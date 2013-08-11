@@ -28,7 +28,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2013-08-05 11:09:57 +0000</string>
+	<string>2013-08-09 03:01:46 +0000</string>
 	<key>Modifier</key>
 	<string>Patrick Deng</string>
 	<key>NotesVisible</key>
@@ -156,6 +156,33 @@
 			<string>1.000 cm = 1.000 cm</string>
 			<key>GraphicsList</key>
 			<array>
+				<dict>
+					<key>Bounds</key>
+					<string>{{1348, 200}, {134, 170}}</string>
+					<key>Class</key>
+					<string>ShapedGraphic</string>
+					<key>FontInfo</key>
+					<dict>
+						<key>Font</key>
+						<string>STHeitiSC-Light</string>
+						<key>Size</key>
+						<real>18</real>
+					</dict>
+					<key>ID</key>
+					<integer>246</integer>
+					<key>Shape</key>
+					<string>Rectangle</string>
+					<key>Text</key>
+					<dict>
+						<key>Text</key>
+						<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf390
+\cocoascreenfonts1{\fonttbl\f0\fnil\fcharset134 STHeitiSC-Light;}
+{\colortbl;\red255\green255\blue255;}
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
+
+\f0\fs36 \cf0 \'c9\'e8\'b1\'b8}</string>
+					</dict>
+				</dict>
 				<dict>
 					<key>Class</key>
 					<string>Group</string>
@@ -406,7 +433,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{1287, 320.95966339111328}, {134, 86.278022766113281}}</string>
+							<string>{{1177, 434.91932678222656}, {134, 86.278022766113281}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FontInfo</key>
@@ -483,7 +510,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{249, 603.00799560546875}, {134, 170}}</string>
+							<string>{{263, 599.00799560546875}, {134, 170}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FontInfo</key>
@@ -511,7 +538,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{182.99200439453125, 188}, {134, 170}}</string>
+							<string>{{196.99200439453125, 184}, {134, 170}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FontInfo</key>
@@ -538,34 +565,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{377.49600219726562, 231.50399780273438}, {134, 170}}</string>
-							<key>Class</key>
-							<string>ShapedGraphic</string>
-							<key>FontInfo</key>
-							<dict>
-								<key>Font</key>
-								<string>STHeitiSC-Light</string>
-								<key>Size</key>
-								<real>18</real>
-							</dict>
-							<key>ID</key>
-							<integer>246</integer>
-							<key>Shape</key>
-							<string>Rectangle</string>
-							<key>Text</key>
-							<dict>
-								<key>Text</key>
-								<string>{\rtf1\ansi\ansicpg936\cocoartf1187\cocoasubrtf390
-\cocoascreenfonts1{\fonttbl\f0\fnil\fcharset134 STHeitiSC-Light;}
-{\colortbl;\red255\green255\blue255;}
-\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\qc
-
-\f0\fs36 \cf0 \'c9\'e8\'b1\'b8}</string>
-							</dict>
-						</dict>
-						<dict>
-							<key>Bounds</key>
-							<string>{{134, 393.00799560546875}, {134, 170}}</string>
+							<string>{{148, 389.00799560546875}, {134, 170}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FontInfo</key>
@@ -592,7 +592,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{464, 423.031982421875}, {134, 170}}</string>
+							<string>{{478, 419.031982421875}, {134, 170}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FontInfo</key>
@@ -619,7 +619,7 @@
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{125, 163}, {482, 619.00799560546875}}</string>
+							<string>{{139, 159}, {482, 619.00799560546875}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
@@ -708,7 +708,7 @@
 			<key>RowSpacing</key>
 			<real>36</real>
 			<key>SheetTitle</key>
-			<string>人海的生态环境</string>
+			<string>生态环境图</string>
 			<key>UniqueID</key>
 			<integer>3</integer>
 			<key>VPages</key>
@@ -1981,7 +1981,7 @@
 			<key>RowSpacing</key>
 			<real>36</real>
 			<key>SheetTitle</key>
-			<string>业务Server端的基本结构</string>
+			<string>业务Server端基本结构</string>
 			<key>UniqueID</key>
 			<integer>1</integer>
 			<key>VPages</key>
@@ -2693,7 +2693,7 @@
 			<key>RowSpacing</key>
 			<real>36</real>
 			<key>SheetTitle</key>
-			<string>设备的状态</string>
+			<string>设备状态</string>
 			<key>UniqueID</key>
 			<integer>4</integer>
 			<key>VPages</key>
@@ -3454,7 +3454,7 @@
 			<key>RowSpacing</key>
 			<real>36</real>
 			<key>SheetTitle</key>
-			<string>业务会话的状态</string>
+			<string>业务会话状态</string>
 			<key>UniqueID</key>
 			<integer>5</integer>
 			<key>VPages</key>
@@ -4083,7 +4083,7 @@
 			<key>RowSpacing</key>
 			<real>36</real>
 			<key>SheetTitle</key>
-			<string>业务会话的各种异常情况</string>
+			<string>业务会话各种异常情况</string>
 			<key>UniqueID</key>
 			<integer>6</integer>
 			<key>VPages</key>
@@ -4379,7 +4379,7 @@
 					<array>
 						<dict>
 							<key>Bounds</key>
-							<string>{{478.91422926184771, 1896.8524675119402}, {48, 13}}</string>
+							<string>{{478.94856691245718, 1897.3338989422241}, {48, 13}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -4449,8 +4449,8 @@
 							<integer>301</integer>
 							<key>Points</key>
 							<array>
-								<string>{667.65978530038865, 1913}</string>
-								<string>{350, 1915.4331324297218}</string>
+								<string>{667.65978530038865, 1914.0000000196724}</string>
+								<string>{349.99999526132615, 1915.4331324297218}</string>
 							</array>
 							<key>Style</key>
 							<dict>
@@ -8736,7 +8736,7 @@ App #1}</string>
 			<key>RowSpacing</key>
 			<real>36</real>
 			<key>SheetTitle</key>
-			<string>业务会话的主干消息图</string>
+			<string>业务会话主干消息图</string>
 			<key>UniqueID</key>
 			<integer>7</integer>
 			<key>VPages</key>
@@ -16464,7 +16464,7 @@ App #1}</string>
 			<key>RowSpacing</key>
 			<real>36</real>
 			<key>SheetTitle</key>
-			<string>App端的业务会话完整流程</string>
+			<string>App端业务会话流程</string>
 			<key>UniqueID</key>
 			<integer>8</integer>
 			<key>VPages</key>
@@ -26712,7 +26712,7 @@ App #1}</string>
 			<key>RowSpacing</key>
 			<real>36</real>
 			<key>SheetTitle</key>
-			<string>业务Server端的业务会话完整流程</string>
+			<string>业务Server端业务会话流程</string>
 			<key>UniqueID</key>
 			<integer>9</integer>
 			<key>VPages</key>
@@ -26728,7 +26728,7 @@ App #1}</string>
 	<key>WindowInfo</key>
 	<dict>
 		<key>CurrentSheet</key>
-		<integer>5</integer>
+		<integer>6</integer>
 		<key>ExpandedCanvases</key>
 		<array/>
 		<key>Frame</key>
@@ -26744,48 +26744,48 @@ App #1}</string>
 		<key>SidebarWidth</key>
 		<integer>268</integer>
 		<key>VisibleRegion</key>
-		<string>{{1, 995}, {1652, 960}}</string>
+		<string>{{1, 1266}, {1652, 960}}</string>
 		<key>Zoom</key>
 		<real>1</real>
 		<key>ZoomValues</key>
 		<array>
 			<array>
-				<string>业务Server端的基本结构</string>
+				<string>业务Server端基本结构</string>
 				<real>0.0</real>
 				<real>1</real>
 			</array>
 			<array>
-				<string>人海的生态环境</string>
+				<string>生态环境图</string>
 				<real>0.0</real>
 				<real>1</real>
 			</array>
 			<array>
-				<string>设备的状态</string>
+				<string>设备状态</string>
 				<real>0.0</real>
 				<real>1</real>
 			</array>
 			<array>
-				<string>业务会话的状态</string>
+				<string>业务会话状态</string>
 				<real>0.0</real>
 				<real>1</real>
 			</array>
 			<array>
-				<string>业务会话的各种异常情况</string>
+				<string>业务会话各种异常情况</string>
 				<real>0.0</real>
 				<real>1</real>
 			</array>
 			<array>
-				<string>业务会话的主干消息图</string>
+				<string>业务会话主干消息图</string>
 				<real>1</real>
 				<real>1.5</real>
 			</array>
 			<array>
-				<string>App端的业务会话完整流程</string>
+				<string>App端业务会话流程</string>
 				<real>1</real>
 				<real>0.5</real>
 			</array>
 			<array>
-				<string>业务Server端的业务会话完整流程</string>
+				<string>业务Server端业务会话流程</string>
 				<real>0.8399999737739563</real>
 				<real>0.88999998569488525</real>
 			</array>
