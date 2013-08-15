@@ -188,3 +188,17 @@
 		"OperationResult": "Success" // "Fail"
 	}
 }
+
+12. Server广播通知 BroadcastNotification (App <- Server)
+{
+	"header":
+   {
+		"deviceId": "",
+		"messageId": "BroadcastNotification",
+		"timeStamp": "2013-08-14 21:18:49"
+   }
+	"body": 
+	{
+		"content":"This is a broadcast message!"
+	}
+}
