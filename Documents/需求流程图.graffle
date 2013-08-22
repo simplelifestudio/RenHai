@@ -28,7 +28,7 @@
 	<key>MasterSheets</key>
 	<array/>
 	<key>ModificationDate</key>
-	<string>2013-08-20 00:26:06 +0000</string>
+	<string>2013-08-20 00:53:45 +0000</string>
 	<key>Modifier</key>
 	<string>Patrick Deng</string>
 	<key>NotesVisible</key>
@@ -87,7 +87,7 @@
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {1654, 961}}</string>
+				<string>{{0, 0}, {1578, 854}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -147,7 +147,7 @@
 			<key>CanvasOrigin</key>
 			<string>{0, 0}</string>
 			<key>CanvasSize</key>
-			<string>{1654, 961}</string>
+			<string>{1578, 854}</string>
 			<key>ColumnAlign</key>
 			<integer>1</integer>
 			<key>ColumnSpacing</key>
@@ -9319,7 +9319,7 @@ WebRTC Server}</string>
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {1654, 961}}</string>
+				<string>{{0, 0}, {589, 783}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -9379,7 +9379,7 @@ WebRTC Server}</string>
 			<key>CanvasOrigin</key>
 			<string>{0, 0}</string>
 			<key>CanvasSize</key>
-			<string>{1654, 961}</string>
+			<string>{589, 783}</string>
 			<key>ColumnAlign</key>
 			<integer>1</integer>
 			<key>ColumnSpacing</key>
@@ -9764,7 +9764,7 @@ WebRTC Server}</string>
 			<key>GridInfo</key>
 			<dict/>
 			<key>HPages</key>
-			<integer>3</integer>
+			<integer>2</integer>
 			<key>KeepToScale</key>
 			<false/>
 			<key>Layers</key>
@@ -9812,7 +9812,7 @@ WebRTC Server}</string>
 			<key>UniqueID</key>
 			<integer>10</integer>
 			<key>VPages</key>
-			<integer>2</integer>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>ActiveLayerIndex</key>
@@ -9822,7 +9822,7 @@ WebRTC Server}</string>
 			<key>BackgroundGraphic</key>
 			<dict>
 				<key>Bounds</key>
-				<string>{{0, 0}, {1654, 4315}}</string>
+				<string>{{0, 0}, {1332, 4315}}</string>
 				<key>Class</key>
 				<string>SolidGraphic</string>
 				<key>ID</key>
@@ -9882,7 +9882,7 @@ WebRTC Server}</string>
 			<key>CanvasOrigin</key>
 			<string>{0, 0}</string>
 			<key>CanvasSize</key>
-			<string>{1654, 4315}</string>
+			<string>{1332, 4315}</string>
 			<key>ColumnAlign</key>
 			<integer>1</integer>
 			<key>ColumnSpacing</key>
@@ -29215,7 +29215,7 @@ WebRTC Server}</string>
 					<integer>1852</integer>
 					<key>Points</key>
 					<array>
-						<string>{843.06899999999996, 503.5}</string>
+						<string>{832.06899999999973, 492.5}</string>
 						<string>{760.06999999999994, 561.5}</string>
 					</array>
 					<key>Style</key>
@@ -30480,7 +30480,7 @@ WebRTC Server}</string>
 					<key>Points</key>
 					<array>
 						<string>{1041.0700000000038, 622.5}</string>
-						<string>{938.06899999999996, 503.5}</string>
+						<string>{927.06899999999973, 492.5}</string>
 					</array>
 					<key>Style</key>
 					<dict>
@@ -30775,7 +30775,7 @@ WebRTC Server}</string>
 					<key>Points</key>
 					<array>
 						<string>{1100.0804499999999, 280.16091004022491}</string>
-						<string>{890.56899999999996, 464}</string>
+						<string>{927.06899999999973, 492.5}</string>
 					</array>
 					<key>Style</key>
 					<dict>
@@ -30810,7 +30810,7 @@ WebRTC Server}</string>
 							<key>AllowConnections</key>
 							<string>NO</string>
 							<key>Bounds</key>
-							<string>{{843.00000000000023, 496.15700000000004}, {95.322599999999994, 28}}</string>
+							<string>{{832, 485.15700000000004}, {95.322599999999994, 28}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>FitText</key>
@@ -30871,8 +30871,8 @@ WebRTC Server}</string>
 							<real>-1</real>
 							<key>Points</key>
 							<array>
-								<string>{843.46100000000013, 480.48900000000003}</string>
-								<string>{938.46100000000024, 480.48900000000003}</string>
+								<string>{832.4609999999999, 469.48900000000003}</string>
+								<string>{927.46100000000001, 469.48900000000003}</string>
 							</array>
 							<key>Style</key>
 							<dict>
@@ -30895,7 +30895,7 @@ WebRTC Server}</string>
 						</dict>
 						<dict>
 							<key>Bounds</key>
-							<string>{{843.06899999999996, 464}, {95, 79}}</string>
+							<string>{{832.06899999999973, 453}, {95, 79}}</string>
 							<key>Class</key>
 							<string>ShapedGraphic</string>
 							<key>ID</key>
