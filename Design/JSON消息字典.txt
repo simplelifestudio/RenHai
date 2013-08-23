@@ -3,11 +3,13 @@
 	1. 测试请求 AlohaRequest
 	2. App数据同步请求 AppDataSyncRequest
 	3. Server数据同步请求 ServerDataSyncRequest
+	4. 业务会话请求 BusinessSessionRequest
 2. Response Server->App
 	1. 错误响应 ErrorResponse
 	2. 测试响应 AlohaResponse
 	3. App数据同步响应 AppDataSyncResponse
 	4. Server数据同步响应 ServerDataSyncResponse
+	5. 业务会话响应 BusinessSessionResponse
 3. Notification Server->App
 	1. 	业务会话通知 BusinessSessionNotification
 	2. Server广播通知 BroadcastNotification
@@ -250,7 +252,41 @@
 	}
 }
 
-10. Server广播通知 BroadcastNotification
+10. 业务会话请求 BusinessSessionRequest
+{
+	"header":
+   {
+		"deviceId": "1234",
+		"messageId": "BusinessSessionRequest",
+		"timeStamp": "2013-08-14 21:18:49"
+   }
+	"body": 
+	{
+		"businessSessionId":"",
+		"businessType":"Interest",
+		"operationStatus":"EnterPool", // 这里存放App需要向Server告知的信息
+		"operationValue":"" 
+	}	
+}
+
+11. 业务会话响应 BusinessSessionResponse
+{
+	"header":
+   {
+		"deviceId": "1234",
+		"messageId": "BusinessSessionResponse",
+		"timeStamp": "2013-08-14 21:18:49"
+   }
+	"body": 
+	{
+		"businessSessionId":"9861ASFDE",
+		"businessType":"Interest",
+		"operationStatus":"EnterPool", // 这里存放Server需要向App告知的信息
+		"operationValue":"Success" 
+	}	
+}
+
+12. Server广播通知 BroadcastNotification
 {
 	"header":
    {
