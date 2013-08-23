@@ -1,8 +1,26 @@
-消息格式 MessageFormat (App <-> or <- or -> Server）
+#消息分类
+1. Request App->Server
+	1. 测试请求 AlohaRequest
+	2. App数据同步请求 AppDataSyncRequest
+	3. Server数据同步请求 ServerDataSyncRequest
+2. Response Server->App
+	1. 错误响应 ErrorResponse
+	2. 测试响应 AlohaResponse
+	3. App数据同步响应 AppDataSyncResponse
+	4. Server数据同步响应 ServerDataSyncResponse
+3. Notification Server->App
+	1. 	业务会话通知 BusinessSessionNotification
+	2. Server广播通知 BroadcastNotification
+4. NotificationResponse App->Server
+	1. 错误响应 ErrorResponse
+	2. 业务会话通知响应 BusinessSessionNotificationResponse
+
+
+#消息格式 MessageFormat
 {
     "header":
     {
-		"deviceId": "ABCD1234",
+		"deviceId": "1234",
 		"messageId": "MessageName",
 		"timeStamp": "2013-08-14 21:18:49" // App启动后首次收到Server发来的消息时需要计算两边时间差并保存留用
     },
@@ -14,27 +32,29 @@
     }
 }
 
-1. 错误 ErrorResponse (App <-> Server)
+
+#消息列表
+1. 错误响应 ErrorResponse
 {
     "header":
     {
-		"deviceId": "ABCD1234",
+		"deviceId": "1234",
 		"messageId": "ErrorResponse",
 		"timeStamp": "2013-08-14 21:18:49"
     },
     "body":
     {
-		"requestMessage": "AlohaRequest",
+		"AppRequestMessage": "AlohaRequest",
 		"errorCode": "-7",
       	"errorDescription": "Empty Content"
     }
 }
 
-2. 测试请求 AlohaRequest (App <-> Server)
+2. 测试请求 AlohaRequest
 {
     "header":
     {
-		"deviceId": "ABCD1234",
+		"deviceId": "1234",
 		"messageId": "AlohaRequest",
 		"timeStamp": "2013-08-14 21:18:49"
     },
@@ -44,11 +64,11 @@
     }
 }
 
-3. 测试响应 AlohaResponse (App <-> Server)
+3. 测试响应 AlohaResponse
 {
     "header":
     {
-		"deviceId": "ABCD1234",
+		"deviceId": "1234",
 		"messageId": "AlohaResponse",
 		"timeStamp": "2013-08-14 21:18:49"
     },
@@ -58,69 +78,132 @@
     }
 }
 
-4. 设备信息请求 DeviceDataRequest (App -> Server)
+4. App数据同步请求 AppDataSyncRequest
 {
     "header":
     {
-		"deviceId": "ABCD1234",
-		"messageId": "DeviceDataRequest",
-		"timeStamp": "2013-08-14 21:18:49"
-    },
-    "body": 
-    {
-		"dataQuery": // 一个消息里包含了查询和更新两种操作，是否不如一个消息里只有一种操作简单明了？
-		{
-			"deviceCard":{},
-			"impressionCard":{}		
-		},
-		"dataUpdate":
-		{
-			"interestCard":{}
-		}
-    }
-}
-
-5. 设备信息响应 DeviceDataResponse (App <- Server)
-{
-    "header":
-    {
-		"deviceId": "ABCD1234",
-		"messageId": "DeviceDataResponse",
+		"deviceId": "1234",
+		"messageId": "AppDataSyncRequest",
 		"timeStamp": "2013-08-14 21:18:49"
     },
     "body": 
     {
 		"dataQuery":
 		{
-			"deviceCard":{},
-			"impressionCard":{}		
+			"deviceCard":
+			{
+				"serviceStatus":"", 
+				"registerTime":"",
+				"forbiddenExpiredDate":"",
+				"profileId""=""
+			},
+			"impressCard":
+			{
+				"labelListCount":"10" // 最小值为3
+			},
+			"interestCard":
+			{
+				"labelListCount":"5"
+			}		
 		},
 		"dataUpdate":
 		{
-			"interestCard":{}
+			"deviceCard":
+			{
+				"osVersion": "iOS 6.1.2",
+				"appVersion": "1.2",
+				"isJailed": "No",
+				"location": "22.511962,113.380301"
+			},
+			"interestCard":
+			{
+				{
+					"soccer":
+					{
+						"order":"0",
+						"matchCount":"7"
+					},
+					"music":
+					{
+						"order":"1",
+						"matchCount":"3"
+					}
+				}
+			}
 		}
     }
 }
 
-6. Server信息查询请求 ServerDataQueryRequest (App -> Server)
+5. App数据同步响应 AppDataSyncResponse
 {
     "header":
     {
-		"deviceId": "ABCD1234",
-		"messageId": "ServerDataQueryRequest",
+		"deviceId": "1234",
+		"messageId": "AppDataSyncResponse",
+		"timeStamp": "2013-08-14 21:18:49"
+    },
+    "body": // 将App发来的update部分在内存数据中完成后，与query部分一并发回给App
+    {
+		"deviceCard":
+		{
+			"serviceStatus":"Normal", 
+			"registerTime":"2013-08-07 14:01:39",
+			"forbiddenExpiredDate":"",
+			"profileId""="4587"
+		},
+		"impressCard":
+		{
+			"impressCardId":"9631",
+			"chatTotalCount":"47",
+			"totalChatDuration":"1288",
+			"chatLossCount":"9",
+			"labelList":
+			{
+				"impress1":{"count":"7", "assessCount":"3"},
+				"impress2":{"count":"2", "assessCount":"1"},
+				"impress2":{"count":"1", "assessCount":"0"}
+			}
+		},
+		"interestCard":
+		{
+			"soccer":
+			{
+				"order":"0",
+				"matchCount":"7"
+			},
+			"music":
+			{
+				"order":"1",
+				"matchCount":"3"
+			}
+		}	
+    }
+}
+
+6. Server数据同步请求 ServerDataSyncRequest
+{
+    "header":
+    {
+		"deviceId": "1234",
+		"messageId": "ServerDataSyncRequest",
 		"timeStamp": "2013-08-14 21:18:49"
     }
     "body": 
     {
-		"onlineDeviceCount":""
+		"onlineDeviceCount":"",
+		"interestDeviceCount":"",
+		"chatDeviceCount":"",
+		"interestChatDeviceCount":"",
+		"currentHotInterestLabels":"", // 这里需要指定要多少个标签，这一层的结构就破坏了
+		"historyHotInterestLabels":""
     }
 }
 
-7. Server信息查询响应 ServerDataQueryResponse (App <- Server)
+7. Server数据同步响应 ServerDataSyncResponse
 {
     "header":
     {
-		"deviceId": "ABCD1234",
+		"deviceId": "1234",
 		"messageId": "ServerDataQueryResponse",
 		"timeStamp": "2013-08-14 21:18:49"
     }
@@ -130,66 +213,44 @@
     }
 }
 
-8. 业务会话通知 BusinessSessionNotification (App <- Server)
+8. 业务会话通知 BusinessSessionNotification
 {
 	"header":
    {
-		"deviceId": "ABCD1234",
-		"messageId": "BusinessSessionRequest",
+		"deviceId": "1234",
+		"messageId": "BusinessSessionNotification",
 		"timeStamp": "2013-08-14 21:18:49"
    }
 	"body": 
 	{
-		"BusinessSessionId":"9861ASFDE"
+		"sessionId":"9861ASFDE"，
+		"businessType":"Interest",
+		"operationType":"SessionBinded" // 这里存放业务会话的操作
+		"operationValue":
+		{
+			// 这里存放匹配对象的信息
+		}
 	}
 }
 
-9. 业务会话通知响应 BusinessSessionNotificationResponse (App -> Server)
+9. 业务会话通知响应 BusinessSessionNotificationResponse
 {
 	"header":
    {
-		"deviceId": "ABCD1234",
-		"messageId": "BusinessSessionResponse",
+		"deviceId": "1234",
+		"messageId": "BusinessSessionNotificationResponse",
 		"timeStamp": "2013-08-14 21:18:49"
    }
 	"body": 
 	{
-		"BusinessSessionId":"9861ASFDE"
+		"businessSessionId":"9861ASFDE",
+		"businessType":"Interest",
+		"operationStatus":"Received", // 这里存放App需要向Server告知的信息
+		"operationValue":"" 
 	}
 }
 
-10. 业务会话操作请求 BusinessSessionOperationRequest (App -> Server)
-{
-	"header":
-   {
-		"deviceId": "ABCD1234",
-		"messageId": "BusinessSessionOperationRequest",
-		"timeStamp": "2013-08-14 21:18:49"
-   }
-	"body": 
-	{
-		"OperationType": "WebRTCEnded", // "ImpressionEvaluated"
-		"OperationValue": ""
-	}
-}
-
-11. 业务会话操作响应 BusinessSessionOperationResponse (App <- Server)
-{
-	"header":
-   {
-		"deviceId": "ABCD1234",
-		"messageId": "BusinessSessionOperationRequest",
-		"timeStamp": "2013-08-14 21:18:49"
-   }
-	"body": 
-	{
-		"OperationType": "EndWebRTC",
-		"OperationValue": "",
-		"OperationResult": "Success" // "Fail"
-	}
-}
-
-12. Server广播通知 BroadcastNotification (App <- Server)
+10. Server广播通知 BroadcastNotification
 {
 	"header":
    {
