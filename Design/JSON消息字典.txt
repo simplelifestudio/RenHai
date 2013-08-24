@@ -247,7 +247,7 @@
 	{
 		"businessSessionId":"9861ASFDE",
 		"businessType":"Interest",
-		"operationStatus":"Received", // 这里存放App需要向Server告知的信息
+		"operationType":"Received", // 这里存放App需要向Server告知的信息
 		"operationValue":"" 
 	}
 }
@@ -264,7 +264,7 @@
 	{
 		"businessSessionId":"",
 		"businessType":"Interest",
-		"operationStatus":"EnterPool", // 这里存放App需要向Server告知的信息
+		"operationType":"EnterPool", // 这里存放App需要向Server告知的信息
 		"operationValue":"" 
 	}	
 }
@@ -281,7 +281,7 @@
 	{
 		"businessSessionId":"9861ASFDE",
 		"businessType":"Interest",
-		"operationStatus":"EnterPool", // 这里存放Server需要向App告知的信息
+		"operationType":"EnterPool", // 这里存放Server需要向App告知的信息
 		"operationValue":"Success" 
 	}	
 }
