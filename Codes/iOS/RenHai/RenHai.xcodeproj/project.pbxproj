@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A78CC9AE7E143978B28D429 /* libPods-RenHaiGHUnitTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */; };
+		C15369EAD9D54E87A40074DC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B66314B17C746578ACF6BD6 /* libPods.a */; };
 		C55B43EC17CF580A009BB21B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EB17CF580A009BB21B /* UIKit.framework */; };
 		C55B43EE17CF580A009BB21B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43ED17CF580A009BB21B /* Foundation.framework */; };
 		C55B43F017CF580A009BB21B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EF17CF580A009BB21B /* CoreGraphics.framework */; };
@@ -19,9 +21,24 @@
 		C55B440517CF580A009BB21B /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C55B440317CF580A009BB21B /* MainStoryboard_iPhone.storyboard */; };
 		C55B440817CF580A009BB21B /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C55B440617CF580A009BB21B /* MainStoryboard_iPad.storyboard */; };
 		C55B440B17CF580A009BB21B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B440A17CF580A009BB21B /* ViewController.m */; };
+		C55B442217CF5992009BB21B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EB17CF580A009BB21B /* UIKit.framework */; };
+		C55B442317CF5992009BB21B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43ED17CF580A009BB21B /* Foundation.framework */; };
+		C55B442417CF5992009BB21B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EF17CF580A009BB21B /* CoreGraphics.framework */; };
+		C55B442A17CF5992009BB21B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C55B442817CF5992009BB21B /* InfoPlist.strings */; };
+		C55B442C17CF5992009BB21B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B442B17CF5992009BB21B /* main.m */; };
+		C55B443217CF5993009BB21B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B443117CF5993009BB21B /* Default.png */; };
+		C55B443417CF5993009BB21B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B443317CF5993009BB21B /* Default@2x.png */; };
+		C55B443617CF5993009BB21B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B443517CF5993009BB21B /* Default-568h@2x.png */; };
+		C55B443917CF5993009BB21B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B443817CF5993009BB21B /* ViewController.m */; };
+		C55B443C17CF5993009BB21B /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C55B443A17CF5993009BB21B /* ViewController_iPhone.xib */; };
+		C55B443F17CF5993009BB21B /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = C55B443D17CF5993009BB21B /* ViewController_iPad.xib */; };
+		C55B444717CF5B72009BB21B /* GHUnitSampleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B444617CF5B72009BB21B /* GHUnitSampleTest.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		92519C2C061245F9942C7EC7 /* Pods-RenHaiGHUnitTest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RenHaiGHUnitTest.xcconfig"; path = "Pods/Pods-RenHaiGHUnitTest.xcconfig"; sourceTree = SOURCE_ROOT; };
+		9B66314B17C746578ACF6BD6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		BE6EB6DB7AC443EFBAAD45CD /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 		C55B43E817CF580A009BB21B /* RenHai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55B43EB17CF580A009BB21B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C55B43ED17CF580A009BB21B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -39,6 +56,21 @@
 		C55B440717CF580A009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		C55B440917CF580A009BB21B /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = ../../ViewController.h; sourceTree = "<group>"; };
 		C55B440A17CF580A009BB21B /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = ../../ViewController.m; sourceTree = "<group>"; };
+		C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHaiGHUnitTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C55B442717CF5992009BB21B /* RenHaiGHUnitTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RenHaiGHUnitTest-Info.plist"; sourceTree = "<group>"; };
+		C55B442917CF5992009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		C55B442B17CF5992009BB21B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		C55B442D17CF5993009BB21B /* RenHaiGHUnitTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RenHaiGHUnitTest-Prefix.pch"; sourceTree = "<group>"; };
+		C55B443117CF5993009BB21B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		C55B443317CF5993009BB21B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		C55B443517CF5993009BB21B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		C55B443717CF5993009BB21B /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		C55B443817CF5993009BB21B /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		C55B443B17CF5993009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPhone.xib; sourceTree = "<group>"; };
+		C55B443E17CF5993009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
+		C55B444517CF5B72009BB21B /* GHUnitSampleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHUnitSampleTest.h; sourceTree = "<group>"; };
+		C55B444617CF5B72009BB21B /* GHUnitSampleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GHUnitSampleTest.m; sourceTree = "<group>"; };
+		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +81,18 @@
 				C55B43EC17CF580A009BB21B /* UIKit.framework in Frameworks */,
 				C55B43EE17CF580A009BB21B /* Foundation.framework in Frameworks */,
 				C55B43F017CF580A009BB21B /* CoreGraphics.framework in Frameworks */,
+				C15369EAD9D54E87A40074DC /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C55B441E17CF5992009BB21B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C55B442217CF5992009BB21B /* UIKit.framework in Frameworks */,
+				C55B442317CF5992009BB21B /* Foundation.framework in Frameworks */,
+				C55B442417CF5992009BB21B /* CoreGraphics.framework in Frameworks */,
+				7A78CC9AE7E143978B28D429 /* libPods-RenHaiGHUnitTest.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,8 +103,11 @@
 			isa = PBXGroup;
 			children = (
 				C55B43F117CF580A009BB21B /* RenHai */,
+				C55B442517CF5992009BB21B /* RenHaiGHUnitTest */,
 				C55B43EA17CF580A009BB21B /* Frameworks */,
 				C55B43E917CF580A009BB21B /* Products */,
+				BE6EB6DB7AC443EFBAAD45CD /* Pods.xcconfig */,
+				92519C2C061245F9942C7EC7 /* Pods-RenHaiGHUnitTest.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -68,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				C55B43E817CF580A009BB21B /* RenHai.app */,
+				C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -78,6 +126,8 @@
 				C55B43EB17CF580A009BB21B /* UIKit.framework */,
 				C55B43ED17CF580A009BB21B /* Foundation.framework */,
 				C55B43EF17CF580A009BB21B /* CoreGraphics.framework */,
+				9B66314B17C746578ACF6BD6 /* libPods.a */,
+				DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -206,6 +256,50 @@
 			path = WebRTC;
 			sourceTree = "<group>";
 		};
+		C55B442517CF5992009BB21B /* RenHaiGHUnitTest */ = {
+			isa = PBXGroup;
+			children = (
+				C55B444417CF5B4A009BB21B /* TestCases */,
+				C55B444317CF5B4A009BB21B /* Libraries */,
+				C55B442617CF5992009BB21B /* Supporting Files */,
+			);
+			path = RenHaiGHUnitTest;
+			sourceTree = "<group>";
+		};
+		C55B442617CF5992009BB21B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				C55B443717CF5993009BB21B /* ViewController.h */,
+				C55B443817CF5993009BB21B /* ViewController.m */,
+				C55B443A17CF5993009BB21B /* ViewController_iPhone.xib */,
+				C55B443D17CF5993009BB21B /* ViewController_iPad.xib */,
+				C55B442717CF5992009BB21B /* RenHaiGHUnitTest-Info.plist */,
+				C55B442817CF5992009BB21B /* InfoPlist.strings */,
+				C55B442B17CF5992009BB21B /* main.m */,
+				C55B442D17CF5993009BB21B /* RenHaiGHUnitTest-Prefix.pch */,
+				C55B443117CF5993009BB21B /* Default.png */,
+				C55B443317CF5993009BB21B /* Default@2x.png */,
+				C55B443517CF5993009BB21B /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		C55B444317CF5B4A009BB21B /* Libraries */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Libraries;
+			sourceTree = "<group>";
+		};
+		C55B444417CF5B4A009BB21B /* TestCases */ = {
+			isa = PBXGroup;
+			children = (
+				C55B444517CF5B72009BB21B /* GHUnitSampleTest.h */,
+				C55B444617CF5B72009BB21B /* GHUnitSampleTest.m */,
+			);
+			path = TestCases;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -213,9 +307,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C55B440E17CF580A009BB21B /* Build configuration list for PBXNativeTarget "RenHai" */;
 			buildPhases = (
+				62A41906FFA9465A970C7A06 /* Check Pods Manifest.lock */,
 				C55B43E417CF580A009BB21B /* Sources */,
 				C55B43E517CF580A009BB21B /* Frameworks */,
 				C55B43E617CF580A009BB21B /* Resources */,
+				146995957BB44944A99B64BD /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -224,6 +320,25 @@
 			name = RenHai;
 			productName = RenHai;
 			productReference = C55B43E817CF580A009BB21B /* RenHai.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C55B442017CF5992009BB21B /* RenHaiGHUnitTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C55B444017CF5993009BB21B /* Build configuration list for PBXNativeTarget "RenHaiGHUnitTest" */;
+			buildPhases = (
+				51DF468EFF3741DB9C0EE23B /* Check Pods Manifest.lock */,
+				C55B441D17CF5992009BB21B /* Sources */,
+				C55B441E17CF5992009BB21B /* Frameworks */,
+				C55B441F17CF5992009BB21B /* Resources */,
+				635D7F92C4E64C989E6B81DD /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RenHaiGHUnitTest;
+			productName = RenHaiGHUnitTest;
+			productReference = C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -248,6 +363,7 @@
 			projectRoot = "";
 			targets = (
 				C55B43E717CF580A009BB21B /* RenHai */,
+				C55B442017CF5992009BB21B /* RenHaiGHUnitTest */,
 			);
 		};
 /* End PBXProject section */
@@ -266,7 +382,83 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C55B441F17CF5992009BB21B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C55B442A17CF5992009BB21B /* InfoPlist.strings in Resources */,
+				C55B443217CF5993009BB21B /* Default.png in Resources */,
+				C55B443417CF5993009BB21B /* Default@2x.png in Resources */,
+				C55B443617CF5993009BB21B /* Default-568h@2x.png in Resources */,
+				C55B443C17CF5993009BB21B /* ViewController_iPhone.xib in Resources */,
+				C55B443F17CF5993009BB21B /* ViewController_iPad.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		146995957BB44944A99B64BD /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		51DF468EFF3741DB9C0EE23B /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		62A41906FFA9465A970C7A06 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		635D7F92C4E64C989E6B81DD /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-RenHaiGHUnitTest-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C55B43E417CF580A009BB21B /* Sources */ = {
@@ -276,6 +468,16 @@
 				C55B43F817CF580A009BB21B /* main.m in Sources */,
 				C55B43FC17CF580A009BB21B /* AppDelegate.m in Sources */,
 				C55B440B17CF580A009BB21B /* ViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C55B441D17CF5992009BB21B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C55B442C17CF5992009BB21B /* main.m in Sources */,
+				C55B443917CF5993009BB21B /* ViewController.m in Sources */,
+				C55B444717CF5B72009BB21B /* GHUnitSampleTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,6 +508,30 @@
 			);
 			name = MainStoryboard_iPad.storyboard;
 			path = ../..;
+			sourceTree = "<group>";
+		};
+		C55B442817CF5992009BB21B /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C55B442917CF5992009BB21B /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		C55B443A17CF5993009BB21B /* ViewController_iPhone.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C55B443B17CF5993009BB21B /* en */,
+			);
+			name = ViewController_iPhone.xib;
+			sourceTree = "<group>";
+		};
+		C55B443D17CF5993009BB21B /* ViewController_iPad.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C55B443E17CF5993009BB21B /* en */,
+			);
+			name = ViewController_iPad.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -371,6 +597,7 @@
 		};
 		C55B440F17CF580A009BB21B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE6EB6DB7AC443EFBAAD45CD /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHai/RenHai-Prefix.pch";
@@ -382,10 +609,37 @@
 		};
 		C55B441017CF580A009BB21B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BE6EB6DB7AC443EFBAAD45CD /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHai/RenHai-Prefix.pch";
 				INFOPLIST_FILE = "RenHai/RenHai-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C55B444117CF5993009BB21B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 92519C2C061245F9942C7EC7 /* Pods-RenHaiGHUnitTest.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RenHaiGHUnitTest/RenHaiGHUnitTest-Prefix.pch";
+				INFOPLIST_FILE = "RenHaiGHUnitTest/RenHaiGHUnitTest-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		C55B444217CF5993009BB21B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 92519C2C061245F9942C7EC7 /* Pods-RenHaiGHUnitTest.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "RenHaiGHUnitTest/RenHaiGHUnitTest-Prefix.pch";
+				INFOPLIST_FILE = "RenHaiGHUnitTest/RenHaiGHUnitTest-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -410,6 +664,16 @@
 				C55B441017CF580A009BB21B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C55B444017CF5993009BB21B /* Build configuration list for PBXNativeTarget "RenHaiGHUnitTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C55B444117CF5993009BB21B /* Debug */,
+				C55B444217CF5993009BB21B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
