@@ -33,7 +33,7 @@
 		C55B443C17CF5993009BB21B /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C55B443A17CF5993009BB21B /* ViewController_iPhone.xib */; };
 		C55B443F17CF5993009BB21B /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = C55B443D17CF5993009BB21B /* ViewController_iPad.xib */; };
 		C55B444717CF5B72009BB21B /* GHUnitSampleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B444617CF5B72009BB21B /* GHUnitSampleTest.m */; };
-		C55B445117CF5C14009BB21B /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B444F17CF5C14009BB21B /* GTMBase64.m */; };
+		C55B445117CF5C14009BB21B /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B444F17CF5C14009BB21B /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C55B445217CF5C14009BB21B /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B444F17CF5C14009BB21B /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
