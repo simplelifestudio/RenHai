@@ -36,13 +36,27 @@
 		C55B445117CF5C14009BB21B /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B444F17CF5C14009BB21B /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C55B445217CF5C14009BB21B /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B444F17CF5C14009BB21B /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C55B445517CF5DFA009BB21B /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B445417CF5DFA009BB21B /* Crashlytics.framework */; };
+		C55B445D17CF8632009BB21B /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445617CF8632009BB21B /* Icon-72.png */; };
+		C55B445E17CF8632009BB21B /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445617CF8632009BB21B /* Icon-72.png */; };
+		C55B445F17CF8632009BB21B /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445717CF8632009BB21B /* Icon-Small-50.png */; };
+		C55B446017CF8632009BB21B /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445717CF8632009BB21B /* Icon-Small-50.png */; };
+		C55B446117CF8632009BB21B /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445817CF8632009BB21B /* Icon-Small.png */; };
+		C55B446217CF8632009BB21B /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445817CF8632009BB21B /* Icon-Small.png */; };
+		C55B446317CF8632009BB21B /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445917CF8632009BB21B /* Icon-Small@2x.png */; };
+		C55B446417CF8632009BB21B /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445917CF8632009BB21B /* Icon-Small@2x.png */; };
+		C55B446517CF8632009BB21B /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445A17CF8632009BB21B /* Icon.png */; };
+		C55B446617CF8632009BB21B /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445A17CF8632009BB21B /* Icon.png */; };
+		C55B446717CF8632009BB21B /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445B17CF8632009BB21B /* Icon@2x.png */; };
+		C55B446817CF8632009BB21B /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445B17CF8632009BB21B /* Icon@2x.png */; };
+		C55B446917CF8632009BB21B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = C55B445C17CF8632009BB21B /* iTunesArtwork */; };
+		C55B446A17CF8632009BB21B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = C55B445C17CF8632009BB21B /* iTunesArtwork */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		92519C2C061245F9942C7EC7 /* Pods-RenHaiGHUnitTest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RenHaiGHUnitTest.xcconfig"; path = "Pods/Pods-RenHaiGHUnitTest.xcconfig"; sourceTree = SOURCE_ROOT; };
 		9B66314B17C746578ACF6BD6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE6EB6DB7AC443EFBAAD45CD /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
-		C55B43E817CF580A009BB21B /* RenHai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHai.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C55B43E817CF580A009BB21B /* 人海.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "人海.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55B43EB17CF580A009BB21B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C55B43ED17CF580A009BB21B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C55B43EF17CF580A009BB21B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -59,7 +73,7 @@
 		C55B440717CF580A009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		C55B440917CF580A009BB21B /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = ../../ViewController.h; sourceTree = "<group>"; };
 		C55B440A17CF580A009BB21B /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = ../../ViewController.m; sourceTree = "<group>"; };
-		C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHaiGHUnitTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C55B442117CF5992009BB21B /* 人海测试.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "人海测试.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55B442717CF5992009BB21B /* RenHaiGHUnitTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RenHaiGHUnitTest-Info.plist"; sourceTree = "<group>"; };
 		C55B442917CF5992009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C55B442B17CF5992009BB21B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -77,6 +91,13 @@
 		C55B444F17CF5C14009BB21B /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
 		C55B445017CF5C14009BB21B /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		C55B445417CF5DFA009BB21B /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
+		C55B445617CF8632009BB21B /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
+		C55B445717CF8632009BB21B /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
+		C55B445817CF8632009BB21B /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
+		C55B445917CF8632009BB21B /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
+		C55B445A17CF8632009BB21B /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
+		C55B445B17CF8632009BB21B /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
+		C55B445C17CF8632009BB21B /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -122,8 +143,8 @@
 		C55B43E917CF580A009BB21B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C55B43E817CF580A009BB21B /* RenHai.app */,
-				C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */,
+				C55B43E817CF580A009BB21B /* 人海.app */,
+				C55B442117CF5992009BB21B /* 人海测试.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -186,6 +207,13 @@
 		C55B441317CF587A009BB21B /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				C55B445617CF8632009BB21B /* Icon-72.png */,
+				C55B445717CF8632009BB21B /* Icon-Small-50.png */,
+				C55B445817CF8632009BB21B /* Icon-Small.png */,
+				C55B445917CF8632009BB21B /* Icon-Small@2x.png */,
+				C55B445A17CF8632009BB21B /* Icon.png */,
+				C55B445B17CF8632009BB21B /* Icon@2x.png */,
+				C55B445C17CF8632009BB21B /* iTunesArtwork */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -340,7 +368,7 @@
 			);
 			name = RenHai;
 			productName = RenHai;
-			productReference = C55B43E817CF580A009BB21B /* RenHai.app */;
+			productReference = C55B43E817CF580A009BB21B /* 人海.app */;
 			productType = "com.apple.product-type.application";
 		};
 		C55B442017CF5992009BB21B /* RenHaiGHUnitTest */ = {
@@ -359,7 +387,7 @@
 			);
 			name = RenHaiGHUnitTest;
 			productName = RenHaiGHUnitTest;
-			productReference = C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */;
+			productReference = C55B442117CF5992009BB21B /* 人海测试.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -400,6 +428,13 @@
 				C55B440217CF580A009BB21B /* Default-568h@2x.png in Resources */,
 				C55B440517CF580A009BB21B /* MainStoryboard_iPhone.storyboard in Resources */,
 				C55B440817CF580A009BB21B /* MainStoryboard_iPad.storyboard in Resources */,
+				C55B445D17CF8632009BB21B /* Icon-72.png in Resources */,
+				C55B445F17CF8632009BB21B /* Icon-Small-50.png in Resources */,
+				C55B446117CF8632009BB21B /* Icon-Small.png in Resources */,
+				C55B446317CF8632009BB21B /* Icon-Small@2x.png in Resources */,
+				C55B446517CF8632009BB21B /* Icon.png in Resources */,
+				C55B446717CF8632009BB21B /* Icon@2x.png in Resources */,
+				C55B446917CF8632009BB21B /* iTunesArtwork in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -413,6 +448,13 @@
 				C55B443617CF5993009BB21B /* Default-568h@2x.png in Resources */,
 				C55B443C17CF5993009BB21B /* ViewController_iPhone.xib in Resources */,
 				C55B443F17CF5993009BB21B /* ViewController_iPad.xib in Resources */,
+				C55B445E17CF8632009BB21B /* Icon-72.png in Resources */,
+				C55B446017CF8632009BB21B /* Icon-Small-50.png in Resources */,
+				C55B446217CF8632009BB21B /* Icon-Small.png in Resources */,
+				C55B446417CF8632009BB21B /* Icon-Small@2x.png in Resources */,
+				C55B446617CF8632009BB21B /* Icon.png in Resources */,
+				C55B446817CF8632009BB21B /* Icon@2x.png in Resources */,
+				C55B446A17CF8632009BB21B /* iTunesArtwork in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,7 +684,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHai/RenHai-Prefix.pch";
 				INFOPLIST_FILE = "RenHai/RenHai-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "人海";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -658,7 +700,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHai/RenHai-Prefix.pch";
 				INFOPLIST_FILE = "RenHai/RenHai-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "人海";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -671,7 +713,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHaiGHUnitTest/RenHaiGHUnitTest-Prefix.pch";
 				INFOPLIST_FILE = "RenHaiGHUnitTest/RenHaiGHUnitTest-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "人海测试";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -684,7 +726,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHaiGHUnitTest/RenHaiGHUnitTest-Prefix.pch";
 				INFOPLIST_FILE = "RenHaiGHUnitTest/RenHaiGHUnitTest-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "人海测试";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
