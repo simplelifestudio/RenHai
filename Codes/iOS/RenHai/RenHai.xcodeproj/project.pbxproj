@@ -14,13 +14,9 @@
 		C55B43F017CF580A009BB21B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EF17CF580A009BB21B /* CoreGraphics.framework */; };
 		C55B43F617CF580A009BB21B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C55B43F417CF580A009BB21B /* InfoPlist.strings */; };
 		C55B43F817CF580A009BB21B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B43F717CF580A009BB21B /* main.m */; };
-		C55B43FC17CF580A009BB21B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B43FB17CF580A009BB21B /* AppDelegate.m */; };
 		C55B43FE17CF580A009BB21B /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B43FD17CF580A009BB21B /* Default.png */; };
 		C55B440017CF580A009BB21B /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B43FF17CF580A009BB21B /* Default@2x.png */; };
 		C55B440217CF580A009BB21B /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B440117CF580A009BB21B /* Default-568h@2x.png */; };
-		C55B440517CF580A009BB21B /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C55B440317CF580A009BB21B /* MainStoryboard_iPhone.storyboard */; };
-		C55B440817CF580A009BB21B /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C55B440617CF580A009BB21B /* MainStoryboard_iPad.storyboard */; };
-		C55B440B17CF580A009BB21B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B440A17CF580A009BB21B /* ViewController.m */; };
 		C55B442217CF5992009BB21B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EB17CF580A009BB21B /* UIKit.framework */; };
 		C55B442317CF5992009BB21B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43ED17CF580A009BB21B /* Foundation.framework */; };
 		C55B442417CF5992009BB21B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EF17CF580A009BB21B /* CoreGraphics.framework */; };
@@ -50,13 +46,17 @@
 		C55B446817CF8632009BB21B /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445B17CF8632009BB21B /* Icon@2x.png */; };
 		C55B446917CF8632009BB21B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = C55B445C17CF8632009BB21B /* iTunesArtwork */; };
 		C55B446A17CF8632009BB21B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = C55B445C17CF8632009BB21B /* iTunesArtwork */; };
+		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
+		C5D1214917CF9C570064C68A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214717CF9C570064C68A /* ViewController.m */; };
+		C5D1214E17CF9C740064C68A /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5D1214A17CF9C740064C68A /* MainStoryboard_iPad.storyboard */; };
+		C5D1214F17CF9C740064C68A /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5D1214C17CF9C740064C68A /* MainStoryboard_iPhone.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		92519C2C061245F9942C7EC7 /* Pods-RenHaiGHUnitTest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RenHaiGHUnitTest.xcconfig"; path = "Pods/Pods-RenHaiGHUnitTest.xcconfig"; sourceTree = SOURCE_ROOT; };
 		9B66314B17C746578ACF6BD6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE6EB6DB7AC443EFBAAD45CD /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
-		C55B43E817CF580A009BB21B /* 人海.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "人海.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C55B43E817CF580A009BB21B /* RenHai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55B43EB17CF580A009BB21B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C55B43ED17CF580A009BB21B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C55B43EF17CF580A009BB21B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -64,16 +64,10 @@
 		C55B43F517CF580A009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C55B43F717CF580A009BB21B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		C55B43F917CF580A009BB21B /* RenHai-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RenHai-Prefix.pch"; sourceTree = "<group>"; };
-		C55B43FA17CF580A009BB21B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ../AppDelegate.h; sourceTree = "<group>"; };
-		C55B43FB17CF580A009BB21B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = ../AppDelegate.m; sourceTree = "<group>"; };
 		C55B43FD17CF580A009BB21B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		C55B43FF17CF580A009BB21B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		C55B440117CF580A009BB21B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		C55B440417CF580A009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
-		C55B440717CF580A009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
-		C55B440917CF580A009BB21B /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = ../../ViewController.h; sourceTree = "<group>"; };
-		C55B440A17CF580A009BB21B /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = ../../ViewController.m; sourceTree = "<group>"; };
-		C55B442117CF5992009BB21B /* 人海测试.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "人海测试.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHaiGHUnitTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55B442717CF5992009BB21B /* RenHaiGHUnitTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RenHaiGHUnitTest-Info.plist"; sourceTree = "<group>"; };
 		C55B442917CF5992009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C55B442B17CF5992009BB21B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -98,6 +92,12 @@
 		C55B445A17CF8632009BB21B /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		C55B445B17CF8632009BB21B /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		C55B445C17CF8632009BB21B /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
+		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; };
+		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; };
+		C5D1214617CF9C570064C68A /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = RenHai/ViewController.h; sourceTree = SOURCE_ROOT; };
+		C5D1214717CF9C570064C68A /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = RenHai/ViewController.m; sourceTree = SOURCE_ROOT; };
+		C5D1214B17CF9C740064C68A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = RenHai/en.lproj/MainStoryboard_iPad.storyboard; sourceTree = SOURCE_ROOT; };
+		C5D1214D17CF9C740064C68A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = RenHai/en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = SOURCE_ROOT; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -143,8 +143,8 @@
 		C55B43E917CF580A009BB21B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C55B43E817CF580A009BB21B /* 人海.app */,
-				C55B442117CF5992009BB21B /* 人海测试.app */,
+				C55B43E817CF580A009BB21B /* RenHai.app */,
+				C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -228,8 +228,8 @@
 		C55B441517CF587A009BB21B /* Src */ = {
 			isa = PBXGroup;
 			children = (
-				C55B43FA17CF580A009BB21B /* AppDelegate.h */,
-				C55B43FB17CF580A009BB21B /* AppDelegate.m */,
+				C5D1214417CF9C570064C68A /* AppDelegate.h */,
+				C5D1214517CF9C570064C68A /* AppDelegate.m */,
 				C55B441617CF58B6009BB21B /* AppData */,
 				C55B441717CF58B6009BB21B /* Common */,
 				C55B441817CF58B6009BB21B /* Communication */,
@@ -265,10 +265,10 @@
 		C55B441917CF58B6009BB21B /* GUI */ = {
 			isa = PBXGroup;
 			children = (
-				C55B440917CF580A009BB21B /* ViewController.h */,
-				C55B440A17CF580A009BB21B /* ViewController.m */,
-				C55B440317CF580A009BB21B /* MainStoryboard_iPhone.storyboard */,
-				C55B440617CF580A009BB21B /* MainStoryboard_iPad.storyboard */,
+				C5D1214617CF9C570064C68A /* ViewController.h */,
+				C5D1214717CF9C570064C68A /* ViewController.m */,
+				C5D1214A17CF9C740064C68A /* MainStoryboard_iPad.storyboard */,
+				C5D1214C17CF9C740064C68A /* MainStoryboard_iPhone.storyboard */,
 			);
 			path = GUI;
 			sourceTree = "<group>";
@@ -351,9 +351,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C55B43E717CF580A009BB21B /* RenHai */ = {
+		C55B43E717CF580A009BB21B /* 人海 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C55B440E17CF580A009BB21B /* Build configuration list for PBXNativeTarget "RenHai" */;
+			buildConfigurationList = C55B440E17CF580A009BB21B /* Build configuration list for PBXNativeTarget "人海" */;
 			buildPhases = (
 				62A41906FFA9465A970C7A06 /* Check Pods Manifest.lock */,
 				C55B43E417CF580A009BB21B /* Sources */,
@@ -366,14 +366,14 @@
 			);
 			dependencies = (
 			);
-			name = RenHai;
+			name = "人海";
 			productName = RenHai;
-			productReference = C55B43E817CF580A009BB21B /* 人海.app */;
+			productReference = C55B43E817CF580A009BB21B /* RenHai.app */;
 			productType = "com.apple.product-type.application";
 		};
-		C55B442017CF5992009BB21B /* RenHaiGHUnitTest */ = {
+		C55B442017CF5992009BB21B /* 人海测试 */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C55B444017CF5993009BB21B /* Build configuration list for PBXNativeTarget "RenHaiGHUnitTest" */;
+			buildConfigurationList = C55B444017CF5993009BB21B /* Build configuration list for PBXNativeTarget "人海测试" */;
 			buildPhases = (
 				51DF468EFF3741DB9C0EE23B /* Check Pods Manifest.lock */,
 				C55B441D17CF5992009BB21B /* Sources */,
@@ -385,9 +385,9 @@
 			);
 			dependencies = (
 			);
-			name = RenHaiGHUnitTest;
+			name = "人海测试";
 			productName = RenHaiGHUnitTest;
-			productReference = C55B442117CF5992009BB21B /* 人海测试.app */;
+			productReference = C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -411,8 +411,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C55B43E717CF580A009BB21B /* RenHai */,
-				C55B442017CF5992009BB21B /* RenHaiGHUnitTest */,
+				C55B43E717CF580A009BB21B /* 人海 */,
+				C55B442017CF5992009BB21B /* 人海测试 */,
 			);
 		};
 /* End PBXProject section */
@@ -426,8 +426,6 @@
 				C55B43FE17CF580A009BB21B /* Default.png in Resources */,
 				C55B440017CF580A009BB21B /* Default@2x.png in Resources */,
 				C55B440217CF580A009BB21B /* Default-568h@2x.png in Resources */,
-				C55B440517CF580A009BB21B /* MainStoryboard_iPhone.storyboard in Resources */,
-				C55B440817CF580A009BB21B /* MainStoryboard_iPad.storyboard in Resources */,
 				C55B445D17CF8632009BB21B /* Icon-72.png in Resources */,
 				C55B445F17CF8632009BB21B /* Icon-Small-50.png in Resources */,
 				C55B446117CF8632009BB21B /* Icon-Small.png in Resources */,
@@ -435,6 +433,8 @@
 				C55B446517CF8632009BB21B /* Icon.png in Resources */,
 				C55B446717CF8632009BB21B /* Icon@2x.png in Resources */,
 				C55B446917CF8632009BB21B /* iTunesArtwork in Resources */,
+				C5D1214E17CF9C740064C68A /* MainStoryboard_iPad.storyboard in Resources */,
+				C5D1214F17CF9C740064C68A /* MainStoryboard_iPhone.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,9 +542,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				C55B43F817CF580A009BB21B /* main.m in Sources */,
-				C55B43FC17CF580A009BB21B /* AppDelegate.m in Sources */,
-				C55B440B17CF580A009BB21B /* ViewController.m in Sources */,
 				C55B445117CF5C14009BB21B /* GTMBase64.m in Sources */,
+				C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */,
+				C5D1214917CF9C570064C68A /* ViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -570,24 +570,6 @@
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
-		C55B440317CF580A009BB21B /* MainStoryboard_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C55B440417CF580A009BB21B /* en */,
-			);
-			name = MainStoryboard_iPhone.storyboard;
-			path = ../..;
-			sourceTree = "<group>";
-		};
-		C55B440617CF580A009BB21B /* MainStoryboard_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C55B440717CF580A009BB21B /* en */,
-			);
-			name = MainStoryboard_iPad.storyboard;
-			path = ../..;
-			sourceTree = "<group>";
-		};
 		C55B442817CF5992009BB21B /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -610,6 +592,22 @@
 				C55B443E17CF5993009BB21B /* en */,
 			);
 			name = ViewController_iPad.xib;
+			sourceTree = "<group>";
+		};
+		C5D1214A17CF9C740064C68A /* MainStoryboard_iPad.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C5D1214B17CF9C740064C68A /* en */,
+			);
+			name = MainStoryboard_iPad.storyboard;
+			sourceTree = "<group>";
+		};
+		C5D1214C17CF9C740064C68A /* MainStoryboard_iPhone.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C5D1214D17CF9C740064C68A /* en */,
+			);
+			name = MainStoryboard_iPhone.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -684,7 +682,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHai/RenHai-Prefix.pch";
 				INFOPLIST_FILE = "RenHai/RenHai-Info.plist";
-				PRODUCT_NAME = "人海";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -700,7 +698,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHai/RenHai-Prefix.pch";
 				INFOPLIST_FILE = "RenHai/RenHai-Info.plist";
-				PRODUCT_NAME = "人海";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -713,7 +711,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHaiGHUnitTest/RenHaiGHUnitTest-Prefix.pch";
 				INFOPLIST_FILE = "RenHaiGHUnitTest/RenHaiGHUnitTest-Info.plist";
-				PRODUCT_NAME = "人海测试";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -726,7 +724,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHaiGHUnitTest/RenHaiGHUnitTest-Prefix.pch";
 				INFOPLIST_FILE = "RenHaiGHUnitTest/RenHaiGHUnitTest-Info.plist";
-				PRODUCT_NAME = "人海测试";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -743,7 +741,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C55B440E17CF580A009BB21B /* Build configuration list for PBXNativeTarget "RenHai" */ = {
+		C55B440E17CF580A009BB21B /* Build configuration list for PBXNativeTarget "人海" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C55B440F17CF580A009BB21B /* Debug */,
@@ -752,7 +750,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C55B444017CF5993009BB21B /* Build configuration list for PBXNativeTarget "RenHaiGHUnitTest" */ = {
+		C55B444017CF5993009BB21B /* Build configuration list for PBXNativeTarget "人海测试" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C55B444117CF5993009BB21B /* Debug */,
