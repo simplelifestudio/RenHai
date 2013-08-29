@@ -1,0 +1,2 @@
+PODS_RENHAIGHUNITTEST_OPENTOKSDK_WEBRTC_FRAMEWORK_SEARCH_PATHS = "$(PODS_ROOT)/OpenTokSDK-WebRTC/"
+PODS_RENHAIGHUNITTEST_OPENTOKSDK_WEBRTC_OTHER_LDFLAGS = -lstdc++ -lz -framework AVFoundation -framework AudioToolbox -framework CFNetwork -framework CoreAudio -framework CoreMedia -framework CoreTelephony -framework CoreVideo -framework MobileCoreServices -framework OpenGLES -framework Opentok -framework QuartzCore -framework Security -framework SystemConfiguration -framework UIKit

@@ -1,0 +1,40 @@
+PODS:
+  - AFNetworking (1.3.2)
+  - CocoaLumberjack (1.6.2)
+  - EGOTableViewPullRefresh (0.1.0)
+  - FlatUIKit (1.2)
+  - GHUnitIOS (0.5.6)
+  - MBProgressHUD (0.7)
+  - OpenTokSDK-WebRTC (2.1.4)
+  - PKRevealController (1.0b2)
+  - Reachability (3.1.1)
+  - SocketRocket (0.3.1-beta2)
+  - SSKeychain (1.2.0)
+
+DEPENDENCIES:
+  - AFNetworking (~> 1.3.2)
+  - CocoaLumberjack (~> 1.6.2)
+  - EGOTableViewPullRefresh (~> 0.1.0)
+  - FlatUIKit (~> 1.2)
+  - GHUnitIOS (~> 0.5.6)
+  - MBProgressHUD (~> 0.7)
+  - OpenTokSDK-WebRTC (~> 2.1.4)
+  - PKRevealController (~> 1.0b2)
+  - Reachability (~> 3.1.1)
+  - SocketRocket (~> 0.3.1-beta2)
+  - SSKeychain (~> 1.2.0)
+
+SPEC CHECKSUMS:
+  AFNetworking: 7f9bcd7c287a75476cd5c61e82fd3380e93e4c54
+  CocoaLumberjack: d73e1e317ced14ab930797dda6c17156ff17aaa1
+  EGOTableViewPullRefresh: 6ba637ce6dd3186b503d2d91e6b3a08a26d650f5
+  FlatUIKit: 43b2acaa6f4ef57539b51b00e4ce62d506e33e11
+  GHUnitIOS: bf149b2c44084eee2785ce4ac3675c3a699e509d
+  MBProgressHUD: 1fd8591a2216d5dec6de24e09187bb03bcbe9946
+  OpenTokSDK-WebRTC: 8858edc7cbe5bb53e1360a2c3d1c672f4d681a8f
+  PKRevealController: 631e6a3db833a0c660203c2dba0963109549ec8a
+  Reachability: 2be6bc2fd2bd31d97f5db33e75e4b29c79e95883
+  SocketRocket: 7ac946bcce46287a791dfff3c1f8daa692821dae
+  SSKeychain: 2fe90c92034129d9615a508529b601a520f297d1
+
+COCOAPODS: 0.23.0
