@@ -2,6 +2,6 @@
 
 *.xcuserstate
 
-Codes/iOS/RenHai/RenHai.xcworkspace/xcuserdata/motodexter.xcuserdatad/UserInterfaceState.xcuserstate
+*.DS_Store
 
-*.xcuserstate
+Codes/iOS/RenHai/RenHai.xcworkspace/xcuserdata/motodexter.xcuserdatad/UserInterfaceState.xcuserstate
