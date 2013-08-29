@@ -47,16 +47,13 @@
 		C55B446917CF8632009BB21B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = C55B445C17CF8632009BB21B /* iTunesArtwork */; };
 		C55B446A17CF8632009BB21B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = C55B445C17CF8632009BB21B /* iTunesArtwork */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
-		C5D1214917CF9C570064C68A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214717CF9C570064C68A /* ViewController.m */; };
-		C5D1214E17CF9C740064C68A /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5D1214A17CF9C740064C68A /* MainStoryboard_iPad.storyboard */; };
-		C5D1214F17CF9C740064C68A /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5D1214C17CF9C740064C68A /* MainStoryboard_iPhone.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		92519C2C061245F9942C7EC7 /* Pods-RenHaiGHUnitTest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RenHaiGHUnitTest.xcconfig"; path = "Pods/Pods-RenHaiGHUnitTest.xcconfig"; sourceTree = SOURCE_ROOT; };
 		9B66314B17C746578ACF6BD6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE6EB6DB7AC443EFBAAD45CD /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
-		C55B43E817CF580A009BB21B /* RenHai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHai.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C55B43E817CF580A009BB21B /* 人海.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "人海.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55B43EB17CF580A009BB21B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C55B43ED17CF580A009BB21B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C55B43EF17CF580A009BB21B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -67,7 +64,7 @@
 		C55B43FD17CF580A009BB21B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		C55B43FF17CF580A009BB21B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		C55B440117CF580A009BB21B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHaiGHUnitTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C55B442117CF5992009BB21B /* 人海测试.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "人海测试.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55B442717CF5992009BB21B /* RenHaiGHUnitTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RenHaiGHUnitTest-Info.plist"; sourceTree = "<group>"; };
 		C55B442917CF5992009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C55B442B17CF5992009BB21B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -94,10 +91,6 @@
 		C55B445C17CF8632009BB21B /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; };
-		C5D1214617CF9C570064C68A /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = RenHai/ViewController.h; sourceTree = SOURCE_ROOT; };
-		C5D1214717CF9C570064C68A /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = RenHai/ViewController.m; sourceTree = SOURCE_ROOT; };
-		C5D1214B17CF9C740064C68A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = RenHai/en.lproj/MainStoryboard_iPad.storyboard; sourceTree = SOURCE_ROOT; };
-		C5D1214D17CF9C740064C68A /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = RenHai/en.lproj/MainStoryboard_iPhone.storyboard; sourceTree = SOURCE_ROOT; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -143,8 +136,8 @@
 		C55B43E917CF580A009BB21B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C55B43E817CF580A009BB21B /* RenHai.app */,
-				C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */,
+				C55B43E817CF580A009BB21B /* 人海.app */,
+				C55B442117CF5992009BB21B /* 人海测试.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -165,7 +158,7 @@
 		C55B43F117CF580A009BB21B /* RenHai */ = {
 			isa = PBXGroup;
 			children = (
-				C55B441517CF587A009BB21B /* Src */,
+				C5F8936817CFA136003EF1B3 /* Src */,
 				C55B441117CF587A009BB21B /* Lib */,
 				C55B441217CF587A009BB21B /* Res */,
 				C55B43F217CF580A009BB21B /* Supporting Files */,
@@ -176,6 +169,8 @@
 		C55B43F217CF580A009BB21B /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				C5D1214417CF9C570064C68A /* AppDelegate.h */,
+				C5D1214517CF9C570064C68A /* AppDelegate.m */,
 				C55B43F317CF580A009BB21B /* RenHai-Info.plist */,
 				C55B43F417CF580A009BB21B /* InfoPlist.strings */,
 				C55B43F717CF580A009BB21B /* main.m */,
@@ -223,75 +218,6 @@
 			children = (
 			);
 			path = Sounds;
-			sourceTree = "<group>";
-		};
-		C55B441517CF587A009BB21B /* Src */ = {
-			isa = PBXGroup;
-			children = (
-				C5D1214417CF9C570064C68A /* AppDelegate.h */,
-				C5D1214517CF9C570064C68A /* AppDelegate.m */,
-				C55B441617CF58B6009BB21B /* AppData */,
-				C55B441717CF58B6009BB21B /* Common */,
-				C55B441817CF58B6009BB21B /* Communication */,
-				C55B441917CF58B6009BB21B /* GUI */,
-				C55B441A17CF58B6009BB21B /* Logger */,
-				C55B441B17CF58B6009BB21B /* UserData */,
-				C55B441C17CF58B6009BB21B /* WebRTC */,
-			);
-			path = Src;
-			sourceTree = "<group>";
-		};
-		C55B441617CF58B6009BB21B /* AppData */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = AppData;
-			sourceTree = "<group>";
-		};
-		C55B441717CF58B6009BB21B /* Common */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
-		C55B441817CF58B6009BB21B /* Communication */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Communication;
-			sourceTree = "<group>";
-		};
-		C55B441917CF58B6009BB21B /* GUI */ = {
-			isa = PBXGroup;
-			children = (
-				C5D1214617CF9C570064C68A /* ViewController.h */,
-				C5D1214717CF9C570064C68A /* ViewController.m */,
-				C5D1214A17CF9C740064C68A /* MainStoryboard_iPad.storyboard */,
-				C5D1214C17CF9C740064C68A /* MainStoryboard_iPhone.storyboard */,
-			);
-			path = GUI;
-			sourceTree = "<group>";
-		};
-		C55B441A17CF58B6009BB21B /* Logger */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Logger;
-			sourceTree = "<group>";
-		};
-		C55B441B17CF58B6009BB21B /* UserData */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = UserData;
-			sourceTree = "<group>";
-		};
-		C55B441C17CF58B6009BB21B /* WebRTC */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = WebRTC;
 			sourceTree = "<group>";
 		};
 		C55B442517CF5992009BB21B /* RenHaiGHUnitTest */ = {
@@ -348,6 +274,69 @@
 			path = GTMBase64;
 			sourceTree = "<group>";
 		};
+		C5F8936817CFA136003EF1B3 /* Src */ = {
+			isa = PBXGroup;
+			children = (
+				C5F8936917CFA136003EF1B3 /* AppData */,
+				C5F8936A17CFA136003EF1B3 /* Common */,
+				C5F8936B17CFA136003EF1B3 /* Communication */,
+				C5F8936C17CFA136003EF1B3 /* GUI */,
+				C5F8936D17CFA136003EF1B3 /* Logger */,
+				C5F8936E17CFA136003EF1B3 /* UserData */,
+				C5F8936F17CFA136003EF1B3 /* WebRTC */,
+			);
+			path = Src;
+			sourceTree = "<group>";
+		};
+		C5F8936917CFA136003EF1B3 /* AppData */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = AppData;
+			sourceTree = "<group>";
+		};
+		C5F8936A17CFA136003EF1B3 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		C5F8936B17CFA136003EF1B3 /* Communication */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Communication;
+			sourceTree = "<group>";
+		};
+		C5F8936C17CFA136003EF1B3 /* GUI */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = GUI;
+			sourceTree = "<group>";
+		};
+		C5F8936D17CFA136003EF1B3 /* Logger */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Logger;
+			sourceTree = "<group>";
+		};
+		C5F8936E17CFA136003EF1B3 /* UserData */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UserData;
+			sourceTree = "<group>";
+		};
+		C5F8936F17CFA136003EF1B3 /* WebRTC */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = WebRTC;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -368,7 +357,7 @@
 			);
 			name = "人海";
 			productName = RenHai;
-			productReference = C55B43E817CF580A009BB21B /* RenHai.app */;
+			productReference = C55B43E817CF580A009BB21B /* 人海.app */;
 			productType = "com.apple.product-type.application";
 		};
 		C55B442017CF5992009BB21B /* 人海测试 */ = {
@@ -387,7 +376,7 @@
 			);
 			name = "人海测试";
 			productName = RenHaiGHUnitTest;
-			productReference = C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */;
+			productReference = C55B442117CF5992009BB21B /* 人海测试.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -433,8 +422,6 @@
 				C55B446517CF8632009BB21B /* Icon.png in Resources */,
 				C55B446717CF8632009BB21B /* Icon@2x.png in Resources */,
 				C55B446917CF8632009BB21B /* iTunesArtwork in Resources */,
-				C5D1214E17CF9C740064C68A /* MainStoryboard_iPad.storyboard in Resources */,
-				C5D1214F17CF9C740064C68A /* MainStoryboard_iPhone.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -544,7 +531,6 @@
 				C55B43F817CF580A009BB21B /* main.m in Sources */,
 				C55B445117CF5C14009BB21B /* GTMBase64.m in Sources */,
 				C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */,
-				C5D1214917CF9C570064C68A /* ViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -592,22 +578,6 @@
 				C55B443E17CF5993009BB21B /* en */,
 			);
 			name = ViewController_iPad.xib;
-			sourceTree = "<group>";
-		};
-		C5D1214A17CF9C740064C68A /* MainStoryboard_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C5D1214B17CF9C740064C68A /* en */,
-			);
-			name = MainStoryboard_iPad.storyboard;
-			sourceTree = "<group>";
-		};
-		C5D1214C17CF9C740064C68A /* MainStoryboard_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C5D1214D17CF9C740064C68A /* en */,
-			);
-			name = MainStoryboard_iPhone.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
