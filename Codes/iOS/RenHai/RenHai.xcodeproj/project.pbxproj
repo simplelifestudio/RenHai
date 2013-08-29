@@ -33,6 +33,8 @@
 		C55B443C17CF5993009BB21B /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C55B443A17CF5993009BB21B /* ViewController_iPhone.xib */; };
 		C55B443F17CF5993009BB21B /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = C55B443D17CF5993009BB21B /* ViewController_iPad.xib */; };
 		C55B444717CF5B72009BB21B /* GHUnitSampleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B444617CF5B72009BB21B /* GHUnitSampleTest.m */; };
+		C55B445117CF5C14009BB21B /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B444F17CF5C14009BB21B /* GTMBase64.m */; };
+		C55B445217CF5C14009BB21B /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B444F17CF5C14009BB21B /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +72,9 @@
 		C55B443E17CF5993009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
 		C55B444517CF5B72009BB21B /* GHUnitSampleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHUnitSampleTest.h; sourceTree = "<group>"; };
 		C55B444617CF5B72009BB21B /* GHUnitSampleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GHUnitSampleTest.m; sourceTree = "<group>"; };
+		C55B444E17CF5C14009BB21B /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
+		C55B444F17CF5C14009BB21B /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
+		C55B445017CF5C14009BB21B /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -160,6 +165,7 @@
 		C55B441117CF587A009BB21B /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				C55B444D17CF5C14009BB21B /* GTMBase64 */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -298,6 +304,16 @@
 				C55B444617CF5B72009BB21B /* GHUnitSampleTest.m */,
 			);
 			path = TestCases;
+			sourceTree = "<group>";
+		};
+		C55B444D17CF5C14009BB21B /* GTMBase64 */ = {
+			isa = PBXGroup;
+			children = (
+				C55B444E17CF5C14009BB21B /* GTMBase64.h */,
+				C55B444F17CF5C14009BB21B /* GTMBase64.m */,
+				C55B445017CF5C14009BB21B /* GTMDefines.h */,
+			);
+			path = GTMBase64;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -468,6 +484,7 @@
 				C55B43F817CF580A009BB21B /* main.m in Sources */,
 				C55B43FC17CF580A009BB21B /* AppDelegate.m in Sources */,
 				C55B440B17CF580A009BB21B /* ViewController.m in Sources */,
+				C55B445117CF5C14009BB21B /* GTMBase64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -478,6 +495,7 @@
 				C55B442C17CF5992009BB21B /* main.m in Sources */,
 				C55B443917CF5993009BB21B /* ViewController.m in Sources */,
 				C55B444717CF5B72009BB21B /* GHUnitSampleTest.m in Sources */,
+				C55B445217CF5C14009BB21B /* GTMBase64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
