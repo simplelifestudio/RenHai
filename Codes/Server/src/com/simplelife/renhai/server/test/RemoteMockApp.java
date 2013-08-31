@@ -32,7 +32,11 @@ public class RemoteMockApp extends AbstractMockApp
     /** */
     public void assess(String impressLabelList)
     {
-        String[] labels = impressLabelList.split(",");
+    }
+    
+    public void assessAndQuit(String impressLabelList)
+    {
+    	
     }
     
     /** */
