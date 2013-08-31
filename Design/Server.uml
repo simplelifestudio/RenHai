@@ -34422,7 +34422,7 @@ JsonFactory
 <XPD:OBJ name="NameCompartment" type="UMLNameCompartmentView" guid="UJ1+pno4Ek+BW6BIIEp0swAA">
 <XPD:OBJ name="NameLabel" type="LabelView" guid="c2HQnST01Eiff4/+HFlbcQAA">
 <XPD:ATTR name="FontStyle" type="integer">1</XPD:ATTR>
-<XPD:ATTR name="Text" type="string">SlaveMockApp</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">LocalMockApp</XPD:ATTR>
 </XPD:OBJ>
 <XPD:OBJ name="StereotypeLabel" type="LabelView" guid="P1q1tcPy/02ctJnzG12SWAAA">
 <XPD:ATTR name="Visible" type="boolean">False</XPD:ATTR>
@@ -34474,12 +34474,12 @@ JsonFactory
 <XPD:ATTR name="Left" type="integer">556</XPD:ATTR>
 <XPD:ATTR name="Top" type="integer">396</XPD:ATTR>
 <XPD:ATTR name="Width" type="integer">114</XPD:ATTR>
-<XPD:ATTR name="Height" type="integer">56</XPD:ATTR>
+<XPD:ATTR name="Height" type="integer">69</XPD:ATTR>
 <XPD:REF name="Model">6EV9QhJy70Cf0zmE1/rhoAAA</XPD:REF>
 <XPD:OBJ name="NameCompartment" type="UMLNameCompartmentView" guid="8IRxv6EqMkiHDXnu0AXxYAAA">
 <XPD:OBJ name="NameLabel" type="LabelView" guid="T12rK+BIvEuIIkfCaOSE8wAA">
 <XPD:ATTR name="FontStyle" type="integer">1</XPD:ATTR>
-<XPD:ATTR name="Text" type="string">InitiativeMockApp</XPD:ATTR>
+<XPD:ATTR name="Text" type="string">RemoteMockApp</XPD:ATTR>
 </XPD:OBJ>
 <XPD:OBJ name="StereotypeLabel" type="LabelView" guid="gOcfyIBHfEC0EcWIvQymCAAA">
 <XPD:ATTR name="Visible" type="boolean">False</XPD:ATTR>
@@ -34502,7 +34502,7 @@ JsonFactory
 <XPD:OBJ name="OwnedViews[9]" type="UMLGeneralizationView" guid="KHsoQeF6Z0udR4M9s2ReTAAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">588,396;538,340</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">583,396;536,340</XPD:ATTR>
 <XPD:REF name="Model">E8BTbwd3LkiusV9YAY31wgAA</XPD:REF>
 <XPD:REF name="Head">Jadr0Ia2KEeEwe0fOp7wFQAA</XPD:REF>
 <XPD:REF name="Tail">aIy2o+k4G0i/4qz4yefmwQAA</XPD:REF>
@@ -34758,7 +34758,7 @@ JsonFactory
 <XPD:OBJ name="OwnedViews[14]" type="UMLAssociationView" guid="7lm2QOEg7UeQ0bKE11qamQAA">
 <XPD:ATTR name="LineColor" type="string">clMaroon</XPD:ATTR>
 <XPD:ATTR name="FillColor" type="string">$00B9FFFF</XPD:ATTR>
-<XPD:ATTR name="Points" type="Points">736,430;669,426</XPD:ATTR>
+<XPD:ATTR name="Points" type="Points">736,432;669,431</XPD:ATTR>
 <XPD:REF name="Model">p5OzXK+k1kyZpjSfXFJbCAAA</XPD:REF>
 <XPD:REF name="Head">aIy2o+k4G0i/4qz4yefmwQAA</XPD:REF>
 <XPD:REF name="Tail">2qYU4GvmgEqfa7nTlusVbAAA</XPD:REF>
@@ -37323,7 +37323,7 @@ JsonFactory
 <XPD:REF name="Owner">pxS3T13YRkaFgYHBduZipgAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="Operations[9]" type="UMLOperation" guid="WCABq3KXCUuy961MjXuYxwAA">
-<XPD:ATTR name="Name" type="string">selectBusiness</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">enterBusinessPool</XPD:ATTR>
 <XPD:REF name="Owner">pxS3T13YRkaFgYHBduZipgAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="Operations[10]" type="UMLOperation" guid="Z0hG+7QvoEGyNIxiLTrGfQAA">
@@ -40921,7 +40921,7 @@ JsonFactory
 </XPD:OBJ>
 </XPD:OBJ>
 <XPD:OBJ name="OwnedElements[2]" type="UMLClass" guid="DJQnoMnfhUSkMKXT5KHRqQAA">
-<XPD:ATTR name="Name" type="string">SlaveMockApp</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">LocalMockApp</XPD:ATTR>
 <XPD:REF name="Namespace">D6pVkBr4OkixDw4LmOG9mQAA</XPD:REF>
 <XPD:ATTR name="#Views" type="integer">4</XPD:ATTR>
 <XPD:REF name="Views[0]">kzPW/e/kK0ej4qfq0UHwgAAA</XPD:REF>
@@ -40934,7 +40934,7 @@ JsonFactory
 <XPD:REF name="Associations[0]">/q7nfNLViEGcjnFsI5RdOAAA</XPD:REF>
 </XPD:OBJ>
 <XPD:OBJ name="OwnedElements[3]" type="UMLClass" guid="6EV9QhJy70Cf0zmE1/rhoAAA">
-<XPD:ATTR name="Name" type="string">InitiativeMockApp</XPD:ATTR>
+<XPD:ATTR name="Name" type="string">RemoteMockApp</XPD:ATTR>
 <XPD:REF name="Namespace">D6pVkBr4OkixDw4LmOG9mQAA</XPD:REF>
 <XPD:ATTR name="#Views" type="integer">4</XPD:ATTR>
 <XPD:REF name="Views[0]">aIy2o+k4G0i/4qz4yefmwQAA</XPD:REF>
@@ -40943,9 +40943,13 @@ JsonFactory
 <XPD:REF name="Views[3]">hlNKcOnTEU2Lgu48lyZfawAA</XPD:REF>
 <XPD:ATTR name="#Generalizations" type="integer">1</XPD:ATTR>
 <XPD:REF name="Generalizations[0]">E8BTbwd3LkiusV9YAY31wgAA</XPD:REF>
-<XPD:ATTR name="#Operations" type="integer">1</XPD:ATTR>
+<XPD:ATTR name="#Operations" type="integer">2</XPD:ATTR>
 <XPD:OBJ name="Operations[0]" type="UMLOperation" guid="ffG68nj2e0q9tuKPGOl9UAAA">
 <XPD:ATTR name="Name" type="string">onJSONCommand</XPD:ATTR>
+<XPD:REF name="Owner">6EV9QhJy70Cf0zmE1/rhoAAA</XPD:REF>
+</XPD:OBJ>
+<XPD:OBJ name="Operations[1]" type="UMLOperation" guid="yBXqFXSF3UKvQZ4k6LCzzgAA">
+<XPD:ATTR name="Name" type="string">setRunningMode</XPD:ATTR>
 <XPD:REF name="Owner">6EV9QhJy70Cf0zmE1/rhoAAA</XPD:REF>
 </XPD:OBJ>
 <XPD:ATTR name="#Associations" type="integer">1</XPD:ATTR>
