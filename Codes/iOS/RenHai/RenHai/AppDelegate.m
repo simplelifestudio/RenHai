@@ -10,11 +10,36 @@
 
 #import <Crashlytics/Crashlytics.h>
 
+#import "LoggerModule.h"
+#import "CommunicationModule.h"
+#import "GUIModule.h"
+
 @implementation AppDelegate
+
+@synthesize moduleManager = _moduleManager;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    // Modules initialization
+    _moduleManager = [CBModuleManager sharedInstance];
+    
+    id<CBModule> loggerModule = [LoggerModule sharedInstance];
+    loggerModule.moduleWeightFactor = 0.1;
+    [_moduleManager registerModule:loggerModule];
+    
+    id<CBModule> communicationModule = [CommunicationModule sharedInstance];
+    communicationModule.moduleWeightFactor = 0.1;
+    [_moduleManager registerModule:communicationModule];
+    
+    id<CBModule> guiModule = [GUIModule sharedInstance];
+    guiModule.moduleWeightFactor = 0.2;
+    [_moduleManager registerModule:guiModule];
+    
+    [_moduleManager initModules];
+    
+    DDLogVerbose(@"App Sandbox Path: %@", NSHomeDirectory());
     
     [Crashlytics startWithAPIKey:@"592220da47f22b9cdb4a9df47ea79170d94a150a"];
     
