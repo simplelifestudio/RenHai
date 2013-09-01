@@ -161,9 +161,8 @@
 			"chatLossCount":"9",
 			"labelList":
 			{
-				"impress1":{"count":"7", "assessCount":"3"},
-				"impress2":{"count":"2", "assessCount":"1"},
-				"impress2":{"count":"1", "assessCount":"0"}
+				{"impressId":"4421", "impressName":"绅士", "count":"7", "assessCount":"3"},
+				{"impressId":"9976", "impressName":"风趣", "count":"3", "assessCount":"2"}
 			}
 		},
 		"interestCard":
