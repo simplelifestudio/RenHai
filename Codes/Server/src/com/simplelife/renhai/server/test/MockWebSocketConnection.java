@@ -2,12 +2,10 @@
  * MockWebSocketConnection.java
  * 
  * History:
- *     2013-8-28: Tomas Chen, initial version
+ *     2013-8-29: Tomas Chen, initial version
  * 
  * Copyright (c) 2013 SimpleLife Studio. All rights reserved.
  */
-
-
 
 package com.simplelife.renhai.server.test;
 
@@ -20,6 +18,9 @@ import com.simplelife.renhai.server.websocket.WebSocketConnection;
 /** */
 public class MockWebSocketConnection extends WebSocketConnection
 {
+    /** */
+    public LocalMockApp Unnamed1;
+    
     /** */
     public void disableConnection(IDeviceWrapper device)
     {
