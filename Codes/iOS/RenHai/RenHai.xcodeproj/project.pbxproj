@@ -88,6 +88,12 @@
 		C55B446A17CF8632009BB21B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = C55B445C17CF8632009BB21B /* iTunesArtwork */; };
 		C593C41517D2F55B00C26367 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C593C41417D2F55B00C26367 /* MainStoryboard_iPhone.storyboard */; };
 		C593C41817D2F5BF00C26367 /* HomeViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C41717D2F5BF00C26367 /* HomeViewController_iPhone.m */; };
+		C593C41B17D3244000C26367 /* AppDataModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C41A17D3244000C26367 /* AppDataModule.m */; };
+		C593C41C17D3244000C26367 /* AppDataModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C41A17D3244000C26367 /* AppDataModule.m */; };
+		C593C41F17D3258600C26367 /* UserDataModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C41E17D3258600C26367 /* UserDataModule.m */; };
+		C593C42017D3258600C26367 /* UserDataModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C41E17D3258600C26367 /* UserDataModule.m */; };
+		C593C42317D3259600C26367 /* WebRTCModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C42217D3259600C26367 /* WebRTCModule.m */; };
+		C593C42417D3259600C26367 /* WebRTCModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C42217D3259600C26367 /* WebRTCModule.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
 /* End PBXBuildFile section */
 
@@ -178,6 +184,12 @@
 		C593C41417D2F55B00C26367 /* MainStoryboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		C593C41617D2F5BF00C26367 /* HomeViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController_iPhone.h; sourceTree = "<group>"; };
 		C593C41717D2F5BF00C26367 /* HomeViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C41917D3244000C26367 /* AppDataModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDataModule.h; sourceTree = "<group>"; };
+		C593C41A17D3244000C26367 /* AppDataModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDataModule.m; sourceTree = "<group>"; };
+		C593C41D17D3258600C26367 /* UserDataModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataModule.h; sourceTree = "<group>"; };
+		C593C41E17D3258600C26367 /* UserDataModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataModule.m; sourceTree = "<group>"; };
+		C593C42117D3259600C26367 /* WebRTCModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebRTCModule.h; sourceTree = "<group>"; };
+		C593C42217D3259600C26367 /* WebRTCModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebRTCModule.m; sourceTree = "<group>"; };
 		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -380,6 +392,8 @@
 		C5F8936917CFA136003EF1B3 /* AppData */ = {
 			isa = PBXGroup;
 			children = (
+				C593C41917D3244000C26367 /* AppDataModule.h */,
+				C593C41A17D3244000C26367 /* AppDataModule.m */,
 			);
 			path = AppData;
 			sourceTree = "<group>";
@@ -462,6 +476,8 @@
 		C5F8936E17CFA136003EF1B3 /* UserData */ = {
 			isa = PBXGroup;
 			children = (
+				C593C41D17D3258600C26367 /* UserDataModule.h */,
+				C593C41E17D3258600C26367 /* UserDataModule.m */,
 			);
 			path = UserData;
 			sourceTree = "<group>";
@@ -469,6 +485,8 @@
 		C5F8936F17CFA136003EF1B3 /* WebRTC */ = {
 			isa = PBXGroup;
 			children = (
+				C593C42117D3259600C26367 /* WebRTCModule.h */,
+				C593C42217D3259600C26367 /* WebRTCModule.m */,
 			);
 			path = WebRTC;
 			sourceTree = "<group>";
@@ -689,6 +707,9 @@
 				C50505EA17D2D26C00DB6589 /* GUIStyle.m in Sources */,
 				C50505EE17D2D28600DB6589 /* CommunicationModule.m in Sources */,
 				C593C41817D2F5BF00C26367 /* HomeViewController_iPhone.m in Sources */,
+				C593C41B17D3244000C26367 /* AppDataModule.m in Sources */,
+				C593C41F17D3258600C26367 /* UserDataModule.m in Sources */,
+				C593C42317D3259600C26367 /* WebRTCModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -720,6 +741,9 @@
 				C50505E917D2D26C00DB6589 /* GUIModule.m in Sources */,
 				C50505EB17D2D26C00DB6589 /* GUIStyle.m in Sources */,
 				C50505EF17D2D28600DB6589 /* CommunicationModule.m in Sources */,
+				C593C41C17D3244000C26367 /* AppDataModule.m in Sources */,
+				C593C42017D3258600C26367 /* UserDataModule.m in Sources */,
+				C593C42417D3259600C26367 /* WebRTCModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
