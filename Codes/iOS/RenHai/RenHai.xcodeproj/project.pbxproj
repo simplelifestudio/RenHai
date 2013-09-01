@@ -86,6 +86,8 @@
 		C55B446817CF8632009BB21B /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445B17CF8632009BB21B /* Icon@2x.png */; };
 		C55B446917CF8632009BB21B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = C55B445C17CF8632009BB21B /* iTunesArtwork */; };
 		C55B446A17CF8632009BB21B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = C55B445C17CF8632009BB21B /* iTunesArtwork */; };
+		C593C41517D2F55B00C26367 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C593C41417D2F55B00C26367 /* MainStoryboard_iPhone.storyboard */; };
+		C593C41817D2F5BF00C26367 /* HomeViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C41717D2F5BF00C26367 /* HomeViewController_iPhone.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
 /* End PBXBuildFile section */
 
@@ -173,6 +175,9 @@
 		C55B445A17CF8632009BB21B /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		C55B445B17CF8632009BB21B /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		C55B445C17CF8632009BB21B /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
+		C593C41417D2F55B00C26367 /* MainStoryboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		C593C41617D2F5BF00C26367 /* HomeViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController_iPhone.h; sourceTree = "<group>"; };
+		C593C41717D2F5BF00C26367 /* HomeViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController_iPhone.m; sourceTree = "<group>"; };
 		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -438,6 +443,9 @@
 				C50505E517D2D26C00DB6589 /* GUIModule.m */,
 				C50505E617D2D26C00DB6589 /* GUIStyle.h */,
 				C50505E717D2D26C00DB6589 /* GUIStyle.m */,
+				C593C41617D2F5BF00C26367 /* HomeViewController_iPhone.h */,
+				C593C41717D2F5BF00C26367 /* HomeViewController_iPhone.m */,
+				C593C41417D2F55B00C26367 /* MainStoryboard_iPhone.storyboard */,
 			);
 			path = GUI;
 			sourceTree = "<group>";
@@ -550,6 +558,7 @@
 				C55B446517CF8632009BB21B /* Icon.png in Resources */,
 				C55B446717CF8632009BB21B /* Icon@2x.png in Resources */,
 				C55B446917CF8632009BB21B /* iTunesArtwork in Resources */,
+				C593C41517D2F55B00C26367 /* MainStoryboard_iPhone.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -679,6 +688,7 @@
 				C50505E817D2D26C00DB6589 /* GUIModule.m in Sources */,
 				C50505EA17D2D26C00DB6589 /* GUIStyle.m in Sources */,
 				C50505EE17D2D28600DB6589 /* CommunicationModule.m in Sources */,
+				C593C41817D2F5BF00C26367 /* HomeViewController_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
