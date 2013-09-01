@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C55B43E717CF580A009BB21B"
-               BuildableName = "&#20154;&#28023;.app"
-               BlueprintName = "&#20154;&#28023;"
+               BuildableName = "RenHai.app"
+               BlueprintName = "RenHai"
                ReferencedContainer = "container:RenHai.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C55B43E717CF580A009BB21B"
-            BuildableName = "&#20154;&#28023;.app"
-            BlueprintName = "&#20154;&#28023;"
+            BuildableName = "RenHai.app"
+            BlueprintName = "RenHai"
             ReferencedContainer = "container:RenHai.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -52,8 +52,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C55B43E717CF580A009BB21B"
-            BuildableName = "&#20154;&#28023;.app"
-            BlueprintName = "&#20154;&#28023;"
+            BuildableName = "RenHai.app"
+            BlueprintName = "RenHai"
             ReferencedContainer = "container:RenHai.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -70,8 +70,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C55B43E717CF580A009BB21B"
-            BuildableName = "&#20154;&#28023;.app"
-            BlueprintName = "&#20154;&#28023;"
+            BuildableName = "RenHai.app"
+            BlueprintName = "RenHai"
             ReferencedContainer = "container:RenHai.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
