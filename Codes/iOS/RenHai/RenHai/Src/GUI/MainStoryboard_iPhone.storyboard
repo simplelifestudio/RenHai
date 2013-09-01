@@ -4,10 +4,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
-        <!--Home View Controller i Phone-->
+        <!--Splash View Controller i Phone-->
         <scene sceneID="m1U-Om-lIu">
             <objects>
-                <viewController storyboardIdentifier="sbid_homeviewcontroller_iphone" id="DgF-zo-nqX" customClass="HomeViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="sbid_splashviewcontroller_iphone" id="DgF-zo-nqX" customClass="SplashViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="NMg-NX-QmX">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -16,12 +16,199 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rlm-A3-Ugf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="369" y="69"/>
+            <point key="canvasLocation" x="-317" y="-327"/>
+        </scene>
+        <!--Config View Controller i Phone-->
+        <scene sceneID="2XR-3H-66m">
+            <objects>
+                <viewController storyboardIdentifier="sbid_configviewcontroller_iphone" id="Hx6-hH-w8F" customClass="ConfigViewController_iPhone" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="H1F-lY-EeO">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="L7e-o9-YOz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-322" y="424"/>
+        </scene>
+        <!--Chat Impress View Controller i Phone-->
+        <scene sceneID="bn4-Bc-kHz">
+            <objects>
+                <viewController storyboardIdentifier="sbid_chatimpressviewcontroller_iphone" id="AMc-ys-cLE" customClass="ChatImpressViewController_iPhone" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="oHj-lV-qis">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mb2-zd-MPb" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-322" y="1184"/>
+        </scene>
+        <!--Warning View Controller i Phone-->
+        <scene sceneID="Op2-oa-IBe">
+            <objects>
+                <viewController storyboardIdentifier="sbid_warningviewcontroller_iphone" id="eef-45-kBk" customClass="WarningViewController_iPhone" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="ggI-eV-eSW">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uj7-c3-aVO" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="102" y="1180"/>
+        </scene>
+        <!--Help View Controller i Phone-->
+        <scene sceneID="YZc-Dp-bQm">
+            <objects>
+                <viewController storyboardIdentifier="sbid_helpviewcontroller_iphone" id="Imt-vO-xvM" customClass="HelpViewController_iPhone" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="JjY-o6-NsQ">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BPW-TB-TDH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="110" y="424"/>
+        </scene>
+        <!--Chat Wait View Controller i Phone-->
+        <scene sceneID="lxn-CJ-Ljo">
+            <objects>
+                <viewController storyboardIdentifier="sbid_chatwaitviewcontroller_iphone" id="liG-sB-OzW" customClass="ChatWaitViewController_iPhone" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Y1g-pW-N07">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="SpY-7A-QfI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="554" y="422"/>
+        </scene>
+        <!--Chat Confirm View Controller i Phone-->
+        <scene sceneID="LvM-7V-czb">
+            <objects>
+                <viewController storyboardIdentifier="sbid_chatconfirmviewcontroller_iphone" id="UgM-pj-HWT" customClass="ChatConfirmViewController_iPhone" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="y48-DI-AFQ">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iEh-wB-Ngp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="952" y="424"/>
+        </scene>
+        <!--Chat WebRTC View Controller i Phone-->
+        <scene sceneID="gbj-pg-eqa">
+            <objects>
+                <viewController storyboardIdentifier="sbid_chatwebrtcviewcontroller_iphone" id="Rwb-k1-UZq" customClass="ChatWebRTCViewController_iPhone" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="aRm-Ul-Twj">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mov-Tt-rJQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1352" y="420"/>
+        </scene>
+        <!--Home View Controller i Phone-->
+        <scene sceneID="lRd-QE-GlH">
+            <objects>
+                <viewController storyboardIdentifier="sbid_homeviewcontroller_iphone" id="KTb-47-hxa" customClass="HomeViewController_iPhone" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="e4l-i9-iJx">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3NT-bM-sTE" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="117" y="-327"/>
+        </scene>
+        <!--Device View Controller i Phone-->
+        <scene sceneID="chS-id-q6j">
+            <objects>
+                <viewController storyboardIdentifier="sbid_deviceviewcontroller_iphone" id="Fe4-oS-0Lu" customClass="DeviceViewController_iPhone" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="lvJ-Hh-vrl">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="60F-YZ-ngr" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="546" y="-330"/>
+        </scene>
+        <!--Impress View Controller i Phone-->
+        <scene sceneID="w40-uq-hTf">
+            <objects>
+                <viewController storyboardIdentifier="sbid_impressviewcontroller_iphone" id="UiM-FE-4vZ" customClass="ImpressViewController_iPhone" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="EiP-Uw-swS">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xkI-s6-GVM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="952" y="-337"/>
+        </scene>
+        <!--Interest View Controller i Phone-->
+        <scene sceneID="Sq7-2g-1YB">
+            <objects>
+                <viewController storyboardIdentifier="sbid_interestviewcontroller_iphone" id="3Zd-iR-RMM" customClass="InterestViewController_iPhone" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="5cj-Iy-u5a">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="p0X-7R-tYM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1356" y="-334"/>
         </scene>
     </scenes>
     <classes>
+        <class className="ChatConfirmViewController_iPhone" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ChatConfirmViewController_iPhone.h"/>
+        </class>
+        <class className="ChatImpressViewController_iPhone" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ChatImpressViewController_iPhone.h"/>
+        </class>
+        <class className="ChatWaitViewController_iPhone" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ChatWaitViewController_iPhone.h"/>
+        </class>
+        <class className="ChatWebRTCViewController_iPhone" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ChatWebRTCViewController_iPhone.h"/>
+        </class>
+        <class className="ConfigViewController_iPhone" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ConfigViewController_iPhone.h"/>
+        </class>
+        <class className="DeviceViewController_iPhone" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/DeviceViewController_iPhone.h"/>
+        </class>
+        <class className="HelpViewController_iPhone" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/HelpViewController_iPhone.h"/>
+        </class>
         <class className="HomeViewController_iPhone" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/HomeViewController_iPhone.h"/>
+        </class>
+        <class className="ImpressViewController_iPhone" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ImpressViewController_iPhone.h"/>
+        </class>
+        <class className="InterestViewController_iPhone" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/InterestViewController_iPhone.h"/>
+        </class>
+        <class className="SplashViewController_iPhone" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SplashViewController_iPhone.h"/>
+        </class>
+        <class className="WarningViewController_iPhone" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/WarningViewController_iPhone.h"/>
         </class>
     </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
