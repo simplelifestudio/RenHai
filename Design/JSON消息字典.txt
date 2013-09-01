@@ -46,7 +46,7 @@
     },
     "body":
     {
-		"AppRequestMessage": "AlohaRequest",
+		"appRequestMessage": "AlohaRequest",
 		"errorCode": "-7",
       	"errorDescription": "Empty Content"
     }
@@ -268,6 +268,10 @@
 		"operationValue":"" 
 	}	
 }
+
+businessType取值范围：
+EnterPool, LeavePool, AgreeChat, RejectChat, EndChat, Assess, AssessAndQuit
+
 
 11. 业务会话响应 BusinessSessionResponse
 {
