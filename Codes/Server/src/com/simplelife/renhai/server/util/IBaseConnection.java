@@ -34,7 +34,7 @@ public interface IBaseConnection
     public void ping();
     
     /** */
-    public void onTextMessage();
+    public void onTextMessage(String message);
     
     /** */
     public void sendMessage(String messge);

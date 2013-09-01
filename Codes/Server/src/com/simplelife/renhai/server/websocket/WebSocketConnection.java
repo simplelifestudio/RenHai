@@ -68,7 +68,7 @@ public class WebSocketConnection implements IBaseConnection
     }
     
     /** */
-    public void onTextMessage()
+    public void onTextMessage(String message)
     {
     }
     
