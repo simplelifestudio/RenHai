@@ -9,6 +9,46 @@
 /* Begin PBXBuildFile section */
 		7A78CC9AE7E143978B28D429 /* libPods-RenHaiGHUnitTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */; };
 		C15369EAD9D54E87A40074DC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B66314B17C746578ACF6BD6 /* libPods.a */; };
+		C50505C017D2BD4800DB6589 /* CBAppUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C505059D17D2BD4800DB6589 /* CBAppUtils.m */; };
+		C50505C117D2BD4800DB6589 /* CBAppUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C505059D17D2BD4800DB6589 /* CBAppUtils.m */; };
+		C50505C217D2BD4800DB6589 /* CBDateUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C505059F17D2BD4800DB6589 /* CBDateUtils.m */; };
+		C50505C317D2BD4800DB6589 /* CBDateUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C505059F17D2BD4800DB6589 /* CBDateUtils.m */; };
+		C50505C417D2BD4800DB6589 /* CBFileUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A117D2BD4800DB6589 /* CBFileUtils.m */; };
+		C50505C517D2BD4800DB6589 /* CBFileUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A117D2BD4800DB6589 /* CBFileUtils.m */; };
+		C50505C617D2BD4800DB6589 /* CBGZipUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A317D2BD4800DB6589 /* CBGZipUtils.m */; };
+		C50505C717D2BD4800DB6589 /* CBGZipUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A317D2BD4800DB6589 /* CBGZipUtils.m */; };
+		C50505C817D2BD4800DB6589 /* CBHUDAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A517D2BD4800DB6589 /* CBHUDAgent.m */; };
+		C50505C917D2BD4800DB6589 /* CBHUDAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A517D2BD4800DB6589 /* CBHUDAgent.m */; };
+		C50505CA17D2BD4800DB6589 /* CBMathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A817D2BD4800DB6589 /* CBMathUtils.m */; };
+		C50505CB17D2BD4800DB6589 /* CBMathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A817D2BD4800DB6589 /* CBMathUtils.m */; };
+		C50505CC17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505AB17D2BD4800DB6589 /* CBModuleAbstractImpl.m */; };
+		C50505CD17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505AB17D2BD4800DB6589 /* CBModuleAbstractImpl.m */; };
+		C50505CE17D2BD4800DB6589 /* CBModuleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505AD17D2BD4800DB6589 /* CBModuleManager.m */; };
+		C50505CF17D2BD4800DB6589 /* CBModuleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505AD17D2BD4800DB6589 /* CBModuleManager.m */; };
+		C50505D017D2BD4800DB6589 /* CBNetworkUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505AF17D2BD4800DB6589 /* CBNetworkUtils.m */; };
+		C50505D117D2BD4800DB6589 /* CBNetworkUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505AF17D2BD4800DB6589 /* CBNetworkUtils.m */; };
+		C50505D217D2BD4800DB6589 /* CBPathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505B217D2BD4800DB6589 /* CBPathUtils.m */; };
+		C50505D317D2BD4800DB6589 /* CBPathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505B217D2BD4800DB6589 /* CBPathUtils.m */; };
+		C50505D417D2BD4800DB6589 /* CBSecurityUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505B417D2BD4800DB6589 /* CBSecurityUtils.m */; };
+		C50505D517D2BD4800DB6589 /* CBSecurityUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505B417D2BD4800DB6589 /* CBSecurityUtils.m */; };
+		C50505D617D2BD4800DB6589 /* CBStringUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505B717D2BD4800DB6589 /* CBStringUtils.m */; };
+		C50505D717D2BD4800DB6589 /* CBStringUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505B717D2BD4800DB6589 /* CBStringUtils.m */; };
+		C50505D817D2BD4800DB6589 /* CBUIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505B917D2BD4800DB6589 /* CBUIUtils.m */; };
+		C50505D917D2BD4800DB6589 /* CBUIUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505B917D2BD4800DB6589 /* CBUIUtils.m */; };
+		C50505DA17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505BB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m */; };
+		C50505DB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505BB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m */; };
+		C50505DC17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505BD17D2BD4800DB6589 /* UIColor+CBColors.m */; };
+		C50505DD17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505BD17D2BD4800DB6589 /* UIColor+CBColors.m */; };
+		C50505DE17D2BD4800DB6589 /* UIDevice+Resolutions.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505BF17D2BD4800DB6589 /* UIDevice+Resolutions.m */; };
+		C50505DF17D2BD4800DB6589 /* UIDevice+Resolutions.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505BF17D2BD4800DB6589 /* UIDevice+Resolutions.m */; };
+		C50505E217D2C53A00DB6589 /* LoggerModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505E117D2C53A00DB6589 /* LoggerModule.m */; };
+		C50505E317D2C53A00DB6589 /* LoggerModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505E117D2C53A00DB6589 /* LoggerModule.m */; };
+		C50505E817D2D26C00DB6589 /* GUIModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505E517D2D26C00DB6589 /* GUIModule.m */; };
+		C50505E917D2D26C00DB6589 /* GUIModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505E517D2D26C00DB6589 /* GUIModule.m */; };
+		C50505EA17D2D26C00DB6589 /* GUIStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505E717D2D26C00DB6589 /* GUIStyle.m */; };
+		C50505EB17D2D26C00DB6589 /* GUIStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505E717D2D26C00DB6589 /* GUIStyle.m */; };
+		C50505EE17D2D28600DB6589 /* CommunicationModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505ED17D2D28600DB6589 /* CommunicationModule.m */; };
+		C50505EF17D2D28600DB6589 /* CommunicationModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505ED17D2D28600DB6589 /* CommunicationModule.m */; };
 		C55B43EC17CF580A009BB21B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EB17CF580A009BB21B /* UIKit.framework */; };
 		C55B43EE17CF580A009BB21B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43ED17CF580A009BB21B /* Foundation.framework */; };
 		C55B43F017CF580A009BB21B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EF17CF580A009BB21B /* CoreGraphics.framework */; };
@@ -53,7 +93,51 @@
 		92519C2C061245F9942C7EC7 /* Pods-RenHaiGHUnitTest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RenHaiGHUnitTest.xcconfig"; path = "Pods/Pods-RenHaiGHUnitTest.xcconfig"; sourceTree = SOURCE_ROOT; };
 		9B66314B17C746578ACF6BD6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE6EB6DB7AC443EFBAAD45CD /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
-		C55B43E817CF580A009BB21B /* 人海.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "人海.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C505059C17D2BD4800DB6589 /* CBAppUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBAppUtils.h; sourceTree = "<group>"; };
+		C505059D17D2BD4800DB6589 /* CBAppUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBAppUtils.m; sourceTree = "<group>"; };
+		C505059E17D2BD4800DB6589 /* CBDateUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBDateUtils.h; sourceTree = "<group>"; };
+		C505059F17D2BD4800DB6589 /* CBDateUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBDateUtils.m; sourceTree = "<group>"; };
+		C50505A017D2BD4800DB6589 /* CBFileUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBFileUtils.h; sourceTree = "<group>"; };
+		C50505A117D2BD4800DB6589 /* CBFileUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBFileUtils.m; sourceTree = "<group>"; };
+		C50505A217D2BD4800DB6589 /* CBGZipUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBGZipUtils.h; sourceTree = "<group>"; };
+		C50505A317D2BD4800DB6589 /* CBGZipUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBGZipUtils.m; sourceTree = "<group>"; };
+		C50505A417D2BD4800DB6589 /* CBHUDAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBHUDAgent.h; sourceTree = "<group>"; };
+		C50505A517D2BD4800DB6589 /* CBHUDAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBHUDAgent.m; sourceTree = "<group>"; };
+		C50505A617D2BD4800DB6589 /* CBLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBLog.h; sourceTree = "<group>"; };
+		C50505A717D2BD4800DB6589 /* CBMathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBMathUtils.h; sourceTree = "<group>"; };
+		C50505A817D2BD4800DB6589 /* CBMathUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBMathUtils.m; sourceTree = "<group>"; };
+		C50505A917D2BD4800DB6589 /* CBModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBModule.h; sourceTree = "<group>"; };
+		C50505AA17D2BD4800DB6589 /* CBModuleAbstractImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBModuleAbstractImpl.h; sourceTree = "<group>"; };
+		C50505AB17D2BD4800DB6589 /* CBModuleAbstractImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBModuleAbstractImpl.m; sourceTree = "<group>"; };
+		C50505AC17D2BD4800DB6589 /* CBModuleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBModuleManager.h; sourceTree = "<group>"; };
+		C50505AD17D2BD4800DB6589 /* CBModuleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBModuleManager.m; sourceTree = "<group>"; };
+		C50505AE17D2BD4800DB6589 /* CBNetworkUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBNetworkUtils.h; sourceTree = "<group>"; };
+		C50505AF17D2BD4800DB6589 /* CBNetworkUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBNetworkUtils.m; sourceTree = "<group>"; };
+		C50505B017D2BD4800DB6589 /* CBNotificationListenable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBNotificationListenable.h; sourceTree = "<group>"; };
+		C50505B117D2BD4800DB6589 /* CBPathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBPathUtils.h; sourceTree = "<group>"; };
+		C50505B217D2BD4800DB6589 /* CBPathUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBPathUtils.m; sourceTree = "<group>"; };
+		C50505B317D2BD4800DB6589 /* CBSecurityUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBSecurityUtils.h; sourceTree = "<group>"; };
+		C50505B417D2BD4800DB6589 /* CBSecurityUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBSecurityUtils.m; sourceTree = "<group>"; };
+		C50505B517D2BD4800DB6589 /* CBSharedInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBSharedInstance.h; sourceTree = "<group>"; };
+		C50505B617D2BD4800DB6589 /* CBStringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBStringUtils.h; sourceTree = "<group>"; };
+		C50505B717D2BD4800DB6589 /* CBStringUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBStringUtils.m; sourceTree = "<group>"; };
+		C50505B817D2BD4800DB6589 /* CBUIUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBUIUtils.h; sourceTree = "<group>"; };
+		C50505B917D2BD4800DB6589 /* CBUIUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBUIUtils.m; sourceTree = "<group>"; };
+		C50505BA17D2BD4800DB6589 /* CBUncaughtExceptionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBUncaughtExceptionHandler.h; sourceTree = "<group>"; };
+		C50505BB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBUncaughtExceptionHandler.m; sourceTree = "<group>"; };
+		C50505BC17D2BD4800DB6589 /* UIColor+CBColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CBColors.h"; sourceTree = "<group>"; };
+		C50505BD17D2BD4800DB6589 /* UIColor+CBColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CBColors.m"; sourceTree = "<group>"; };
+		C50505BE17D2BD4800DB6589 /* UIDevice+Resolutions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Resolutions.h"; sourceTree = "<group>"; };
+		C50505BF17D2BD4800DB6589 /* UIDevice+Resolutions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Resolutions.m"; sourceTree = "<group>"; };
+		C50505E017D2C53A00DB6589 /* LoggerModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggerModule.h; sourceTree = "<group>"; };
+		C50505E117D2C53A00DB6589 /* LoggerModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoggerModule.m; sourceTree = "<group>"; };
+		C50505E417D2D26C00DB6589 /* GUIModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIModule.h; sourceTree = "<group>"; };
+		C50505E517D2D26C00DB6589 /* GUIModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GUIModule.m; sourceTree = "<group>"; };
+		C50505E617D2D26C00DB6589 /* GUIStyle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIStyle.h; sourceTree = "<group>"; };
+		C50505E717D2D26C00DB6589 /* GUIStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GUIStyle.m; sourceTree = "<group>"; };
+		C50505EC17D2D28600DB6589 /* CommunicationModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunicationModule.h; sourceTree = "<group>"; };
+		C50505ED17D2D28600DB6589 /* CommunicationModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommunicationModule.m; sourceTree = "<group>"; };
+		C55B43E817CF580A009BB21B /* RenHai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55B43EB17CF580A009BB21B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C55B43ED17CF580A009BB21B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		C55B43EF17CF580A009BB21B /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -64,7 +148,7 @@
 		C55B43FD17CF580A009BB21B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		C55B43FF17CF580A009BB21B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		C55B440117CF580A009BB21B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		C55B442117CF5992009BB21B /* 人海测试.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "人海测试.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHaiGHUnitTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55B442717CF5992009BB21B /* RenHaiGHUnitTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RenHaiGHUnitTest-Info.plist"; sourceTree = "<group>"; };
 		C55B442917CF5992009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C55B442B17CF5992009BB21B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -136,8 +220,8 @@
 		C55B43E917CF580A009BB21B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C55B43E817CF580A009BB21B /* 人海.app */,
-				C55B442117CF5992009BB21B /* 人海测试.app */,
+				C55B43E817CF580A009BB21B /* RenHai.app */,
+				C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -277,11 +361,11 @@
 		C5F8936817CFA136003EF1B3 /* Src */ = {
 			isa = PBXGroup;
 			children = (
-				C5F8936917CFA136003EF1B3 /* AppData */,
 				C5F8936A17CFA136003EF1B3 /* Common */,
 				C5F8936B17CFA136003EF1B3 /* Communication */,
 				C5F8936C17CFA136003EF1B3 /* GUI */,
 				C5F8936D17CFA136003EF1B3 /* Logger */,
+				C5F8936917CFA136003EF1B3 /* AppData */,
 				C5F8936E17CFA136003EF1B3 /* UserData */,
 				C5F8936F17CFA136003EF1B3 /* WebRTC */,
 			);
@@ -298,6 +382,42 @@
 		C5F8936A17CFA136003EF1B3 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				C505059C17D2BD4800DB6589 /* CBAppUtils.h */,
+				C505059D17D2BD4800DB6589 /* CBAppUtils.m */,
+				C505059E17D2BD4800DB6589 /* CBDateUtils.h */,
+				C505059F17D2BD4800DB6589 /* CBDateUtils.m */,
+				C50505A017D2BD4800DB6589 /* CBFileUtils.h */,
+				C50505A117D2BD4800DB6589 /* CBFileUtils.m */,
+				C50505A217D2BD4800DB6589 /* CBGZipUtils.h */,
+				C50505A317D2BD4800DB6589 /* CBGZipUtils.m */,
+				C50505A417D2BD4800DB6589 /* CBHUDAgent.h */,
+				C50505A517D2BD4800DB6589 /* CBHUDAgent.m */,
+				C50505A617D2BD4800DB6589 /* CBLog.h */,
+				C50505A717D2BD4800DB6589 /* CBMathUtils.h */,
+				C50505A817D2BD4800DB6589 /* CBMathUtils.m */,
+				C50505A917D2BD4800DB6589 /* CBModule.h */,
+				C50505AA17D2BD4800DB6589 /* CBModuleAbstractImpl.h */,
+				C50505AB17D2BD4800DB6589 /* CBModuleAbstractImpl.m */,
+				C50505AC17D2BD4800DB6589 /* CBModuleManager.h */,
+				C50505AD17D2BD4800DB6589 /* CBModuleManager.m */,
+				C50505AE17D2BD4800DB6589 /* CBNetworkUtils.h */,
+				C50505AF17D2BD4800DB6589 /* CBNetworkUtils.m */,
+				C50505B017D2BD4800DB6589 /* CBNotificationListenable.h */,
+				C50505B117D2BD4800DB6589 /* CBPathUtils.h */,
+				C50505B217D2BD4800DB6589 /* CBPathUtils.m */,
+				C50505B317D2BD4800DB6589 /* CBSecurityUtils.h */,
+				C50505B417D2BD4800DB6589 /* CBSecurityUtils.m */,
+				C50505B517D2BD4800DB6589 /* CBSharedInstance.h */,
+				C50505B617D2BD4800DB6589 /* CBStringUtils.h */,
+				C50505B717D2BD4800DB6589 /* CBStringUtils.m */,
+				C50505B817D2BD4800DB6589 /* CBUIUtils.h */,
+				C50505B917D2BD4800DB6589 /* CBUIUtils.m */,
+				C50505BA17D2BD4800DB6589 /* CBUncaughtExceptionHandler.h */,
+				C50505BB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m */,
+				C50505BC17D2BD4800DB6589 /* UIColor+CBColors.h */,
+				C50505BD17D2BD4800DB6589 /* UIColor+CBColors.m */,
+				C50505BE17D2BD4800DB6589 /* UIDevice+Resolutions.h */,
+				C50505BF17D2BD4800DB6589 /* UIDevice+Resolutions.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -305,6 +425,8 @@
 		C5F8936B17CFA136003EF1B3 /* Communication */ = {
 			isa = PBXGroup;
 			children = (
+				C50505EC17D2D28600DB6589 /* CommunicationModule.h */,
+				C50505ED17D2D28600DB6589 /* CommunicationModule.m */,
 			);
 			path = Communication;
 			sourceTree = "<group>";
@@ -312,6 +434,10 @@
 		C5F8936C17CFA136003EF1B3 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
+				C50505E417D2D26C00DB6589 /* GUIModule.h */,
+				C50505E517D2D26C00DB6589 /* GUIModule.m */,
+				C50505E617D2D26C00DB6589 /* GUIStyle.h */,
+				C50505E717D2D26C00DB6589 /* GUIStyle.m */,
 			);
 			path = GUI;
 			sourceTree = "<group>";
@@ -319,6 +445,8 @@
 		C5F8936D17CFA136003EF1B3 /* Logger */ = {
 			isa = PBXGroup;
 			children = (
+				C50505E017D2C53A00DB6589 /* LoggerModule.h */,
+				C50505E117D2C53A00DB6589 /* LoggerModule.m */,
 			);
 			path = Logger;
 			sourceTree = "<group>";
@@ -340,9 +468,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		C55B43E717CF580A009BB21B /* 人海 */ = {
+		C55B43E717CF580A009BB21B /* RenHai */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C55B440E17CF580A009BB21B /* Build configuration list for PBXNativeTarget "人海" */;
+			buildConfigurationList = C55B440E17CF580A009BB21B /* Build configuration list for PBXNativeTarget "RenHai" */;
 			buildPhases = (
 				62A41906FFA9465A970C7A06 /* Check Pods Manifest.lock */,
 				C55B43E417CF580A009BB21B /* Sources */,
@@ -355,14 +483,14 @@
 			);
 			dependencies = (
 			);
-			name = "人海";
+			name = RenHai;
 			productName = RenHai;
-			productReference = C55B43E817CF580A009BB21B /* 人海.app */;
+			productReference = C55B43E817CF580A009BB21B /* RenHai.app */;
 			productType = "com.apple.product-type.application";
 		};
-		C55B442017CF5992009BB21B /* 人海测试 */ = {
+		C55B442017CF5992009BB21B /* RenHaiGHUnitTest */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C55B444017CF5993009BB21B /* Build configuration list for PBXNativeTarget "人海测试" */;
+			buildConfigurationList = C55B444017CF5993009BB21B /* Build configuration list for PBXNativeTarget "RenHaiGHUnitTest" */;
 			buildPhases = (
 				51DF468EFF3741DB9C0EE23B /* Check Pods Manifest.lock */,
 				C55B441D17CF5992009BB21B /* Sources */,
@@ -374,9 +502,9 @@
 			);
 			dependencies = (
 			);
-			name = "人海测试";
+			name = RenHaiGHUnitTest;
 			productName = RenHaiGHUnitTest;
-			productReference = C55B442117CF5992009BB21B /* 人海测试.app */;
+			productReference = C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -400,8 +528,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				C55B43E717CF580A009BB21B /* 人海 */,
-				C55B442017CF5992009BB21B /* 人海测试 */,
+				C55B43E717CF580A009BB21B /* RenHai */,
+				C55B442017CF5992009BB21B /* RenHaiGHUnitTest */,
 			);
 		};
 /* End PBXProject section */
@@ -531,6 +659,26 @@
 				C55B43F817CF580A009BB21B /* main.m in Sources */,
 				C55B445117CF5C14009BB21B /* GTMBase64.m in Sources */,
 				C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */,
+				C50505C017D2BD4800DB6589 /* CBAppUtils.m in Sources */,
+				C50505C217D2BD4800DB6589 /* CBDateUtils.m in Sources */,
+				C50505C417D2BD4800DB6589 /* CBFileUtils.m in Sources */,
+				C50505C617D2BD4800DB6589 /* CBGZipUtils.m in Sources */,
+				C50505C817D2BD4800DB6589 /* CBHUDAgent.m in Sources */,
+				C50505CA17D2BD4800DB6589 /* CBMathUtils.m in Sources */,
+				C50505CC17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */,
+				C50505CE17D2BD4800DB6589 /* CBModuleManager.m in Sources */,
+				C50505D017D2BD4800DB6589 /* CBNetworkUtils.m in Sources */,
+				C50505D217D2BD4800DB6589 /* CBPathUtils.m in Sources */,
+				C50505D417D2BD4800DB6589 /* CBSecurityUtils.m in Sources */,
+				C50505D617D2BD4800DB6589 /* CBStringUtils.m in Sources */,
+				C50505D817D2BD4800DB6589 /* CBUIUtils.m in Sources */,
+				C50505DA17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
+				C50505DC17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */,
+				C50505DE17D2BD4800DB6589 /* UIDevice+Resolutions.m in Sources */,
+				C50505E217D2C53A00DB6589 /* LoggerModule.m in Sources */,
+				C50505E817D2D26C00DB6589 /* GUIModule.m in Sources */,
+				C50505EA17D2D26C00DB6589 /* GUIStyle.m in Sources */,
+				C50505EE17D2D28600DB6589 /* CommunicationModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -542,6 +690,26 @@
 				C55B443917CF5993009BB21B /* ViewController.m in Sources */,
 				C55B444717CF5B72009BB21B /* GHUnitSampleTest.m in Sources */,
 				C55B445217CF5C14009BB21B /* GTMBase64.m in Sources */,
+				C50505C117D2BD4800DB6589 /* CBAppUtils.m in Sources */,
+				C50505C317D2BD4800DB6589 /* CBDateUtils.m in Sources */,
+				C50505C517D2BD4800DB6589 /* CBFileUtils.m in Sources */,
+				C50505C717D2BD4800DB6589 /* CBGZipUtils.m in Sources */,
+				C50505C917D2BD4800DB6589 /* CBHUDAgent.m in Sources */,
+				C50505CB17D2BD4800DB6589 /* CBMathUtils.m in Sources */,
+				C50505CD17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */,
+				C50505CF17D2BD4800DB6589 /* CBModuleManager.m in Sources */,
+				C50505D117D2BD4800DB6589 /* CBNetworkUtils.m in Sources */,
+				C50505D317D2BD4800DB6589 /* CBPathUtils.m in Sources */,
+				C50505D517D2BD4800DB6589 /* CBSecurityUtils.m in Sources */,
+				C50505D717D2BD4800DB6589 /* CBStringUtils.m in Sources */,
+				C50505D917D2BD4800DB6589 /* CBUIUtils.m in Sources */,
+				C50505DB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
+				C50505DD17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */,
+				C50505DF17D2BD4800DB6589 /* UIDevice+Resolutions.m in Sources */,
+				C50505E317D2C53A00DB6589 /* LoggerModule.m in Sources */,
+				C50505E917D2D26C00DB6589 /* GUIModule.m in Sources */,
+				C50505EB17D2D26C00DB6589 /* GUIStyle.m in Sources */,
+				C50505EF17D2D28600DB6589 /* CommunicationModule.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -711,7 +879,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C55B440E17CF580A009BB21B /* Build configuration list for PBXNativeTarget "人海" */ = {
+		C55B440E17CF580A009BB21B /* Build configuration list for PBXNativeTarget "RenHai" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C55B440F17CF580A009BB21B /* Debug */,
@@ -720,7 +888,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C55B444017CF5993009BB21B /* Build configuration list for PBXNativeTarget "人海测试" */ = {
+		C55B444017CF5993009BB21B /* Build configuration list for PBXNativeTarget "RenHaiGHUnitTest" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C55B444117CF5993009BB21B /* Debug */,
