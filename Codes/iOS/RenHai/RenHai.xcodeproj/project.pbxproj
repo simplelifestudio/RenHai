@@ -88,6 +88,34 @@
 		C55B446A17CF8632009BB21B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = C55B445C17CF8632009BB21B /* iTunesArtwork */; };
 		C593C41517D2F55B00C26367 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C593C41417D2F55B00C26367 /* MainStoryboard_iPhone.storyboard */; };
 		C593C41817D2F5BF00C26367 /* HomeViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C41717D2F5BF00C26367 /* HomeViewController_iPhone.m */; };
+		C593C41B17D3244000C26367 /* AppDataModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C41A17D3244000C26367 /* AppDataModule.m */; };
+		C593C41C17D3244000C26367 /* AppDataModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C41A17D3244000C26367 /* AppDataModule.m */; };
+		C593C41F17D3258600C26367 /* UserDataModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C41E17D3258600C26367 /* UserDataModule.m */; };
+		C593C42017D3258600C26367 /* UserDataModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C41E17D3258600C26367 /* UserDataModule.m */; };
+		C593C42317D3259600C26367 /* WebRTCModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C42217D3259600C26367 /* WebRTCModule.m */; };
+		C593C42417D3259600C26367 /* WebRTCModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C42217D3259600C26367 /* WebRTCModule.m */; };
+		C593C42B17D3284600C26367 /* SplashViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C42A17D3284600C26367 /* SplashViewController_iPhone.m */; };
+		C593C42C17D3284600C26367 /* SplashViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C42A17D3284600C26367 /* SplashViewController_iPhone.m */; };
+		C593C42F17D3296700C26367 /* DeviceViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C42E17D3296700C26367 /* DeviceViewController_iPhone.m */; };
+		C593C43017D3296800C26367 /* DeviceViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C42E17D3296700C26367 /* DeviceViewController_iPhone.m */; };
+		C593C44317D329BF00C26367 /* ImpressViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C44217D329BF00C26367 /* ImpressViewController_iPhone.m */; };
+		C593C44417D329BF00C26367 /* ImpressViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C44217D329BF00C26367 /* ImpressViewController_iPhone.m */; };
+		C593C44717D329D200C26367 /* InterestViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C44617D329D200C26367 /* InterestViewController_iPhone.m */; };
+		C593C44817D329D200C26367 /* InterestViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C44617D329D200C26367 /* InterestViewController_iPhone.m */; };
+		C593C44B17D329E100C26367 /* ConfigViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C44A17D329E100C26367 /* ConfigViewController_iPhone.m */; };
+		C593C44C17D329E100C26367 /* ConfigViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C44A17D329E100C26367 /* ConfigViewController_iPhone.m */; };
+		C593C44F17D329F300C26367 /* HelpViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C44E17D329F300C26367 /* HelpViewController_iPhone.m */; };
+		C593C45017D329F300C26367 /* HelpViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C44E17D329F300C26367 /* HelpViewController_iPhone.m */; };
+		C593C45317D32A8300C26367 /* ChatWaitViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45217D32A8300C26367 /* ChatWaitViewController_iPhone.m */; };
+		C593C45417D32A8300C26367 /* ChatWaitViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45217D32A8300C26367 /* ChatWaitViewController_iPhone.m */; };
+		C593C45717D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45617D32A9700C26367 /* ChatConfirmViewController_iPhone.m */; };
+		C593C45817D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45617D32A9700C26367 /* ChatConfirmViewController_iPhone.m */; };
+		C593C45F17D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */; };
+		C593C46017D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */; };
+		C593C46317D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46217D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m */; };
+		C593C46417D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46217D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m */; };
+		C593C46717D32AF600C26367 /* WarningViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */; };
+		C593C46817D32AF600C26367 /* WarningViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
 /* End PBXBuildFile section */
 
@@ -178,6 +206,34 @@
 		C593C41417D2F55B00C26367 /* MainStoryboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		C593C41617D2F5BF00C26367 /* HomeViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController_iPhone.h; sourceTree = "<group>"; };
 		C593C41717D2F5BF00C26367 /* HomeViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C41917D3244000C26367 /* AppDataModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDataModule.h; sourceTree = "<group>"; };
+		C593C41A17D3244000C26367 /* AppDataModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDataModule.m; sourceTree = "<group>"; };
+		C593C41D17D3258600C26367 /* UserDataModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataModule.h; sourceTree = "<group>"; };
+		C593C41E17D3258600C26367 /* UserDataModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataModule.m; sourceTree = "<group>"; };
+		C593C42117D3259600C26367 /* WebRTCModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebRTCModule.h; sourceTree = "<group>"; };
+		C593C42217D3259600C26367 /* WebRTCModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebRTCModule.m; sourceTree = "<group>"; };
+		C593C42917D3284600C26367 /* SplashViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController_iPhone.h; sourceTree = "<group>"; };
+		C593C42A17D3284600C26367 /* SplashViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C42D17D3296700C26367 /* DeviceViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceViewController_iPhone.h; sourceTree = "<group>"; };
+		C593C42E17D3296700C26367 /* DeviceViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C44117D329BF00C26367 /* ImpressViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpressViewController_iPhone.h; sourceTree = "<group>"; };
+		C593C44217D329BF00C26367 /* ImpressViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImpressViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C44517D329D200C26367 /* InterestViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterestViewController_iPhone.h; sourceTree = "<group>"; };
+		C593C44617D329D200C26367 /* InterestViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterestViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C44917D329E100C26367 /* ConfigViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigViewController_iPhone.h; sourceTree = "<group>"; };
+		C593C44A17D329E100C26367 /* ConfigViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfigViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C44D17D329F300C26367 /* HelpViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HelpViewController_iPhone.h; sourceTree = "<group>"; };
+		C593C44E17D329F300C26367 /* HelpViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HelpViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C45117D32A8300C26367 /* ChatWaitViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatWaitViewController_iPhone.h; sourceTree = "<group>"; };
+		C593C45217D32A8300C26367 /* ChatWaitViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatWaitViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C45517D32A9700C26367 /* ChatConfirmViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatConfirmViewController_iPhone.h; sourceTree = "<group>"; };
+		C593C45617D32A9700C26367 /* ChatConfirmViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatConfirmViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C45D17D32AC800C26367 /* ChatImpressViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatImpressViewController_iPhone.h; sourceTree = "<group>"; };
+		C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatImpressViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C46117D32ADE00C26367 /* ChatWebRTCViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatWebRTCViewController_iPhone.h; sourceTree = "<group>"; };
+		C593C46217D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatWebRTCViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C46517D32AF600C26367 /* WarningViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WarningViewController_iPhone.h; sourceTree = "<group>"; };
+		C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WarningViewController_iPhone.m; sourceTree = "<group>"; };
 		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -380,6 +436,8 @@
 		C5F8936917CFA136003EF1B3 /* AppData */ = {
 			isa = PBXGroup;
 			children = (
+				C593C41917D3244000C26367 /* AppDataModule.h */,
+				C593C41A17D3244000C26367 /* AppDataModule.m */,
 			);
 			path = AppData;
 			sourceTree = "<group>";
@@ -439,13 +497,35 @@
 		C5F8936C17CFA136003EF1B3 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
+				C593C41417D2F55B00C26367 /* MainStoryboard_iPhone.storyboard */,
 				C50505E417D2D26C00DB6589 /* GUIModule.h */,
 				C50505E517D2D26C00DB6589 /* GUIModule.m */,
 				C50505E617D2D26C00DB6589 /* GUIStyle.h */,
 				C50505E717D2D26C00DB6589 /* GUIStyle.m */,
+				C593C46517D32AF600C26367 /* WarningViewController_iPhone.h */,
+				C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */,
+				C593C42917D3284600C26367 /* SplashViewController_iPhone.h */,
+				C593C42A17D3284600C26367 /* SplashViewController_iPhone.m */,
 				C593C41617D2F5BF00C26367 /* HomeViewController_iPhone.h */,
 				C593C41717D2F5BF00C26367 /* HomeViewController_iPhone.m */,
-				C593C41417D2F55B00C26367 /* MainStoryboard_iPhone.storyboard */,
+				C593C42D17D3296700C26367 /* DeviceViewController_iPhone.h */,
+				C593C42E17D3296700C26367 /* DeviceViewController_iPhone.m */,
+				C593C44117D329BF00C26367 /* ImpressViewController_iPhone.h */,
+				C593C44217D329BF00C26367 /* ImpressViewController_iPhone.m */,
+				C593C44517D329D200C26367 /* InterestViewController_iPhone.h */,
+				C593C44617D329D200C26367 /* InterestViewController_iPhone.m */,
+				C593C44917D329E100C26367 /* ConfigViewController_iPhone.h */,
+				C593C44A17D329E100C26367 /* ConfigViewController_iPhone.m */,
+				C593C44D17D329F300C26367 /* HelpViewController_iPhone.h */,
+				C593C44E17D329F300C26367 /* HelpViewController_iPhone.m */,
+				C593C45117D32A8300C26367 /* ChatWaitViewController_iPhone.h */,
+				C593C45217D32A8300C26367 /* ChatWaitViewController_iPhone.m */,
+				C593C45517D32A9700C26367 /* ChatConfirmViewController_iPhone.h */,
+				C593C45617D32A9700C26367 /* ChatConfirmViewController_iPhone.m */,
+				C593C46117D32ADE00C26367 /* ChatWebRTCViewController_iPhone.h */,
+				C593C46217D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m */,
+				C593C45D17D32AC800C26367 /* ChatImpressViewController_iPhone.h */,
+				C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */,
 			);
 			path = GUI;
 			sourceTree = "<group>";
@@ -462,6 +542,8 @@
 		C5F8936E17CFA136003EF1B3 /* UserData */ = {
 			isa = PBXGroup;
 			children = (
+				C593C41D17D3258600C26367 /* UserDataModule.h */,
+				C593C41E17D3258600C26367 /* UserDataModule.m */,
 			);
 			path = UserData;
 			sourceTree = "<group>";
@@ -469,6 +551,8 @@
 		C5F8936F17CFA136003EF1B3 /* WebRTC */ = {
 			isa = PBXGroup;
 			children = (
+				C593C42117D3259600C26367 /* WebRTCModule.h */,
+				C593C42217D3259600C26367 /* WebRTCModule.m */,
 			);
 			path = WebRTC;
 			sourceTree = "<group>";
@@ -689,6 +773,20 @@
 				C50505EA17D2D26C00DB6589 /* GUIStyle.m in Sources */,
 				C50505EE17D2D28600DB6589 /* CommunicationModule.m in Sources */,
 				C593C41817D2F5BF00C26367 /* HomeViewController_iPhone.m in Sources */,
+				C593C41B17D3244000C26367 /* AppDataModule.m in Sources */,
+				C593C41F17D3258600C26367 /* UserDataModule.m in Sources */,
+				C593C42317D3259600C26367 /* WebRTCModule.m in Sources */,
+				C593C42B17D3284600C26367 /* SplashViewController_iPhone.m in Sources */,
+				C593C42F17D3296700C26367 /* DeviceViewController_iPhone.m in Sources */,
+				C593C44317D329BF00C26367 /* ImpressViewController_iPhone.m in Sources */,
+				C593C44717D329D200C26367 /* InterestViewController_iPhone.m in Sources */,
+				C593C44B17D329E100C26367 /* ConfigViewController_iPhone.m in Sources */,
+				C593C44F17D329F300C26367 /* HelpViewController_iPhone.m in Sources */,
+				C593C45317D32A8300C26367 /* ChatWaitViewController_iPhone.m in Sources */,
+				C593C45717D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */,
+				C593C45F17D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */,
+				C593C46317D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m in Sources */,
+				C593C46717D32AF600C26367 /* WarningViewController_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -720,6 +818,20 @@
 				C50505E917D2D26C00DB6589 /* GUIModule.m in Sources */,
 				C50505EB17D2D26C00DB6589 /* GUIStyle.m in Sources */,
 				C50505EF17D2D28600DB6589 /* CommunicationModule.m in Sources */,
+				C593C41C17D3244000C26367 /* AppDataModule.m in Sources */,
+				C593C42017D3258600C26367 /* UserDataModule.m in Sources */,
+				C593C42417D3259600C26367 /* WebRTCModule.m in Sources */,
+				C593C42C17D3284600C26367 /* SplashViewController_iPhone.m in Sources */,
+				C593C43017D3296800C26367 /* DeviceViewController_iPhone.m in Sources */,
+				C593C44417D329BF00C26367 /* ImpressViewController_iPhone.m in Sources */,
+				C593C44817D329D200C26367 /* InterestViewController_iPhone.m in Sources */,
+				C593C44C17D329E100C26367 /* ConfigViewController_iPhone.m in Sources */,
+				C593C45017D329F300C26367 /* HelpViewController_iPhone.m in Sources */,
+				C593C45417D32A8300C26367 /* ChatWaitViewController_iPhone.m in Sources */,
+				C593C45817D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */,
+				C593C46017D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */,
+				C593C46417D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m in Sources */,
+				C593C46817D32AF600C26367 /* WarningViewController_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
