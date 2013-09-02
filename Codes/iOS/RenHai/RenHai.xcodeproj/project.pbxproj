@@ -116,6 +116,16 @@
 		C593C46417D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46217D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m */; };
 		C593C46717D32AF600C26367 /* WarningViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */; };
 		C593C46817D32AF600C26367 /* WarningViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */; };
+		C593C46B17D4224B00C26367 /* LeftBarViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46A17D4224A00C26367 /* LeftBarViewController_iPhone.m */; };
+		C593C46C17D4224B00C26367 /* LeftBarViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46A17D4224A00C26367 /* LeftBarViewController_iPhone.m */; };
+		C593C46F17D4235A00C26367 /* LeftBarHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46E17D4235900C26367 /* LeftBarHeaderView_iPhone.m */; };
+		C593C47017D4235A00C26367 /* LeftBarHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46E17D4235900C26367 /* LeftBarHeaderView_iPhone.m */; };
+		C593C47217D4240800C26367 /* LeftBarHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C593C47117D4240700C26367 /* LeftBarHeaderView_iPhone.xib */; };
+		C593C47317D4240800C26367 /* LeftBarHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C593C47117D4240700C26367 /* LeftBarHeaderView_iPhone.xib */; };
+		C593C47617D42B5A00C26367 /* LeftBarFooterView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C47517D42B5900C26367 /* LeftBarFooterView_iPhone.m */; };
+		C593C47717D42B5A00C26367 /* LeftBarFooterView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C47517D42B5900C26367 /* LeftBarFooterView_iPhone.m */; };
+		C593C47917D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C593C47817D42B7400C26367 /* LeftBarFooterView_iPhone.xib */; };
+		C593C47A17D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C593C47817D42B7400C26367 /* LeftBarFooterView_iPhone.xib */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
 /* End PBXBuildFile section */
 
@@ -234,6 +244,14 @@
 		C593C46217D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatWebRTCViewController_iPhone.m; sourceTree = "<group>"; };
 		C593C46517D32AF600C26367 /* WarningViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WarningViewController_iPhone.h; sourceTree = "<group>"; };
 		C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WarningViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C46917D4224A00C26367 /* LeftBarViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftBarViewController_iPhone.h; sourceTree = "<group>"; };
+		C593C46A17D4224A00C26367 /* LeftBarViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftBarViewController_iPhone.m; sourceTree = "<group>"; };
+		C593C46D17D4235800C26367 /* LeftBarHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftBarHeaderView_iPhone.h; sourceTree = "<group>"; };
+		C593C46E17D4235900C26367 /* LeftBarHeaderView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftBarHeaderView_iPhone.m; sourceTree = "<group>"; };
+		C593C47117D4240700C26367 /* LeftBarHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftBarHeaderView_iPhone.xib; sourceTree = "<group>"; };
+		C593C47417D42B5800C26367 /* LeftBarFooterView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftBarFooterView_iPhone.h; sourceTree = "<group>"; };
+		C593C47517D42B5900C26367 /* LeftBarFooterView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftBarFooterView_iPhone.m; sourceTree = "<group>"; };
+		C593C47817D42B7400C26367 /* LeftBarFooterView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftBarFooterView_iPhone.xib; sourceTree = "<group>"; };
 		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -506,6 +524,14 @@
 				C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */,
 				C593C42917D3284600C26367 /* SplashViewController_iPhone.h */,
 				C593C42A17D3284600C26367 /* SplashViewController_iPhone.m */,
+				C593C46917D4224A00C26367 /* LeftBarViewController_iPhone.h */,
+				C593C46A17D4224A00C26367 /* LeftBarViewController_iPhone.m */,
+				C593C46D17D4235800C26367 /* LeftBarHeaderView_iPhone.h */,
+				C593C46E17D4235900C26367 /* LeftBarHeaderView_iPhone.m */,
+				C593C47117D4240700C26367 /* LeftBarHeaderView_iPhone.xib */,
+				C593C47417D42B5800C26367 /* LeftBarFooterView_iPhone.h */,
+				C593C47517D42B5900C26367 /* LeftBarFooterView_iPhone.m */,
+				C593C47817D42B7400C26367 /* LeftBarFooterView_iPhone.xib */,
 				C593C41617D2F5BF00C26367 /* HomeViewController_iPhone.h */,
 				C593C41717D2F5BF00C26367 /* HomeViewController_iPhone.m */,
 				C593C42D17D3296700C26367 /* DeviceViewController_iPhone.h */,
@@ -643,6 +669,8 @@
 				C55B446717CF8632009BB21B /* Icon@2x.png in Resources */,
 				C55B446917CF8632009BB21B /* iTunesArtwork in Resources */,
 				C593C41517D2F55B00C26367 /* MainStoryboard_iPhone.storyboard in Resources */,
+				C593C47217D4240800C26367 /* LeftBarHeaderView_iPhone.xib in Resources */,
+				C593C47917D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -663,6 +691,8 @@
 				C55B446617CF8632009BB21B /* Icon.png in Resources */,
 				C55B446817CF8632009BB21B /* Icon@2x.png in Resources */,
 				C55B446A17CF8632009BB21B /* iTunesArtwork in Resources */,
+				C593C47317D4240800C26367 /* LeftBarHeaderView_iPhone.xib in Resources */,
+				C593C47A17D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -787,6 +817,9 @@
 				C593C45F17D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */,
 				C593C46317D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m in Sources */,
 				C593C46717D32AF600C26367 /* WarningViewController_iPhone.m in Sources */,
+				C593C46B17D4224B00C26367 /* LeftBarViewController_iPhone.m in Sources */,
+				C593C46F17D4235A00C26367 /* LeftBarHeaderView_iPhone.m in Sources */,
+				C593C47617D42B5A00C26367 /* LeftBarFooterView_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -832,6 +865,9 @@
 				C593C46017D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */,
 				C593C46417D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m in Sources */,
 				C593C46817D32AF600C26367 /* WarningViewController_iPhone.m in Sources */,
+				C593C46C17D4224B00C26367 /* LeftBarViewController_iPhone.m in Sources */,
+				C593C47017D4235A00C26367 /* LeftBarHeaderView_iPhone.m in Sources */,
+				C593C47717D42B5A00C26367 /* LeftBarFooterView_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
