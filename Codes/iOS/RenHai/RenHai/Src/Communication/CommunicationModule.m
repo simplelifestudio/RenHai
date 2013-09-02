@@ -110,6 +110,8 @@ SINGLETON(CommunicationModule)
     [self registerReachability];
 }
 
+#pragma mark - UIApplicationDelegate
+
 -(void)applicationWillResignActive:(UIApplication *)application
 {
     
@@ -117,7 +119,7 @@ SINGLETON(CommunicationModule)
 
 -(void)applicationDidEnterBackground:(UIApplication *)application
 {
-
+    
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -127,7 +129,7 @@ SINGLETON(CommunicationModule)
 
 -(void)applicationWillEnterForeground:(UIApplication *)application
 {
-
+    
 }
 
 @end
