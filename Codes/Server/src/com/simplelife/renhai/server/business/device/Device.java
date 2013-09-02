@@ -28,21 +28,15 @@ public class Device implements IDbOperation, ICardOperation
     public DeviceWrapper Unnamed1;
     
     /** */
-    public DeviceCard Unnamed2;
-    
-    /** */
-    public Profile Unnamed3;
-    
-    /** */
     public void updateDeviceCard()
     {
     
     }
     
     /** */
-    public void getDeviceCard()
+    public DeviceCard getDeviceCard()
     {
-    
+		return deviceCard;
     }
     
     /** */
