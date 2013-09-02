@@ -11,7 +11,22 @@
                     <view key="view" contentMode="scaleToFill" id="NMg-NX-QmX">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="欢迎" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LCa-5k-1zF">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="wmU-if-IWJ"/>
+                                    <constraint firstAttribute="height" constant="44" id="ylt-3v-4L2"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="LCa-5k-1zF" firstAttribute="centerY" secondItem="NMg-NX-QmX" secondAttribute="centerY" type="default" id="3ds-mT-q1Z"/>
+                            <constraint firstItem="LCa-5k-1zF" firstAttribute="centerX" secondItem="NMg-NX-QmX" secondAttribute="centerX" type="default" id="MaN-Eg-y8F"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rlm-A3-Ugf" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -25,7 +40,22 @@
                     <view key="view" contentMode="scaleToFill" id="H1F-lY-EeO">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="配置" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5fK-CA-AKv">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="LjM-Fn-GSb"/>
+                                    <constraint firstAttribute="height" constant="44" id="QU6-mM-zMu"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="5fK-CA-AKv" firstAttribute="centerX" secondItem="H1F-lY-EeO" secondAttribute="centerX" type="default" id="8at-5U-BYH"/>
+                            <constraint firstItem="5fK-CA-AKv" firstAttribute="centerY" secondItem="H1F-lY-EeO" secondAttribute="centerY" type="default" id="fea-hj-EUO"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L7e-o9-YOz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -39,7 +69,22 @@
                     <view key="view" contentMode="scaleToFill" id="oHj-lV-qis">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="聊天评价" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jqk-U9-56g">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="4O2-Vs-xZf"/>
+                                    <constraint firstAttribute="width" constant="97" id="Cfq-lR-KdF"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Jqk-U9-56g" firstAttribute="centerX" secondItem="oHj-lV-qis" secondAttribute="centerX" type="default" id="Ofj-iF-sY3"/>
+                            <constraint firstItem="Jqk-U9-56g" firstAttribute="centerY" secondItem="oHj-lV-qis" secondAttribute="centerY" type="default" id="h3j-2I-PKg"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mb2-zd-MPb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -53,12 +98,68 @@
                     <view key="view" contentMode="scaleToFill" id="ggI-eV-eSW">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="警告" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JoT-VZ-t5f">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="I5d-e0-QXY"/>
+                                    <constraint firstAttribute="height" constant="44" id="bzd-IF-mEd"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="JoT-VZ-t5f" firstAttribute="centerX" secondItem="ggI-eV-eSW" secondAttribute="centerX" type="default" id="51H-O4-Qwd"/>
+                            <constraint firstItem="JoT-VZ-t5f" firstAttribute="centerY" secondItem="ggI-eV-eSW" secondAttribute="centerY" type="default" id="ayH-3U-uUJ"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uj7-c3-aVO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="102" y="1180"/>
+        </scene>
+        <!--Left Bar View Controller i Phone-->
+        <scene sceneID="2so-KA-4rR">
+            <objects>
+                <tableViewController storyboardIdentifier="sbid_leftbarviewcontroller_iphone" id="f1s-lo-04Y" customClass="LeftBarViewController_iPhone" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="j1s-6T-HSl">
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="GdK-BP-G24">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="f1s-lo-04Y" id="rQw-Mi-89f"/>
+                            <outlet property="delegate" destination="f1s-lo-04Y" id="c5G-Rt-QDg"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VYK-Qi-6VH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="554" y="1178"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="FVc-ov-xcf">
+            <objects>
+                <navigationController storyboardIdentifier="sbid_navigationcontroller" definesPresentationContext="YES" id="5R2-n5-ms1" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7CO-W0-pfR">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9vd-TX-Lng" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="958" y="1178"/>
         </scene>
         <!--Help View Controller i Phone-->
         <scene sceneID="YZc-Dp-bQm">
@@ -67,7 +168,22 @@
                     <view key="view" contentMode="scaleToFill" id="JjY-o6-NsQ">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="帮助" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xu1-LP-xKk">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="Kvp-tK-XTv"/>
+                                    <constraint firstAttribute="width" constant="80" id="xQd-W4-oSW"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Xu1-LP-xKk" firstAttribute="centerY" secondItem="JjY-o6-NsQ" secondAttribute="centerY" type="default" id="07B-le-8Oc"/>
+                            <constraint firstItem="Xu1-LP-xKk" firstAttribute="centerX" secondItem="JjY-o6-NsQ" secondAttribute="centerX" type="default" id="KnK-wQ-6id"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BPW-TB-TDH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -81,7 +197,22 @@
                     <view key="view" contentMode="scaleToFill" id="Y1g-pW-N07">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="等待匹配" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dCl-rU-Z2b">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="b5Q-eu-5hO"/>
+                                    <constraint firstAttribute="width" constant="80" id="exo-lj-5bS"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="dCl-rU-Z2b" firstAttribute="centerX" secondItem="Y1g-pW-N07" secondAttribute="centerX" type="default" id="0ip-lA-Bf0"/>
+                            <constraint firstItem="dCl-rU-Z2b" firstAttribute="centerY" secondItem="Y1g-pW-N07" secondAttribute="centerY" type="default" id="E2M-Uh-JTs"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SpY-7A-QfI" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -95,7 +226,22 @@
                     <view key="view" contentMode="scaleToFill" id="y48-DI-AFQ">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="聊天确认" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CAS-hi-WT3">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="96" id="MQ6-bh-NtT"/>
+                                    <constraint firstAttribute="height" constant="44" id="RX1-j0-gXv"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="CAS-hi-WT3" firstAttribute="centerY" secondItem="y48-DI-AFQ" secondAttribute="centerY" type="default" id="FRt-QK-DYB"/>
+                            <constraint firstItem="CAS-hi-WT3" firstAttribute="centerX" secondItem="y48-DI-AFQ" secondAttribute="centerX" type="default" id="egK-Tp-5Zn"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iEh-wB-Ngp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -109,7 +255,22 @@
                     <view key="view" contentMode="scaleToFill" id="aRm-Ul-Twj">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="视频聊天" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t8z-ov-QWI">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="dw4-9P-Gyn"/>
+                                    <constraint firstAttribute="width" constant="106" id="s5Y-f2-8l7"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="t8z-ov-QWI" firstAttribute="centerX" secondItem="aRm-Ul-Twj" secondAttribute="centerX" type="default" id="ZN2-0u-FYo"/>
+                            <constraint firstItem="t8z-ov-QWI" firstAttribute="centerY" secondItem="aRm-Ul-Twj" secondAttribute="centerY" type="default" id="ewy-rJ-LOY"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mov-Tt-rJQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -123,7 +284,22 @@
                     <view key="view" contentMode="scaleToFill" id="e4l-i9-iJx">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="主屏" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vb8-0v-xLK">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="M7E-Kp-83n"/>
+                                    <constraint firstAttribute="width" constant="80" id="ug8-pq-QhX"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="Vb8-0v-xLK" firstAttribute="centerY" secondItem="e4l-i9-iJx" secondAttribute="centerY" type="default" id="bgV-Sl-9Oc"/>
+                            <constraint firstItem="Vb8-0v-xLK" firstAttribute="centerX" secondItem="e4l-i9-iJx" secondAttribute="centerX" type="default" id="udE-Ib-CBl"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3NT-bM-sTE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -137,7 +313,22 @@
                     <view key="view" contentMode="scaleToFill" id="lvJ-Hh-vrl">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="设备" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eoH-oM-SwB">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="BVW-m6-4QW"/>
+                                    <constraint firstAttribute="width" constant="80" id="X8N-HU-GxD"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="eoH-oM-SwB" firstAttribute="centerX" secondItem="lvJ-Hh-vrl" secondAttribute="centerX" type="default" id="8uk-la-wGx"/>
+                            <constraint firstItem="eoH-oM-SwB" firstAttribute="centerY" secondItem="lvJ-Hh-vrl" secondAttribute="centerY" type="default" id="Ytq-Ao-MmW"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="60F-YZ-ngr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -151,12 +342,27 @@
                     <view key="view" contentMode="scaleToFill" id="EiP-Uw-swS">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="印象" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6CJ-j4-bN8">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="B0j-dZ-HKM"/>
+                                    <constraint firstAttribute="height" constant="44" id="Flh-Jt-VSO"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="6CJ-j4-bN8" firstAttribute="centerY" secondItem="EiP-Uw-swS" secondAttribute="centerY" type="default" id="LPV-Ad-XOA"/>
+                            <constraint firstItem="6CJ-j4-bN8" firstAttribute="centerX" secondItem="EiP-Uw-swS" secondAttribute="centerX" type="default" id="z2P-pG-2S9"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xkI-s6-GVM" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="952" y="-337"/>
+            <point key="canvasLocation" x="952" y="-330"/>
         </scene>
         <!--Interest View Controller i Phone-->
         <scene sceneID="Sq7-2g-1YB">
@@ -165,7 +371,22 @@
                     <view key="view" contentMode="scaleToFill" id="5cj-Iy-u5a">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="兴趣" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qAo-gr-Srq">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="dFQ-yg-NXw"/>
+                                    <constraint firstAttribute="width" constant="80" id="lX4-fB-hFn"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="qAo-gr-Srq" firstAttribute="centerX" secondItem="5cj-Iy-u5a" secondAttribute="centerX" type="default" id="9bc-IM-ifX"/>
+                            <constraint firstItem="qAo-gr-Srq" firstAttribute="centerY" secondItem="5cj-Iy-u5a" secondAttribute="centerY" type="default" id="Sds-N7-Q3g"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p0X-7R-tYM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -203,6 +424,12 @@
         </class>
         <class className="InterestViewController_iPhone" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/InterestViewController_iPhone.h"/>
+        </class>
+        <class className="LeftBarViewController_iPhone" superclassName="UITableViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/LeftBarViewController_iPhone.h"/>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
         </class>
         <class className="SplashViewController_iPhone" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/SplashViewController_iPhone.h"/>
