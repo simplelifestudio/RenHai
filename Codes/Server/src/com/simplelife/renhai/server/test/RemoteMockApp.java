@@ -12,6 +12,7 @@ package com.simplelife.renhai.server.test;
 import java.util.HashMap;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
 /** */

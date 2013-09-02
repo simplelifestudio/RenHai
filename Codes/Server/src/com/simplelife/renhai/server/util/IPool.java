@@ -26,4 +26,6 @@ public interface IPool
     
     /** */
     public int getElementCount();
+    
+    public void clearPool();
 }

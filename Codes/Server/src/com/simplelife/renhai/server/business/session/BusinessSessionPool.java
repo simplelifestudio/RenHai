@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.business.session;
 
+import java.util.HashMap;
 import java.util.Timer;
 
 import com.simplelife.renhai.server.business.pool.AbstractPool;
@@ -21,7 +22,9 @@ import com.simplelife.renhai.server.util.IBusinessSession;
 public class BusinessSessionPool extends AbstractPool
 {
     /** */
-    public Timer timer;
+    private Timer timer;
+    
+    private HashMap<String, IBusinessSession> sessionMap;
     
     /** */
     public IBusinessSession getBusinessSession()
@@ -64,4 +67,13 @@ public class BusinessSessionPool extends AbstractPool
     {
         return 0;
     }
+
+	/* (non-Javadoc)
+	 * @see com.simplelife.renhai.server.util.IPool#clearPool()
+	 */
+	@Override
+	public void clearPool()
+	{
+		sessionMap.clear();
+	}
 }

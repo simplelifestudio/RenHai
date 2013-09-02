@@ -102,7 +102,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     public Device getDevice()
     {
         return device;
-    
     }
     
     /** */
@@ -243,4 +242,13 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
         // TODO Auto-generated method stub
         
     }
+
+	/* (non-Javadoc)
+	 * @see com.simplelife.renhai.server.util.IBaseConnectionOwner#getConnection()
+	 */
+	@Override
+	public IBaseConnection getConnection()
+	{
+		return webSocketConnection;
+	}
 }

@@ -13,6 +13,8 @@ package com.simplelife.renhai.server.util;
 
 import java.util.Date;
 
+import com.simplelife.renhai.server.business.device.Device;
+
 
 /** */
 public interface IDeviceWrapper
@@ -43,4 +45,6 @@ public interface IDeviceWrapper
     
     /** */
     public Date getLastActivityTime();
+    
+    public Device getDevice();
 }

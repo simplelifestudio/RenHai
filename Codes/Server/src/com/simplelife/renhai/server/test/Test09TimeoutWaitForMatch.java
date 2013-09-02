@@ -34,6 +34,14 @@ public class Test09TimeoutWaitForMatch extends TestCase
 	@Test
 	public void test()
 	{
-		fail("Not yet implemented");
+		// 前置条件 设备已经成功同步设备信息
+		// Step_01 调用：OnlineDevicePool::getCount
+		// Step_02 调用：RandomBusinessDivicePool::getCount
+		// Step_03 Mock请求：进入随机聊天
+		// Step_04 调用：RandomBusinessDivicePool::getCount
+		// Step_05 等待Server的Websocket通信异常时间
+		// Step_06 Mock事件：onPing
+		// Step_07 调用：OnlineDevicePool::getCount
+		// Step_08 调用：RandomBusinessDivicePool::getCount
 	}
 }

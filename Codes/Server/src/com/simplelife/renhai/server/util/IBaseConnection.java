@@ -47,4 +47,6 @@ public interface IBaseConnection
     
     /** */
     public void close();
+    
+    public IBaseConnectionOwner getOwner();
 }

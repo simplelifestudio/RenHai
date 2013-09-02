@@ -34,6 +34,12 @@ public class Test05SyncDeviceForbidden extends TestCase
 	@Test
 	public void test()
 	{
-		fail("Not yet implemented");
+		// 前置条件 设备A已建立WebSocket连接（参考TC_01）
+		// Step_01 数据库操作：将设备A的服务状态更新为禁聊，到期日期为明年
+		// Step_02 调用：OnlineDevicePool::getCount
+		// Step_03 调用：DeviceWrapper::getServiceStatus
+		// Step_04 Mock请求：设备同步
+		// Step_05 调用：OnlineDevicePool::getCount
+		// Step_06 调用：DeviceWrapper::getLastActivityTime
 	}
 }

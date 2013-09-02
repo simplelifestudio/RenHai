@@ -34,7 +34,13 @@ public class Test08TimeoutAfterSyncDevice extends TestCase
 	@Test
 	public void test()
 	{
-		assertEquals(1, 1);
-		//assertEquals(1, 2);
+		// 前置条件 设备已建立WebSocket连接（参考TC_01）
+		// Step_01 调用：OnlineDevicePool::getCount
+		// Step_02 Mock请求：设备同步
+		// Step_03 调用：DeviceWrapper::getServiceStatus
+		// Step_04 调用：OnlineDevicePool::getCount
+		// Step_05 等待Server的Websocket通信异常时间
+		// Step_06 Mock事件：onPing
+		// Step_07 调用：OnlineDevicePool::getCount
 	}
 }

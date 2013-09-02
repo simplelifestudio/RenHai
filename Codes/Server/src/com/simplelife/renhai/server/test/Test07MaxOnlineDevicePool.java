@@ -34,6 +34,15 @@ public class Test07MaxOnlineDevicePool extends TestCase
 	@Test
 	public void test()
 	{
-		fail("Not yet implemented");
+		// 前置条件 设备A、B已建立WebSocket连接（参考TC_01）
+		// Step_01 调用：OnlineDevicePool::getCount
+		// Step_02 调用：OnlineDevicePool::setCapacity
+		// Step_03 调用：DeviceWrapper::getServiceStatus
+		// Step_04 Mock请求：A设备同步
+		// Step_05 调用：A DeviceWrapper::getServiceStatus
+		// Step_06 调用：OnlineDevicePool::getCount
+		// Step_07 Mock请求：B设备同步
+		// Step_08 调用：OnlineDevicePool::getCount
+
 	}
 }

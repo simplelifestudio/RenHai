@@ -20,13 +20,15 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
 /** */
-public abstract class OnlineDevicePool extends AbstractDevicePool
+public class OnlineDevicePool extends AbstractDevicePool
 {
     /** */
     private Timer timer;
     
     /** */
     private List businessPoolList;
+    
+    private static OnlineDevicePool poolInstance;
     
     /** */
     private void checkInactiveDevice()
@@ -35,9 +37,24 @@ public abstract class OnlineDevicePool extends AbstractDevicePool
     }
     
     /** */
-    public void getInstance()
+    public static OnlineDevicePool getInstance()
     {
-    
+    	if (poolInstance != null)
+    	{
+    		return poolInstance;
+    	}
+    	
+    	synchronized (poolInstance)
+		{
+    		// Check again after get lock
+    		if (poolInstance != null)
+        	{
+        		return poolInstance;
+        	}
+    		
+    		poolInstance = new OnlineDevicePool();
+    		return poolInstance;
+		}
     }
     
     /** */

@@ -34,6 +34,8 @@ public class Test02CreateRealConnection extends TestCase
 	@Test
 	public void test()
 	{
-		fail("Not yet implemented");
+		// 前置条件 Server已经部署
+		// Step_01 通过echo.html和server建立WebSocket连接
+		// Step_02 通过页面发送设备同步的Json命令
 	}
 }

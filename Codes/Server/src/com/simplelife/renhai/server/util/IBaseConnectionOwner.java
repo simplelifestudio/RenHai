@@ -26,4 +26,6 @@ public interface IBaseConnectionOwner
     
     /** */
     public void onTimeOut(IBaseConnection conection);
+    
+    public IBaseConnection getConnection();
 }

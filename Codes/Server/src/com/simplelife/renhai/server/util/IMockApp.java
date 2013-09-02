@@ -64,4 +64,6 @@ public interface IMockApp
 	 * @param obj
 	 */
 	public void onJSONCommand(JSONObject obj);
+	
+	public void bindDevice(IDeviceWrapper device);
 }
