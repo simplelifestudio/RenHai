@@ -13,6 +13,7 @@ package com.simplelife.renhai.server.test;
 
 import java.util.HashMap;
 
+import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.Device;
 import com.simplelife.renhai.server.business.device.DeviceCard;
 import com.simplelife.renhai.server.json.JSONKey;
@@ -30,6 +31,7 @@ public abstract class AbstractMockApp implements IMockApp
     protected String peerDeviceId;
     protected String businessSessionId;
     protected String businessSessionType;
+    protected JSONObject lastReceivedCommand;
     
     protected HashMap<String, Object> jsonMap = new HashMap<String, Object>();
     protected HashMap<String, Object> jsonMapHeader = new HashMap<String, Object>();

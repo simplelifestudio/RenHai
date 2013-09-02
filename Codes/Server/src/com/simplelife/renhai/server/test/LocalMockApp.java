@@ -209,6 +209,7 @@ public class LocalMockApp extends AbstractMockApp
 	@Override
 	public void onJSONCommand(JSONObject obj)
 	{
+		lastReceivedCommand = obj;
 		FileLogger.info(obj.toJSONString());
 	}
 }
