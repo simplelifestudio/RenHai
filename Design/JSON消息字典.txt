@@ -99,10 +99,6 @@
 	{
 		"deviceCard":
 		{
-			"serviceStatus":"", 
-			"registerTime":"",
-			"forbiddenExpiredDate":"",
-			"profileId""=""
 		},
 		"impressCard":
 		{
