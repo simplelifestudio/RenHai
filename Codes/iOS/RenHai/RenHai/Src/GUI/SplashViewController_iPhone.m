@@ -10,6 +10,8 @@
 
 #import "CBModuleManager.h"
 
+#import "AppDataModule.h"
+
 @interface SplashViewController_iPhone ()
 
 @property (nonatomic, strong) NSThread *loadStuffThread;
@@ -76,7 +78,18 @@
 }
 
 - (void) finishFadingSplashScreen
-{    
+{
+    AppDataModule* appDataModule = [AppDataModule sharedInstance];
+    BOOL isAppLaunchedBefore = [appDataModule isAppLaunchedBefore];
+    if (!isAppLaunchedBefore)
+    {
+        
+    }
+    else
+    {
+        [appDataModule recordAppLaunchedBefore];
+    }
+    
     [self _enterInApp];
 }
 

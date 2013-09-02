@@ -8,6 +8,16 @@
 
 #import "AppDataModule.h"
 
+#define PERSISTENTDOMAIN_APPDATA @"com.simplelife.RenHai.appdata"
+#define APPDATA_KEY_APPLAUNCHEDBEFORE @"appLaunchedBefore"
+
+@interface AppDataModule()
+{
+    NSUserDefaults* _userDefaults;
+}
+
+@end
+
 @implementation AppDataModule
 
 SINGLETON(AppDataModule)
@@ -17,6 +27,8 @@ SINGLETON(AppDataModule)
     [self setModuleIdentity:NSLocalizedString(@"AppData Module", nil)];
     [self.serviceThread setName:NSLocalizedString(@"AppData Module Thread", nil)];
     [self setKeepAlive:FALSE];
+    
+    _userDefaults = [NSUserDefaults standardUserDefaults];
 }
 
 -(void) releaseModule
@@ -36,5 +48,106 @@ SINGLETON(AppDataModule)
     MODULE_DELAY
 }
 
+#pragma mark - Common
+
+-(void) resetDefaults
+{
+    [self resetDefaultsInPersistentDomain:PERSISTENTDOMAIN_APPDATA];
+}
+
+-(void) resetDefaultsInPersistentDomain:(NSString*) domain
+{
+    if (nil != domain && 0 < domain.length)
+    {
+        [_userDefaults removePersistentDomainForName:domain];
+        NSDictionary* newDic = [NSDictionary dictionary];
+        [_userDefaults setPersistentDomain:newDic forName:domain];
+        DDLogInfo(@"AppData in persistent domain: %@ has been reset.", domain);
+    }
+}
+
+-(NSMutableDictionary*) persistentDomainForName:(NSString*) name
+{
+    NSMutableDictionary* mutableDic = nil;
+    
+    if (nil != name && 0 < name.length)
+    {
+        mutableDic = [NSMutableDictionary dictionary];
+        NSDictionary* dic = [_userDefaults persistentDomainForName:name];
+        if (nil != dic)
+        {
+            [mutableDic setDictionary:dic];
+        }
+    }
+    
+    return mutableDic;
+}
+
+-(void) setValueForKeyInPersistentDomain:(id) value forKey:(NSString*) key inPersistentDomain:(NSString*) domain
+{
+    NSMutableDictionary* dic = [self persistentDomainForName:domain];
+    if (nil != dic && nil != value && nil != key)
+    {
+        [dic setObject:value forKey:key];
+        [_userDefaults setPersistentDomain:dic forName:domain];
+        [_userDefaults synchronize];
+    }
+}
+
+-(id) getValueForKeyInPersistentDomain:(NSString*) key inPersistentDomain:(NSString*) domain
+{
+    id value = nil;
+    
+    if (nil != domain && 0 < domain.length && nil != key && 0 < key.length)
+    {
+        NSMutableDictionary* dic = [self persistentDomainForName:domain];
+        value = [dic objectForKey:key];
+    }
+    
+    return value;
+}
+
+#pragma mark - App
+
+-(BOOL) isAppLaunchedBefore
+{
+    BOOL flag = NO;
+    
+    id value = [self getValueForKeyInPersistentDomain:APPDATA_KEY_APPLAUNCHEDBEFORE inPersistentDomain:PERSISTENTDOMAIN_APPDATA];
+    if ([value isEqualToString:@"YES"])
+    {
+        flag = YES;
+    }
+    
+    return flag;
+}
+
+-(void) recordAppLaunchedBefore
+{
+    NSString* sVal = @"YES";
+    [self setValueForKeyInPersistentDomain:sVal forKey:APPDATA_KEY_APPLAUNCHEDBEFORE inPersistentDomain:PERSISTENTDOMAIN_APPDATA];
+}
+
+#pragma mark - UIApplicationDelegate
+
+-(void)applicationWillResignActive:(UIApplication *)application
+{
+    
+}
+
+-(void)applicationDidEnterBackground:(UIApplication *)application
+{
+    
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    
+}
+
+-(void)applicationWillEnterForeground:(UIApplication *)application
+{
+    
+}
 
 @end
