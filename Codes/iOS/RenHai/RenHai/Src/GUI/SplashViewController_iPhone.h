@@ -10,4 +10,8 @@
 
 @interface SplashViewController_iPhone : UIViewController
 
+-(void) loadAnyNecessaryStuff;
+-(void) startFadingSplashScreen;
+-(void) finishFadingSplashScreen;
+
 @end

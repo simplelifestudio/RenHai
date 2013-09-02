@@ -52,8 +52,6 @@
     guiModule.moduleWeightFactor = 0.4;
     [_moduleManager registerModule:guiModule];
     
-    [_moduleManager initModules];
-    
     DDLogVerbose(@"App Sandbox Path: %@", NSHomeDirectory());
     
     [Crashlytics startWithAPIKey:@"592220da47f22b9cdb4a9df47ea79170d94a150a"];

@@ -67,8 +67,8 @@ SINGLETON(GUIModule)
     if ((nil == _HUDAgent))
     {
 #warning HomeViewController need be here.
-        UIView* view = nil;
-        _HUDAgent = [[CBHUDAgent alloc] initWithUIView:view];
+//        UIView* view = nil;
+//        _HUDAgent = [[CBHUDAgent alloc] initWithUIView:view];
     }
     
     return _HUDAgent;
