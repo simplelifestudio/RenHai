@@ -12,6 +12,7 @@
 package com.simplelife.renhai.server.test;
 
 import java.util.HashMap;
+import java.util.Timer;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.DeviceCard;
@@ -25,6 +26,7 @@ public abstract class AbstractMockApp implements IMockApp
 {
     /** */
     protected int sessionId;
+    protected Timer pingTimer;
     
     /** */
     protected IDeviceWrapper deviceWrapper;

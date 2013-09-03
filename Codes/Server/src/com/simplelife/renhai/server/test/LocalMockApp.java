@@ -22,7 +22,7 @@ import com.simplelife.renhai.server.util.JSONKey;
 public class LocalMockApp extends AbstractMockApp
 {
 	/** */
-	public MockWebSocketConnection connection;
+	protected MockWebSocketConnection connection;
 	
 	@Override
 	public void assessAndQuit(String impressLabelList)
@@ -211,5 +211,10 @@ public class LocalMockApp extends AbstractMockApp
 	{
 		lastReceivedCommand = obj;
 		FileLogger.info(obj.toJSONString());
+	}
+	
+	public void startPingTimer()
+	{
+		
 	}
 }
