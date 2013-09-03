@@ -126,6 +126,27 @@
 		C593C47717D42B5A00C26367 /* LeftBarFooterView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C47517D42B5900C26367 /* LeftBarFooterView_iPhone.m */; };
 		C593C47917D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C593C47817D42B7400C26367 /* LeftBarFooterView_iPhone.xib */; };
 		C593C47A17D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C593C47817D42B7400C26367 /* LeftBarFooterView_iPhone.xib */; };
+		C593C47D17D46C1D00C26367 /* RHDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C47C17D46C1D00C26367 /* RHDevice.m */; };
+		C593C47E17D46C1D00C26367 /* RHDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C47C17D46C1D00C26367 /* RHDevice.m */; };
+		C593C48117D46C2700C26367 /* RHDeviceCard.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C48017D46C2700C26367 /* RHDeviceCard.m */; };
+		C593C48217D46C2700C26367 /* RHDeviceCard.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C48017D46C2700C26367 /* RHDeviceCard.m */; };
+		C593C48517D46C3300C26367 /* RHProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C48417D46C3300C26367 /* RHProfile.m */; };
+		C593C48617D46C3300C26367 /* RHProfile.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C48417D46C3300C26367 /* RHProfile.m */; };
+		C593C48917D46C4700C26367 /* RHInterestCard.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C48817D46C4700C26367 /* RHInterestCard.m */; };
+		C593C48A17D46C4700C26367 /* RHInterestCard.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C48817D46C4700C26367 /* RHInterestCard.m */; };
+		C593C48D17D46C5700C26367 /* RHImpressCard.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C48C17D46C5700C26367 /* RHImpressCard.m */; };
+		C593C48E17D46C5700C26367 /* RHImpressCard.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C48C17D46C5700C26367 /* RHImpressCard.m */; };
+		C593C49117D46CB800C26367 /* RHImpressLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C49017D46CB700C26367 /* RHImpressLabel.m */; };
+		C593C49217D46CB800C26367 /* RHImpressLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C49017D46CB700C26367 /* RHImpressLabel.m */; };
+		C593C49517D46CC400C26367 /* RHInterestLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C49417D46CC400C26367 /* RHInterestLabel.m */; };
+		C593C49617D46CC400C26367 /* RHInterestLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C49417D46CC400C26367 /* RHInterestLabel.m */; };
+		C593C49F17D482EA00C26367 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C593C49D17D482C400C26367 /* CoreLocation.framework */; };
+		C593C4A017D482F000C26367 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C593C49B17D482B300C26367 /* MapKit.framework */; };
+		C593C4A117D4830B00C26367 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C593C49B17D482B300C26367 /* MapKit.framework */; };
+		C593C4A217D4831200C26367 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C593C49D17D482C400C26367 /* CoreLocation.framework */; };
+		C5945F5B17D56DDF0084BB10 /* CBJSONUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C5945F5A17D56DDF0084BB10 /* CBJSONUtils.m */; };
+		C5945F5C17D56DDF0084BB10 /* CBJSONUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C5945F5A17D56DDF0084BB10 /* CBJSONUtils.m */; };
+		C5945F5F17D56F5D0084BB10 /* RenHaiCommonModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = C5945F5E17D56F5D0084BB10 /* RenHaiCommonModuleTest.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
 /* End PBXBuildFile section */
 
@@ -252,6 +273,27 @@
 		C593C47417D42B5800C26367 /* LeftBarFooterView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftBarFooterView_iPhone.h; sourceTree = "<group>"; };
 		C593C47517D42B5900C26367 /* LeftBarFooterView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftBarFooterView_iPhone.m; sourceTree = "<group>"; };
 		C593C47817D42B7400C26367 /* LeftBarFooterView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftBarFooterView_iPhone.xib; sourceTree = "<group>"; };
+		C593C47B17D46C1D00C26367 /* RHDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDevice.h; sourceTree = "<group>"; };
+		C593C47C17D46C1D00C26367 /* RHDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDevice.m; sourceTree = "<group>"; };
+		C593C47F17D46C2700C26367 /* RHDeviceCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHDeviceCard.h; sourceTree = "<group>"; };
+		C593C48017D46C2700C26367 /* RHDeviceCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHDeviceCard.m; sourceTree = "<group>"; };
+		C593C48317D46C3300C26367 /* RHProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHProfile.h; sourceTree = "<group>"; };
+		C593C48417D46C3300C26367 /* RHProfile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHProfile.m; sourceTree = "<group>"; };
+		C593C48717D46C4700C26367 /* RHInterestCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHInterestCard.h; sourceTree = "<group>"; };
+		C593C48817D46C4700C26367 /* RHInterestCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHInterestCard.m; sourceTree = "<group>"; };
+		C593C48B17D46C5600C26367 /* RHImpressCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHImpressCard.h; sourceTree = "<group>"; };
+		C593C48C17D46C5700C26367 /* RHImpressCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHImpressCard.m; sourceTree = "<group>"; };
+		C593C48F17D46CB700C26367 /* RHImpressLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHImpressLabel.h; sourceTree = "<group>"; };
+		C593C49017D46CB700C26367 /* RHImpressLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHImpressLabel.m; sourceTree = "<group>"; };
+		C593C49317D46CC400C26367 /* RHInterestLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHInterestLabel.h; sourceTree = "<group>"; };
+		C593C49417D46CC400C26367 /* RHInterestLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHInterestLabel.m; sourceTree = "<group>"; };
+		C593C49917D4758400C26367 /* CBJSONable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBJSONable.h; sourceTree = "<group>"; };
+		C593C49B17D482B300C26367 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		C593C49D17D482C400C26367 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C5945F5917D56DDF0084BB10 /* CBJSONUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBJSONUtils.h; sourceTree = "<group>"; };
+		C5945F5A17D56DDF0084BB10 /* CBJSONUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBJSONUtils.m; sourceTree = "<group>"; };
+		C5945F5D17D56F5C0084BB10 /* RenHaiCommonModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenHaiCommonModuleTest.h; sourceTree = "<group>"; };
+		C5945F5E17D56F5D0084BB10 /* RenHaiCommonModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenHaiCommonModuleTest.m; sourceTree = "<group>"; };
 		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -262,6 +304,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C593C4A017D482F000C26367 /* MapKit.framework in Frameworks */,
+				C593C49F17D482EA00C26367 /* CoreLocation.framework in Frameworks */,
 				C55B43EC17CF580A009BB21B /* UIKit.framework in Frameworks */,
 				C55B43EE17CF580A009BB21B /* Foundation.framework in Frameworks */,
 				C55B43F017CF580A009BB21B /* CoreGraphics.framework in Frameworks */,
@@ -274,6 +318,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C593C4A217D4831200C26367 /* CoreLocation.framework in Frameworks */,
+				C593C4A117D4830B00C26367 /* MapKit.framework in Frameworks */,
 				C55B442217CF5992009BB21B /* UIKit.framework in Frameworks */,
 				C55B442317CF5992009BB21B /* Foundation.framework in Frameworks */,
 				C55B442417CF5992009BB21B /* CoreGraphics.framework in Frameworks */,
@@ -308,6 +354,8 @@
 		C55B43EA17CF580A009BB21B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C593C49D17D482C400C26367 /* CoreLocation.framework */,
+				C593C49B17D482B300C26367 /* MapKit.framework */,
 				C55B445417CF5DFA009BB21B /* Crashlytics.framework */,
 				C55B43EB17CF580A009BB21B /* UIKit.framework */,
 				C55B43ED17CF580A009BB21B /* Foundation.framework */,
@@ -423,6 +471,8 @@
 			children = (
 				C55B444517CF5B72009BB21B /* GHUnitSampleTest.h */,
 				C55B444617CF5B72009BB21B /* GHUnitSampleTest.m */,
+				C5945F5D17D56F5C0084BB10 /* RenHaiCommonModuleTest.h */,
+				C5945F5E17D56F5D0084BB10 /* RenHaiCommonModuleTest.m */,
 			);
 			path = TestCases;
 			sourceTree = "<group>";
@@ -493,8 +543,11 @@
 				C50505B717D2BD4800DB6589 /* CBStringUtils.m */,
 				C50505B817D2BD4800DB6589 /* CBUIUtils.h */,
 				C50505B917D2BD4800DB6589 /* CBUIUtils.m */,
+				C5945F5917D56DDF0084BB10 /* CBJSONUtils.h */,
+				C5945F5A17D56DDF0084BB10 /* CBJSONUtils.m */,
 				C50505BA17D2BD4800DB6589 /* CBUncaughtExceptionHandler.h */,
 				C50505BB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m */,
+				C593C49917D4758400C26367 /* CBJSONable.h */,
 				C50505BC17D2BD4800DB6589 /* UIColor+CBColors.h */,
 				C50505BD17D2BD4800DB6589 /* UIColor+CBColors.m */,
 				C50505BE17D2BD4800DB6589 /* UIDevice+Resolutions.h */,
@@ -570,6 +623,20 @@
 			children = (
 				C593C41D17D3258600C26367 /* UserDataModule.h */,
 				C593C41E17D3258600C26367 /* UserDataModule.m */,
+				C593C47B17D46C1D00C26367 /* RHDevice.h */,
+				C593C47C17D46C1D00C26367 /* RHDevice.m */,
+				C593C47F17D46C2700C26367 /* RHDeviceCard.h */,
+				C593C48017D46C2700C26367 /* RHDeviceCard.m */,
+				C593C48317D46C3300C26367 /* RHProfile.h */,
+				C593C48417D46C3300C26367 /* RHProfile.m */,
+				C593C48717D46C4700C26367 /* RHInterestCard.h */,
+				C593C48817D46C4700C26367 /* RHInterestCard.m */,
+				C593C49317D46CC400C26367 /* RHInterestLabel.h */,
+				C593C49417D46CC400C26367 /* RHInterestLabel.m */,
+				C593C48B17D46C5600C26367 /* RHImpressCard.h */,
+				C593C48C17D46C5700C26367 /* RHImpressCard.m */,
+				C593C48F17D46CB700C26367 /* RHImpressLabel.h */,
+				C593C49017D46CB700C26367 /* RHImpressLabel.m */,
 			);
 			path = UserData;
 			sourceTree = "<group>";
@@ -820,6 +887,14 @@
 				C593C46B17D4224B00C26367 /* LeftBarViewController_iPhone.m in Sources */,
 				C593C46F17D4235A00C26367 /* LeftBarHeaderView_iPhone.m in Sources */,
 				C593C47617D42B5A00C26367 /* LeftBarFooterView_iPhone.m in Sources */,
+				C593C47D17D46C1D00C26367 /* RHDevice.m in Sources */,
+				C593C48117D46C2700C26367 /* RHDeviceCard.m in Sources */,
+				C593C48517D46C3300C26367 /* RHProfile.m in Sources */,
+				C593C48917D46C4700C26367 /* RHInterestCard.m in Sources */,
+				C593C48D17D46C5700C26367 /* RHImpressCard.m in Sources */,
+				C593C49117D46CB800C26367 /* RHImpressLabel.m in Sources */,
+				C593C49517D46CC400C26367 /* RHInterestLabel.m in Sources */,
+				C5945F5B17D56DDF0084BB10 /* CBJSONUtils.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -868,6 +943,15 @@
 				C593C46C17D4224B00C26367 /* LeftBarViewController_iPhone.m in Sources */,
 				C593C47017D4235A00C26367 /* LeftBarHeaderView_iPhone.m in Sources */,
 				C593C47717D42B5A00C26367 /* LeftBarFooterView_iPhone.m in Sources */,
+				C593C47E17D46C1D00C26367 /* RHDevice.m in Sources */,
+				C593C48217D46C2700C26367 /* RHDeviceCard.m in Sources */,
+				C593C48617D46C3300C26367 /* RHProfile.m in Sources */,
+				C593C48A17D46C4700C26367 /* RHInterestCard.m in Sources */,
+				C593C48E17D46C5700C26367 /* RHImpressCard.m in Sources */,
+				C593C49217D46CB800C26367 /* RHImpressLabel.m in Sources */,
+				C593C49617D46CC400C26367 /* RHInterestLabel.m in Sources */,
+				C5945F5C17D56DDF0084BB10 /* CBJSONUtils.m in Sources */,
+				C5945F5F17D56F5D0084BB10 /* RenHaiCommonModuleTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
