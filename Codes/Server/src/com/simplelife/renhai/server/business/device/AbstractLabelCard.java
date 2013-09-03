@@ -35,9 +35,9 @@ public abstract class AbstractLabelCard implements IAbstractLabelCard, IJSONObje
     }
     
     /** */
-    public LinkedList getLabelList()
+    public LinkedList<AbstractLabel> getLabelList()
     {
-        return null;
+        return labelList;
     }
     
     /** */

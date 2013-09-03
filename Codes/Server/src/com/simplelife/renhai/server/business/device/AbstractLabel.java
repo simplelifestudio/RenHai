@@ -19,10 +19,13 @@ import com.simplelife.renhai.server.util.IJSONObject;
 public abstract class AbstractLabel implements IJSONObject
 {
     /** */
-    public int count;
+    protected int count;
+    protected String name;
     
-    /** */
-    public AbstractLabelCard Unnamed1;
+    public String getName()
+    {
+    	return name;
+    }
     
     /** */
     public abstract JSONObject toJSONObject();

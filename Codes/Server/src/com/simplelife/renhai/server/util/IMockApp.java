@@ -11,6 +11,7 @@ package com.simplelife.renhai.server.util;
 
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import com.alibaba.fastjson.JSONObject;
 
@@ -59,7 +60,7 @@ public interface IMockApp
 	public void assessAndQuit(String impressLabelList);
 	
 	public void updateInterestCard(HashMap<String, Object> interestLabels);
-	
+
 	/**
 	 * @param obj
 	 */

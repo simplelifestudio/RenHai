@@ -20,14 +20,29 @@ public class InterestLabel extends AbstractLabel
     /** */
     protected int order;
     
-    /** */
+    /**
+	 * @param order the order to set
+	 */
+	public void setOrder(int order)
+	{
+		this.order = order;
+	}
+
+	/**
+	 * @param validFlag the validFlag to set
+	 */
+	public void setValidFlag(int validFlag)
+	{
+		this.validFlag = validFlag;
+	}
+
+	/** */
     protected int validFlag;
     
     /** */
     public int getOrder()
     {
         return order;
-    
     }
     
     /** */
