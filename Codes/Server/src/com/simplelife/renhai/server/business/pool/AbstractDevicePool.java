@@ -17,7 +17,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
 /** */
-public class AbstractDevicePool extends AbstractPool
+public abstract class AbstractDevicePool extends AbstractPool
 {
     /** */
     protected HashMap deviceMap;
@@ -51,5 +51,10 @@ public class AbstractDevicePool extends AbstractPool
     public int getElementCount()
     {
         return 0;
+    }
+    
+    public void clearPool()
+    {
+    	deviceMap.clear();
     }
 }

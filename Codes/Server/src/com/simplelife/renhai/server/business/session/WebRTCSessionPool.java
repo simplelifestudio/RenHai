@@ -75,4 +75,10 @@ public class WebRTCSessionPool extends AbstractPool implements IDbOperation
     {
         return false;
     }
+    
+	@Override
+	public void clearPool()
+	{
+		webRTCSessionLink.clear();
+	}
 }

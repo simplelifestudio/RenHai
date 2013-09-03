@@ -13,6 +13,8 @@ package com.simplelife.renhai.server.util;
 
 import java.util.LinkedList;
 
+import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
+
 
 /** */
 public interface IBusinessSession
@@ -34,7 +36,7 @@ public interface IBusinessSession
      *
      * @param    status
     **/
-    public void changeStatus(BusinessSessionStatus status);
+    public void changeStatus(Consts.BusinessSessionStatus status);
     
     /** */
     public void endChat();

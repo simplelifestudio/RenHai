@@ -9,7 +9,7 @@
 
 
 
-package com.simplelife.renhai.server.json;
+package com.simplelife.renhai.server.util;
 
 
 /** */
@@ -105,5 +105,6 @@ public class JSONKey
     	public final static String ImpressCard					= "impressCard";
     	public final static String InterestCard					= "interestCard";
     	public final static String DataUpdate					= "dataUpdate";
+    	public final static String DeviceModel					= "deviceModel";
     }
 }

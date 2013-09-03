@@ -11,8 +11,8 @@
 
 package com.simplelife.renhai.server.business.pool;
 
-import java.util.List;
 import java.util.Timer;
+import java.util.Vector;
 
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IBusinessPool;
@@ -20,13 +20,15 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
 /** */
-public abstract class OnlineDevicePool extends AbstractDevicePool
+public class OnlineDevicePool extends AbstractDevicePool
 {
     /** */
     private Timer timer;
     
     /** */
-    private List businessPoolList;
+    private Vector<AbstractBusinessDevicePool> businessPoolList = new Vector<AbstractBusinessDevicePool>();
+    
+    private static OnlineDevicePool poolInstance;
     
     /** */
     private void checkInactiveDevice()
@@ -35,22 +37,40 @@ public abstract class OnlineDevicePool extends AbstractDevicePool
     }
     
     /** */
-    public void getInstance()
+    public static OnlineDevicePool getInstance()
     {
-    
+    	if (poolInstance != null)
+    	{
+    		return poolInstance;
+    	}
+    	
+    	synchronized (poolInstance)
+		{
+    		// Check again after get lock
+    		if (poolInstance != null)
+        	{
+        		return poolInstance;
+        	}
+    		
+    		poolInstance = new OnlineDevicePool();
+    		return poolInstance;
+		}
     }
     
     /** */
-    public void addBusinessPool(IBusinessPool pool)
+    public void addBusinessPool(int type, AbstractBusinessDevicePool pool)
     {
-    
+    	businessPoolList.set(type, pool);
     }
     
-    /** */
-    public List getBusinessPoolList()
+    public AbstractBusinessDevicePool getBusinessPool(int type)
     {
-        return businessPoolList;
-    
+    	if (type < 0 || type >= businessPoolList.size())
+    	{
+    		return null;
+    	}
+    	
+    	return businessPoolList.get(type);
     }
     
     /** */

@@ -13,27 +13,69 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.TestCase;
+import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.GlobalSetting;
+import com.simplelife.renhai.server.util.JSONKey;
 
 /**
  * 
  */
-public class Test09TimeoutWaitForMatch extends TestCase
+public class Test09TimeoutWaitForMatch extends AbstractTestCase
 {
+	private LocalMockApp mockApp;
+	
+	/**
+	 * Initialize variables needed in case
+	 */
 	@Before
 	public void setUp() throws Exception
 	{
-		
+		mockApp = createMockApp();
 	}
 	
+	/**
+	 * Clear variables created in case
+	 */
 	@After
 	public void tearDown() throws Exception
 	{
+		deleteDevice(mockApp);
 	}
 	
 	@Test
 	public void test()
 	{
-		fail("Not yet implemented");
+		OnlineDevicePool pool = OnlineDevicePool.getInstance();
+		// Step_01 调用：OnlineDevicePool::getCount
+		int deviceCount = pool.getElementCount();
+		
+		// Step_02 调用：RandomBusinessDivicePool::getCount
+		int randomDeviceCount = pool.getBusinessPool(Consts.BusinessType.Random).getElementCount();
+		
+		// Step_03 Mock请求：进入随机聊天
+		mockApp.enterPool(JSONKey.BusinessType.Random);
+		
+		// Step_04 调用：RandomBusinessDivicePool::getCount
+		assertEquals(randomDeviceCount + 1, pool.getBusinessPool(Consts.BusinessType.Random).getElementCount());
+		
+		// Step_05 等待Server的Websocket通信异常时间
+		try
+		{
+			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 1000 + 1000);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		
+		// Step_06 Mock事件：onPing
+		mockApp.ping();
+		
+		// Step_07 调用：OnlineDevicePool::getCount
+		assertEquals(deviceCount-1, pool.getElementCount());
+		
+		// Step_08 调用：RandomBusinessDivicePool::getCount
+		assertEquals(randomDeviceCount, pool.getBusinessPool(Consts.BusinessType.Random).getElementCount());
 	}
 }

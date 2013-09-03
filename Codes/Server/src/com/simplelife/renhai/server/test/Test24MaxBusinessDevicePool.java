@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 /**
  * 
  */
-public class Test24MaxBusinessDevicePool extends TestCase
+public class Test24MaxBusinessDevicePool extends AbstractTestCase
 {
 	@Before
 	public void setUp() throws Exception
@@ -34,6 +34,9 @@ public class Test24MaxBusinessDevicePool extends TestCase
 	@Test
 	public void test()
 	{
-		fail("Not yet implemented");
+		// 前置条件 设备A和设备B均已建立WebSocket连接（参考TC_01）
+		// Step_05 调用：RandomBusinessDivicePool::setCapacity(1)
+		// Step_06 Mock请求：A进入随机聊天
+		// Step_07 Mock请求：B进入随机聊天
 	}
 }

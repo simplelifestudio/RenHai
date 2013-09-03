@@ -15,7 +15,7 @@ import com.simplelife.renhai.server.util.IPool;
 
 
 /** */
-public class AbstractPool implements IPool
+public abstract class AbstractPool implements IPool
 {
     /** */
     protected int capacity;

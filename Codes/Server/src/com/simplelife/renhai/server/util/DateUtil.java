@@ -240,6 +240,18 @@ public class DateUtil
 	 * @param dayBack: backward days from today
 	 * @return Date string in format of "yyyy-MM-dd"
 	 */
+	public static Date getDateByDayBack(int dayBack)
+	{
+		Calendar cal = getCalendar();
+		cal.add(Calendar.DAY_OF_YEAR, -dayBack);
+		return cal.getTime();
+	}
+	
+	/**
+	 * Get date string of backward from today by given days, in format of "yyyy-MM-dd"
+	 * @param dayBack: backward days from today
+	 * @return Date string in format of "yyyy-MM-dd"
+	 */
 	public static String getDateStringByDayBack(int dayBack)
 	{
 		String now;

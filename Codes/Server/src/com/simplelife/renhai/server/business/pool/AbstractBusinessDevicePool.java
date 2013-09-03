@@ -37,6 +37,11 @@ public class AbstractBusinessDevicePool extends AbstractDevicePool implements IB
     {
     }
     
+    public AbstractBusinessScheduler getBusinessScheduler()
+    {
+    	return businessScheduler;
+    }
+    
     /** */
     public int getElementCount()
     {

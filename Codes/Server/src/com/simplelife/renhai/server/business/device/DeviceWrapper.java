@@ -15,8 +15,7 @@ import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.util.DeviceBusinessStatus;
-import com.simplelife.renhai.server.util.DeviceServiceStatus;
+import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IAppJSONMessage;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IBaseConnectionOwner;
@@ -46,10 +45,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     protected Device device;
     
     /** */
-    protected DeviceServiceStatus serviceStatus;
+    protected Consts.DeviceServiceStatus serviceStatus;
     
     /** */
-    protected DeviceBusinessStatus businessStatus;
+    protected Consts.DeviceBusinessStatus businessStatus;
     
    
     /** */
@@ -102,17 +101,16 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     public Device getDevice()
     {
         return device;
-    
     }
     
     /** */
-    public DeviceBusinessStatus getBusinessStatus()
+    public Consts.DeviceBusinessStatus getBusinessStatus()
     {
         return null;
     }
     
     /** */
-    public DeviceServiceStatus getServiceStatus()
+    public Consts.DeviceServiceStatus getServiceStatus()
     {
         return null;
     }
@@ -243,4 +241,13 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
         // TODO Auto-generated method stub
         
     }
+
+	/* (non-Javadoc)
+	 * @see com.simplelife.renhai.server.util.IBaseConnectionOwner#getConnection()
+	 */
+	@Override
+	public IBaseConnection getConnection()
+	{
+		return webSocketConnection;
+	}
 }

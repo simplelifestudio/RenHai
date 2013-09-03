@@ -13,9 +13,8 @@ package com.simplelife.renhai.server.test;
 import java.util.HashMap;
 
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.business.device.Device;
-import com.simplelife.renhai.server.json.JSONKey;
 import com.simplelife.renhai.server.log.FileLogger;
+import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */
@@ -198,7 +197,7 @@ public class LocalMockApp extends AbstractMockApp
 	public void updateInterestCard(HashMap<String, Object> interestLabels)
 	{
 		HashMap<String, Object> updateMap = new HashMap<String, Object>();
-		updateMap.put(JSONKey.FieldName.DeviceCard, getDeviceMap());
+		updateMap.put(JSONKey.FieldName.DeviceCard, getDeviceJSONMap());
 		updateMap.put(JSONKey.FieldName.InterestCard, interestLabels);
 		sendAppDataSyncRequest(null, updateMap);
 	}

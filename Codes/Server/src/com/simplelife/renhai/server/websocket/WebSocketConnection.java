@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.websocket;
 
+import java.io.IOException;
 import java.nio.CharBuffer;
 
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
@@ -23,7 +24,7 @@ import com.simplelife.renhai.server.util.IServerJSONMessage;
 public class WebSocketConnection implements IBaseConnection
 {
     /** */
-    public IBaseConnectionOwner Unnamed1;
+    public IBaseConnectionOwner owner;
     
     /** */
     public void WebSocketConnection()
@@ -73,12 +74,12 @@ public class WebSocketConnection implements IBaseConnection
     }
     
     /** */
-    public void sendMessage(String messge)
+    public void sendMessage(String messge) throws IOException
     {
     }
     
     /** */
-    public void sendMessage(IServerJSONMessage message)
+    public void sendMessage(IServerJSONMessage message) throws IOException
     {
     }
     
@@ -96,4 +97,13 @@ public class WebSocketConnection implements IBaseConnection
         // TODO Auto-generated method stub
         
     }
+
+	/* (non-Javadoc)
+	 * @see com.simplelife.renhai.server.util.IBaseConnection#getOwner()
+	 */
+	@Override
+	public IBaseConnectionOwner getOwner()
+	{
+		return owner;
+	}
 }
