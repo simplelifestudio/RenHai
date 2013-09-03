@@ -11,6 +11,18 @@
 #import "CBModuleAbstractImpl.h"
 #import "CBSharedInstance.h"
 
+#import "RHDevice.h"
+
 @interface UserDataModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
+
+@property (atomic, strong, readonly) RHDevice* device;
+
+-(NSString*) dataDirectory;
+
+-(BOOL) saveUserData;
+-(BOOL) loadUserData;
+-(void) initUserData;
+-(void) updateUserData;
+-(void) syncUserData;
 
 @end
