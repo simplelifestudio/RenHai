@@ -13,34 +13,68 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.TestCase;
+import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.GlobalSetting;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 /**
  * 
  */
-public class Test08TimeoutAfterSyncDevice extends TestCase
+public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 {
+	private LocalMockApp mockApp;
+	
+	/**
+	 * Initialize variables needed in case
+	 */
 	@Before
 	public void setUp() throws Exception
 	{
-		
+		mockApp = createMockApp();
 	}
 	
+	/**
+	 * Clear variables created in case
+	 */
 	@After
 	public void tearDown() throws Exception
 	{
+		deleteDevice(mockApp);
 	}
 	
 	@Test
 	public void test()
 	{
-		// 前置条件 设备已建立WebSocket连接（参考TC_01）
+		OnlineDevicePool pool = OnlineDevicePool.getInstance();
+		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
+		
 		// Step_01 调用：OnlineDevicePool::getCount
+		int deviceCount = pool.getElementCount();
+		
 		// Step_02 Mock请求：设备同步
-		// Step_03 调用：DeviceWrapper::getServiceStatus
+		syncDevice(mockApp);
+		
+		// Step_03 调用：DeviceWrapper::getBusinessStatus
+		assertEquals(Consts.DeviceBusinessStatus.Idle, deviceWrapper.getBusinessStatus());
+		
 		// Step_04 调用：OnlineDevicePool::getCount
+		assertEquals(deviceCount, pool.getElementCount());
+		
 		// Step_05 等待Server的Websocket通信异常时间
+		try
+		{
+			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 1000 + 1000);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		
 		// Step_06 Mock事件：onPing
+		mockApp.ping();
+		
 		// Step_07 调用：OnlineDevicePool::getCount
+		assertEquals(deviceCount-1, pool.getElementCount());
 	}
 }

@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 /**
  * 
  */
-public class Test22Assess extends TestCase
+public class Test22Assess extends AbstractTestCase
 {
 	@Before
 	public void setUp() throws Exception

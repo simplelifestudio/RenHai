@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 /**
  * 
  */
-public class Test23NormalProcessAndStatistics extends TestCase
+public class Test23NormalProcessAndStatistics extends AbstractTestCase
 {
 	@Before
 	public void setUp() throws Exception

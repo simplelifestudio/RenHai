@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 /**
  * 
  */
-public class Test21UpdateInterestCard extends TestCase
+public class Test21UpdateInterestCard extends AbstractTestCase
 {
 	@Before
 	public void setUp() throws Exception

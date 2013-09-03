@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 /**
  * 
  */
-public class Test13FailToNotifyB extends TestCase
+public class Test13FailToNotifyB extends AbstractTestCase
 {
 	@Before
 	public void setUp() throws Exception
@@ -38,24 +38,24 @@ public class Test13FailToNotifyB extends TestCase
 		// Step_01 调用：OnlineDevicePool::getCount
 		// Step_02 调用：RandomBusinessDivicePool::getCount
 		// Step_03 调用：BusinessSessionPool::getCount
-		// Step_04 调用：A DeviceWrapper::getServiceStatus
-		// Step_05 调用：B DeviceWrapper::getServiceStatus
+		// Step_04 调用：A DeviceWrapper::getBusinessStatus
+		// Step_05 调用：B DeviceWrapper::getBusinessStatus
 		// Step_06 Mock请求：A进入随机聊天
 		// Step_07 Mock请求：B进入随机聊天
-		// Step_08 调用：A DeviceWrapper::getServiceStatus
-		// Step_09 调用：B DeviceWrapper::getServiceStatus
+		// Step_08 调用：A DeviceWrapper::getBusinessStatus
+		// Step_09 调用：B DeviceWrapper::getBusinessStatus
 		// Step_10 调用：RandomBusinessDivicePool::getCount
 		// Step_11 调用：MockWebSocketConnection::disableConnection，禁用B的通信功能
 		// Step_12 调用：RandomBusinessScheduler::schedule
 		// Step_13 Mock事件：B的通信被禁用掉后，抛出IOException
 		// Step_14 调用：BusinessSessionPool::getCount
-		// Step_15 调用：A DeviceWrapper::getServiceStatus
-		// Step_16 调用：B DeviceWrapper::getServiceStatus
+		// Step_15 调用：A DeviceWrapper::getBusinessStatus
+		// Step_16 调用：B DeviceWrapper::getBusinessStatus
 		// Step_17 调用：BusinessSession::getStatus
 		// Step_18 Mock事件：A确认绑定
 		// Step_19 调用：BusinessSession::getStatus
-		// Step_20 调用：A DeviceWrapper::getServiceStatus
-		// Step_21 调用：B DeviceWrapper::getServiceStatus
+		// Step_20 调用：A DeviceWrapper::getBusinessStatus
+		// Step_21 调用：B DeviceWrapper::getBusinessStatus
 		// Step_22 Mock事件：A同意聊天
 		// Step_23 Mock事件：A onPing
 		// Step_24 Mock事件：B onPing

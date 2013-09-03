@@ -7,9 +7,8 @@
  * Copyright (c) 2013 SimpleLife Studio. All rights reserved.
  */
 
-
-
 package com.simplelife.renhai.server.business.session;
+
 
 import java.util.HashMap;
 import java.util.Timer;
@@ -21,54 +20,79 @@ import com.simplelife.renhai.server.util.IBusinessSession;
 /** */
 public class BusinessSessionPool extends AbstractPool
 {
-    /** */
-    private Timer timer;
+	/** */
+	private Timer timer;
+	
+	private HashMap<String, IBusinessSession> sessionMap;
+	
+	private static BusinessSessionPool poolInstance;
     
-    private HashMap<String, IBusinessSession> sessionMap;
-    
     /** */
-    public IBusinessSession getBusinessSession()
+    public static BusinessSessionPool getInstance()
     {
-        return null;
-    
+    	if (poolInstance != null)
+    	{
+    		return poolInstance;
+    	}
+    	
+    	synchronized (poolInstance)
+		{
+    		// Check again after get lock
+    		if (poolInstance != null)
+        	{
+        		return poolInstance;
+        	}
+    		
+    		poolInstance = new BusinessSessionPool();
+    		return poolInstance;
+		}
     }
-    
-    /** */
-    public void recycleBusinessSession(IBusinessSession session)
-    {
-    
-    }
-    
-    /** */
-    public void init()
-    {
-    
-    }
-    
-    /** */
-    public void checkWebRTCToken()
-    {
-    
-    }
-    
-    /** */
-    public boolean isPoolFull()
-    {
-        return false;
-    }
-    
-    /** */
-    public void updateCount()
-    {
-    }
-    
-    /** */
-    public int getElementCount()
-    {
-        return 0;
-    }
-
-	/* (non-Javadoc)
+	
+	/** */
+	public IBusinessSession getBusinessSession()
+	{
+		return null;
+		
+	}
+	
+	/** */
+	public void recycleBusinessSession(IBusinessSession session)
+	{
+		
+	}
+	
+	/** */
+	public void init()
+	{
+		
+	}
+	
+	/** */
+	public void checkWebRTCToken()
+	{
+		
+	}
+	
+	/** */
+	public boolean isPoolFull()
+	{
+		return false;
+	}
+	
+	/** */
+	public void updateCount()
+	{
+	}
+	
+	/** */
+	public int getElementCount()
+	{
+		return 0;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.simplelife.renhai.server.util.IPool#clearPool()
 	 */
 	@Override

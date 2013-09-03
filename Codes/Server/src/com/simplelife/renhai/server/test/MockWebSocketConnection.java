@@ -9,6 +9,8 @@
 
 package com.simplelife.renhai.server.test;
 
+import java.io.IOException;
+
 import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.IServerJSONMessage;
@@ -19,12 +21,18 @@ import com.simplelife.renhai.server.websocket.WebSocketConnection;
 public class MockWebSocketConnection extends WebSocketConnection
 {
     /** */
-    public LocalMockApp Unnamed1;
+    private boolean disabled = false;
+    
     
     /** */
-    public void disableConnection(IDeviceWrapper device)
+    public void disableConnection()
     {
+    	disabled = true;
+    }
     
+    public void enableConnection()
+    {
+    	disabled = false;
     }
     
     /** */
@@ -62,14 +70,26 @@ public class MockWebSocketConnection extends WebSocketConnection
     {
     }
     
-    /** */
-    public void sendMessage(String messge)
+    /**
+     * @throws IOException  */
+    @Override
+    public void sendMessage(String messge) throws IOException
     {
+    	if (disabled)
+    	{
+    		throw new IOException();
+    	}
     }
     
-    /** */
-    public void sendMessage(IServerJSONMessage message)
+    /**
+     * @throws IOException  */
+    @Override
+    public void sendMessage(IServerJSONMessage message) throws IOException
     {
+    	if (disabled)
+    	{
+    		throw new IOException();
+    	}
     }
     
     /** */

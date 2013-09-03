@@ -13,7 +13,8 @@ package com.simplelife.renhai.server.business.session;
 
 import java.util.LinkedList;
 
-import com.simplelife.renhai.server.util.BusinessSessionStatus;
+import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
@@ -22,7 +23,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 public class BusinessSession implements IBusinessSession
 {
     /** */
-    private BusinessSessionStatus status;
+    private Consts.BusinessSessionStatus status;
     
     /** */
     private LinkedList deviceList;
@@ -60,7 +61,7 @@ public class BusinessSession implements IBusinessSession
      *
      * @param    status
     **/
-    public void changeStatus(BusinessSessionStatus status)
+    public void changeStatus(Consts.BusinessSessionStatus status)
     {
     }
     

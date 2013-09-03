@@ -19,7 +19,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
 import com.simplelife.renhai.server.log.FileLogger;
-import com.simplelife.renhai.server.util.DBExistResult;
+import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDbOperation;
 
@@ -84,19 +84,19 @@ public class DAOWrapper
 	 * @param sql: SQL string
 	 * @return nonExistent, existent or errorOccurred
 	 */
-	public static DBExistResult exists(String sql)
+	public static Consts.DBExistResult exists(String sql)
 	{
 		if (sql == null || sql.length() == 0)
 		{
 			FileLogger.severe("Invalid SQL string: " + sql);
-			return DBExistResult.NonExistent;
+			return Consts.DBExistResult.NonExistent;
 		}
 		
 		Session session = HibernateSessionFactory.getCurrentSession();
 		if (session == null)
 		{
 			FileLogger.severe("Null hibernate session, check DB parameters");
-			return DBExistResult.ErrorOccurred;
+			return Consts.DBExistResult.ErrorOccurred;
 		}
 		
 		try
@@ -104,18 +104,18 @@ public class DAOWrapper
 			SQLQuery query = session.createSQLQuery(sql); 
 			if (query.list().size() > 0)
 			{
-				return DBExistResult.Existent;
+				return Consts.DBExistResult.Existent;
 			}
 			else
 			{
-				return DBExistResult.NonExistent;
+				return Consts.DBExistResult.NonExistent;
 			}
 		}
 		catch(Exception e)
 		{
 		    FileLogger.severe(sql);
 			FileLogger.printStackTrace(e);
-			return DBExistResult.ErrorOccurred;
+			return Consts.DBExistResult.ErrorOccurred;
 		}
 		finally
 		{

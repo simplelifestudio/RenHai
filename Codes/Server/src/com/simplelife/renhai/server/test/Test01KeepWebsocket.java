@@ -16,17 +16,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
-
-import junit.framework.TestCase;
 
 
 /**
  * 
  */
-public class Test01KeepWebsocket extends TestCase
+public class Test01KeepWebsocket extends AbstractTestCase
 {
 	private IDeviceWrapper mockDevice;
 	

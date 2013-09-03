@@ -13,10 +13,8 @@ package com.simplelife.renhai.server.test;
 import java.util.HashMap;
 
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.business.device.Device;
-import com.simplelife.renhai.server.json.JSONKey;
 import com.simplelife.renhai.server.log.FileLogger;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */

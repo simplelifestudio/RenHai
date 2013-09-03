@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 /**
  * 
  */
-public class Test24MaxBusinessDevicePool extends TestCase
+public class Test24MaxBusinessDevicePool extends AbstractTestCase
 {
 	@Before
 	public void setUp() throws Exception

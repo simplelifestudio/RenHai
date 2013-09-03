@@ -14,12 +14,11 @@ package com.simplelife.renhai.server.test;
 import java.util.HashMap;
 
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.business.device.Device;
 import com.simplelife.renhai.server.business.device.DeviceCard;
-import com.simplelife.renhai.server.json.JSONKey;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.IMockApp;
+import com.simplelife.renhai.server.util.JSONKey;
 
 /** */
 public abstract class AbstractMockApp implements IMockApp
@@ -69,9 +68,13 @@ public abstract class AbstractMockApp implements IMockApp
     	return jsonMapDevice;
     }
     
-    public void bindDevice(IDeviceWrapper deviceWrapper)
+    public void bindDeviceWrapper(IDeviceWrapper deviceWrapper)
     {
     	this.deviceWrapper = deviceWrapper;
     }
     
+    public IDeviceWrapper getDeviceWrapper()
+    {
+    	return deviceWrapper;
+    }
 }

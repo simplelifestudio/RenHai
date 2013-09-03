@@ -18,7 +18,7 @@ import junit.framework.TestCase;
 /**
  * 
  */
-public class Test15FailToNotifyAAfterBAgree extends TestCase
+public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 {
 	@Before
 	public void setUp() throws Exception
@@ -38,23 +38,23 @@ public class Test15FailToNotifyAAfterBAgree extends TestCase
 		// Step_01 调用：OnlineDevicePool::getCount
 		// Step_02 调用：RandomBusinessDivicePool::getCount
 		// Step_03 调用：BusinessSessionPool::getCount
-		// Step_04 调用：A DeviceWrapper::getServiceStatus
-		// Step_05 调用：B DeviceWrapper::getServiceStatus
+		// Step_04 调用：A DeviceWrapper::getBusinessStatus
+		// Step_05 调用：B DeviceWrapper::getBusinessStatus
 		// Step_06 Mock请求：A进入随机聊天
 		// Step_07 Mock请求：B进入随机聊天
-		// Step_08 调用：A DeviceWrapper::getServiceStatus
-		// Step_09 调用：B DeviceWrapper::getServiceStatus
+		// Step_08 调用：A DeviceWrapper::getBusinessStatus
+		// Step_09 调用：B DeviceWrapper::getBusinessStatus
 		// Step_10 调用：RandomBusinessDivicePool::getCount
 		// Step_11 调用：RandomBusinessScheduler::schedule
 		// Step_12 调用：BusinessSessionPool::getCount
-		// Step_13 调用：A DeviceWrapper::getServiceStatus
-		// Step_14 调用：B DeviceWrapper::getServiceStatus
+		// Step_13 调用：A DeviceWrapper::getBusinessStatus
+		// Step_14 调用：B DeviceWrapper::getBusinessStatus
 		// Step_15 调用：BusinessSession::getStatus
 		// Step_16 Mock事件：A确认绑定
 		// Step_17 Mock事件：B确认绑定
 		// Step_18 调用：BusinessSession::getStatus
-		// Step_19 调用：A DeviceWrapper::getServiceStatus
-		// Step_20 调用：B DeviceWrapper::getServiceStatus
+		// Step_19 调用：A DeviceWrapper::getBusinessStatus
+		// Step_20 调用：B DeviceWrapper::getBusinessStatus
 		// Step_21 Mock事件：A同意聊天
 		// Step_22 Mock事件：B同意聊天
 		// Step_23 调用：MockWebSocketConnection::disableConnection，禁用A的通信功能
@@ -62,6 +62,6 @@ public class Test15FailToNotifyAAfterBAgree extends TestCase
 		// Step_25 Mock事件：B onPing
 		// Step_26 调用：OnlineDevicePool::getCount
 		// Step_27 调用：BusinessSessionPool::getCount
-		// Step_28 调用：B DeviceWrapper::getServiceStatus
+		// Step_28 调用：B DeviceWrapper::getBusinessStatus
 	}
 }

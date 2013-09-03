@@ -9,7 +9,7 @@
 
 
 
-package com.simplelife.renhai.server.json;
+package com.simplelife.renhai.server.util;
 
 
 /** */

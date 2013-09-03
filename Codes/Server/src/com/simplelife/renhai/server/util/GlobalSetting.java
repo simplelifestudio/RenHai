@@ -31,4 +31,11 @@ public class GlobalSetting
 	{
 		public static int MaxRecordCountForFlush = 100;
 	}
+	
+	public static class BusinessSetting
+	{
+		public static int OnlinePoolCapacity = 10000;
+		public static int RandomBusinessPoolCapacity = 10000;
+		public static int InterestBusinessPoolCapacity = 0;
+	}
 }

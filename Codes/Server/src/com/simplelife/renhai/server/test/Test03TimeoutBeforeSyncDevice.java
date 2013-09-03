@@ -19,12 +19,10 @@ import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
-import junit.framework.TestCase;
-
 /**
  * 
  */
-public class Test03TimeoutBeforeSyncDevice extends TestCase
+public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 {
 	private IDeviceWrapper mockDevice;
 	@Before

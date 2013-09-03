@@ -20,10 +20,10 @@ import com.simplelife.renhai.server.business.device.Device;
 public interface IDeviceWrapper
 {
     /** */
-    public DeviceBusinessStatus getBusinessStatus();
+    public Consts.DeviceBusinessStatus getBusinessStatus();
     
     /** */
-    public DeviceServiceStatus getServiceStatus();
+    public Consts.DeviceServiceStatus getServiceStatus();
     
     /** */
     public boolean checkExistenceInDb();
