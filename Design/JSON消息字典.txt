@@ -22,16 +22,17 @@
 {
     "header":
     {
-	"deviceId": "1234",
-	"deviceSn": "ABCD77631GGWQ",
-	"messageId": "MessageName",
-	"timeStamp": "2013-08-14 21:18:49" // App启动后首次收到Server发来的消息时需要计算两边时间差并保存留用
+	    "messageSn":"AFLNWERJL3203598FDLGSLDF",
+	    "messageId":"MessageName",
+	    "deviceId":"1234",
+	    "deviceSn":"ABCD77631GGWQ",
+	    "timeStamp":"2013-08-14 21:18:49" // App启动后首次收到Server发来的消息时需要计算两边时间差并保存留用
     },
     "body": 
     {
-	"param1": "value1",
-	"param2": "value2",
-	"paramn": "valuen"
+		"param1":"value1",
+		"param2":"value2",
+		"paramn":"valuen"
     }
 }
 
@@ -41,16 +42,16 @@
 {
     "header":
     {
-	"deviceId": "1234",
-	"deviceSn": "ABCD77631GGWQ",
-	"messageId": "ErrorResponse",
-	"timeStamp": "2013-08-14 21:18:49"
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"ErrorResponse",    
+		"deviceId":"1234",
+		"deviceSn":"ABCD77631GGWQ",
+		"timeStamp":"2013-08-14 21:18:49"
     },
     "body":
     {
-	"appRequestMessage": "AlohaRequest",
-	"errorCode": "-7",
-      	"errorDescription": "Empty Content"
+		"appRequestMessage":"AlohaRequest",
+		"errorCode":"-7",
+      	"errorDescription":"Empty Content"
     }
 }
 
@@ -58,10 +59,10 @@
 {
     "header":
     {
-	"deviceId": "1234",
-	"deviceSn": "ABCD77631GGWQ",
-	"messageId": "AlohaRequest",
-	"timeStamp": "2013-08-14 21:18:49"
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"AlohaRequest",    
+		"deviceId":"1234",
+		"deviceSn":"ABCD77631GGWQ",
+		"timeStamp":"2013-08-14 21:18:49"
     },
     "body":
     {
@@ -73,10 +74,10 @@
 {
     "header":
     {
-	"deviceId": "1234",
-	"deviceSn": "ABCD77631GGWQ",
-	"messageId": "AlohaResponse",
-	"timeStamp": "2013-08-14 21:18:49"
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"AlohaResponse",    
+		"deviceId":"1234",
+		"deviceSn":"ABCD77631GGWQ",
+		"timeStamp":"2013-08-14 21:18:49"
     },
     "body":
     {
@@ -88,35 +89,82 @@
 {
     "header":
     {
-	"deviceId": "1234",
-	"deviceSn": "ABCD77631GGWQ",
-	"messageId": "AppDataSyncRequest",
-	"timeStamp": "2013-08-14 21:18:49"
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"AppDataSyncRequest", 
+		"deviceId":"1234",
+		"deviceSn":"ABCD77631GGWQ",
+		"timeStamp":"2013-08-14 21:18:49"
     },
     "body": 
     {
-	"dataQuery":
-	{
+		"dataQuery":
+		{
+			"deviceCard":
+			{
+			},
+			"impressCard":
+			{
+				"labelListCount":"10" // 最小值为3
+			},
+			"interestCard":
+			{
+				"labelListCount":"5"
+			}		
+		},
+		"dataUpdate":
+		{	
+			"deviceCard":
+			{
+				"osVersion":"iOS 6.1.2",
+				"appVersion":"1.2",
+				"isJailed":"No",
+				"location":"22.511962,113.380301"
+			},
+			"interestCard":
+			{
+				"soccer":
+				{
+					"order":"0",
+					"matchCount":"7"
+				},
+				"music":
+				{
+					"order":"1",
+					"matchCount":"3"
+				}
+			}
+		}
+    }
+}
+
+5. App数据同步响应 AppDataSyncResponse
+{
+    "header":
+    {
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"AppDataSyncResponse",    
+		"deviceId":"1234",
+		"deviceSn":"ABCD77631GGWQ",
+		"timeStamp":"2013-08-14 21:18:49"
+    },
+    "body": // 将App发来的update部分在内存数据中完成后，与query部分一并发回给App
+    {
 		"deviceCard":
 		{
+			"serviceStatus":"Normal", 
+			"registerTime":"2013-08-07 14:01:39",
+			"forbiddenExpiredDate":"",
+			"profileId""="4587"
 		},
 		"impressCard":
 		{
-			"labelListCount":"10" // 最小值为3
-		},
-		"interestCard":
-		{
-			"labelListCount":"5"
-		}		
-	},
-	"dataUpdate":
-	{
-		"deviceCard":
-		{
-			"osVersion": "iOS 6.1.2",
-			"appVersion": "1.2",
-			"isJailed": "No",
-			"location": "22.511962,113.380301"
+			"impressCardId":"9631",
+			"chatTotalCount":"47",
+			"totalChatDuration":"1288",
+			"chatLossCount":"9",
+			"labelList":
+			{
+				{"impressId":"4421", "impressName":"绅士", "count":"7", "assessCount":"3"},
+				{"impressId":"9976", "impressName":"风趣", "count":"3", "assessCount":"2"}
+			}
 		},
 		"interestCard":
 		{
@@ -130,54 +178,7 @@
 				"order":"1",
 				"matchCount":"3"
 			}
-		}
-	}
-    }
-}
-
-5. App数据同步响应 AppDataSyncResponse
-{
-    "header":
-    {
-	"deviceId": "1234",
-	"deviceSn": "ABCD77631GGWQ",
-	"messageId": "AppDataSyncResponse",
-	"timeStamp": "2013-08-14 21:18:49"
-    },
-    "body": // 将App发来的update部分在内存数据中完成后，与query部分一并发回给App
-    {
-	"deviceCard":
-	{
-		"serviceStatus":"Normal", 
-		"registerTime":"2013-08-07 14:01:39",
-		"forbiddenExpiredDate":"",
-		"profileId""="4587"
-	},
-	"impressCard":
-	{
-		"impressCardId":"9631",
-		"chatTotalCount":"47",
-		"totalChatDuration":"1288",
-		"chatLossCount":"9",
-		"labelList":
-		{
-			{"impressId":"4421", "impressName":"绅士", "count":"7", "assessCount":"3"},
-			{"impressId":"9976", "impressName":"风趣", "count":"3", "assessCount":"2"}
-		}
-	},
-	"interestCard":
-	{
-		"soccer":
-		{
-			"order":"0",
-			"matchCount":"7"
-		},
-		"music":
-		{
-			"order":"1",
-			"matchCount":"3"
-		}
-	}	
+		}	
     }
 }
 
@@ -185,10 +186,10 @@
 {
     "header":
     {
-		"deviceId": "1234",
-		"deviceSn": "ABCD77631GGWQ",
-		"messageId": "ServerDataSyncRequest",
-		"timeStamp": "2013-08-14 21:18:49"
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"ServerDataSyncRequest",    
+		"deviceId":"1234",
+		"deviceSn":"ABCD77631GGWQ",
+		"timeStamp":"2013-08-14 21:18:49"
     }
     "body": 
     {
@@ -205,14 +206,14 @@
 {
     "header":
     {
-	"deviceId": "1234",
-	"deviceSn": "ABCD77631GGWQ",
-	"messageId": "ServerDataQueryResponse",
-	"timeStamp": "2013-08-14 21:18:49"
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"ServerDataSyncResponse",    
+		"deviceId":"1234",
+		"deviceSn":"ABCD77631GGWQ",
+		"timeStamp":"2013-08-14 21:18:49"
     }
     "body": 
     {
-	"onlineDeviceCount":"3601"
+		"onlineDeviceCount":"3601"
     }
 }
 
@@ -220,10 +221,10 @@
 {
 	"header":
    	{
-		"deviceId": "1234",
-		"deviceSn": "ABCD77631GGWQ",
-		"messageId": "BusinessSessionNotification",
-		"timeStamp": "2013-08-14 21:18:49"
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"BusinessSessionNotification",
+		"deviceId":"1234",
+		"deviceSn":"ABCD77631GGWQ",
+		"timeStamp":"2013-08-14 21:18:49"
 	}
 	"body": 
 	{
@@ -241,10 +242,10 @@
 {
 	"header":
 	{
-		"deviceId": "1234",
-		"deviceSn": "ABCD77631GGWQ",
-		"messageId": "BusinessSessionNotificationResponse",
-		"timeStamp": "2013-08-14 21:18:49"
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"BusinessSessionNotificationResponse",
+		"deviceId":"1234",
+		"deviceSn":"ABCD77631GGWQ",
+		"timeStamp":"2013-08-14 21:18:49"
 	}
 	"body": 
 	{
@@ -259,11 +260,11 @@
 {
 	"header":
    	{
-		"deviceId": "1234",
-		"deviceSn": "ABCD77631GGWQ",
-		"messageId": "BusinessSessionRequest",
-		"timeStamp": "2013-08-14 21:18:49"
-   		}
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"BusinessSessionRequest",
+		"deviceId":"1234",
+		"deviceSn":"ABCD77631GGWQ",
+		"timeStamp":"2013-08-14 21:18:49"
+   	}
 	"body": 
 	{
 		"businessSessionId":"",
@@ -281,10 +282,10 @@ EnterPool, LeavePool, AgreeChat, RejectChat, EndChat, Assess, AssessAndQuit
 {
 	"header":
    	{
-		"deviceId": "1234",
-		"deviceSn": "ABCD77631GGWQ",
-		"messageId": "BusinessSessionResponse",
-		"timeStamp": "2013-08-14 21:18:49"
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"BusinessSessionResponse",
+		"deviceId":"1234",
+		"deviceSn":"ABCD77631GGWQ",
+		"timeStamp":"2013-08-14 21:18:49"
    	}
 	"body": 
 	{
@@ -299,10 +300,10 @@ EnterPool, LeavePool, AgreeChat, RejectChat, EndChat, Assess, AssessAndQuit
 {
 	"header":
    	{
-		"deviceId": "",
-		"deviceSn": "",
-		"messageId": "BroadcastNotification",
-		"timeStamp": "2013-08-14 21:18:49"
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"BroadcastNotification",
+		"deviceId":"",
+		"deviceSn":"",
+		"timeStamp":"2013-08-14 21:18:49"
    	}
 	"body": 
 	{
