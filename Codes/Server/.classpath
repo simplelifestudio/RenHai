@@ -26,5 +26,8 @@
 	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/hibernate/mysql-connector-java-5.1.25-bin.jar"/>
 	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/json/fastjson-1.1.33.jar"/>
 	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/juit/junit-4.10.jar"/>
+	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.lib.hibernate41.MYECLIPSE_HIBERNATE_4_1_CORE"/>
+	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.lib.hibernate41.MYECLIPSE_HIBERNATE_4_1_EXTRAS"/>
+	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/log/slf4j-api-1.7.5.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
