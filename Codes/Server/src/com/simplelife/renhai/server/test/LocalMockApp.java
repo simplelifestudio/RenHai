@@ -11,6 +11,7 @@ package com.simplelife.renhai.server.test;
 
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.log.FileLogger;
@@ -21,26 +22,7 @@ import com.simplelife.renhai.server.util.JSONKey;
 public class LocalMockApp extends AbstractMockApp
 {
 	/** */
-	public MockWebSocketConnection connection;
-	
-	/** */
-	@Override
-	public void ping()
-	{
-		connection.onPing();
-	}
-	
-	/** */
-	@Override
-	public void assess(String impressLabelList)
-	{
-		if (impressLabelList == null || impressLabelList.length() == 0)
-		{
-			return;
-		}
-		
-		sendBusinessSessionRequest(JSONKey.OperationType.Assess, impressLabelList);
-	}
+	protected MockWebSocketConnection connection;
 	
 	@Override
 	public void assessAndQuit(String impressLabelList)
@@ -189,6 +171,25 @@ public class LocalMockApp extends AbstractMockApp
 		}
 	}
 	
+	/** */
+	@Override
+	public void ping()
+	{
+		connection.onPing();
+	}
+	
+	/** */
+	@Override
+	public void assess(String impressLabelList)
+	{
+		if (impressLabelList == null || impressLabelList.length() == 0)
+		{
+			return;
+		}
+		
+		sendBusinessSessionRequest(JSONKey.OperationType.Assess, impressLabelList);
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.simplelife.renhai.server.util.IMockApp#updateInterestCard(java.lang.String)
 	 */
@@ -210,5 +211,10 @@ public class LocalMockApp extends AbstractMockApp
 	{
 		lastReceivedCommand = obj;
 		FileLogger.info(obj.toJSONString());
+	}
+	
+	public void startPingTimer()
+	{
+		
 	}
 }

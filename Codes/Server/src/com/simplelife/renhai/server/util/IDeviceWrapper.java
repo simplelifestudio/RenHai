@@ -47,4 +47,6 @@ public interface IDeviceWrapper
     public Date getLastActivityTime();
     
     public Device getDevice();
+    
+    public IBusinessSession getOwnerBusinessSession();
 }

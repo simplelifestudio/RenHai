@@ -47,7 +47,7 @@ public class DAOWrapper
 			return false;
 		}
 		
-		Session session = HibernateSessionFactory.getCurrentSession();
+		Session session = HibernateSessionFactory.getSession();
 		if (session == null)
 		{
 			FileLogger.severe("Null hibernate session, check DB parameters");
@@ -75,7 +75,7 @@ public class DAOWrapper
 		}
 		finally
 		{
-			HibernateSessionFactory.closeCurrentSession();
+			HibernateSessionFactory.closeSession();
 		}
 	}
     
@@ -92,7 +92,7 @@ public class DAOWrapper
 			return Consts.DBExistResult.NonExistent;
 		}
 		
-		Session session = HibernateSessionFactory.getCurrentSession();
+		Session session = HibernateSessionFactory.getSession();
 		if (session == null)
 		{
 			FileLogger.severe("Null hibernate session, check DB parameters");
@@ -119,7 +119,7 @@ public class DAOWrapper
 		}
 		finally
 		{
-			HibernateSessionFactory.closeCurrentSession();
+			HibernateSessionFactory.closeSession();
 		}
 	}
     
@@ -137,7 +137,7 @@ public class DAOWrapper
 			return null;
 		}
 		
-		Session session = HibernateSessionFactory.getCurrentSession();
+		Session session = HibernateSessionFactory.getSession();
 	    if (session == null)
 		{
 			FileLogger.severe("Null hibernate session, check DB parameters");
@@ -157,7 +157,7 @@ public class DAOWrapper
 		}
 	    finally
 		{
-			HibernateSessionFactory.closeCurrentSession();
+			HibernateSessionFactory.closeSession();
 		}
 	}
     
@@ -167,7 +167,7 @@ public class DAOWrapper
 	 */
 	public static void delete(Object obj)
 	{
-		Session session = HibernateSessionFactory.getCurrentSession();
+		Session session = HibernateSessionFactory.getSession();
 		if (session == null)
 		{
 			FileLogger.severe("Null hibernate session, check DB parameters");
@@ -190,7 +190,7 @@ public class DAOWrapper
 		}
 		finally
 		{
-			HibernateSessionFactory.closeCurrentSession();
+			HibernateSessionFactory.closeSession();
 		}
 	}
     
@@ -200,7 +200,7 @@ public class DAOWrapper
 	 */
 	public static void save(Object obj)
 	{
-		Session session = HibernateSessionFactory.getCurrentSession();
+		Session session = HibernateSessionFactory.getSession();
 		if (session == null)
 		{
 			FileLogger.severe("Null hibernate session, check DB parameters");
@@ -225,7 +225,7 @@ public class DAOWrapper
 		}
 		finally
 		{
-			HibernateSessionFactory.closeCurrentSession();
+			HibernateSessionFactory.closeSession();
 		}
 	}
 

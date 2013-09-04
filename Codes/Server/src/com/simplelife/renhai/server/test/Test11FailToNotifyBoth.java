@@ -36,6 +36,7 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 	{
 		mockApp1 = createMockApp();
 		mockApp2 = createMockApp();
+		mockApp2.getDeviceWrapper().getDevice().getDeviceCard().setDeviceSn("SNOfDeviceB");
 	}
 	
 	/**
@@ -60,11 +61,14 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		
 		MockWebSocketConnection connection1 = getMockWebSocket(deviceWrapper1);
 		MockWebSocketConnection connection2 = getMockWebSocket(deviceWrapper2);
+		syncDevice(mockApp1);
+		syncDevice(mockApp2);
+
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		int deviceCount = onlinePool.getElementCount();
 		
-		// Step_02 调用：RandomBusinessDivicePool::getCount
+		// Step_02 调用：RandomBusinessDevicePool::getCount
 		int randomDeviceCount = businessPool.getElementCount();
 		
 		// Step_03 调用：BusinessSessionPool::getCount
@@ -88,7 +92,7 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		// Step_09 调用：B DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceBusinessStatus.WaitMatch, deviceWrapper2.getBusinessStatus());
 		
-		// Step_10 调用：RandomBusinessDivicePool::getCount
+		// Step_10 调用：RandomBusinessDevicePool::getCount
 		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
 		randomDeviceCount = businessPool.getElementCount();
 		

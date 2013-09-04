@@ -42,12 +42,6 @@ public class InterestCard extends AbstractLabelCard implements IJSONObject, IDbO
     }
     
     /** */
-    public LinkedList getLabelList()
-    {
-        return null;
-    }
-    
-    /** */
     public void clear()
     {
     }
