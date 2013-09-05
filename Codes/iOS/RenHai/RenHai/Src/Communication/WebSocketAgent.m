@@ -73,7 +73,13 @@
 
 -(void) asyncMessage:(RHJSONMessage*) requestMessage
 {
-    NSString* jsonString = [CBJSONUtils toJSONString:requestMessage.toJSONObject];
+    NSString* jsonString = requestMessage.toJSONString;
+    
+    if ([RHJSONMessage isMessageNeedEncrypt])
+    {
+        jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:JSONMESSAGE_SECURITY_KEY];
+    }
+    
     [_webSocket send:jsonString];
 }
 
@@ -199,7 +205,7 @@
     _messageLockSet = [NSMutableDictionary dictionary];
     _responseMessageSet = [NSMutableDictionary dictionary];
     
-    [self connectWebSocket];
+//    [self connectWebSocket];
 }
 
 - (void) _heartBeatPing
