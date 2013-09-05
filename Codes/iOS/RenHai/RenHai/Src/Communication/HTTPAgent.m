@@ -15,8 +15,6 @@
 
 #import "CommunicationModule.h"
 
-#define JSON_ENVELOPE @"jsonEnvelope"
-
 @implementation HTTPAgent
 
 +(NSMutableURLRequest*) constructURLRequest:(RHJSONMessage*) message serviceTarget:(NSString*) serviceTarget

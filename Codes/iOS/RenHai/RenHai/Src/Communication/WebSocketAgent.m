@@ -74,13 +74,7 @@
 -(void) asyncMessage:(RHJSONMessage*) requestMessage
 {
     NSString* jsonString = requestMessage.toJSONString;
-    
-    if ([RHJSONMessage isMessageNeedEncrypt])
-    {
-        jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:JSONMESSAGE_SECURITY_KEY];
-    }
-    
-    [_webSocket send:jsonString];
+    [self _sendJSONStringToWebSocket:jsonString];
 }
 
 #pragma mark - CBJSONMessageComm
@@ -104,13 +98,7 @@
     NSCondition* _messageLock = [self _newMessageLock:messageSn];
     
     NSString* jsonString = requestMessage.toJSONString;
-    
-    if ([RHJSONMessage isMessageNeedEncrypt])
-    {
-        jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:JSONMESSAGE_SECURITY_KEY];
-    }
-    
-    [_webSocket send:jsonString];
+    [self _sendJSONStringToWebSocket:jsonString];
     
     [_messageLock lock];
     BOOL flag = [_messageLock waitUntilDate:endTimeStamp];
@@ -147,7 +135,9 @@
 {
     DDLogInfo(@"WebSocket Received Message Uncrypted: \"%@\"", message);
     
-    RHJSONMessage* jsonMessage = [RHJSONMessage constructWithString:message];
+    NSDictionary* dic = [CBJSONUtils toJSONObject:message];
+    NSString* jsonString = [dic objectForKey:JSON_ENVELOPE];
+    RHJSONMessage* jsonMessage = [RHJSONMessage constructWithString:jsonString];
     
     DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", jsonMessage.toJSONString);
     
@@ -199,6 +189,16 @@
 }
 
 #pragma mark - Private Methods
+
+-(void) _sendJSONStringToWebSocket:(NSString*) jsonString
+{
+    if ([RHJSONMessage isMessageNeedEncrypt])
+    {
+        jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:JSONMESSAGE_SECURITY_KEY];
+    }
+    
+    [_webSocket send:jsonString];
+}
 
 -(void) _initInstance
 {

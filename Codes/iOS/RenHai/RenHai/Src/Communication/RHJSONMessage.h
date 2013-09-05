@@ -12,6 +12,8 @@
 
 #define JSONMESSAGE_SECURITY_KEY @"19890604"
 
+#define JSON_ENVELOPE @"jsonEnvelope"
+
 // App->Server->App
 #define JSONMESSAGE_SERVERERRORRESPONSE @"ServerErrorResponse"
 #define JSONMESSAGE_SERVERTIMEOUTRESPONSE @"ServerTimeoutResponse"
