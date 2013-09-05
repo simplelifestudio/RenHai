@@ -9,8 +9,21 @@
 #import "RHJSONMessage.h"
 
 #import "CBJSONUtils.h"
+#import "CBSecurityUtils.h"
+
+static BOOL s_messageEncrypted;
 
 @implementation RHJSONMessage
+
++(void) setMessageNeedEncrypt:(BOOL) encrypt
+{
+    s_messageEncrypted = encrypt;
+}
+
++(BOOL) isMessageNeedEncrypt
+{
+    return s_messageEncrypted;
+}
 
 +(RHJSONMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body
 {
@@ -38,6 +51,11 @@
     
     if (nil != jsonString && 0 < jsonString.length)
     {
+        if ([RHJSONMessage isMessageNeedEncrypt])
+        {
+            jsonString = [CBSecurityUtils decryptByDESAndDecodeByBase64:jsonString key:JSONMESSAGE_SECURITY_KEY];
+        }
+        
         NSDictionary* dic = [CBJSONUtils toJSONObject:jsonString];
         message = [RHJSONMessage constructWithContent:dic];
     }
@@ -131,61 +149,6 @@
     NSString* str = [_header objectForKey:JSONMESSAGE_KEY_MESSAGETYPE];
     return [str intValue];
 }
-
-//-(RHJSONMessageType) messageType
-//{
-//    RHJSONMessageType type = UnknownMessage;
-//    
-//    NSString* messageId = [self messageId];
-//    if (nil != messageId && 0 < messageId.length)
-//    {
-//        BOOL flag1 = [messageId isEqualToString:JSONMESSAGE_ALOHAREQUEST];
-//        BOOL flag2 = [messageId isEqualToString:JSONMESSAGE_APPDATASYNCREQUEST];
-//        BOOL flag3 = [messageId isEqualToString:JSONMESSAGE_BUSINESSSESSIONREQUEST];
-//        BOOL flag4 = [messageId isEqualToString:JSONMESSAGE_SERVERDATASYNCREQUEST];
-//        BOOL appRequestTypeFlag = flag1 | flag2 | flag3 | flag4;
-//        if (appRequestTypeFlag)
-//        {
-//            type = AppRequestMessage;
-//        }
-//        else
-//        {
-//            BOOL flag5 = [messageId isEqualToString:JSONMESSAGE_ALOHARESPONSE];
-//            BOOL flag6 = [messageId isEqualToString:JSONMESSAGE_APPDATASYNCRESPONSE];
-//            BOOL flag7 = [messageId isEqualToString:JSONMESSAGE_BUSINESSSESSIONRESPONSE];
-//            BOOL flag8 = [messageId isEqualToString:JSONMESSAGE_SERVERDATASYNCRESPONSE];
-//            BOOL flag9 = [messageId isEqualToString:JSONMESSAGE_SERVERERRORRESPONSE];
-//            BOOL flag10 = [messageId isEqualToString:JSONMESSAGE_SERVERTIMEOUTRESPONSE];
-//            BOOL serverResponseTypeFlag = flag5 | flag6 | flag7 | flag8 | flag9 | flag10;
-//            if (serverResponseTypeFlag)
-//            {
-//                type = ServerResponseMessage;
-//            }
-//            else
-//            {
-//                BOOL flag11 = [messageId isEqualToString:JSONMESSAGE_BUSINESSSESSIONNOTIFICATION];
-//                BOOL flag12 = [messageId isEqualToString:JSONMESSAGE_BROADCASTNOTIFICATION];
-//                BOOL serverNotificationTypeFlag = flag11 | flag12;
-//                if (serverNotificationTypeFlag)
-//                {
-//                    type = ServerNotificationMessage;
-//                }
-//                else
-//                {
-//                    BOOL flag13 = [messageId isEqualToString:JSONMESSAGE_BUSINESSSESSIONNOTIFICATIONRESPONSE];
-//                    BOOL flag14 = [messageId isEqualToString:JSONMESSAGE_BROADCASTNOTIFICATIONRESPONSE];
-//                    BOOL appResponseTypeFlag = flag13 | flag14;
-//                    if (appResponseTypeFlag)
-//                    {
-//                        type = AppResponseMessage;
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    return type;
-//}
 
 #pragma mark - CBJSONable
 

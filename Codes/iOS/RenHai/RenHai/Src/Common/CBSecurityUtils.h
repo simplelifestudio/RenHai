@@ -10,7 +10,7 @@
 
 @interface CBSecurityUtils : NSObject
 
-+(NSString*) encryptByDESAndEncodeByBase64:(NSString *)plainText key:(NSString *)key;
++(NSString*) encryptByDESAndEncodeByBase64:(NSString*)plainText key:(NSString*)key;
 +(NSString*) decryptByDESAndDecodeByBase64:(NSString*)cipherText key:(NSString*)key;
 
 @end

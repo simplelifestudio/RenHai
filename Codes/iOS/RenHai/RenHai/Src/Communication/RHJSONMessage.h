@@ -10,12 +10,7 @@
 
 #import "CBJSONable.h"
 
-//// Message Type
-//#define JSONMESSAGE_TYPE_APPREQUEST @"AppRequest"
-//#define JSONMESSAGE_TYPE_SERVERRESPONSE @"ServerResponse"
-//#define JSONMESSAGE_TYPE_SERVERNOTIFICATION @"ServerNotification"
-//#define JSONMESSAGE_TYPE_APPRESPONSE @"AppResponse"
-//#define JSONMESSAGE_TYPE_UNKNOWN @"Unknown"
+#define JSONMESSAGE_SECURITY_KEY @"19890604"
 
 // App->Server->App
 #define JSONMESSAGE_SERVERERRORRESPONSE @"ServerErrorResponse"
@@ -73,6 +68,10 @@ typedef enum
 RHJSONMessageErrorCode;
 
 @interface RHJSONMessage : NSObject <CBJSONable>
+
+// MessageNeedEncrypt flag should be same with server side
++(void) setMessageNeedEncrypt:(BOOL) encrypt;
++(BOOL) isMessageNeedEncrypt;
 
 +(RHJSONMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body;
 +(RHJSONMessage*) constructWithContent:(NSDictionary*) content;

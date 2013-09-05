@@ -11,8 +11,10 @@
 #import "AFHTTPClient.h"
 #import "AFJSONRequestOperation.h"
 
-#import "CommunicationModule.h"
 #import "CBJSONUtils.h"
+#import "CBSecurityUtils.h"
+
+#import "CommunicationModule.h"
 
 #define PING_TEXT @"#####RenHai-App-Ping#####"
 
@@ -96,6 +98,12 @@
     NSCondition* _messageLock = [self _newMessageLock:messageSn];
     
     NSString* jsonString = requestMessage.toJSONString;
+    
+    if ([RHJSONMessage isMessageNeedEncrypt])
+    {
+        jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:JSONMESSAGE_SECURITY_KEY];
+    }
+    
     [_webSocket send:jsonString];
     
     [_messageLock lock];
@@ -131,9 +139,12 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;
 {
-    DDLogInfo(@"WebSocket Received Message: \"%@\"", message);
+    DDLogInfo(@"WebSocket Received Message Uncrypted: \"%@\"", message);
     
     RHJSONMessage* jsonMessage = [RHJSONMessage constructWithString:message];
+    
+    DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", jsonMessage.toJSONString);
+    
     NSString* messageSn = jsonMessage.messageSn;
     
     switch (jsonMessage.messageType)
@@ -151,17 +162,18 @@
         }
         case ServerNotificationMessage:
         {
-#warning TODO:
+            NSNotification* notification = [NSNotification notificationWithName:jsonMessage.messageId object:jsonMessage userInfo:nil];
+            [[NSNotificationCenter defaultCenter] postNotification:notification];
+            
             break;
         }
         case UnknownMessage:
         {
-#warning TODO:
             break;
         }
         default:
         {
-#warning TODO:
+
             break;
         }
     }

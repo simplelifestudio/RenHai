@@ -8,10 +8,14 @@
 
 #import "HTTPAgent.h"
 
-#import "CommunicationModule.h"
-
 #import "AFHTTPClient.h"
 #import "AFJSONRequestOperation.h"
+
+#import "CBSecurityUtils.h"
+
+#import "CommunicationModule.h"
+
+#define JSON_ENVELOPE @"jsonEnvelope"
 
 @implementation HTTPAgent
 
@@ -26,10 +30,18 @@
     
     if ([serviceTarget isEqualToString:REMOTEPATH_SERVICE_HTTP])
     {
+        NSString* jsonString = message.toJSONString;
+        if ([RHJSONMessage isMessageNeedEncrypt])
+        {
+            jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:JSONMESSAGE_SECURITY_KEY];
+        }
+
+        NSDictionary* params = [NSDictionary dictionaryWithObject:jsonString forKey:JSON_ENVELOPE];
+        
         request = [httpClient
                    requestWithMethod:@"POST"
                    path:REMOTEPATH_SERVICE_HTTP
-                   parameters:message.body];
+                   parameters:params];
     }
     
     return request;
@@ -76,7 +88,8 @@
     id syncSuccessBlock = ^(NSURLRequest* request, NSHTTPURLResponse* response, id JSON)
     {
         NSDictionary* content = (NSDictionary*)JSON;
-        responseMessage = [RHJSONMessage constructWithContent:content];
+        NSString* jsonString = [content objectForKey:JSON_ENVELOPE];
+        responseMessage = [RHJSONMessage constructWithString:jsonString];
         
         [lock lock];
         [lock signal];
@@ -86,7 +99,8 @@
     id syncFailureBlock = ^(NSURLRequest* request, NSHTTPURLResponse* response, NSError* error, id JSON)
     {
         NSDictionary* content = (NSDictionary*)JSON;
-        responseMessage = [RHJSONMessage constructWithContent:content];
+        NSString* jsonString = [content objectForKey:JSON_ENVELOPE];
+        responseMessage = [RHJSONMessage constructWithString:jsonString];
         
         [lock lock];
         [lock signal];

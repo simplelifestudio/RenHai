@@ -8,6 +8,14 @@
 
 #import "RenHaiCommunicationModuleTest.h"
 
+#import "CBStringUtils.h"
+
 @implementation RenHaiCommunicationModuleTest
+
+-(void) testRandomString
+{
+    NSString *randomStr = [CBStringUtils randomString:32];
+    NSLog(@"random string is %@", randomStr);
+}
 
 @end
