@@ -21,21 +21,25 @@
 
 #消息格式 MessageFormat
 {
-    "header":
-    {
-		"messageType":"0",
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",
-		"messageId":"MessageName",
-		"deviceId":"1234",
-		"deviceSn":"ABCD77631GGWQ",
-		"timeStamp":"2013-08-14 21:18:49" // App启动后首次收到Server发来的消息时需要计算两边时间差并保存留用
-    },
-    "body": 
-    {
-		"param1":"value1",
-		"param2":"value2",
-		"paramn":"valuen"
-    }
+	"jsonEnvelope":
+	// 以下部分为实际消息部分，分为编码/加密和未编码/加密两种情况
+	{
+		"header":
+    	{
+			"messageType":"0",
+			"messageSn":"AFLNWERJL3203598FDLGSLDF",
+			"messageId":"MessageName",
+			"deviceId":"1234",
+			"deviceSn":"ABCD77631GGWQ",
+			"timeStamp":"2013-08-14 21:18:49" // App启动后首次收到Server发来的消息时需要计算两边时间差并保存留用
+    	},
+    	"body": 
+    	{		
+			"param1":"value1",
+			"param2":"value2",
+			"paramn":"valuen"
+    	}
+	}
 }
 
 
