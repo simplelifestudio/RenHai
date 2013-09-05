@@ -132,4 +132,24 @@
     return hexStr;
 }
 
++(NSString*) randomString:(NSUInteger)length
+{
+    char data[length];
+    for (int x = 0; x < length ; x++)
+    {
+        bool isChar = arc4random_uniform(2);
+        if (isChar)
+        {
+            data[x] = (char)('A' + arc4random_uniform(26));
+        }
+        else
+        {
+            data[x] = (char)('0' + (arc4random_uniform(10)));
+        }
+    }
+    NSString* randomStr = [[NSString alloc] initWithBytes:data length:length encoding:NSUTF8StringEncoding];
+    
+    return randomStr;
+}
+
 @end

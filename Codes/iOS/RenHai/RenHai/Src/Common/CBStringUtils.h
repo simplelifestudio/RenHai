@@ -32,4 +32,6 @@
 +(NSString*) parseByte2HexString:(Byte *) bytes;
 +(NSString*) parseByteArray2HexString:(Byte[]) bytes;
 
++(NSString*) randomString:(NSUInteger) length;
+
 @end
