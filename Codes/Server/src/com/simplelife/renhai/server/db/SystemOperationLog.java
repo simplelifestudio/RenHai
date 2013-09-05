@@ -2,94 +2,115 @@ package com.simplelife.renhai.server.db;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
 /**
- * SystemOperationLog entity. @author MyEclipse Persistence Tools
+ * Systemoperationlog entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "SystemOperationLog", catalog = "renhai")
-public class SystemOperationLog implements java.io.Serializable {
+@Table(name="systemoperationlog"
+    ,catalog="renhai"
+)
 
-	// Fields
+public class Systemoperationlog  implements java.io.Serializable {
 
-	private Integer systemOperationLogId;
-	private Integer moduleId;
-	private long logTime;
-	private Integer operationCode;
-	private String logInfo;
 
-	// Constructors
+    // Fields    
 
-	/** default constructor */
-	public SystemOperationLog() {
-	}
+     private Integer systemOperationLogId;
+     private Moduledefinition moduledefinition;
+     private Operationcodedefinition operationcodedefinition;
+     private Long logTime;
+     private String logInfo;
+
+
+    // Constructors
+
+    /** default constructor */
+    public Systemoperationlog() {
+    }
 
 	/** minimal constructor */
-	public SystemOperationLog(Integer moduleId, long logTime,
-			Integer operationCode) {
-		this.moduleId = moduleId;
-		this.logTime = logTime;
-		this.operationCode = operationCode;
-	}
+    public Systemoperationlog(Moduledefinition moduledefinition, Operationcodedefinition operationcodedefinition, Long logTime) {
+        this.moduledefinition = moduledefinition;
+        this.operationcodedefinition = operationcodedefinition;
+        this.logTime = logTime;
+    }
+    
+    /** full constructor */
+    public Systemoperationlog(Moduledefinition moduledefinition, Operationcodedefinition operationcodedefinition, Long logTime, String logInfo) {
+        this.moduledefinition = moduledefinition;
+        this.operationcodedefinition = operationcodedefinition;
+        this.logTime = logTime;
+        this.logInfo = logInfo;
+    }
 
-	/** full constructor */
-	public SystemOperationLog(Integer moduleId, long logTime,
-			Integer operationCode, String logInfo) {
-		this.moduleId = moduleId;
-		this.logTime = logTime;
-		this.operationCode = operationCode;
-		this.logInfo = logInfo;
-	}
+   
+    // Property accessors
+    @Id @GeneratedValue
+    
+    @Column(name="systemOperationLogId", unique=true, nullable=false)
 
-	// Property accessors
-	@Id
-	@GeneratedValue
-	@Column(name = "systemOperationLogId", unique = true, nullable = false)
-	public Integer getSystemOperationLogId() {
-		return this.systemOperationLogId;
-	}
+    public Integer getSystemOperationLogId() {
+        return this.systemOperationLogId;
+    }
+    
+    public void setSystemOperationLogId(Integer systemOperationLogId) {
+        this.systemOperationLogId = systemOperationLogId;
+    }
+	@ManyToOne(fetch=FetchType.LAZY)
+        @JoinColumn(name="moduleId", nullable=false)
 
-	public void setSystemOperationLogId(Integer systemOperationLogId) {
-		this.systemOperationLogId = systemOperationLogId;
-	}
+    public Moduledefinition getModuledefinition() {
+        return this.moduledefinition;
+    }
+    
+    public void setModuledefinition(Moduledefinition moduledefinition) {
+        this.moduledefinition = moduledefinition;
+    }
+	@ManyToOne(fetch=FetchType.LAZY)
+        @JoinColumn(name="operationCode", nullable=false)
 
-	@Column(name = "moduleId", nullable = false)
-	public Integer getModuleId() {
-		return this.moduleId;
-	}
+    public Operationcodedefinition getOperationcodedefinition() {
+        return this.operationcodedefinition;
+    }
+    
+    public void setOperationcodedefinition(Operationcodedefinition operationcodedefinition) {
+        this.operationcodedefinition = operationcodedefinition;
+    }
+    
+    @Column(name="logTime", nullable=false)
 
-	public void setModuleId(Integer moduleId) {
-		this.moduleId = moduleId;
-	}
+    public Long getLogTime() {
+        return this.logTime;
+    }
+    
+    public void setLogTime(Long logTime) {
+        this.logTime = logTime;
+    }
+    
+    @Column(name="logInfo", length=256)
 
-	@Column(name = "logTime", nullable = false)
-	public long getLogTime() {
-		return this.logTime;
-	}
+    public String getLogInfo() {
+        return this.logInfo;
+    }
+    
+    public void setLogInfo(String logInfo) {
+        this.logInfo = logInfo;
+    }
+   
 
-	public void setLogTime(long logTime) {
-		this.logTime = logTime;
-	}
 
-	@Column(name = "operationCode", nullable = false)
-	public Integer getOperationCode() {
-		return this.operationCode;
-	}
 
-	public void setOperationCode(Integer operationCode) {
-		this.operationCode = operationCode;
-	}
 
-	@Column(name = "logInfo", length = 256)
-	public String getLogInfo() {
-		return this.logInfo;
-	}
 
-	public void setLogInfo(String logInfo) {
-		this.logInfo = logInfo;
-	}
+
+
 
 }

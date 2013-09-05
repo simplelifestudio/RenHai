@@ -1,64 +1,104 @@
 package com.simplelife.renhai.server.db;
 
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
 /**
- * StatisticsItemDefinition entity. @author MyEclipse Persistence Tools
+ * Statisticsitemdefinition entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "StatisticsItemDefinition", catalog = "renhai")
-public class StatisticsItemDefinition implements java.io.Serializable {
+@Table(name="statisticsitemdefinition"
+    ,catalog="renhai"
+)
 
-	// Fields
+public class Statisticsitemdefinition  implements java.io.Serializable {
 
-	private Integer statisticsItemDefinitionId;
-	private Integer statisticsItem;
-	private String description;
 
-	// Constructors
+    // Fields    
 
-	/** default constructor */
-	public StatisticsItemDefinition() {
-	}
+     private Integer statisticsItemDefinitionId;
+     private Integer statisticsItem;
+     private String description;
+     private Set<Systemstatistics> systemstatisticses = new HashSet<Systemstatistics>(0);
 
-	/** full constructor */
-	public StatisticsItemDefinition(Integer statisticsItem, String description) {
-		this.statisticsItem = statisticsItem;
-		this.description = description;
-	}
 
-	// Property accessors
-	@Id
-	@GeneratedValue
-	@Column(name = "statisticsItemDefinitionId", unique = true, nullable = false)
-	public Integer getStatisticsItemDefinitionId() {
-		return this.statisticsItemDefinitionId;
-	}
+    // Constructors
 
-	public void setStatisticsItemDefinitionId(Integer statisticsItemDefinitionId) {
-		this.statisticsItemDefinitionId = statisticsItemDefinitionId;
-	}
+    /** default constructor */
+    public Statisticsitemdefinition() {
+    }
 
-	@Column(name = "statisticsItem", nullable = false)
-	public Integer getStatisticsItem() {
-		return this.statisticsItem;
-	}
+	/** minimal constructor */
+    public Statisticsitemdefinition(Integer statisticsItem, String description) {
+        this.statisticsItem = statisticsItem;
+        this.description = description;
+    }
+    
+    /** full constructor */
+    public Statisticsitemdefinition(Integer statisticsItem, String description, Set<Systemstatistics> systemstatisticses) {
+        this.statisticsItem = statisticsItem;
+        this.description = description;
+        this.systemstatisticses = systemstatisticses;
+    }
 
-	public void setStatisticsItem(Integer statisticsItem) {
-		this.statisticsItem = statisticsItem;
-	}
+   
+    // Property accessors
+    @Id @GeneratedValue
+    
+    @Column(name="statisticsItemDefinitionId", unique=true, nullable=false)
 
-	@Column(name = "description", nullable = false, length = 256)
-	public String getDescription() {
-		return this.description;
-	}
+    public Integer getStatisticsItemDefinitionId() {
+        return this.statisticsItemDefinitionId;
+    }
+    
+    public void setStatisticsItemDefinitionId(Integer statisticsItemDefinitionId) {
+        this.statisticsItemDefinitionId = statisticsItemDefinitionId;
+    }
+    
+    @Column(name="statisticsItem", nullable=false)
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public Integer getStatisticsItem() {
+        return this.statisticsItem;
+    }
+    
+    public void setStatisticsItem(Integer statisticsItem) {
+        this.statisticsItem = statisticsItem;
+    }
+    
+    @Column(name="description", nullable=false, length=256)
+
+    public String getDescription() {
+        return this.description;
+    }
+    
+    public void setDescription(String description) {
+        this.description = description;
+    }
+@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="statisticsitemdefinition")
+
+    public Set<Systemstatistics> getSystemstatisticses() {
+        return this.systemstatisticses;
+    }
+    
+    public void setSystemstatisticses(Set<Systemstatistics> systemstatisticses) {
+        this.systemstatisticses = systemstatisticses;
+    }
+   
+
+
+
+
+
+
+
 
 }

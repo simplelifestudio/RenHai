@@ -2,76 +2,97 @@ package com.simplelife.renhai.server.db;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
 /**
- * HotInterestLabelStatistics entity. @author MyEclipse Persistence Tools
+ * Hotinterestlabelstatistics entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "HotInterestLabelStatistics", catalog = "renhai")
-public class HotInterestLabelStatistics implements java.io.Serializable {
+@Table(name="hotinterestlabelstatistics"
+    ,catalog="renhai"
+)
 
-	// Fields
+public class Hotinterestlabelstatistics  implements java.io.Serializable {
 
-	private Integer hotInterestLabelStatisticsId;
-	private long saveTime;
-	private Integer globalInterestLabelId;
-	private Integer count;
 
-	// Constructors
+    // Fields    
 
-	/** default constructor */
-	public HotInterestLabelStatistics() {
-	}
+     private Integer hotInterestLabelStatisticsId;
+     private Globalinterestlabel globalinterestlabel;
+     private Long saveTime;
+     private Integer count;
 
-	/** full constructor */
-	public HotInterestLabelStatistics(long saveTime,
-			Integer globalInterestLabelId, Integer count) {
-		this.saveTime = saveTime;
-		this.globalInterestLabelId = globalInterestLabelId;
-		this.count = count;
-	}
 
-	// Property accessors
-	@Id
-	@GeneratedValue
-	@Column(name = "hotInterestLabelStatisticsId", unique = true, nullable = false)
-	public Integer getHotInterestLabelStatisticsId() {
-		return this.hotInterestLabelStatisticsId;
-	}
+    // Constructors
 
-	public void setHotInterestLabelStatisticsId(
-			Integer hotInterestLabelStatisticsId) {
-		this.hotInterestLabelStatisticsId = hotInterestLabelStatisticsId;
-	}
+    /** default constructor */
+    public Hotinterestlabelstatistics() {
+    }
 
-	@Column(name = "saveTime", nullable = false)
-	public long getSaveTime() {
-		return this.saveTime;
-	}
+    
+    /** full constructor */
+    public Hotinterestlabelstatistics(Globalinterestlabel globalinterestlabel, Long saveTime, Integer count) {
+        this.globalinterestlabel = globalinterestlabel;
+        this.saveTime = saveTime;
+        this.count = count;
+    }
 
-	public void setSaveTime(long saveTime) {
-		this.saveTime = saveTime;
-	}
+   
+    // Property accessors
+    @Id @GeneratedValue
+    
+    @Column(name="hotInterestLabelStatisticsId", unique=true, nullable=false)
 
-	@Column(name = "globalInterestLabelId", nullable = false)
-	public Integer getGlobalInterestLabelId() {
-		return this.globalInterestLabelId;
-	}
+    public Integer getHotInterestLabelStatisticsId() {
+        return this.hotInterestLabelStatisticsId;
+    }
+    
+    public void setHotInterestLabelStatisticsId(Integer hotInterestLabelStatisticsId) {
+        this.hotInterestLabelStatisticsId = hotInterestLabelStatisticsId;
+    }
+	@ManyToOne(fetch=FetchType.LAZY)
+        @JoinColumn(name="globalInterestLabelId", nullable=false)
 
-	public void setGlobalInterestLabelId(Integer globalInterestLabelId) {
-		this.globalInterestLabelId = globalInterestLabelId;
-	}
+    public Globalinterestlabel getGlobalinterestlabel() {
+        return this.globalinterestlabel;
+    }
+    
+    public void setGlobalinterestlabel(Globalinterestlabel globalinterestlabel) {
+        this.globalinterestlabel = globalinterestlabel;
+    }
+    
+    @Column(name="saveTime", nullable=false)
 
-	@Column(name = "count", nullable = false)
-	public Integer getCount() {
-		return this.count;
-	}
+    public Long getSaveTime() {
+        return this.saveTime;
+    }
+    
+    public void setSaveTime(Long saveTime) {
+        this.saveTime = saveTime;
+    }
+    
+    @Column(name="count", nullable=false)
 
-	public void setCount(Integer count) {
-		this.count = count;
-	}
+    public Integer getCount() {
+        return this.count;
+    }
+    
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+   
+
+
+
+
+
+
+
 
 }
