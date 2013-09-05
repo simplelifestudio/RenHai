@@ -2,63 +2,85 @@ package com.simplelife.renhai.server.db;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
 /**
- * DeviceProfileMap entity. @author MyEclipse Persistence Tools
+ * Deviceprofilemap entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "DeviceProfileMap", catalog = "renhai")
-public class DeviceProfileMap implements java.io.Serializable {
+@Table(name="deviceprofilemap"
+    ,catalog="renhai"
+)
 
-	// Fields
+public class Deviceprofilemap  implements java.io.Serializable {
 
-	private Integer deviceProfileMapId;
-	private Integer deviceId;
-	private Integer profileId;
 
-	// Constructors
+    // Fields    
 
-	/** default constructor */
-	public DeviceProfileMap() {
-	}
+     private Integer deviceProfileMapId;
+     private Profile profile;
+     private Devicecard devicecard;
 
-	/** full constructor */
-	public DeviceProfileMap(Integer deviceId, Integer profileId) {
-		this.deviceId = deviceId;
-		this.profileId = profileId;
-	}
 
-	// Property accessors
-	@Id
-	@GeneratedValue
-	@Column(name = "deviceProfileMapId", unique = true, nullable = false)
-	public Integer getDeviceProfileMapId() {
-		return this.deviceProfileMapId;
-	}
+    // Constructors
 
-	public void setDeviceProfileMapId(Integer deviceProfileMapId) {
-		this.deviceProfileMapId = deviceProfileMapId;
-	}
+    /** default constructor */
+    public Deviceprofilemap() {
+    }
 
-	@Column(name = "deviceId", nullable = false)
-	public Integer getDeviceId() {
-		return this.deviceId;
-	}
+    
+    /** full constructor */
+    public Deviceprofilemap(Profile profile, Devicecard devicecard) {
+        this.profile = profile;
+        this.devicecard = devicecard;
+    }
 
-	public void setDeviceId(Integer deviceId) {
-		this.deviceId = deviceId;
-	}
+   
+    // Property accessors
+    @Id @GeneratedValue
+    
+    @Column(name="deviceProfileMapId", unique=true, nullable=false)
 
-	@Column(name = "profileId", nullable = false)
-	public Integer getProfileId() {
-		return this.profileId;
-	}
+    public Integer getDeviceProfileMapId() {
+        return this.deviceProfileMapId;
+    }
+    
+    public void setDeviceProfileMapId(Integer deviceProfileMapId) {
+        this.deviceProfileMapId = deviceProfileMapId;
+    }
+	@ManyToOne(fetch=FetchType.LAZY)
+        @JoinColumn(name="profileId", nullable=false)
 
-	public void setProfileId(Integer profileId) {
-		this.profileId = profileId;
-	}
+    public Profile getProfile() {
+        return this.profile;
+    }
+    
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+	@ManyToOne(fetch=FetchType.LAZY)
+        @JoinColumn(name="deviceId", nullable=false)
+
+    public Devicecard getDevicecard() {
+        return this.devicecard;
+    }
+    
+    public void setDevicecard(Devicecard devicecard) {
+        this.devicecard = devicecard;
+    }
+   
+
+
+
+
+
+
+
 
 }

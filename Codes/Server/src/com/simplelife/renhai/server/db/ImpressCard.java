@@ -1,76 +1,128 @@
 package com.simplelife.renhai.server.db;
 
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
 /**
- * ImpressCard entity. @author MyEclipse Persistence Tools
+ * Impresscard entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "ImpressCard", catalog = "renhai")
-public class ImpressCard implements java.io.Serializable {
+@Table(name="impresscard"
+    ,catalog="renhai"
+)
 
-	// Fields
+public class Impresscard  implements java.io.Serializable {
 
-	private Integer impressCardId;
-	private Integer chatTotalCount;
-	private Integer chatTotalDuration;
-	private Integer chatLossCount;
 
-	// Constructors
+    // Fields    
 
-	/** default constructor */
-	public ImpressCard() {
-	}
+     private Integer impressCardId;
+     private Integer chatTotalCount;
+     private Integer chatTotalDuration;
+     private Integer chatLossCount;
+     private Set<Profile> profiles = new HashSet<Profile>(0);
+     private Set<Impresslabelcollection> impresslabelcollections = new HashSet<Impresslabelcollection>(0);
 
-	/** full constructor */
-	public ImpressCard(Integer chatTotalCount, Integer chatTotalDuration,
-			Integer chatLossCount) {
-		this.chatTotalCount = chatTotalCount;
-		this.chatTotalDuration = chatTotalDuration;
-		this.chatLossCount = chatLossCount;
-	}
 
-	// Property accessors
-	@Id
-	@GeneratedValue
-	@Column(name = "impressCardId", unique = true, nullable = false)
-	public Integer getImpressCardId() {
-		return this.impressCardId;
-	}
+    // Constructors
 
-	public void setImpressCardId(Integer impressCardId) {
-		this.impressCardId = impressCardId;
-	}
+    /** default constructor */
+    public Impresscard() {
+    }
 
-	@Column(name = "chatTotalCount", nullable = false)
-	public Integer getChatTotalCount() {
-		return this.chatTotalCount;
-	}
+	/** minimal constructor */
+    public Impresscard(Integer chatTotalCount, Integer chatTotalDuration, Integer chatLossCount) {
+        this.chatTotalCount = chatTotalCount;
+        this.chatTotalDuration = chatTotalDuration;
+        this.chatLossCount = chatLossCount;
+    }
+    
+    /** full constructor */
+    public Impresscard(Integer chatTotalCount, Integer chatTotalDuration, Integer chatLossCount, Set<Profile> profiles, Set<Impresslabelcollection> impresslabelcollections) {
+        this.chatTotalCount = chatTotalCount;
+        this.chatTotalDuration = chatTotalDuration;
+        this.chatLossCount = chatLossCount;
+        this.profiles = profiles;
+        this.impresslabelcollections = impresslabelcollections;
+    }
 
-	public void setChatTotalCount(Integer chatTotalCount) {
-		this.chatTotalCount = chatTotalCount;
-	}
+   
+    // Property accessors
+    @Id @GeneratedValue
+    
+    @Column(name="impressCardId", unique=true, nullable=false)
 
-	@Column(name = "chatTotalDuration", nullable = false)
-	public Integer getChatTotalDuration() {
-		return this.chatTotalDuration;
-	}
+    public Integer getImpressCardId() {
+        return this.impressCardId;
+    }
+    
+    public void setImpressCardId(Integer impressCardId) {
+        this.impressCardId = impressCardId;
+    }
+    
+    @Column(name="chatTotalCount", nullable=false)
 
-	public void setChatTotalDuration(Integer chatTotalDuration) {
-		this.chatTotalDuration = chatTotalDuration;
-	}
+    public Integer getChatTotalCount() {
+        return this.chatTotalCount;
+    }
+    
+    public void setChatTotalCount(Integer chatTotalCount) {
+        this.chatTotalCount = chatTotalCount;
+    }
+    
+    @Column(name="chatTotalDuration", nullable=false)
 
-	@Column(name = "chatLossCount", nullable = false)
-	public Integer getChatLossCount() {
-		return this.chatLossCount;
-	}
+    public Integer getChatTotalDuration() {
+        return this.chatTotalDuration;
+    }
+    
+    public void setChatTotalDuration(Integer chatTotalDuration) {
+        this.chatTotalDuration = chatTotalDuration;
+    }
+    
+    @Column(name="chatLossCount", nullable=false)
 
-	public void setChatLossCount(Integer chatLossCount) {
-		this.chatLossCount = chatLossCount;
-	}
+    public Integer getChatLossCount() {
+        return this.chatLossCount;
+    }
+    
+    public void setChatLossCount(Integer chatLossCount) {
+        this.chatLossCount = chatLossCount;
+    }
+@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="impresscard")
+
+    public Set<Profile> getProfiles() {
+        return this.profiles;
+    }
+    
+    public void setProfiles(Set<Profile> profiles) {
+        this.profiles = profiles;
+    }
+@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="impresscard")
+
+    public Set<Impresslabelcollection> getImpresslabelcollections() {
+        return this.impresslabelcollections;
+    }
+    
+    public void setImpresslabelcollections(Set<Impresslabelcollection> impresslabelcollections) {
+        this.impresslabelcollections = impresslabelcollections;
+    }
+   
+
+
+
+
+
+
+
 
 }

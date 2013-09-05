@@ -1,5 +1,5 @@
 #MyEclipse Hibernate Properties
-#Wed Sep 04 19:52:20 CST 2013
+#Thu Sep 05 13:00:08 CST 2013
 sessionFactoryName=com.simplelife.renhai.server.db.HibernateSessionFactory
 genBasicCompId=true
 profile=
@@ -10,7 +10,7 @@ detectM2M=true
 reStrategyClass=
 detectO2O=true
 springDaoFile=
-useJavaTypes=false
+useJavaTypes=true
 keyGenerator=native
 libInstallFolder=WebContent/WEB-INF/lib
 addLibs2Project=true
@@ -18,8 +18,8 @@ genVersionTag=false
 sessionFactoryId=
 basePersistenceClass=
 genAnnotations=true
-reSettingsFile=
+reSettingsFile=/RenHai/hibernate.reveng.xml
 configFile=/RenHai/src/hibernate.cfg.xml
 createConfigFile=true
 addLibs2Classpath=true
-baseDaoClass=BaseHibernateDAO
+baseDaoClass=com.simplelife.renhai.server.db.BaseHibernateDAO

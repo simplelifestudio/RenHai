@@ -2,98 +2,121 @@ package com.simplelife.renhai.server.db;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
 /**
- * InterestLabelCollection entity. @author MyEclipse Persistence Tools
+ * Interestlabelcollection entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "InterestLabelCollection", catalog = "renhai")
-public class InterestLabelCollection implements java.io.Serializable {
+@Table(name="interestlabelcollection"
+    ,catalog="renhai"
+)
 
-	// Fields
+public class Interestlabelcollection  implements java.io.Serializable {
 
-	private Integer interestLabelMaplId;
-	private Integer interestCardId;
-	private Integer globalInterestLabelId;
-	private Integer order;
-	private Integer matchCount;
-	private String validFlag;
 
-	// Constructors
+    // Fields    
 
-	/** default constructor */
-	public InterestLabelCollection() {
-	}
+     private Integer interestLabelMaplId;
+     private Interestcard interestcard;
+     private Globalinterestlabel globalinterestlabel;
+     private Integer order;
+     private Integer matchCount;
+     private String validFlag;
 
-	/** full constructor */
-	public InterestLabelCollection(Integer interestCardId,
-			Integer globalInterestLabelId, Integer order, Integer matchCount,
-			String validFlag) {
-		this.interestCardId = interestCardId;
-		this.globalInterestLabelId = globalInterestLabelId;
-		this.order = order;
-		this.matchCount = matchCount;
-		this.validFlag = validFlag;
-	}
 
-	// Property accessors
-	@Id
-	@GeneratedValue
-	@Column(name = "interestLabelMaplId", unique = true, nullable = false)
-	public Integer getInterestLabelMaplId() {
-		return this.interestLabelMaplId;
-	}
+    // Constructors
 
-	public void setInterestLabelMaplId(Integer interestLabelMaplId) {
-		this.interestLabelMaplId = interestLabelMaplId;
-	}
+    /** default constructor */
+    public Interestlabelcollection() {
+    }
 
-	@Column(name = "interestCardId", nullable = false)
-	public Integer getInterestCardId() {
-		return this.interestCardId;
-	}
+    
+    /** full constructor */
+    public Interestlabelcollection(Interestcard interestcard, Globalinterestlabel globalinterestlabel, Integer order, Integer matchCount, String validFlag) {
+        this.interestcard = interestcard;
+        this.globalinterestlabel = globalinterestlabel;
+        this.order = order;
+        this.matchCount = matchCount;
+        this.validFlag = validFlag;
+    }
 
-	public void setInterestCardId(Integer interestCardId) {
-		this.interestCardId = interestCardId;
-	}
+   
+    // Property accessors
+    @Id @GeneratedValue
+    
+    @Column(name="interestLabelMaplId", unique=true, nullable=false)
 
-	@Column(name = "globalInterestLabelId", nullable = false)
-	public Integer getGlobalInterestLabelId() {
-		return this.globalInterestLabelId;
-	}
+    public Integer getInterestLabelMaplId() {
+        return this.interestLabelMaplId;
+    }
+    
+    public void setInterestLabelMaplId(Integer interestLabelMaplId) {
+        this.interestLabelMaplId = interestLabelMaplId;
+    }
+	@ManyToOne(fetch=FetchType.LAZY)
+        @JoinColumn(name="interestCardId", nullable=false)
 
-	public void setGlobalInterestLabelId(Integer globalInterestLabelId) {
-		this.globalInterestLabelId = globalInterestLabelId;
-	}
+    public Interestcard getInterestcard() {
+        return this.interestcard;
+    }
+    
+    public void setInterestcard(Interestcard interestcard) {
+        this.interestcard = interestcard;
+    }
+	@ManyToOne(fetch=FetchType.LAZY)
+        @JoinColumn(name="globalInterestLabelId", nullable=false)
 
-	@Column(name = "order", nullable = false)
-	public Integer getOrder() {
-		return this.order;
-	}
+    public Globalinterestlabel getGlobalinterestlabel() {
+        return this.globalinterestlabel;
+    }
+    
+    public void setGlobalinterestlabel(Globalinterestlabel globalinterestlabel) {
+        this.globalinterestlabel = globalinterestlabel;
+    }
+    
+    @Column(name="order", nullable=false)
 
-	public void setOrder(Integer order) {
-		this.order = order;
-	}
+    public Integer getOrder() {
+        return this.order;
+    }
+    
+    public void setOrder(Integer order) {
+        this.order = order;
+    }
+    
+    @Column(name="matchCount", nullable=false)
 
-	@Column(name = "matchCount", nullable = false)
-	public Integer getMatchCount() {
-		return this.matchCount;
-	}
+    public Integer getMatchCount() {
+        return this.matchCount;
+    }
+    
+    public void setMatchCount(Integer matchCount) {
+        this.matchCount = matchCount;
+    }
+    
+    @Column(name="validFlag", nullable=false, length=7)
 
-	public void setMatchCount(Integer matchCount) {
-		this.matchCount = matchCount;
-	}
+    public String getValidFlag() {
+        return this.validFlag;
+    }
+    
+    public void setValidFlag(String validFlag) {
+        this.validFlag = validFlag;
+    }
+   
 
-	@Column(name = "validFlag", nullable = false, length = 7)
-	public String getValidFlag() {
-		return this.validFlag;
-	}
 
-	public void setValidFlag(String validFlag) {
-		this.validFlag = validFlag;
-	}
+
+
+
+
+
 
 }

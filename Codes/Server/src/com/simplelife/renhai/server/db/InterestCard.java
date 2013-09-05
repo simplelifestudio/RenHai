@@ -1,53 +1,102 @@
 package com.simplelife.renhai.server.db;
 
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
 /**
- * InterestCard entity. @author MyEclipse Persistence Tools
+ * Interestcard entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "InterestCard", catalog = "renhai")
-public class InterestCard implements java.io.Serializable {
+@Table(name="interestcard"
+    ,catalog="renhai"
+)
 
-	// Fields
+public class Interestcard  implements java.io.Serializable {
 
-	private Integer interestCardId;
-	private long createTime;
 
-	// Constructors
+    // Fields    
 
-	/** default constructor */
-	public InterestCard() {
-	}
+     private Integer interestCardId;
+     private Long createTime;
+     private Set<Interestlabelcollection> interestlabelcollections = new HashSet<Interestlabelcollection>(0);
+     private Set<Profile> profiles = new HashSet<Profile>(0);
 
-	/** full constructor */
-	public InterestCard(long createTime) {
-		this.createTime = createTime;
-	}
 
-	// Property accessors
-	@Id
-	@GeneratedValue
-	@Column(name = "interestCardId", unique = true, nullable = false)
-	public Integer getInterestCardId() {
-		return this.interestCardId;
-	}
+    // Constructors
 
-	public void setInterestCardId(Integer interestCardId) {
-		this.interestCardId = interestCardId;
-	}
+    /** default constructor */
+    public Interestcard() {
+    }
 
-	@Column(name = "createTime", nullable = false)
-	public long getCreateTime() {
-		return this.createTime;
-	}
+	/** minimal constructor */
+    public Interestcard(Long createTime) {
+        this.createTime = createTime;
+    }
+    
+    /** full constructor */
+    public Interestcard(Long createTime, Set<Interestlabelcollection> interestlabelcollections, Set<Profile> profiles) {
+        this.createTime = createTime;
+        this.interestlabelcollections = interestlabelcollections;
+        this.profiles = profiles;
+    }
 
-	public void setCreateTime(long createTime) {
-		this.createTime = createTime;
-	}
+   
+    // Property accessors
+    @Id @GeneratedValue
+    
+    @Column(name="interestCardId", unique=true, nullable=false)
+
+    public Integer getInterestCardId() {
+        return this.interestCardId;
+    }
+    
+    public void setInterestCardId(Integer interestCardId) {
+        this.interestCardId = interestCardId;
+    }
+    
+    @Column(name="createTime", nullable=false)
+
+    public Long getCreateTime() {
+        return this.createTime;
+    }
+    
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
+@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="interestcard")
+
+    public Set<Interestlabelcollection> getInterestlabelcollections() {
+        return this.interestlabelcollections;
+    }
+    
+    public void setInterestlabelcollections(Set<Interestlabelcollection> interestlabelcollections) {
+        this.interestlabelcollections = interestlabelcollections;
+    }
+@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="interestcard")
+
+    public Set<Profile> getProfiles() {
+        return this.profiles;
+    }
+    
+    public void setProfiles(Set<Profile> profiles) {
+        this.profiles = profiles;
+    }
+   
+
+
+
+
+
+
+
 
 }

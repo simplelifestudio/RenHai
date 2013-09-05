@@ -2,98 +2,121 @@ package com.simplelife.renhai.server.db;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+
 /**
- * ImpressLabelCollection entity. @author MyEclipse Persistence Tools
+ * Impresslabelcollection entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "ImpressLabelCollection", catalog = "renhai")
-public class ImpressLabelCollection implements java.io.Serializable {
+@Table(name="impresslabelcollection"
+    ,catalog="renhai"
+)
 
-	// Fields
+public class Impresslabelcollection  implements java.io.Serializable {
 
-	private Integer impressLabelMaplId;
-	private Integer impressCardId;
-	private Integer globalImpressLabelId;
-	private Integer count;
-	private long updateTime;
-	private Integer assessCount;
 
-	// Constructors
+    // Fields    
 
-	/** default constructor */
-	public ImpressLabelCollection() {
-	}
+     private Integer impressLabelMaplId;
+     private Globalimpresslabel globalimpresslabel;
+     private Impresscard impresscard;
+     private Integer count;
+     private Long updateTime;
+     private Integer assessCount;
 
-	/** full constructor */
-	public ImpressLabelCollection(Integer impressCardId,
-			Integer globalImpressLabelId, Integer count, long updateTime,
-			Integer assessCount) {
-		this.impressCardId = impressCardId;
-		this.globalImpressLabelId = globalImpressLabelId;
-		this.count = count;
-		this.updateTime = updateTime;
-		this.assessCount = assessCount;
-	}
 
-	// Property accessors
-	@Id
-	@GeneratedValue
-	@Column(name = "impressLabelMaplId", unique = true, nullable = false)
-	public Integer getImpressLabelMaplId() {
-		return this.impressLabelMaplId;
-	}
+    // Constructors
 
-	public void setImpressLabelMaplId(Integer impressLabelMaplId) {
-		this.impressLabelMaplId = impressLabelMaplId;
-	}
+    /** default constructor */
+    public Impresslabelcollection() {
+    }
 
-	@Column(name = "impressCardId", nullable = false)
-	public Integer getImpressCardId() {
-		return this.impressCardId;
-	}
+    
+    /** full constructor */
+    public Impresslabelcollection(Globalimpresslabel globalimpresslabel, Impresscard impresscard, Integer count, Long updateTime, Integer assessCount) {
+        this.globalimpresslabel = globalimpresslabel;
+        this.impresscard = impresscard;
+        this.count = count;
+        this.updateTime = updateTime;
+        this.assessCount = assessCount;
+    }
 
-	public void setImpressCardId(Integer impressCardId) {
-		this.impressCardId = impressCardId;
-	}
+   
+    // Property accessors
+    @Id @GeneratedValue
+    
+    @Column(name="impressLabelMaplId", unique=true, nullable=false)
 
-	@Column(name = "globalImpressLabelId", nullable = false)
-	public Integer getGlobalImpressLabelId() {
-		return this.globalImpressLabelId;
-	}
+    public Integer getImpressLabelMaplId() {
+        return this.impressLabelMaplId;
+    }
+    
+    public void setImpressLabelMaplId(Integer impressLabelMaplId) {
+        this.impressLabelMaplId = impressLabelMaplId;
+    }
+	@ManyToOne(fetch=FetchType.LAZY)
+        @JoinColumn(name="globalImpressLabelId", nullable=false)
 
-	public void setGlobalImpressLabelId(Integer globalImpressLabelId) {
-		this.globalImpressLabelId = globalImpressLabelId;
-	}
+    public Globalimpresslabel getGlobalimpresslabel() {
+        return this.globalimpresslabel;
+    }
+    
+    public void setGlobalimpresslabel(Globalimpresslabel globalimpresslabel) {
+        this.globalimpresslabel = globalimpresslabel;
+    }
+	@ManyToOne(fetch=FetchType.LAZY)
+        @JoinColumn(name="impressCardId", nullable=false)
 
-	@Column(name = "count", nullable = false)
-	public Integer getCount() {
-		return this.count;
-	}
+    public Impresscard getImpresscard() {
+        return this.impresscard;
+    }
+    
+    public void setImpresscard(Impresscard impresscard) {
+        this.impresscard = impresscard;
+    }
+    
+    @Column(name="count", nullable=false)
 
-	public void setCount(Integer count) {
-		this.count = count;
-	}
+    public Integer getCount() {
+        return this.count;
+    }
+    
+    public void setCount(Integer count) {
+        this.count = count;
+    }
+    
+    @Column(name="updateTime", nullable=false)
 
-	@Column(name = "updateTime", nullable = false)
-	public long getUpdateTime() {
-		return this.updateTime;
-	}
+    public Long getUpdateTime() {
+        return this.updateTime;
+    }
+    
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
+    }
+    
+    @Column(name="assessCount", nullable=false)
 
-	public void setUpdateTime(long updateTime) {
-		this.updateTime = updateTime;
-	}
+    public Integer getAssessCount() {
+        return this.assessCount;
+    }
+    
+    public void setAssessCount(Integer assessCount) {
+        this.assessCount = assessCount;
+    }
+   
 
-	@Column(name = "assessCount", nullable = false)
-	public Integer getAssessCount() {
-		return this.assessCount;
-	}
 
-	public void setAssessCount(Integer assessCount) {
-		this.assessCount = assessCount;
-	}
+
+
+
+
+
 
 }
