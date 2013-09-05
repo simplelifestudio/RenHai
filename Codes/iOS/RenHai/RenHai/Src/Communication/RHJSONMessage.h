@@ -14,25 +14,6 @@
 
 #define JSON_ENVELOPE @"jsonEnvelope"
 
-// App->Server->App
-#define JSONMESSAGE_SERVERERRORRESPONSE @"ServerErrorResponse"
-#define JSONMESSAGE_SERVERTIMEOUTRESPONSE @"ServerTimeoutResponse"
-
-#define JSONMESSAGE_ALOHAREQUEST @"AlohaRequest"
-#define JSONMESSAGE_ALOHARESPONSE @"AlohaResponse"
-#define JSONMESSAGE_APPDATASYNCREQUEST @"AppDataSyncRequest"
-#define JSONMESSAGE_APPDATASYNCRESPONSE @"AppDataSyncResponse"
-#define JSONMESSAGE_SERVERDATASYNCREQUEST @"ServerDataSyncRequest"
-#define JSONMESSAGE_SERVERDATASYNCRESPONSE @"ServerDataSyncResponse"
-#define JSONMESSAGE_BUSINESSSESSIONREQUEST @"BusinessSessionRequest"
-#define JSONMESSAGE_BUSINESSSESSIONRESPONSE @"BusinessSessionResponse"
-
-// Server->App->Server
-#define JSONMESSAGE_BUSINESSSESSIONNOTIFICATION @"BusinessSessionNotification"
-#define JSONMESSAGE_BUSINESSSESSIONNOTIFICATIONRESPONSE @"BusinessSessionNotificationResponse"
-#define JSONMESSAGE_BROADCASTNOTIFICATION @"BroadcastNotification"
-#define JSONMESSAGE_BROADCASTNOTIFICATIONRESPONSE @"BroadcastNotificationResponse"
-
 #define JSONMESSAGE_KEY_HEADER @"header"
 #define JSONMESSAGE_KEY_BODY @"body"
 
@@ -51,21 +32,42 @@
 
 typedef enum
 {
-    UnknownMessage = 0,
-    AppRequestMessage = 1,
-    ServerResponseMessage = 2,
-    ServerNotificationMessage = 3,
-    AppResponseMessage = 4
+    MessageType_Unkown = 0,
+    MessageType_AppRequest = 1,
+    MessageType_ServerResponse = 2,
+    MessageType_ServerNotification = 3,
+    MessageType_AppResponse = 4
 }
 RHJSONMessageType;
 
 typedef enum
 {
-    ServerLegalResponse,
-    ServerNullResponse,
-    ServerIllegalResponse, // 消息的语法（基本格式）错误
-    ServerErrorResponse, // 消息的语意（业务逻辑）错误
-    ServerTimeout
+    MessageId_Unknown = 0,
+    MessageId_AppTimeoutResponse = 98,
+    MessageId_ServerTimeoutResponse = 99,
+    MessageId_AppErrorResponse = 100,
+    MessageId_ServerErrorResponse = 101,
+    MessageId_AlohaRequest = 102,
+    MessageId_AlohaResponse = 103,
+    MessageId_AppDataSyncRequest = 104,
+    MessageId_AppDataSyncResponse = 105,
+    MessageId_ServerDataSyncRequest = 106,
+    MessageId_ServerDataSyncResponse = 107,
+    MessageId_BusinessSessionNotification = 108,
+    MessageId_BusinessSessionNotificationResponse = 109,
+    MessageId_BusinessSessionRequest = 110,
+    MessageId_BusinessSessionResponse = 111,
+    MessageId_BroadcastNotification = 112
+}
+RHJSONMessageId;
+
+typedef enum
+{
+    ErrorCode_ServerLegalResponse,
+    ErrorCode_ServerNullResponse,
+    ErrorCode_ServerIllegalResponse, // 消息的语法（基本格式）错误
+    ErrorCode_ServerErrorResponse, // 消息的语意（业务逻辑）错误
+    ErrorCode_ServerTimeout
 }
 RHJSONMessageErrorCode;
 
@@ -88,7 +90,7 @@ RHJSONMessageErrorCode;
 @property (nonatomic, strong) NSDictionary* body;
 
 -(NSString*) messageSn;
--(NSString*) messageId;
+-(RHJSONMessageId) messageId;
 
 -(RHJSONMessageType) messageType;
 
