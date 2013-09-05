@@ -6,7 +6,7 @@
 	3. Server数据同步请求 ServerDataSyncRequest
 	4. 业务会话请求 BusinessSessionRequest
 2. ServerResponse Server->App
-	1. 错误响应 ErrorResponse
+	1. 错误响应 ServerErrorResponse
 	2. 测试响应 AlohaResponse
 	3. App数据同步响应 AppDataSyncResponse
 	4. Server数据同步响应 ServerDataSyncResponse
@@ -15,7 +15,7 @@
 	1. 	业务会话通知 BusinessSessionNotification
 	2. Server广播通知 BroadcastNotification
 4. AppResponse App->Server
-	1. 错误响应 ErrorResponse
+	1. 错误响应 AppErrorResponse
 	2. 业务会话通知响应 BusinessSessionNotificationResponse
 
 
