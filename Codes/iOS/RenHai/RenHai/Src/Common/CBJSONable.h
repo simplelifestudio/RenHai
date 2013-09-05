@@ -12,4 +12,7 @@
 
 -(NSDictionary*) toJSONObject;
 
+@optional
+-(NSString*) toJSONString;
+
 @end

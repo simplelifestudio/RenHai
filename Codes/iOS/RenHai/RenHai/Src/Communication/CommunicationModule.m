@@ -26,11 +26,17 @@
 
 SINGLETON(CommunicationModule)
 
+@synthesize httpCommAgent = _httpCommAgent;
+@synthesize webSocketCommAgent = _webSocketCommAgent;
+
 -(void) initModule
 {
     [self setModuleIdentity:NSLocalizedString(@"Communication Module", nil)];
     [self.serviceThread setName:NSLocalizedString(@"Communication Module Thread", nil)];
     [self setKeepAlive:FALSE];
+    
+    _httpCommAgent = [[HTTPAgent alloc] init];
+    _webSocketCommAgent = [[WebSocketAgent alloc] init];
 }
 
 - (void)registerReachability
