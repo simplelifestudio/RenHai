@@ -15,9 +15,9 @@ package com.simplelife.renhai.server.util;
 /** */
 public class JSONKey
 {
-	public class Command
+	public class MessageId
 	{
-		public final static String ErrorResponse				=  "ErrorResponse";
+		public final static String ServerErrorResponse			=  "ServerErrorResponse";
 		public final static String AlohaRequest					=  "AlohaRequest";
 		public final static String AlohaResponse				=  "AlohaResponse";
 		public final static String AppDataSyncRequest			=  "AppDataSyncRequest";
@@ -33,17 +33,24 @@ public class JSONKey
 		public final static String BroadcastNotification		=  "BroadcastNotification";
 	}
 	
-    public class OperationType
+    public enum OperationType
     {
-    	public final static String EnterPool					=  "EnterPool";
-    	public final static String LeavePool					=  "LeavePool";
-    	public final static String AgreeChat					=  "AgreeChat";
-    	public final static String RejectChat					=  "RejectChat";
-    	public final static String EndChat						=  "EndChat";
+    	EnterPool(1),
+    	LeavePool(2),
+    	AgreeChat(3),
+    	RejectChat(4),
+    	EndChat(5),
 
-    	public final static String Assess						=  "Assess";
-    	public final static String AssessAndQuit				=  "AssessAndQuit";
-    	public final static String Received						=  "Received";
+    	Assess(6),
+    	AssessAndQuit(7),
+    	Received(8);
+
+    	private int type;
+    	
+    	private OperationType(int type)
+    	{
+    		this.type = type; 
+    	}
     }
     
     public class BusinessType
@@ -106,5 +113,10 @@ public class JSONKey
     	public final static String InterestCard					= "interestCard";
     	public final static String DataUpdate					= "dataUpdate";
     	public final static String DeviceModel					= "deviceModel";
+    	public final static String MessageType					= "messageType";
+    	
+    	public final static String MessageSn					= "messageSn";
+    	public final static String JsonEnvelope					= "jsonEnvelope";
+    	public final static String ReceivedMessage				= "receivedMessage";
     }
 }
