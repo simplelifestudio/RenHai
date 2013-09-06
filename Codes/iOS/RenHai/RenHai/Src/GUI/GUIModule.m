@@ -24,9 +24,21 @@
 @end
 
 @implementation GUIModule
-{
 
-}
+@synthesize mainViewController = _mainViewController;
+@synthesize leftbarViewController = _leftbarViewController;
+@synthesize homeViewController = _homeViewController;
+@synthesize deviceViewController = _deviceViewController;
+@synthesize interestViewController = _interestViewController;
+@synthesize impressViewController = _impressViewController;
+@synthesize configViewController = _configViewController;
+@synthesize helpViewController = _helpViewController;
+@synthesize warningViewController = _warningViewController;
+
+@synthesize chatWaitViewController = _chatWaitViewController;
+@synthesize chatConfirmViewContorller = _chatConfirmViewContorller;
+@synthesize chatWebRTCViewController = _chatWebRTCViewController;
+@synthesize chatImpressViewController = _chatImpressViewController;
 
 @synthesize HUDAgent = _HUDAgent;
 
@@ -38,7 +50,9 @@ SINGLETON(GUIModule)
     [self.serviceThread setName:NSLocalizedString(@"GUI Module Thread", nil)];
     [self setKeepAlive:FALSE];
     
-    _networkActivityIndicator = [AFNetworkActivityIndicatorManager sharedManager];    
+    _networkActivityIndicator = [AFNetworkActivityIndicatorManager sharedManager];
+    
+    [self _setupViewControllersFromStoryboard];
 }
 
 -(void) releaseModule
@@ -64,11 +78,10 @@ SINGLETON(GUIModule)
 
 -(CBHUDAgent*) HUDAgent
 {
-    if ((nil == _HUDAgent))
+    if (nil == _HUDAgent && nil != _mainViewController.view)
     {
-#warning HomeViewController need be here.
-//        UIView* view = nil;
-//        _HUDAgent = [[CBHUDAgent alloc] initWithUIView:view];
+        UIView* view = _mainViewController.view;
+        _HUDAgent = [[CBHUDAgent alloc] initWithUIView:view];
     }
     
     return _HUDAgent;
@@ -124,10 +137,39 @@ SINGLETON(GUIModule)
 
 -(UIViewController*) _currentRootViewController
 {
-#warning HomeViewController need be here.
-//    UIViewController* rootVC = (nil != _homeViewController) ? _homeViewController : _helpViewController;
-//    return rootVC;
-    return nil;
+    return _mainViewController;
+}
+
+-(void) _setupViewControllersFromStoryboard
+{
+    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:STORYBOARD_IPHONE bundle:nil];
+    
+    _leftbarViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_LEFTBAR_IPHONE];
+    _navigationController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_NAVIGATION];
+    
+    _homeViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_HOME_IPHONE];
+    _deviceViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_DEVICE_IPHONE];
+    _interestViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_INTEREST_IPHONE];
+    _impressViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_IMPRESS_IPHONE];
+    _helpViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_HELP_IPHONE];
+    _configViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CONFIG_IPHONE];
+    _warningViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_WARNING_IPHONE];
+    
+    _chatWaitViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATWAIT_IPHONE];
+    _chatConfirmViewContorller = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATCONFIRM_IPHONE];
+    _chatWebRTCViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATWEBRTC_IPHONE];
+    _chatImpressViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATIMPRESS_IPHONE];
+    
+    [self _assembleMainViewController];
+}
+
+-(void) _assembleMainViewController
+{
+    NSDictionary *options = @{
+                              PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
+                              PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
+                              };
+    _mainViewController = [MainViewController_iPhone revealControllerWithFrontViewController:_navigationController leftViewController:_leftbarViewController options:options];
 }
 
 @end

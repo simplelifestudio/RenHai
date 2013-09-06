@@ -10,11 +10,34 @@
 
 #import <QuartzCore/QuartzCore.h>
 
+static UIImage* sidebarMenuIconPortrait;
+static UIImage* sidebarMenuIconLandscape;
+
 @implementation GUIStyle
 
 // Static block
 +(void) initialize
 {
+    if (nil == sidebarMenuIconPortrait)
+    {
+        sidebarMenuIconPortrait = [UIImage imageNamed:@"sidebar_menu_icon_portrait"];
+
+    }
+    
+    if (nil == sidebarMenuIconLandscape)
+    {
+       sidebarMenuIconLandscape = [UIImage imageNamed:@"sidebar_menu_icon_landscape"];        
+    }
+}
+
++(UIImage*) sidebarMenuIconPortrait
+{
+    return sidebarMenuIconPortrait;
+}
+
++(UIImage*) sidebarMenuIconLandscape
+{
+    return sidebarMenuIconLandscape;
 }
 
 +(void) formatFlatUIButton:(FUIButton*) button buttonColor:(UIColor*) buttonColor shadowColor:(UIColor*) shadowColor shadowHeight:(CGFloat) shadowHeight cornerRadius:(CGFloat) cornerRadius titleColor:(UIColor*) titleColor highlightedTitleColor:(UIColor*) highlightedTitleColor

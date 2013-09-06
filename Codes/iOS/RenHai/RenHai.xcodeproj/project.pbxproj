@@ -154,6 +154,18 @@
 		C594603217D6CEA60084BB10 /* WebSocketAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = C594603017D6CEA60084BB10 /* WebSocketAgent.m */; };
 		C594603517D7352F0084BB10 /* RHJSONMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C594603417D7352F0084BB10 /* RHJSONMessage.m */; };
 		C594603617D7352F0084BB10 /* RHJSONMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C594603417D7352F0084BB10 /* RHJSONMessage.m */; };
+		C596283917DA08AA009127E6 /* sidebar_menu_icon_landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = C596283517DA08AA009127E6 /* sidebar_menu_icon_landscape.png */; };
+		C596283A17DA08AA009127E6 /* sidebar_menu_icon_landscape.png in Resources */ = {isa = PBXBuildFile; fileRef = C596283517DA08AA009127E6 /* sidebar_menu_icon_landscape.png */; };
+		C596283B17DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C596283617DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png */; };
+		C596283C17DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C596283617DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png */; };
+		C596283D17DA08AA009127E6 /* sidebar_menu_icon_portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = C596283717DA08AA009127E6 /* sidebar_menu_icon_portrait.png */; };
+		C596283E17DA08AA009127E6 /* sidebar_menu_icon_portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = C596283717DA08AA009127E6 /* sidebar_menu_icon_portrait.png */; };
+		C596283F17DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C596283817DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png */; };
+		C596284017DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C596283817DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png */; };
+		C596284317DA1C8B009127E6 /* RHNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C596284217DA1C8A009127E6 /* RHNavigationController.m */; };
+		C596284417DA1C8B009127E6 /* RHNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C596284217DA1C8A009127E6 /* RHNavigationController.m */; };
+		C59E2C1817D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
+		C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
 /* End PBXBuildFile section */
 
@@ -310,6 +322,14 @@
 		C594603017D6CEA60084BB10 /* WebSocketAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocketAgent.m; sourceTree = "<group>"; };
 		C594603317D7352F0084BB10 /* RHJSONMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHJSONMessage.h; sourceTree = "<group>"; };
 		C594603417D7352F0084BB10 /* RHJSONMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHJSONMessage.m; sourceTree = "<group>"; };
+		C596283517DA08AA009127E6 /* sidebar_menu_icon_landscape.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sidebar_menu_icon_landscape.png; sourceTree = "<group>"; };
+		C596283617DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sidebar_menu_icon_landscape@2x.png"; sourceTree = "<group>"; };
+		C596283717DA08AA009127E6 /* sidebar_menu_icon_portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sidebar_menu_icon_portrait.png; sourceTree = "<group>"; };
+		C596283817DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sidebar_menu_icon_portrait@2x.png"; sourceTree = "<group>"; };
+		C596284117DA1C89009127E6 /* RHNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNavigationController.h; sourceTree = "<group>"; };
+		C596284217DA1C8A009127E6 /* RHNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNavigationController.m; sourceTree = "<group>"; };
+		C59E2C1617D9ABA5000234A0 /* MainViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController_iPhone.h; sourceTree = "<group>"; };
+		C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController_iPhone.m; sourceTree = "<group>"; };
 		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -429,6 +449,10 @@
 		C55B441317CF587A009BB21B /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				C596283517DA08AA009127E6 /* sidebar_menu_icon_landscape.png */,
+				C596283617DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png */,
+				C596283717DA08AA009127E6 /* sidebar_menu_icon_portrait.png */,
+				C596283817DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png */,
 				C55B445617CF8632009BB21B /* Icon-72.png */,
 				C55B445717CF8632009BB21B /* Icon-Small-50.png */,
 				C55B445817CF8632009BB21B /* Icon-Small.png */,
@@ -598,10 +622,14 @@
 				C50505E517D2D26C00DB6589 /* GUIModule.m */,
 				C50505E617D2D26C00DB6589 /* GUIStyle.h */,
 				C50505E717D2D26C00DB6589 /* GUIStyle.m */,
+				C596284117DA1C89009127E6 /* RHNavigationController.h */,
+				C596284217DA1C8A009127E6 /* RHNavigationController.m */,
 				C593C46517D32AF600C26367 /* WarningViewController_iPhone.h */,
 				C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */,
 				C593C42917D3284600C26367 /* SplashViewController_iPhone.h */,
 				C593C42A17D3284600C26367 /* SplashViewController_iPhone.m */,
+				C59E2C1617D9ABA5000234A0 /* MainViewController_iPhone.h */,
+				C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */,
 				C593C46917D4224A00C26367 /* LeftBarViewController_iPhone.h */,
 				C593C46A17D4224A00C26367 /* LeftBarViewController_iPhone.m */,
 				C593C46D17D4235800C26367 /* LeftBarHeaderView_iPhone.h */,
@@ -763,6 +791,10 @@
 				C593C41517D2F55B00C26367 /* MainStoryboard_iPhone.storyboard in Resources */,
 				C593C47217D4240800C26367 /* LeftBarHeaderView_iPhone.xib in Resources */,
 				C593C47917D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */,
+				C596283917DA08AA009127E6 /* sidebar_menu_icon_landscape.png in Resources */,
+				C596283B17DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png in Resources */,
+				C596283D17DA08AA009127E6 /* sidebar_menu_icon_portrait.png in Resources */,
+				C596283F17DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -785,6 +817,10 @@
 				C55B446A17CF8632009BB21B /* iTunesArtwork in Resources */,
 				C593C47317D4240800C26367 /* LeftBarHeaderView_iPhone.xib in Resources */,
 				C593C47A17D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */,
+				C596283A17DA08AA009127E6 /* sidebar_menu_icon_landscape.png in Resources */,
+				C596283C17DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png in Resources */,
+				C596283E17DA08AA009127E6 /* sidebar_menu_icon_portrait.png in Resources */,
+				C596284017DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -923,6 +959,8 @@
 				C594602A17D6C7C90084BB10 /* HTTPAgent.m in Sources */,
 				C594603117D6CEA60084BB10 /* WebSocketAgent.m in Sources */,
 				C594603517D7352F0084BB10 /* RHJSONMessage.m in Sources */,
+				C59E2C1817D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */,
+				C596284317DA1C8B009127E6 /* RHNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -984,6 +1022,8 @@
 				C594602E17D6C9410084BB10 /* RenHaiCommunicationModuleTest.m in Sources */,
 				C594603217D6CEA60084BB10 /* WebSocketAgent.m in Sources */,
 				C594603617D7352F0084BB10 /* RHJSONMessage.m in Sources */,
+				C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */,
+				C596284417DA1C8B009127E6 /* RHNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

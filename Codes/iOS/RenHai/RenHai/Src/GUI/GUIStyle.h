@@ -13,7 +13,7 @@
 // UI Style Definitions based on FlatUIKit
 
 #define COLOR_DEEP [UIColor colorFromHexCode:@"1C1C1C"]
-#define COLOR_MID [UIColor colorFromHexCode:@"4682B4"]
+#define COLOR_MID [UIColor colorWithRed:78.0/255.0 green:156.0/255.0 blue:206.0/255.0 alpha:1.0]
 #define COLOR_LIGHT [UIColor colorFromHexCode:@"DCDCDC"]
 
 #define COLOR_B_DEEP [UIColor colorFromHexCode:@"4F4F4F"]
@@ -53,6 +53,9 @@
 #define FLATUI_CORNER_RADIUS 3
 
 @interface GUIStyle : NSObject
+
++(UIImage*) sidebarMenuIconPortrait;
++(UIImage*) sidebarMenuIconLandscape;
 
 // FlatUI Componenents Formatters
 +(void) formatFlatUIButton:(FUIButton*) button buttonColor:(UIColor*) buttonColor shadowColor:(UIColor*) shadowColor shadowHeight:(CGFloat) shadowHeight cornerRadius:(CGFloat) cornerRadius titleColor:(UIColor*) titleColor highlightedTitleColor:(UIColor*) highlightedTitleColor;

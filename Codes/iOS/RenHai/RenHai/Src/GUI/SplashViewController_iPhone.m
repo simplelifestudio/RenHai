@@ -9,16 +9,24 @@
 #import "SplashViewController_iPhone.h"
 
 #import "CBModuleManager.h"
-#import "AppDataModule.h"
-
 #import "CBAppUtils.h"
+#import "CBUIUtils.h"
 
-#define STUDIOLABEL_DURATION 1.0
-#define LABELS_DURATION 1.0
-#define LABELS_DURATION_OFFSET 0.75
-#define SPLASH_DURATION 1.0
+#import "AppDataModule.h"
+#import "GUIModule.h"
+
+#import "PKRevealController.h"
+#import "MainViewController_iPhone.h"
+
+#define STUDIOLABEL_DURATION 0.75
+#define LABELS_DURATION 0.75
+#define LABELS_DURATION_OFFSET 0.5
+#define SPLASH_DURATION 0.75
 
 @interface SplashViewController_iPhone ()
+{
+    GUIModule* _guiModule;
+}
 
 @property (nonatomic, strong) NSThread *loadStuffThread;
 
@@ -48,6 +56,8 @@
     [super viewDidLoad];
 
     [self _setupViewController];
+    
+    _guiModule = [GUIModule sharedInstance];
 }
 
 - (void)didReceiveMemoryWarning
@@ -178,7 +188,10 @@ static NSTimeInterval s_labelDuration = LABELS_DURATION;
 - (void) _enterInApp
 {
     [self dismissViewControllerAnimated:NO completion:nil];
-    [self performSegueWithIdentifier:@"splashviewcontroller2pkrevealcontroller" sender:self];
+
+    MainViewController_iPhone* _mainViewController = _guiModule.mainViewController;
+    
+    [self presentViewController:_mainViewController animated:NO completion:nil];
 }
 
 - (void) _setupViewController
