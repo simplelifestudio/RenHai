@@ -4,30 +4,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
     <scenes>
-        <!--Reveal Controller-->
+        <!--Main View Controller i Phone-->
         <scene sceneID="4FI-rz-OkA">
             <objects>
-                <viewController storyboardIdentifier="sbid_pkrevealcontroller" id="4n2-x7-zjA" customClass="PKRevealController" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Chq-Eh-fbW">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="主视图控制器" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sgg-cb-2S0">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="zLb-Kn-qmY"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="Sgg-cb-2S0" firstAttribute="centerX" secondItem="Chq-Eh-fbW" secondAttribute="centerX" type="default" id="DS7-oa-CH7"/>
-                            <constraint firstItem="Sgg-cb-2S0" firstAttribute="centerY" secondItem="Chq-Eh-fbW" secondAttribute="centerY" type="default" id="I8A-sV-84M"/>
-                        </constraints>
-                    </view>
-                </viewController>
+                <viewController storyboardIdentifier="main_iphone" id="4n2-x7-zjA" customClass="MainViewController_iPhone" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wg3-fm-bYa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-327" y="424"/>
@@ -35,7 +15,7 @@
         <!--Splash View Controller i Phone-->
         <scene sceneID="m1U-Om-lIu">
             <objects>
-                <viewController storyboardIdentifier="sbid_splashviewcontroller_iphone" id="DgF-zo-nqX" customClass="SplashViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="splash_iphone" id="DgF-zo-nqX" customClass="SplashViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="NMg-NX-QmX">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -92,17 +72,16 @@
                         <outlet property="label2" destination="LCa-5k-1zF" id="u0p-SO-7pL"/>
                         <outlet property="label3" destination="fet-Pn-p8B" id="nZs-rZ-t9v"/>
                         <outlet property="studioLabel" destination="MOv-da-WD3" id="IJ2-DP-d3G"/>
-                        <segue destination="4n2-x7-zjA" kind="modal" identifier="splashviewcontroller2pkrevealcontroller" modalTransitionStyle="crossDissolve" animates="NO" id="ubx-Ya-CYO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="rlm-A3-Ugf" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-327" y="-327"/>
+            <point key="canvasLocation" x="-735" y="95"/>
         </scene>
         <!--Config View Controller i Phone-->
         <scene sceneID="2XR-3H-66m">
             <objects>
-                <viewController storyboardIdentifier="sbid_configviewcontroller_iphone" id="Hx6-hH-w8F" customClass="ConfigViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="config_iphone" id="Hx6-hH-w8F" customClass="ConfigViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="H1F-lY-EeO">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -131,7 +110,7 @@
         <!--Chat Impress View Controller i Phone-->
         <scene sceneID="bn4-Bc-kHz">
             <objects>
-                <viewController storyboardIdentifier="sbid_chatimpressviewcontroller_iphone" id="AMc-ys-cLE" customClass="ChatImpressViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="chatimpress_iphone" id="AMc-ys-cLE" customClass="ChatImpressViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="oHj-lV-qis">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -160,7 +139,7 @@
         <!--Warning View Controller i Phone-->
         <scene sceneID="Op2-oa-IBe">
             <objects>
-                <viewController storyboardIdentifier="sbid_warningviewcontroller_iphone" id="eef-45-kBk" customClass="WarningViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="warning_iphone" id="eef-45-kBk" customClass="WarningViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ggI-eV-eSW">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -189,13 +168,14 @@
         <!--Left Bar View Controller i Phone-->
         <scene sceneID="2so-KA-4rR">
             <objects>
-                <tableViewController storyboardIdentifier="sbid_leftbarviewcontroller_iphone" id="f1s-lo-04Y" customClass="LeftBarViewController_iPhone" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="j1s-6T-HSl">
+                <tableViewController storyboardIdentifier="leftbar_iphone" id="f1s-lo-04Y" customClass="LeftBarViewController_iPhone" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="j1s-6T-HSl">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="GdK-BP-G24">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" id="GdK-BP-G24">
                                 <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -218,19 +198,22 @@
         <!--Navigation Controller-->
         <scene sceneID="FVc-ov-xcf">
             <objects>
-                <navigationController storyboardIdentifier="sbid_navigationcontroller" definesPresentationContext="YES" id="5R2-n5-ms1" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="navigation" definesPresentationContext="YES" id="5R2-n5-ms1" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="7CO-W0-pfR">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <connections>
+                        <segue destination="KTb-47-hxa" kind="relationship" relationship="rootViewController" id="cMV-cy-XN3"/>
+                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9vd-TX-Lng" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1352" y="1178"/>
+            <point key="canvasLocation" x="-342" y="-327"/>
         </scene>
         <!--Help View Controller i Phone-->
         <scene sceneID="YZc-Dp-bQm">
             <objects>
-                <viewController storyboardIdentifier="sbid_helpviewcontroller_iphone" id="Imt-vO-xvM" customClass="HelpViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="help_iphone" id="Imt-vO-xvM" customClass="HelpViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JjY-o6-NsQ">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -259,7 +242,7 @@
         <!--Chat Wait View Controller i Phone-->
         <scene sceneID="lxn-CJ-Ljo">
             <objects>
-                <viewController storyboardIdentifier="sbid_chatwaitviewcontroller_iphone" id="liG-sB-OzW" customClass="ChatWaitViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="chatwait_iphone" id="liG-sB-OzW" customClass="ChatWaitViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Y1g-pW-N07">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -288,7 +271,7 @@
         <!--Chat Confirm View Controller i Phone-->
         <scene sceneID="LvM-7V-czb">
             <objects>
-                <viewController storyboardIdentifier="sbid_chatconfirmviewcontroller_iphone" id="UgM-pj-HWT" customClass="ChatConfirmViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="chatconfirm_iphone" id="UgM-pj-HWT" customClass="ChatConfirmViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="y48-DI-AFQ">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -317,7 +300,7 @@
         <!--Chat WebRTC View Controller i Phone-->
         <scene sceneID="gbj-pg-eqa">
             <objects>
-                <viewController storyboardIdentifier="sbid_chatwebrtcviewcontroller_iphone" id="Rwb-k1-UZq" customClass="ChatWebRTCViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="chatwebrtc_iphone" id="Rwb-k1-UZq" customClass="ChatWebRTCViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aRm-Ul-Twj">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -346,9 +329,9 @@
         <!--Home View Controller i Phone-->
         <scene sceneID="lRd-QE-GlH">
             <objects>
-                <viewController storyboardIdentifier="sbid_homeviewcontroller_iphone" id="KTb-47-hxa" customClass="HomeViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="home_iphone" id="KTb-47-hxa" customClass="HomeViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="e4l-i9-iJx">
-                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="主屏" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vb8-0v-xLK">
@@ -367,6 +350,7 @@
                             <constraint firstItem="Vb8-0v-xLK" firstAttribute="centerX" secondItem="e4l-i9-iJx" secondAttribute="centerX" type="default" id="udE-Ib-CBl"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="DUg-hB-ZNt"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3NT-bM-sTE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -375,7 +359,7 @@
         <!--Device View Controller i Phone-->
         <scene sceneID="chS-id-q6j">
             <objects>
-                <viewController storyboardIdentifier="sbid_deviceviewcontroller_iphone" id="Fe4-oS-0Lu" customClass="DeviceViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="device_iphone" id="Fe4-oS-0Lu" customClass="DeviceViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lvJ-Hh-vrl">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -404,7 +388,7 @@
         <!--Impress View Controller i Phone-->
         <scene sceneID="w40-uq-hTf">
             <objects>
-                <viewController storyboardIdentifier="sbid_impressviewcontroller_iphone" id="UiM-FE-4vZ" customClass="ImpressViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="impress_iphone" id="UiM-FE-4vZ" customClass="ImpressViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="EiP-Uw-swS">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -433,7 +417,7 @@
         <!--Interest View Controller i Phone-->
         <scene sceneID="Sq7-2g-1YB">
             <objects>
-                <viewController storyboardIdentifier="sbid_interestviewcontroller_iphone" id="3Zd-iR-RMM" customClass="InterestViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="interest_iphone" id="3Zd-iR-RMM" customClass="InterestViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5cj-Iy-u5a">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -493,6 +477,9 @@
         </class>
         <class className="LeftBarViewController_iPhone" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/LeftBarViewController_iPhone.h"/>
+        </class>
+        <class className="MainViewController_iPhone" superclassName="PKRevealController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/MainViewController_iPhone.h"/>
         </class>
         <class className="NSLayoutConstraint" superclassName="NSObject">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>

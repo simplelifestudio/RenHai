@@ -8,13 +8,24 @@
 
 #import "LeftBarViewController_iPhone.h"
 
+#import "CBUIUtils.h"
+
+#import "GUIModule.h"
+
 #import "LeftBarHeaderView_iPhone.h"
 #import "LeftBarFooterView_iPhone.h"
-#import "CBUIUtils.h"
+
+#define NIB_LeftBarHeaderView_iPhone @"LeftBarHeaderView_iPhone"
+#define HEIGHT_LeftBarHeaderView 44
+
+#define NIB_LeftBarFooterView_iPhone @"LeftBarFooterView_iPhone"
+#define HEIGHT_LeftBarFooterView 44
 
 @interface LeftBarViewController_iPhone ()
 {
-    NSInteger _selectedRow;    
+    NSInteger _selectedRow;
+    
+    GUIModule* _guiModule;
 }
 
 @end
@@ -26,7 +37,7 @@
     self = [super initWithStyle:style];
     if (self)
     {
-        // Custom initialization
+
     }
     return self;
 }
@@ -35,45 +46,41 @@
 {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    _guiModule = [GUIModule sharedInstance];
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-    
-    
+//    [self.tableView registerClass:[UITableViewCell class]  forCellReuseIdentifier:@"Cell"];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
-//    AppDelegate* app = [UIApplication sharedApplication].delegate;
-//    PKRevealController* revealVC = app.revealController;
-//    UINavigationController* frontVC = (UINavigationController*)revealVC.frontViewController;
-//    UIViewController* presentingVC = frontVC.visibleViewController;
-//    if (presentingVC == app.homeViewController)
-//    {
-//        _selectedRow = 0;
-//    }
-//    else if (presentingVC == app.deviceCardViewController)
-//    {
-//        _selectedRow = 1;
-//    }
-//    else if (presentingVC == app.impressCardViewController)
-//    {
-//        _selectedRow = 2;
-//    }
-//    else if (presentingVC == app.interestCardViewController)
-//    {
-//        _selectedRow = 3;
-//    }
-//    else if (presentingVC == app.configViewController)
-//    {
-//        _selectedRow = 4;
-//    }
-//    else if (presentingVC == app.helpViewController)
-//    {
-//        _selectedRow = 5;
-//    }
+    MainViewController_iPhone* mainVC = _guiModule.mainViewController;
+    
+    UINavigationController* frontVC = (UINavigationController*)mainVC.frontViewController;
+    UIViewController* presentingVC = frontVC.visibleViewController;
+    if (presentingVC == _guiModule.homeViewController)
+    {
+        _selectedRow = 0;
+    }
+    else if (presentingVC == _guiModule.deviceViewController)
+    {
+        _selectedRow = 1;
+    }
+    else if (presentingVC == _guiModule.impressViewController)
+    {
+        _selectedRow = 2;
+    }
+    else if (presentingVC == _guiModule.interestViewController)
+    {
+        _selectedRow = 3;
+    }
+    else if (presentingVC == _guiModule.configViewController)
+    {
+        _selectedRow = 4;
+    }
+    else if (presentingVC == _guiModule.helpViewController)
+    {
+        _selectedRow = 5;
+    }
     
     [self.tableView reloadData];
     
@@ -83,73 +90,58 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    return 6;
+    return LEFTBAR_CELL_COUNT;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    float version = [[UIDevice currentDevice] systemVersion].floatValue;
-    BOOL iOS6Flag = (6.0 <= version) ? YES : NO;
-    
     static NSString *CellIdentifier = @"Cell";
     
-    UITableViewCell *cell = nil;
-    if (iOS6Flag)
-    {
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    }
-    else
-    {
-        cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    }
-    
-    // Configure the cell...
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+
     NSString* cellText = nil;
     NSInteger row = indexPath.row;
     switch (row)
     {
-        case 0:
+        case LEFTBAR_CELL_HOME:
         {
-            cellText = @"主屏";
+            cellText = NAVIGATIONBAR_TITLE_HOME;
             break;
         }
-        case 1:
+        case LEFTBAR_CELL_DEVICE:
         {
-            cellText = @"设备";
+            cellText = NAVIGATIONBAR_TITLE_DEVICE;
             break;
         }
-        case 2:
+        case LEFTBAR_CELL_IMPRESS:
         {
-            cellText = @"印象";
+            cellText = NAVIGATIONBAR_TITLE_IMPRESS;
             break;
         }
-        case 3:
+        case LEFTBAR_CELL_INTEREST:
         {
-            cellText = @"兴趣";
+            cellText = NAVIGATIONBAR_TITLE_INTEREST;
             break;
         }
-        case 4:
+        case LEFTBAR_CELL_CONFIG:
         {
-            cellText = @"配置";
+            cellText = NAVIGATIONBAR_TITLE_CONFIG;
             break;
         }
-        case 5:
+        case LEFTBAR_CELL_HELP:
         {
-            cellText = @"帮助";
+            cellText = NAVIGATIONBAR_TITLE_HELP;
             break;
         }
         default:
@@ -164,13 +156,10 @@
     if (row == _selectedRow)
     {
         textColor = [UIColor whiteColor];
-        //        cell.selected = YES;
-        
-        
     }
     else
     {
-        //        cell.selected = NO;
+
     }
     
     cell.textLabel.text = cellText;
@@ -181,142 +170,95 @@
     return cell;
 }
 
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- }
- else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
-
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
-    
-//    AppDelegate* app = [UIApplication sharedApplication].delegate;
-//    UINavigationController* navigationVC = app.navigationController;
-//    PKRevealController* revealVC = app.revealController;
-//    NSInteger row = indexPath.row;
-//    switch (row)
-//    {
-//        case 0:
-//        {
-//            [navigationVC popToRootViewControllerAnimated:NO];
-//            [navigationVC pushViewController:app.homeViewController animated:NO];
-//            [revealVC showViewController:navigationVC animated:YES completion:nil];
-//            
-//            break;
-//        }
-//        case 1:
-//        {
-//            [navigationVC popToRootViewControllerAnimated:NO];
-//            [navigationVC pushViewController:app.deviceCardViewController animated:NO];
-//            [revealVC showViewController:navigationVC animated:YES completion:nil];
-//            
-//            break;
-//        }
-//        case 2:
-//        {
-//            [navigationVC popToRootViewControllerAnimated:NO];
-//            [navigationVC pushViewController:app.impressCardViewController animated:NO];
-//            [revealVC showViewController:navigationVC animated:YES completion:nil];
-//            
-//            break;
-//        }
-//        case 3:
-//        {
-//            [navigationVC popToRootViewControllerAnimated:NO];
-//            [navigationVC pushViewController:app.interestCardViewController animated:NO];
-//            [revealVC showViewController:navigationVC animated:YES completion:nil];
-//            
-//            break;
-//        }
-//        case 4:
-//        {
-//            [navigationVC popToRootViewControllerAnimated:NO];
-//            [navigationVC pushViewController:app.configViewController animated:NO];
-//            [revealVC showViewController:navigationVC animated:YES completion:nil];
-//            
-//            break;
-//        }
-//        case 5:
-//        {
-//            [navigationVC popToRootViewControllerAnimated:NO];
-//            [navigationVC pushViewController:app.helpViewController animated:NO];
-//            [revealVC showViewController:navigationVC animated:YES completion:nil];
-//            
-//            break;
-//        }
-//        default:
-//        {
-//            
-//            break;
-//        }
-//    }
+    UINavigationController* navigationVC = _guiModule.navigationController;
+    MainViewController_iPhone* mainVC = _guiModule.mainViewController;
+
+    NSInteger row = indexPath.row;
+    switch (row)
+    {
+        case LEFTBAR_CELL_HOME:
+        {
+            [navigationVC popToRootViewControllerAnimated:NO];
+            [navigationVC pushViewController:_guiModule.homeViewController animated:NO];
+            [mainVC showViewController:navigationVC animated:YES completion:nil];
+            
+            break;
+        }
+        case LEFTBAR_CELL_DEVICE:
+        {
+            [navigationVC popToRootViewControllerAnimated:NO];
+            [navigationVC pushViewController:_guiModule.deviceViewController animated:NO];
+            [mainVC showViewController:navigationVC animated:YES completion:nil];
+            
+            break;
+        }
+        case LEFTBAR_CELL_IMPRESS:
+        {
+            [navigationVC popToRootViewControllerAnimated:NO];
+            [navigationVC pushViewController:_guiModule.impressViewController animated:NO];
+            [mainVC showViewController:navigationVC animated:YES completion:nil];
+            
+            break;
+        }
+        case LEFTBAR_CELL_INTEREST:
+        {
+            [navigationVC popToRootViewControllerAnimated:NO];
+            [navigationVC pushViewController:_guiModule.interestViewController animated:NO];
+            [mainVC showViewController:navigationVC animated:YES completion:nil];
+            
+            break;
+        }
+        case LEFTBAR_CELL_CONFIG:
+        {
+            [navigationVC popToRootViewControllerAnimated:NO];
+            [navigationVC pushViewController:_guiModule.configViewController animated:NO];
+            [mainVC showViewController:navigationVC animated:YES completion:nil];
+            
+            break;
+        }
+        case LEFTBAR_CELL_HELP:
+        {
+            [navigationVC popToRootViewControllerAnimated:NO];
+            [navigationVC pushViewController:_guiModule.helpViewController animated:NO];
+            [mainVC showViewController:navigationVC animated:YES completion:nil];
+            
+            break;
+        }
+        default:
+        {
+            
+            break;
+        }
+    }
     
 }
 
 -(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {    
-    LeftBarHeaderView_iPhone* headerView = [CBUIUtils componentFromNib:@"LeftBarHeaderView_iPhone" owner:self options:nil];
+    LeftBarHeaderView_iPhone* headerView = [CBUIUtils componentFromNib:NIB_LeftBarHeaderView_iPhone owner:self options:nil];
     
     return headerView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 44;
+    return HEIGHT_LeftBarHeaderView;
 }
 
 -(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    LeftBarFooterView_iPhone* footerView = [CBUIUtils componentFromNib:@"LeftBarFooterView_iPhone" owner:self options:nil];
+    LeftBarFooterView_iPhone* footerView = [CBUIUtils componentFromNib:NIB_LeftBarFooterView_iPhone owner:self options:nil];
     
     return footerView;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 44;
+    return HEIGHT_LeftBarFooterView;
 }
 
 @end

@@ -8,31 +8,61 @@
 
 #import "ConfigViewController_iPhone.h"
 
+#import "GUIModule.h"
+#import "GUIStyle.h"
+
 @interface ConfigViewController_iPhone ()
+{
+    GUIModule* _guiModule;
+}
 
 @end
 
 @implementation ConfigViewController_iPhone
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+	
+    _guiModule = [GUIModule sharedInstance];
+    
+    [self _setupNavigationBar];
 }
 
-- (void)didReceiveMemoryWarning
+#pragma mark - Private Methods
+
+-(void)_setupNavigationBar
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [self _setupSideBarMenuButtons];
+    
+    [self.navigationController.navigationBar setTintColor:COLOR_MID];
+    
+    self.navigationItem.title = NAVIGATIONBAR_TITLE_CONFIG;
+}
+
+-(void)_setupSideBarMenuButtons
+{
+    UIImage* sidebarMenuIcon_portrait = [GUIStyle sidebarMenuIconPortrait];
+    UIImage* sidebarMenuIcon_landscape = [GUIStyle sidebarMenuIconLandscape];
+    
+    if (self.navigationController.revealController.type & PKRevealControllerTypeLeft)
+    {
+        UIBarButtonItem* leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:sidebarMenuIcon_portrait landscapeImagePhone:sidebarMenuIcon_landscape style:UIBarButtonItemStylePlain target:self action:@selector(_leftBarButtonItemClicked:)];
+        
+        self.navigationItem.leftBarButtonItem = leftBarButtonItem;
+    }
+}
+
+-(void)_leftBarButtonItemClicked:(id)sender
+{
+    if (self.navigationController.revealController.focusedController == self.navigationController.revealController.leftViewController)
+    {
+        [self.navigationController.revealController showViewController:self.navigationController.revealController.frontViewController];
+    }
+    else
+    {
+        [self.navigationController.revealController showViewController:self.navigationController.revealController.leftViewController];
+    }
 }
 
 @end
