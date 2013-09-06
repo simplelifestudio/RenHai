@@ -9,8 +9,14 @@
 #import "SplashViewController_iPhone.h"
 
 #import "CBModuleManager.h"
-
 #import "AppDataModule.h"
+
+#import "CBAppUtils.h"
+
+#define STUDIOLABEL_DURATION 1.0
+#define LABELS_DURATION 1.0
+#define LABELS_DURATION_OFFSET 0.75
+#define SPLASH_DURATION 1.0
 
 @interface SplashViewController_iPhone ()
 
@@ -19,6 +25,11 @@
 @end
 
 @implementation SplashViewController_iPhone
+
+@synthesize label1 = _label1;
+@synthesize label2 = _label2;
+@synthesize label3 = _label3;
+@synthesize studioLabel = _studioLabel;
 
 @synthesize loadStuffThread = _loadStuffThread;
 
@@ -63,18 +74,18 @@
         [module startService];
     }
     
-    // Switch back to Splash UI
-    [self performSelectorOnMainThread:@selector(startFadingSplashScreen) withObject:self waitUntilDone:YES];
+    [self performSelectorOnMainThread:@selector(_startShowingStudioLabel) withObject:self waitUntilDone:YES];
 }
 
 - (void)startFadingSplashScreen
 {
-	[UIView beginAnimations:nil context:nil]; // begins animation block
-	[UIView setAnimationDuration:0.75];        // sets animation duration
-	[UIView setAnimationDelegate:self];        // sets delegate for this block
-	[UIView setAnimationDidStopSelector:@selector(finishFadingSplashScreen)];   // calls the finishFadingSplashScreen method when the animation is done (or done fading out)
-	self.view.alpha = 0.0;       // Fades the alpha channel of this view to "0.0" over the animationDuration of "0.75" seconds
-	[UIView commitAnimations];   // commits the animation block.  This Block is done.
+	[UIView beginAnimations:nil context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveLinear];    
+	[UIView setAnimationDuration:SPLASH_DURATION];
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationDidStopSelector:@selector(finishFadingSplashScreen)];
+	self.view.alpha = 0.0;
+	[UIView commitAnimations];   
 }
 
 - (void) finishFadingSplashScreen
@@ -95,16 +106,95 @@
 
 #pragma mark - Private Methods
 
+- (void) _startShowingStudioLabel
+{
+	[UIView beginAnimations:nil context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+	[UIView setAnimationDuration:STUDIOLABEL_DURATION];
+	[UIView setAnimationDelegate:self];
+    
+    _studioLabel.alpha = 0.0;
+    
+	[UIView setAnimationDidStopSelector:@selector(_finishShowingStudioLabel)];
+    
+    [UIView commitAnimations];
+}
+
+- (void) _finishShowingStudioLabel
+{    
+    [self performSelectorOnMainThread:@selector(_startShowingLabels) withObject:self waitUntilDone:YES];
+}
+
+static NSInteger s_labelShowingIndex = 1;
+static NSTimeInterval s_labelDuration = LABELS_DURATION;
+- (void) _startShowingLabels
+{
+	[UIView beginAnimations:nil context:nil];
+    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+	[UIView setAnimationDuration:s_labelDuration];
+    s_labelDuration += LABELS_DURATION_OFFSET;
+	[UIView setAnimationDelegate:self];
+	[UIView setAnimationDidStopSelector:@selector(_finishShowingLabels)];
+
+    switch (s_labelShowingIndex)
+    {
+        case 1:
+        {
+            _label1.alpha = 1.0;
+            break;
+        }
+        case 2:
+        {
+            _label2.alpha = 1.0;
+            break;
+        }
+        case 3:
+        {
+            _label3.alpha = 1.0;
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    
+	[UIView commitAnimations];
+}
+
+- (void) _finishShowingLabels
+{
+    if (s_labelShowingIndex < 3)
+    {
+        s_labelShowingIndex++;        
+        [self _startShowingLabels];
+    }
+    else
+    {
+        [self performSelectorOnMainThread:@selector(startFadingSplashScreen) withObject:self waitUntilDone:YES];
+    }
+}
+
 - (void) _enterInApp
 {
     [self dismissViewControllerAnimated:NO completion:nil];
     [self performSegueWithIdentifier:@"splashviewcontroller2pkrevealcontroller" sender:self];
 }
 
--(void) _setupViewController
+- (void) _setupViewController
 {
+    [self _setupLabels];
+    
     _loadStuffThread = [[NSThread alloc] initWithTarget:self selector:@selector(loadAnyNecessaryStuff)  object:nil];
     [_loadStuffThread start];
+}
+
+- (void) _setupLabels
+{
+    _label1.alpha = 0.0;
+    _label2.alpha = 0.0;
+    _label3.alpha = 0.0;
+    _studioLabel.alpha = 1.0;
 }
 
 @end

@@ -10,6 +10,11 @@
 
 @interface SplashViewController_iPhone : UIViewController
 
+@property (weak, nonatomic) IBOutlet UILabel *label1;
+@property (weak, nonatomic) IBOutlet UILabel *label2;
+@property (weak, nonatomic) IBOutlet UILabel *label3;
+@property (weak, nonatomic) IBOutlet UILabel *studioLabel;
+
 -(void) loadAnyNecessaryStuff;
 -(void) startFadingSplashScreen;
 -(void) finishFadingSplashScreen;
