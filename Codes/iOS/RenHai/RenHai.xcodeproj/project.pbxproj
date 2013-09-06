@@ -162,6 +162,8 @@
 		C596283E17DA08AA009127E6 /* sidebar_menu_icon_portrait.png in Resources */ = {isa = PBXBuildFile; fileRef = C596283717DA08AA009127E6 /* sidebar_menu_icon_portrait.png */; };
 		C596283F17DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C596283817DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png */; };
 		C596284017DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C596283817DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png */; };
+		C596284317DA1C8B009127E6 /* RHNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C596284217DA1C8A009127E6 /* RHNavigationController.m */; };
+		C596284417DA1C8B009127E6 /* RHNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = C596284217DA1C8A009127E6 /* RHNavigationController.m */; };
 		C59E2C1817D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
@@ -324,6 +326,8 @@
 		C596283617DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sidebar_menu_icon_landscape@2x.png"; sourceTree = "<group>"; };
 		C596283717DA08AA009127E6 /* sidebar_menu_icon_portrait.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sidebar_menu_icon_portrait.png; sourceTree = "<group>"; };
 		C596283817DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "sidebar_menu_icon_portrait@2x.png"; sourceTree = "<group>"; };
+		C596284117DA1C89009127E6 /* RHNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHNavigationController.h; sourceTree = "<group>"; };
+		C596284217DA1C8A009127E6 /* RHNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHNavigationController.m; sourceTree = "<group>"; };
 		C59E2C1617D9ABA5000234A0 /* MainViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController_iPhone.h; sourceTree = "<group>"; };
 		C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController_iPhone.m; sourceTree = "<group>"; };
 		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; };
@@ -618,6 +622,8 @@
 				C50505E517D2D26C00DB6589 /* GUIModule.m */,
 				C50505E617D2D26C00DB6589 /* GUIStyle.h */,
 				C50505E717D2D26C00DB6589 /* GUIStyle.m */,
+				C596284117DA1C89009127E6 /* RHNavigationController.h */,
+				C596284217DA1C8A009127E6 /* RHNavigationController.m */,
 				C593C46517D32AF600C26367 /* WarningViewController_iPhone.h */,
 				C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */,
 				C593C42917D3284600C26367 /* SplashViewController_iPhone.h */,
@@ -954,6 +960,7 @@
 				C594603117D6CEA60084BB10 /* WebSocketAgent.m in Sources */,
 				C594603517D7352F0084BB10 /* RHJSONMessage.m in Sources */,
 				C59E2C1817D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */,
+				C596284317DA1C8B009127E6 /* RHNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1016,6 +1023,7 @@
 				C594603217D6CEA60084BB10 /* WebSocketAgent.m in Sources */,
 				C594603617D7352F0084BB10 /* RHJSONMessage.m in Sources */,
 				C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */,
+				C596284417DA1C8B009127E6 /* RHNavigationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

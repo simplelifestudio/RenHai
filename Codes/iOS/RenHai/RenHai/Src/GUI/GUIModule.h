@@ -12,6 +12,7 @@
 
 #import "MainViewController_iPhone.h"
 #import "LeftBarViewController_iPhone.h"
+#import "RHNavigationController.h"
 #import "HomeViewController_iPhone.h"
 #import "DeviceViewController_iPhone.h"
 #import "InterestViewController_iPhone.h"
@@ -70,7 +71,7 @@ LEFTBAR_CELL_ID;
 
 @property (nonatomic, strong) MainViewController_iPhone* mainViewController;
 @property (nonatomic, strong) LeftBarViewController_iPhone* leftbarViewController;
-@property (nonatomic, strong) UINavigationController* navigationController;
+@property (nonatomic, strong) RHNavigationController* navigationController;
 @property (nonatomic, strong) HomeViewController_iPhone* homeViewController;
 @property (nonatomic, strong) InterestViewController_iPhone* interestViewController;
 @property (nonatomic, strong) ImpressViewController_iPhone* impressViewController;
