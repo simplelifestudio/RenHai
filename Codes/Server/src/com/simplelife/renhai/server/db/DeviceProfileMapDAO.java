@@ -12,17 +12,17 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Deviceprofilemap
+	 * @see com.simplelife.renhai.server.db.DeviceProfileMap
   * @author MyEclipse Persistence Tools 
  */
-public class DeviceprofilemapDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(DeviceprofilemapDAO.class);
+public class DeviceProfileMapDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(DeviceProfileMapDAO.class);
 		//property constants
 
 
 
     
-    public void save(Deviceprofilemap transientInstance) {
+    public void save(DeviceProfileMap transientInstance) {
         log.debug("saving Deviceprofilemap instance");
         try {
             getSession().save(transientInstance);
@@ -33,7 +33,7 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Deviceprofilemap persistentInstance) {
+	public void delete(DeviceProfileMap persistentInstance) {
         log.debug("deleting Deviceprofilemap instance");
         try {
             getSession().delete(persistentInstance);
@@ -44,10 +44,10 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Deviceprofilemap findById( java.lang.Integer id) {
+    public DeviceProfileMap findById( java.lang.Integer id) {
         log.debug("getting Deviceprofilemap instance with id: " + id);
         try {
-            Deviceprofilemap instance = (Deviceprofilemap) getSession()
+            DeviceProfileMap instance = (DeviceProfileMap) getSession()
                     .get("com.simplelife.renhai.server.db.Deviceprofilemap", id);
             return instance;
         } catch (RuntimeException re) {
@@ -57,10 +57,10 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Deviceprofilemap> findByExample(Deviceprofilemap instance) {
+    public List<DeviceProfileMap> findByExample(DeviceProfileMap instance) {
         log.debug("finding Deviceprofilemap instance by example");
         try {
-            List<Deviceprofilemap> results = (List<Deviceprofilemap>) getSession()
+            List<DeviceProfileMap> results = (List<DeviceProfileMap>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Deviceprofilemap")
                     .add( create(instance) )
             .list();
@@ -100,10 +100,10 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Deviceprofilemap merge(Deviceprofilemap detachedInstance) {
+    public DeviceProfileMap merge(DeviceProfileMap detachedInstance) {
         log.debug("merging Deviceprofilemap instance");
         try {
-            Deviceprofilemap result = (Deviceprofilemap) getSession()
+            DeviceProfileMap result = (DeviceProfileMap) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -113,7 +113,7 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Deviceprofilemap instance) {
+    public void attachDirty(DeviceProfileMap instance) {
         log.debug("attaching dirty Deviceprofilemap instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -124,7 +124,7 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Deviceprofilemap instance) {
+    public void attachClean(DeviceProfileMap instance) {
         log.debug("attaching clean Deviceprofilemap instance");
         try {
             getSession().lock(instance, LockMode.NONE);

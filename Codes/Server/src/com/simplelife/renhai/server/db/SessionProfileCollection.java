@@ -18,26 +18,26 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Sessionprofilecollection  implements java.io.Serializable {
+public class SessionProfileCollection  implements java.io.Serializable {
 
 
     // Fields    
 
      private Integer sessionImpressMapId;
      private Profile profile;
-     private Sessionrecord sessionrecord;
+     private SessionRecord sessionrecord;
      private Integer count;
 
 
     // Constructors
 
     /** default constructor */
-    public Sessionprofilecollection() {
+    public SessionProfileCollection() {
     }
 
     
     /** full constructor */
-    public Sessionprofilecollection(Profile profile, Sessionrecord sessionrecord, Integer count) {
+    public SessionProfileCollection(Profile profile, SessionRecord sessionrecord, Integer count) {
         this.profile = profile;
         this.sessionrecord = sessionrecord;
         this.count = count;
@@ -69,11 +69,11 @@ public class Sessionprofilecollection  implements java.io.Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="sessionRecordId", nullable=false)
 
-    public Sessionrecord getSessionrecord() {
+    public SessionRecord getSessionrecord() {
         return this.sessionrecord;
     }
     
-    public void setSessionrecord(Sessionrecord sessionrecord) {
+    public void setSessionrecord(SessionRecord sessionrecord) {
         this.sessionrecord = sessionrecord;
     }
     

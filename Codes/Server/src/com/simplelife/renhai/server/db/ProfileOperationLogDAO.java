@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Profileoperationlog
+	 * @see com.simplelife.renhai.server.db.ProfileOperationLog
   * @author MyEclipse Persistence Tools 
  */
-public class ProfileoperationlogDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(ProfileoperationlogDAO.class);
+public class ProfileOperationLogDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(ProfileOperationLogDAO.class);
 		//property constants
 	public static final String LOG_TIME = "logTime";
 	public static final String LOG_INFO = "logInfo";
@@ -24,7 +24,7 @@ public class ProfileoperationlogDAO extends BaseHibernateDAO  {
 
 
     
-    public void save(Profileoperationlog transientInstance) {
+    public void save(ProfileOperationLog transientInstance) {
         log.debug("saving Profileoperationlog instance");
         try {
             getSession().save(transientInstance);
@@ -35,7 +35,7 @@ public class ProfileoperationlogDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Profileoperationlog persistentInstance) {
+	public void delete(ProfileOperationLog persistentInstance) {
         log.debug("deleting Profileoperationlog instance");
         try {
             getSession().delete(persistentInstance);
@@ -46,10 +46,10 @@ public class ProfileoperationlogDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Profileoperationlog findById( java.lang.Integer id) {
+    public ProfileOperationLog findById( java.lang.Integer id) {
         log.debug("getting Profileoperationlog instance with id: " + id);
         try {
-            Profileoperationlog instance = (Profileoperationlog) getSession()
+            ProfileOperationLog instance = (ProfileOperationLog) getSession()
                     .get("com.simplelife.renhai.server.db.Profileoperationlog", id);
             return instance;
         } catch (RuntimeException re) {
@@ -59,10 +59,10 @@ public class ProfileoperationlogDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Profileoperationlog> findByExample(Profileoperationlog instance) {
+    public List<ProfileOperationLog> findByExample(ProfileOperationLog instance) {
         log.debug("finding Profileoperationlog instance by example");
         try {
-            List<Profileoperationlog> results = (List<Profileoperationlog>) getSession()
+            List<ProfileOperationLog> results = (List<ProfileOperationLog>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Profileoperationlog")
                     .add( create(instance) )
             .list();
@@ -89,13 +89,13 @@ public class ProfileoperationlogDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Profileoperationlog> findByLogTime(Object logTime
+	public List<ProfileOperationLog> findByLogTime(Object logTime
 	) {
 		return findByProperty(LOG_TIME, logTime
 		);
 	}
 	
-	public List<Profileoperationlog> findByLogInfo(Object logInfo
+	public List<ProfileOperationLog> findByLogInfo(Object logInfo
 	) {
 		return findByProperty(LOG_INFO, logInfo
 		);
@@ -114,10 +114,10 @@ public class ProfileoperationlogDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Profileoperationlog merge(Profileoperationlog detachedInstance) {
+    public ProfileOperationLog merge(ProfileOperationLog detachedInstance) {
         log.debug("merging Profileoperationlog instance");
         try {
-            Profileoperationlog result = (Profileoperationlog) getSession()
+            ProfileOperationLog result = (ProfileOperationLog) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -127,7 +127,7 @@ public class ProfileoperationlogDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Profileoperationlog instance) {
+    public void attachDirty(ProfileOperationLog instance) {
         log.debug("attaching dirty Profileoperationlog instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -138,7 +138,7 @@ public class ProfileoperationlogDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Profileoperationlog instance) {
+    public void attachClean(ProfileOperationLog instance) {
         log.debug("attaching clean Profileoperationlog instance");
         try {
             getSession().lock(instance, LockMode.NONE);

@@ -20,30 +20,30 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Interestcard  implements java.io.Serializable {
+public class InterestCard  implements java.io.Serializable {
 
 
     // Fields    
 
      private Integer interestCardId;
      private Long createTime;
-     private Set<Interestlabelcollection> interestlabelcollections = new HashSet<Interestlabelcollection>(0);
+     private Set<InterestLabelCollection> interestlabelcollections = new HashSet<InterestLabelCollection>(0);
      private Set<Profile> profiles = new HashSet<Profile>(0);
 
 
     // Constructors
 
     /** default constructor */
-    public Interestcard() {
+    public InterestCard() {
     }
 
 	/** minimal constructor */
-    public Interestcard(Long createTime) {
+    public InterestCard(Long createTime) {
         this.createTime = createTime;
     }
     
     /** full constructor */
-    public Interestcard(Long createTime, Set<Interestlabelcollection> interestlabelcollections, Set<Profile> profiles) {
+    public InterestCard(Long createTime, Set<InterestLabelCollection> interestlabelcollections, Set<Profile> profiles) {
         this.createTime = createTime;
         this.interestlabelcollections = interestlabelcollections;
         this.profiles = profiles;
@@ -74,11 +74,11 @@ public class Interestcard  implements java.io.Serializable {
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="interestcard")
 
-    public Set<Interestlabelcollection> getInterestlabelcollections() {
+    public Set<InterestLabelCollection> getInterestlabelcollections() {
         return this.interestlabelcollections;
     }
     
-    public void setInterestlabelcollections(Set<Interestlabelcollection> interestlabelcollections) {
+    public void setInterestlabelcollections(Set<InterestLabelCollection> interestlabelcollections) {
         this.interestlabelcollections = interestlabelcollections;
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="interestcard")

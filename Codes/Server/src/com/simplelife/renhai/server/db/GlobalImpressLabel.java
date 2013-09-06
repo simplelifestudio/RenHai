@@ -20,7 +20,7 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Globalimpresslabel  implements java.io.Serializable {
+public class GlobalImpressLabel  implements java.io.Serializable {
 
 
     // Fields    
@@ -28,23 +28,23 @@ public class Globalimpresslabel  implements java.io.Serializable {
      private Integer globalImpressLabelId;
      private String impressLabel;
      private Integer globalAssessCount;
-     private Set<Impresslabelcollection> impresslabelcollections = new HashSet<Impresslabelcollection>(0);
+     private Set<ImpressLabelCollection> impresslabelcollections = new HashSet<ImpressLabelCollection>(0);
 
 
     // Constructors
 
     /** default constructor */
-    public Globalimpresslabel() {
+    public GlobalImpressLabel() {
     }
 
 	/** minimal constructor */
-    public Globalimpresslabel(String impressLabel, Integer globalAssessCount) {
+    public GlobalImpressLabel(String impressLabel, Integer globalAssessCount) {
         this.impressLabel = impressLabel;
         this.globalAssessCount = globalAssessCount;
     }
     
     /** full constructor */
-    public Globalimpresslabel(String impressLabel, Integer globalAssessCount, Set<Impresslabelcollection> impresslabelcollections) {
+    public GlobalImpressLabel(String impressLabel, Integer globalAssessCount, Set<ImpressLabelCollection> impresslabelcollections) {
         this.impressLabel = impressLabel;
         this.globalAssessCount = globalAssessCount;
         this.impresslabelcollections = impresslabelcollections;
@@ -85,11 +85,11 @@ public class Globalimpresslabel  implements java.io.Serializable {
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="globalimpresslabel")
 
-    public Set<Impresslabelcollection> getImpresslabelcollections() {
+    public Set<ImpressLabelCollection> getImpresslabelcollections() {
         return this.impresslabelcollections;
     }
     
-    public void setImpresslabelcollections(Set<Impresslabelcollection> impresslabelcollections) {
+    public void setImpresslabelcollections(Set<ImpressLabelCollection> impresslabelcollections) {
         this.impresslabelcollections = impresslabelcollections;
     }
    

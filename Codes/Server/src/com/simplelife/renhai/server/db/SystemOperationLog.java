@@ -18,14 +18,14 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Systemoperationlog  implements java.io.Serializable {
+public class SystemOperationLog  implements java.io.Serializable {
 
 
     // Fields    
 
      private Integer systemOperationLogId;
-     private Moduledefinition moduledefinition;
-     private Operationcodedefinition operationcodedefinition;
+     private ModuleDefinition moduledefinition;
+     private OperationCodeDefinition operationcodedefinition;
      private Long logTime;
      private String logInfo;
 
@@ -33,18 +33,18 @@ public class Systemoperationlog  implements java.io.Serializable {
     // Constructors
 
     /** default constructor */
-    public Systemoperationlog() {
+    public SystemOperationLog() {
     }
 
 	/** minimal constructor */
-    public Systemoperationlog(Moduledefinition moduledefinition, Operationcodedefinition operationcodedefinition, Long logTime) {
+    public SystemOperationLog(ModuleDefinition moduledefinition, OperationCodeDefinition operationcodedefinition, Long logTime) {
         this.moduledefinition = moduledefinition;
         this.operationcodedefinition = operationcodedefinition;
         this.logTime = logTime;
     }
     
     /** full constructor */
-    public Systemoperationlog(Moduledefinition moduledefinition, Operationcodedefinition operationcodedefinition, Long logTime, String logInfo) {
+    public SystemOperationLog(ModuleDefinition moduledefinition, OperationCodeDefinition operationcodedefinition, Long logTime, String logInfo) {
         this.moduledefinition = moduledefinition;
         this.operationcodedefinition = operationcodedefinition;
         this.logTime = logTime;
@@ -67,21 +67,21 @@ public class Systemoperationlog  implements java.io.Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="moduleId", nullable=false)
 
-    public Moduledefinition getModuledefinition() {
+    public ModuleDefinition getModuledefinition() {
         return this.moduledefinition;
     }
     
-    public void setModuledefinition(Moduledefinition moduledefinition) {
+    public void setModuledefinition(ModuleDefinition moduledefinition) {
         this.moduledefinition = moduledefinition;
     }
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="operationCode", nullable=false)
 
-    public Operationcodedefinition getOperationcodedefinition() {
+    public OperationCodeDefinition getOperationcodedefinition() {
         return this.operationcodedefinition;
     }
     
-    public void setOperationcodedefinition(Operationcodedefinition operationcodedefinition) {
+    public void setOperationcodedefinition(OperationCodeDefinition operationcodedefinition) {
         this.operationcodedefinition = operationcodedefinition;
     }
     

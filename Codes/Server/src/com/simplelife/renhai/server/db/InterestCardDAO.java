@@ -13,18 +13,18 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Interestcard
+	 * @see com.simplelife.renhai.server.db.InterestCard
   * @author MyEclipse Persistence Tools 
  */
-public class InterestcardDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(InterestcardDAO.class);
+public class InterestCardDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(InterestCardDAO.class);
 		//property constants
 	public static final String CREATE_TIME = "createTime";
 
 
 
     
-    public void save(Interestcard transientInstance) {
+    public void save(InterestCard transientInstance) {
         log.debug("saving Interestcard instance");
         try {
             getSession().save(transientInstance);
@@ -35,7 +35,7 @@ public class InterestcardDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Interestcard persistentInstance) {
+	public void delete(InterestCard persistentInstance) {
         log.debug("deleting Interestcard instance");
         try {
             getSession().delete(persistentInstance);
@@ -46,10 +46,10 @@ public class InterestcardDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Interestcard findById( java.lang.Integer id) {
+    public InterestCard findById( java.lang.Integer id) {
         log.debug("getting Interestcard instance with id: " + id);
         try {
-            Interestcard instance = (Interestcard) getSession()
+            InterestCard instance = (InterestCard) getSession()
                     .get("com.simplelife.renhai.server.db.Interestcard", id);
             return instance;
         } catch (RuntimeException re) {
@@ -59,10 +59,10 @@ public class InterestcardDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Interestcard> findByExample(Interestcard instance) {
+    public List<InterestCard> findByExample(InterestCard instance) {
         log.debug("finding Interestcard instance by example");
         try {
-            List<Interestcard> results = (List<Interestcard>) getSession()
+            List<InterestCard> results = (List<InterestCard>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Interestcard")
                     .add( create(instance) )
             .list();
@@ -89,7 +89,7 @@ public class InterestcardDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Interestcard> findByCreateTime(Object createTime
+	public List<InterestCard> findByCreateTime(Object createTime
 	) {
 		return findByProperty(CREATE_TIME, createTime
 		);
@@ -108,10 +108,10 @@ public class InterestcardDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Interestcard merge(Interestcard detachedInstance) {
+    public InterestCard merge(InterestCard detachedInstance) {
         log.debug("merging Interestcard instance");
         try {
-            Interestcard result = (Interestcard) getSession()
+            InterestCard result = (InterestCard) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -121,7 +121,7 @@ public class InterestcardDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Interestcard instance) {
+    public void attachDirty(InterestCard instance) {
         log.debug("attaching dirty Interestcard instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -132,7 +132,7 @@ public class InterestcardDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Interestcard instance) {
+    public void attachClean(InterestCard instance) {
         log.debug("attaching clean Interestcard instance");
         try {
             getSession().lock(instance, LockMode.NONE);

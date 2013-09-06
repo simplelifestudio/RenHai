@@ -20,7 +20,7 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Sessionrecord  implements java.io.Serializable {
+public class SessionRecord  implements java.io.Serializable {
 
 
     // Fields    
@@ -31,17 +31,17 @@ public class Sessionrecord  implements java.io.Serializable {
      private Integer duration;
      private String endStatus;
      private String endReason;
-     private Set<Sessionprofilecollection> sessionprofilecollections = new HashSet<Sessionprofilecollection>(0);
+     private Set<SessionProfileCollection> sessionprofilecollections = new HashSet<SessionProfileCollection>(0);
 
 
     // Constructors
 
     /** default constructor */
-    public Sessionrecord() {
+    public SessionRecord() {
     }
 
 	/** minimal constructor */
-    public Sessionrecord(String businessType, Long startTime, Integer duration, String endStatus, String endReason) {
+    public SessionRecord(String businessType, Long startTime, Integer duration, String endStatus, String endReason) {
         this.businessType = businessType;
         this.startTime = startTime;
         this.duration = duration;
@@ -50,7 +50,7 @@ public class Sessionrecord  implements java.io.Serializable {
     }
     
     /** full constructor */
-    public Sessionrecord(String businessType, Long startTime, Integer duration, String endStatus, String endReason, Set<Sessionprofilecollection> sessionprofilecollections) {
+    public SessionRecord(String businessType, Long startTime, Integer duration, String endStatus, String endReason, Set<SessionProfileCollection> sessionprofilecollections) {
         this.businessType = businessType;
         this.startTime = startTime;
         this.duration = duration;
@@ -124,11 +124,11 @@ public class Sessionrecord  implements java.io.Serializable {
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="sessionrecord")
 
-    public Set<Sessionprofilecollection> getSessionprofilecollections() {
+    public Set<SessionProfileCollection> getSessionprofilecollections() {
         return this.sessionprofilecollections;
     }
     
-    public void setSessionprofilecollections(Set<Sessionprofilecollection> sessionprofilecollections) {
+    public void setSessionprofilecollections(Set<SessionProfileCollection> sessionprofilecollections) {
         this.sessionprofilecollections = sessionprofilecollections;
     }
    

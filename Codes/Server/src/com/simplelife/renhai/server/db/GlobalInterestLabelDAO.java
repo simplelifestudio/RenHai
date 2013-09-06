@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Globalinterestlabel
+	 * @see com.simplelife.renhai.server.db.GlobalInterestLabel
   * @author MyEclipse Persistence Tools 
  */
-public class GlobalinterestlabelDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(GlobalinterestlabelDAO.class);
+public class GlobalInterestLabelDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(GlobalInterestLabelDAO.class);
 		//property constants
 	public static final String INTEREST_LABEL = "interestLabel";
 	public static final String GLOBAL_MATCH_COUNT = "globalMatchCount";
@@ -25,7 +25,7 @@ public class GlobalinterestlabelDAO extends BaseHibernateDAO  {
 
 
     
-    public void save(Globalinterestlabel transientInstance) {
+    public void save(GlobalInterestLabel transientInstance) {
         log.debug("saving Globalinterestlabel instance");
         try {
             getSession().save(transientInstance);
@@ -36,7 +36,7 @@ public class GlobalinterestlabelDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Globalinterestlabel persistentInstance) {
+	public void delete(GlobalInterestLabel persistentInstance) {
         log.debug("deleting Globalinterestlabel instance");
         try {
             getSession().delete(persistentInstance);
@@ -47,10 +47,10 @@ public class GlobalinterestlabelDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Globalinterestlabel findById( java.lang.Integer id) {
+    public GlobalInterestLabel findById( java.lang.Integer id) {
         log.debug("getting Globalinterestlabel instance with id: " + id);
         try {
-            Globalinterestlabel instance = (Globalinterestlabel) getSession()
+            GlobalInterestLabel instance = (GlobalInterestLabel) getSession()
                     .get("com.simplelife.renhai.server.db.Globalinterestlabel", id);
             return instance;
         } catch (RuntimeException re) {
@@ -60,10 +60,10 @@ public class GlobalinterestlabelDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Globalinterestlabel> findByExample(Globalinterestlabel instance) {
+    public List<GlobalInterestLabel> findByExample(GlobalInterestLabel instance) {
         log.debug("finding Globalinterestlabel instance by example");
         try {
-            List<Globalinterestlabel> results = (List<Globalinterestlabel>) getSession()
+            List<GlobalInterestLabel> results = (List<GlobalInterestLabel>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Globalinterestlabel")
                     .add( create(instance) )
             .list();
@@ -90,13 +90,13 @@ public class GlobalinterestlabelDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Globalinterestlabel> findByInterestLabel(Object interestLabel
+	public List<GlobalInterestLabel> findByInterestLabel(Object interestLabel
 	) {
 		return findByProperty(INTEREST_LABEL, interestLabel
 		);
 	}
 	
-	public List<Globalinterestlabel> findByGlobalMatchCount(Object globalMatchCount
+	public List<GlobalInterestLabel> findByGlobalMatchCount(Object globalMatchCount
 	) {
 		return findByProperty(GLOBAL_MATCH_COUNT, globalMatchCount
 		);
@@ -115,10 +115,10 @@ public class GlobalinterestlabelDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Globalinterestlabel merge(Globalinterestlabel detachedInstance) {
+    public GlobalInterestLabel merge(GlobalInterestLabel detachedInstance) {
         log.debug("merging Globalinterestlabel instance");
         try {
-            Globalinterestlabel result = (Globalinterestlabel) getSession()
+            GlobalInterestLabel result = (GlobalInterestLabel) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -128,7 +128,7 @@ public class GlobalinterestlabelDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Globalinterestlabel instance) {
+    public void attachDirty(GlobalInterestLabel instance) {
         log.debug("attaching dirty Globalinterestlabel instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -139,7 +139,7 @@ public class GlobalinterestlabelDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Globalinterestlabel instance) {
+    public void attachClean(GlobalInterestLabel instance) {
         log.debug("attaching clean Globalinterestlabel instance");
         try {
             getSession().lock(instance, LockMode.NONE);

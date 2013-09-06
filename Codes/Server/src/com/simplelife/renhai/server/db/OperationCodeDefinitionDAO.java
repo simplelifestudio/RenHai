@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Operationcodedefinition
+	 * @see com.simplelife.renhai.server.db.OperationCodeDefinition
   * @author MyEclipse Persistence Tools 
  */
-public class OperationcodedefinitionDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(OperationcodedefinitionDAO.class);
+public class OperationCodeDefinitionDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(OperationCodeDefinitionDAO.class);
 		//property constants
 	public static final String OPERATION_CODE = "operationCode";
 	public static final String OPERATION_TYPE = "operationType";
@@ -26,7 +26,7 @@ public class OperationcodedefinitionDAO extends BaseHibernateDAO  {
 
 
     
-    public void save(Operationcodedefinition transientInstance) {
+    public void save(OperationCodeDefinition transientInstance) {
         log.debug("saving Operationcodedefinition instance");
         try {
             getSession().save(transientInstance);
@@ -37,7 +37,7 @@ public class OperationcodedefinitionDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Operationcodedefinition persistentInstance) {
+	public void delete(OperationCodeDefinition persistentInstance) {
         log.debug("deleting Operationcodedefinition instance");
         try {
             getSession().delete(persistentInstance);
@@ -48,10 +48,10 @@ public class OperationcodedefinitionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Operationcodedefinition findById( java.lang.Integer id) {
+    public OperationCodeDefinition findById( java.lang.Integer id) {
         log.debug("getting Operationcodedefinition instance with id: " + id);
         try {
-            Operationcodedefinition instance = (Operationcodedefinition) getSession()
+            OperationCodeDefinition instance = (OperationCodeDefinition) getSession()
                     .get("com.simplelife.renhai.server.db.Operationcodedefinition", id);
             return instance;
         } catch (RuntimeException re) {
@@ -61,10 +61,10 @@ public class OperationcodedefinitionDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Operationcodedefinition> findByExample(Operationcodedefinition instance) {
+    public List<OperationCodeDefinition> findByExample(OperationCodeDefinition instance) {
         log.debug("finding Operationcodedefinition instance by example");
         try {
-            List<Operationcodedefinition> results = (List<Operationcodedefinition>) getSession()
+            List<OperationCodeDefinition> results = (List<OperationCodeDefinition>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Operationcodedefinition")
                     .add( create(instance) )
             .list();
@@ -91,19 +91,19 @@ public class OperationcodedefinitionDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Operationcodedefinition> findByOperationCode(Object operationCode
+	public List<OperationCodeDefinition> findByOperationCode(Object operationCode
 	) {
 		return findByProperty(OPERATION_CODE, operationCode
 		);
 	}
 	
-	public List<Operationcodedefinition> findByOperationType(Object operationType
+	public List<OperationCodeDefinition> findByOperationType(Object operationType
 	) {
 		return findByProperty(OPERATION_TYPE, operationType
 		);
 	}
 	
-	public List<Operationcodedefinition> findByDescription(Object description
+	public List<OperationCodeDefinition> findByDescription(Object description
 	) {
 		return findByProperty(DESCRIPTION, description
 		);
@@ -122,10 +122,10 @@ public class OperationcodedefinitionDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Operationcodedefinition merge(Operationcodedefinition detachedInstance) {
+    public OperationCodeDefinition merge(OperationCodeDefinition detachedInstance) {
         log.debug("merging Operationcodedefinition instance");
         try {
-            Operationcodedefinition result = (Operationcodedefinition) getSession()
+            OperationCodeDefinition result = (OperationCodeDefinition) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -135,7 +135,7 @@ public class OperationcodedefinitionDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Operationcodedefinition instance) {
+    public void attachDirty(OperationCodeDefinition instance) {
         log.debug("attaching dirty Operationcodedefinition instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -146,7 +146,7 @@ public class OperationcodedefinitionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Operationcodedefinition instance) {
+    public void attachClean(OperationCodeDefinition instance) {
         log.debug("attaching clean Operationcodedefinition instance");
         try {
             getSession().lock(instance, LockMode.NONE);

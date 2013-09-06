@@ -20,7 +20,7 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Impresscard  implements java.io.Serializable {
+public class ImpressCard  implements java.io.Serializable {
 
 
     // Fields    
@@ -30,24 +30,24 @@ public class Impresscard  implements java.io.Serializable {
      private Integer chatTotalDuration;
      private Integer chatLossCount;
      private Set<Profile> profiles = new HashSet<Profile>(0);
-     private Set<Impresslabelcollection> impresslabelcollections = new HashSet<Impresslabelcollection>(0);
+     private Set<ImpressLabelCollection> impresslabelcollections = new HashSet<ImpressLabelCollection>(0);
 
 
     // Constructors
 
     /** default constructor */
-    public Impresscard() {
+    public ImpressCard() {
     }
 
 	/** minimal constructor */
-    public Impresscard(Integer chatTotalCount, Integer chatTotalDuration, Integer chatLossCount) {
+    public ImpressCard(Integer chatTotalCount, Integer chatTotalDuration, Integer chatLossCount) {
         this.chatTotalCount = chatTotalCount;
         this.chatTotalDuration = chatTotalDuration;
         this.chatLossCount = chatLossCount;
     }
     
     /** full constructor */
-    public Impresscard(Integer chatTotalCount, Integer chatTotalDuration, Integer chatLossCount, Set<Profile> profiles, Set<Impresslabelcollection> impresslabelcollections) {
+    public ImpressCard(Integer chatTotalCount, Integer chatTotalDuration, Integer chatLossCount, Set<Profile> profiles, Set<ImpressLabelCollection> impresslabelcollections) {
         this.chatTotalCount = chatTotalCount;
         this.chatTotalDuration = chatTotalDuration;
         this.chatLossCount = chatLossCount;
@@ -109,11 +109,11 @@ public class Impresscard  implements java.io.Serializable {
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="impresscard")
 
-    public Set<Impresslabelcollection> getImpresslabelcollections() {
+    public Set<ImpressLabelCollection> getImpresslabelcollections() {
         return this.impresslabelcollections;
     }
     
-    public void setImpresslabelcollections(Set<Impresslabelcollection> impresslabelcollections) {
+    public void setImpresslabelcollections(Set<ImpressLabelCollection> impresslabelcollections) {
         this.impresslabelcollections = impresslabelcollections;
     }
    

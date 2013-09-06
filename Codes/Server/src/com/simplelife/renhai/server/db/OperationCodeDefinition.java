@@ -20,7 +20,7 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Operationcodedefinition  implements java.io.Serializable {
+public class OperationCodeDefinition  implements java.io.Serializable {
 
 
     // Fields    
@@ -29,25 +29,25 @@ public class Operationcodedefinition  implements java.io.Serializable {
      private Integer operationCode;
      private String operationType;
      private String description;
-     private Set<Profileoperationlog> profileoperationlogs = new HashSet<Profileoperationlog>(0);
-     private Set<Systemoperationlog> systemoperationlogs = new HashSet<Systemoperationlog>(0);
+     private Set<ProfileOperationLog> profileoperationlogs = new HashSet<ProfileOperationLog>(0);
+     private Set<SystemOperationLog> systemoperationlogs = new HashSet<SystemOperationLog>(0);
 
 
     // Constructors
 
     /** default constructor */
-    public Operationcodedefinition() {
+    public OperationCodeDefinition() {
     }
 
 	/** minimal constructor */
-    public Operationcodedefinition(Integer operationCode, String operationType, String description) {
+    public OperationCodeDefinition(Integer operationCode, String operationType, String description) {
         this.operationCode = operationCode;
         this.operationType = operationType;
         this.description = description;
     }
     
     /** full constructor */
-    public Operationcodedefinition(Integer operationCode, String operationType, String description, Set<Profileoperationlog> profileoperationlogs, Set<Systemoperationlog> systemoperationlogs) {
+    public OperationCodeDefinition(Integer operationCode, String operationType, String description, Set<ProfileOperationLog> profileoperationlogs, Set<SystemOperationLog> systemoperationlogs) {
         this.operationCode = operationCode;
         this.operationType = operationType;
         this.description = description;
@@ -100,20 +100,20 @@ public class Operationcodedefinition  implements java.io.Serializable {
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="operationcodedefinition")
 
-    public Set<Profileoperationlog> getProfileoperationlogs() {
+    public Set<ProfileOperationLog> getProfileoperationlogs() {
         return this.profileoperationlogs;
     }
     
-    public void setProfileoperationlogs(Set<Profileoperationlog> profileoperationlogs) {
+    public void setProfileoperationlogs(Set<ProfileOperationLog> profileoperationlogs) {
         this.profileoperationlogs = profileoperationlogs;
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="operationcodedefinition")
 
-    public Set<Systemoperationlog> getSystemoperationlogs() {
+    public Set<SystemOperationLog> getSystemoperationlogs() {
         return this.systemoperationlogs;
     }
     
-    public void setSystemoperationlogs(Set<Systemoperationlog> systemoperationlogs) {
+    public void setSystemoperationlogs(Set<SystemOperationLog> systemoperationlogs) {
         this.systemoperationlogs = systemoperationlogs;
     }
    

@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Interestlabelcollection
+	 * @see com.simplelife.renhai.server.db.InterestLabelCollection
   * @author MyEclipse Persistence Tools 
  */
-public class InterestlabelcollectionDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(InterestlabelcollectionDAO.class);
+public class InterestLabelCollectionDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(InterestLabelCollectionDAO.class);
 		//property constants
 	public static final String ORDER = "order";
 	public static final String MATCH_COUNT = "matchCount";
@@ -25,7 +25,7 @@ public class InterestlabelcollectionDAO extends BaseHibernateDAO  {
 
 
     
-    public void save(Interestlabelcollection transientInstance) {
+    public void save(InterestLabelCollection transientInstance) {
         log.debug("saving Interestlabelcollection instance");
         try {
             getSession().save(transientInstance);
@@ -36,7 +36,7 @@ public class InterestlabelcollectionDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Interestlabelcollection persistentInstance) {
+	public void delete(InterestLabelCollection persistentInstance) {
         log.debug("deleting Interestlabelcollection instance");
         try {
             getSession().delete(persistentInstance);
@@ -47,10 +47,10 @@ public class InterestlabelcollectionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Interestlabelcollection findById( java.lang.Integer id) {
+    public InterestLabelCollection findById( java.lang.Integer id) {
         log.debug("getting Interestlabelcollection instance with id: " + id);
         try {
-            Interestlabelcollection instance = (Interestlabelcollection) getSession()
+            InterestLabelCollection instance = (InterestLabelCollection) getSession()
                     .get("com.simplelife.renhai.server.db.Interestlabelcollection", id);
             return instance;
         } catch (RuntimeException re) {
@@ -60,10 +60,10 @@ public class InterestlabelcollectionDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Interestlabelcollection> findByExample(Interestlabelcollection instance) {
+    public List<InterestLabelCollection> findByExample(InterestLabelCollection instance) {
         log.debug("finding Interestlabelcollection instance by example");
         try {
-            List<Interestlabelcollection> results = (List<Interestlabelcollection>) getSession()
+            List<InterestLabelCollection> results = (List<InterestLabelCollection>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Interestlabelcollection")
                     .add( create(instance) )
             .list();
@@ -90,19 +90,19 @@ public class InterestlabelcollectionDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Interestlabelcollection> findByOrder(Object order
+	public List<InterestLabelCollection> findByOrder(Object order
 	) {
 		return findByProperty(ORDER, order
 		);
 	}
 	
-	public List<Interestlabelcollection> findByMatchCount(Object matchCount
+	public List<InterestLabelCollection> findByMatchCount(Object matchCount
 	) {
 		return findByProperty(MATCH_COUNT, matchCount
 		);
 	}
 	
-	public List<Interestlabelcollection> findByValidFlag(Object validFlag
+	public List<InterestLabelCollection> findByValidFlag(Object validFlag
 	) {
 		return findByProperty(VALID_FLAG, validFlag
 		);
@@ -121,10 +121,10 @@ public class InterestlabelcollectionDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Interestlabelcollection merge(Interestlabelcollection detachedInstance) {
+    public InterestLabelCollection merge(InterestLabelCollection detachedInstance) {
         log.debug("merging Interestlabelcollection instance");
         try {
-            Interestlabelcollection result = (Interestlabelcollection) getSession()
+            InterestLabelCollection result = (InterestLabelCollection) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -134,7 +134,7 @@ public class InterestlabelcollectionDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Interestlabelcollection instance) {
+    public void attachDirty(InterestLabelCollection instance) {
         log.debug("attaching dirty Interestlabelcollection instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -145,7 +145,7 @@ public class InterestlabelcollectionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Interestlabelcollection instance) {
+    public void attachClean(InterestLabelCollection instance) {
         log.debug("attaching clean Interestlabelcollection instance");
         try {
             getSession().lock(instance, LockMode.NONE);

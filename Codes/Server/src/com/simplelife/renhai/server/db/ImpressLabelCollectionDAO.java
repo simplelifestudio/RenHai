@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Impresslabelcollection
+	 * @see com.simplelife.renhai.server.db.ImpressLabelCollection
   * @author MyEclipse Persistence Tools 
  */
-public class ImpresslabelcollectionDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(ImpresslabelcollectionDAO.class);
+public class ImpressLabelCollectionDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(ImpressLabelCollectionDAO.class);
 		//property constants
 	public static final String COUNT = "count";
 	public static final String UPDATE_TIME = "updateTime";
@@ -25,7 +25,7 @@ public class ImpresslabelcollectionDAO extends BaseHibernateDAO  {
 
 
     
-    public void save(Impresslabelcollection transientInstance) {
+    public void save(ImpressLabelCollection transientInstance) {
         log.debug("saving Impresslabelcollection instance");
         try {
             getSession().save(transientInstance);
@@ -36,7 +36,7 @@ public class ImpresslabelcollectionDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Impresslabelcollection persistentInstance) {
+	public void delete(ImpressLabelCollection persistentInstance) {
         log.debug("deleting Impresslabelcollection instance");
         try {
             getSession().delete(persistentInstance);
@@ -47,10 +47,10 @@ public class ImpresslabelcollectionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Impresslabelcollection findById( java.lang.Integer id) {
+    public ImpressLabelCollection findById( java.lang.Integer id) {
         log.debug("getting Impresslabelcollection instance with id: " + id);
         try {
-            Impresslabelcollection instance = (Impresslabelcollection) getSession()
+            ImpressLabelCollection instance = (ImpressLabelCollection) getSession()
                     .get("com.simplelife.renhai.server.db.Impresslabelcollection", id);
             return instance;
         } catch (RuntimeException re) {
@@ -60,10 +60,10 @@ public class ImpresslabelcollectionDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Impresslabelcollection> findByExample(Impresslabelcollection instance) {
+    public List<ImpressLabelCollection> findByExample(ImpressLabelCollection instance) {
         log.debug("finding Impresslabelcollection instance by example");
         try {
-            List<Impresslabelcollection> results = (List<Impresslabelcollection>) getSession()
+            List<ImpressLabelCollection> results = (List<ImpressLabelCollection>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Impresslabelcollection")
                     .add( create(instance) )
             .list();
@@ -90,19 +90,19 @@ public class ImpresslabelcollectionDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Impresslabelcollection> findByCount(Object count
+	public List<ImpressLabelCollection> findByCount(Object count
 	) {
 		return findByProperty(COUNT, count
 		);
 	}
 	
-	public List<Impresslabelcollection> findByUpdateTime(Object updateTime
+	public List<ImpressLabelCollection> findByUpdateTime(Object updateTime
 	) {
 		return findByProperty(UPDATE_TIME, updateTime
 		);
 	}
 	
-	public List<Impresslabelcollection> findByAssessCount(Object assessCount
+	public List<ImpressLabelCollection> findByAssessCount(Object assessCount
 	) {
 		return findByProperty(ASSESS_COUNT, assessCount
 		);
@@ -121,10 +121,10 @@ public class ImpresslabelcollectionDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Impresslabelcollection merge(Impresslabelcollection detachedInstance) {
+    public ImpressLabelCollection merge(ImpressLabelCollection detachedInstance) {
         log.debug("merging Impresslabelcollection instance");
         try {
-            Impresslabelcollection result = (Impresslabelcollection) getSession()
+            ImpressLabelCollection result = (ImpressLabelCollection) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -134,7 +134,7 @@ public class ImpresslabelcollectionDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Impresslabelcollection instance) {
+    public void attachDirty(ImpressLabelCollection instance) {
         log.debug("attaching dirty Impresslabelcollection instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -145,7 +145,7 @@ public class ImpresslabelcollectionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Impresslabelcollection instance) {
+    public void attachClean(ImpressLabelCollection instance) {
         log.debug("attaching clean Impresslabelcollection instance");
         try {
             getSession().lock(instance, LockMode.NONE);

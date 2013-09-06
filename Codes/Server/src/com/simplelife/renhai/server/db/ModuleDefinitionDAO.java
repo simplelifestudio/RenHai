@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Moduledefinition
+	 * @see com.simplelife.renhai.server.db.ModuleDefinition
   * @author MyEclipse Persistence Tools 
  */
-public class ModuledefinitionDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(ModuledefinitionDAO.class);
+public class ModuleDefinitionDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(ModuleDefinitionDAO.class);
 		//property constants
 	public static final String MODULE_ID = "moduleId";
 	public static final String DESCRIPTION = "description";
@@ -25,7 +25,7 @@ public class ModuledefinitionDAO extends BaseHibernateDAO  {
 
 
     
-    public void save(Moduledefinition transientInstance) {
+    public void save(ModuleDefinition transientInstance) {
         log.debug("saving Moduledefinition instance");
         try {
             getSession().save(transientInstance);
@@ -36,7 +36,7 @@ public class ModuledefinitionDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Moduledefinition persistentInstance) {
+	public void delete(ModuleDefinition persistentInstance) {
         log.debug("deleting Moduledefinition instance");
         try {
             getSession().delete(persistentInstance);
@@ -47,10 +47,10 @@ public class ModuledefinitionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Moduledefinition findById( java.lang.Integer id) {
+    public ModuleDefinition findById( java.lang.Integer id) {
         log.debug("getting Moduledefinition instance with id: " + id);
         try {
-            Moduledefinition instance = (Moduledefinition) getSession()
+            ModuleDefinition instance = (ModuleDefinition) getSession()
                     .get("com.simplelife.renhai.server.db.Moduledefinition", id);
             return instance;
         } catch (RuntimeException re) {
@@ -60,10 +60,10 @@ public class ModuledefinitionDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Moduledefinition> findByExample(Moduledefinition instance) {
+    public List<ModuleDefinition> findByExample(ModuleDefinition instance) {
         log.debug("finding Moduledefinition instance by example");
         try {
-            List<Moduledefinition> results = (List<Moduledefinition>) getSession()
+            List<ModuleDefinition> results = (List<ModuleDefinition>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Moduledefinition")
                     .add( create(instance) )
             .list();
@@ -90,13 +90,13 @@ public class ModuledefinitionDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Moduledefinition> findByModuleId(Object moduleId
+	public List<ModuleDefinition> findByModuleId(Object moduleId
 	) {
 		return findByProperty(MODULE_ID, moduleId
 		);
 	}
 	
-	public List<Moduledefinition> findByDescription(Object description
+	public List<ModuleDefinition> findByDescription(Object description
 	) {
 		return findByProperty(DESCRIPTION, description
 		);
@@ -115,10 +115,10 @@ public class ModuledefinitionDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Moduledefinition merge(Moduledefinition detachedInstance) {
+    public ModuleDefinition merge(ModuleDefinition detachedInstance) {
         log.debug("merging Moduledefinition instance");
         try {
-            Moduledefinition result = (Moduledefinition) getSession()
+            ModuleDefinition result = (ModuleDefinition) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -128,7 +128,7 @@ public class ModuledefinitionDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Moduledefinition instance) {
+    public void attachDirty(ModuleDefinition instance) {
         log.debug("attaching dirty Moduledefinition instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -139,7 +139,7 @@ public class ModuledefinitionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Moduledefinition instance) {
+    public void attachClean(ModuleDefinition instance) {
         log.debug("attaching clean Moduledefinition instance");
         try {
             getSession().lock(instance, LockMode.NONE);

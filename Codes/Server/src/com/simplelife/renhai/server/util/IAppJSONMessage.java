@@ -16,5 +16,5 @@ package com.simplelife.renhai.server.util;
 public interface IAppJSONMessage
 {
     /** */
-    public void execute();
+    //public void run();
 }

@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Statisticsitemdefinition
+	 * @see com.simplelife.renhai.server.db.StatisticsItemDefinition
   * @author MyEclipse Persistence Tools 
  */
-public class StatisticsitemdefinitionDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(StatisticsitemdefinitionDAO.class);
+public class StatisticsItemDefinitionDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(StatisticsItemDefinitionDAO.class);
 		//property constants
 	public static final String STATISTICS_ITEM = "statisticsItem";
 	public static final String DESCRIPTION = "description";
@@ -25,7 +25,7 @@ public class StatisticsitemdefinitionDAO extends BaseHibernateDAO  {
 
 
     
-    public void save(Statisticsitemdefinition transientInstance) {
+    public void save(StatisticsItemDefinition transientInstance) {
         log.debug("saving Statisticsitemdefinition instance");
         try {
             getSession().save(transientInstance);
@@ -36,7 +36,7 @@ public class StatisticsitemdefinitionDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Statisticsitemdefinition persistentInstance) {
+	public void delete(StatisticsItemDefinition persistentInstance) {
         log.debug("deleting Statisticsitemdefinition instance");
         try {
             getSession().delete(persistentInstance);
@@ -47,10 +47,10 @@ public class StatisticsitemdefinitionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Statisticsitemdefinition findById( java.lang.Integer id) {
+    public StatisticsItemDefinition findById( java.lang.Integer id) {
         log.debug("getting Statisticsitemdefinition instance with id: " + id);
         try {
-            Statisticsitemdefinition instance = (Statisticsitemdefinition) getSession()
+            StatisticsItemDefinition instance = (StatisticsItemDefinition) getSession()
                     .get("com.simplelife.renhai.server.db.Statisticsitemdefinition", id);
             return instance;
         } catch (RuntimeException re) {
@@ -60,10 +60,10 @@ public class StatisticsitemdefinitionDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Statisticsitemdefinition> findByExample(Statisticsitemdefinition instance) {
+    public List<StatisticsItemDefinition> findByExample(StatisticsItemDefinition instance) {
         log.debug("finding Statisticsitemdefinition instance by example");
         try {
-            List<Statisticsitemdefinition> results = (List<Statisticsitemdefinition>) getSession()
+            List<StatisticsItemDefinition> results = (List<StatisticsItemDefinition>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Statisticsitemdefinition")
                     .add( create(instance) )
             .list();
@@ -90,13 +90,13 @@ public class StatisticsitemdefinitionDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Statisticsitemdefinition> findByStatisticsItem(Object statisticsItem
+	public List<StatisticsItemDefinition> findByStatisticsItem(Object statisticsItem
 	) {
 		return findByProperty(STATISTICS_ITEM, statisticsItem
 		);
 	}
 	
-	public List<Statisticsitemdefinition> findByDescription(Object description
+	public List<StatisticsItemDefinition> findByDescription(Object description
 	) {
 		return findByProperty(DESCRIPTION, description
 		);
@@ -115,10 +115,10 @@ public class StatisticsitemdefinitionDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Statisticsitemdefinition merge(Statisticsitemdefinition detachedInstance) {
+    public StatisticsItemDefinition merge(StatisticsItemDefinition detachedInstance) {
         log.debug("merging Statisticsitemdefinition instance");
         try {
-            Statisticsitemdefinition result = (Statisticsitemdefinition) getSession()
+            StatisticsItemDefinition result = (StatisticsItemDefinition) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -128,7 +128,7 @@ public class StatisticsitemdefinitionDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Statisticsitemdefinition instance) {
+    public void attachDirty(StatisticsItemDefinition instance) {
         log.debug("attaching dirty Statisticsitemdefinition instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -139,7 +139,7 @@ public class StatisticsitemdefinitionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Statisticsitemdefinition instance) {
+    public void attachClean(StatisticsItemDefinition instance) {
         log.debug("attaching clean Statisticsitemdefinition instance");
         try {
             getSession().lock(instance, LockMode.NONE);

@@ -28,14 +28,14 @@ public class Profile  implements java.io.Serializable {
     // Fields    
 
      private Integer profileId;
-     private Interestcard interestcard;
-     private Impresscard impresscard;
+     private InterestCard interestcard;
+     private ImpressCard impresscard;
      private Long lastActivityTime;
      private Long createTime;
-     private Set<Deviceprofilemap> deviceprofilemaps = new HashSet<Deviceprofilemap>(0);
-     private Set<Devicecard> devicecards = new HashSet<Devicecard>(0);
-     private Set<Sessionprofilecollection> sessionprofilecollections = new HashSet<Sessionprofilecollection>(0);
-     private Set<Profileoperationlog> profileoperationlogs = new HashSet<Profileoperationlog>(0);
+     private Set<DeviceProfileMap> deviceprofilemaps = new HashSet<DeviceProfileMap>(0);
+     private Set<DeviceCard> devicecards = new HashSet<DeviceCard>(0);
+     private Set<SessionProfileCollection> sessionprofilecollections = new HashSet<SessionProfileCollection>(0);
+     private Set<ProfileOperationLog> profileoperationlogs = new HashSet<ProfileOperationLog>(0);
 
 
     // Constructors
@@ -45,7 +45,7 @@ public class Profile  implements java.io.Serializable {
     }
 
 	/** minimal constructor */
-    public Profile(Interestcard interestcard, Impresscard impresscard, Long lastActivityTime, Long createTime) {
+    public Profile(InterestCard interestcard, ImpressCard impresscard, Long lastActivityTime, Long createTime) {
         this.interestcard = interestcard;
         this.impresscard = impresscard;
         this.lastActivityTime = lastActivityTime;
@@ -53,7 +53,7 @@ public class Profile  implements java.io.Serializable {
     }
     
     /** full constructor */
-    public Profile(Interestcard interestcard, Impresscard impresscard, Long lastActivityTime, Long createTime, Set<Deviceprofilemap> deviceprofilemaps, Set<Devicecard> devicecards, Set<Sessionprofilecollection> sessionprofilecollections, Set<Profileoperationlog> profileoperationlogs) {
+    public Profile(InterestCard interestcard, ImpressCard impresscard, Long lastActivityTime, Long createTime, Set<DeviceProfileMap> deviceprofilemaps, Set<DeviceCard> devicecards, Set<SessionProfileCollection> sessionprofilecollections, Set<ProfileOperationLog> profileoperationlogs) {
         this.interestcard = interestcard;
         this.impresscard = impresscard;
         this.lastActivityTime = lastActivityTime;
@@ -80,21 +80,21 @@ public class Profile  implements java.io.Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="interestCardId", nullable=false)
 
-    public Interestcard getInterestcard() {
+    public InterestCard getInterestcard() {
         return this.interestcard;
     }
     
-    public void setInterestcard(Interestcard interestcard) {
+    public void setInterestcard(InterestCard interestcard) {
         this.interestcard = interestcard;
     }
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="impressCardId", nullable=false)
 
-    public Impresscard getImpresscard() {
+    public ImpressCard getImpresscard() {
         return this.impresscard;
     }
     
-    public void setImpresscard(Impresscard impresscard) {
+    public void setImpresscard(ImpressCard impresscard) {
         this.impresscard = impresscard;
     }
     
@@ -119,38 +119,38 @@ public class Profile  implements java.io.Serializable {
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="profile")
 
-    public Set<Deviceprofilemap> getDeviceprofilemaps() {
+    public Set<DeviceProfileMap> getDeviceprofilemaps() {
         return this.deviceprofilemaps;
     }
     
-    public void setDeviceprofilemaps(Set<Deviceprofilemap> deviceprofilemaps) {
+    public void setDeviceprofilemaps(Set<DeviceProfileMap> deviceprofilemaps) {
         this.deviceprofilemaps = deviceprofilemaps;
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="profile")
 
-    public Set<Devicecard> getDevicecards() {
+    public Set<DeviceCard> getDevicecards() {
         return this.devicecards;
     }
     
-    public void setDevicecards(Set<Devicecard> devicecards) {
+    public void setDevicecards(Set<DeviceCard> devicecards) {
         this.devicecards = devicecards;
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="profile")
 
-    public Set<Sessionprofilecollection> getSessionprofilecollections() {
+    public Set<SessionProfileCollection> getSessionprofilecollections() {
         return this.sessionprofilecollections;
     }
     
-    public void setSessionprofilecollections(Set<Sessionprofilecollection> sessionprofilecollections) {
+    public void setSessionprofilecollections(Set<SessionProfileCollection> sessionprofilecollections) {
         this.sessionprofilecollections = sessionprofilecollections;
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="profile")
 
-    public Set<Profileoperationlog> getProfileoperationlogs() {
+    public Set<ProfileOperationLog> getProfileoperationlogs() {
         return this.profileoperationlogs;
     }
     
-    public void setProfileoperationlogs(Set<Profileoperationlog> profileoperationlogs) {
+    public void setProfileoperationlogs(Set<ProfileOperationLog> profileoperationlogs) {
         this.profileoperationlogs = profileoperationlogs;
     }
    

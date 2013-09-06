@@ -20,7 +20,7 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Globalinterestlabel  implements java.io.Serializable {
+public class GlobalInterestLabel  implements java.io.Serializable {
 
 
     // Fields    
@@ -28,24 +28,24 @@ public class Globalinterestlabel  implements java.io.Serializable {
      private Integer globalInterestLabelId;
      private String interestLabel;
      private Integer globalMatchCount;
-     private Set<Hotinterestlabelstatistics> hotinterestlabelstatisticses = new HashSet<Hotinterestlabelstatistics>(0);
-     private Set<Interestlabelcollection> interestlabelcollections = new HashSet<Interestlabelcollection>(0);
+     private Set<HotInterestLabelStatistics> hotinterestlabelstatisticses = new HashSet<HotInterestLabelStatistics>(0);
+     private Set<InterestLabelCollection> interestlabelcollections = new HashSet<InterestLabelCollection>(0);
 
 
     // Constructors
 
     /** default constructor */
-    public Globalinterestlabel() {
+    public GlobalInterestLabel() {
     }
 
 	/** minimal constructor */
-    public Globalinterestlabel(String interestLabel, Integer globalMatchCount) {
+    public GlobalInterestLabel(String interestLabel, Integer globalMatchCount) {
         this.interestLabel = interestLabel;
         this.globalMatchCount = globalMatchCount;
     }
     
     /** full constructor */
-    public Globalinterestlabel(String interestLabel, Integer globalMatchCount, Set<Hotinterestlabelstatistics> hotinterestlabelstatisticses, Set<Interestlabelcollection> interestlabelcollections) {
+    public GlobalInterestLabel(String interestLabel, Integer globalMatchCount, Set<HotInterestLabelStatistics> hotinterestlabelstatisticses, Set<InterestLabelCollection> interestlabelcollections) {
         this.interestLabel = interestLabel;
         this.globalMatchCount = globalMatchCount;
         this.hotinterestlabelstatisticses = hotinterestlabelstatisticses;
@@ -87,20 +87,20 @@ public class Globalinterestlabel  implements java.io.Serializable {
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="globalinterestlabel")
 
-    public Set<Hotinterestlabelstatistics> getHotinterestlabelstatisticses() {
+    public Set<HotInterestLabelStatistics> getHotinterestlabelstatisticses() {
         return this.hotinterestlabelstatisticses;
     }
     
-    public void setHotinterestlabelstatisticses(Set<Hotinterestlabelstatistics> hotinterestlabelstatisticses) {
+    public void setHotinterestlabelstatisticses(Set<HotInterestLabelStatistics> hotinterestlabelstatisticses) {
         this.hotinterestlabelstatisticses = hotinterestlabelstatisticses;
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="globalinterestlabel")
 
-    public Set<Interestlabelcollection> getInterestlabelcollections() {
+    public Set<InterestLabelCollection> getInterestlabelcollections() {
         return this.interestlabelcollections;
     }
     
-    public void setInterestlabelcollections(Set<Interestlabelcollection> interestlabelcollections) {
+    public void setInterestlabelcollections(Set<InterestLabelCollection> interestlabelcollections) {
         this.interestlabelcollections = interestlabelcollections;
     }
    

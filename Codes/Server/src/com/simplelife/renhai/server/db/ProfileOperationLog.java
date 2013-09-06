@@ -18,15 +18,15 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Profileoperationlog  implements java.io.Serializable {
+public class ProfileOperationLog  implements java.io.Serializable {
 
 
     // Fields    
 
      private Integer profileOperationLogId;
      private Profile profile;
-     private Operationcodedefinition operationcodedefinition;
-     private Devicecard devicecard;
+     private OperationCodeDefinition operationcodedefinition;
+     private DeviceCard devicecard;
      private Integer logTime;
      private String logInfo;
 
@@ -34,11 +34,11 @@ public class Profileoperationlog  implements java.io.Serializable {
     // Constructors
 
     /** default constructor */
-    public Profileoperationlog() {
+    public ProfileOperationLog() {
     }
 
 	/** minimal constructor */
-    public Profileoperationlog(Profile profile, Operationcodedefinition operationcodedefinition, Devicecard devicecard, Integer logTime) {
+    public ProfileOperationLog(Profile profile, OperationCodeDefinition operationcodedefinition, DeviceCard devicecard, Integer logTime) {
         this.profile = profile;
         this.operationcodedefinition = operationcodedefinition;
         this.devicecard = devicecard;
@@ -46,7 +46,7 @@ public class Profileoperationlog  implements java.io.Serializable {
     }
     
     /** full constructor */
-    public Profileoperationlog(Profile profile, Operationcodedefinition operationcodedefinition, Devicecard devicecard, Integer logTime, String logInfo) {
+    public ProfileOperationLog(Profile profile, OperationCodeDefinition operationcodedefinition, DeviceCard devicecard, Integer logTime, String logInfo) {
         this.profile = profile;
         this.operationcodedefinition = operationcodedefinition;
         this.devicecard = devicecard;
@@ -80,21 +80,21 @@ public class Profileoperationlog  implements java.io.Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="operationCode", nullable=false)
 
-    public Operationcodedefinition getOperationcodedefinition() {
+    public OperationCodeDefinition getOperationcodedefinition() {
         return this.operationcodedefinition;
     }
     
-    public void setOperationcodedefinition(Operationcodedefinition operationcodedefinition) {
+    public void setOperationcodedefinition(OperationCodeDefinition operationcodedefinition) {
         this.operationcodedefinition = operationcodedefinition;
     }
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="deviceId", nullable=false)
 
-    public Devicecard getDevicecard() {
+    public DeviceCard getDevicecard() {
         return this.devicecard;
     }
     
-    public void setDevicecard(Devicecard devicecard) {
+    public void setDevicecard(DeviceCard devicecard) {
         this.devicecard = devicecard;
     }
     

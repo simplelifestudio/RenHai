@@ -11,54 +11,64 @@
 
 package com.simplelife.renhai.server.log;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import com.simplelife.renhai.server.db.SessionRecordDAO;
 
 
 /** */
 public class FileLogger
 {
+	private static final Logger logger = LoggerFactory.getLogger("CommonLogger");
+	
 	public static String LogLevelFine = "Fine";
     public static String LogLevelInfo = "Info";
     public static String LogLevelWarning = "Warning";
     public static String LogLevelSevere = "Severe";
     
+    public boolean isDebugEnabled()
+    {
+    	return logger.isDebugEnabled();
+    }
     
-	private static Logger logger = Logger.getLogger("Seeds");
-	
-	public static Level getLevel()
-	{
-	    return logger.getLevel();
-	}
-	
-	public static void setLevel(Level level)
-	{
-	    logger.setLevel(level);
-	}
-	
+    public boolean isWarnEnabled()
+    {
+    	return logger.isWarnEnabled();
+    }
+    
+    public boolean isInfoEnabled()
+    {
+    	return logger.isInfoEnabled();
+    }
+    
+    public boolean isErrorEnabled()
+    {
+    	return logger.isErrorEnabled();
+    }
+    
 	public static void info(String logInfo)
 	{
-		log(Level.INFO, logInfo);
+		logger.info(logInfo);
 	}
 	
 	public static void severe(String logInfo)
 	{
-		log(Level.SEVERE, logInfo);
+		logger.error(logInfo);
 	}
 	
 	public static void warning(String logInfo)
 	{
-		log(Level.WARNING, logInfo);
+		logger.warn(logInfo);
 	}
 	
 	public static void fine(String logInfo)
 	{
-		log(Level.FINE, logInfo);
+		logger.debug(logInfo);
 	}
 	
 	public static void printStackTrace(Exception e)
 	{
-	    logger.logp(Level.SEVERE, "", "", e.getMessage());
+	    logger.error(e.getMessage());
 	    
 		StackTraceElement[] messages = e.getStackTrace();
 		int length=messages.length;
@@ -66,21 +76,8 @@ public class FileLogger
 		{
 		    if (messages[i].toString().contains("com.simplelife.seeds"))
 		    {
-		        logger.logp(Level.SEVERE, "", "", messages[i].toString());
+		    	logger.error(messages[i].toString());
 		    }
 		}
-	}
-	
-	private static void log(Level level, String logInfo)
-	{
-		if (!logger.isLoggable(level))
-		{
-			return;
-		}
-		
-		StackTraceElement traceElement = Thread.currentThread().getStackTrace()[3]; 
-		String methodName = traceElement.getMethodName();
-		String fileName = traceElement.getFileName()+ ":" + Integer.toString(traceElement.getLineNumber());
-		logger.logp(level, fileName, methodName, logInfo);
 	}
 }

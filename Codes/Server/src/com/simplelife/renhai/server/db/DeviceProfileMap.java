@@ -18,25 +18,25 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Deviceprofilemap  implements java.io.Serializable {
+public class DeviceProfileMap  implements java.io.Serializable {
 
 
     // Fields    
 
      private Integer deviceProfileMapId;
      private Profile profile;
-     private Devicecard devicecard;
+     private DeviceCard devicecard;
 
 
     // Constructors
 
     /** default constructor */
-    public Deviceprofilemap() {
+    public DeviceProfileMap() {
     }
 
     
     /** full constructor */
-    public Deviceprofilemap(Profile profile, Devicecard devicecard) {
+    public DeviceProfileMap(Profile profile, DeviceCard devicecard) {
         this.profile = profile;
         this.devicecard = devicecard;
     }
@@ -67,11 +67,11 @@ public class Deviceprofilemap  implements java.io.Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="deviceId", nullable=false)
 
-    public Devicecard getDevicecard() {
+    public DeviceCard getDevicecard() {
         return this.devicecard;
     }
     
-    public void setDevicecard(Devicecard devicecard) {
+    public void setDevicecard(DeviceCard devicecard) {
         this.devicecard = devicecard;
     }
    
