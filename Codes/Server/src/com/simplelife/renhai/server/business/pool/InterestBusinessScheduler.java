@@ -11,8 +11,6 @@
 
 package com.simplelife.renhai.server.business.pool;
 
-import com.simplelife.renhai.server.util.IBusinessPool;
-
 
 /** */
 public class InterestBusinessScheduler extends AbstractBusinessScheduler

@@ -9,8 +9,6 @@
 
 package com.simplelife.renhai.server.json;
 
-import com.simplelife.renhai.server.util.IDeviceWrapper;
-
 /**
  * 
  */

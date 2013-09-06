@@ -11,10 +11,9 @@ package com.simplelife.renhai.server.test;
 
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.log.FileLogger;
+import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.JSONKey;
 
 
@@ -32,7 +31,7 @@ public class LocalMockApp extends AbstractMockApp
 			return;
 		}
 		
-		sendBusinessSessionRequest(JSONKey.OperationType.AssessAndQuit, impressLabelList);
+		sendBusinessSessionRequest(Consts.OperationType.AssessAndQuit, impressLabelList);
 	}
 	
 	/** */
@@ -40,7 +39,7 @@ public class LocalMockApp extends AbstractMockApp
 	public void sendAlohaRequest()
 	{
 		// Add command type
-		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.Command.AlohaRequest);
+		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.MessageId.AlohaRequest);
 		
 		// Add command body
 		jsonMapBody.put(JSONKey.FieldName.Content, "Hello Server!");
@@ -54,7 +53,7 @@ public class LocalMockApp extends AbstractMockApp
 	public void sendAppDataSyncRequest(HashMap<String, Object> queryMap, HashMap<String, Object> updateMap)
 	{
 		// Add command type
-		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.Command.AppDataSyncRequest);
+		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.MessageId.AppDataSyncRequest);
 		
 		// Add command body
 		if (queryMap != null)
@@ -76,7 +75,7 @@ public class LocalMockApp extends AbstractMockApp
 	public void sendServerDataSyncRequest()
 	{
 		// Add command type
-		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.Command.AppDataSyncRequest);
+		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.MessageId.AppDataSyncRequest);
 		
 		// Add command body
 		jsonMapBody.put(JSONKey.FieldName.OnlineDeviceCount, "");
@@ -107,12 +106,12 @@ public class LocalMockApp extends AbstractMockApp
 	public void sendNotificationResponse()
 	{
 		// Add command type
-		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.Command.BusinessSessionNotificationResponse);
+		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.MessageId.BusinessSessionNotificationResponse);
 		
 		// Add command body
 		jsonMapBody.put(JSONKey.FieldName.BusinessSessionId, businessSessionId);
-		jsonMapBody.put(JSONKey.FieldName.BusinessType, JSONKey.BusinessType.Interest);
-		jsonMapBody.put(JSONKey.FieldName.OperationType, JSONKey.OperationType.Received);
+		jsonMapBody.put(JSONKey.FieldName.BusinessType, Consts.BusinessType.Interest);
+		jsonMapBody.put(JSONKey.FieldName.OperationType, Consts.OperationType.Received);
 		jsonMapBody.put(JSONKey.FieldName.OperationValue, "");
 		
 		// Send
@@ -121,15 +120,15 @@ public class LocalMockApp extends AbstractMockApp
 	
 	/** */
 	@Override
-	public void sendBusinessSessionRequest(String operationType, String operationValue)
+	public void sendBusinessSessionRequest(Consts.OperationType operationType, String operationValue)
 	{
 		// Add command type
-		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.Command.BusinessSessionRequest);
+		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.MessageId.BusinessSessionRequest);
 		
 		// Add command body
 		jsonMapBody.put(JSONKey.FieldName.BusinessSessionId, businessSessionId);
-		jsonMapBody.put(JSONKey.FieldName.BusinessType, businessSessionType);
-		jsonMapBody.put(JSONKey.FieldName.OperationType, operationType);
+		jsonMapBody.put(JSONKey.FieldName.BusinessType, businessType);
+		jsonMapBody.put(JSONKey.FieldName.OperationType, operationType.name());
 		jsonMapBody.put(JSONKey.FieldName.OperationValue, operationValue);
 		
 		// Send
@@ -145,16 +144,16 @@ public class LocalMockApp extends AbstractMockApp
 	
 	/** */
 	@Override
-	public void enterPool(String businessType)
+	public void enterPool(Consts.BusinessType poolType)
 	{
-		sendBusinessSessionRequest(JSONKey.OperationType.EnterPool, businessType);
+		sendBusinessSessionRequest(Consts.OperationType.EnterPool, poolType.name());
 	}
 	
 	/** */
 	@Override
 	public void endChat()
 	{
-		sendBusinessSessionRequest(JSONKey.OperationType.EndChat, "");
+		sendBusinessSessionRequest(Consts.OperationType.EndChat, "");
 	}
 	
 	/** */
@@ -163,11 +162,11 @@ public class LocalMockApp extends AbstractMockApp
 	{
 		if (agree)
 		{
-			sendBusinessSessionRequest(JSONKey.OperationType.AgreeChat, "");
+			sendBusinessSessionRequest(Consts.OperationType.AgreeChat, "");
 		}
 		else
 		{
-			sendBusinessSessionRequest(JSONKey.OperationType.RejectChat, "");
+			sendBusinessSessionRequest(Consts.OperationType.RejectChat, "");
 		}
 	}
 	
@@ -187,7 +186,7 @@ public class LocalMockApp extends AbstractMockApp
 			return;
 		}
 		
-		sendBusinessSessionRequest(JSONKey.OperationType.Assess, impressLabelList);
+		sendBusinessSessionRequest(Consts.OperationType.Assess, impressLabelList);
 	}
 	
 	/* (non-Javadoc)

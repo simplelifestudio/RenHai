@@ -1,8 +1,8 @@
 /**
- * AppErrorResposne.java
+ * TimeoutRequest.java
  * 
  * History:
- *     2013-9-5: Tomas Chen, initial version
+ *     2013-9-6: Tomas Chen, initial version
  * 
  * Copyright (c) 2013 SimpleLife Studio. All rights reserved.
  */
@@ -10,20 +10,20 @@
 package com.simplelife.renhai.server.json;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 
 /**
  * 
  */
-public class AppErrorResposne extends AppJSONMessage
+public class TimeoutRequest extends AppJSONMessage
 {
 	
 	/**
 	 * @param jsonObject
 	 */
-	public AppErrorResposne(JSONObject jsonObject)
+	public TimeoutRequest(JSONObject jsonObject)
 	{
 		super(jsonObject);
-		// TODO Auto-generated constructor stub
 	}
 
 	/* (non-Javadoc)
@@ -32,5 +32,7 @@ public class AppErrorResposne extends AppJSONMessage
 	@Override
 	public void run()
 	{
+		((IBaseConnectionOwner)deviceWrapper).onTimeOut(null);
 	}
+	
 }

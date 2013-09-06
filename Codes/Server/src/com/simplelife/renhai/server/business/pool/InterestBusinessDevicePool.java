@@ -32,7 +32,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     }
     
     /** */
-    public LinkedList getHistoryHotInterestLabel(int count)
+    public LinkedList<AbstractLabel> getHistoryHotInterestLabel(int count)
     {
         return null;
     

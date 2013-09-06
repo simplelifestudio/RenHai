@@ -11,10 +11,19 @@
 
 package com.simplelife.renhai.server.util;
 
+import org.slf4j.Logger;
+
 
 /** */
 public class AbstractModule implements IModule
 {
+	protected Logger logger;
+	
+	public Logger getLogger()
+	{
+		return logger;
+	}
+
     /** */
     public void initModule()
     {

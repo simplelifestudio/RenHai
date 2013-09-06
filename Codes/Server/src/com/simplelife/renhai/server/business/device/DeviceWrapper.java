@@ -185,7 +185,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     public void onJSONCommand(IAppJSONMessage command)
     {
         // TODO Auto-generated method stub
-        
     }
 
 

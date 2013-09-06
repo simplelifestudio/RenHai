@@ -10,6 +10,7 @@
 package com.simplelife.renhai.server.json;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.JSONKey;
 
 /**
@@ -38,8 +39,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 		boolean update = body.containsKey(JSONKey.FieldName.DataUpdate);
 		if (!(query || update))
 		{
-			errorCode = 1103;
-			errorDescription = "Neither " + JSONKey.FieldName.DataQuery + " nor " + JSONKey.FieldName.DataUpdate + " is included in request";
+			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+			this.setErrorDescription("Neither " + JSONKey.FieldName.DataQuery + " nor " + JSONKey.FieldName.DataUpdate + " is included in request");
 		}
 		return true;
     }
@@ -49,7 +50,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 	{
 		if (!checkJsonCommand())
 		{
-			responseError();
+			responseError(Consts.MessageId.AppDataSyncRequest.name());
 			return;
 		}
 		

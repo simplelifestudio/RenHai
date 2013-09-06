@@ -23,7 +23,6 @@ import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
-import com.simplelife.renhai.server.util.JSONKey;
 
 
 /**
@@ -106,7 +105,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		lastActivityTime = deviceWrapper.getLastActivityTime().getTime();
 		
 		// Step_10 Mock事件：onClose
-		connectionOwner.getConnection().onClose();
+		connectionOwner.getConnection().onClose(0);
 		
 		// Step_11 调用：OnlineDevicePool::getCount
 		assertEquals(deviceCount, pool.getElementCount());
@@ -125,14 +124,14 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertTrue(deviceWrapper.getLastActivityTime().getTime() > lastActivityTime);
 		
 		// Step_15 Mock请求：进入随机聊天
-		mockApp.enterPool(JSONKey.BusinessType.Random);
+		mockApp.enterPool(Consts.BusinessType.Random);
 		
 		// Step_16 Mock请求：设备同步
 		syncDevice(mockApp);
 		fail("需要检查收到的消息是否正确");
 		
 		// Step_17 Mock事件：onClose
-		connectionOwner.getConnection().onClose();
+		connectionOwner.getConnection().onClose(0);
 		
 		// Step_18 建立WebSocket连接
 		mockApp = createMockApp();

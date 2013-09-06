@@ -32,7 +32,7 @@ public abstract class AbstractMockApp implements IMockApp
     protected IDeviceWrapper deviceWrapper;
     protected String peerDeviceId;
     protected String businessSessionId;
-    protected String businessSessionType;
+    protected String businessType;
     protected JSONObject lastReceivedCommand;
     
     protected HashMap<String, Object> jsonMap = new HashMap<String, Object>();

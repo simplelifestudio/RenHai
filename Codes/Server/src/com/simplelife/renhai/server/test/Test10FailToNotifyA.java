@@ -19,7 +19,6 @@ import com.simplelife.renhai.server.business.session.BusinessSessionPool;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
-import com.simplelife.renhai.server.util.JSONKey;
 
 /**
  * 
@@ -84,10 +83,10 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		assertEquals(Consts.DeviceBusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
-		mockApp1.enterPool(JSONKey.BusinessType.Random);
+		mockApp1.enterPool(Consts.BusinessType.Random);
 		
 		// Step_07 Mock请求：B进入随机聊天
-		mockApp2.enterPool(JSONKey.BusinessType.Random);
+		mockApp2.enterPool(Consts.BusinessType.Random);
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceBusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());

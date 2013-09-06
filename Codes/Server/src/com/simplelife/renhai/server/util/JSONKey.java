@@ -32,33 +32,7 @@ public class JSONKey
 		public final static String BusinessSessionResponse		=  "BusinessSessionResponse";
 		public final static String BroadcastNotification		=  "BroadcastNotification";
 	}
-	
-    public enum OperationType
-    {
-    	EnterPool(1),
-    	LeavePool(2),
-    	AgreeChat(3),
-    	RejectChat(4),
-    	EndChat(5),
-
-    	Assess(6),
-    	AssessAndQuit(7),
-    	Received(8);
-
-    	private int type;
-    	
-    	private OperationType(int type)
-    	{
-    		this.type = type; 
-    	}
-    }
-    
-    public class BusinessType
-    {
-    	public final static String Interest 					= "Interest";
-        public final static String Random 						= "Random";
-    }
-    
+   
     public class FieldName
     {
     	public final static String AppRequestMessage			= "appRequestMessage";

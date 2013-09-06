@@ -1,7 +1,6 @@
 package com.simplelife.renhai.server.db;
 
 import java.util.List;
-import java.util.Set;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import static org.hibernate.criterion.Example.create;

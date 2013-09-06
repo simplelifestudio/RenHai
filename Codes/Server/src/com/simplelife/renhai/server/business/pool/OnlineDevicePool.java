@@ -14,6 +14,7 @@ package com.simplelife.renhai.server.business.pool;
 import java.util.Timer;
 import java.util.Vector;
 
+import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IBusinessPool;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -63,14 +64,15 @@ public class OnlineDevicePool extends AbstractDevicePool
     	businessPoolList.set(type, pool);
     }
     
-    public AbstractBusinessDevicePool getBusinessPool(int type)
+    public AbstractBusinessDevicePool getBusinessPool(Consts.BusinessType type)
     {
-    	if (type < 0 || type >= businessPoolList.size())
+    	int index = type.ordinal();
+    	if (index < 0 || index >= businessPoolList.size())
     	{
     		return null;
     	}
     	
-    	return businessPoolList.get(type);
+    	return businessPoolList.get(index);
     }
     
     /** */
