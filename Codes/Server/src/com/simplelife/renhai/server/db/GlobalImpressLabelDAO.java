@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Globalimpresslabel
+	 * @see com.simplelife.renhai.server.db.GlobalImpressLabel
   * @author MyEclipse Persistence Tools 
  */
-public class GlobalimpresslabelDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(GlobalimpresslabelDAO.class);
+public class GlobalImpressLabelDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(GlobalImpressLabelDAO.class);
 		//property constants
 	public static final String IMPRESS_LABEL = "impressLabel";
 	public static final String GLOBAL_ASSESS_COUNT = "globalAssessCount";
@@ -25,7 +25,7 @@ public class GlobalimpresslabelDAO extends BaseHibernateDAO  {
 
 
     
-    public void save(Globalimpresslabel transientInstance) {
+    public void save(GlobalImpressLabel transientInstance) {
         log.debug("saving Globalimpresslabel instance");
         try {
             getSession().save(transientInstance);
@@ -36,7 +36,7 @@ public class GlobalimpresslabelDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Globalimpresslabel persistentInstance) {
+	public void delete(GlobalImpressLabel persistentInstance) {
         log.debug("deleting Globalimpresslabel instance");
         try {
             getSession().delete(persistentInstance);
@@ -47,10 +47,10 @@ public class GlobalimpresslabelDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Globalimpresslabel findById( java.lang.Integer id) {
+    public GlobalImpressLabel findById( java.lang.Integer id) {
         log.debug("getting Globalimpresslabel instance with id: " + id);
         try {
-            Globalimpresslabel instance = (Globalimpresslabel) getSession()
+            GlobalImpressLabel instance = (GlobalImpressLabel) getSession()
                     .get("com.simplelife.renhai.server.db.Globalimpresslabel", id);
             return instance;
         } catch (RuntimeException re) {
@@ -60,10 +60,10 @@ public class GlobalimpresslabelDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Globalimpresslabel> findByExample(Globalimpresslabel instance) {
+    public List<GlobalImpressLabel> findByExample(GlobalImpressLabel instance) {
         log.debug("finding Globalimpresslabel instance by example");
         try {
-            List<Globalimpresslabel> results = (List<Globalimpresslabel>) getSession()
+            List<GlobalImpressLabel> results = (List<GlobalImpressLabel>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Globalimpresslabel")
                     .add( create(instance) )
             .list();
@@ -90,13 +90,13 @@ public class GlobalimpresslabelDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Globalimpresslabel> findByImpressLabel(Object impressLabel
+	public List<GlobalImpressLabel> findByImpressLabel(Object impressLabel
 	) {
 		return findByProperty(IMPRESS_LABEL, impressLabel
 		);
 	}
 	
-	public List<Globalimpresslabel> findByGlobalAssessCount(Object globalAssessCount
+	public List<GlobalImpressLabel> findByGlobalAssessCount(Object globalAssessCount
 	) {
 		return findByProperty(GLOBAL_ASSESS_COUNT, globalAssessCount
 		);
@@ -115,10 +115,10 @@ public class GlobalimpresslabelDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Globalimpresslabel merge(Globalimpresslabel detachedInstance) {
+    public GlobalImpressLabel merge(GlobalImpressLabel detachedInstance) {
         log.debug("merging Globalimpresslabel instance");
         try {
-            Globalimpresslabel result = (Globalimpresslabel) getSession()
+            GlobalImpressLabel result = (GlobalImpressLabel) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -128,7 +128,7 @@ public class GlobalimpresslabelDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Globalimpresslabel instance) {
+    public void attachDirty(GlobalImpressLabel instance) {
         log.debug("attaching dirty Globalimpresslabel instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -139,7 +139,7 @@ public class GlobalimpresslabelDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Globalimpresslabel instance) {
+    public void attachClean(GlobalImpressLabel instance) {
         log.debug("attaching clean Globalimpresslabel instance");
         try {
             getSession().lock(instance, LockMode.NONE);

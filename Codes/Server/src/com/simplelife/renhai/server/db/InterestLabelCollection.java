@@ -18,14 +18,14 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Interestlabelcollection  implements java.io.Serializable {
+public class InterestLabelCollection  implements java.io.Serializable {
 
 
     // Fields    
 
      private Integer interestLabelMaplId;
-     private Interestcard interestcard;
-     private Globalinterestlabel globalinterestlabel;
+     private InterestCard interestcard;
+     private GlobalInterestLabel globalinterestlabel;
      private Integer order;
      private Integer matchCount;
      private String validFlag;
@@ -34,12 +34,12 @@ public class Interestlabelcollection  implements java.io.Serializable {
     // Constructors
 
     /** default constructor */
-    public Interestlabelcollection() {
+    public InterestLabelCollection() {
     }
 
     
     /** full constructor */
-    public Interestlabelcollection(Interestcard interestcard, Globalinterestlabel globalinterestlabel, Integer order, Integer matchCount, String validFlag) {
+    public InterestLabelCollection(InterestCard interestcard, GlobalInterestLabel globalinterestlabel, Integer order, Integer matchCount, String validFlag) {
         this.interestcard = interestcard;
         this.globalinterestlabel = globalinterestlabel;
         this.order = order;
@@ -63,21 +63,21 @@ public class Interestlabelcollection  implements java.io.Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="interestCardId", nullable=false)
 
-    public Interestcard getInterestcard() {
+    public InterestCard getInterestcard() {
         return this.interestcard;
     }
     
-    public void setInterestcard(Interestcard interestcard) {
+    public void setInterestcard(InterestCard interestcard) {
         this.interestcard = interestcard;
     }
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="globalInterestLabelId", nullable=false)
 
-    public Globalinterestlabel getGlobalinterestlabel() {
+    public GlobalInterestLabel getGlobalinterestlabel() {
         return this.globalinterestlabel;
     }
     
-    public void setGlobalinterestlabel(Globalinterestlabel globalinterestlabel) {
+    public void setGlobalinterestlabel(GlobalInterestLabel globalinterestlabel) {
         this.globalinterestlabel = globalinterestlabel;
     }
     

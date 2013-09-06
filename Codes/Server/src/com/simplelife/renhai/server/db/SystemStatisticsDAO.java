@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Systemstatistics
+	 * @see com.simplelife.renhai.server.db.SystemStatistics
   * @author MyEclipse Persistence Tools 
  */
-public class SystemstatisticsDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(SystemstatisticsDAO.class);
+public class SystemStatisticsDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(SystemStatisticsDAO.class);
 		//property constants
 	public static final String SAVE_TIME = "saveTime";
 	public static final String COUNT = "count";
@@ -24,7 +24,7 @@ public class SystemstatisticsDAO extends BaseHibernateDAO  {
 
 
     
-    public void save(Systemstatistics transientInstance) {
+    public void save(SystemStatistics transientInstance) {
         log.debug("saving Systemstatistics instance");
         try {
             getSession().save(transientInstance);
@@ -35,7 +35,7 @@ public class SystemstatisticsDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Systemstatistics persistentInstance) {
+	public void delete(SystemStatistics persistentInstance) {
         log.debug("deleting Systemstatistics instance");
         try {
             getSession().delete(persistentInstance);
@@ -46,10 +46,10 @@ public class SystemstatisticsDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Systemstatistics findById( java.lang.Integer id) {
+    public SystemStatistics findById( java.lang.Integer id) {
         log.debug("getting Systemstatistics instance with id: " + id);
         try {
-            Systemstatistics instance = (Systemstatistics) getSession()
+            SystemStatistics instance = (SystemStatistics) getSession()
                     .get("com.simplelife.renhai.server.db.Systemstatistics", id);
             return instance;
         } catch (RuntimeException re) {
@@ -59,10 +59,10 @@ public class SystemstatisticsDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Systemstatistics> findByExample(Systemstatistics instance) {
+    public List<SystemStatistics> findByExample(SystemStatistics instance) {
         log.debug("finding Systemstatistics instance by example");
         try {
-            List<Systemstatistics> results = (List<Systemstatistics>) getSession()
+            List<SystemStatistics> results = (List<SystemStatistics>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Systemstatistics")
                     .add( create(instance) )
             .list();
@@ -89,13 +89,13 @@ public class SystemstatisticsDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Systemstatistics> findBySaveTime(Object saveTime
+	public List<SystemStatistics> findBySaveTime(Object saveTime
 	) {
 		return findByProperty(SAVE_TIME, saveTime
 		);
 	}
 	
-	public List<Systemstatistics> findByCount(Object count
+	public List<SystemStatistics> findByCount(Object count
 	) {
 		return findByProperty(COUNT, count
 		);
@@ -114,10 +114,10 @@ public class SystemstatisticsDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Systemstatistics merge(Systemstatistics detachedInstance) {
+    public SystemStatistics merge(SystemStatistics detachedInstance) {
         log.debug("merging Systemstatistics instance");
         try {
-            Systemstatistics result = (Systemstatistics) getSession()
+            SystemStatistics result = (SystemStatistics) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -127,7 +127,7 @@ public class SystemstatisticsDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Systemstatistics instance) {
+    public void attachDirty(SystemStatistics instance) {
         log.debug("attaching dirty Systemstatistics instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -138,7 +138,7 @@ public class SystemstatisticsDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Systemstatistics instance) {
+    public void attachClean(SystemStatistics instance) {
         log.debug("attaching clean Systemstatistics instance");
         try {
             getSession().lock(instance, LockMode.NONE);

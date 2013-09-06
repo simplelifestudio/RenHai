@@ -20,7 +20,7 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Moduledefinition  implements java.io.Serializable {
+public class ModuleDefinition  implements java.io.Serializable {
 
 
     // Fields    
@@ -28,23 +28,23 @@ public class Moduledefinition  implements java.io.Serializable {
      private Integer moduleDefinitionId;
      private Integer moduleId;
      private String description;
-     private Set<Systemoperationlog> systemoperationlogs = new HashSet<Systemoperationlog>(0);
+     private Set<SystemOperationLog> systemoperationlogs = new HashSet<SystemOperationLog>(0);
 
 
     // Constructors
 
     /** default constructor */
-    public Moduledefinition() {
+    public ModuleDefinition() {
     }
 
 	/** minimal constructor */
-    public Moduledefinition(Integer moduleId, String description) {
+    public ModuleDefinition(Integer moduleId, String description) {
         this.moduleId = moduleId;
         this.description = description;
     }
     
     /** full constructor */
-    public Moduledefinition(Integer moduleId, String description, Set<Systemoperationlog> systemoperationlogs) {
+    public ModuleDefinition(Integer moduleId, String description, Set<SystemOperationLog> systemoperationlogs) {
         this.moduleId = moduleId;
         this.description = description;
         this.systemoperationlogs = systemoperationlogs;
@@ -85,11 +85,11 @@ public class Moduledefinition  implements java.io.Serializable {
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="moduledefinition")
 
-    public Set<Systemoperationlog> getSystemoperationlogs() {
+    public Set<SystemOperationLog> getSystemoperationlogs() {
         return this.systemoperationlogs;
     }
     
-    public void setSystemoperationlogs(Set<Systemoperationlog> systemoperationlogs) {
+    public void setSystemoperationlogs(Set<SystemOperationLog> systemoperationlogs) {
         this.systemoperationlogs = systemoperationlogs;
     }
    

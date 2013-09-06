@@ -18,13 +18,13 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Hotinterestlabelstatistics  implements java.io.Serializable {
+public class HotInterestLabelStatistics  implements java.io.Serializable {
 
 
     // Fields    
 
      private Integer hotInterestLabelStatisticsId;
-     private Globalinterestlabel globalinterestlabel;
+     private GlobalInterestLabel globalinterestlabel;
      private Long saveTime;
      private Integer count;
 
@@ -32,12 +32,12 @@ public class Hotinterestlabelstatistics  implements java.io.Serializable {
     // Constructors
 
     /** default constructor */
-    public Hotinterestlabelstatistics() {
+    public HotInterestLabelStatistics() {
     }
 
     
     /** full constructor */
-    public Hotinterestlabelstatistics(Globalinterestlabel globalinterestlabel, Long saveTime, Integer count) {
+    public HotInterestLabelStatistics(GlobalInterestLabel globalinterestlabel, Long saveTime, Integer count) {
         this.globalinterestlabel = globalinterestlabel;
         this.saveTime = saveTime;
         this.count = count;
@@ -59,11 +59,11 @@ public class Hotinterestlabelstatistics  implements java.io.Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="globalInterestLabelId", nullable=false)
 
-    public Globalinterestlabel getGlobalinterestlabel() {
+    public GlobalInterestLabel getGlobalinterestlabel() {
         return this.globalinterestlabel;
     }
     
-    public void setGlobalinterestlabel(Globalinterestlabel globalinterestlabel) {
+    public void setGlobalinterestlabel(GlobalInterestLabel globalinterestlabel) {
         this.globalinterestlabel = globalinterestlabel;
     }
     

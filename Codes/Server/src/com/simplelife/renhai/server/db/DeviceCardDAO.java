@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Devicecard
+	 * @see com.simplelife.renhai.server.db.DeviceCard
   * @author MyEclipse Persistence Tools 
  */
-public class DevicecardDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(DevicecardDAO.class);
+public class DeviceCardDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(DeviceCardDAO.class);
 		//property constants
 	public static final String DEVICE_SN = "deviceSn";
 	public static final String REGISTER_TIME = "registerTime";
@@ -32,7 +32,7 @@ public class DevicecardDAO extends BaseHibernateDAO  {
 
 
     
-    public void save(Devicecard transientInstance) {
+    public void save(DeviceCard transientInstance) {
         log.debug("saving Devicecard instance");
         try {
             getSession().save(transientInstance);
@@ -43,7 +43,7 @@ public class DevicecardDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Devicecard persistentInstance) {
+	public void delete(DeviceCard persistentInstance) {
         log.debug("deleting Devicecard instance");
         try {
             getSession().delete(persistentInstance);
@@ -54,10 +54,10 @@ public class DevicecardDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Devicecard findById( java.lang.Integer id) {
+    public DeviceCard findById( java.lang.Integer id) {
         log.debug("getting Devicecard instance with id: " + id);
         try {
-            Devicecard instance = (Devicecard) getSession()
+            DeviceCard instance = (DeviceCard) getSession()
                     .get("com.simplelife.renhai.server.db.Devicecard", id);
             return instance;
         } catch (RuntimeException re) {
@@ -67,10 +67,10 @@ public class DevicecardDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Devicecard> findByExample(Devicecard instance) {
+    public List<DeviceCard> findByExample(DeviceCard instance) {
         log.debug("finding Devicecard instance by example");
         try {
-            List<Devicecard> results = (List<Devicecard>) getSession()
+            List<DeviceCard> results = (List<DeviceCard>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Devicecard")
                     .add( create(instance) )
             .list();
@@ -97,55 +97,55 @@ public class DevicecardDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Devicecard> findByDeviceSn(Object deviceSn
+	public List<DeviceCard> findByDeviceSn(Object deviceSn
 	) {
 		return findByProperty(DEVICE_SN, deviceSn
 		);
 	}
 	
-	public List<Devicecard> findByRegisterTime(Object registerTime
+	public List<DeviceCard> findByRegisterTime(Object registerTime
 	) {
 		return findByProperty(REGISTER_TIME, registerTime
 		);
 	}
 	
-	public List<Devicecard> findByServiceStatus(Object serviceStatus
+	public List<DeviceCard> findByServiceStatus(Object serviceStatus
 	) {
 		return findByProperty(SERVICE_STATUS, serviceStatus
 		);
 	}
 	
-	public List<Devicecard> findByForbiddenExpiredDate(Object forbiddenExpiredDate
+	public List<DeviceCard> findByForbiddenExpiredDate(Object forbiddenExpiredDate
 	) {
 		return findByProperty(FORBIDDEN_EXPIRED_DATE, forbiddenExpiredDate
 		);
 	}
 	
-	public List<Devicecard> findByDeviceModel(Object deviceModel
+	public List<DeviceCard> findByDeviceModel(Object deviceModel
 	) {
 		return findByProperty(DEVICE_MODEL, deviceModel
 		);
 	}
 	
-	public List<Devicecard> findByOsVersion(Object osVersion
+	public List<DeviceCard> findByOsVersion(Object osVersion
 	) {
 		return findByProperty(OS_VERSION, osVersion
 		);
 	}
 	
-	public List<Devicecard> findByAppVersion(Object appVersion
+	public List<DeviceCard> findByAppVersion(Object appVersion
 	) {
 		return findByProperty(APP_VERSION, appVersion
 		);
 	}
 	
-	public List<Devicecard> findByLocation(Object location
+	public List<DeviceCard> findByLocation(Object location
 	) {
 		return findByProperty(LOCATION, location
 		);
 	}
 	
-	public List<Devicecard> findByIsJailed(Object isJailed
+	public List<DeviceCard> findByIsJailed(Object isJailed
 	) {
 		return findByProperty(IS_JAILED, isJailed
 		);
@@ -164,10 +164,10 @@ public class DevicecardDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Devicecard merge(Devicecard detachedInstance) {
+    public DeviceCard merge(DeviceCard detachedInstance) {
         log.debug("merging Devicecard instance");
         try {
-            Devicecard result = (Devicecard) getSession()
+            DeviceCard result = (DeviceCard) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -177,7 +177,7 @@ public class DevicecardDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Devicecard instance) {
+    public void attachDirty(DeviceCard instance) {
         log.debug("attaching dirty Devicecard instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -188,7 +188,7 @@ public class DevicecardDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Devicecard instance) {
+    public void attachClean(DeviceCard instance) {
         log.debug("attaching clean Devicecard instance");
         try {
             getSession().lock(instance, LockMode.NONE);

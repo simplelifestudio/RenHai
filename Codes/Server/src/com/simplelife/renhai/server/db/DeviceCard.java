@@ -22,7 +22,7 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Devicecard  implements java.io.Serializable {
+public class DeviceCard  implements java.io.Serializable {
 
 
     // Fields    
@@ -38,18 +38,18 @@ public class Devicecard  implements java.io.Serializable {
      private String appVersion;
      private String location;
      private String isJailed;
-     private Set<Profileoperationlog> profileoperationlogs = new HashSet<Profileoperationlog>(0);
-     private Set<Deviceprofilemap> deviceprofilemaps = new HashSet<Deviceprofilemap>(0);
+     private Set<ProfileOperationLog> profileoperationlogs = new HashSet<ProfileOperationLog>(0);
+     private Set<DeviceProfileMap> deviceprofilemaps = new HashSet<DeviceProfileMap>(0);
 
 
     // Constructors
 
     /** default constructor */
-    public Devicecard() {
+    public DeviceCard() {
     }
 
 	/** minimal constructor */
-    public Devicecard(Profile profile, String deviceSn, Long registerTime, String serviceStatus, String deviceModel, String osVersion, String appVersion) {
+    public DeviceCard(Profile profile, String deviceSn, Long registerTime, String serviceStatus, String deviceModel, String osVersion, String appVersion) {
         this.profile = profile;
         this.deviceSn = deviceSn;
         this.registerTime = registerTime;
@@ -60,7 +60,7 @@ public class Devicecard  implements java.io.Serializable {
     }
     
     /** full constructor */
-    public Devicecard(Profile profile, String deviceSn, Long registerTime, String serviceStatus, Long forbiddenExpiredDate, String deviceModel, String osVersion, String appVersion, String location, String isJailed, Set<Profileoperationlog> profileoperationlogs, Set<Deviceprofilemap> deviceprofilemaps) {
+    public DeviceCard(Profile profile, String deviceSn, Long registerTime, String serviceStatus, Long forbiddenExpiredDate, String deviceModel, String osVersion, String appVersion, String location, String isJailed, Set<ProfileOperationLog> profileoperationlogs, Set<DeviceProfileMap> deviceprofilemaps) {
         this.profile = profile;
         this.deviceSn = deviceSn;
         this.registerTime = registerTime;
@@ -190,20 +190,20 @@ public class Devicecard  implements java.io.Serializable {
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="devicecard")
 
-    public Set<Profileoperationlog> getProfileoperationlogs() {
+    public Set<ProfileOperationLog> getProfileoperationlogs() {
         return this.profileoperationlogs;
     }
     
-    public void setProfileoperationlogs(Set<Profileoperationlog> profileoperationlogs) {
+    public void setProfileoperationlogs(Set<ProfileOperationLog> profileoperationlogs) {
         this.profileoperationlogs = profileoperationlogs;
     }
 @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="devicecard")
 
-    public Set<Deviceprofilemap> getDeviceprofilemaps() {
+    public Set<DeviceProfileMap> getDeviceprofilemaps() {
         return this.deviceprofilemaps;
     }
     
-    public void setDeviceprofilemaps(Set<Deviceprofilemap> deviceprofilemaps) {
+    public void setDeviceprofilemaps(Set<DeviceProfileMap> deviceprofilemaps) {
         this.deviceprofilemaps = deviceprofilemaps;
     }
    

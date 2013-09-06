@@ -13,11 +13,11 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Impresscard
+	 * @see com.simplelife.renhai.server.db.ImpressCard
   * @author MyEclipse Persistence Tools 
  */
-public class ImpresscardDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(ImpresscardDAO.class);
+public class ImpressCardDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(ImpressCardDAO.class);
 		//property constants
 	public static final String CHAT_TOTAL_COUNT = "chatTotalCount";
 	public static final String CHAT_TOTAL_DURATION = "chatTotalDuration";
@@ -26,7 +26,7 @@ public class ImpresscardDAO extends BaseHibernateDAO  {
 
 
     
-    public void save(Impresscard transientInstance) {
+    public void save(ImpressCard transientInstance) {
         log.debug("saving Impresscard instance");
         try {
             getSession().save(transientInstance);
@@ -37,7 +37,7 @@ public class ImpresscardDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Impresscard persistentInstance) {
+	public void delete(ImpressCard persistentInstance) {
         log.debug("deleting Impresscard instance");
         try {
             getSession().delete(persistentInstance);
@@ -48,10 +48,10 @@ public class ImpresscardDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Impresscard findById( java.lang.Integer id) {
+    public ImpressCard findById( java.lang.Integer id) {
         log.debug("getting Impresscard instance with id: " + id);
         try {
-            Impresscard instance = (Impresscard) getSession()
+            ImpressCard instance = (ImpressCard) getSession()
                     .get("com.simplelife.renhai.server.db.Impresscard", id);
             return instance;
         } catch (RuntimeException re) {
@@ -61,10 +61,10 @@ public class ImpresscardDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Impresscard> findByExample(Impresscard instance) {
+    public List<ImpressCard> findByExample(ImpressCard instance) {
         log.debug("finding Impresscard instance by example");
         try {
-            List<Impresscard> results = (List<Impresscard>) getSession()
+            List<ImpressCard> results = (List<ImpressCard>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Impresscard")
                     .add( create(instance) )
             .list();
@@ -91,19 +91,19 @@ public class ImpresscardDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Impresscard> findByChatTotalCount(Object chatTotalCount
+	public List<ImpressCard> findByChatTotalCount(Object chatTotalCount
 	) {
 		return findByProperty(CHAT_TOTAL_COUNT, chatTotalCount
 		);
 	}
 	
-	public List<Impresscard> findByChatTotalDuration(Object chatTotalDuration
+	public List<ImpressCard> findByChatTotalDuration(Object chatTotalDuration
 	) {
 		return findByProperty(CHAT_TOTAL_DURATION, chatTotalDuration
 		);
 	}
 	
-	public List<Impresscard> findByChatLossCount(Object chatLossCount
+	public List<ImpressCard> findByChatLossCount(Object chatLossCount
 	) {
 		return findByProperty(CHAT_LOSS_COUNT, chatLossCount
 		);
@@ -122,10 +122,10 @@ public class ImpresscardDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Impresscard merge(Impresscard detachedInstance) {
+    public ImpressCard merge(ImpressCard detachedInstance) {
         log.debug("merging Impresscard instance");
         try {
-            Impresscard result = (Impresscard) getSession()
+            ImpressCard result = (ImpressCard) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -135,7 +135,7 @@ public class ImpresscardDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Impresscard instance) {
+    public void attachDirty(ImpressCard instance) {
         log.debug("attaching dirty Impresscard instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -146,7 +146,7 @@ public class ImpresscardDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Impresscard instance) {
+    public void attachClean(ImpressCard instance) {
         log.debug("attaching clean Impresscard instance");
         try {
             getSession().lock(instance, LockMode.NONE);

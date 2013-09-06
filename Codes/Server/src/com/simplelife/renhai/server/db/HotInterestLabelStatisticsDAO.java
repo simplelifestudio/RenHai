@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Hotinterestlabelstatistics
+	 * @see com.simplelife.renhai.server.db.HotInterestLabelStatistics
   * @author MyEclipse Persistence Tools 
  */
-public class HotinterestlabelstatisticsDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(HotinterestlabelstatisticsDAO.class);
+public class HotInterestLabelStatisticsDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(HotInterestLabelStatisticsDAO.class);
 		//property constants
 	public static final String SAVE_TIME = "saveTime";
 	public static final String COUNT = "count";
@@ -24,7 +24,7 @@ public class HotinterestlabelstatisticsDAO extends BaseHibernateDAO  {
 
 
     
-    public void save(Hotinterestlabelstatistics transientInstance) {
+    public void save(HotInterestLabelStatistics transientInstance) {
         log.debug("saving Hotinterestlabelstatistics instance");
         try {
             getSession().save(transientInstance);
@@ -35,7 +35,7 @@ public class HotinterestlabelstatisticsDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Hotinterestlabelstatistics persistentInstance) {
+	public void delete(HotInterestLabelStatistics persistentInstance) {
         log.debug("deleting Hotinterestlabelstatistics instance");
         try {
             getSession().delete(persistentInstance);
@@ -46,10 +46,10 @@ public class HotinterestlabelstatisticsDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Hotinterestlabelstatistics findById( java.lang.Integer id) {
+    public HotInterestLabelStatistics findById( java.lang.Integer id) {
         log.debug("getting Hotinterestlabelstatistics instance with id: " + id);
         try {
-            Hotinterestlabelstatistics instance = (Hotinterestlabelstatistics) getSession()
+            HotInterestLabelStatistics instance = (HotInterestLabelStatistics) getSession()
                     .get("com.simplelife.renhai.server.db.Hotinterestlabelstatistics", id);
             return instance;
         } catch (RuntimeException re) {
@@ -59,10 +59,10 @@ public class HotinterestlabelstatisticsDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Hotinterestlabelstatistics> findByExample(Hotinterestlabelstatistics instance) {
+    public List<HotInterestLabelStatistics> findByExample(HotInterestLabelStatistics instance) {
         log.debug("finding Hotinterestlabelstatistics instance by example");
         try {
-            List<Hotinterestlabelstatistics> results = (List<Hotinterestlabelstatistics>) getSession()
+            List<HotInterestLabelStatistics> results = (List<HotInterestLabelStatistics>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Hotinterestlabelstatistics")
                     .add( create(instance) )
             .list();
@@ -89,13 +89,13 @@ public class HotinterestlabelstatisticsDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Hotinterestlabelstatistics> findBySaveTime(Object saveTime
+	public List<HotInterestLabelStatistics> findBySaveTime(Object saveTime
 	) {
 		return findByProperty(SAVE_TIME, saveTime
 		);
 	}
 	
-	public List<Hotinterestlabelstatistics> findByCount(Object count
+	public List<HotInterestLabelStatistics> findByCount(Object count
 	) {
 		return findByProperty(COUNT, count
 		);
@@ -114,10 +114,10 @@ public class HotinterestlabelstatisticsDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Hotinterestlabelstatistics merge(Hotinterestlabelstatistics detachedInstance) {
+    public HotInterestLabelStatistics merge(HotInterestLabelStatistics detachedInstance) {
         log.debug("merging Hotinterestlabelstatistics instance");
         try {
-            Hotinterestlabelstatistics result = (Hotinterestlabelstatistics) getSession()
+            HotInterestLabelStatistics result = (HotInterestLabelStatistics) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -127,7 +127,7 @@ public class HotinterestlabelstatisticsDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Hotinterestlabelstatistics instance) {
+    public void attachDirty(HotInterestLabelStatistics instance) {
         log.debug("attaching dirty Hotinterestlabelstatistics instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -138,7 +138,7 @@ public class HotinterestlabelstatisticsDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Hotinterestlabelstatistics instance) {
+    public void attachClean(HotInterestLabelStatistics instance) {
         log.debug("attaching clean Hotinterestlabelstatistics instance");
         try {
             getSession().lock(instance, LockMode.NONE);

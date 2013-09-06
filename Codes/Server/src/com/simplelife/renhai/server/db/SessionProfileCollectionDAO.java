@@ -12,18 +12,18 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Sessionprofilecollection
+	 * @see com.simplelife.renhai.server.db.SessionProfileCollection
   * @author MyEclipse Persistence Tools 
  */
-public class SessionprofilecollectionDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(SessionprofilecollectionDAO.class);
+public class SessionProfileCollectionDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(SessionProfileCollectionDAO.class);
 		//property constants
 	public static final String COUNT = "count";
 
 
 
     
-    public void save(Sessionprofilecollection transientInstance) {
+    public void save(SessionProfileCollection transientInstance) {
         log.debug("saving Sessionprofilecollection instance");
         try {
             getSession().save(transientInstance);
@@ -34,7 +34,7 @@ public class SessionprofilecollectionDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Sessionprofilecollection persistentInstance) {
+	public void delete(SessionProfileCollection persistentInstance) {
         log.debug("deleting Sessionprofilecollection instance");
         try {
             getSession().delete(persistentInstance);
@@ -45,10 +45,10 @@ public class SessionprofilecollectionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Sessionprofilecollection findById( java.lang.Integer id) {
+    public SessionProfileCollection findById( java.lang.Integer id) {
         log.debug("getting Sessionprofilecollection instance with id: " + id);
         try {
-            Sessionprofilecollection instance = (Sessionprofilecollection) getSession()
+            SessionProfileCollection instance = (SessionProfileCollection) getSession()
                     .get("com.simplelife.renhai.server.db.Sessionprofilecollection", id);
             return instance;
         } catch (RuntimeException re) {
@@ -58,10 +58,10 @@ public class SessionprofilecollectionDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Sessionprofilecollection> findByExample(Sessionprofilecollection instance) {
+    public List<SessionProfileCollection> findByExample(SessionProfileCollection instance) {
         log.debug("finding Sessionprofilecollection instance by example");
         try {
-            List<Sessionprofilecollection> results = (List<Sessionprofilecollection>) getSession()
+            List<SessionProfileCollection> results = (List<SessionProfileCollection>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Sessionprofilecollection")
                     .add( create(instance) )
             .list();
@@ -88,7 +88,7 @@ public class SessionprofilecollectionDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Sessionprofilecollection> findByCount(Object count
+	public List<SessionProfileCollection> findByCount(Object count
 	) {
 		return findByProperty(COUNT, count
 		);
@@ -107,10 +107,10 @@ public class SessionprofilecollectionDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Sessionprofilecollection merge(Sessionprofilecollection detachedInstance) {
+    public SessionProfileCollection merge(SessionProfileCollection detachedInstance) {
         log.debug("merging Sessionprofilecollection instance");
         try {
-            Sessionprofilecollection result = (Sessionprofilecollection) getSession()
+            SessionProfileCollection result = (SessionProfileCollection) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -120,7 +120,7 @@ public class SessionprofilecollectionDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Sessionprofilecollection instance) {
+    public void attachDirty(SessionProfileCollection instance) {
         log.debug("attaching dirty Sessionprofilecollection instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -131,7 +131,7 @@ public class SessionprofilecollectionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Sessionprofilecollection instance) {
+    public void attachClean(SessionProfileCollection instance) {
         log.debug("attaching clean Sessionprofilecollection instance");
         try {
             getSession().lock(instance, LockMode.NONE);

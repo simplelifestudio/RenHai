@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
  			* Transaction control of the save(), update() and delete() operations 
 		can directly support Spring container-managed transactions or they can be augmented	to handle user-managed Spring transactions. 
 		Each of these methods provides additional information for how to configure it for the desired type of transaction control. 	
-	 * @see com.simplelife.renhai.server.db.Webrtcsession
+	 * @see com.simplelife.renhai.server.db.WebRTCSession
   * @author MyEclipse Persistence Tools 
  */
-public class WebrtcsessionDAO extends BaseHibernateDAO  {
-	     private static final Logger log = LoggerFactory.getLogger(WebrtcsessionDAO.class);
+public class WebRTCSessionDAO extends BaseHibernateDAO  {
+	     private static final Logger log = LoggerFactory.getLogger(WebRTCSessionDAO.class);
 		//property constants
 	public static final String WEBRTCSESSION = "webrtcsession";
 	public static final String REQUEST_DATE = "requestDate";
@@ -27,7 +27,7 @@ public class WebrtcsessionDAO extends BaseHibernateDAO  {
 
 
     
-    public void save(Webrtcsession transientInstance) {
+    public void save(WebRTCSession transientInstance) {
         log.debug("saving Webrtcsession instance");
         try {
             getSession().save(transientInstance);
@@ -38,7 +38,7 @@ public class WebrtcsessionDAO extends BaseHibernateDAO  {
         }
     }
     
-	public void delete(Webrtcsession persistentInstance) {
+	public void delete(WebRTCSession persistentInstance) {
         log.debug("deleting Webrtcsession instance");
         try {
             getSession().delete(persistentInstance);
@@ -49,10 +49,10 @@ public class WebrtcsessionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public Webrtcsession findById( java.lang.Integer id) {
+    public WebRTCSession findById( java.lang.Integer id) {
         log.debug("getting Webrtcsession instance with id: " + id);
         try {
-            Webrtcsession instance = (Webrtcsession) getSession()
+            WebRTCSession instance = (WebRTCSession) getSession()
                     .get("com.simplelife.renhai.server.db.Webrtcsession", id);
             return instance;
         } catch (RuntimeException re) {
@@ -62,10 +62,10 @@ public class WebrtcsessionDAO extends BaseHibernateDAO  {
     }
     
     
-    public List<Webrtcsession> findByExample(Webrtcsession instance) {
+    public List<WebRTCSession> findByExample(WebRTCSession instance) {
         log.debug("finding Webrtcsession instance by example");
         try {
-            List<Webrtcsession> results = (List<Webrtcsession>) getSession()
+            List<WebRTCSession> results = (List<WebRTCSession>) getSession()
                     .createCriteria("com.simplelife.renhai.server.db.Webrtcsession")
                     .add( create(instance) )
             .list();
@@ -92,31 +92,31 @@ public class WebrtcsessionDAO extends BaseHibernateDAO  {
       }
 	}
 
-	public List<Webrtcsession> findByWebrtcsession(Object webrtcsession
+	public List<WebRTCSession> findByWebrtcsession(Object webrtcsession
 	) {
 		return findByProperty(WEBRTCSESSION, webrtcsession
 		);
 	}
 	
-	public List<Webrtcsession> findByRequestDate(Object requestDate
+	public List<WebRTCSession> findByRequestDate(Object requestDate
 	) {
 		return findByProperty(REQUEST_DATE, requestDate
 		);
 	}
 	
-	public List<Webrtcsession> findByToken(Object token
+	public List<WebRTCSession> findByToken(Object token
 	) {
 		return findByProperty(TOKEN, token
 		);
 	}
 	
-	public List<Webrtcsession> findByTokenUpdateDate(Object tokenUpdateDate
+	public List<WebRTCSession> findByTokenUpdateDate(Object tokenUpdateDate
 	) {
 		return findByProperty(TOKEN_UPDATE_DATE, tokenUpdateDate
 		);
 	}
 	
-	public List<Webrtcsession> findByExpirationDate(Object expirationDate
+	public List<WebRTCSession> findByExpirationDate(Object expirationDate
 	) {
 		return findByProperty(EXPIRATION_DATE, expirationDate
 		);
@@ -135,10 +135,10 @@ public class WebrtcsessionDAO extends BaseHibernateDAO  {
 		}
 	}
 	
-    public Webrtcsession merge(Webrtcsession detachedInstance) {
+    public WebRTCSession merge(WebRTCSession detachedInstance) {
         log.debug("merging Webrtcsession instance");
         try {
-            Webrtcsession result = (Webrtcsession) getSession()
+            WebRTCSession result = (WebRTCSession) getSession()
                     .merge(detachedInstance);
             log.debug("merge successful");
             return result;
@@ -148,7 +148,7 @@ public class WebrtcsessionDAO extends BaseHibernateDAO  {
         }
     }
 
-    public void attachDirty(Webrtcsession instance) {
+    public void attachDirty(WebRTCSession instance) {
         log.debug("attaching dirty Webrtcsession instance");
         try {
             getSession().saveOrUpdate(instance);
@@ -159,7 +159,7 @@ public class WebrtcsessionDAO extends BaseHibernateDAO  {
         }
     }
     
-    public void attachClean(Webrtcsession instance) {
+    public void attachClean(WebRTCSession instance) {
         log.debug("attaching clean Webrtcsession instance");
         try {
             getSession().lock(instance, LockMode.NONE);

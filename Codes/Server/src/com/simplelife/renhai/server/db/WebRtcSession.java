@@ -15,7 +15,7 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Webrtcsession  implements java.io.Serializable {
+public class WebRTCSession  implements java.io.Serializable {
 
 
     // Fields    
@@ -31,12 +31,12 @@ public class Webrtcsession  implements java.io.Serializable {
     // Constructors
 
     /** default constructor */
-    public Webrtcsession() {
+    public WebRTCSession() {
     }
 
     
     /** full constructor */
-    public Webrtcsession(String webrtcsession, Integer requestDate, String token, Integer tokenUpdateDate, String expirationDate) {
+    public WebRTCSession(String webrtcsession, Integer requestDate, String token, Integer tokenUpdateDate, String expirationDate) {
         this.webrtcsession = webrtcsession;
         this.requestDate = requestDate;
         this.token = token;

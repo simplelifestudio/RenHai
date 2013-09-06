@@ -18,14 +18,14 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Impresslabelcollection  implements java.io.Serializable {
+public class ImpressLabelCollection  implements java.io.Serializable {
 
 
     // Fields    
 
      private Integer impressLabelMaplId;
-     private Globalimpresslabel globalimpresslabel;
-     private Impresscard impresscard;
+     private GlobalImpressLabel globalimpresslabel;
+     private ImpressCard impresscard;
      private Integer count;
      private Long updateTime;
      private Integer assessCount;
@@ -34,12 +34,12 @@ public class Impresslabelcollection  implements java.io.Serializable {
     // Constructors
 
     /** default constructor */
-    public Impresslabelcollection() {
+    public ImpressLabelCollection() {
     }
 
     
     /** full constructor */
-    public Impresslabelcollection(Globalimpresslabel globalimpresslabel, Impresscard impresscard, Integer count, Long updateTime, Integer assessCount) {
+    public ImpressLabelCollection(GlobalImpressLabel globalimpresslabel, ImpressCard impresscard, Integer count, Long updateTime, Integer assessCount) {
         this.globalimpresslabel = globalimpresslabel;
         this.impresscard = impresscard;
         this.count = count;
@@ -63,21 +63,21 @@ public class Impresslabelcollection  implements java.io.Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="globalImpressLabelId", nullable=false)
 
-    public Globalimpresslabel getGlobalimpresslabel() {
+    public GlobalImpressLabel getGlobalimpresslabel() {
         return this.globalimpresslabel;
     }
     
-    public void setGlobalimpresslabel(Globalimpresslabel globalimpresslabel) {
+    public void setGlobalimpresslabel(GlobalImpressLabel globalimpresslabel) {
         this.globalimpresslabel = globalimpresslabel;
     }
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="impressCardId", nullable=false)
 
-    public Impresscard getImpresscard() {
+    public ImpressCard getImpresscard() {
         return this.impresscard;
     }
     
-    public void setImpresscard(Impresscard impresscard) {
+    public void setImpresscard(ImpressCard impresscard) {
         this.impresscard = impresscard;
     }
     

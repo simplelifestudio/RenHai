@@ -18,13 +18,13 @@ import javax.persistence.Table;
     ,catalog="renhai"
 )
 
-public class Systemstatistics  implements java.io.Serializable {
+public class SystemStatistics  implements java.io.Serializable {
 
 
     // Fields    
 
      private Integer systemStatisticsId;
-     private Statisticsitemdefinition statisticsitemdefinition;
+     private StatisticsItemDefinition statisticsitemdefinition;
      private Integer saveTime;
      private Integer count;
 
@@ -32,12 +32,12 @@ public class Systemstatistics  implements java.io.Serializable {
     // Constructors
 
     /** default constructor */
-    public Systemstatistics() {
+    public SystemStatistics() {
     }
 
     
     /** full constructor */
-    public Systemstatistics(Statisticsitemdefinition statisticsitemdefinition, Integer saveTime, Integer count) {
+    public SystemStatistics(StatisticsItemDefinition statisticsitemdefinition, Integer saveTime, Integer count) {
         this.statisticsitemdefinition = statisticsitemdefinition;
         this.saveTime = saveTime;
         this.count = count;
@@ -59,11 +59,11 @@ public class Systemstatistics  implements java.io.Serializable {
 	@ManyToOne(fetch=FetchType.LAZY)
         @JoinColumn(name="statisticsItem", nullable=false)
 
-    public Statisticsitemdefinition getStatisticsitemdefinition() {
+    public StatisticsItemDefinition getStatisticsitemdefinition() {
         return this.statisticsitemdefinition;
     }
     
-    public void setStatisticsitemdefinition(Statisticsitemdefinition statisticsitemdefinition) {
+    public void setStatisticsitemdefinition(StatisticsItemDefinition statisticsitemdefinition) {
         this.statisticsitemdefinition = statisticsitemdefinition;
     }
     
