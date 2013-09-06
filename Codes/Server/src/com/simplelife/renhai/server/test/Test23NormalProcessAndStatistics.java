@@ -18,7 +18,6 @@ import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
-import com.simplelife.renhai.server.util.JSONKey;
 
 /**
  * 
@@ -62,11 +61,11 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		
 		// Step_02 Mock请求：A进入随机聊天
 		syncDevice(mockApp1);
-		mockApp1.enterPool(JSONKey.BusinessType.Random);
+		mockApp1.enterPool(Consts.BusinessType.Random);
 		
 		// Step_03 Mock请求：B进入随机聊天
 		syncDevice(mockApp2);
-		mockApp2.enterPool(JSONKey.BusinessType.Random);
+		mockApp2.enterPool(Consts.BusinessType.Random);
 		
 		// Step_04 Mock请求：查询所有统计项
 		mockApp1.sendServerDataSyncRequest();

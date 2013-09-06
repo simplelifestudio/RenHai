@@ -10,6 +10,8 @@
 package com.simplelife.renhai.server.json;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.JSONKey;
 
 /**
  * 
@@ -31,6 +33,13 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		{
 			return false;
 		}
+		
+		if (body.isEmpty())
+		{
+			setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+			setErrorDescription("No content in body of request.");
+			return false;
+		}
 		return true;
     }
 	
@@ -39,7 +48,7 @@ public class ServerDataSyncRequest extends AppJSONMessage
 	{
 		if (!checkJsonCommand())
 		{
-			responseError();
+			responseError(Consts.MessageId.ServerDataSyncRequest.name());
 			return;
 		}
 		

@@ -12,6 +12,7 @@ package com.simplelife.renhai.server.test;
 import java.util.HashMap;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.util.Consts;
 
 
 /** */
@@ -75,7 +76,7 @@ public class RemoteMockApp extends AbstractMockApp
     
     /** */
     @Override
-    public void sendBusinessSessionRequest(String operationType, String operationValue)
+    public void sendBusinessSessionRequest(Consts.OperationType operationType, String operationValue)
     {
     }
     
@@ -95,7 +96,7 @@ public class RemoteMockApp extends AbstractMockApp
 	 * @see com.simplelife.renhai.server.util.IMockApp#enterPool(java.lang.String)
 	 */
 	@Override
-	public void enterPool(String businessType)
+	public void enterPool(Consts.BusinessType businessType)
 	{
 		// TODO Auto-generated method stub
 		

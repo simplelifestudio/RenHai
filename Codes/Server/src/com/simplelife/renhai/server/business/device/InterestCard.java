@@ -12,8 +12,6 @@
 package com.simplelife.renhai.server.business.device;
 
 import java.util.Date;
-import java.util.LinkedList;
-
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.IDbOperation;

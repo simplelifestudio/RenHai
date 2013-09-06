@@ -11,8 +11,6 @@ package com.simplelife.renhai.server.util;
 
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-
 import com.alibaba.fastjson.JSONObject;
 
 
@@ -37,13 +35,13 @@ public interface IMockApp
 	public void sendNotificationResponse();
 	
 	/** */
-	public void sendBusinessSessionRequest(String operationType, String operationValue);
+	public void sendBusinessSessionRequest(Consts.OperationType operationType, String operationValue);
 	
 	/** */
 	public void close();
 	
 	/** */
-	public void enterPool(String businessType);
+	public void enterPool(Consts.BusinessType poolType);
 	
 	/** */
 	public void endChat();

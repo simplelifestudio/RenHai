@@ -48,8 +48,8 @@ public class AlohaRequest extends AppJSONMessage
     	{
     		ServerErrorResponse response = new ServerErrorResponse(deviceWrapper);
     		response.addToBody(JSONKey.FieldName.ReceivedMessage, Consts.MessageId.AlohaResponse);
-    		response.addToBody(JSONKey.FieldName.ErrorCode, this.errorCode);
-    		response.addToBody(JSONKey.FieldName.ErrorDescription, this.errorDescription);
+    		response.addToBody(JSONKey.FieldName.ErrorCode, this.getErrorCode());
+    		response.addToBody(JSONKey.FieldName.ErrorDescription, this.getErrorDescription());
     		response.asyncResponse();
     	}
     	

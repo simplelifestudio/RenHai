@@ -23,45 +23,58 @@ public class JSONFactory
 	/** */
 	public static AppJSONMessage createAppJSONMessage(JSONObject obj)
 	{
+		AppJSONMessage message;
+		if (obj == null)
+		{
+			message = new InvalidRequest(null);
+			message.setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
+			message.setErrorDescription("Invalid JSON string.");
+			return message;
+		}
+		
 		if (!obj.containsKey(JSONKey.FieldName.JsonEnvelope))
 		{
-			return null;
+			message = new InvalidRequest(obj);
+			message.setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
+			message.setErrorDescription("Invalid JSON request: " + JSONKey.FieldName.JsonEnvelope + " was not found.");
+			return message;
 		}
 		
 		JSONObject messageObject = obj.getJSONObject(JSONKey.FieldName.JsonEnvelope);
-		
-		AppJSONMessage message = new AppJSONMessage(messageObject); 
-		
+		message = new InvalidRequest(messageObject); 
 		if (!message.checkJsonCommand())
 		{
 			return message;
 		}
 		
-		int messageId = message.getMessageId();
+		Consts.MessageId messageId = message.getMessageId();
 		switch (messageId)
 		{
-			case Consts.MessageId.AlohaRequest:
+			case AlohaRequest:
 				message = new AlohaRequest(messageObject);
 				break;
 				
-			case Consts.MessageId.AppDataSyncRequest:
+			case AppDataSyncRequest:
 				message = new AppDataSyncRequest(messageObject);
 				break;
 				
-			case Consts.MessageId.AppErrorResposne:
+			case AppErrorResposne:
 				message = new AppErrorResposne(messageObject);
 				break;
 				
-			case Consts.MessageId.BusinessSessionNotificationResponse:
+			case BusinessSessionNotificationResponse:
 				message = new BusinessSessionNotificationResponse(messageObject);
 				break;
 				
-			case Consts.MessageId.BusinessSessionRequest:
+			case BusinessSessionRequest:
 				message = new BusinessSessionRequest(messageObject);
 				break;
 				
-			case Consts.MessageId.ServerDataSyncRequest:
+			case ServerDataSyncRequest:
 				message = new ServerDataSyncRequest(messageObject);
+				break;
+				
+			default:
 				break;
 		}
 		
@@ -69,37 +82,40 @@ public class JSONFactory
 	}
 	
 	/** */
-	public static ServerJSONMessage createServerJSONMessage(int messageId, IDeviceWrapper deviceWrapper)
+	public static ServerJSONMessage createServerJSONMessage(Consts.MessageId messageId, IDeviceWrapper deviceWrapper)
 	{
 		ServerJSONMessage message = null;
 		switch (messageId)
 		{
-			case Consts.MessageId.AlohaResponse:
+			case AlohaResponse:
 				message = new AlohaResponse(deviceWrapper);
 				break;
 				
-			case Consts.MessageId.AppDataSyncResponse:
+			case AppDataSyncResponse:
 				message = new AppDataSyncResponse(deviceWrapper);
 				break;
 				
-			case Consts.MessageId.BroadcastNotification:
+			case BroadcastNotification:
 				message = new BroadcastNotification();
 				break;
 				
-			case Consts.MessageId.BusinessSessionNotification:
+			case BusinessSessionNotification:
 				message = new BusinessSessionNotification(deviceWrapper);
 				break;
 				
-			case Consts.MessageId.BusinessSessionResponse:
+			case BusinessSessionResponse:
 				message = new BusinessSessionResponse(deviceWrapper);
 				break;
 				
-			case Consts.MessageId.ServerDataSyncResponse:
+			case ServerDataSyncResponse:
 				message = new ServerDataSyncResponse(deviceWrapper);
 				break;
 				
-			case Consts.MessageId.ServerErrorResponse:
+			case ServerErrorResponse:
 				message = new ServerErrorResponse(deviceWrapper);
+				break;
+				
+			default:
 				break;
 		}
 		return message;

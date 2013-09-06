@@ -16,7 +16,6 @@ import org.junit.Test;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
-import com.simplelife.renhai.server.util.JSONKey;
 
 /**
  * 
@@ -56,7 +55,7 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 		int randomDeviceCount = pool.getBusinessPool(Consts.BusinessType.Random).getElementCount();
 		
 		// Step_03 Mock请求：进入随机聊天
-		mockApp.enterPool(JSONKey.BusinessType.Random);
+		mockApp.enterPool(Consts.BusinessType.Random);
 		
 		// Step_04 调用：RandomBusinessDevicePool::getCount
 		assertEquals(randomDeviceCount + 1, pool.getBusinessPool(Consts.BusinessType.Random).getElementCount());

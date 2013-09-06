@@ -40,14 +40,22 @@ public class Consts
 		Existent, NonExistent, ErrorOccurred
 	}
 	
-	public class MessageType
+	public enum MessageType
 	{
-		public final static int AppRequest = 1; 
-		public final static int ServerResponse = 2;
-		public final static int ServerNotification = 3;
-		public final static int AppResponse = 4;
+		Invalid(0),
+		AppRequest(1), 
+		ServerResponse(2),
+		ServerNotification(3),
+		AppResponse(4);
+		
+		private int value;
+		private MessageType(int value)
+		{
+			this.value = value;
+		}
 	}
 	
+	/*
 	public class MessageId
 	{
 		public final static int Invalid						= 0;
@@ -67,8 +75,8 @@ public class Consts
 		public final static int BusinessSessionResponse		= 111;
 		public final static int BroadcastNotification		= 112;
 	}
+	*/
 	
-	/*
 	public enum MessageId
 	{
 		Invalid(0),
@@ -101,25 +109,51 @@ public class Consts
 			return String.valueOf(this.messageId);
 		}
 	}
-	*/
 	
-	public class GlobalErrorCode
+	public enum GlobalErrorCode
 	{
-		public final static int WebSocketSetupFailed_1000		= 1000;
-		public final static int DBException_1001				= 1001;
-		public final static int CapacityReached_1002			= 1002;
-		public final static int ConnectionTimeout_1003			= 1003;
-		public final static int EchoTimeout_1004				= 1004;
+		WebSocketSetupFailed_1000(1000),
+		DBException_1001(1001),
+		CapacityReached_1002(1002),
+		ConnectionTimeout_1003(1003),
+		EchoTimeout_1004(1004),
 		                                                    
-		public final static int InvalidJSONRequest_1100			= 1100;
-		public final static int InvalidBusinessRequest_1101		= 1101;
-		public final static int NoPermission_1102				= 1102;
-		public final static int ParameterError_1103				= 1103;
-		public final static int UnknownException_1104			= 1104;
+		InvalidJSONRequest_1100(1100),
+		InvalidBusinessRequest_1101(1101),
+		NoPermission_1102(1102),
+		ParameterError_1103(1103),
+		UnknownException_1104(1104),
+
+		SyncFailureUnkownReason_1200(1200),
+		StatFailureUnkownReason_1201(1201),
+		CapacityReached_1202(1202),
+		QuitBusiDevicePoolUnkown_1203(1203);
 		
-		public final static int SyncFailureUnkownReason_1200	= 1200;
-		public final static int StatFailureUnkownReason_1201	= 1201;
-		public final static int CapacityReached_1202			= 1202;
-		public final static int QuitBusiDevicePoolUnkown_1203	= 1203;
+		private int code;
+    	
+    	private GlobalErrorCode(int code)
+    	{
+    		this.code = code; 
+    	}
 	}
+	
+	public enum OperationType
+    {
+    	EnterPool(1),
+    	LeavePool(2),
+    	AgreeChat(3),
+    	RejectChat(4),
+    	EndChat(5),
+
+    	Assess(6),
+    	AssessAndQuit(7),
+    	Received(8);
+
+    	private int type;
+    	
+    	private OperationType(int type)
+    	{
+    		this.type = type; 
+    	}
+    }
 }

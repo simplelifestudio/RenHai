@@ -38,4 +38,17 @@ public class GlobalSetting
 		public static int RandomBusinessPoolCapacity = 10000;
 		public static int InterestBusinessPoolCapacity = 0;
 	}
+	
+	public enum ConnectionSetting
+	{
+		ByteBufferMaxSize (2097152),
+		CharBufferMaxSize (2097152);
+		
+		private int value;
+		
+		private ConnectionSetting(int value)
+		{
+			this.value = value;
+		}
+	}
 }

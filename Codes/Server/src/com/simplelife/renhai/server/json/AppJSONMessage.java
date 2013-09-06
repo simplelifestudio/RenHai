@@ -18,15 +18,15 @@ import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */
-public class AppJSONMessage extends AbstractJSONMessage implements Runnable, IAppJSONMessage
+public abstract class AppJSONMessage extends AbstractJSONMessage implements Runnable, IAppJSONMessage
 {
+    private String errorDescription;
+    private Consts.GlobalErrorCode errorCode;
+    
     /** */
     protected JSONObject jsonObject;
     protected JSONObject header;
     protected JSONObject body;
-    
-    protected String errorDescription;
-    protected int errorCode;
     
     public AppJSONMessage(JSONObject jsonObject)
     {
@@ -51,7 +51,7 @@ public class AppJSONMessage extends AbstractJSONMessage implements Runnable, IAp
     	return body;
     }
     
-    public int getMessageId()
+    public Consts.MessageId getMessageId()
     {
     	if (getHeader() == null)
     	{
@@ -65,29 +65,13 @@ public class AppJSONMessage extends AbstractJSONMessage implements Runnable, IAp
     	
     	try
     	{
-    		int id = header.getIntValue(JSONKey.FieldName.MessageType);
-    		return id;
+    		return Consts.MessageId.valueOf(header.getString(JSONKey.FieldName.MessageType));
     	}
     	catch(Exception e)
     	{
     		errorDescription = "";
     	}
     	return Consts.MessageId.Invalid;
-    }
-    
-    public String getMessageType()
-    {
-    	if (getHeader() == null)
-    	{
-    		return null;
-    	}
-    	
-    	if (!header.containsKey(JSONKey.FieldName.MessageType))
-    	{
-    		return null;
-    	}
-    	
-    	return header.getString(JSONKey.FieldName.MessageType); 
     }
     
     
@@ -168,19 +152,59 @@ public class AppJSONMessage extends AbstractJSONMessage implements Runnable, IAp
     	return reponse;
     }
 
-    protected void responseError()
+    protected void responseError(String messageId)
     {
     	ServerErrorResponse response = createErrorResponse();
+    	response.addToBody(JSONKey.FieldName.ReceivedMessage, messageId);
+    	response.addToBody(JSONKey.FieldName.ErrorCode, this.errorCode);
+    	response.addToBody(JSONKey.FieldName.ErrorDescription, this.errorDescription);
     	response.asyncResponse();
     }
 
 	/* (non-Javadoc)
 	 * @see com.simplelife.renhai.server.json.AbstractJSONMessage#run()
 	 */
-	public void run()
+	public abstract void run();
+	
+	
+	public void setErrorCode(Consts.GlobalErrorCode errorCode)
 	{
-		// TODO: 如果执行到这个方法，说明request不能识别（缺少必要字段），
-    	// 接下来根据之前保存的errorInfo给App返回错误
-    	responseError();
+		this.errorCode = errorCode;
 	}
+	
+	public void setErrorDescription(String errorDescription)
+	{
+		this.errorDescription = errorDescription;
+	}
+	
+	public Consts.GlobalErrorCode getErrorCode()
+	{
+		return errorCode;
+	}
+	
+	public String getErrorDescription()
+	{
+		return errorDescription;
+	}
+	
+    public Consts.MessageType getMessageType()
+    {
+    	if (getHeader() == null)
+    	{
+    		return Consts.MessageType.Invalid;
+    	}
+    	
+    	if (!header.containsKey(JSONKey.FieldName.MessageType))
+    	{
+    		return Consts.MessageType.Invalid;
+    	}
+    	
+    	return Consts.MessageType.valueOf(header.getString(JSONKey.FieldName.MessageType)); 
+    }
+    
+
+    public String getMessageSn()
+    {
+    	return null;
+    }
 }
