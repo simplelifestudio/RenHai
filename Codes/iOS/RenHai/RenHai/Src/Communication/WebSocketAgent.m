@@ -145,7 +145,7 @@
     
     switch (jsonMessage.messageType)
     {
-        case ServerResponseMessage:
+        case MessageType_ServerResponse:
         {
             [self _saveResponseMessage:jsonMessage];
             
@@ -156,14 +156,15 @@
             
             break;
         }
-        case ServerNotificationMessage:
+        case MessageType_ServerNotification:
         {
-            NSNotification* notification = [NSNotification notificationWithName:jsonMessage.messageId object:jsonMessage userInfo:nil];
+            NSString* messageIdStr = [NSString stringWithFormat:@"%d", jsonMessage.messageId];
+            NSNotification* notification = [NSNotification notificationWithName:messageIdStr object:jsonMessage userInfo:nil];
             [[NSNotificationCenter defaultCenter] postNotification:notification];
             
             break;
         }
-        case UnknownMessage:
+        case MessageType_Unkown:
         {
             break;
         }

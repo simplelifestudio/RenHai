@@ -1,22 +1,24 @@
 #消息分类 MessageType
 0. Unknown (Illegal Type)
 1. AppRequest App->Server
-	1. 测试请求 AlohaRequest
-	2. App数据同步请求 AppDataSyncRequest
-	3. Server数据同步请求 ServerDataSyncRequest
-	4. 业务会话请求 BusinessSessionRequest
+	1. 测试请求 AlohaRequest (102)
+	2. App数据同步请求 AppDataSyncRequest (104)
+	3. Server数据同步请求 ServerDataSyncRequest (106)
+	4. 业务会话请求 BusinessSessionRequest (110)
 2. ServerResponse Server->App
-	1. 错误响应 ServerErrorResponse
-	2. 测试响应 AlohaResponse
-	3. App数据同步响应 AppDataSyncResponse
-	4. Server数据同步响应 ServerDataSyncResponse
-	5. 业务会话响应 BusinessSessionResponse
+	0. 超时响应 ServerTimeoutResponse (99)
+	1. 错误响应 ServerErrorResponse (101)
+	2. 测试响应 AlohaResponse (103)
+	3. App数据同步响应 AppDataSyncResponse (105)
+	4. Server数据同步响应 ServerDataSyncResponse (107)
+	5. 业务会话响应 BusinessSessionResponse (111)
 3. ServerNotification Server->App
-	1. 	业务会话通知 BusinessSessionNotification
-	2. Server广播通知 BroadcastNotification
+	1. 	业务会话通知 BusinessSessionNotification (108)
+	2. Server广播通知 BroadcastNotification (112)
 4. AppResponse App->Server
-	1. 错误响应 AppErrorResponse
-	2. 业务会话通知响应 BusinessSessionNotificationResponse
+	0. 超时响应 AppTimeoutResponse (98)
+	1. 错误响应 AppErrorResponse (100)
+	2. 业务会话通知响应 BusinessSessionNotificationResponse (109)
 
 
 #消息格式 MessageFormat
@@ -28,7 +30,7 @@
     	{
 			"messageType":"0",
 			"messageSn":"AFLNWERJL3203598FDLGSLDF",
-			"messageId":"MessageName",
+			"messageId":"102",
 			"deviceId":"1234",
 			"deviceSn":"ABCD77631GGWQ",
 			"timeStamp":"2013-08-14 21:18:49" // App启动后首次收到Server发来的消息时需要计算两边时间差并保存留用
@@ -49,7 +51,7 @@
     "header":
     {
 		"messageType":"4",    
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"AppErrorResponse",    
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"100",    
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -67,7 +69,7 @@
     "header":
     {
 		"messageType":"2",    
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"ServerErrorResponse",    
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"101",    
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -85,7 +87,7 @@
     "header":
     {
 		"messageType":"1",    
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"AlohaRequest",    
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"102",    
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -101,7 +103,7 @@
     "header":
     {
 		"messageType":"2",    
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"AlohaResponse",    
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"103",    
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -117,7 +119,7 @@
     "header":
     {
 		"messageType":"1",    
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"AppDataSyncRequest", 
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"104", 
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -169,7 +171,7 @@
     "header":
     {
 		"messageType":"2",    
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"AppDataSyncResponse",    
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"105",    
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -216,7 +218,7 @@
     "header":
     {
     	"messageType":"1",
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"ServerDataSyncRequest",    
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"106",    
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -237,7 +239,7 @@
     "header":
     {
 		"messageType":"2",    
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"ServerDataSyncResponse",    
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"107",    
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -253,7 +255,7 @@
 	"header":
    	{
 		"messageType":"3",
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"BusinessSessionNotification",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"108",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -275,7 +277,7 @@
 	"header":
 	{
 		"messageType":"4",
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"BusinessSessionNotificationResponse",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"109",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -294,7 +296,7 @@
 	"header":
    	{
 		"messageType":"1",
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"BusinessSessionRequest",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"110",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -314,7 +316,7 @@
 	"header":
    	{
    		"messageType":"2",
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"BusinessSessionResponse",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"111",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -333,7 +335,7 @@
 	"header":
    	{
    		"messageType":"3",
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"BroadcastNotification",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"112",
 		"deviceId":"",
 		"deviceSn":"",
 		"timeStamp":"2013-08-14 21:18:49"

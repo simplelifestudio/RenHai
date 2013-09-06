@@ -65,31 +65,27 @@ static BOOL s_messageEncrypted;
 
 +(RHJSONMessageErrorCode) verify:(RHJSONMessage*) message
 {
-    RHJSONMessageErrorCode error = ServerLegalResponse;
+    RHJSONMessageErrorCode error = ErrorCode_ServerLegalResponse;
     
     if (nil != message)
     {
-        NSString* messageId = message.messageId;
-        NSString* messageSn = message.messageSn;
-        if (nil != messageId && 0 < messageId.length && nil != messageSn && 0 < messageSn.length)
+        RHJSONMessageId messageId = message.messageId;
+        if (messageId == MessageId_ServerErrorResponse)
         {
-            if ([messageId isEqualToString:JSONMESSAGE_SERVERERRORRESPONSE])
-            {
-                error = ServerErrorResponse;
-            }
-            else if ([messageId isEqualToString:JSONMESSAGE_SERVERTIMEOUTRESPONSE])
-            {
-                error = ServerTimeout;
-            }
+            error = ErrorCode_ServerErrorResponse;
         }
-        else
+        else if (messageId == MessageId_ServerTimeoutResponse)
         {
-            error = ServerIllegalResponse;
+            error = ErrorCode_ServerTimeout;
+        }
+        else if (messageId == MessageId_Unknown)
+        {
+            error = ErrorCode_ServerIllegalResponse;
         }
     }
     else
     {
-        error = ServerNullResponse;
+        error = ErrorCode_ServerNullResponse;
     }
     
     return error;
@@ -97,8 +93,9 @@ static BOOL s_messageEncrypted;
 
 +(RHJSONMessage*) newServerTimeoutResponseMessage
 {
-    NSString* messageType = [NSString stringWithFormat:@"%d", ServerResponseMessage];
-    NSDictionary* dic = [NSDictionary dictionaryWithObjects:@[messageType, JSONMESSAGE_SERVERTIMEOUTRESPONSE] forKeys:@[JSONMESSAGE_KEY_MESSAGETYPE, JSONMESSAGE_KEY_MESSAGEID]];
+    NSString* messageType = [NSString stringWithFormat:@"%d", MessageType_ServerResponse];
+    NSString* messageId = [NSString stringWithFormat:@"%d", MessageId_ServerTimeoutResponse];
+    NSDictionary* dic = [NSDictionary dictionaryWithObjects:@[messageType, messageId] forKeys:@[JSONMESSAGE_KEY_MESSAGETYPE, JSONMESSAGE_KEY_MESSAGEID]];
     
     RHJSONMessage* message = [RHJSONMessage constructWithMessageHeader:dic messageBody:nil];
     
@@ -109,7 +106,7 @@ static BOOL s_messageEncrypted;
 {
     BOOL flag = NO;
     
-    if (nil != message && [message.messageId isEqualToString:JSONMESSAGE_SERVERTIMEOUTRESPONSE])
+    if (nil != message && message.messageId == MessageId_ServerTimeoutResponse)
     {
         flag = YES;
     }
@@ -121,7 +118,7 @@ static BOOL s_messageEncrypted;
 {
     BOOL flag = NO;
     
-    if (nil != message && [message.messageId isEqualToString:JSONMESSAGE_SERVERERRORRESPONSE])
+    if (nil != message && message.messageId == MessageId_ServerErrorResponse)
     {
         flag = YES;
     }
@@ -139,9 +136,12 @@ static BOOL s_messageEncrypted;
     return [_header objectForKey:JSONMESSAGE_KEY_MESSAGESN];
 }
 
--(NSString*) messageId
-{    
-    return [_header objectForKey:JSONMESSAGE_KEY_MESSAGEID];
+-(RHJSONMessageId) messageId
+{
+    NSString* str = [_header objectForKey:JSONMESSAGE_KEY_MESSAGEID];
+    RHJSONMessageId messageId = str.intValue;
+    
+    return messageId;
 }
 
 -(RHJSONMessageType) messageType
