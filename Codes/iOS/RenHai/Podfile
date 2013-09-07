@@ -9,6 +9,7 @@ pod 'OpenTokSDK-WebRTC', '~> 2.1.4'
 pod 'FlatUIKit', '~> 1.2'
 pod 'PKRevealController', '~> 1.0b2'
 pod 'CocoaLumberjack', '~> 1.6.2'
+pod 'OBShapedButton', '~> 1.0.2'
 
 target :RenHaiGHUnitTest do
 	pod 'GHUnitIOS', '~> 0.5.6'
