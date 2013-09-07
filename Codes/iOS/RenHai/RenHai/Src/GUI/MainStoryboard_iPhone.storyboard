@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="DgF-zo-nqX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="DgF-zo-nqX">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -20,52 +20,32 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="穿过" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dix-5b-p0q" userLabel="label1">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="60" id="xdP-iZ-uMv"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="穿过" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dix-5b-p0q" userLabel="label1">
+                                <rect key="frame" x="66" y="232" width="60" height="22"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="人海" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LCa-5k-1zF" userLabel="label2">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="100" id="ajU-bs-2Bv"/>
-                                    <constraint firstAttribute="height" constant="44" id="ylt-3v-4L2"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="人海" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LCa-5k-1zF" userLabel="label2">
+                                <rect key="frame" x="110" y="252" width="100" height="44"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="32"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="来你面前" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fet-Pn-p8B" userLabel="label3">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="5s7-RX-sj0"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="来你面前" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fet-Pn-p8B" userLabel="label3">
+                                <rect key="frame" x="170" y="304" width="80" height="22"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="易生活工作室" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MOv-da-WD3" userLabel="studioLabel">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="100" id="Nl4-68-3SO"/>
-                                    <constraint firstAttribute="width" constant="200" id="gUb-pM-huN"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="易生活工作室" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="MOv-da-WD3" userLabel="studioLabel">
+                                <rect key="frame" x="60" y="224" width="200" height="100"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="LCa-5k-1zF" firstAttribute="centerY" secondItem="NMg-NX-QmX" secondAttribute="centerY" type="default" id="02Z-0a-AjA"/>
-                            <constraint firstItem="dix-5b-p0q" firstAttribute="top" secondItem="NMg-NX-QmX" secondAttribute="top" constant="232" id="2OC-Oz-GsC"/>
-                            <constraint firstItem="dix-5b-p0q" firstAttribute="leading" secondItem="NMg-NX-QmX" secondAttribute="leading" constant="66" id="57v-gx-SKZ"/>
-                            <constraint firstAttribute="trailing" secondItem="fet-Pn-p8B" secondAttribute="trailing" constant="70" id="ADN-Oc-kd7"/>
-                            <constraint firstItem="MOv-da-WD3" firstAttribute="centerX" secondItem="LCa-5k-1zF" secondAttribute="centerX" type="default" id="Dq6-BX-whR"/>
-                            <constraint firstItem="LCa-5k-1zF" firstAttribute="centerX" secondItem="NMg-NX-QmX" secondAttribute="centerX" type="default" id="OaK-O8-Bui"/>
-                            <constraint firstItem="fet-Pn-p8B" firstAttribute="top" secondItem="LCa-5k-1zF" secondAttribute="bottom" constant="8" symbolic="YES" type="default" id="bWI-Uk-Dag"/>
-                            <constraint firstItem="MOv-da-WD3" firstAttribute="centerY" secondItem="LCa-5k-1zF" secondAttribute="centerY" type="default" id="rtL-ZS-1cT"/>
-                        </constraints>
                     </view>
                     <connections>
                         <outlet property="label1" destination="dix-5b-p0q" id="vzq-rW-ayO"/>
@@ -86,21 +66,14 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="配置" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5fK-CA-AKv">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="LjM-Fn-GSb"/>
-                                    <constraint firstAttribute="height" constant="44" id="QU6-mM-zMu"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="配置" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5fK-CA-AKv">
+                                <rect key="frame" x="120" y="252" width="80" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="5fK-CA-AKv" firstAttribute="centerX" secondItem="H1F-lY-EeO" secondAttribute="centerX" type="default" id="8at-5U-BYH"/>
-                            <constraint firstItem="5fK-CA-AKv" firstAttribute="centerY" secondItem="H1F-lY-EeO" secondAttribute="centerY" type="default" id="fea-hj-EUO"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L7e-o9-YOz" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -115,21 +88,14 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="聊天评价" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jqk-U9-56g">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="4O2-Vs-xZf"/>
-                                    <constraint firstAttribute="width" constant="97" id="Cfq-lR-KdF"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="聊天评价" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Jqk-U9-56g">
+                                <rect key="frame" x="112" y="252" width="97" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="Jqk-U9-56g" firstAttribute="centerX" secondItem="oHj-lV-qis" secondAttribute="centerX" type="default" id="Ofj-iF-sY3"/>
-                            <constraint firstItem="Jqk-U9-56g" firstAttribute="centerY" secondItem="oHj-lV-qis" secondAttribute="centerY" type="default" id="h3j-2I-PKg"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mb2-zd-MPb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -144,21 +110,14 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="警告" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JoT-VZ-t5f">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="I5d-e0-QXY"/>
-                                    <constraint firstAttribute="height" constant="44" id="bzd-IF-mEd"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="警告" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JoT-VZ-t5f">
+                                <rect key="frame" x="120" y="252" width="80" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="JoT-VZ-t5f" firstAttribute="centerX" secondItem="ggI-eV-eSW" secondAttribute="centerX" type="default" id="51H-O4-Qwd"/>
-                            <constraint firstItem="JoT-VZ-t5f" firstAttribute="centerY" secondItem="ggI-eV-eSW" secondAttribute="centerY" type="default" id="ayH-3U-uUJ"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uj7-c3-aVO" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -218,21 +177,14 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="帮助" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xu1-LP-xKk">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="Kvp-tK-XTv"/>
-                                    <constraint firstAttribute="width" constant="80" id="xQd-W4-oSW"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="帮助" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Xu1-LP-xKk">
+                                <rect key="frame" x="120" y="252" width="80" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="Xu1-LP-xKk" firstAttribute="centerY" secondItem="JjY-o6-NsQ" secondAttribute="centerY" type="default" id="07B-le-8Oc"/>
-                            <constraint firstItem="Xu1-LP-xKk" firstAttribute="centerX" secondItem="JjY-o6-NsQ" secondAttribute="centerX" type="default" id="KnK-wQ-6id"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BPW-TB-TDH" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -247,21 +199,14 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="等待匹配" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dCl-rU-Z2b">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="b5Q-eu-5hO"/>
-                                    <constraint firstAttribute="width" constant="80" id="exo-lj-5bS"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="等待匹配" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dCl-rU-Z2b">
+                                <rect key="frame" x="120" y="252" width="80" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="dCl-rU-Z2b" firstAttribute="centerX" secondItem="Y1g-pW-N07" secondAttribute="centerX" type="default" id="0ip-lA-Bf0"/>
-                            <constraint firstItem="dCl-rU-Z2b" firstAttribute="centerY" secondItem="Y1g-pW-N07" secondAttribute="centerY" type="default" id="E2M-Uh-JTs"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SpY-7A-QfI" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -276,21 +221,14 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="聊天确认" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CAS-hi-WT3">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="96" id="MQ6-bh-NtT"/>
-                                    <constraint firstAttribute="height" constant="44" id="RX1-j0-gXv"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="聊天确认" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="CAS-hi-WT3">
+                                <rect key="frame" x="112" y="252" width="96" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="CAS-hi-WT3" firstAttribute="centerY" secondItem="y48-DI-AFQ" secondAttribute="centerY" type="default" id="FRt-QK-DYB"/>
-                            <constraint firstItem="CAS-hi-WT3" firstAttribute="centerX" secondItem="y48-DI-AFQ" secondAttribute="centerX" type="default" id="egK-Tp-5Zn"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iEh-wB-Ngp" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -305,21 +243,14 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="视频聊天" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t8z-ov-QWI">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="dw4-9P-Gyn"/>
-                                    <constraint firstAttribute="width" constant="106" id="s5Y-f2-8l7"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="视频聊天" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="t8z-ov-QWI">
+                                <rect key="frame" x="107" y="252" width="106" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="t8z-ov-QWI" firstAttribute="centerX" secondItem="aRm-Ul-Twj" secondAttribute="centerX" type="default" id="ZN2-0u-FYo"/>
-                            <constraint firstItem="t8z-ov-QWI" firstAttribute="centerY" secondItem="aRm-Ul-Twj" secondAttribute="centerY" type="default" id="ewy-rJ-LOY"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mov-Tt-rJQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -334,21 +265,14 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="业务" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vb8-0v-xLK">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="M7E-Kp-83n"/>
-                                    <constraint firstAttribute="width" constant="80" id="ug8-pq-QhX"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="业务" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Vb8-0v-xLK">
+                                <rect key="frame" x="120" y="230" width="80" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="Vb8-0v-xLK" firstAttribute="centerY" secondItem="e4l-i9-iJx" secondAttribute="centerY" type="default" id="bgV-Sl-9Oc"/>
-                            <constraint firstItem="Vb8-0v-xLK" firstAttribute="centerX" secondItem="e4l-i9-iJx" secondAttribute="centerX" type="default" id="udE-Ib-CBl"/>
-                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="DUg-hB-ZNt"/>
                 </viewController>
@@ -364,21 +288,14 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="设备" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eoH-oM-SwB">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="BVW-m6-4QW"/>
-                                    <constraint firstAttribute="width" constant="80" id="X8N-HU-GxD"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="设备" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eoH-oM-SwB">
+                                <rect key="frame" x="120" y="252" width="80" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="eoH-oM-SwB" firstAttribute="centerX" secondItem="lvJ-Hh-vrl" secondAttribute="centerX" type="default" id="8uk-la-wGx"/>
-                            <constraint firstItem="eoH-oM-SwB" firstAttribute="centerY" secondItem="lvJ-Hh-vrl" secondAttribute="centerY" type="default" id="Ytq-Ao-MmW"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="60F-YZ-ngr" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -393,21 +310,14 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="印象" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6CJ-j4-bN8">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="80" id="B0j-dZ-HKM"/>
-                                    <constraint firstAttribute="height" constant="44" id="Flh-Jt-VSO"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="印象" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6CJ-j4-bN8">
+                                <rect key="frame" x="120" y="252" width="80" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="6CJ-j4-bN8" firstAttribute="centerY" secondItem="EiP-Uw-swS" secondAttribute="centerY" type="default" id="LPV-Ad-XOA"/>
-                            <constraint firstItem="6CJ-j4-bN8" firstAttribute="centerX" secondItem="EiP-Uw-swS" secondAttribute="centerX" type="default" id="z2P-pG-2S9"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xkI-s6-GVM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -422,21 +332,14 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="兴趣" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qAo-gr-Srq">
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="dFQ-yg-NXw"/>
-                                    <constraint firstAttribute="width" constant="80" id="lX4-fB-hFn"/>
-                                </constraints>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="兴趣" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="qAo-gr-Srq">
+                                <rect key="frame" x="120" y="252" width="80" height="44"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="qAo-gr-Srq" firstAttribute="centerX" secondItem="5cj-Iy-u5a" secondAttribute="centerX" type="default" id="9bc-IM-ifX"/>
-                            <constraint firstItem="qAo-gr-Srq" firstAttribute="centerY" secondItem="5cj-Iy-u5a" secondAttribute="centerY" type="default" id="Sds-N7-Q3g"/>
-                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p0X-7R-tYM" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -480,9 +383,6 @@
         </class>
         <class className="MainViewController_iPhone" superclassName="PKRevealController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/MainViewController_iPhone.h"/>
-        </class>
-        <class className="NSLayoutConstraint" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
         </class>
         <class className="PKRevealController" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/PKRevealController.h"/>
