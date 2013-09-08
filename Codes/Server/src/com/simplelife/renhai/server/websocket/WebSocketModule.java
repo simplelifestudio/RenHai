@@ -18,8 +18,11 @@ import com.simplelife.renhai.server.util.AbstractModule;
 /** */
 public class WebSocketModule extends AbstractModule
 {
-	public WebSocketModule()
+	private WebSocketModule()
 	{
-		logger = LoggerFactory.getLogger(WebSocketModule.class.getName());
+		logger = LoggerFactory.getLogger(WebSocketModule.class);
 	}
+
+	public final static WebSocketModule instance = new WebSocketModule();
+
 }

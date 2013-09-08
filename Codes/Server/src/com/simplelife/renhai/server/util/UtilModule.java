@@ -11,9 +11,16 @@
 
 package com.simplelife.renhai.server.util;
 
+import org.slf4j.LoggerFactory;
+
 
 /** */
 public class UtilModule extends AbstractModule
 {
+	private UtilModule()
+	{
+		logger = LoggerFactory.getLogger(UtilModule.class);
+	}
 
+	public final static UtilModule instance = new UtilModule();
 }

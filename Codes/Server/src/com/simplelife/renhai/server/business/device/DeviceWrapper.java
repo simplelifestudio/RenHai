@@ -11,10 +11,13 @@
 
 package com.simplelife.renhai.server.business.device;
 
+import java.io.IOException;
 import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.json.AppJSONMessage;
+import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IAppJSONMessage;
 import com.simplelife.renhai.server.util.IBaseConnection;
@@ -30,7 +33,7 @@ import com.simplelife.renhai.server.websocket.WebSocketConnection;
 public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwner, IJSONObject
 {
     /** */
-    protected WebSocketConnection webSocketConnection;
+    protected IBaseConnection webSocketConnection;
     
     /** */
     protected Date lastPingTime;
@@ -50,9 +53,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     /** */
     protected Consts.DeviceBusinessStatus businessStatus;
     
-   
-    /** */
-    public Device Unnamed3;
+    protected OnlineDevicePool pool;
     
     /** */
     protected void updatePingTime()
@@ -67,9 +68,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     }
     
     /** */
-    public void DeviceWrapper()
+    public DeviceWrapper(IBaseConnection connection)
     {
-    
+    	this.webSocketConnection = connection;
     }
     
     /** */
@@ -94,7 +95,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     /** */
     public void bindOnlineDevicePool(OnlineDevicePool pool)
     {
-    
+    	this.pool = pool;
     }
     
     /** */
@@ -182,9 +183,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
      * @see IBaseConnectionOwner#onJSONCommand(IAppJSONMessage)
      */
     @Override
-    public void onJSONCommand(IAppJSONMessage command)
+    public void onJSONCommand(AppJSONMessage command)
     {
-        // TODO Auto-generated method stub
+    	command.bindDeviceWrapper(this);
+        (new Thread(command)).run();
     }
 
 
@@ -225,20 +227,34 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
      * @see com.simplelife.renhai.server.util.IDeviceWrapper#syncSendMessage(com.simplelife.renhai.server.util.IJSONObject)
      */
     @Override
-    public void syncSendMessage(IJSONObject message)
+    public void syncSendMessage(ServerJSONMessage message)
     {
-        // TODO Auto-generated method stub
-        
+        try
+		{
+			webSocketConnection.syncSendMessage(message);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /* (non-Javadoc)
      * @see com.simplelife.renhai.server.util.IDeviceWrapper#asyncSendMessage(com.simplelife.renhai.server.util.IJSONObject)
      */
     @Override
-    public void asyncSendMessage(IJSONObject message)
+    public void asyncSendMessage(ServerJSONMessage message)
     {
-        // TODO Auto-generated method stub
-        
+        try
+		{
+			webSocketConnection.asyncSendMessage(message);
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
 	/* (non-Javadoc)
@@ -250,3 +266,4 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
 		return webSocketConnection;
 	}
 }
+

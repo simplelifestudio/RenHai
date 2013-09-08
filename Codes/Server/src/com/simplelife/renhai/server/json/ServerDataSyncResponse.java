@@ -9,15 +9,24 @@
 
 package com.simplelife.renhai.server.json;
 
+import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.Consts.MessageId;
 
 /**
  * 
  */
 public class ServerDataSyncResponse extends ServerJSONMessage
 {
-	public ServerDataSyncResponse(IDeviceWrapper deviceWrapper)
+	public ServerDataSyncResponse(AppJSONMessage request)
 	{
-		super(deviceWrapper);
+		super(request);
+		setMessageType(Consts.MessageType.ServerResponse);
+	}
+	
+	@Override
+	public MessageId getMessageId()
+	{
+		return Consts.MessageId.ServerDataSyncResponse;
 	}
 }

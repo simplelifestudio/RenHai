@@ -14,6 +14,8 @@ package com.simplelife.renhai.server.business.device;
 import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.db.Impresscard;
+import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.util.IAbstractLabelCard;
 import com.simplelife.renhai.server.util.ICardOperation;
 import com.simplelife.renhai.server.util.IDbOperation;
@@ -24,28 +26,28 @@ import com.simplelife.renhai.server.util.IJSONObject;
 public class Profile implements IDbOperation, IJSONObject, ICardOperation
 {
     /** */
-    protected ImpressCard impressCard;
+    protected Impresscard impressCard;
     
     /** */
-    protected InterestCard interestCard;
+    protected Interestcard interestCard;
     
     /** */
     protected Date createTime;
     
     /** */
-    public void setImpressCard(IAbstractLabelCard card)
+    public void setImpresscard(IAbstractLabelCard card)
     {
     
     }
     
     /** */
-    public void setInterestCard(IAbstractLabelCard card)
+    public void setInterestcard(IAbstractLabelCard card)
     {
     
     }
     
     /** */
-    public InterestCard getInterestCard()
+    public Interestcard getInterestcard()
     {
         return interestCard;
     
@@ -70,20 +72,20 @@ public class Profile implements IDbOperation, IJSONObject, ICardOperation
     }
     
     /** */
-    public void setImpressCard(ImpressCard card)
+    public void setImpresscard(Impresscard card)
     {
     }
     
     /** */
-    public void setInterestCard(InterestCard card)
+    public void setInterestcard(Interestcard card)
     {
     }
 
     /* (non-Javadoc)
-     * @see com.simplelife.renhai.server.util.ICardOperation#getImpressCard(int)
+     * @see com.simplelife.renhai.server.util.ICardOperation#getImpresscard(int)
      */
     @Override
-    public ImpressCard getImpressCard(int number)
+    public Impresscard getImpresscard(int number)
     {
         // TODO Auto-generated method stub
         return null;

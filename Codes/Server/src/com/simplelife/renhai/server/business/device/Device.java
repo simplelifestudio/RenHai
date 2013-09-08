@@ -11,6 +11,9 @@
 
 package com.simplelife.renhai.server.business.device;
 
+import com.simplelife.renhai.server.db.Devicecard;
+import com.simplelife.renhai.server.db.Impresscard;
+import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.util.ICardOperation;
 import com.simplelife.renhai.server.util.IDbOperation;
 
@@ -19,7 +22,7 @@ import com.simplelife.renhai.server.util.IDbOperation;
 public class Device implements IDbOperation, ICardOperation
 {
     /** */
-    protected DeviceCard deviceCard;
+    protected Devicecard deviceCard;
     
     /** */
     protected Profile profile;
@@ -28,13 +31,13 @@ public class Device implements IDbOperation, ICardOperation
     public DeviceWrapper Unnamed1;
     
     /** */
-    public void updateDeviceCard()
+    public void updateDevicecard()
     {
     
     }
     
     /** */
-    public DeviceCard getDeviceCard()
+    public Devicecard getDevicecard()
     {
 		return deviceCard;
     }
@@ -58,23 +61,23 @@ public class Device implements IDbOperation, ICardOperation
     }
     
     /** */
-    public void setImpressCard(ImpressCard card)
+    public void setImpresscard(Impresscard card)
     {
     }
     
     /** */
-    public void setInterestCard(InterestCard card)
+    public void setInterestcard(Interestcard card)
     {
     }
     
     /** */
-    public InterestCard getInterestCard()
+    public Interestcard getInterestcard()
     {
         return null;
     }
     
     /** */
-    public ImpressCard getImpressCard(int number)
+    public Impresscard getImpresscard(int number)
     {
         return null;
     }

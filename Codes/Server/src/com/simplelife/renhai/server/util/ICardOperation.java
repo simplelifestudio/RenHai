@@ -11,22 +11,22 @@
 
 package com.simplelife.renhai.server.util;
 
-import com.simplelife.renhai.server.business.device.ImpressCard;
-import com.simplelife.renhai.server.business.device.InterestCard;
+import com.simplelife.renhai.server.db.Impresscard;
+import com.simplelife.renhai.server.db.Interestcard;
 
 
 /** */
 public interface ICardOperation
 {
     /** */
-    public void setImpressCard(ImpressCard card);
+    public void setImpresscard(Impresscard card);
     
     /** */
-    public void setInterestCard(InterestCard card);
+    public void setInterestcard(Interestcard card);
     
     /** */
-    public InterestCard getInterestCard();
+    public Interestcard getInterestcard();
     
     /** */
-    public ImpressCard getImpressCard(int number);
+    public Impresscard getImpresscard(int number);
 }

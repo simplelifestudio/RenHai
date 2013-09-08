@@ -20,7 +20,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 public abstract class AbstractDevicePool extends AbstractPool
 {
     /** */
-    protected HashMap deviceMap;
+    protected HashMap<String, IDeviceWrapper> deviceMap = new HashMap<String, IDeviceWrapper>();
     
     /** */
     public IDeviceWrapper getDevice(int deviceId)

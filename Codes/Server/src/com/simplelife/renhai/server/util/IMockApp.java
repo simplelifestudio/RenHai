@@ -57,7 +57,7 @@ public interface IMockApp
 	
 	public void assessAndQuit(String impressLabelList);
 	
-	public void updateInterestCard(HashMap<String, Object> interestLabels);
+	public void updateInterestcard(HashMap<String, Object> interestLabels);
 
 	/**
 	 * @param obj

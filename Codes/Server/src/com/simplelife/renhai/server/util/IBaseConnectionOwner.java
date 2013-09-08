@@ -11,6 +11,8 @@
 
 package com.simplelife.renhai.server.util;
 
+import com.simplelife.renhai.server.json.AppJSONMessage;
+
 
 /** */
 public interface IBaseConnectionOwner
@@ -22,7 +24,7 @@ public interface IBaseConnectionOwner
     public void onPing(IBaseConnection conection);
     
     /** */
-    public void onJSONCommand(IAppJSONMessage command);
+    public void onJSONCommand(AppJSONMessage command);
     
     /** */
     public void onTimeOut(IBaseConnection conection);

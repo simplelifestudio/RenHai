@@ -9,8 +9,11 @@
 
 package com.simplelife.renhai.server.json;
 
+import org.slf4j.Logger;
+
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.JSONKey;
 
 /**
@@ -44,22 +47,36 @@ public class AlohaRequest extends AppJSONMessage
     @Override
     public void run()
     {
+    	Logger logger = JSONModule.instance.getLogger();
+    	logger.debug("Start run of AlohaRequest");
     	if (!checkJsonCommand())
     	{
-    		ServerErrorResponse response = new ServerErrorResponse(deviceWrapper);
+    		logger.debug("checkJsonCommand failed");
+    		ServerErrorResponse response = new ServerErrorResponse(this);
     		response.addToBody(JSONKey.FieldName.ReceivedMessage, Consts.MessageId.AlohaResponse);
     		response.addToBody(JSONKey.FieldName.ErrorCode, this.getErrorCode());
     		response.addToBody(JSONKey.FieldName.ErrorDescription, this.getErrorDescription());
     		response.asyncResponse();
     	}
     	
-    	ServerJSONMessage response = JSONFactory.createServerJSONMessage(Consts.MessageId.AlohaResponse, deviceWrapper);
+    	ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.AlohaResponse);
     	if (response == null)
     	{
-    		// TODO: log error
+    		logger.error("createServerJSONMessage returns null");
+    		return;
     	}
     	
     	response.addToBody(JSONKey.FieldName.Content, helloApp);
     	response.asyncResponse();
     }
+
+
+	/* (non-Javadoc)
+	 * @see com.simplelife.renhai.server.json.AppJSONMessage#getMessageId()
+	 */
+	@Override
+	public MessageId getMessageId()
+	{
+		return Consts.MessageId.AlohaRequest;
+	}
 }

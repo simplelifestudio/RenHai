@@ -13,8 +13,11 @@ package com.simplelife.renhai.server.json;
 
 import java.util.HashMap;
 
+import org.slf4j.Logger;
+
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.business.device.DeviceCard;
+import com.simplelife.renhai.server.business.device.Device;
+import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -29,23 +32,32 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     protected HashMap<String, Object> jsonMapHeader = new HashMap<String, Object>();
     protected HashMap<String, Object> jsonMapBody = new HashMap<String, Object>();
     
-    protected ServerJSONMessage(IDeviceWrapper deviceWrapper)
+    protected ServerJSONMessage(AppJSONMessage request)
     {
-    	init();
-    	this.deviceWrapper = deviceWrapper;
+    	this.deviceWrapper = request.getDeviceWrapper();
+    	init(request);
     }
     
-    protected void init()
+    protected void init(AppJSONMessage request)
     {
+    	Logger logger = JSONModule.instance.getLogger();
     	jsonMap.clear();
-    	jsonMap.put(JSONKey.FieldName.Head, jsonMapHeader);
+    	jsonMap.put(JSONKey.FieldName.Header, jsonMapHeader);
     	jsonMap.put(JSONKey.FieldName.Body, jsonMapBody);
     	
-    	jsonMapHeader.put(JSONKey.FieldName.TimeStamp, DateUtil.getNow());
+    	addToHeader(JSONKey.FieldName.MessageSn, request.getMessageSn());
+		addToHeader(JSONKey.FieldName.TimeStamp, DateUtil.getNow());
     	
-    	if (deviceWrapper != null)
+    	Device device = request.getDeviceWrapper().getDevice();
+    	if (device == null)
     	{
-    		DeviceCard card = deviceWrapper.getDevice().getDeviceCard();
+    		//addToHeader(JSONKey.FieldName.MessageType, 2);
+    		addToHeader(JSONKey.FieldName.DeviceId, "");
+    		addToHeader(JSONKey.FieldName.DeviceSn, "");
+    	}
+    	else
+    	{
+    		Devicecard card = deviceWrapper.getDevice().getDevicecard();
     		addToHeader(JSONKey.FieldName.DeviceId, card.getDeviceId());
     		addToHeader(JSONKey.FieldName.DeviceSn, card.getDeviceSn());
     	}
@@ -77,9 +89,9 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     	addToHeader(JSONKey.FieldName.MessageSn, messageSn);
     }
     
-    protected void setMessageId(String messageId)
+    protected void setMessageId(Consts.MessageId messageId)
     {
-    	addToHeader(JSONKey.FieldName.MessageId, messageId);
+    	addToHeader(JSONKey.FieldName.MessageId, messageId.toString());
     }
     
     public Consts.MessageType getMessageType()
@@ -92,16 +104,15 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     	return jsonMapHeader.get(JSONKey.FieldName.MessageSn).toString();
     }
     
-    public Consts.MessageId getMessageId()
-    {
-    	return Consts.MessageId.valueOf(jsonMapHeader.get(JSONKey.FieldName.MessageId).toString());
-    }
+    public abstract Consts.MessageId getMessageId();
+    
     
     protected void asyncResponse()
     {
+    	Logger logger = JSONModule.instance.getLogger();
     	if (deviceWrapper == null)
     	{
-    		// TODO: log error here
+    		logger.error("deviceWrapper is null in response");
     		return;
     	}
     	

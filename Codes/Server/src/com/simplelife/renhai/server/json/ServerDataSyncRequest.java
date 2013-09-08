@@ -11,7 +11,7 @@ package com.simplelife.renhai.server.json;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.JSONKey;
+import com.simplelife.renhai.server.util.Consts.MessageId;
 
 /**
  * 
@@ -52,5 +52,14 @@ public class ServerDataSyncRequest extends AppJSONMessage
 			return;
 		}
 		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplelife.renhai.server.json.AppJSONMessage#getMessageId()
+	 */
+	@Override
+	public MessageId getMessageId()
+	{
+		return Consts.MessageId.ServerDataSyncRequest;
 	}
 }
