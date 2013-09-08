@@ -45,14 +45,14 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 		deleteDevice(mockApp1);
 		deleteDevice(mockApp2);
 		
-		OnlineDevicePool.getInstance().setCapacity(GlobalSetting.BusinessSetting.OnlinePoolCapacity);
+		OnlineDevicePool.instance.setCapacity(GlobalSetting.BusinessSetting.OnlinePoolCapacity);
 	}
 	
 	
 	@Test
 	public void test()
 	{
-		OnlineDevicePool pool = OnlineDevicePool.getInstance();
+		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
 		

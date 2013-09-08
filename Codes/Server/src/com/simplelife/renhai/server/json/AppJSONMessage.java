@@ -11,9 +11,13 @@
 
 package com.simplelife.renhai.server.json;
 
+import org.slf4j.Logger;
+
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IAppJSONMessage;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 
 
@@ -27,6 +31,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     protected JSONObject jsonObject;
     protected JSONObject header;
     protected JSONObject body;
+    protected Consts.MessageId messageId;
     
     public AppJSONMessage(JSONObject jsonObject)
     {
@@ -37,7 +42,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     {
     	if (header == null)
     	{
-    		header = jsonObject.getJSONObject(JSONKey.FieldName.Head);
+    		header = jsonObject.getJSONObject(JSONKey.FieldName.Header);
     	}
     	return header;
     }
@@ -51,72 +56,73 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     	return body;
     }
     
-    public Consts.MessageId getMessageId()
+    public void bindDeviceWrapper(IDeviceWrapper deviceWrapper)
     {
-    	if (getHeader() == null)
-    	{
-    		return Consts.MessageId.Invalid;
-    	}
-    	
-    	if (!header.containsKey(JSONKey.FieldName.MessageType))
-    	{
-    		return Consts.MessageId.Invalid;
-    	}
-    	
-    	try
-    	{
-    		return Consts.MessageId.valueOf(header.getString(JSONKey.FieldName.MessageType));
-    	}
-    	catch(Exception e)
-    	{
-    		errorDescription = "";
-    	}
-    	return Consts.MessageId.Invalid;
+    	this.deviceWrapper = deviceWrapper;
     }
+    
+    public abstract Consts.MessageId getMessageId();
     
     
     protected boolean checkJsonCommand()
     {
+    	Logger logger = JSONModule.instance.getLogger();
+    	
     	if (jsonObject == null)
 		{
-    		errorDescription = "Empty JSON Object is attached in request";
-    		errorCode = Consts.GlobalErrorCode.InvalidJSONRequest_1100;
+    		setErrorDescription("Empty JSON Object is attached in request");
+    		setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
+    		logger.error(errorDescription);
 			return false;
 		}
     	
     	JSONObject header = getHeader();
     	if (header == null)
     	{
-    		errorDescription = "Invalid request: " + JSONKey.FieldName.Head+ " can't be found in request";
-    		errorCode = Consts.GlobalErrorCode.ParameterError_1103;
+    		setErrorDescription("Invalid request: " + JSONKey.FieldName.Header+ " can't be found in request");
+    		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+    		logger.error(errorDescription);
     		return false;
     	}
     	
     	if (getBody() == null)
     	{
-    		errorDescription = "Invalid request: " + JSONKey.FieldName.Body + " can't be found in request";
-    		errorCode = Consts.GlobalErrorCode.ParameterError_1103;
+    		setErrorDescription("Invalid request: " + JSONKey.FieldName.Body + " can't be found in request");
+    		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+    		logger.error(errorDescription);
     		return false;
     	}
     
     	if (!header.containsKey(JSONKey.FieldName.MessageType))
     	{
-    		errorDescription = "Invalid request: " + JSONKey.FieldName.MessageType + " can't be found in request";
-    		errorCode = Consts.GlobalErrorCode.ParameterError_1103;
+    		setErrorDescription("Invalid request: " + JSONKey.FieldName.MessageType + " can't be found in request");
+    		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+    		logger.error(errorDescription);
     		return false;
     	}
     	
     	if (!header.containsKey(JSONKey.FieldName.MessageSn))
     	{
-    		errorDescription = "Invalid request: " + JSONKey.FieldName.MessageSn + " can't be found in request";
-    		errorCode = Consts.GlobalErrorCode.ParameterError_1103;
+    		setErrorDescription("Invalid request: " + JSONKey.FieldName.MessageSn + " can't be found in request");
+    		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+    		logger.error(errorDescription);
     		return false;
     	}
     	
     	if (!header.containsKey(JSONKey.FieldName.MessageId))
     	{
-    		errorDescription = "Invalid request: " + JSONKey.FieldName.MessageId + " can't be found in request";
-    		errorCode = Consts.GlobalErrorCode.ParameterError_1103;
+    		setErrorDescription("Invalid request: " + JSONKey.FieldName.MessageId + " can't be found in request");
+    		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+    		logger.error(errorDescription);
+    		return false;
+    	}
+    	
+    	String messageId = header.getString(JSONKey.FieldName.MessageId); 
+    	if (!CommonFunctions.IsNumric(messageId))
+    	{
+    		setErrorDescription("Invalid request: " + JSONKey.FieldName.MessageId + " must be numric");
+    		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+    		logger.error(errorDescription);
     		return false;
     	}
     	
@@ -130,15 +136,17 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     	
     	if (!header.containsKey(JSONKey.FieldName.DeviceSn))
     	{
-    		errorDescription = "Invalid request: " + JSONKey.FieldName.DeviceSn + " can't be found in request";
-    		errorCode = Consts.GlobalErrorCode.ParameterError_1103;
+    		setErrorDescription("Invalid request: " + JSONKey.FieldName.DeviceSn + " can't be found in request");
+    		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+    		logger.error(errorDescription);
     		return false;
     	}
     	
     	if (!header.containsKey(JSONKey.FieldName.TimeStamp))
     	{
-    		errorDescription = "Invalid request: " + JSONKey.FieldName.TimeStamp + " can't be found in request";
-    		errorCode = Consts.GlobalErrorCode.ParameterError_1103;
+    		setErrorDescription("Invalid request: " + JSONKey.FieldName.TimeStamp + " can't be found in request");
+    		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+    		logger.error(errorDescription);
     		return false;
     	}
     	
@@ -148,7 +156,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     
     protected ServerErrorResponse createErrorResponse()
     {
-    	ServerErrorResponse reponse = new ServerErrorResponse(this.deviceWrapper);
+    	ServerErrorResponse reponse = new ServerErrorResponse(this);
     	return reponse;
     }
 
@@ -199,12 +207,28 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     		return Consts.MessageType.Invalid;
     	}
     	
-    	return Consts.MessageType.valueOf(header.getString(JSONKey.FieldName.MessageType)); 
+    	return Consts.MessageType.getEnumItemByValue(header.getIntValue(JSONKey.FieldName.MessageType)); 
     }
     
 
     public String getMessageSn()
     {
-    	return null;
+    	if (getHeader() == null)
+    	{
+    		return "";
+    	}
+    	
+    	if (!header.containsKey(JSONKey.FieldName.MessageType))
+    	{
+    		return "";
+    	}
+    	
+    	return header.getString(JSONKey.FieldName.MessageSn); 
+    }
+    
+    
+    public IDeviceWrapper getDeviceWrapper()
+    {
+    	return deviceWrapper;
     }
 }

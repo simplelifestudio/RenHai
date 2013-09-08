@@ -14,6 +14,7 @@ package com.simplelife.renhai.server.util;
 import java.util.Date;
 
 import com.simplelife.renhai.server.business.device.Device;
+import com.simplelife.renhai.server.json.ServerJSONMessage;
 
 
 /** */
@@ -38,10 +39,10 @@ public interface IDeviceWrapper
     public void unbindBusinessSession();
     
     /** */
-    public void syncSendMessage(IJSONObject message);
+    public void syncSendMessage(ServerJSONMessage message);
     
     /** */
-    public void asyncSendMessage(IJSONObject message);
+    public void asyncSendMessage(ServerJSONMessage message);
     
     /** */
     public Date getLastActivityTime();

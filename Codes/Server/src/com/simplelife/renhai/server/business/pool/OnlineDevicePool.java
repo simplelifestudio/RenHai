@@ -11,10 +11,16 @@
 
 package com.simplelife.renhai.server.business.pool;
 
+import java.util.LinkedList;
 import java.util.Timer;
 import java.util.Vector;
 
+import org.slf4j.Logger;
+
+import com.simplelife.renhai.server.business.BusinessModule;
+import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IBusinessPool;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -25,37 +31,23 @@ public class OnlineDevicePool extends AbstractDevicePool
 {
     /** */
     private Timer timer;
+    private LinkedList<DeviceWrapper> tmpDeviceLink = new LinkedList<DeviceWrapper>(); 
     
     /** */
     private Vector<AbstractBusinessDevicePool> businessPoolList = new Vector<AbstractBusinessDevicePool>();
     
-    private static OnlineDevicePool poolInstance;
+    public final static OnlineDevicePool instance = new OnlineDevicePool();
+    
+    
+    private OnlineDevicePool()
+    {
+    	
+    }
     
     /** */
     private void checkInactiveDevice()
     {
     
-    }
-    
-    /** */
-    public static OnlineDevicePool getInstance()
-    {
-    	if (poolInstance != null)
-    	{
-    		return poolInstance;
-    	}
-    	
-    	synchronized (poolInstance)
-		{
-    		// Check again after get lock
-    		if (poolInstance != null)
-        	{
-        		return poolInstance;
-        	}
-    		
-    		poolInstance = new OnlineDevicePool();
-    		return poolInstance;
-		}
     }
     
     /** */
@@ -85,8 +77,12 @@ public class OnlineDevicePool extends AbstractDevicePool
     /** */
     public IDeviceWrapper newDevice(IBaseConnection connection)
     {
-        return null;
-    
+    	Logger logger = BusinessModule.instance.getLogger();
+    	DeviceWrapper deviceWrapper = new DeviceWrapper(connection);
+    	deviceWrapper.bindOnlineDevicePool(this);
+    	connection.bind(deviceWrapper);
+    	tmpDeviceLink.add(deviceWrapper);
+        return deviceWrapper;
     }
     
     /** */

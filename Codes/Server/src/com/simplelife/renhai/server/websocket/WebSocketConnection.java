@@ -20,14 +20,20 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.slf4j.Logger;
+
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.json.AppJSONMessage;
+import com.simplelife.renhai.server.json.InvalidRequest;
+import com.simplelife.renhai.server.json.UnkownRequest;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.json.TimeoutRequest;
+import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IBaseConnectionOwner;
+import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */
@@ -41,7 +47,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 	}
 	
     /** */
-    private IBaseConnectionOwner owner;
+    private IBaseConnectionOwner connectionOwner;
     private String remoteIPAddress;
     private HashMap<String, SyncController> syncMap = new HashMap<String, SyncController>();
     
@@ -66,8 +72,8 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     public WebSocketConnection()
     {
     	super();
-    	setByteBufferMaxSize(GlobalSetting.ConnectionSetting.ByteBufferMaxSize.ordinal());
-    	setByteBufferMaxSize(GlobalSetting.ConnectionSetting.ByteBufferMaxSize.ordinal());
+    	setByteBufferMaxSize(Consts.ConnectionSetting.ByteBufferMaxSize.ordinal());
+    	setByteBufferMaxSize(Consts.ConnectionSetting.ByteBufferMaxSize.ordinal());
     }
     
     @Override
@@ -80,25 +86,28 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     /** */
     public void bind(IBaseConnectionOwner owner)
     {
-    	this.owner = owner;
+    	this.connectionOwner = owner;
     }
     
 	@Override
 	public IBaseConnectionOwner getOwner()
 	{
-		return owner;
+		return connectionOwner;
 	}
     
     /** */
     public void ping()
     {
+    	Logger logger = WebSocketModule.instance.getLogger();
+    	
         ByteBuffer pingData = ByteBuffer.allocate(5);
         try
         {
             getWsOutbound().ping(pingData);
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
-            // TODO: 
+            logger.error(e.getMessage());
         }
     }
    
@@ -118,16 +127,60 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onTextMessage(String message)
     {
+    	Logger logger = WebSocketModule.instance.getLogger();
+    	logger.debug("Text message received.");
     	
-    	AppJSONMessage appMessage = JSONFactory.createAppJSONMessage(JSONObject.parseObject(message));
+    	JSONObject obj = JSONObject.parseObject(message);
+    	AppJSONMessage appMessage;
+		if (obj == null)
+		{
+			logger.error("Invalid JSON string which can't be converted into JSON object.");
+			appMessage = new InvalidRequest(null);
+			appMessage.setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
+			appMessage.setErrorDescription("Invalid JSON string.");
+		}
+		else if (!obj.containsKey(JSONKey.FieldName.JsonEnvelope))
+		{
+			logger.error("Invalid JSON string ");
+			appMessage = new InvalidRequest(obj);
+			appMessage.setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
+			appMessage.setErrorDescription("Invalid JSON request: " + JSONKey.FieldName.JsonEnvelope + " was not found.");
+		}
+		else
+		{
+			logger.debug("Enveloped JSON string.");
+			message = obj.getString(JSONKey.FieldName.JsonEnvelope);
+	    	if (GlobalSetting.BusinessSetting.Encrypt)
+	    	{
+	    		logger.debug("Try to decrypt message");
+	    		try
+				{
+					message = SecurityUtils.decryptByDESAndDecodeByBase64(message, GlobalSetting.BusinessSetting.EncryptKey);
+				}
+				catch (Exception e)
+				{
+					WebSocketModule.instance.getLogger().error(e.getMessage());
+					e.printStackTrace();
+				}
+	    	}
+	    	
+	    	appMessage = JSONFactory.createAppJSONMessage(JSONObject.parseObject(message));
+	    	
+		}
+
+    	logger.debug("Received message: {}", appMessage.getMessageId().name());
     	String messageSn = appMessage.getMessageSn();
-    	
     	if (!syncMap.containsKey(messageSn))
     	{
-    		owner.onJSONCommand(appMessage);
+    		logger.debug("The received message is not expected by synchronizd sending.");
+    		if (connectionOwner != null)
+    		{
+    			connectionOwner.onJSONCommand(appMessage);
+    		}
     	}
     	else
     	{
+    		logger.debug("Expected synchronizd message received.");
     		SyncController controller = syncMap.get(messageSn);
     		controller.lock.lock();
     		controller.message = appMessage;
@@ -140,40 +193,47 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onTimeout()
     {
-    	owner.onTimeOut(this);
+    	connectionOwner.onTimeOut(this);
     }
     
     @Override
     public void onOpen(WsOutbound outbound)
     {
+    	WebSocketModule.instance.getLogger().debug("onOpen triggered");
         super.onOpen(outbound);
     }
     
     @Override
     public void onPing(ByteBuffer payload)
     {
-    	owner.onPing(this);
+    	WebSocketModule.instance.getLogger().debug("onPing triggered");
+    	connectionOwner.onPing(this);
     	super.onPong(payload);
     }
     
     @Override
     public void onPong(ByteBuffer payload)
     {
+    	WebSocketModule.instance.getLogger().debug("onPong triggered");
     	super.onPong(payload);
     }
     
+    @Override
     public void onClose(int status)
     {
-    	owner.onClose(this);
+    	WebSocketModule.instance.getLogger().debug("onClose triggered");
+    	connectionOwner.onClose(this);
     	super.onClose(status);
     }
 
     
     /** */
-    protected void sendMessage(String messge) throws IOException
+    protected void sendMessage(String message) throws IOException
     {
-    	CharBuffer buffer = CharBuffer.allocate(messge.length());
-        buffer.put(messge);
+    	Logger logger = WebSocketModule.instance.getLogger();
+    	logger.debug("Send message: " + message);
+    	CharBuffer buffer = CharBuffer.allocate(message.length());
+        buffer.put(message);
         buffer.flip();
         
         try
@@ -182,7 +242,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
         } 
         catch (IOException e)
         {
-            // TODO
+        	logger.error(e.getMessage());
         }
     }
     
@@ -195,6 +255,8 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     /** */
     protected AppJSONMessage syncSendMessage(String messageSn, String message) throws IOException
     {
+    	Logger logger = WebSocketModule.instance.getLogger();
+    	
     	if (!syncMap.containsKey(messageSn))
     	{
     		throw new IOException("messageSn <" + messageSn+"> is not saved in syncMap!");
@@ -210,12 +272,12 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	}
     	catch(IOException e)
     	{
-    		// TODO
+    		logger.error(e.getMessage());
     		throw e;
     	}
 		catch (InterruptedException e)
 		{
-			// TODO
+			logger.error(e.getMessage());
 		}
     	finally
     	{

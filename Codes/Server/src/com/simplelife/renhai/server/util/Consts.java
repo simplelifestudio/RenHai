@@ -53,6 +53,18 @@ public class Consts
 		{
 			this.value = value;
 		}
+		
+		public static MessageType getEnumItemByValue(int value)
+		{
+			for (MessageType item : values())
+			{
+				if (item.value == value)
+				{
+					return item;
+				}
+			}
+			return null;
+		}
 	}
 	
 	/*
@@ -79,7 +91,9 @@ public class Consts
 	
 	public enum MessageId
 	{
-		Invalid(0),
+		InvalidRequest(0),
+		UnkownRequest(1),
+		TimeoutRequest(2),
 		AppErrorResposne(100), 
 		ServerErrorResponse(101), 
 		AlohaRequest(102), 
@@ -107,6 +121,22 @@ public class Consts
 		public String toString()
 		{
 			return String.valueOf(this.messageId);
+		}
+		public static MessageId getEnumItemByValue(int value)
+		{
+			for (MessageId item : values())
+			{
+				if (item.messageId == value)
+				{
+					return item;
+				}
+			}
+			return null;
+		}
+		
+		public static MessageId getEnumItemByValue(String value)
+		{
+			return getEnumItemByValue(Integer.parseInt(value));
 		}
 	}
 	
@@ -156,4 +186,17 @@ public class Consts
     		this.type = type; 
     	}
     }
+	
+	public enum ConnectionSetting
+	{
+		ByteBufferMaxSize (2097152),
+		CharBufferMaxSize (2097152);
+		
+		private int value;
+		
+		private ConnectionSetting(int value)
+		{
+			this.value = value;
+		}
+	}
 }

@@ -19,7 +19,7 @@ public class Systemstatistics implements java.io.Serializable {
 	// Fields
 
 	private Integer systemStatisticsId;
-	private Statisticsitemdefinition statisticsitemdefinition;
+	private Statisticsitem statisticsitem;
 	private Integer saveTime;
 	private Integer count;
 
@@ -30,9 +30,9 @@ public class Systemstatistics implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Systemstatistics(Statisticsitemdefinition statisticsitemdefinition,
-			Integer saveTime, Integer count) {
-		this.statisticsitemdefinition = statisticsitemdefinition;
+	public Systemstatistics(Statisticsitem statisticsitem, Integer saveTime,
+			Integer count) {
+		this.statisticsitem = statisticsitem;
 		this.saveTime = saveTime;
 		this.count = count;
 	}
@@ -51,13 +51,12 @@ public class Systemstatistics implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "statisticsItem", nullable = false)
-	public Statisticsitemdefinition getStatisticsitemdefinition() {
-		return this.statisticsitemdefinition;
+	public Statisticsitem getStatisticsitem() {
+		return this.statisticsitem;
 	}
 
-	public void setStatisticsitemdefinition(
-			Statisticsitemdefinition statisticsitemdefinition) {
-		this.statisticsitemdefinition = statisticsitemdefinition;
+	public void setStatisticsitem(Statisticsitem statisticsitem) {
+		this.statisticsitem = statisticsitem;
 	}
 
 	@Column(name = "saveTime", nullable = false)

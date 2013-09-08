@@ -45,7 +45,7 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 	@Test
 	public void test()
 	{
-		OnlineDevicePool pool = OnlineDevicePool.getInstance();
+		OnlineDevicePool pool = OnlineDevicePool.instance;
 		syncDevice(mockApp);
 		
 		// Step_01 µ÷ÓÃ£ºOnlineDevicePool::getCount

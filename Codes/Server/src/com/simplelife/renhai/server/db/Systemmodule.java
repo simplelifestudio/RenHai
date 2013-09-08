@@ -12,16 +12,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * Moduledefinition entity. @author MyEclipse Persistence Tools
+ * Systemmodule entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "moduledefinition", catalog = "renhai")
-public class Moduledefinition implements java.io.Serializable {
+@Table(name = "systemmodule", catalog = "renhai")
+public class Systemmodule implements java.io.Serializable {
 
 	// Fields
 
-	private Integer moduleDefinitionId;
 	private Integer moduleId;
+	private Integer moduleNo;
 	private String description;
 	private Set<Systemoperationlog> systemoperationlogs = new HashSet<Systemoperationlog>(
 			0);
@@ -29,19 +29,19 @@ public class Moduledefinition implements java.io.Serializable {
 	// Constructors
 
 	/** default constructor */
-	public Moduledefinition() {
+	public Systemmodule() {
 	}
 
 	/** minimal constructor */
-	public Moduledefinition(Integer moduleId, String description) {
-		this.moduleId = moduleId;
+	public Systemmodule(Integer moduleNo, String description) {
+		this.moduleNo = moduleNo;
 		this.description = description;
 	}
 
 	/** full constructor */
-	public Moduledefinition(Integer moduleId, String description,
+	public Systemmodule(Integer moduleNo, String description,
 			Set<Systemoperationlog> systemoperationlogs) {
-		this.moduleId = moduleId;
+		this.moduleNo = moduleNo;
 		this.description = description;
 		this.systemoperationlogs = systemoperationlogs;
 	}
@@ -49,22 +49,22 @@ public class Moduledefinition implements java.io.Serializable {
 	// Property accessors
 	@Id
 	@GeneratedValue
-	@Column(name = "moduleDefinitionId", unique = true, nullable = false)
-	public Integer getModuleDefinitionId() {
-		return this.moduleDefinitionId;
-	}
-
-	public void setModuleDefinitionId(Integer moduleDefinitionId) {
-		this.moduleDefinitionId = moduleDefinitionId;
-	}
-
-	@Column(name = "moduleId", nullable = false)
+	@Column(name = "moduleId", unique = true, nullable = false)
 	public Integer getModuleId() {
 		return this.moduleId;
 	}
 
 	public void setModuleId(Integer moduleId) {
 		this.moduleId = moduleId;
+	}
+
+	@Column(name = "moduleNo", nullable = false)
+	public Integer getModuleNo() {
+		return this.moduleNo;
+	}
+
+	public void setModuleNo(Integer moduleNo) {
+		this.moduleNo = moduleNo;
 	}
 
 	@Column(name = "description", nullable = false, length = 256)
@@ -76,7 +76,7 @@ public class Moduledefinition implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "moduledefinition")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "systemmodule")
 	public Set<Systemoperationlog> getSystemoperationlogs() {
 		return this.systemoperationlogs;
 	}

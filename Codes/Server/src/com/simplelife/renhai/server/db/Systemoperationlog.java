@@ -19,8 +19,8 @@ public class Systemoperationlog implements java.io.Serializable {
 	// Fields
 
 	private Integer systemOperationLogId;
-	private Moduledefinition moduledefinition;
-	private Operationcodedefinition operationcodedefinition;
+	private Systemmodule systemmodule;
+	private Operationcode operationcode;
 	private Long logTime;
 	private String logInfo;
 
@@ -31,19 +31,18 @@ public class Systemoperationlog implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Systemoperationlog(Moduledefinition moduledefinition,
-			Operationcodedefinition operationcodedefinition, Long logTime) {
-		this.moduledefinition = moduledefinition;
-		this.operationcodedefinition = operationcodedefinition;
+	public Systemoperationlog(Systemmodule systemmodule,
+			Operationcode operationcode, Long logTime) {
+		this.systemmodule = systemmodule;
+		this.operationcode = operationcode;
 		this.logTime = logTime;
 	}
 
 	/** full constructor */
-	public Systemoperationlog(Moduledefinition moduledefinition,
-			Operationcodedefinition operationcodedefinition, Long logTime,
-			String logInfo) {
-		this.moduledefinition = moduledefinition;
-		this.operationcodedefinition = operationcodedefinition;
+	public Systemoperationlog(Systemmodule systemmodule,
+			Operationcode operationcode, Long logTime, String logInfo) {
+		this.systemmodule = systemmodule;
+		this.operationcode = operationcode;
 		this.logTime = logTime;
 		this.logInfo = logInfo;
 	}
@@ -62,23 +61,22 @@ public class Systemoperationlog implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "moduleId", nullable = false)
-	public Moduledefinition getModuledefinition() {
-		return this.moduledefinition;
+	public Systemmodule getSystemmodule() {
+		return this.systemmodule;
 	}
 
-	public void setModuledefinition(Moduledefinition moduledefinition) {
-		this.moduledefinition = moduledefinition;
+	public void setSystemmodule(Systemmodule systemmodule) {
+		this.systemmodule = systemmodule;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "operationCode", nullable = false)
-	public Operationcodedefinition getOperationcodedefinition() {
-		return this.operationcodedefinition;
+	@JoinColumn(name = "operationCodeId", nullable = false)
+	public Operationcode getOperationcode() {
+		return this.operationcode;
 	}
 
-	public void setOperationcodedefinition(
-			Operationcodedefinition operationcodedefinition) {
-		this.operationcodedefinition = operationcodedefinition;
+	public void setOperationcode(Operationcode operationcode) {
+		this.operationcode = operationcode;
 	}
 
 	@Column(name = "logTime", nullable = false)

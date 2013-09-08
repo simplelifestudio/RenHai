@@ -190,15 +190,15 @@ public class LocalMockApp extends AbstractMockApp
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.util.IMockApp#updateInterestCard(java.lang.String)
+	 * @see com.simplelife.renhai.server.util.IMockApp#updateInterestcard(java.lang.String)
 	 */
 	
 	@Override
-	public void updateInterestCard(HashMap<String, Object> interestLabels)
+	public void updateInterestcard(HashMap<String, Object> interestLabels)
 	{
 		HashMap<String, Object> updateMap = new HashMap<String, Object>();
-		updateMap.put(JSONKey.FieldName.DeviceCard, getDeviceJSONMap());
-		updateMap.put(JSONKey.FieldName.InterestCard, interestLabels);
+		updateMap.put(JSONKey.FieldName.Devicecard, getDeviceJSONMap());
+		updateMap.put(JSONKey.FieldName.Interestcard, interestLabels);
 		sendAppDataSyncRequest(null, updateMap);
 	}
 

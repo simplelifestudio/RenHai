@@ -20,7 +20,7 @@ public class Profileoperationlog implements java.io.Serializable {
 
 	private Integer profileOperationLogId;
 	private Profile profile;
-	private Operationcodedefinition operationcodedefinition;
+	private Operationcode operationcode;
 	private Devicecard devicecard;
 	private Integer logTime;
 	private String logInfo;
@@ -32,21 +32,19 @@ public class Profileoperationlog implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Profileoperationlog(Profile profile,
-			Operationcodedefinition operationcodedefinition,
+	public Profileoperationlog(Profile profile, Operationcode operationcode,
 			Devicecard devicecard, Integer logTime) {
 		this.profile = profile;
-		this.operationcodedefinition = operationcodedefinition;
+		this.operationcode = operationcode;
 		this.devicecard = devicecard;
 		this.logTime = logTime;
 	}
 
 	/** full constructor */
-	public Profileoperationlog(Profile profile,
-			Operationcodedefinition operationcodedefinition,
+	public Profileoperationlog(Profile profile, Operationcode operationcode,
 			Devicecard devicecard, Integer logTime, String logInfo) {
 		this.profile = profile;
-		this.operationcodedefinition = operationcodedefinition;
+		this.operationcode = operationcode;
 		this.devicecard = devicecard;
 		this.logTime = logTime;
 		this.logInfo = logInfo;
@@ -76,13 +74,12 @@ public class Profileoperationlog implements java.io.Serializable {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "operationCode", nullable = false)
-	public Operationcodedefinition getOperationcodedefinition() {
-		return this.operationcodedefinition;
+	public Operationcode getOperationcode() {
+		return this.operationcode;
 	}
 
-	public void setOperationcodedefinition(
-			Operationcodedefinition operationcodedefinition) {
-		this.operationcodedefinition = operationcodedefinition;
+	public void setOperationcode(Operationcode operationcode) {
+		this.operationcode = operationcode;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)

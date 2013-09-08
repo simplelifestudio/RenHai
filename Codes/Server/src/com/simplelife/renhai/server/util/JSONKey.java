@@ -54,9 +54,9 @@ public class JSONKey
     	public final static String ErrorDescription				= "errorDescription";
     	
     	public final static String ForbiddenExpiredDate			= "forbiddenExpiredDate";
-    	public final static String Head							= "head";
+    	public final static String Header						= "header";
     	public final static String HistoryHotInterestLabels		= "historyHotInterestLabels";
-    	public final static String ImpressCardId				= "impressCardId";
+    	public final static String ImpresscardId				= "impressCardId";
     	public final static String ImpressId					= "impressId";
     	
     	public final static String ImpressName					= "impressName";
@@ -81,10 +81,10 @@ public class JSONKey
     	public final static String TimeStamp					= "timeStamp";
     	public final static String TotalChatDuration			= "totalChatDuration";
     	public final static String DataQuery					= "dataQuery";
-    	public final static String DeviceCard					= "deviceCard";
+    	public final static String Devicecard					= "deviceCard";
     	
-    	public final static String ImpressCard					= "impressCard";
-    	public final static String InterestCard					= "interestCard";
+    	public final static String Impresscard					= "impressCard";
+    	public final static String Interestcard					= "interestCard";
     	public final static String DataUpdate					= "dataUpdate";
     	public final static String DeviceModel					= "deviceModel";
     	public final static String MessageType					= "messageType";

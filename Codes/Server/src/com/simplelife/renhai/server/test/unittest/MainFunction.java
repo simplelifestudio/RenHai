@@ -9,11 +9,24 @@
 
 package com.simplelife.renhai.server.test.unittest;
 
+import java.util.List;
+
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.simplelife.renhai.server.db.SystemOperationLog;
+import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.business.device.DeviceWrapper;
+import com.simplelife.renhai.server.db.HibernateSessionFactory;
+import com.simplelife.renhai.server.db.Operationcode;
+import com.simplelife.renhai.server.db.OperationcodeDAO;
+import com.simplelife.renhai.server.db.Systemmodule;
+import com.simplelife.renhai.server.db.SystemmoduleDAO;
+import com.simplelife.renhai.server.db.Systemoperationlog;
+import com.simplelife.renhai.server.db.SystemoperationlogDAO;
+import com.simplelife.renhai.server.json.AlohaRequest;
 import com.simplelife.renhai.server.util.DateUtil;
+import com.simplelife.renhai.server.websocket.WebSocketConnection;
 
 
 /**
@@ -21,6 +34,19 @@ import com.simplelife.renhai.server.util.DateUtil;
  */
 public class MainFunction
 {
+	private static void testJSONFactory()
+	{
+		String strMessage = "{\"header\":{\"messageType\":\"1\",\"messageSn\":\"AFLNWERJL3203598FDLGSLDF\",\"messageId\":\"102\",\"deviceId\":\"1234\",\"deviceSn\":\"ABCD77631GGWQ\",\"timeStamp\":\"2013-08-14 21:18:49\"},\"body\":{\"content\":\"Hello Server!\"}}";
+		JSONObject obj = JSONObject.parseObject(strMessage);
+		
+		WebSocketConnection connection = new WebSocketConnection();
+		DeviceWrapper device = new DeviceWrapper(connection);
+		
+		AlohaRequest request = new AlohaRequest(obj);
+		request.bindDeviceWrapper(device);
+		request.run();
+		
+	}
 	private static void testFileLogger()
 	{
 		Logger log = LoggerFactory.getLogger("RenHai");
@@ -32,17 +58,61 @@ public class MainFunction
 
 	private static void testDbOperations()
 	{
-		SystemOperationLog log = new SystemOperationLog();
+		Systemoperationlog log = new Systemoperationlog();
+		Session session = HibernateSessionFactory.getSession();
+		
+		SystemmoduleDAO moduleDAO = new SystemmoduleDAO();
+		Systemmodule module = moduleDAO.findByModuleNo(3).get(0);
+		log.setSystemmodule(module);
+		
+		OperationcodeDAO dao = new OperationcodeDAO();
+		Operationcode operCode = dao.findByOperationCode(1003).get(0);
+		log.setOperationcode(operCode);
+	
 		long time = DateUtil.getNowDate().getTime();
 		log.setLogTime(time);
 		log.setLogInfo("This is log info");
-		log.setModuledefinition("Moduledefinition");
-		log.setOperationcodedefinition("operationcodedefinition")
 		
+		SystemoperationlogDAO logDAO = new SystemoperationlogDAO();
+		session.beginTransaction();
+		logDAO.save(log);
+		
+		System.out.print("============Contains: " + session.contains(log) + "\n");
+		System.out.print("============Cache Mode: " + session.getCacheMode() + "\n");
+		System.out.print("============IsDirty: " + session.isDirty() + "\n");
+		System.out.print("============IsConnected: " + session.isConnected() + "\n");
+		System.out.print("============IsOpen: " + session.isOpen() + "\n");
+		
+		List<Systemoperationlog> logList = logDAO.findByLogTime(time);
+		if (logList.size() == 0)
+		{
+			System.out.print("=========Error: the saved record can't be found by query\n");
+		}
+		else
+		{
+			System.out.print("=========Correct record found by query\n");
+			System.out.print("log.getLogInfo: " + log.getLogInfo() + "\n");
+			System.out.print("log.getLogTime: " + log.getLogTime() + "\n");
+			
+			System.out.print("log.getOperationCodeId: " + log.getOperationcode().getOperationCodeId() + "\n");
+			System.out.print("log.getOperationCode: " + log.getOperationcode().getOperationCode() + "\n");
+			
+			System.out.print("log.getModuleId: " + log.getSystemmodule().getModuleId() + "\n");
+			System.out.print("log.getModuleNo: " + log.getSystemmodule().getModuleNo() + "\n");
+		}
+		
+		System.out.print("=========Entity count of session: " + HibernateSessionFactory.getSession().getStatistics().getEntityCount() + "\n");
+		
+		session.getTransaction().commit();
+		
+		//HibernateSessionFactory.getSession().flush();
+		//HibernateSessionFactory.getSession().close();
 	}
 	
 	public static void main(String[] args)
 	{
-		testFileLogger();
+		//testFileLogger();
+		//testDbOperations();
+		testJSONFactory();
 	}
 }

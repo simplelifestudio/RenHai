@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 
 /**
@@ -44,8 +46,12 @@ public class RenHaiWebSocketServlet extends WebSocketServlet {
     @Override
     protected StreamInbound createWebSocketInbound(String arg0, HttpServletRequest arg1)
     {
+    	Logger logger = WebSocketModule.instance.getLogger();
+    	logger.debug("New connection recieved.");
+    	
         WebSocketConnection msgInbound = new WebSocketConnection();
-        OnlineDevicePool.getInstance().newDevice(msgInbound);
+        OnlineDevicePool pool = OnlineDevicePool.instance;
+        pool.newDevice(msgInbound);
         return msgInbound;
     }
     

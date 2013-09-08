@@ -113,10 +113,10 @@ public class RemoteMockApp extends AbstractMockApp
 	}
 
 	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.util.IMockApp#updateInterestCard(java.lang.String)
+	 * @see com.simplelife.renhai.server.util.IMockApp#updateInterestcard(java.lang.String)
 	 */
 	@Override
-	public void updateInterestCard(HashMap<String, Object> interestLabels)
+	public void updateInterestcard(HashMap<String, Object> interestLabels)
 	{
 		// TODO Auto-generated method stub
 		

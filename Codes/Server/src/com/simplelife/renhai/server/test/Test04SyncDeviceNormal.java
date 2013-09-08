@@ -16,7 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.simplelife.renhai.server.business.device.DeviceCard;
+import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
@@ -56,12 +56,12 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 	@Test
 	public void test()
 	{
-		OnlineDevicePool pool = OnlineDevicePool.getInstance();
+		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
 		assertTrue(deviceWrapper instanceof IBaseConnectionOwner);
 		IBaseConnectionOwner connectionOwner = (IBaseConnectionOwner) deviceWrapper;
 		
-		DeviceCard deviceCard = deviceWrapper.getDevice().getDeviceCard();
+		Devicecard deviceCard = deviceWrapper.getDevice().getDevicecard();
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		int deviceCount = pool.getElementCount();
@@ -75,15 +75,15 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		syncDevice(mockApp);
 		
 		// Step_04 数据库检查：设备卡片信息
-		String sql = "select * from DeviceCard where deviceSn = '" + deviceCard.getDeviceSn() + "";
-		List<DeviceCard> deviceList = DAOWrapper.query(sql, DeviceCard.class);
+		String sql = "select * from Devicecard where deviceSn = '" + deviceCard.getDeviceSn() + "";
+		List<Devicecard> deviceList = DAOWrapper.query(sql, Devicecard.class);
 		assertEquals(1, deviceList.size());
-		DeviceCard cardInDB = deviceList.get(0);
+		Devicecard cardInDB = deviceList.get(0);
 		
 		assertEquals(AppVersion, cardInDB.getAppVersion());
 		assertEquals(DeviceModel, cardInDB.getDeviceModel());
 		assertEquals(DeviceSN, cardInDB.getDeviceSn());
-		assertEquals(IsJailed, cardInDB.isJailed());
+		assertEquals(IsJailed, cardInDB.getIsJailed());
 		assertEquals(Location, cardInDB.getLocation());
 		assertEquals(OSVersion, cardInDB.getOsVersion());
 		
@@ -115,7 +115,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		deviceWrapper = mockApp.getDeviceWrapper();
 		assertTrue(deviceWrapper instanceof IBaseConnectionOwner);
 		connectionOwner = (IBaseConnectionOwner) deviceWrapper;
-		deviceCard = deviceWrapper.getDevice().getDeviceCard();
+		deviceCard = deviceWrapper.getDevice().getDevicecard();
 		
 		// Step_13 Mock请求：设备同步
 		syncDevice(mockApp);
@@ -138,7 +138,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		deviceWrapper = mockApp.getDeviceWrapper();
 		assertTrue(deviceWrapper instanceof IBaseConnectionOwner);
 		connectionOwner = (IBaseConnectionOwner) deviceWrapper;
-		deviceCard = deviceWrapper.getDevice().getDeviceCard();
+		deviceCard = deviceWrapper.getDevice().getDevicecard();
 		
 		// Step_19 停止数据库服务
 		DBModule.instance().stopService();

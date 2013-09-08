@@ -9,6 +9,8 @@
 
 package com.simplelife.renhai.server.json;
 
+import org.slf4j.Logger;
+
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
@@ -17,6 +19,8 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
  */
 public abstract class AbstractJSONMessage
 {
+	protected Logger logger = JSONModule.instance.getLogger();
+	
 	protected IDeviceWrapper deviceWrapper;
 	
     public abstract Consts.MessageType getMessageType();

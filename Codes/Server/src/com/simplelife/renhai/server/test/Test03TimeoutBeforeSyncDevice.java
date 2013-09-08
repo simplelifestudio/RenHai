@@ -34,7 +34,7 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 	@After
 	public void tearDown() throws Exception
 	{
-		OnlineDevicePool pool = OnlineDevicePool.getInstance();
+		OnlineDevicePool pool = OnlineDevicePool.instance;
 		pool.releaseDevice(mockDevice);
 	}
 	
@@ -44,7 +44,7 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 		// Step_01 创建MockWebSocketConnection对象
 		MockWebSocketConnection conn = new MockWebSocketConnection();
 		// Step_02 调用：OnlineDevicePool::newDevice
-		OnlineDevicePool pool = OnlineDevicePool.getInstance();
+		OnlineDevicePool pool = OnlineDevicePool.instance;
 		mockDevice = pool.newDevice(conn);
 		
 		// Step_02 等待Server的Websocket通信异常时间

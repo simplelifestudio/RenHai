@@ -12,16 +12,22 @@ package com.simplelife.renhai.server.json;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
+import com.simplelife.renhai.server.util.Consts.MessageId;
 
 /**
  * 
  */
 public class ServerErrorResponse extends ServerJSONMessage
 {
-	public ServerErrorResponse(IDeviceWrapper deviceWrapper)
+	public ServerErrorResponse(AppJSONMessage request)
 	{
-		super(deviceWrapper);
+		super(request);
 		setMessageType(Consts.MessageType.ServerResponse);
-		setMessageId(JSONKey.MessageId.ServerErrorResponse);
+	}
+	
+	@Override
+	public MessageId getMessageId()
+	{
+		return Consts.MessageId.ServerErrorResponse;
 	}
 }

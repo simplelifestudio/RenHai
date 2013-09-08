@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50610
 File Encoding         : 65001
 
-Date: 2013-09-05 06:22:27
+Date: 2013-09-07 11:44:02
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -38,7 +38,7 @@ CREATE TABLE `devicecard` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of DeviceCard
+-- Records of devicecard
 -- ----------------------------
 
 -- ----------------------------
@@ -57,7 +57,7 @@ CREATE TABLE `deviceprofilemap` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of DeviceProfileMap
+-- Records of deviceprofilemap
 -- ----------------------------
 
 -- ----------------------------
@@ -73,7 +73,7 @@ CREATE TABLE `globalimpresslabel` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of GlobalImpressLabel
+-- Records of globalimpresslabel
 -- ----------------------------
 
 -- ----------------------------
@@ -89,7 +89,7 @@ CREATE TABLE `globalinterestlabel` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of GlobalInterestLabel
+-- Records of globalinterestlabel
 -- ----------------------------
 
 -- ----------------------------
@@ -107,7 +107,7 @@ CREATE TABLE `hotinterestlabelstatistics` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of HotInterestLabelStatistics
+-- Records of hotinterestlabelstatistics
 -- ----------------------------
 
 -- ----------------------------
@@ -123,7 +123,7 @@ CREATE TABLE `impresscard` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of ImpressCard
+-- Records of impresscard
 -- ----------------------------
 
 -- ----------------------------
@@ -145,7 +145,7 @@ CREATE TABLE `impresslabelcollection` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of ImpressLabelCollection
+-- Records of impresslabelcollection
 -- ----------------------------
 
 -- ----------------------------
@@ -159,7 +159,7 @@ CREATE TABLE `interestcard` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of InterestCard
+-- Records of interestcard
 -- ----------------------------
 
 -- ----------------------------
@@ -181,48 +181,75 @@ CREATE TABLE `interestlabelcollection` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of InterestLabelCollection
+-- Records of interestlabelcollection
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `moduledefinition`
+-- Table structure for `systemmodule`
 -- ----------------------------
-DROP TABLE IF EXISTS `moduledefinition`;
-CREATE TABLE `moduledefinition` (
-  `moduleDefinitionId` int(11) NOT NULL AUTO_INCREMENT,
-  `moduleId` int(11) NOT NULL,
+DROP TABLE IF EXISTS `systemmodule`;
+CREATE TABLE `systemmodule` (
+  `moduleId` int(11) NOT NULL AUTO_INCREMENT,
+  `moduleNo` int(11) NOT NULL,
   `description` varchar(256) NOT NULL,
-  PRIMARY KEY (`moduleDefinitionId`),
+  PRIMARY KEY (`moduleId`),
   KEY `index_moduleId` (`moduleId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of ModuleDefinition
+-- Records of systemmodule
 -- ----------------------------
-INSERT INTO `moduledefinition` VALUES ('1', '1', 'business');
-INSERT INTO `moduledefinition` VALUES ('2', '2', 'db');
-INSERT INTO `moduledefinition` VALUES ('3', '3', 'json');
-INSERT INTO `moduledefinition` VALUES ('4', '4', 'log');
-INSERT INTO `moduledefinition` VALUES ('5', '5', 'servlets');
-INSERT INTO `moduledefinition` VALUES ('6', '6', 'util');
-INSERT INTO `moduledefinition` VALUES ('7', '7', 'websocket');
+INSERT INTO `systemmodule` VALUES ('1', '1', 'business');
+INSERT INTO `systemmodule` VALUES ('2', '2', 'db');
+INSERT INTO `systemmodule` VALUES ('3', '3', 'json');
+INSERT INTO `systemmodule` VALUES ('4', '4', 'log');
+INSERT INTO `systemmodule` VALUES ('5', '5', 'servlets');
+INSERT INTO `systemmodule` VALUES ('6', '6', 'util');
+INSERT INTO `systemmodule` VALUES ('7', '7', 'websocket');
 
 -- ----------------------------
--- Table structure for `operationcodedefinition`
+-- Table structure for `operationcode`
 -- ----------------------------
-DROP TABLE IF EXISTS `operationcodedefinition`;
-CREATE TABLE `operationcodedefinition` (
-  `operationCodeDefinitionId` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `operationcode`;
+CREATE TABLE `operationcode` (
+  `operationCodeId` int(11) NOT NULL AUTO_INCREMENT,
   `operationCode` int(11) NOT NULL,
   `operationType` enum('All','System','User') NOT NULL,
   `description` varchar(256) NOT NULL,
-  PRIMARY KEY (`operationCodeDefinitionId`),
+  PRIMARY KEY (`operationCodeId`),
   KEY `index_operationCode` (`operationCode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of OperationCodeDefinition
+-- Records of operationcode
 -- ----------------------------
+INSERT INTO `operationcode` VALUES ('1', '1001', 'User', '建立WebSocket连接');
+INSERT INTO `operationcode` VALUES ('2', '1002', 'User', '测试请求 AlohaRequest');
+INSERT INTO `operationcode` VALUES ('3', '1003', 'System', '测试响应 AlohaResponse');
+INSERT INTO `operationcode` VALUES ('4', '1004', 'User', 'App数据同步请求 AppDataSyncRequest - 查询');
+INSERT INTO `operationcode` VALUES ('5', '1005', 'User', 'App数据同步请求 AppDataSyncRequest - 更新设备卡片');
+INSERT INTO `operationcode` VALUES ('6', '1006', 'User', 'App数据同步请求 AppDataSyncRequest - 更新兴趣卡片');
+INSERT INTO `operationcode` VALUES ('7', '1007', 'System', 'App数据同步响应 AppDataSyncResponse');
+INSERT INTO `operationcode` VALUES ('8', '1008', 'User', 'Server数据同步请求 ServerDataSyncRequest');
+INSERT INTO `operationcode` VALUES ('9', '1009', 'System', 'Server数据同步响应 ServerDataSyncResponse');
+INSERT INTO `operationcode` VALUES ('10', '1010', 'System', '业务会话通知 BusinessSessionNotification - 会话绑定');
+INSERT INTO `operationcode` VALUES ('11', '1011', 'System', '业务会话通知 BusinessSessionNotification - 对方拒绝');
+INSERT INTO `operationcode` VALUES ('12', '1012', 'System', '业务会话通知 BusinessSessionNotification - 对方同意');
+INSERT INTO `operationcode` VALUES ('13', '1013', 'User', '业务会话通知响应 BusinessSessionNotificationResponse - 确认收到');
+INSERT INTO `operationcode` VALUES ('14', '1014', 'User', '业务会话请求 BusinessSessionRequest - 选择业务');
+INSERT INTO `operationcode` VALUES ('15', '1015', 'User', '业务会话请求 BusinessSessionRequest - 退出业务');
+INSERT INTO `operationcode` VALUES ('16', '1016', 'User', '业务会话请求 BusinessSessionRequest - 同意聊天');
+INSERT INTO `operationcode` VALUES ('17', '1017', 'User', '业务会话请求 BusinessSessionRequest - 拒绝聊天');
+INSERT INTO `operationcode` VALUES ('18', '1018', 'User', '业务会话请求 BusinessSessionRequest - 结束通话');
+INSERT INTO `operationcode` VALUES ('19', '1019', 'User', '业务会话请求 BusinessSessionRequest - 评价');
+INSERT INTO `operationcode` VALUES ('20', '1020', 'User', '业务会话请求 BusinessSessionRequest - 评价并退出');
+INSERT INTO `operationcode` VALUES ('21', '1021', 'System', '业务会话响应 BusinessSessionResponse');
+INSERT INTO `operationcode` VALUES ('22', '1022', 'System', 'Server广播通知 BroadcastNotification');
+INSERT INTO `operationcode` VALUES ('23', '1100', 'System', 'WebSocket连接超时，释放设备');
+INSERT INTO `operationcode` VALUES ('24', '1101', 'System', '空闲状态超时，释放设备');
+INSERT INTO `operationcode` VALUES ('25', '1102', 'System', '消息响应超时，释放设备');
+INSERT INTO `operationcode` VALUES ('26', '1103', 'System', '周期性保存数据到数据库');
+INSERT INTO `operationcode` VALUES ('27', '1104', 'System', '周期性更新WebRTC Session');
 
 -- ----------------------------
 -- Table structure for `profile`
@@ -242,7 +269,7 @@ CREATE TABLE `profile` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of Profile
+-- Records of profile
 -- ----------------------------
 
 -- ----------------------------
@@ -260,13 +287,13 @@ CREATE TABLE `profileoperationlog` (
   KEY `fk_Pro_deviceId_idx` (`deviceId`),
   KEY `fk_Pro_profileId_idx` (`profileId`),
   KEY `fk_Pro_operCode_idx` (`operationCode`),
-  CONSTRAINT `fk_Pro_operCode` FOREIGN KEY (`operationCode`) REFERENCES `operationcodedefinition` (`operationCode`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Pro_operCode` FOREIGN KEY (`operationCode`) REFERENCES `operationcode` (`operationCode`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Pro_deviceId` FOREIGN KEY (`deviceId`) REFERENCES `devicecard` (`deviceId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Pro_profileId` FOREIGN KEY (`profileId`) REFERENCES `profile` (`profileId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of ProfileOperationLog
+-- Records of profileoperationlog
 -- ----------------------------
 
 -- ----------------------------
@@ -286,7 +313,7 @@ CREATE TABLE `sessionprofilecollection` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of SessionProfileCollection
+-- Records of sessionprofilecollection
 -- ----------------------------
 
 -- ----------------------------
@@ -304,31 +331,31 @@ CREATE TABLE `sessionrecord` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of SessionRecord
+-- Records of sessionrecord
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `statisticsitemdefinition`
+-- Table structure for `statisticsitem`
 -- ----------------------------
-DROP TABLE IF EXISTS `statisticsitemdefinition`;
-CREATE TABLE `statisticsitemdefinition` (
-  `statisticsItemDefinitionId` int(11) NOT NULL AUTO_INCREMENT,
+DROP TABLE IF EXISTS `statisticsitem`;
+CREATE TABLE `statisticsitem` (
+  `statisticsitemId` int(11) NOT NULL AUTO_INCREMENT,
   `statisticsItem` int(11) NOT NULL,
   `description` varchar(256) NOT NULL,
-  PRIMARY KEY (`statisticsItemDefinitionId`),
+  PRIMARY KEY (`statisticsitemId`),
   KEY `index_statisticsItem` (`statisticsItem`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of StatisticsItemDefinition
+-- Records of statisticsitem
 -- ----------------------------
-INSERT INTO `statisticsitemdefinition` VALUES ('1', '0', '在线设备数');
-INSERT INTO `statisticsitemdefinition` VALUES ('2', '0', '随机业务设备数');
-INSERT INTO `statisticsitemdefinition` VALUES ('3', '0', '兴趣业务设备数');
-INSERT INTO `statisticsitemdefinition` VALUES ('4', '0', '处于聊天状态设备数');
-INSERT INTO `statisticsitemdefinition` VALUES ('5', '0', '随机聊天设备数');
-INSERT INTO `statisticsitemdefinition` VALUES ('6', '0', '兴趣聊天设备数');
-INSERT INTO `statisticsitemdefinition` VALUES ('7', '0', '热门标签');
+INSERT INTO `statisticsitem` VALUES ('1', '0', '在线设备数');
+INSERT INTO `statisticsitem` VALUES ('2', '0', '随机业务设备数');
+INSERT INTO `statisticsitem` VALUES ('3', '0', '兴趣业务设备数');
+INSERT INTO `statisticsitem` VALUES ('4', '0', '处于聊天状态设备数');
+INSERT INTO `statisticsitem` VALUES ('5', '0', '随机聊天设备数');
+INSERT INTO `statisticsitem` VALUES ('6', '0', '兴趣聊天设备数');
+INSERT INTO `statisticsitem` VALUES ('7', '0', '热门标签');
 
 -- ----------------------------
 -- Table structure for `systemoperationlog`
@@ -338,17 +365,17 @@ CREATE TABLE `systemoperationlog` (
   `systemOperationLogId` int(11) NOT NULL AUTO_INCREMENT,
   `moduleId` int(11) NOT NULL,
   `logTime` bigint(20) NOT NULL,
-  `operationCode` int(11) NOT NULL,
+  `operationCodeId` int(11) NOT NULL,
   `logInfo` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`systemOperationLogId`),
   KEY `fk_SysOpLog_moduleId_idx` (`moduleId`),
-  KEY `fk_SysOpLog_operCode_idx` (`operationCode`),
-  CONSTRAINT `fk_SysOpLog_operCode` FOREIGN KEY (`operationCode`) REFERENCES `operationcodedefinition` (`operationCode`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_SysOpLog_moduleId` FOREIGN KEY (`moduleId`) REFERENCES `moduledefinition` (`moduleId`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_SysOpLog_operCode_idx` (`operationCodeId`),
+  CONSTRAINT `fk_SysOpLog_operCode` FOREIGN KEY (`operationCodeId`) REFERENCES `operationcode` (`operationCodeId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_SysOpLog_moduleId` FOREIGN KEY (`moduleId`) REFERENCES `systemmodule` (`moduleId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of SystemOperationLog
+-- Records of systemoperationlog
 -- ----------------------------
 
 -- ----------------------------
@@ -362,11 +389,11 @@ CREATE TABLE `systemstatistics` (
   `count` int(11) NOT NULL,
   PRIMARY KEY (`systemStatisticsId`),
   KEY `fk_SysStat_statItem_idx` (`statisticsItem`),
-  CONSTRAINT `fk_SysStat_statItem` FOREIGN KEY (`statisticsItem`) REFERENCES `statisticsitemdefinition` (`statisticsItem`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_SysStat_statItem` FOREIGN KEY (`statisticsItem`) REFERENCES `statisticsitem` (`statisticsItem`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of SystemStatistics
+-- Records of systemstatistics
 -- ----------------------------
 
 -- ----------------------------
@@ -384,5 +411,5 @@ CREATE TABLE `webrtcsession` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of WebRtcSession
+-- Records of webrtcsession
 -- ----------------------------

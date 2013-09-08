@@ -15,9 +15,10 @@ import org.slf4j.Logger;
 
 
 /** */
-public class AbstractModule implements IModule
+public abstract class AbstractModule implements IModule
 {
 	protected Logger logger;
+	protected AbstractModule instance;
 	
 	public Logger getLogger()
 	{
