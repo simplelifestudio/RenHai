@@ -44,7 +44,7 @@ public class Test22Assess extends AbstractTestCase
 	@Test
 	public void test()
 	{
-		OnlineDevicePool onlinePool = OnlineDevicePool.getInstance();
+		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		

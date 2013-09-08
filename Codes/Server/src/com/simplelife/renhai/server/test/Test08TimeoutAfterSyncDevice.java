@@ -46,7 +46,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 	@Test
 	public void test()
 	{
-		OnlineDevicePool pool = OnlineDevicePool.getInstance();
+		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
 		
 		// Step_01 µ÷ÓÃ£ºOnlineDevicePool::getCount

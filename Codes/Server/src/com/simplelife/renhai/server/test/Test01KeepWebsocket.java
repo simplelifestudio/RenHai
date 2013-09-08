@@ -36,7 +36,7 @@ public class Test01KeepWebsocket extends AbstractTestCase
 	@After
 	public void tearDown() throws Exception
 	{
-		OnlineDevicePool pool = OnlineDevicePool.getInstance();
+		OnlineDevicePool pool = OnlineDevicePool.instance;
 		pool.releaseDevice(mockDevice);
 	}
 	
@@ -47,7 +47,7 @@ public class Test01KeepWebsocket extends AbstractTestCase
 		MockWebSocketConnection conn = new MockWebSocketConnection();
 		
 		// Step_02 调用：OnlineDevicePool::getCount
-		OnlineDevicePool pool = OnlineDevicePool.getInstance();
+		OnlineDevicePool pool = OnlineDevicePool.instance;
 		int deviceCount = pool.getElementCount();
 		
 		// Step_03 调用：OnlineDevicePool::newDevice

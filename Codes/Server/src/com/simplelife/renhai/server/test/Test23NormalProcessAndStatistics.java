@@ -35,7 +35,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 	{
 		mockApp1 = createMockApp();
 		mockApp2 = createMockApp();
-		mockApp2.getDeviceWrapper().getDevice().getDeviceCard().setDeviceSn("SNOfDeviceB");
+		mockApp2.getDeviceWrapper().getDevice().getDevicecard().setDeviceSn("SNOfDeviceB");
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 	@Test
 	public void test()
 	{
-		OnlineDevicePool onlinePool = OnlineDevicePool.getInstance();
+		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		

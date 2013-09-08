@@ -50,11 +50,11 @@ public class Interestcard implements java.io.Serializable {
 	@Id
 	@GeneratedValue
 	@Column(name = "interestCardId", unique = true, nullable = false)
-	public Integer getInterestCardId() {
+	public Integer getInterestcardId() {
 		return this.interestCardId;
 	}
 
-	public void setInterestCardId(Integer interestCardId) {
+	public void setInterestcardId(Integer interestCardId) {
 		this.interestCardId = interestCardId;
 	}
 

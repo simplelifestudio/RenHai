@@ -45,10 +45,10 @@ public class TableColumnName
 	public static final String HotInterestLabel					= "hotInterestLabel";
 	public static final String HotInterestLabelStatisticsId		= "hotInterestLabelStatisticsId";
 
-	public static final String ImpressCardId					= "impressCardId";
+	public static final String ImpresscardId					= "impressCardId";
 	public static final String ImpressLabel						= "impressLabel";
 	public static final String ImpressLabelMaplId				= "impressLabelMaplId";
-	public static final String InterestCardId					= "interestCardId";
+	public static final String InterestcardId					= "interestCardId";
 	public static final String InterestChatDeviceCount			= "interestChatDeviceCount";
 
 	public static final String InterestDeviceCount				= "interestDeviceCount";

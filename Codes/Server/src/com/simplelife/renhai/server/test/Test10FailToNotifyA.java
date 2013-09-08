@@ -36,7 +36,7 @@ public class Test10FailToNotifyA extends AbstractTestCase
 	{
 		mockApp1 = createMockApp();
 		mockApp2 = createMockApp();
-		mockApp2.getDeviceWrapper().getDevice().getDeviceCard().setDeviceSn("SNOfDeviceB");
+		mockApp2.getDeviceWrapper().getDevice().getDevicecard().setDeviceSn("SNOfDeviceB");
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class Test10FailToNotifyA extends AbstractTestCase
 	@Test
 	public void test()
 	{
-		OnlineDevicePool onlinePool = OnlineDevicePool.getInstance();
+		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random); 
 		BusinessSessionPool sessionPool = BusinessSessionPool.getInstance();  
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();

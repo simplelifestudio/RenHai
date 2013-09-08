@@ -12,15 +12,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * Statisticsitemdefinition entity. @author MyEclipse Persistence Tools
+ * Statisticsitem entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "statisticsitemdefinition", catalog = "renhai")
-public class Statisticsitemdefinition implements java.io.Serializable {
+@Table(name = "statisticsitem", catalog = "renhai")
+public class Statisticsitem implements java.io.Serializable {
 
 	// Fields
 
-	private Integer statisticsItemDefinitionId;
+	private Integer statisticsitemId;
 	private Integer statisticsItem;
 	private String description;
 	private Set<Systemstatistics> systemstatisticses = new HashSet<Systemstatistics>(
@@ -29,17 +29,17 @@ public class Statisticsitemdefinition implements java.io.Serializable {
 	// Constructors
 
 	/** default constructor */
-	public Statisticsitemdefinition() {
+	public Statisticsitem() {
 	}
 
 	/** minimal constructor */
-	public Statisticsitemdefinition(Integer statisticsItem, String description) {
+	public Statisticsitem(Integer statisticsItem, String description) {
 		this.statisticsItem = statisticsItem;
 		this.description = description;
 	}
 
 	/** full constructor */
-	public Statisticsitemdefinition(Integer statisticsItem, String description,
+	public Statisticsitem(Integer statisticsItem, String description,
 			Set<Systemstatistics> systemstatisticses) {
 		this.statisticsItem = statisticsItem;
 		this.description = description;
@@ -49,13 +49,13 @@ public class Statisticsitemdefinition implements java.io.Serializable {
 	// Property accessors
 	@Id
 	@GeneratedValue
-	@Column(name = "statisticsItemDefinitionId", unique = true, nullable = false)
-	public Integer getStatisticsItemDefinitionId() {
-		return this.statisticsItemDefinitionId;
+	@Column(name = "statisticsitemId", unique = true, nullable = false)
+	public Integer getStatisticsitemId() {
+		return this.statisticsitemId;
 	}
 
-	public void setStatisticsItemDefinitionId(Integer statisticsItemDefinitionId) {
-		this.statisticsItemDefinitionId = statisticsItemDefinitionId;
+	public void setStatisticsitemId(Integer statisticsitemId) {
+		this.statisticsitemId = statisticsitemId;
 	}
 
 	@Column(name = "statisticsItem", nullable = false)
@@ -76,7 +76,7 @@ public class Statisticsitemdefinition implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "statisticsitemdefinition")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "statisticsitem")
 	public Set<Systemstatistics> getSystemstatisticses() {
 		return this.systemstatisticses;
 	}

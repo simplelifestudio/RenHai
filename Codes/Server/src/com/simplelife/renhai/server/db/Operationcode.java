@@ -12,15 +12,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * Operationcodedefinition entity. @author MyEclipse Persistence Tools
+ * Operationcode entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "operationcodedefinition", catalog = "renhai")
-public class Operationcodedefinition implements java.io.Serializable {
+@Table(name = "operationcode", catalog = "renhai")
+public class Operationcode implements java.io.Serializable {
 
 	// Fields
 
-	private Integer operationCodeDefinitionId;
+	private Integer operationCodeId;
 	private Integer operationCode;
 	private String operationType;
 	private String description;
@@ -32,11 +32,11 @@ public class Operationcodedefinition implements java.io.Serializable {
 	// Constructors
 
 	/** default constructor */
-	public Operationcodedefinition() {
+	public Operationcode() {
 	}
 
 	/** minimal constructor */
-	public Operationcodedefinition(Integer operationCode, String operationType,
+	public Operationcode(Integer operationCode, String operationType,
 			String description) {
 		this.operationCode = operationCode;
 		this.operationType = operationType;
@@ -44,7 +44,7 @@ public class Operationcodedefinition implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Operationcodedefinition(Integer operationCode, String operationType,
+	public Operationcode(Integer operationCode, String operationType,
 			String description, Set<Profileoperationlog> profileoperationlogs,
 			Set<Systemoperationlog> systemoperationlogs) {
 		this.operationCode = operationCode;
@@ -57,13 +57,13 @@ public class Operationcodedefinition implements java.io.Serializable {
 	// Property accessors
 	@Id
 	@GeneratedValue
-	@Column(name = "operationCodeDefinitionId", unique = true, nullable = false)
-	public Integer getOperationCodeDefinitionId() {
-		return this.operationCodeDefinitionId;
+	@Column(name = "operationCodeId", unique = true, nullable = false)
+	public Integer getOperationCodeId() {
+		return this.operationCodeId;
 	}
 
-	public void setOperationCodeDefinitionId(Integer operationCodeDefinitionId) {
-		this.operationCodeDefinitionId = operationCodeDefinitionId;
+	public void setOperationCodeId(Integer operationCodeId) {
+		this.operationCodeId = operationCodeId;
 	}
 
 	@Column(name = "operationCode", nullable = false)
@@ -93,7 +93,7 @@ public class Operationcodedefinition implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "operationcodedefinition")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "operationcode")
 	public Set<Profileoperationlog> getProfileoperationlogs() {
 		return this.profileoperationlogs;
 	}
@@ -103,7 +103,7 @@ public class Operationcodedefinition implements java.io.Serializable {
 		this.profileoperationlogs = profileoperationlogs;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "operationcodedefinition")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "operationcode")
 	public Set<Systemoperationlog> getSystemoperationlogs() {
 		return this.systemoperationlogs;
 	}

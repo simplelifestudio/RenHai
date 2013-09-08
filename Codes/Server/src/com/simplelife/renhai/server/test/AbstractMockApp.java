@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Timer;
 
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.business.device.DeviceCard;
+import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.IMockApp;
@@ -46,11 +46,11 @@ public abstract class AbstractMockApp implements IMockApp
     protected void init()
     {
     	jsonMap.clear();
-    	jsonMap.put(JSONKey.FieldName.Head, jsonMapHeader);
+    	jsonMap.put(JSONKey.FieldName.Header, jsonMapHeader);
     	jsonMap.put(JSONKey.FieldName.Body, jsonMapBody);
     	
-    	jsonMapHeader.put(JSONKey.FieldName.DeviceId, deviceWrapper.getDevice().getDeviceCard().getDeviceId());
-    	jsonMapHeader.put(JSONKey.FieldName.DeviceSn, deviceWrapper.getDevice().getDeviceCard().getDeviceSn());
+    	jsonMapHeader.put(JSONKey.FieldName.DeviceId, deviceWrapper.getDevice().getDevicecard().getDeviceId());
+    	jsonMapHeader.put(JSONKey.FieldName.DeviceSn, deviceWrapper.getDevice().getDevicecard().getDeviceSn());
     	jsonMapHeader.put(JSONKey.FieldName.TimeStamp, DateUtil.getNow());
     }
     
@@ -61,10 +61,10 @@ public abstract class AbstractMockApp implements IMockApp
     		return jsonMapDevice;
     	}
     	
-    	DeviceCard card = deviceWrapper.getDevice().getDeviceCard();
+    	Devicecard card = deviceWrapper.getDevice().getDevicecard();
     	jsonMapDevice.put(JSONKey.FieldName.OsVersion, card.getOsVersion());
     	jsonMapDevice.put(JSONKey.FieldName.AppVersion, card.getAppVersion());
-    	jsonMapDevice.put(JSONKey.FieldName.IsJailed, card.isJailed());
+    	jsonMapDevice.put(JSONKey.FieldName.IsJailed, card.getIsJailed());
     	jsonMapDevice.put(JSONKey.FieldName.Location, card.getLocation());
     	
     	return jsonMapDevice;

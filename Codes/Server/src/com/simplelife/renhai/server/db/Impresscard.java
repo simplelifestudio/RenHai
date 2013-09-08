@@ -57,11 +57,11 @@ public class Impresscard implements java.io.Serializable {
 	@Id
 	@GeneratedValue
 	@Column(name = "impressCardId", unique = true, nullable = false)
-	public Integer getImpressCardId() {
+	public Integer getImpresscardId() {
 		return this.impressCardId;
 	}
 
-	public void setImpressCardId(Integer impressCardId) {
+	public void setImpresscardId(Integer impressCardId) {
 		this.impressCardId = impressCardId;
 	}
 

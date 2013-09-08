@@ -14,7 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.simplelife.renhai.server.business.device.DeviceCard;
+import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.TableColumnName;
@@ -52,12 +52,12 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 	@Test
 	public void test()
 	{
-		OnlineDevicePool pool = OnlineDevicePool.getInstance();
+		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
-		DeviceCard deviceCard = deviceWrapper.getDevice().getDeviceCard();
+		Devicecard deviceCard = deviceWrapper.getDevice().getDevicecard();
 		
 		// Step_01 数据库操作：将设备A的服务状态更新为禁聊，到期日期为昨天
-		String sql = "update " + TableName.DeviceCard 
+		String sql = "update " + TableName.Devicecard 
 				+ " set " + TableColumnName.ServiceStatus + " = 1, "
 				+ TableColumnName.ForbiddenExpiredDate + " = " + DateUtil.getDateByDayBack(1)
 				+ " where " + TableColumnName.DeviceSn + " = '" + deviceCard.getDeviceSn() + "'";
