@@ -39,9 +39,9 @@
 
 -(void)_setupView
 {
-    _enterButtonProgressView.startAngle = -M_PI_2;
-    _enterButtonProgressView.tintColor = COLOR_MID;
-    
+    _enterButtonProgressView.startAngle = - M_PI_2;
+    _enterButtonProgressView.tintColor = FLATUI_COLOR_PROGRESS;
+//    _enterButtonProgressView.trackColor = FLATUI_COLOR_PROGRESS_TRACK;
     _enterButtonProgressView.roundProgressViewDelegate = self;
 }
 
@@ -49,7 +49,7 @@
 {
     [self _setupSideBarMenuButtons];
     
-    [self.navigationController.navigationBar setTintColor:COLOR_MID];
+    [self.navigationController.navigationBar setTintColor:FLATUI_COLOR_NAVIGATIONBAR];
     
     self.navigationItem.title = NAVIGATIONBAR_TITLE_HOME;
 }
@@ -104,7 +104,7 @@
 static float progress = 0.1;
 -(void)_timerUpdated
 {
-    [_enterButtonProgressView setProgress:progress animated:NO];
+    [_enterButtonProgressView setProgress:progress animated:YES];
     progress+=0.1;
 }
 
@@ -140,8 +140,6 @@ static float progress = 0.1;
     [self _timerFinished];      
     
     [self performSelector:@selector(_unlockViewController) withObject:self afterDelay:0.0];
-
-
 }
 
 @end

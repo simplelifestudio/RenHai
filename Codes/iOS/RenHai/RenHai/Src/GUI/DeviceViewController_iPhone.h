@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DeviceViewController_iPhone : UIViewController
+@interface DeviceViewController_iPhone : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

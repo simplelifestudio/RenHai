@@ -39,8 +39,6 @@
 		C50505DB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505BB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m */; };
 		C50505DC17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505BD17D2BD4800DB6589 /* UIColor+CBColors.m */; };
 		C50505DD17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505BD17D2BD4800DB6589 /* UIColor+CBColors.m */; };
-		C50505DE17D2BD4800DB6589 /* UIDevice+Resolutions.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505BF17D2BD4800DB6589 /* UIDevice+Resolutions.m */; };
-		C50505DF17D2BD4800DB6589 /* UIDevice+Resolutions.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505BF17D2BD4800DB6589 /* UIDevice+Resolutions.m */; };
 		C50505E217D2C53A00DB6589 /* LoggerModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505E117D2C53A00DB6589 /* LoggerModule.m */; };
 		C50505E317D2C53A00DB6589 /* LoggerModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505E117D2C53A00DB6589 /* LoggerModule.m */; };
 		C50505E817D2D26C00DB6589 /* GUIModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505E517D2D26C00DB6589 /* GUIModule.m */; };
@@ -65,6 +63,12 @@
 		C54DC8DA17DC11A000BBD498 /* CBRoundProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8D417DC11A000BBD498 /* CBRoundProgressView.m */; };
 		C54DC8DD17DC497000BBD498 /* TestTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8DC17DC497000BBD498 /* TestTitle.m */; };
 		C54DC8E017DC4A4600BBD498 /* TestObj.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8DF17DC4A4500BBD498 /* TestObj.m */; };
+		C54DC8E417DC73DE00BBD498 /* TableViewLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8E217DC73DC00BBD498 /* TableViewLabelCell.m */; };
+		C54DC8E517DC73DE00BBD498 /* TableViewLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8E217DC73DC00BBD498 /* TableViewLabelCell.m */; };
+		C54DC8E617DC73DE00BBD498 /* TableViewLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8E317DC73DD00BBD498 /* TableViewLabelCell.xib */; };
+		C54DC8E717DC73DE00BBD498 /* TableViewLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8E317DC73DD00BBD498 /* TableViewLabelCell.xib */; };
+		C54DC8EA17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8E917DC926900BBD498 /* UIDevice+CBDeviceExtends.m */; };
+		C54DC8EB17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8E917DC926900BBD498 /* UIDevice+CBDeviceExtends.m */; };
 		C55B43EC17CF580A009BB21B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EB17CF580A009BB21B /* UIKit.framework */; };
 		C55B43EE17CF580A009BB21B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43ED17CF580A009BB21B /* Foundation.framework */; };
 		C55B43F017CF580A009BB21B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EF17CF580A009BB21B /* CoreGraphics.framework */; };
@@ -223,8 +227,6 @@
 		C50505BB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBUncaughtExceptionHandler.m; sourceTree = "<group>"; };
 		C50505BC17D2BD4800DB6589 /* UIColor+CBColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+CBColors.h"; sourceTree = "<group>"; };
 		C50505BD17D2BD4800DB6589 /* UIColor+CBColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CBColors.m"; sourceTree = "<group>"; };
-		C50505BE17D2BD4800DB6589 /* UIDevice+Resolutions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Resolutions.h"; sourceTree = "<group>"; };
-		C50505BF17D2BD4800DB6589 /* UIDevice+Resolutions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Resolutions.m"; sourceTree = "<group>"; };
 		C50505E017D2C53A00DB6589 /* LoggerModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoggerModule.h; sourceTree = "<group>"; };
 		C50505E117D2C53A00DB6589 /* LoggerModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoggerModule.m; sourceTree = "<group>"; };
 		C50505E417D2D26C00DB6589 /* GUIModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GUIModule.h; sourceTree = "<group>"; };
@@ -247,6 +249,11 @@
 		C54DC8DC17DC497000BBD498 /* TestTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestTitle.m; sourceTree = "<group>"; };
 		C54DC8DE17DC4A4500BBD498 /* TestObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestObj.h; sourceTree = "<group>"; };
 		C54DC8DF17DC4A4500BBD498 /* TestObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestObj.m; sourceTree = "<group>"; };
+		C54DC8E117DC73DC00BBD498 /* TableViewLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewLabelCell.h; sourceTree = "<group>"; };
+		C54DC8E217DC73DC00BBD498 /* TableViewLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewLabelCell.m; sourceTree = "<group>"; };
+		C54DC8E317DC73DD00BBD498 /* TableViewLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewLabelCell.xib; sourceTree = "<group>"; };
+		C54DC8E817DC926900BBD498 /* UIDevice+CBDeviceExtends.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+CBDeviceExtends.h"; sourceTree = "<group>"; };
+		C54DC8E917DC926900BBD498 /* UIDevice+CBDeviceExtends.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+CBDeviceExtends.m"; sourceTree = "<group>"; };
 		C55B43E817CF580A009BB21B /* RenHai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55B43EB17CF580A009BB21B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C55B43ED17CF580A009BB21B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -637,8 +644,8 @@
 				C594602717D6C6DF0084BB10 /* CBJSONMessageComm.h */,
 				C50505BC17D2BD4800DB6589 /* UIColor+CBColors.h */,
 				C50505BD17D2BD4800DB6589 /* UIColor+CBColors.m */,
-				C50505BE17D2BD4800DB6589 /* UIDevice+Resolutions.h */,
-				C50505BF17D2BD4800DB6589 /* UIDevice+Resolutions.m */,
+				C54DC8E817DC926900BBD498 /* UIDevice+CBDeviceExtends.h */,
+				C54DC8E917DC926900BBD498 /* UIDevice+CBDeviceExtends.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -702,6 +709,9 @@
 				C593C46217D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m */,
 				C593C45D17D32AC800C26367 /* ChatImpressViewController_iPhone.h */,
 				C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */,
+				C54DC8E117DC73DC00BBD498 /* TableViewLabelCell.h */,
+				C54DC8E217DC73DC00BBD498 /* TableViewLabelCell.m */,
+				C54DC8E317DC73DD00BBD498 /* TableViewLabelCell.xib */,
 			);
 			path = GUI;
 			sourceTree = "<group>";
@@ -843,6 +853,7 @@
 				C54DC8C917DC069900BBD498 /* enterbutton_highlighted@2x.png in Resources */,
 				C54DC8CB17DC069900BBD498 /* enterbutton_normal.png in Resources */,
 				C54DC8CD17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
+				C54DC8E617DC73DE00BBD498 /* TableViewLabelCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -873,6 +884,7 @@
 				C54DC8CA17DC069900BBD498 /* enterbutton_highlighted@2x.png in Resources */,
 				C54DC8CC17DC069900BBD498 /* enterbutton_normal.png in Resources */,
 				C54DC8CE17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
+				C54DC8E717DC73DE00BBD498 /* TableViewLabelCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -977,7 +989,6 @@
 				C50505D817D2BD4800DB6589 /* CBUIUtils.m in Sources */,
 				C50505DA17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
 				C50505DC17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */,
-				C50505DE17D2BD4800DB6589 /* UIDevice+Resolutions.m in Sources */,
 				C50505E217D2C53A00DB6589 /* LoggerModule.m in Sources */,
 				C50505E817D2D26C00DB6589 /* GUIModule.m in Sources */,
 				C50505EA17D2D26C00DB6589 /* GUIStyle.m in Sources */,
@@ -1016,6 +1027,8 @@
 				C54DC8D517DC11A000BBD498 /* CEPlayer.m in Sources */,
 				C54DC8D717DC11A000BBD498 /* CBRoundProgressLayer.m in Sources */,
 				C54DC8D917DC11A000BBD498 /* CBRoundProgressView.m in Sources */,
+				C54DC8E417DC73DE00BBD498 /* TableViewLabelCell.m in Sources */,
+				C54DC8EA17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1042,7 +1055,6 @@
 				C50505D917D2BD4800DB6589 /* CBUIUtils.m in Sources */,
 				C50505DB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
 				C50505DD17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */,
-				C50505DF17D2BD4800DB6589 /* UIDevice+Resolutions.m in Sources */,
 				C50505E317D2C53A00DB6589 /* LoggerModule.m in Sources */,
 				C50505E917D2D26C00DB6589 /* GUIModule.m in Sources */,
 				C50505EB17D2D26C00DB6589 /* GUIStyle.m in Sources */,
@@ -1084,6 +1096,8 @@
 				C54DC8DA17DC11A000BBD498 /* CBRoundProgressView.m in Sources */,
 				C54DC8DD17DC497000BBD498 /* TestTitle.m in Sources */,
 				C54DC8E017DC4A4600BBD498 /* TestObj.m in Sources */,
+				C54DC8E517DC73DE00BBD498 /* TableViewLabelCell.m in Sources */,
+				C54DC8EB17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
