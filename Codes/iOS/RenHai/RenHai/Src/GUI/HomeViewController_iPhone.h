@@ -8,6 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+#import "CBRoundProgressView.h"
+#import "OBShapedButton.h"
+
 @interface HomeViewController_iPhone : UIViewController
+
+@property (weak, nonatomic) IBOutlet CBRoundProgressView *enterButtonProgressView;
+@property (weak, nonatomic) IBOutlet OBShapedButton *enterButton;
+
+- (IBAction)onPressEnterButton:(id)sender;
 
 @end

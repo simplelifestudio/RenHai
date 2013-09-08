@@ -10,4 +10,5 @@
 
 @interface RenHaiCommonModuleTest : GHTestCase
 
+
 @end
