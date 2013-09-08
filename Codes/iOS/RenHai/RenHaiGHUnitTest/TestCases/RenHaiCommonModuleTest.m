@@ -10,6 +10,12 @@
 
 #import "CBJSONUtils.h"
 
+#import "TestTitle.h"
+
+@interface RenHaiCommonModuleTest()
+
+@end
+
 @implementation RenHaiCommonModuleTest
 
 -(void) testNSDictionaryToJSONString
@@ -29,6 +35,13 @@
     NSDictionary* dic = [CBJSONUtils toJSONObject:jsonString];
     
     NSLog(@"JSON Object: %@", dic);
+}
+
+-(void) testDuplicateMemberDeclaration
+{
+    TestTitle* o = [[TestTitle alloc] init];
+    o.obj.password = @"Aloha";
+    NSLog(@"password = %@", [o objPassword]);
 }
 
 @end

@@ -142,7 +142,14 @@ static NSTimeInterval s_labelDuration = LABELS_DURATION;
 	[UIView beginAnimations:nil context:nil];
     [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
 	[UIView setAnimationDuration:s_labelDuration];
-    s_labelDuration += LABELS_DURATION_OFFSET;
+    if (s_labelShowingIndex < 2)
+    {
+        s_labelDuration += LABELS_DURATION_OFFSET;
+    }
+    else
+    {
+        s_labelDuration += LABELS_DURATION_OFFSET * 2;
+    }
 	[UIView setAnimationDelegate:self];
 	[UIView setAnimationDidStopSelector:@selector(_finishShowingLabels)];
 

@@ -5,6 +5,7 @@ PODS:
   - FlatUIKit (1.2)
   - GHUnitIOS (0.5.6)
   - MBProgressHUD (0.7)
+  - OBShapedButton (1.0.2)
   - OpenTokSDK-WebRTC (2.1.4)
   - PKRevealController (1.0b2)
   - Reachability (3.1.1)
@@ -18,6 +19,7 @@ DEPENDENCIES:
   - FlatUIKit (~> 1.2)
   - GHUnitIOS (~> 0.5.6)
   - MBProgressHUD (~> 0.7)
+  - OBShapedButton (~> 1.0.2)
   - OpenTokSDK-WebRTC (~> 2.1.4)
   - PKRevealController (~> 1.0b2)
   - Reachability (~> 3.1.1)
@@ -31,6 +33,7 @@ SPEC CHECKSUMS:
   FlatUIKit: 43b2acaa6f4ef57539b51b00e4ce62d506e33e11
   GHUnitIOS: bf149b2c44084eee2785ce4ac3675c3a699e509d
   MBProgressHUD: 1fd8591a2216d5dec6de24e09187bb03bcbe9946
+  OBShapedButton: d2b9783760660ac98a32f334a587dea459a63e0b
   OpenTokSDK-WebRTC: 8858edc7cbe5bb53e1360a2c3d1c672f4d681a8f
   PKRevealController: 631e6a3db833a0c660203c2dba0963109549ec8a
   Reachability: 2be6bc2fd2bd31d97f5db33e75e4b29c79e95883

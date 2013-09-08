@@ -11,14 +11,18 @@
 #import "GUIModule.h"
 #import "GUIStyle.h"
 
-@interface HomeViewController_iPhone ()
+@interface HomeViewController_iPhone () <CBRoundProgressViewDelegate>
 {
     GUIModule* _guiModule;
+    NSTimer* _enterButtonTimer;
 }
 
 @end
 
 @implementation HomeViewController_iPhone
+
+@synthesize enterButtonProgressView = _enterButtonProgressView;
+@synthesize enterButton = _enterButton;
 
 - (void)viewDidLoad
 {
@@ -27,9 +31,19 @@
     _guiModule = [GUIModule sharedInstance];
     
     [self _setupNavigationBar];
+    
+    [self _setupView];
 }
 
 #pragma mark - Private Methods
+
+-(void)_setupView
+{
+    _enterButtonProgressView.startAngle = -M_PI_2;
+    _enterButtonProgressView.tintColor = COLOR_MID;
+    
+    _enterButtonProgressView.roundProgressViewDelegate = self;
+}
 
 -(void)_setupNavigationBar
 {
@@ -63,6 +77,71 @@
     {
         [self.navigationController.revealController showViewController:self.navigationController.revealController.leftViewController];
     }
+}
+
+-(void)_lockViewController
+{
+    _enterButton.highlighted = YES;
+    _enterButton.enabled = NO;
+    
+    self.navigationItem.leftBarButtonItem.enabled = NO;
+    
+    UIPanGestureRecognizer* gesturer = self.navigationController.revealController.revealPanGestureRecognizer;
+    gesturer.enabled = NO;
+}
+
+-(void)_unlockViewController
+{
+    _enterButton.highlighted = NO;
+    _enterButton.enabled = YES;
+    
+    self.navigationItem.leftBarButtonItem.enabled = YES;
+    
+    UIPanGestureRecognizer* gesturer = self.navigationController.revealController.revealPanGestureRecognizer;
+    gesturer.enabled = YES;
+}
+
+static float progress = 0.1;
+-(void)_timerUpdated
+{
+    [_enterButtonProgressView setProgress:progress animated:NO];
+    progress+=0.1;
+}
+
+-(void)_timerFinished
+{
+    [_enterButtonTimer invalidate];
+    
+    progress = 0.0;
+    [_enterButtonProgressView setProgress:progress animated:NO];
+}
+
+#pragma mark - IBActions
+
+- (IBAction)onPressEnterButton:(id)sender
+{
+    [self performSelector:@selector(_lockViewController) withObject:self afterDelay:0.0];
+    
+    [self _timerFinished];
+    
+    _enterButtonTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(_timerUpdated) userInfo:nil repeats:YES];
+    [_enterButtonTimer fire];
+}
+
+#pragma mark - CBRoundProgressViewDelegate
+
+- (void) progressStarted
+{
+    
+}
+
+- (void) progressFinished
+{
+    [self _timerFinished];      
+    
+    [self performSelector:@selector(_unlockViewController) withObject:self afterDelay:0.0];
+
+
 }
 
 @end
