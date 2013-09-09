@@ -101,7 +101,7 @@
                 case ITEM_INDEX_DEVICEMODEL:
                 {
                     itemName = NSLocalizedString(@"DeviceCard_DeviceModel", nil);
-                    itemVal = [UIDevice deviceModel];
+                    itemVal = [UIDevice deviceSimpleModel];
                     break;
                 }
                 case ITEM_INDEX_OSVER:
@@ -113,7 +113,7 @@
                 case ITEM_INDEX_ISJAILED:
                 {
                     itemName = NSLocalizedString(@"DeviceCard_IsJailed", nil);
-                    itemVal = ([UIDevice isJailed]) ? NSLocalizedString(@"Yes", nil) : NSLocalizedString(@"No", nil);
+                    itemVal = ([UIDevice isJailed]) ? NSLocalizedString(@"Common_Yes", nil) : NSLocalizedString(@"Common_No", nil);
                     break;
                 }
                 case ITEM_INDEX_DEVICESN:

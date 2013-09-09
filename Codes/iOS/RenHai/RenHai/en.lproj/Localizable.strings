@@ -6,6 +6,9 @@
   Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 */
 
+"Common_Yes" = "Yes";
+"Common_No" = "No";
+
 "DeviceCard_DeviceModel" = "Model";
 "DeviceCard_OSVersion" = "OS";
 "DeviceCard_IsJailed" = "Jailed";

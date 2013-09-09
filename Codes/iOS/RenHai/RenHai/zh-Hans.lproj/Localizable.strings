@@ -6,6 +6,9 @@
   Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 */
 
+"Common_Yes" = "是";
+"Common_No" = "否";
+
 "DeviceCard_DeviceModel" = "设备类型";
 "DeviceCard_OSVersion" = "系统平台";
 "DeviceCard_IsJailed" = "是否越狱";
