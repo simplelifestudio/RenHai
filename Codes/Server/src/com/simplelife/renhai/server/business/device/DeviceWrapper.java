@@ -19,6 +19,7 @@ import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IAppJSONMessage;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IBaseConnectionOwner;
@@ -53,12 +54,12 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     /** */
     protected Consts.DeviceBusinessStatus businessStatus;
     
-    protected OnlineDevicePool pool;
+    protected OnlineDevicePool ownerOnlinePool;
     
     /** */
     protected void updatePingTime()
     {
-    
+    	lastPingTime = DateUtil.getNowDate();
     }
     
     /** */
@@ -95,7 +96,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     /** */
     public void bindOnlineDevicePool(OnlineDevicePool pool)
     {
-    	this.pool = pool;
+    	this.ownerOnlinePool = pool;
     }
     
     /** */
@@ -168,20 +169,13 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
         return null;
     }
 
-    /* (non-Javadoc)
-     * @see IBaseConnectionOwner#onClose(IBaseConnection)
-     */
     @Override
     public void onClose(IBaseConnection connection)
     {
-        // TODO Auto-generated method stub
-        
+        ownerOnlinePool.releaseDevice(this);
     }
 
 
-    /* (non-Javadoc)
-     * @see IBaseConnectionOwner#onJSONCommand(IAppJSONMessage)
-     */
     @Override
     public void onJSONCommand(AppJSONMessage command)
     {
@@ -189,43 +183,26 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
         (new Thread(command)).run();
     }
 
-
-    /* (non-Javadoc)
-     * @see IDeviceWrapper#bindBusinessSession(IBusinessSession)
-     */
     @Override
     public void bindBusinessSession(IBusinessSession session)
     {
-        // TODO Auto-generated method stub
-        
+        this.ownerBusinessSession = session;
     }
 
-
-    /* (non-Javadoc)
-     * @see com.simplelife.renhai.server.util.IBaseConnectionOwner#onPing(com.simplelife.renhai.server.util.IBaseConnection)
-     */
     @Override
     public void onPing(IBaseConnection conection)
     {
-        // TODO Auto-generated method stub
-        
+        this.updateLastActivityTime();
     }
 
 
-    /* (non-Javadoc)
-     * @see com.simplelife.renhai.server.util.IBaseConnectionOwner#onTimeOut(com.simplelife.renhai.server.util.IBaseConnection)
-     */
     @Override
     public void onTimeOut(IBaseConnection conection)
     {
-        // TODO Auto-generated method stub
-        
+        this.ownerOnlinePool.releaseDevice(this);
     }
 
 
-    /* (non-Javadoc)
-     * @see com.simplelife.renhai.server.util.IDeviceWrapper#syncSendMessage(com.simplelife.renhai.server.util.IJSONObject)
-     */
     @Override
     public void syncSendMessage(ServerJSONMessage message)
     {
@@ -235,14 +212,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
 
-    /* (non-Javadoc)
-     * @see com.simplelife.renhai.server.util.IDeviceWrapper#asyncSendMessage(com.simplelife.renhai.server.util.IJSONObject)
-     */
     @Override
     public void asyncSendMessage(ServerJSONMessage message)
     {
@@ -252,18 +225,19 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
 		}
 		catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
 
-	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.util.IBaseConnectionOwner#getConnection()
-	 */
 	@Override
 	public IBaseConnection getConnection()
 	{
 		return webSocketConnection;
+	}
+	
+	public void setDevice(Device device)
+	{
+		this.device = device;
 	}
 }
 

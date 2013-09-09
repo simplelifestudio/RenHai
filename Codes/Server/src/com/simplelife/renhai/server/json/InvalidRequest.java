@@ -47,8 +47,11 @@ public class InvalidRequest extends AppJSONMessage
     	return null;
     }
 	
+	/**
+	 * Check if JSON request is valid
+	 */
 	@Override
-	protected boolean checkJsonCommand()
+	protected boolean checkJSONRequest()
 	{
 		setErrorDescription("Invalid JSON string");
 		setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);

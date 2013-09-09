@@ -14,6 +14,7 @@ package com.simplelife.renhai.server.business.device;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Interestcard;
+import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.util.ICardOperation;
 import com.simplelife.renhai.server.util.IDbOperation;
 
@@ -63,11 +64,13 @@ public class Device implements IDbOperation, ICardOperation
     /** */
     public void setImpresscard(Impresscard card)
     {
+    	profile.setImpresscard(card);
     }
     
     /** */
     public void setInterestcard(Interestcard card)
     {
+    	profile.setInterestcard(card);
     }
     
     /** */
@@ -81,4 +84,15 @@ public class Device implements IDbOperation, ICardOperation
     {
         return null;
     }
+
+	@Override
+	public void setDevicecard(Devicecard card)
+	{
+		this.deviceCard = card;
+	}
+	
+	public void setProfile(Profile profile)
+	{
+		this.profile = profile;
+	}
 }

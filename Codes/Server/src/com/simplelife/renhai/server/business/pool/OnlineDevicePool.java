@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.business.pool;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.Vector;
@@ -31,7 +32,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 {
     /** */
     private Timer timer;
-    private LinkedList<DeviceWrapper> tmpDeviceLink = new LinkedList<DeviceWrapper>(); 
+    private HashMap<String, DeviceWrapper> tmpDeviceLink = new HashMap<String, DeviceWrapper>(); 
     
     /** */
     private Vector<AbstractBusinessDevicePool> businessPoolList = new Vector<AbstractBusinessDevicePool>();
@@ -78,10 +79,11 @@ public class OnlineDevicePool extends AbstractDevicePool
     public IDeviceWrapper newDevice(IBaseConnection connection)
     {
     	Logger logger = BusinessModule.instance.getLogger();
+    	logger.debug("newDevice");
     	DeviceWrapper deviceWrapper = new DeviceWrapper(connection);
     	deviceWrapper.bindOnlineDevicePool(this);
     	connection.bind(deviceWrapper);
-    	tmpDeviceLink.add(deviceWrapper);
+    	tmpDeviceLink.put(connection.getConnectionId(), deviceWrapper);
         return deviceWrapper;
     }
     

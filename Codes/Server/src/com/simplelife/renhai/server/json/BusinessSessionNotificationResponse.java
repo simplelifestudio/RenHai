@@ -28,10 +28,13 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 		super(jsonObject);
 	}
 	
+	/**
+	 * Check if JSON request is valid
+	 */
 	@Override
-	protected boolean checkJsonCommand()
+	protected boolean checkJSONRequest()
     {
-		if (!super.checkJsonCommand())
+		if (!super.checkJSONRequest())
 		{
 			return false;
 		}
@@ -47,7 +50,7 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 	@Override
 	public void run()
 	{
-		if (!checkJsonCommand())
+		if (!checkJSONRequest())
 		{
 			responseError(Consts.MessageId.BusinessSessionNotificationResponse.name());
 			return;
