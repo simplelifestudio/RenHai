@@ -1,0 +1,26 @@
+/* 
+  Localizable.strings
+  RenHai
+
+  Created by Patrick Deng on 13-9-9.
+  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
+*/
+
+"Common_Yes" = "是";
+"Common_No" = "否";
+
+"DeviceCard_DeviceModel" = "设备类型";
+"DeviceCard_OSVersion" = "系统平台";
+"DeviceCard_IsJailed" = "是否越狱";
+"DeviceCard_DeviceSN" = "设备标识";
+"DeviceCard_AppVersion" = "软件版本";
+"DeviceCard_RegisterTime" = "服务起始";
+"DeviceCard_ServiceStatus" = "服务状态";
+"DeviceCard_ForbiddenExpiredDate" = "禁言周期";
+
+"LeftBar_Home" = "主屏";
+"LeftBar_Device" = "设备";
+"LeftBar_Impress" = "印象";
+"LeftBar_Interest" = "兴趣";
+"LeftBar_Config" = "配置";
+"LeftBar_Help" = "帮助";

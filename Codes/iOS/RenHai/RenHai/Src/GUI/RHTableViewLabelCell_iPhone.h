@@ -1,5 +1,5 @@
 //
-//  TableViewLabelCell.h
+//  RHTableViewLabelCell_iPhone.h
 //  Seeds
 //
 //  Created by Patrick Deng on 13-7-2.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TableViewLabelCell : UITableViewCell
+@interface RHTableViewLabelCell_iPhone : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *majorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *minorLabel;

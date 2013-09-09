@@ -14,7 +14,7 @@
 #import "GUIStyle.h"
 #import "UIDevice+CBDeviceExtends.h"
 
-#import "TableViewLabelCell.h"
+#import "RHTableViewLabelCell_iPhone.h"
 
 #define SECTION_ITEMCOUNT_CONFIG 2
 
@@ -32,9 +32,9 @@
 #define ITEM_INDEX_SERVICESTATUS 2
 #define ITEM_INDEX_FORBIDDENEXPIREDDATE 3
 
-#define CELL_ID_DEVICEITEM @"TableViewLabelCell"
+#define CELL_ID_DEVICEITEM @"RHTableViewLabelCell_iPhone"
 
-#define NIB_TABLEVIEWLABELCELL @"TableViewLabelCell"
+#define NIB_TABLEVIEWLABELCELL @"RHTableViewLabelCell_iPhone"
 
 @interface DeviceViewController_iPhone ()
 {
@@ -85,7 +85,7 @@
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    TableViewLabelCell* cell = (TableViewLabelCell*)[tableView dequeueReusableCellWithIdentifier:CELL_ID_DEVICEITEM forIndexPath:indexPath];
+    RHTableViewLabelCell_iPhone* cell = (RHTableViewLabelCell_iPhone*)[tableView dequeueReusableCellWithIdentifier:CELL_ID_DEVICEITEM forIndexPath:indexPath];
     
     NSString* itemName = @"";
     NSString* itemVal = @"";
@@ -100,25 +100,25 @@
             {
                 case ITEM_INDEX_DEVICEMODEL:
                 {
-                    itemName = NSLocalizedString(@"Device Model", nil);
-                    itemVal = [UIDevice deviceModel];
+                    itemName = NSLocalizedString(@"DeviceCard_DeviceModel", nil);
+                    itemVal = [UIDevice deviceSimpleModel];
                     break;
                 }
                 case ITEM_INDEX_OSVER:
                 {
-                    itemName = NSLocalizedString(@"OS Version", nil);
+                    itemName = NSLocalizedString(@"DeviceCard_OSVersion", nil);
                     itemVal = [UIDevice osVersion];
                     break;
                 }
                 case ITEM_INDEX_ISJAILED:
                 {
-                    itemName = NSLocalizedString(@"Jailed", nil);
-                    itemVal = ([UIDevice isJailed]) ? NSLocalizedString(@"Yes", nil) : NSLocalizedString(@"No", nil);
+                    itemName = NSLocalizedString(@"DeviceCard_IsJailed", nil);
+                    itemVal = ([UIDevice isJailed]) ? NSLocalizedString(@"Common_Yes", nil) : NSLocalizedString(@"Common_No", nil);
                     break;
                 }
                 case ITEM_INDEX_DEVICESN:
                 {
-                    itemName = NSLocalizedString(@"Device SN", nil);
+                    itemName = NSLocalizedString(@"DeviceCard_DeviceSN", nil);
                     break;
                 }
                 default:
@@ -135,22 +135,22 @@
             {
                 case ITEM_INDEX_APPVER:
                 {
-                    itemName = NSLocalizedString(@"App Version", nil);                    
+                    itemName = NSLocalizedString(@"DeviceCard_AppVersion", nil);                    
                     break;
                 }
                 case ITEM_INDEX_REGTIME:
                 {
-                    itemName = NSLocalizedString(@"Reg Time", nil);                    
+                    itemName = NSLocalizedString(@"DeviceCard_RegisterTime", nil);                    
                     break;
                 }
                 case ITEM_INDEX_SERVICESTATUS:
                 {
-                    itemName = NSLocalizedString(@"Service Status", nil);
+                    itemName = NSLocalizedString(@"DeviceCard_ServiceStatus", nil);
                     break;
                 }
                 case ITEM_INDEX_FORBIDDENEXPIREDDATE:
                 {
-                    itemName = NSLocalizedString(@"ForbiddenExpiredDate", nil);                    
+                    itemName = NSLocalizedString(@"DeviceCard_ForbiddenExpiredDate", nil);                    
                     break;
                 }
                 default:
@@ -166,8 +166,6 @@
             break;
         }
     }
-    
-    cell = (TableViewLabelCell*)cell;
     
     cell.majorLabel.text = itemName;
     cell.minorLabel.text = itemVal;

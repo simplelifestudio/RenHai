@@ -47,6 +47,10 @@
 		C50505EB17D2D26C00DB6589 /* GUIStyle.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505E717D2D26C00DB6589 /* GUIStyle.m */; };
 		C50505EE17D2D28600DB6589 /* CommunicationModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505ED17D2D28600DB6589 /* CommunicationModule.m */; };
 		C50505EF17D2D28600DB6589 /* CommunicationModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505ED17D2D28600DB6589 /* CommunicationModule.m */; };
+		C53A7F1117DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C53A7F1017DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m */; };
+		C53A7F1217DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C53A7F1017DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m */; };
+		C53A7F1417DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C53A7F1317DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib */; };
+		C53A7F1517DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C53A7F1317DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib */; };
 		C54DC8C717DC069900BBD498 /* enterbutton_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8C317DC069900BBD498 /* enterbutton_highlighted.png */; };
 		C54DC8C817DC069900BBD498 /* enterbutton_highlighted.png in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8C317DC069900BBD498 /* enterbutton_highlighted.png */; };
 		C54DC8C917DC069900BBD498 /* enterbutton_highlighted@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8C417DC069900BBD498 /* enterbutton_highlighted@2x.png */; };
@@ -63,12 +67,14 @@
 		C54DC8DA17DC11A000BBD498 /* CBRoundProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8D417DC11A000BBD498 /* CBRoundProgressView.m */; };
 		C54DC8DD17DC497000BBD498 /* TestTitle.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8DC17DC497000BBD498 /* TestTitle.m */; };
 		C54DC8E017DC4A4600BBD498 /* TestObj.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8DF17DC4A4500BBD498 /* TestObj.m */; };
-		C54DC8E417DC73DE00BBD498 /* TableViewLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8E217DC73DC00BBD498 /* TableViewLabelCell.m */; };
-		C54DC8E517DC73DE00BBD498 /* TableViewLabelCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8E217DC73DC00BBD498 /* TableViewLabelCell.m */; };
-		C54DC8E617DC73DE00BBD498 /* TableViewLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8E317DC73DD00BBD498 /* TableViewLabelCell.xib */; };
-		C54DC8E717DC73DE00BBD498 /* TableViewLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8E317DC73DD00BBD498 /* TableViewLabelCell.xib */; };
+		C54DC8E417DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8E217DC73DC00BBD498 /* RHTableViewLabelCell_iPhone.m */; };
+		C54DC8E517DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8E217DC73DC00BBD498 /* RHTableViewLabelCell_iPhone.m */; };
+		C54DC8E617DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8E317DC73DD00BBD498 /* RHTableViewLabelCell_iPhone.xib */; };
+		C54DC8E717DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8E317DC73DD00BBD498 /* RHTableViewLabelCell_iPhone.xib */; };
 		C54DC8EA17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8E917DC926900BBD498 /* UIDevice+CBDeviceExtends.m */; };
 		C54DC8EB17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8E917DC926900BBD498 /* UIDevice+CBDeviceExtends.m */; };
+		C54DC8EF17DD5ECE00BBD498 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8F217DD5ECE00BBD498 /* Localizable.strings */; };
+		C54DC8F017DD5ECE00BBD498 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8F217DD5ECE00BBD498 /* Localizable.strings */; };
 		C55B43EC17CF580A009BB21B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EB17CF580A009BB21B /* UIKit.framework */; };
 		C55B43EE17CF580A009BB21B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43ED17CF580A009BB21B /* Foundation.framework */; };
 		C55B43F017CF580A009BB21B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EF17CF580A009BB21B /* CoreGraphics.framework */; };
@@ -235,6 +241,9 @@
 		C50505E717D2D26C00DB6589 /* GUIStyle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GUIStyle.m; sourceTree = "<group>"; };
 		C50505EC17D2D28600DB6589 /* CommunicationModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunicationModule.h; sourceTree = "<group>"; };
 		C50505ED17D2D28600DB6589 /* CommunicationModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommunicationModule.m; sourceTree = "<group>"; };
+		C53A7F0F17DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHCollectionLabelCell_iPhone.h; sourceTree = "<group>"; };
+		C53A7F1017DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHCollectionLabelCell_iPhone.m; sourceTree = "<group>"; };
+		C53A7F1317DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHCollectionLabelCell_iPhone.xib; sourceTree = "<group>"; };
 		C54DC8C317DC069900BBD498 /* enterbutton_highlighted.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = enterbutton_highlighted.png; sourceTree = "<group>"; };
 		C54DC8C417DC069900BBD498 /* enterbutton_highlighted@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "enterbutton_highlighted@2x.png"; sourceTree = "<group>"; };
 		C54DC8C517DC069900BBD498 /* enterbutton_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = enterbutton_normal.png; sourceTree = "<group>"; };
@@ -249,11 +258,15 @@
 		C54DC8DC17DC497000BBD498 /* TestTitle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestTitle.m; sourceTree = "<group>"; };
 		C54DC8DE17DC4A4500BBD498 /* TestObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestObj.h; sourceTree = "<group>"; };
 		C54DC8DF17DC4A4500BBD498 /* TestObj.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestObj.m; sourceTree = "<group>"; };
-		C54DC8E117DC73DC00BBD498 /* TableViewLabelCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TableViewLabelCell.h; sourceTree = "<group>"; };
-		C54DC8E217DC73DC00BBD498 /* TableViewLabelCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TableViewLabelCell.m; sourceTree = "<group>"; };
-		C54DC8E317DC73DD00BBD498 /* TableViewLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewLabelCell.xib; sourceTree = "<group>"; };
+		C54DC8E117DC73DC00BBD498 /* RHTableViewLabelCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTableViewLabelCell_iPhone.h; sourceTree = "<group>"; };
+		C54DC8E217DC73DC00BBD498 /* RHTableViewLabelCell_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTableViewLabelCell_iPhone.m; sourceTree = "<group>"; };
+		C54DC8E317DC73DD00BBD498 /* RHTableViewLabelCell_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHTableViewLabelCell_iPhone.xib; sourceTree = "<group>"; };
 		C54DC8E817DC926900BBD498 /* UIDevice+CBDeviceExtends.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+CBDeviceExtends.h"; sourceTree = "<group>"; };
 		C54DC8E917DC926900BBD498 /* UIDevice+CBDeviceExtends.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+CBDeviceExtends.m"; sourceTree = "<group>"; };
+		C54DC8F117DD5ECE00BBD498 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C54DC8F517DD60AF00BBD498 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		C54DC8F617DD60AF00BBD498 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C54DC8F717DD60AF00BBD498 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		C55B43E817CF580A009BB21B /* RenHai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55B43EB17CF580A009BB21B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C55B43ED17CF580A009BB21B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -462,6 +475,7 @@
 				C55B43FD17CF580A009BB21B /* Default.png */,
 				C55B43FF17CF580A009BB21B /* Default@2x.png */,
 				C55B440117CF580A009BB21B /* Default-568h@2x.png */,
+				C54DC8F217DD5ECE00BBD498 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -709,9 +723,12 @@
 				C593C46217D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m */,
 				C593C45D17D32AC800C26367 /* ChatImpressViewController_iPhone.h */,
 				C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */,
-				C54DC8E117DC73DC00BBD498 /* TableViewLabelCell.h */,
-				C54DC8E217DC73DC00BBD498 /* TableViewLabelCell.m */,
-				C54DC8E317DC73DD00BBD498 /* TableViewLabelCell.xib */,
+				C54DC8E117DC73DC00BBD498 /* RHTableViewLabelCell_iPhone.h */,
+				C54DC8E217DC73DC00BBD498 /* RHTableViewLabelCell_iPhone.m */,
+				C54DC8E317DC73DD00BBD498 /* RHTableViewLabelCell_iPhone.xib */,
+				C53A7F0F17DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.h */,
+				C53A7F1017DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m */,
+				C53A7F1317DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib */,
 			);
 			path = GUI;
 			sourceTree = "<group>";
@@ -814,6 +831,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				"zh-Hans",
 			);
 			mainGroup = C55B43DF17CF580A009BB21B;
 			productRefGroup = C55B43E917CF580A009BB21B /* Products */;
@@ -853,7 +871,9 @@
 				C54DC8C917DC069900BBD498 /* enterbutton_highlighted@2x.png in Resources */,
 				C54DC8CB17DC069900BBD498 /* enterbutton_normal.png in Resources */,
 				C54DC8CD17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
-				C54DC8E617DC73DE00BBD498 /* TableViewLabelCell.xib in Resources */,
+				C54DC8E617DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.xib in Resources */,
+				C54DC8EF17DD5ECE00BBD498 /* Localizable.strings in Resources */,
+				C53A7F1417DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -884,7 +904,9 @@
 				C54DC8CA17DC069900BBD498 /* enterbutton_highlighted@2x.png in Resources */,
 				C54DC8CC17DC069900BBD498 /* enterbutton_normal.png in Resources */,
 				C54DC8CE17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
-				C54DC8E717DC73DE00BBD498 /* TableViewLabelCell.xib in Resources */,
+				C54DC8E717DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.xib in Resources */,
+				C54DC8F017DD5ECE00BBD498 /* Localizable.strings in Resources */,
+				C53A7F1517DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1027,8 +1049,9 @@
 				C54DC8D517DC11A000BBD498 /* CEPlayer.m in Sources */,
 				C54DC8D717DC11A000BBD498 /* CBRoundProgressLayer.m in Sources */,
 				C54DC8D917DC11A000BBD498 /* CBRoundProgressView.m in Sources */,
-				C54DC8E417DC73DE00BBD498 /* TableViewLabelCell.m in Sources */,
+				C54DC8E417DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.m in Sources */,
 				C54DC8EA17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */,
+				C53A7F1117DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1096,18 +1119,29 @@
 				C54DC8DA17DC11A000BBD498 /* CBRoundProgressView.m in Sources */,
 				C54DC8DD17DC497000BBD498 /* TestTitle.m in Sources */,
 				C54DC8E017DC4A4600BBD498 /* TestObj.m in Sources */,
-				C54DC8E517DC73DE00BBD498 /* TableViewLabelCell.m in Sources */,
+				C54DC8E517DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.m in Sources */,
 				C54DC8EB17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */,
+				C53A7F1217DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		C54DC8F217DD5ECE00BBD498 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C54DC8F117DD5ECE00BBD498 /* en */,
+				C54DC8F617DD60AF00BBD498 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		C55B43F417CF580A009BB21B /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				C55B43F517CF580A009BB21B /* en */,
+				C54DC8F517DD60AF00BBD498 /* zh-Hans */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1116,6 +1150,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				C55B442917CF5992009BB21B /* en */,
+				C54DC8F717DD60AF00BBD498 /* zh-Hans */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";

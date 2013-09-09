@@ -1,0 +1,26 @@
+/* 
+  Localizable.strings
+  RenHai
+
+  Created by Patrick Deng on 13-9-9.
+  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
+*/
+
+"Common_Yes" = "Yes";
+"Common_No" = "No";
+
+"DeviceCard_DeviceModel" = "Model";
+"DeviceCard_OSVersion" = "OS";
+"DeviceCard_IsJailed" = "Jailed";
+"DeviceCard_DeviceSN" = "SN";
+"DeviceCard_AppVersion" = "App";
+"DeviceCard_RegisterTime" = "Reg Time";
+"DeviceCard_ServiceStatus" = "Status";
+"DeviceCard_ForbiddenExpiredDate" = "Banned";
+
+"LeftBar_Home" = "Home";
+"LeftBar_Device" = "Device";
+"LeftBar_Impress" = "Impress";
+"LeftBar_Interest" = "Interest";
+"LeftBar_Config" = "Config";
+"LeftBar_Help" = "Help";
