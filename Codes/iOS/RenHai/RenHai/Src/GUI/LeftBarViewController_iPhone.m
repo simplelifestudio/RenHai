@@ -21,6 +21,8 @@
 #define NIB_LeftBarFooterView_iPhone @"LeftBarFooterView_iPhone"
 #define HEIGHT_LeftBarFooterView 44
 
+#define CELL_ID_LEFTBAR @"LeftBarCell"
+
 @interface LeftBarViewController_iPhone ()
 {
     NSInteger _selectedRow;
@@ -47,8 +49,6 @@
     [super viewDidLoad];
     
     _guiModule = [GUIModule sharedInstance];
-    
-//    [self.tableView registerClass:[UITableViewCell class]  forCellReuseIdentifier:@"Cell"];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -59,27 +59,27 @@
     UIViewController* presentingVC = frontVC.visibleViewController;
     if (presentingVC == _guiModule.homeViewController)
     {
-        _selectedRow = 0;
+        _selectedRow = LEFTBAR_CELL_HOME;
     }
     else if (presentingVC == _guiModule.deviceViewController)
     {
-        _selectedRow = 1;
+        _selectedRow = LEFTBAR_CELL_DEVICE;
     }
     else if (presentingVC == _guiModule.impressViewController)
     {
-        _selectedRow = 2;
+        _selectedRow = LEFTBAR_CELL_IMPRESS;
     }
     else if (presentingVC == _guiModule.interestViewController)
     {
-        _selectedRow = 3;
+        _selectedRow = LEFTBAR_CELL_INTEREST;
     }
     else if (presentingVC == _guiModule.configViewController)
     {
-        _selectedRow = 4;
+        _selectedRow = LEFTBAR_CELL_CONFIG;
     }
     else if (presentingVC == _guiModule.helpViewController)
     {
-        _selectedRow = 5;
+        _selectedRow = LEFTBAR_CELL_HELP;
     }
     
     [self.tableView reloadData];
@@ -105,10 +105,8 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *CellIdentifier = @"Cell";
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+{    
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CELL_ID_LEFTBAR];
 
     NSString* cellText = nil;
     NSInteger row = indexPath.row;

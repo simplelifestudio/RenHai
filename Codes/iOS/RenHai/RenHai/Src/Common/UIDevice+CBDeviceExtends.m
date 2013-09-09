@@ -1,14 +1,14 @@
 //
-//  UIDevice+Resolutions.m
+//  UIDevice+CBDeviceExtends.m
 //  RenHai
 //
 //  Created by Patrick Deng on 13-9-1.
 //  Copyright (c) 2013年 SimpleLife Studio. All rights reserved.
 //
 
-#import "UIDevice+Resolutions.h"
+#import "UIDevice+CBDeviceExtends.h"
 
-@implementation UIDevice (Resolutions)
+@implementation UIDevice (CBDeviceExtends)
 
 + (UIDeviceResolution) currentResolution
 {
@@ -103,6 +103,27 @@
     if ([platform isEqualToString:@"x86_64"])       return @"Simulator";
     
     return platform;
+}
+
++ (NSString*) osVersion
+{
+    return [UIDevice currentDevice].systemVersion;
+}
+
++ (BOOL) isJailed
+{
+    BOOL jailbroken = NO;
+    NSString *cydiaPath = @"/Applications/Cydia.app";
+    NSString *aptPath = @"/private/var/lib/apt/";
+    if ([[NSFileManager defaultManager] fileExistsAtPath:cydiaPath])
+    {
+        jailbroken = YES;
+    }
+    if ([[NSFileManager defaultManager] fileExistsAtPath:aptPath])
+    {
+        jailbroken = YES;
+    }
+    return jailbroken;
 }
 
 @end

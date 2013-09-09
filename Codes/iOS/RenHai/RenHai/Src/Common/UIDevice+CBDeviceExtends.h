@@ -1,5 +1,5 @@
 //
-//  UIDevice+Resolutions.h
+//  UIDevice+CBDeviceExtends.h
 //  RenHai
 //
 //  Created by Patrick Deng on 13-9-1.
@@ -26,7 +26,7 @@ enum
 
 typedef NSUInteger UIDeviceResolution;
 
-@interface UIDevice (Resolutions)
+@interface UIDevice (CBDeviceExtends)
 {
     
 }
@@ -40,5 +40,9 @@ typedef NSUInteger UIDeviceResolution;
 + (BOOL)isRunningOniOS6AndLater;
 
 + (NSString*) deviceModel;
+
++ (NSString*) osVersion;
+
++ (BOOL) isJailed;
 
 @end

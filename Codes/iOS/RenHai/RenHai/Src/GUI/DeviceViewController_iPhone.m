@@ -8,8 +8,33 @@
 
 #import "DeviceViewController_iPhone.h"
 
+#import "FlatUIKit.h"
+
 #import "GUIModule.h"
 #import "GUIStyle.h"
+#import "UIDevice+CBDeviceExtends.h"
+
+#import "TableViewLabelCell.h"
+
+#define SECTION_ITEMCOUNT_CONFIG 2
+
+#define SECTION_INDEX_ENV 0
+#define SECTION_ITEMCOUNT_ENV 4
+#define ITEM_INDEX_DEVICEMODEL 0
+#define ITEM_INDEX_OSVER 1
+#define ITEM_INDEX_ISJAILED 2
+#define ITEM_INDEX_DEVICESN 3
+
+#define SECTION_INDEX_APP 1
+#define SECTION_ITEMCOUNT_APP 4
+#define ITEM_INDEX_APPVER 0
+#define ITEM_INDEX_REGTIME 1
+#define ITEM_INDEX_SERVICESTATUS 2
+#define ITEM_INDEX_FORBIDDENEXPIREDDATE 3
+
+#define CELL_ID_DEVICEITEM @"TableViewLabelCell"
+
+#define NIB_TABLEVIEWLABELCELL @"TableViewLabelCell"
 
 @interface DeviceViewController_iPhone ()
 {
@@ -27,15 +52,144 @@
     _guiModule = [GUIModule sharedInstance];
     
     [self _setupNavigationBar];
+    
+    [self _setupTableView];
+}
+
+#pragma mark - UITableViewDataDelegate
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return SECTION_ITEMCOUNT_CONFIG;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    switch (section)
+    {
+        case SECTION_INDEX_ENV:
+        {
+            return SECTION_ITEMCOUNT_ENV;
+        }
+        case SECTION_INDEX_APP:
+        {
+            return SECTION_ITEMCOUNT_APP;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    return 0;
+}
+
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    TableViewLabelCell* cell = (TableViewLabelCell*)[tableView dequeueReusableCellWithIdentifier:CELL_ID_DEVICEITEM forIndexPath:indexPath];
+    
+    NSString* itemName = @"";
+    NSString* itemVal = @"";
+    
+    NSInteger section = indexPath.section;
+    NSInteger rowInSection = indexPath.row;
+    switch (section)
+    {
+        case SECTION_INDEX_ENV:
+        {
+            switch (rowInSection)
+            {
+                case ITEM_INDEX_DEVICEMODEL:
+                {
+                    itemName = NSLocalizedString(@"Device Model", nil);
+                    itemVal = [UIDevice deviceModel];
+                    break;
+                }
+                case ITEM_INDEX_OSVER:
+                {
+                    itemName = NSLocalizedString(@"OS Version", nil);
+                    itemVal = [UIDevice osVersion];
+                    break;
+                }
+                case ITEM_INDEX_ISJAILED:
+                {
+                    itemName = NSLocalizedString(@"Jailed", nil);
+                    itemVal = ([UIDevice isJailed]) ? NSLocalizedString(@"Yes", nil) : NSLocalizedString(@"No", nil);
+                    break;
+                }
+                case ITEM_INDEX_DEVICESN:
+                {
+                    itemName = NSLocalizedString(@"Device SN", nil);
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+            
+            break;
+        }
+        case SECTION_INDEX_APP:
+        {
+            switch (rowInSection)
+            {
+                case ITEM_INDEX_APPVER:
+                {
+                    itemName = NSLocalizedString(@"App Version", nil);                    
+                    break;
+                }
+                case ITEM_INDEX_REGTIME:
+                {
+                    itemName = NSLocalizedString(@"Reg Time", nil);                    
+                    break;
+                }
+                case ITEM_INDEX_SERVICESTATUS:
+                {
+                    itemName = NSLocalizedString(@"Service Status", nil);
+                    break;
+                }
+                case ITEM_INDEX_FORBIDDENEXPIREDDATE:
+                {
+                    itemName = NSLocalizedString(@"ForbiddenExpiredDate", nil);                    
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+            
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    
+    cell = (TableViewLabelCell*)cell;
+    
+    cell.majorLabel.text = itemName;
+    cell.minorLabel.text = itemVal;
+    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+    return cell;
 }
 
 #pragma mark - Private Methods
+
+-(void)_setupTableView
+{
+    UINib* nib = [UINib nibWithNibName:NIB_TABLEVIEWLABELCELL bundle:nil];
+    [self.tableView registerNib:nib forCellReuseIdentifier:CELL_ID_DEVICEITEM];
+}
 
 -(void)_setupNavigationBar
 {
     [self _setupSideBarMenuButtons];
     
-    [self.navigationController.navigationBar setTintColor:COLOR_MID];
+    [self.navigationController.navigationBar setTintColor:FLATUI_COLOR_NAVIGATIONBAR];
     
     self.navigationItem.title = NAVIGATIONBAR_TITLE_DEVICE;
 }
