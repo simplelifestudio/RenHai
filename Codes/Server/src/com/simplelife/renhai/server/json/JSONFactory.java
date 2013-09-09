@@ -51,7 +51,7 @@ public class JSONFactory
 		logger.debug("Enter createAppJSONMessage()");
 		
 		AppJSONMessage message = new UnkownRequest(messageObject); 
-		if (!message.checkJsonCommand())
+		if (!message.checkJSONRequest())
 		{
 			logger.debug("Failed to parse request: " + messageObject.toJSONString());
 			return message;

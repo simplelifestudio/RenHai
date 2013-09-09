@@ -49,5 +49,7 @@ public interface IDeviceWrapper
     
     public Device getDevice();
     
+    public void setDevice(Device device);
+    
     public IBusinessSession getOwnerBusinessSession();
 }

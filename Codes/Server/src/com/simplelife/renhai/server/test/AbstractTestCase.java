@@ -36,7 +36,7 @@ public abstract class AbstractTestCase extends TestCase
 	 */
 	public LocalMockApp createMockApp()
 	{
-		MockWebSocketConnection conn = new MockWebSocketConnection();
+		MockWebSocketConnection conn = new MockWebSocketConnection("1111");
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = pool.newDevice(conn);
 		

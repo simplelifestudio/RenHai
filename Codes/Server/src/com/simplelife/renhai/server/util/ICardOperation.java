@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.util;
 
+import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Interestcard;
 
@@ -29,4 +30,8 @@ public interface ICardOperation
     
     /** */
     public Impresscard getImpresscard(int number);
+    
+    public void setDevicecard(Devicecard card);
+    
+    public Devicecard getDevicecard();
 }

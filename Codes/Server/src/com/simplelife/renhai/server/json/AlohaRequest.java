@@ -32,14 +32,12 @@ public class AlohaRequest extends AppJSONMessage
 	}
 
 
+	/**
+	 * Check if JSON request is valid
+	 */
 	@Override
-	protected boolean checkJsonCommand()
+	protected boolean checkJSONRequest()
     {
-		if (!super.checkJsonCommand())
-		{
-			return false;
-		}
-		
 		return true;
     }
 	
@@ -49,9 +47,9 @@ public class AlohaRequest extends AppJSONMessage
     {
     	Logger logger = JSONModule.instance.getLogger();
     	logger.debug("Start run of AlohaRequest");
-    	if (!checkJsonCommand())
+    	if (!checkJSONRequest())
     	{
-    		logger.debug("checkJsonCommand failed");
+    		logger.debug("checkJSONRequest failed");
     		ServerErrorResponse response = new ServerErrorResponse(this);
     		response.addToBody(JSONKey.FieldName.ReceivedMessage, Consts.MessageId.AlohaResponse);
     		response.addToBody(JSONKey.FieldName.ErrorCode, this.getErrorCode());

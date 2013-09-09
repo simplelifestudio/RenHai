@@ -20,7 +20,12 @@ import com.simplelife.renhai.server.websocket.WebSocketConnection;
 /** */
 public class MockWebSocketConnection extends WebSocketConnection
 {
-    /** */
+	public MockWebSocketConnection(String connectionId)
+	{
+		super(connectionId);
+	}
+
+	/** */
     private boolean disabled = false;
     
     

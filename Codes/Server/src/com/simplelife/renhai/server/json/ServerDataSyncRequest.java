@@ -27,9 +27,13 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		super(messageObject);
 	}
 	
-	protected boolean checkJsonCommand()
+	/**
+	 * Check if JSON request is valid
+	 */
+	@Override
+	protected boolean checkJSONRequest()
     {
-		if (!super.checkJsonCommand())
+		if (!super.checkJSONRequest())
 		{
 			return false;
 		}
@@ -46,7 +50,7 @@ public class ServerDataSyncRequest extends AppJSONMessage
 	@Override
 	public void run()
 	{
-		if (!checkJsonCommand())
+		if (!checkJSONRequest())
 		{
 			responseError(Consts.MessageId.ServerDataSyncRequest.name());
 			return;

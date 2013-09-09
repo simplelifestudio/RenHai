@@ -50,6 +50,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     private IBaseConnectionOwner connectionOwner;
     private String remoteIPAddress;
     private HashMap<String, SyncController> syncMap = new HashMap<String, SyncController>();
+    private String connectionId;
     
     
     /**
@@ -69,11 +70,12 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 	}
 
 	/** */
-    public WebSocketConnection()
+    public WebSocketConnection(String connectionId)
     {
     	super();
     	setByteBufferMaxSize(Consts.ConnectionSetting.ByteBufferMaxSize.ordinal());
     	setByteBufferMaxSize(Consts.ConnectionSetting.ByteBufferMaxSize.ordinal());
+    	this.connectionId = connectionId;
     }
     
     @Override
@@ -310,4 +312,10 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	}
     	return appMessage;
     }
+
+	@Override
+	public String getConnectionId()
+	{
+		return connectionId;
+	}
 }

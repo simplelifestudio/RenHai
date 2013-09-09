@@ -64,7 +64,10 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     public abstract Consts.MessageId getMessageId();
     
     
-    protected boolean checkJsonCommand()
+	/**
+	 * Check if JSON request is valid
+	 */
+	protected boolean checkJSONRequest()
     {
     	Logger logger = JSONModule.instance.getLogger();
     	

@@ -42,7 +42,7 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 	public void test()
 	{
 		// Step_01 创建MockWebSocketConnection对象
-		MockWebSocketConnection conn = new MockWebSocketConnection();
+		MockWebSocketConnection conn = new MockWebSocketConnection("1111");
 		// Step_02 调用：OnlineDevicePool::newDevice
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		mockDevice = pool.newDevice(conn);

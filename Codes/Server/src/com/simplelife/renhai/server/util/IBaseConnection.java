@@ -56,4 +56,6 @@ public interface IBaseConnection
 	public void bind(IBaseConnectionOwner owner);
 	
 	public IBaseConnectionOwner getOwner();
+	
+	public String getConnectionId();
 }
