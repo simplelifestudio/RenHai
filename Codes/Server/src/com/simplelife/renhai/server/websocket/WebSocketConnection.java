@@ -47,10 +47,10 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 	}
 	
     /** */
-    private IBaseConnectionOwner connectionOwner;
-    private String remoteIPAddress;
-    private HashMap<String, SyncController> syncMap = new HashMap<String, SyncController>();
-    private String connectionId;
+    protected IBaseConnectionOwner connectionOwner;
+    protected String remoteIPAddress;
+    protected HashMap<String, SyncController> syncMap = new HashMap<String, SyncController>();
+    protected String connectionId;
     
     
     /**
@@ -210,7 +210,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     {
     	WebSocketModule.instance.getLogger().debug("onPing triggered");
     	connectionOwner.onPing(this);
-    	super.onPong(payload);
+    	super.onPing(payload);
     }
     
     @Override

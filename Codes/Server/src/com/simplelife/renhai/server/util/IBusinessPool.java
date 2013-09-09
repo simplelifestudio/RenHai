@@ -20,4 +20,8 @@ public interface IBusinessPool
     
     /** */
     public void deviceLeave(IDeviceWrapper device);
+    
+    public void startChat(IBusinessSession session);
+    
+    public void endChat(IBusinessSession session);
 }

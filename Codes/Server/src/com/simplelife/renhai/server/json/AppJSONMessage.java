@@ -35,7 +35,26 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     
     public AppJSONMessage(JSONObject jsonObject)
     {
+    	Logger logger = JSONModule.instance.getLogger();
     	this.jsonObject = jsonObject;
+    	
+    	if (jsonObject.containsKey(JSONKey.FieldName.Header))
+    	{
+    		header = jsonObject.getJSONObject(JSONKey.FieldName.Header);
+    	}
+    	else
+    	{
+    		logger.error("Trying to create APP JSON request bases on invalid string: " + jsonObject.toJSONString());
+    	}
+    	
+    	if (jsonObject.containsKey(JSONKey.FieldName.Body))
+    	{
+    		body = jsonObject.getJSONObject(JSONKey.FieldName.Body);
+    	}
+    	else
+    	{
+    		logger.error("Trying to create APP JSON request bases on invalid string: " + jsonObject.toJSONString());
+    	}
     }
     
     public JSONObject getHeader()

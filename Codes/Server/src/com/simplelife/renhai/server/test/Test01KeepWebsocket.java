@@ -25,7 +25,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
  */
 public class Test01KeepWebsocket extends AbstractTestCase
 {
-	private IDeviceWrapper mockDevice;
+	private LocalMockApp mockApp;
 	
 	@Before
 	public void setUp() throws Exception
@@ -36,8 +36,7 @@ public class Test01KeepWebsocket extends AbstractTestCase
 	@After
 	public void tearDown() throws Exception
 	{
-		OnlineDevicePool pool = OnlineDevicePool.instance;
-		pool.releaseDevice(mockDevice);
+		deleteDevice(mockApp);
 	}
 	
 	@Test
@@ -51,21 +50,31 @@ public class Test01KeepWebsocket extends AbstractTestCase
 		int deviceCount = pool.getElementCount();
 		
 		// Step_03 调用：OnlineDevicePool::newDevice
-		mockDevice = pool.newDevice(conn);
+		mockApp = createMockApp();
 		
 		// Step_04 调用：OnlineDevicePool::getCount
 		assertEquals(pool.getElementCount(), deviceCount + 1);
 		
 		// Step_05 Mock事件：onPing
-		conn.onPing();
+		mockApp.ping();
 		
 		// Step_06 调用：DeviceWrapper::getLastPingTime()
-		Date lastPingTime = mockDevice.getLastPingTime();
+		long lastPingTime = mockApp.getDeviceWrapper().getLastPingTime().getTime();
+		
+		try
+		{
+			Thread.sleep(100);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// Step_07 Mock事件：onPing
-		conn.onPing();
+		mockApp.ping();
 		
 		// Step_08 调用设备的getLastPingTime()
-		assertTrue(lastPingTime.getTime() < mockDevice.getLastPingTime().getTime());
+		assertTrue(lastPingTime < mockApp.getDeviceWrapper().getLastPingTime().getTime());
 	}
 }

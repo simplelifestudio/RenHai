@@ -14,7 +14,10 @@ package com.simplelife.renhai.server.business.device;
 import java.io.IOException;
 import java.util.Date;
 
+import org.slf4j.Logger;
+
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
@@ -48,6 +51,8 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     /** */
     protected Device device;
     
+    protected String deviceSn;
+    
     /** */
     protected Consts.DeviceServiceStatus serviceStatus;
     
@@ -61,7 +66,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     {
     	lastPingTime = DateUtil.getNowDate();
     }
-    
+            
     /** */
     public void onChatConfirm()
     {
@@ -75,22 +80,37 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     }
     
     /** */
-    public void changeBusinessStatus()
+    public void changeBusinessStatus(Consts.DeviceBusinessStatus targetStatus)
     {
-    
+    	switch(targetStatus)
+    	{
+    		case Idle:
+    			break;
+    		case Init:
+    			if (businessStatus == Consts.DeviceBusinessStatus.Idle)
+    			{
+    				ownerOnlinePool.synchronizeDevice(this);
+    			}
+    			break;
+    		case SessionBound:
+    			break;
+    		case WaitMatch:
+    			break;
+    		default:
+    			break;
+    	}
     }
     
     /** */
     public void updateLastActivityTime()
     {
-    
+    	lastActivityTime = DateUtil.getNowDate();
     }
     
     /** */
     public IBusinessSession getOwnerBusinessSession()
     {
         return ownerBusinessSession;
-    
     }
     
     /** */
@@ -108,13 +128,13 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     /** */
     public Consts.DeviceBusinessStatus getBusinessStatus()
     {
-        return null;
+        return businessStatus;
     }
     
     /** */
     public Consts.DeviceServiceStatus getServiceStatus()
     {
-        return null;
+        return serviceStatus;
     }
     
     /** */
@@ -126,7 +146,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     /** */
     public Date getLastPingTime()
     {
-        return null;
+        return lastPingTime;
     }
     
      
@@ -138,7 +158,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     /** */
     public Date getLastActivityTime()
     {
-        return null;
+        return lastActivityTime;
     }
     
     /** */
@@ -192,7 +212,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     @Override
     public void onPing(IBaseConnection conection)
     {
-        this.updateLastActivityTime();
+        this.updatePingTime();
     }
 
 
@@ -206,8 +226,14 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     @Override
     public void syncSendMessage(ServerJSONMessage message)
     {
+    	Logger logger = BusinessModule.instance.getLogger();
         try
 		{
+        	if (webSocketConnection == null)
+        	{
+        		logger.error("webSocketConnection == null");
+        		return;
+        	}
 			webSocketConnection.syncSendMessage(message);
 		}
 		catch (IOException e)
@@ -219,8 +245,14 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     @Override
     public void asyncSendMessage(ServerJSONMessage message)
     {
+    	Logger logger = BusinessModule.instance.getLogger();
         try
 		{
+        	if (webSocketConnection == null)
+        	{
+        		logger.error("webSocketConnection == null");
+        		return;
+        	}
 			webSocketConnection.asyncSendMessage(message);
 		}
 		catch (IOException e)
@@ -238,6 +270,12 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
 	public void setDevice(Device device)
 	{
 		this.device = device;
+		deviceSn = device.getDevicecard().getDeviceSn();
+	}
+	
+	public String getDeviceSn()
+	{
+		return this.deviceSn;
 	}
 }
 

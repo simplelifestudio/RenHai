@@ -16,6 +16,7 @@ import org.junit.Test;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.GlobalSetting;
 
 /**
@@ -56,17 +57,17 @@ public class Test24MaxBusinessDevicePool extends AbstractTestCase
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
 		
-		syncDevice(mockApp1);
-		syncDevice(mockApp2);
+		mockApp1.syncDevice();
+		mockApp2.syncDevice();
 		
 		// Step_05 调用：RandomBusinessDevicePool::setCapacity(1)
 		businessPool.setCapacity(businessPool.getElementCount() + 1);
 		
 		// Step_06 Mock请求：A进入随机聊天
-		syncDevice(mockApp1);
+		mockApp1.enterPool(BusinessType.Random);
 		
 		// Step_07 Mock请求：B进入随机聊天
-		syncDevice(mockApp2);
+		mockApp2.enterPool(BusinessType.Random);
 		fail("检查Server的响应包含业务设备池达到上限");
 	}
 }

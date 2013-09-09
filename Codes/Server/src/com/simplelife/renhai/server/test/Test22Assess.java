@@ -48,8 +48,8 @@ public class Test22Assess extends AbstractTestCase
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		
-		syncDevice(mockApp1);
-		syncDevice(mockApp2);
+		mockApp1.syncDevice();
+		mockApp2.syncDevice();
 		
 		// Step_01 Mock请求：A进入随机聊天
 		mockApp1.enterPool(Consts.BusinessType.Random);

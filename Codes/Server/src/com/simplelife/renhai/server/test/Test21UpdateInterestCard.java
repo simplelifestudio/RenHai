@@ -113,7 +113,7 @@ public class Test21UpdateInterestcard extends AbstractTestCase
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 
 		// Step_01 Mock请求：A设备同步
-		syncDevice(mockApp1);
+		mockApp1.syncDevice();
 		
 		// Step_02 Mock请求：A更新兴趣卡片，5个兴趣标签
 		HashMap<String, Object> labels = new HashMap<String, Object>();
@@ -182,7 +182,7 @@ public class Test21UpdateInterestcard extends AbstractTestCase
 		fail("需要检查数据库中的兴趣标签");
 		
 		// Step_18 Mock请求：A查询兴趣卡片
-		syncDevice(mockApp1);
+		mockApp1.syncDevice();
 		fail("需要检查回复的标签是否正确");
 	}
 }

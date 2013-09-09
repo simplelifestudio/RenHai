@@ -79,7 +79,7 @@ public class JSONKey
     	
     	public final static String SessionId					= "sessionId";
     	public final static String TimeStamp					= "timeStamp";
-    	public final static String TotalChatDuration			= "totalChatDuration";
+    	public final static String ChatTotalDuration			= "chatTotalDuration";
     	public final static String DataQuery					= "dataQuery";
     	public final static String Devicecard					= "deviceCard";
     	

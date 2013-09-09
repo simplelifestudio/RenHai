@@ -60,11 +60,11 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		fail("需要解释并核实各个统计项");
 		
 		// Step_02 Mock请求：A进入随机聊天
-		syncDevice(mockApp1);
+		mockApp1.syncDevice();
 		mockApp1.enterPool(Consts.BusinessType.Random);
 		
 		// Step_03 Mock请求：B进入随机聊天
-		syncDevice(mockApp2);
+		mockApp2.syncDevice();
 		mockApp2.enterPool(Consts.BusinessType.Random);
 		
 		// Step_04 Mock请求：查询所有统计项

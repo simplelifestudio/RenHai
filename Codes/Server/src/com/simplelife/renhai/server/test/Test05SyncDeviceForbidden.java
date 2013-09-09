@@ -70,7 +70,7 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 		
 		// Step_04 Mock请求：设备同步
 		long lastActivity = deviceWrapper.getLastActivityTime().getTime();
-		syncDevice(mockApp);
+		mockApp.syncDevice();
 		
 		// Step_05 调用：OnlineDevicePool::getCount
 		assertEquals(deviceCount - 1, pool.getElementCount());

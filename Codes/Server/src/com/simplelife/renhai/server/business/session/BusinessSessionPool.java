@@ -25,29 +25,13 @@ public class BusinessSessionPool extends AbstractPool
 	
 	private HashMap<String, IBusinessSession> sessionMap;
 	
-	private static BusinessSessionPool poolInstance;
+	public final static BusinessSessionPool instance = new BusinessSessionPool();
     
-    /** */
-    public static BusinessSessionPool getInstance()
-    {
-    	if (poolInstance != null)
-    	{
-    		return poolInstance;
-    	}
-    	
-    	synchronized (poolInstance)
-		{
-    		// Check again after get lock
-    		if (poolInstance != null)
-        	{
-        		return poolInstance;
-        	}
-    		
-    		poolInstance = new BusinessSessionPool();
-    		return poolInstance;
-		}
-    }
-	
+	private BusinessSessionPool()
+	{
+		
+	}
+    
 	/** */
 	public IBusinessSession getBusinessSession()
 	{

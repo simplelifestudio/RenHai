@@ -55,6 +55,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
 		Devicecard deviceCard = deviceWrapper.getDevice().getDevicecard();
+		mockApp = createMockApp();
 		
 		// Step_01 数据库操作：将设备A的服务状态更新为禁聊，到期日期为昨天
 		String sql = "update " + TableName.Devicecard 
@@ -72,7 +73,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		// Step_04 Mock请求：设备同步
 		
 		long lastActivity = deviceWrapper.getLastActivityTime().getTime();
-		syncDevice(mockApp);
+		mockApp.syncDevice();
 		
 		// Step_05 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceBusinessStatus.Idle, deviceWrapper.getBusinessStatus());

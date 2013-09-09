@@ -72,7 +72,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertEquals(businessStatus, Consts.DeviceBusinessStatus.Init);
 		
 		// Step_03 Mock请求：设备同步
-		syncDevice(mockApp);
+		mockApp.syncDevice();
 		
 		// Step_04 数据库检查：设备卡片信息
 		String sql = "select * from Devicecard where deviceSn = '" + deviceCard.getDeviceSn() + "";
@@ -111,14 +111,13 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertEquals(deviceCount, pool.getElementCount());
 		
 		// Step_12 建立WebSocket连接
-		mockApp = createMockApp();
 		deviceWrapper = mockApp.getDeviceWrapper();
 		assertTrue(deviceWrapper instanceof IBaseConnectionOwner);
 		connectionOwner = (IBaseConnectionOwner) deviceWrapper;
 		deviceCard = deviceWrapper.getDevice().getDevicecard();
 		
 		// Step_13 Mock请求：设备同步
-		syncDevice(mockApp);
+		mockApp.syncDevice();
 		
 		// Step_14 调用：DeviceWrapper::getLastActivityTime
 		assertTrue(deviceWrapper.getLastActivityTime().getTime() > lastActivityTime);
@@ -127,14 +126,13 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		mockApp.enterPool(Consts.BusinessType.Random);
 		
 		// Step_16 Mock请求：设备同步
-		syncDevice(mockApp);
+		mockApp.syncDevice();
 		fail("需要检查收到的消息是否正确");
 		
 		// Step_17 Mock事件：onClose
 		connectionOwner.getConnection().onClose(0);
 		
 		// Step_18 建立WebSocket连接
-		mockApp = createMockApp();
 		deviceWrapper = mockApp.getDeviceWrapper();
 		assertTrue(deviceWrapper instanceof IBaseConnectionOwner);
 		connectionOwner = (IBaseConnectionOwner) deviceWrapper;
@@ -144,7 +142,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		DBModule.instance().stopService();
 		
 		// Step_20 Mock请求：设备同步
-		syncDevice(mockApp);
+		mockApp.syncDevice();
 		fail("需要检查此时应该收到系统故障，操作失败");
 	}
 }

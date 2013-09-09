@@ -42,7 +42,7 @@ public interface IBusinessSession
     public void endChat();
     
     /** */
-    public LinkedList getDeviceList();
+    public LinkedList<IDeviceWrapper> getDeviceList();
     
     /** */
     public BusinessSessionStatus getStatus();

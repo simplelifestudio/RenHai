@@ -52,4 +52,6 @@ public interface IDeviceWrapper
     public void setDevice(Device device);
     
     public IBusinessSession getOwnerBusinessSession();
+    
+    public String getDeviceSn();
 }

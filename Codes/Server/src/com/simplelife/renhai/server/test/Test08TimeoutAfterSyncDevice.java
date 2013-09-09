@@ -53,7 +53,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 		int deviceCount = pool.getElementCount();
 		
 		// Step_02 Mock请求：设备同步
-		syncDevice(mockApp);
+		mockApp.syncDevice();
 		
 		// Step_03 调用：DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceBusinessStatus.Idle, deviceWrapper.getBusinessStatus());

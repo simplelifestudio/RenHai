@@ -39,23 +39,6 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     }
     
     /** */
-    public boolean isPoolFull()
-    {
-        return false;
-    }
-    
-    /** */
-    public void updateCount()
-    {
-    }
-    
-    /** */
-    public int getElementCount()
-    {
-        return 0;
-    }
-    
-    /** */
     public boolean deviceEnter(IDeviceWrapper device)
     {
         return false;
@@ -65,4 +48,11 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     public void deviceLeave(IDeviceWrapper device)
     {
     }
+
+	@Override
+	public void clearPool()
+	{
+		deviceMap.clear();
+		interestLabelMap.clear();
+	}
 }

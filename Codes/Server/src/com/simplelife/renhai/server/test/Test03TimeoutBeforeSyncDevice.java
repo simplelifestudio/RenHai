@@ -24,7 +24,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
  */
 public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 {
-	private IDeviceWrapper mockDevice;
+	private LocalMockApp mockApp;
 	@Before
 	public void setUp() throws Exception
 	{
@@ -34,8 +34,7 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 	@After
 	public void tearDown() throws Exception
 	{
-		OnlineDevicePool pool = OnlineDevicePool.instance;
-		pool.releaseDevice(mockDevice);
+		deleteDevice(mockApp);
 	}
 	
 	@Test
@@ -43,14 +42,14 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 	{
 		// Step_01 创建MockWebSocketConnection对象
 		MockWebSocketConnection conn = new MockWebSocketConnection("1111");
+		
 		// Step_02 调用：OnlineDevicePool::newDevice
-		OnlineDevicePool pool = OnlineDevicePool.instance;
-		mockDevice = pool.newDevice(conn);
+		mockApp = createMockApp();
 		
 		// Step_02 等待Server的Websocket通信异常时间
 		try
 		{
-			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 1000);
+			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 1000 + 1000);
 		}
 		catch (InterruptedException e)
 		{
@@ -58,11 +57,11 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 		}
 		
 		// Step_03 Mock事件：onPing
-		conn.onPing();
-		Date lastPingTime = mockDevice.getLastPingTime();
+		mockApp.ping();
+		Date lastPingTime = mockApp.getDeviceWrapper().getLastPingTime();
 		
-		conn.onPing();
-		assertEquals(lastPingTime, mockDevice.getLastPingTime());
+		mockApp.ping();
+		assertTrue(lastPingTime.getTime() < mockApp.getDeviceWrapper().getLastPingTime().getTime());
 		
 		// Step_04 建立Websocket连接
 		

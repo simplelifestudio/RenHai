@@ -10,8 +10,11 @@
 package com.simplelife.renhai.server.test;
 
 
+import java.nio.ByteBuffer;
 import java.util.HashMap;
+
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.JSONKey;
@@ -22,6 +25,12 @@ public class LocalMockApp extends AbstractMockApp
 {
 	/** */
 	protected MockWebSocketConnection connection;
+	
+	
+	public LocalMockApp(MockWebSocketConnection connection)
+	{
+		this.connection = connection;
+	}
 	
 	@Override
 	public void assessAndQuit(String impressLabelList)
@@ -66,8 +75,11 @@ public class LocalMockApp extends AbstractMockApp
 			jsonMapBody.put(JSONKey.FieldName.DataUpdate, updateMap);
 		}
 		
+		JSONObject envelopeObj = new JSONObject();
+		envelopeObj.put(JSONKey.FieldName.JsonEnvelope, jsonMap);
+		
 		// Send
-		connection.onTextMessage(JSONObject.toJSONString(jsonMap));
+		connection.onTextMessage(envelopeObj.toJSONString());
 	}
 	
 	/** */
@@ -174,7 +186,8 @@ public class LocalMockApp extends AbstractMockApp
 	@Override
 	public void ping()
 	{
-		connection.onPing();
+		ByteBuffer pingData = ByteBuffer.allocate(5);
+		connection.onPing(pingData);
 	}
 	
 	/** */
@@ -215,5 +228,37 @@ public class LocalMockApp extends AbstractMockApp
 	public void startPingTimer()
 	{
 		
+	}
+	
+	/**
+	 * Mock request of AppDataSyncRequest
+	 */
+	protected void syncDevice()
+	{
+		HashMap<String, Object> queryMap = new HashMap<String, Object>();
+		queryMap.put(JSONKey.FieldName.Devicecard, new HashMap<String, Object>());
+		
+		HashMap<String, Object> impressCardMap = new HashMap<String, Object>();
+		impressCardMap.put(JSONKey.FieldName.LabelListCount, "10");
+		queryMap.put(JSONKey.FieldName.Impresscard, impressCardMap);
+		
+		HashMap<String, Object> interestCardMap = new HashMap<String, Object>();
+		impressCardMap.put(JSONKey.FieldName.LabelListCount, "5");
+		queryMap.put(JSONKey.FieldName.Interestcard, interestCardMap);
+		
+		HashMap<String, Object> updateMap = new HashMap<String, Object>();
+		
+		HashMap<String, Object> deviceCardMap = new HashMap<String, Object>();
+		Devicecard card = new Devicecard();
+		
+		deviceCardMap.put(JSONKey.FieldName.OsVersion, "iOS 6.1.2");
+		deviceCardMap.put(JSONKey.FieldName.AppVersion, "1.2");
+		deviceCardMap.put(JSONKey.FieldName.IsJailed, "No");
+		deviceCardMap.put(JSONKey.FieldName.Location, "22.511962,113.380301");
+		deviceCardMap.put(JSONKey.FieldName.DeviceSn, "AFLNWERJL3203598FDLGSLDF");
+		deviceCardMap.put(JSONKey.FieldName.DeviceModel, "iPhone5");
+		updateMap.put(JSONKey.FieldName.Devicecard, deviceCardMap);
+		
+		sendAppDataSyncRequest(queryMap, updateMap);
 	}
 }

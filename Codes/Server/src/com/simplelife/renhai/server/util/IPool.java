@@ -17,10 +17,7 @@ public interface IPool
 {
     /** */
     public boolean isPoolFull();
-    
-    /** */
-    public void updateCount();
-    
+
     /** */
     public int getCapacity();
     

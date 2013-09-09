@@ -24,29 +24,17 @@ public abstract class AbstractPool implements IPool
     public int getCapacity()
     {
         return capacity;
-    
     }
     
     /** */
     public void setCapacity(int newCapacity)
     {
-    
+    	this.capacity = newCapacity;
     }
     
     /** */
-    public boolean isPoolFull()
-    {
-        return false;
-    }
+    public abstract boolean isPoolFull();
     
     /** */
-    public void updateCount()
-    {
-    }
-    
-    /** */
-    public int getElementCount()
-    {
-        return 0;
-    }
+    public abstract int getElementCount();
 }

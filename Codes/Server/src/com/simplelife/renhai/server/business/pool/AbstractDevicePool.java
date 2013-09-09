@@ -23,38 +23,15 @@ public abstract class AbstractDevicePool extends AbstractPool
     protected HashMap<String, IDeviceWrapper> deviceMap = new HashMap<String, IDeviceWrapper>();
     
     /** */
-    public IDeviceWrapper getDevice(int deviceId)
-    {
-        return null;
-    
-    }
-    
-    /** */
     public IDeviceWrapper getDevice(String deviceSn)
     {
-        return null;
-    
+        return deviceMap.get(deviceSn);
     }
     
     /** */
-    public boolean isPoolFull()
-    {
-        return false;
-    }
-    
+    public abstract boolean isPoolFull();
     /** */
-    public void updateCount()
-    {
-    }
+    public abstract int getElementCount();
     
-    /** */
-    public int getElementCount()
-    {
-        return 0;
-    }
-    
-    public void clearPool()
-    {
-    	deviceMap.clear();
-    }
+    public abstract void clearPool();
 }

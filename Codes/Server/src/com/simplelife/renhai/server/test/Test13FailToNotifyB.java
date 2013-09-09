@@ -56,14 +56,14 @@ public class Test13FailToNotifyB extends AbstractTestCase
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
-		BusinessSessionPool sessionPool = BusinessSessionPool.getInstance();
+		BusinessSessionPool sessionPool = BusinessSessionPool.instance;
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
 		
 		MockWebSocketConnection connection2 = getMockWebSocket(deviceWrapper2);
 		
-		syncDevice(mockApp1);
-		syncDevice(mockApp2);
+		mockApp1.syncDevice();
+		mockApp2.syncDevice();
 		
 		// Step_01 µ÷ÓÃ£ºOnlineDevicePool::getCount
 		int deviceCount = onlinePool.getElementCount();

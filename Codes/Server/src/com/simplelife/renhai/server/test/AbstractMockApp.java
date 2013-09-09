@@ -50,7 +50,7 @@ public abstract class AbstractMockApp implements IMockApp
     	jsonMap.put(JSONKey.FieldName.Body, jsonMapBody);
     	
     	jsonMapHeader.put(JSONKey.FieldName.DeviceId, deviceWrapper.getDevice().getDevicecard().getDeviceId());
-    	jsonMapHeader.put(JSONKey.FieldName.DeviceSn, deviceWrapper.getDevice().getDevicecard().getDeviceSn());
+    	jsonMapHeader.put(JSONKey.FieldName.DeviceSn, deviceWrapper.getDeviceSn());
     	jsonMapHeader.put(JSONKey.FieldName.TimeStamp, DateUtil.getNow());
     }
     

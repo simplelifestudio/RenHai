@@ -43,6 +43,7 @@ public class MockWebSocketConnection extends WebSocketConnection
     /** */
     public void onClose()
     {
+    	getOwner().onClose(this);
     }
     
     /** */
@@ -51,22 +52,7 @@ public class MockWebSocketConnection extends WebSocketConnection
     }
     
     /** */
-    public void onPing()
-    {
-    }
-    
-    /** */
     public void onPong()
-    {
-    }
-    
-    /** */
-    public void bind(IBaseConnectionOwner owner)
-    {
-    }
-    
-    /** */
-    public void ping()
     {
     }
     
