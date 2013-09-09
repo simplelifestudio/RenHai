@@ -41,6 +41,8 @@ typedef NSUInteger UIDeviceResolution;
 
 + (NSString*) deviceModel;
 
++ (NSString*) deviceSimpleModel;
+
 + (NSString*) osVersion;
 
 + (BOOL) isJailed;
