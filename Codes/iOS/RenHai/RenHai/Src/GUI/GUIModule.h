@@ -48,12 +48,12 @@
 
 #define LEFTBAR_WIDTH_IPHONE 120
 
-#define NAVIGATIONBAR_TITLE_HOME @"业务"
-#define NAVIGATIONBAR_TITLE_DEVICE @"设备"
-#define NAVIGATIONBAR_TITLE_INTEREST @"兴趣"
-#define NAVIGATIONBAR_TITLE_IMPRESS @"印象"
-#define NAVIGATIONBAR_TITLE_CONFIG @"配置"
-#define NAVIGATIONBAR_TITLE_HELP @"帮助"
+#define NAVIGATIONBAR_TITLE_HOME NSLocalizedString(@"LeftBar_Home", nil)
+#define NAVIGATIONBAR_TITLE_DEVICE NSLocalizedString(@"LeftBar_Device", nil)
+#define NAVIGATIONBAR_TITLE_INTEREST NSLocalizedString(@"LeftBar_Interest", nil)
+#define NAVIGATIONBAR_TITLE_IMPRESS NSLocalizedString(@"LeftBar_Impress", nil)
+#define NAVIGATIONBAR_TITLE_CONFIG NSLocalizedString(@"LeftBar_Config", nil)
+#define NAVIGATIONBAR_TITLE_HELP NSLocalizedString(@"LeftBar_Help", nil)
 
 typedef enum
 {

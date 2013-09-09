@@ -100,25 +100,25 @@
             {
                 case ITEM_INDEX_DEVICEMODEL:
                 {
-                    itemName = NSLocalizedString(@"Device Model", nil);
+                    itemName = NSLocalizedString(@"DeviceCard_DeviceModel", nil);
                     itemVal = [UIDevice deviceModel];
                     break;
                 }
                 case ITEM_INDEX_OSVER:
                 {
-                    itemName = NSLocalizedString(@"OS Version", nil);
+                    itemName = NSLocalizedString(@"DeviceCard_OSVersion", nil);
                     itemVal = [UIDevice osVersion];
                     break;
                 }
                 case ITEM_INDEX_ISJAILED:
                 {
-                    itemName = NSLocalizedString(@"Jailed", nil);
+                    itemName = NSLocalizedString(@"DeviceCard_IsJailed", nil);
                     itemVal = ([UIDevice isJailed]) ? NSLocalizedString(@"Yes", nil) : NSLocalizedString(@"No", nil);
                     break;
                 }
                 case ITEM_INDEX_DEVICESN:
                 {
-                    itemName = NSLocalizedString(@"Device SN", nil);
+                    itemName = NSLocalizedString(@"DeviceCard_DeviceSN", nil);
                     break;
                 }
                 default:
@@ -135,22 +135,22 @@
             {
                 case ITEM_INDEX_APPVER:
                 {
-                    itemName = NSLocalizedString(@"App Version", nil);                    
+                    itemName = NSLocalizedString(@"DeviceCard_AppVersion", nil);                    
                     break;
                 }
                 case ITEM_INDEX_REGTIME:
                 {
-                    itemName = NSLocalizedString(@"Reg Time", nil);                    
+                    itemName = NSLocalizedString(@"DeviceCard_RegisterTime", nil);                    
                     break;
                 }
                 case ITEM_INDEX_SERVICESTATUS:
                 {
-                    itemName = NSLocalizedString(@"Service Status", nil);
+                    itemName = NSLocalizedString(@"DeviceCard_ServiceStatus", nil);
                     break;
                 }
                 case ITEM_INDEX_FORBIDDENEXPIREDDATE:
                 {
-                    itemName = NSLocalizedString(@"ForbiddenExpiredDate", nil);                    
+                    itemName = NSLocalizedString(@"DeviceCard_ForbiddenExpiredDate", nil);                    
                     break;
                 }
                 default:

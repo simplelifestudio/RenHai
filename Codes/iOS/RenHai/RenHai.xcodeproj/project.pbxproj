@@ -69,6 +69,8 @@
 		C54DC8E717DC73DE00BBD498 /* TableViewLabelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8E317DC73DD00BBD498 /* TableViewLabelCell.xib */; };
 		C54DC8EA17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8E917DC926900BBD498 /* UIDevice+CBDeviceExtends.m */; };
 		C54DC8EB17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = C54DC8E917DC926900BBD498 /* UIDevice+CBDeviceExtends.m */; };
+		C54DC8EF17DD5ECE00BBD498 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8F217DD5ECE00BBD498 /* Localizable.strings */; };
+		C54DC8F017DD5ECE00BBD498 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C54DC8F217DD5ECE00BBD498 /* Localizable.strings */; };
 		C55B43EC17CF580A009BB21B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EB17CF580A009BB21B /* UIKit.framework */; };
 		C55B43EE17CF580A009BB21B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43ED17CF580A009BB21B /* Foundation.framework */; };
 		C55B43F017CF580A009BB21B /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B43EF17CF580A009BB21B /* CoreGraphics.framework */; };
@@ -254,6 +256,10 @@
 		C54DC8E317DC73DD00BBD498 /* TableViewLabelCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableViewLabelCell.xib; sourceTree = "<group>"; };
 		C54DC8E817DC926900BBD498 /* UIDevice+CBDeviceExtends.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+CBDeviceExtends.h"; sourceTree = "<group>"; };
 		C54DC8E917DC926900BBD498 /* UIDevice+CBDeviceExtends.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+CBDeviceExtends.m"; sourceTree = "<group>"; };
+		C54DC8F117DD5ECE00BBD498 /* en */ = {isa = PBXFileReference; lastKnownFileType = file; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C54DC8F517DD60AF00BBD498 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		C54DC8F617DD60AF00BBD498 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = file; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C54DC8F717DD60AF00BBD498 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		C55B43E817CF580A009BB21B /* RenHai.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHai.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55B43EB17CF580A009BB21B /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		C55B43ED17CF580A009BB21B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -462,6 +468,7 @@
 				C55B43FD17CF580A009BB21B /* Default.png */,
 				C55B43FF17CF580A009BB21B /* Default@2x.png */,
 				C55B440117CF580A009BB21B /* Default-568h@2x.png */,
+				C54DC8F217DD5ECE00BBD498 /* Localizable.strings */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -814,6 +821,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				"zh-Hans",
 			);
 			mainGroup = C55B43DF17CF580A009BB21B;
 			productRefGroup = C55B43E917CF580A009BB21B /* Products */;
@@ -854,6 +862,7 @@
 				C54DC8CB17DC069900BBD498 /* enterbutton_normal.png in Resources */,
 				C54DC8CD17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
 				C54DC8E617DC73DE00BBD498 /* TableViewLabelCell.xib in Resources */,
+				C54DC8EF17DD5ECE00BBD498 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -885,6 +894,7 @@
 				C54DC8CC17DC069900BBD498 /* enterbutton_normal.png in Resources */,
 				C54DC8CE17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
 				C54DC8E717DC73DE00BBD498 /* TableViewLabelCell.xib in Resources */,
+				C54DC8F017DD5ECE00BBD498 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1104,10 +1114,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		C54DC8F217DD5ECE00BBD498 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C54DC8F117DD5ECE00BBD498 /* en */,
+				C54DC8F617DD60AF00BBD498 /* zh-Hans */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		C55B43F417CF580A009BB21B /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
 				C55B43F517CF580A009BB21B /* en */,
+				C54DC8F517DD60AF00BBD498 /* zh-Hans */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -1116,6 +1136,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				C55B442917CF5992009BB21B /* en */,
+				C54DC8F717DD60AF00BBD498 /* zh-Hans */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
