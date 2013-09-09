@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ImpressViewController_iPhone : UIViewController
+@interface ImpressViewController_iPhone : UICollectionViewController <UICollectionViewDataSource>
 
 @end

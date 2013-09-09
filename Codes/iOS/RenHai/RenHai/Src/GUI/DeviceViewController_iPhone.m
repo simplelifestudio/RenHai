@@ -14,7 +14,7 @@
 #import "GUIStyle.h"
 #import "UIDevice+CBDeviceExtends.h"
 
-#import "TableViewLabelCell.h"
+#import "RHTableViewLabelCell_iPhone.h"
 
 #define SECTION_ITEMCOUNT_CONFIG 2
 
@@ -32,9 +32,9 @@
 #define ITEM_INDEX_SERVICESTATUS 2
 #define ITEM_INDEX_FORBIDDENEXPIREDDATE 3
 
-#define CELL_ID_DEVICEITEM @"TableViewLabelCell"
+#define CELL_ID_DEVICEITEM @"RHTableViewLabelCell_iPhone"
 
-#define NIB_TABLEVIEWLABELCELL @"TableViewLabelCell"
+#define NIB_TABLEVIEWLABELCELL @"RHTableViewLabelCell_iPhone"
 
 @interface DeviceViewController_iPhone ()
 {
@@ -85,7 +85,7 @@
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    TableViewLabelCell* cell = (TableViewLabelCell*)[tableView dequeueReusableCellWithIdentifier:CELL_ID_DEVICEITEM forIndexPath:indexPath];
+    RHTableViewLabelCell_iPhone* cell = (RHTableViewLabelCell_iPhone*)[tableView dequeueReusableCellWithIdentifier:CELL_ID_DEVICEITEM forIndexPath:indexPath];
     
     NSString* itemName = @"";
     NSString* itemVal = @"";
@@ -166,8 +166,6 @@
             break;
         }
     }
-    
-    cell = (TableViewLabelCell*)cell;
     
     cell.majorLabel.text = itemName;
     cell.minorLabel.text = itemVal;

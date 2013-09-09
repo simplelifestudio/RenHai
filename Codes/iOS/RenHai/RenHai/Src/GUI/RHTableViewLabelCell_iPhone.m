@@ -1,16 +1,16 @@
 //
-//  TableViewLabelCell.m
+//  RHTableViewLabelCell_iPhone.m
 //  Seeds
 //
 //  Created by Patrick Deng on 13-7-2.
 //  Copyright (c) 2013年 SimpleLife Studio. All rights reserved.
 //
 
-#import "TableViewLabelCell.h"
+#import "RHTableViewLabelCell_iPhone.h"
 
 #import "GUIStyle.h"
 
-@implementation TableViewLabelCell
+@implementation RHTableViewLabelCell_iPhone
 
 @synthesize majorLabel = _majorLabel;
 @synthesize minorLabel = _minorLabel;
@@ -44,7 +44,7 @@
     [GUIStyle formatFlatUILabel:_majorLabel textColor:COLOR_TEXT_INFO];
     [GUIStyle formatFlatUILabel:_minorLabel textColor:COLOR_TEXT_INFO];
     
-    [TableViewLabelCell configureFlatCellWithColor:[UIColor greenColor] selectedColor:FLATUI_COLOR_TABLECELL_SELECTED style:UITableViewCellStyleValue1 reuseIdentifier:@"TableViewLabelCell"];
+    [RHTableViewLabelCell_iPhone configureFlatCellWithColor:[UIColor greenColor] selectedColor:FLATUI_COLOR_TABLECELL_SELECTED style:UITableViewCellStyleValue1 reuseIdentifier:@"RHTableViewLabelCell_iPhone"];
 }
 
 @end
