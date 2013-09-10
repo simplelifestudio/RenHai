@@ -146,7 +146,7 @@
 			{
 				"osVersion":"iOS 6.1.2",
 				"appVersion":"1.2",
-				"isJailed":"No",
+				"isJailed":"0",
 				"location":"22.511962,113.380301"
 			},
 			"interestCard":
@@ -176,40 +176,58 @@
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
     },
-    "body": // 将App发来的update部分在内存数据中完成后，与query部分一并发回给App
+    "body": // Server端需要先处理dataUpdate部分，完成数据更新之后，再处理dataQuery部分，将最新的数据返回给App
     {
-		"deviceCard":
+		"dataQuery":
 		{
-			"serviceStatus":"Normal", 
-			"registerTime":"2013-08-07 14:01:39",
-			"forbiddenExpiredDate":"",
-			"profileId""="4587"
-		},
-		"impressCard":
-		{
-			"impressCardId":"9631",
-			"chatTotalCount":"47",
-			"totalChatDuration":"1288",
-			"chatLossCount":"9",
-			"labelList":
+			"deviceCard":
 			{
-				{"impressId":"4421", "impressName":"绅士", "count":"7", "assessCount":"3"},
-				{"impressId":"9976", "impressName":"风趣", "count":"3", "assessCount":"2"}
-			}
-		},
-		"interestCard":
-		{
-			"soccer":
-			{
-				"order":"0",
-				"matchCount":"7"
+				"serviceStatus":"Normal", 
+				"registerTime":"2013-08-07 14:01:39",
+				"forbiddenExpiredDate":"",
+				"profileId""="4587"
 			},
-			"music":
+			"impressCard":
 			{
-				"order":"1",
-				"matchCount":"3"
+				"impressCardId":"9631",
+				"chatTotalCount":"47",
+				"totalChatDuration":"1288",
+				"chatLossCount":"9",
+				"labelList":
+				{
+					{"impressId":"4421", "impressName":"绅士", "count":"7", "assessCount":"3"},
+					{"impressId":"9976", "impressName":"风趣", "count":"3", "assessCount":"2"}
+				}
+			},
+			"interestCard":
+			{
+				"soccer":
+				{
+					"order":"0",
+					"matchCount":"7"
+				},
+				"music":
+				{
+					"order":"1",
+					"matchCount":"3"
+				}
+			}					
+		},
+		"dataUpdate":
+		{	
+			"deviceCard":
+			{
+				"osVersion":"1",
+				"appVersion":"0",
+				"isJailed":"0",
+				"location":"1"
+			},
+			"interestCard":
+			{
+				"soccer":"1",
+				"music":"1"
 			}
-		}	
+		}
     }
 }
 
