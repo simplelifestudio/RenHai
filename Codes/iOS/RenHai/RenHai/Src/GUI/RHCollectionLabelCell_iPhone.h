@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface RHCollectionLabelCell_iPhone : UICollectionViewCell
+@interface RHCollectionLabelCell_iPhone : UICollectionViewCell <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UILabel *countLabel;

@@ -17,19 +17,34 @@
     self = [super initWithFrame:frame];
     if (self)
     {
-        [self _formatFlatUI];
+        [self _setupComponents];
     }
     return self;
 }
 
 - (void)awakeFromNib
 {
-    [self _formatFlatUI];
+    [self _setupComponents];
     
     [super awakeFromNib];
 }
 
+#pragma mark - UITextFieldDelegate
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 #pragma mark - Private Methods
+
+-(void) _setupComponents
+{
+    _textField.delegate = self;
+    
+    [self _formatFlatUI];
+}
 
 -(void) _formatFlatUI
 {
