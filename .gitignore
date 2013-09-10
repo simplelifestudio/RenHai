@@ -14,6 +14,6 @@ Codes/iOS/RenHai/RenHai.xcworkspace/xcuserdata/motodexter.xcuserdatad/UserInterf
 
 /Test/~$Server测试用例.xlsm
 
-/Codes/Server/renhai.jar
+*.xcbkptlist
 
-/Codes/Server/build/classes
+Codes/iOS/RenHai/RenHai.xcworkspace/xcuserdata/motodexter.xcuserdatad/xcdebugger/Breakpoints.xcbkptlist
