@@ -154,12 +154,10 @@
 				"soccer":
 				{
 					"order":"0",
-					"matchCount":"7"
 				},
 				"music":
 				{
 					"order":"1",
-					"matchCount":"3"
 				}
 			}
 		}
