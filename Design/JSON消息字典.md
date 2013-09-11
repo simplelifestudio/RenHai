@@ -54,7 +54,7 @@ Server接收到App消息后，向App回应的消息
 	{
 		"header": // 业务消息头部
 		{
-			"messageType":"0", // 消息类型
+			"messageType":"1", // 消息类型
 			"messageSn":"AFLNWERJL3203598FDLGSLDF", // 消息序列号（请求和响应一对消息使用同一个序列号）
 			"messageId":"100", // 消息编号
 			"deviceId":"1234", // 设备编号（数据库字段）
@@ -168,23 +168,6 @@ Server接收到App消息后，向App回应的消息
 </code></pre>
 
 ###2. Server统计数据结构体
-####已有方案
-<pre><code>
-{
-	"body":
-	{
-		"onlineDeviceCount":"",
-		"randomDeviceCount":"",
-		"interestDeviceCount":"",
-		"chatDeviceCount":"",
-		"randomChatDeviceCount":"",
-		"interestChatDeviceCount":"",
-		"currentHotInterestLabels":"", // 这里需要指定要多少个标签，这一层的结构就破坏了?
-		"historyHotInterestLabels":"" // 这里也需要指定history的时间周期
-	}
-}
-</code></pre>
-####改进方案
 <pre><code>
 {
 	"body":
@@ -216,14 +199,15 @@ App与Server通过消息交互完成的数据操作
 ##1. 查询 dataQuery
 ##2. 更新 dataUpdate
 
-#数据枚举值
-操作的结果，即代码枚举值
+#数据格式
+
 ##1. 成功:1/失败:0
 ##2. 是:1/否:0
-##3. 业务会话请求目标 Random, Interest
-##4. App业务会话请求动作 EnterPool, LeavePool, AgreeChat, RejectChat, EndChat, Assess, AssessAndQuit
-##5. Server业务会话通知动作 SessionBinded
-##6. 
+##3. 业务会话请求目标 Random:1, Interest:2
+##4. App业务会话请求动作 EnterPool:1, LeavePool:2, AgreeChat:3, RejectChat:4, EndChat:5, AssessAndContinue:6, AssessAndQuit:7
+##5. Server业务会话通知动作 SessionBinded:1, OthersideRejected:2, OthersideAgreed:3, OthersideLost
+##6. Profile服务状态 正常:1/禁聊:0
+##7. 日期时间格式 2013-09-11 16:05:38
 
 #消息列表
 以下消息均略去header部分
@@ -418,7 +402,8 @@ App与Server通过消息交互完成的数据操作
 	{
 		"businessSessionId":"",
 		"businessType":"Interest",
-		"operationType":"EnterPool", // 这里存放App需要向Server告知的信息
+		"operationType":"EnterPool",
+		"operationInfo":"",
 		"operationValue":"" 
 	}	
 }
@@ -432,7 +417,8 @@ App与Server通过消息交互完成的数据操作
 	{
 		"businessSessionId":"9861ASFDE",
 		"businessType":"Interest",
-		"operationType":"EnterPool", // 这里存放Server需要向App告知的信息
+		"operationType":"EnterPool",
+		"operationInfo":"",		
 		"operationValue":"1" 
 	}	
 }
@@ -443,13 +429,14 @@ App与Server通过消息交互完成的数据操作
 {
 	"body": 
 	{
-		"sessionId":"9861ASFDE"，
+		"businessSessionId":"9861ASFDE"，
 		"businessType":"Interest",
-		"operationType":"SessionBinded" // 这里存放业务会话的操作
-		"operationValue":
+		"operationType":"SessionBinded"
+		"operationInfo":
 		{
 			// 这里存放匹配对象的信息
-		}
+		},
+		"operationValue":""
 	}
 }
 </code></pre>
@@ -461,7 +448,8 @@ App与Server通过消息交互完成的数据操作
 	{
 		"businessSessionId":"9861ASFDE",
 		"businessType":"Interest",
-		"operationType":"SessionBinded", // 这里存放App需要向Server告知的信息
+		"operationType":"SessionBinded",
+		"operationInfo":"",
 		"operationValue":"1" 
 	}
 }
@@ -472,8 +460,11 @@ App与Server通过消息交互完成的数据操作
 {
     "body":
     {
-		"receivedMessage":"BusinessSessionNotification",// 此处是否需要完整给出收到的消息？
-		"errorCode":"-7", // 错误码，因为此消息由App回应给Server，因此App是否需要也出一份错误码表？
+		"receivedMessage":
+		{
+			// 此处存放收到的信息原文
+		},
+		"errorCode":"-7",
       	"errorDescription":"Empty Content"
     }
 }
@@ -484,7 +475,10 @@ App与Server通过消息交互完成的数据操作
 {
     "body":
     {
-		"receivedMessage":"AlohaRequest",
+		"receivedMessage":
+		{
+			// 此处存放收到的信息原文		
+		},
 		"errorCode":"-7",
       	"errorDescription":"Empty Content"
     }
