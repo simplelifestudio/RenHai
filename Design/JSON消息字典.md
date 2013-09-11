@@ -1,33 +1,49 @@
 #消息分类 MessageType
-0. Unknown (Illegal Type)
-1. AppRequest App->Server
-	1. 测试请求 AlohaRequest (102)
-	2. App数据同步请求 AppDataSyncRequest (104)
-	3. Server数据同步请求 ServerDataSyncRequest (106)
-	4. 业务会话请求 BusinessSessionRequest (110)
-2. ServerResponse Server->App
-	0. 超时响应 ServerTimeoutResponse (99)
-	1. 错误响应 ServerErrorResponse (101)
-	2. 测试响应 AlohaResponse (103)
-	3. App数据同步响应 AppDataSyncResponse (105)
-	4. Server数据同步响应 ServerDataSyncResponse (107)
-	5. 业务会话响应 BusinessSessionResponse (111)
-3. ServerNotification Server->App
-	1. 	业务会话通知 BusinessSessionNotification (108)
-	2. Server广播通知 BroadcastNotification (112)
-4. AppResponse App->Server
-	0. 超时响应 AppTimeoutResponse (98)
-	1. 错误响应 AppErrorResponse (100)
-	2. 业务会话通知响应 BusinessSessionNotificationResponse (109)
+消息分类编号即代码枚举值
+###0. Unknown类
+###1. AppRequest类
+###2. AppResponse类
+###3. ServerNotification类
+###4. ServerResponse类
 
+#消息列表 MessageId
+消息编号即代码枚举值，且编号的第一位映射了消息分类编号
+
+##AppRequest类消息
+App主动发往Server的消息
+###100. 测试请求 AlohaRequest
+###101. App数据同步请求 AppDataSyncRequest
+###102. Server数据同步请求 ServerDataSyncRequest
+###103. 业务会话请求 BusinessSessionRequest
+
+##AppResponse类消息
+App接收到Server消息后，向Server回应的消息
+###200. 超时响应 AppTimeoutResponse
+###201. 错误响应 AppErrorResponse
+###202. 业务会话通知响应 BusinessSessionNotificationResponse
+
+##ServerNotification类消息
+Server主动发往App的消息
+###300. 业务会话通知 BusinessSessionNotification
+###301. 广播通知 BroadcastNotification
+
+##ServerResponse类消息
+Server接收到App消息后，向App回应的消息
+###400. 超时响应 ServerTimeoutResponse
+###401. 错误响应 ServerErrorResponse
+###402. 测试响应 AlohaResponse
+###403. App数据同步响应 AppDataSyncResponse
+###404. Server数据同步响应 ServerDataSyncResponse
+###405. 业务会话响应 BusinessSessionResponse
 
 #消息格式 MessageFormat
+以"jsonEnvelop"作为JSON消息的信封外套，对应的值即实际的业务消息（已编码/已加密/已压缩）
+<pre><code>
 {
-	"jsonEnvelope":
-	// 以下部分为实际消息部分，分为编码/加密和未编码/加密两种情况
+	"jsonEnvelope": // 信封外套
 	{
 		"header":
-    	{
+		{
 			"messageType":"0",
 			"messageSn":"AFLNWERJL3203598FDLGSLDF",
 			"messageId":"102",
@@ -43,15 +59,17 @@
     	}
 	}
 }
-
+</code></pre>
 
 #消息列表
-0. App错误响应 AppErrorResposne
+###201. App错误响应 AppErrorResposne
+<pre><code>
 {
-    "header":
-    {
-		"messageType":"4",    
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"100",    
+	"header":
+	{
+		"messageType":"4",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",
+		"messageId":"100",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -63,13 +81,16 @@
       	"errorDescription":"Empty Content"
     }
 }
+</code></pre>
 
-1. Server错误响应 ServerErrorResponse
+###401. Server错误响应 ServerErrorResponse
+<pre><code>
 {
-    "header":
-    {
-		"messageType":"2",    
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"101",    
+	"header":
+	{
+		"messageType":"2",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",
+		"messageId":"101",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -81,13 +102,16 @@
       	"errorDescription":"Empty Content"
     }
 }
+</code></pre>
 
-2. 测试请求 AlohaRequest
+###100. 测试请求 AlohaRequest
+<pre><code>
 {
-    "header":
-    {
-		"messageType":"1",    
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"102",    
+	"header":
+	{
+		"messageType":"1",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",
+		"messageId":"102",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -97,13 +121,16 @@
     	"content":"Hello Server!"
     }
 }
+</code></pre>
 
-3. 测试响应 AlohaResponse
+###402. 测试响应 AlohaResponse
+<pre><code>
 {
-    "header":
-    {
-		"messageType":"2",    
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"103",    
+	"header":
+	{
+		"messageType":"2",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",
+		"messageId":"103",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -113,27 +140,30 @@
     	"content":"Hello App!"
     }
 }
+</code></pre>
 
-4. App数据同步请求 AppDataSyncRequest
+###101. App数据同步请求 AppDataSyncRequest
+<pre><code>
 {
-    "header":
-    {
-		"messageType":"1",    
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"104", 
+	"header":
+	{
+		"messageType":"1",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",
+		"messageId":"104",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
-    },
-    "body": 
-    {
-		"dataQuery":
-		{
-			"deviceCard":
-			{
-			},
-			"impressCard":
-			{
-				"labelListCount":"10" // 最小值为3
+	},
+	"body":
+	{
+    	"dataQuery":
+    	{
+    		"deviceCard":
+    		{
+    		},
+    		"impressCard":
+    		{
+    			"labelListCount":"10" // 最小值为3
 			},
 			"interestCard":
 			{
@@ -163,11 +193,13 @@
 		}
     }
 }
+</code></pre>
 
-5. App数据同步响应 AppDataSyncResponse
+###403. App数据同步响应 AppDataSyncResponse
+<pre><code>
 {
-    "header":
-    {
+	"header":
+	{
 		"messageType":"2",    
 		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"105",    
 		"deviceId":"1234",
@@ -210,50 +242,57 @@
 		}	
     }
 }
+</code></pre>
 
-6. Server数据同步请求 ServerDataSyncRequest
+###102. Server数据同步请求 ServerDataSyncRequest
+<pre><code>
 {
-    "header":
-    {
-    	"messageType":"1",
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"106",    
+	"header":
+	{
+		"messageType":"1",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",
+		"messageId":"106",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
-    }
-    "body": 
-    {
+	}
+	"body":
+	{
 		"onlineDeviceCount":"",
 		"interestDeviceCount":"",
 		"chatDeviceCount":"",
 		"interestChatDeviceCount":"",
 		"currentHotInterestLabels":"", // 这里需要指定要多少个标签，这一层的结构就破坏了
 		"historyHotInterestLabels":""
-    }
+	}
 }
+</code></pre>
 
-7. Server数据同步响应 ServerDataSyncResponse
+###404. Server数据同步响应 ServerDataSyncResponse
 {
-    "header":
-    {
-		"messageType":"2",    
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"107",    
+	"header":
+	{
+		"messageType":"2",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",
+		"messageId":"107",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
-    }
-    "body": 
-    {
+	}
+	"body":
+	{
 		"onlineDeviceCount":"3601"
-    }
+	}
 }
 
-8. 业务会话通知 BusinessSessionNotification
+###300. 业务会话通知 BusinessSessionNotification
+<pre><code>
 {
 	"header":
-   	{
-		"messageType":"3",
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"108",
+	{
+		"messageType":"2",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",
+		"messageId":"107",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -269,13 +308,16 @@
 		}
 	}
 }
+</code></pre>
 
-9. 业务会话通知响应 BusinessSessionNotificationResponse
+###202. 业务会话通知响应 BusinessSessionNotificationResponse
+<pre><code>
 {
 	"header":
 	{
-		"messageType":"4",
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"109",
+		"messageType":"2",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",
+		"messageId":"107",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
@@ -288,17 +330,20 @@
 		"operationValue":"" 
 	}
 }
+</code></pre>
 
-10. 业务会话请求 BusinessSessionRequest
+###103. 业务会话请求 BusinessSessionRequest
+<pre><code>
 {
 	"header":
-   	{
-		"messageType":"1",
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"110",
+	{
+		"messageType":"2",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",
+		"messageId":"107",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
-   	}
+	}
 	"body": 
 	{
 		"businessSessionId":"",
@@ -307,18 +352,21 @@
 		"operationValue":"" 
 	}	
 }
+</code></pre>
 
 
-11. 业务会话响应 BusinessSessionResponse
+###405. 业务会话响应 BusinessSessionResponse
+<pre><code>
 {
 	"header":
-   	{
-   		"messageType":"2",
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"111",
+	{
+		"messageType":"2",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",
+		"messageId":"107",
 		"deviceId":"1234",
 		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
-   	}
+	}
 	"body": 
 	{
 		"businessSessionId":"9861ASFDE",
@@ -327,19 +375,23 @@
 		"operationValue":"Success" 
 	}	
 }
+</code></pre>
 
-12. Server广播通知 BroadcastNotification
+###301. Server广播通知 BroadcastNotification
+<pre><code>
 {
 	"header":
-   	{
-   		"messageType":"3",
-		"messageSn":"AFLNWERJL3203598FDLGSLDF",		"messageId":"112",
-		"deviceId":"",
-		"deviceSn":"",
+	{
+		"messageType":"2",
+		"messageSn":"AFLNWERJL3203598FDLGSLDF",
+		"messageId":"107",
+		"deviceId":"1234",
+		"deviceSn":"ABCD77631GGWQ",
 		"timeStamp":"2013-08-14 21:18:49"
-   	}
+	}
 	"body": 
 	{
 		"content":"This is a broadcast message!"
 	}
 }
+</code></pre>
