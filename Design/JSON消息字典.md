@@ -137,26 +137,50 @@ Server接收到App消息后，向App回应的消息
 				"chatTotalCount":"",
 				"chatTotalDuration":"",
 				"chatLossCount":"",
-				"impressLabelList": // 这里还是别扭，三个评分标签也在里面
+				"assessLabelList":
+				{
+					{
+						"impressLabel":"",
+						"globalImpressLabelId":"",
+						"assessedCount":"",
+						"updateTime":"",
+						"assessCount":""
+					},
+					{
+						"impressLabel":"",
+						"globalImpressLabelId":"",
+						"assessedCount":"",
+						"updateTime":"",
+						"assessCount":""
+					},
+					{
+						"impressLabel":"",
+						"globalImpressLabelId":"",
+						"assessedCount":"",
+						"updateTime":"",
+						"assessCount":""
+					}					
+				}
+				"impressLabelList":
 				[
 					{
 						"impressLabel":"",
 						"globalImpressLabelId":"",
-						"count":"",
+						"assessedCount":"",
 						"updateTime":"",
 						"assessCount":""
 					},
 					{
 						"impressLabel":"",
 						"globalImpressLabelId":"",
-						"count":"",
+						"assessedCount":"",
 						"updateTime":"",
 						"assessCount":""
 					},
 					{
 						"impressLabel":"",
 						"globalImpressLabelId":"",
-						"count":"",
+						"assessedCount":"",
 						"updateTime":"",
 						"assessCount":""
 					}
@@ -264,6 +288,7 @@ App与Server通过消息交互完成的数据操作
 						"chatTotalCount":"",
 						"chatTotalDuration":"",
 						"chatLossCount":"",
+						"assessLabelList":"",
 						"impressLabelList":"7"
 					}
 				}
@@ -331,26 +356,27 @@ App与Server通过消息交互完成的数据操作
 						"chatTotalCount":"",
 						"chatTotalDuration":"",
 						"chatLossCount":"",
+						"assessLabelList":"",
 						"impressLabelList":
 						[
 							{
 								"impressLabel":"",
 								"globalImpressLabelId":"",
-								"count":"",
+								"assessedCount":"",
 								"updateTime":"",
 								"assessCount":""
 							},
 							{
 								"impressLabel":"",
 								"globalImpressLabelId":"",
-								"count":"",
+								"assessedCount":"",
 								"updateTime":"",
 								"assessCount":""
 							},
 							{
 								"impressLabel":"",
 								"globalImpressLabelId":"",
-								"count":"",
+								"assessedCount":"",
 								"updateTime":"",
 								"assessCount":""
 							}
