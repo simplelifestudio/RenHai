@@ -15,14 +15,51 @@ package com.simplelife.renhai.server.util;
  */
 public class Consts
 {
-	public enum DeviceBusinessStatus
+	public enum ServiceStatus
 	{
-		Init, Idle, WaitMatch, SessionBound
+		Normal, Banned;
+		
+		public static boolean isValidStatus(String status)
+		{
+			for (ServiceStatus item : values())
+			{
+				if (item.name().equals(status))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
 	}
-	
-	public enum DeviceServiceStatus
+	public enum BusinessStatus
 	{
-		Normal, Forbidden
+		Init, Idle, WaitMatch, SessionBound;
+		
+		public boolean isValidStatus(String status)
+		{
+			for (BusinessStatus item : values())
+			{
+				if (item.name().equals(status))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
+	public enum JSONExecuteResult
+	{
+		Success(1),
+		Fail(0),
+		Yes(1),
+		No(0);
+		
+		private int value;
+		private JSONExecuteResult(int value)
+		{
+			this.value = value;
+		}
 	}
 	
 	public enum BusinessSessionStatus
@@ -43,10 +80,10 @@ public class Consts
 	public enum MessageType
 	{
 		Invalid(0),
-		AppRequest(1), 
-		ServerResponse(2),
+		AppRequest(1),
+		AppResponse(2),
 		ServerNotification(3),
-		AppResponse(4);
+		ServerResponse(4);
 		
 		private int value;
 		private MessageType(int value)
@@ -67,48 +104,28 @@ public class Consts
 		}
 	}
 	
-	/*
-	public class MessageId
-	{
-		public final static int Invalid						= 0;
-		public final static int AppErrorResposne			= 100;
-		public final static int ServerErrorResponse			= 101;
-		public final static int AlohaRequest				= 102;
-		public final static int AlohaResponse				= 103;
-		public final static int AppDataSyncRequest			= 104;
-
-		public final static int AppDataSyncResponse			= 105;
-		public final static int ServerDataSyncRequest		= 106;
-		public final static int ServerDataSyncResponse		= 107;
-		public final static int BusinessSessionNotification	= 108;
-		public final static int BusinessSessionNotificationResponse= 109;
-
-		public final static int BusinessSessionRequest		= 110;
-		public final static int BusinessSessionResponse		= 111;
-		public final static int BroadcastNotification		= 112;
-	}
-	*/
-	
 	public enum MessageId
 	{
 		InvalidRequest(0),
 		UnkownRequest(1),
 		TimeoutRequest(2),
-		AppErrorResposne(100), 
-		ServerErrorResponse(101), 
-		AlohaRequest(102), 
-		AlohaResponse(103), 
-		AppDataSyncRequest(104), 
-
-		AppDataSyncResponse(105), 
-		ServerDataSyncRequest(106), 
-		ServerDataSyncResponse(107), 
-		BusinessSessionNotification(108), 
-		BusinessSessionNotificationResponse(109), 
-
-		BusinessSessionRequest(110), 
-		BusinessSessionResponse(111), 
-		BroadcastNotification(112);
+		
+		AlohaRequest(100),
+		AppDataSyncRequest(101),
+		ServerDataSyncRequest(102),
+		BusinessSessionRequest(103),
+		
+		AppErrorResposne(201),
+		BusinessSessionNotificationResponse(202),
+		
+		BusinessSessionNotification(300),
+		BroadcastNotification(301),
+		
+		ServerErrorResponse(401), 
+		AlohaResponse(402),
+		AppDataSyncResponse(403), 
+		ServerDataSyncResponse(404), 
+		BusinessSessionResponse(405); 
 		
 		private int messageId ;
 		
@@ -175,15 +192,15 @@ public class Consts
     	RejectChat(4),
     	EndChat(5),
 
-    	Assess(6),
+    	AssessAndContinue(6),
     	AssessAndQuit(7),
     	Received(8);
 
-    	private int type;
+    	private int value;
     	
-    	private OperationType(int type)
+    	private OperationType(int value)
     	{
-    		this.type = type; 
+    		this.value = value; 
     	}
     }
 	

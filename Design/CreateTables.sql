@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : renhai
+Source Server         : local
 Source Server Version : 50610
 Source Host           : localhost:3306
 Source Database       : renhai
@@ -10,54 +10,45 @@ Target Server Type    : MYSQL
 Target Server Version : 50610
 File Encoding         : 65001
 
-Date: 2013-09-07 11:44:02
+Date: 2013-09-11 12:55:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for `device`
+-- ----------------------------
+DROP TABLE IF EXISTS `device`;
+CREATE TABLE `device` (
+  `deviceId` int(11) NOT NULL AUTO_INCREMENT,
+  `deviceSn` varchar(256) DEFAULT NULL,
+  PRIMARY KEY (`deviceId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of device
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for `devicecard`
 -- ----------------------------
 DROP TABLE IF EXISTS `devicecard`;
 CREATE TABLE `devicecard` (
-  `deviceId` int(11) NOT NULL AUTO_INCREMENT,
-  `deviceSn` varchar(256) NOT NULL,
+  `deviceCardId` int(11) NOT NULL AUTO_INCREMENT,
+  `deviceId` int(11) NOT NULL,
   `registerTime` bigint(20) NOT NULL,
-  `serviceStatus` enum('Normal','Forbidden') NOT NULL,
-  `forbiddenExpiredDate` bigint(20) DEFAULT NULL,
-  `profileId` int(11) NOT NULL,
   `deviceModel` varchar(256) NOT NULL,
   `osVersion` varchar(128) NOT NULL,
   `appVersion` varchar(128) NOT NULL,
   `location` varchar(256) DEFAULT NULL,
-  `isJailed` enum('True','False') DEFAULT NULL,
-  PRIMARY KEY (`deviceId`),
-  KEY `index_deviceSn` (`deviceSn`(255)),
-  KEY `fk_DeviceCard_profileId_idx` (`profileId`),
-  CONSTRAINT `fk_DeviceCard_profileId` FOREIGN KEY (`profileId`) REFERENCES `profile` (`profileId`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  `isJailed` enum('True','False') NOT NULL,
+  PRIMARY KEY (`deviceCardId`),
+  KEY `devicecard_ibfk_1` (`deviceId`),
+  CONSTRAINT `devicecard_ibfk_1` FOREIGN KEY (`deviceId`) REFERENCES `device` (`deviceId`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of devicecard
--- ----------------------------
-
--- ----------------------------
--- Table structure for `deviceprofilemap`
--- ----------------------------
-DROP TABLE IF EXISTS `deviceprofilemap`;
-CREATE TABLE `deviceprofilemap` (
-  `deviceProfileMapId` int(11) NOT NULL AUTO_INCREMENT,
-  `deviceId` int(11) NOT NULL,
-  `profileId` int(11) NOT NULL,
-  PRIMARY KEY (`deviceProfileMapId`),
-  KEY `deviceId_idx` (`deviceId`),
-  KEY `profileId_idx` (`profileId`),
-  CONSTRAINT `fk_DeviceProfileMap_deviceId` FOREIGN KEY (`deviceId`) REFERENCES `devicecard` (`deviceId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_DeviceProfileMap_profileId` FOREIGN KEY (`profileId`) REFERENCES `profile` (`profileId`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of deviceprofilemap
 -- ----------------------------
 
 -- ----------------------------
@@ -116,10 +107,13 @@ CREATE TABLE `hotinterestlabelstatistics` (
 DROP TABLE IF EXISTS `impresscard`;
 CREATE TABLE `impresscard` (
   `impressCardId` int(11) NOT NULL AUTO_INCREMENT,
+  `profileId` int(11) DEFAULT NULL,
   `chatTotalCount` int(11) NOT NULL,
   `chatTotalDuration` int(11) NOT NULL,
   `chatLossCount` int(11) NOT NULL,
-  PRIMARY KEY (`impressCardId`)
+  PRIMARY KEY (`impressCardId`),
+  KEY `profileId` (`profileId`),
+  CONSTRAINT `impresscard_ibfk_1` FOREIGN KEY (`profileId`) REFERENCES `profile` (`profileId`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -127,10 +121,10 @@ CREATE TABLE `impresscard` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `impresslabelcollection`
+-- Table structure for `impresslabelmap`
 -- ----------------------------
-DROP TABLE IF EXISTS `impresslabelcollection`;
-CREATE TABLE `impresslabelcollection` (
+DROP TABLE IF EXISTS `impresslabelmap`;
+CREATE TABLE `impresslabelmap` (
   `impressLabelMaplId` int(11) NOT NULL,
   `impressCardId` int(11) NOT NULL,
   `globalImpressLabelId` int(11) NOT NULL,
@@ -145,7 +139,7 @@ CREATE TABLE `impresslabelcollection` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of impresslabelcollection
+-- Records of impresslabelmap
 -- ----------------------------
 
 -- ----------------------------
@@ -154,8 +148,10 @@ CREATE TABLE `impresslabelcollection` (
 DROP TABLE IF EXISTS `interestcard`;
 CREATE TABLE `interestcard` (
   `interestCardId` int(11) NOT NULL AUTO_INCREMENT,
-  `createTime` bigint(20) NOT NULL,
-  PRIMARY KEY (`interestCardId`)
+  `profileId` int(11) NOT NULL,
+  PRIMARY KEY (`interestCardId`),
+  KEY `profileId` (`profileId`),
+  CONSTRAINT `interestcard_ibfk_1` FOREIGN KEY (`profileId`) REFERENCES `profile` (`profileId`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -163,10 +159,10 @@ CREATE TABLE `interestcard` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `interestlabelcollection`
+-- Table structure for `interestlabelmap`
 -- ----------------------------
-DROP TABLE IF EXISTS `interestlabelcollection`;
-CREATE TABLE `interestlabelcollection` (
+DROP TABLE IF EXISTS `interestlabelmap`;
+CREATE TABLE `interestlabelmap` (
   `interestLabelMaplId` int(11) NOT NULL AUTO_INCREMENT,
   `interestCardId` int(11) NOT NULL,
   `globalInterestLabelId` int(11) NOT NULL,
@@ -181,31 +177,8 @@ CREATE TABLE `interestlabelcollection` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of interestlabelcollection
+-- Records of interestlabelmap
 -- ----------------------------
-
--- ----------------------------
--- Table structure for `systemmodule`
--- ----------------------------
-DROP TABLE IF EXISTS `systemmodule`;
-CREATE TABLE `systemmodule` (
-  `moduleId` int(11) NOT NULL AUTO_INCREMENT,
-  `moduleNo` int(11) NOT NULL,
-  `description` varchar(256) NOT NULL,
-  PRIMARY KEY (`moduleId`),
-  KEY `index_moduleId` (`moduleId`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of systemmodule
--- ----------------------------
-INSERT INTO `systemmodule` VALUES ('1', '1', 'business');
-INSERT INTO `systemmodule` VALUES ('2', '2', 'db');
-INSERT INTO `systemmodule` VALUES ('3', '3', 'json');
-INSERT INTO `systemmodule` VALUES ('4', '4', 'log');
-INSERT INTO `systemmodule` VALUES ('5', '5', 'servlets');
-INSERT INTO `systemmodule` VALUES ('6', '6', 'util');
-INSERT INTO `systemmodule` VALUES ('7', '7', 'websocket');
 
 -- ----------------------------
 -- Table structure for `operationcode`
@@ -257,15 +230,15 @@ INSERT INTO `operationcode` VALUES ('27', '1104', 'System', '周期性更新WebR
 DROP TABLE IF EXISTS `profile`;
 CREATE TABLE `profile` (
   `profileId` int(11) NOT NULL AUTO_INCREMENT,
-  `interestCardId` int(11) NOT NULL,
-  `impressCardId` int(11) NOT NULL,
+  `deviceId` int(11) NOT NULL,
+  `serviceStatus` enum('Ban','Normal') NOT NULL,
+  `unbanDate` bigint(20) DEFAULT NULL,
   `lastActivityTime` bigint(20) NOT NULL,
   `createTime` bigint(20) NOT NULL,
+  `active` enum('No','Yes') DEFAULT NULL,
   PRIMARY KEY (`profileId`),
-  KEY `fk_Profile_intCardId_idx` (`interestCardId`),
-  KEY `fk_Profile_impCardId_idx` (`impressCardId`),
-  CONSTRAINT `fk_Profile_intCardId` FOREIGN KEY (`interestCardId`) REFERENCES `interestcard` (`interestCardId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Profile_impCardId` FOREIGN KEY (`impressCardId`) REFERENCES `impresscard` (`impressCardId`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `profile_ibfk_1` (`deviceId`),
+  CONSTRAINT `profile_ibfk_1` FOREIGN KEY (`deviceId`) REFERENCES `device` (`deviceId`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -278,17 +251,14 @@ CREATE TABLE `profile` (
 DROP TABLE IF EXISTS `profileoperationlog`;
 CREATE TABLE `profileoperationlog` (
   `profileOperationLogId` int(11) NOT NULL AUTO_INCREMENT,
-  `deviceId` int(11) NOT NULL,
   `profileId` int(11) NOT NULL,
   `logTime` int(11) NOT NULL,
-  `operationCode` int(11) NOT NULL,
+  `operationCodeId` int(11) NOT NULL,
   `logInfo` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`profileOperationLogId`),
-  KEY `fk_Pro_deviceId_idx` (`deviceId`),
   KEY `fk_Pro_profileId_idx` (`profileId`),
-  KEY `fk_Pro_operCode_idx` (`operationCode`),
-  CONSTRAINT `fk_Pro_operCode` FOREIGN KEY (`operationCode`) REFERENCES `operationcode` (`operationCode`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Pro_deviceId` FOREIGN KEY (`deviceId`) REFERENCES `devicecard` (`deviceId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  KEY `fk_Pro_operCode_idx` (`operationCodeId`),
+  CONSTRAINT `fk_Pro_operCode` FOREIGN KEY (`operationCodeId`) REFERENCES `operationcode` (`operationCodeId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Pro_profileId` FOREIGN KEY (`profileId`) REFERENCES `profile` (`profileId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -297,23 +267,22 @@ CREATE TABLE `profileoperationlog` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `sessionprofilecollection`
+-- Table structure for `sessionprofilemap`
 -- ----------------------------
-DROP TABLE IF EXISTS `sessionprofilecollection`;
-CREATE TABLE `sessionprofilecollection` (
+DROP TABLE IF EXISTS `sessionprofilemap`;
+CREATE TABLE `sessionprofilemap` (
   `sessionImpressMapId` int(11) NOT NULL AUTO_INCREMENT,
   `sessionRecordId` int(11) NOT NULL,
   `profileId` int(11) NOT NULL,
-  `count` int(11) NOT NULL,
   PRIMARY KEY (`sessionImpressMapId`),
   KEY `fk_sessionRecordId_idx` (`sessionRecordId`),
   KEY `fk_profileId_idx` (`profileId`),
-  CONSTRAINT `fk_sessionRecordId` FOREIGN KEY (`sessionRecordId`) REFERENCES `sessionrecord` (`sessionRecordId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_profileId` FOREIGN KEY (`profileId`) REFERENCES `profile` (`profileId`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_profileId` FOREIGN KEY (`profileId`) REFERENCES `profile` (`profileId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_sessionRecordId` FOREIGN KEY (`sessionRecordId`) REFERENCES `sessionrecord` (`sessionRecordId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of sessionprofilecollection
+-- Records of sessionprofilemap
 -- ----------------------------
 
 -- ----------------------------
@@ -358,6 +327,29 @@ INSERT INTO `statisticsitem` VALUES ('6', '0', '兴趣聊天设备数');
 INSERT INTO `statisticsitem` VALUES ('7', '0', '热门标签');
 
 -- ----------------------------
+-- Table structure for `systemmodule`
+-- ----------------------------
+DROP TABLE IF EXISTS `systemmodule`;
+CREATE TABLE `systemmodule` (
+  `moduleId` int(11) NOT NULL AUTO_INCREMENT,
+  `moduleNo` int(11) NOT NULL,
+  `description` varchar(256) NOT NULL,
+  PRIMARY KEY (`moduleId`),
+  KEY `index_moduleId` (`moduleNo`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of systemmodule
+-- ----------------------------
+INSERT INTO `systemmodule` VALUES ('1', '1', 'business');
+INSERT INTO `systemmodule` VALUES ('2', '2', 'db');
+INSERT INTO `systemmodule` VALUES ('3', '3', 'json');
+INSERT INTO `systemmodule` VALUES ('4', '4', 'log');
+INSERT INTO `systemmodule` VALUES ('5', '5', 'servlets');
+INSERT INTO `systemmodule` VALUES ('6', '6', 'util');
+INSERT INTO `systemmodule` VALUES ('7', '7', 'websocket');
+
+-- ----------------------------
 -- Table structure for `systemoperationlog`
 -- ----------------------------
 DROP TABLE IF EXISTS `systemoperationlog`;
@@ -385,11 +377,11 @@ DROP TABLE IF EXISTS `systemstatistics`;
 CREATE TABLE `systemstatistics` (
   `systemStatisticsId` int(11) NOT NULL AUTO_INCREMENT,
   `saveTime` int(11) NOT NULL,
-  `statisticsItem` int(11) NOT NULL,
+  `statisticsItemId` int(11) NOT NULL,
   `count` int(11) NOT NULL,
   PRIMARY KEY (`systemStatisticsId`),
-  KEY `fk_SysStat_statItem_idx` (`statisticsItem`),
-  CONSTRAINT `fk_SysStat_statItem` FOREIGN KEY (`statisticsItem`) REFERENCES `statisticsitem` (`statisticsItem`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_SysStat_statItem_idx` (`statisticsItemId`),
+  CONSTRAINT `fk_SysStat_statItem` FOREIGN KEY (`statisticsItemId`) REFERENCES `statisticsitem` (`statisticsitemId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------

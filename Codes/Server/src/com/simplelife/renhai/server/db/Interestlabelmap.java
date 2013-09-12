@@ -10,11 +10,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * Interestlabelcollection entity. @author MyEclipse Persistence Tools
+ * Interestlabelmap entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "interestlabelcollection", catalog = "renhai")
-public class Interestlabelcollection implements java.io.Serializable {
+@Table(name = "interestlabelmap", catalog = "renhai")
+public class Interestlabelmap implements java.io.Serializable {
 
 	// Fields
 
@@ -28,11 +28,11 @@ public class Interestlabelcollection implements java.io.Serializable {
 	// Constructors
 
 	/** default constructor */
-	public Interestlabelcollection() {
+	public Interestlabelmap() {
 	}
 
 	/** full constructor */
-	public Interestlabelcollection(Interestcard interestcard,
+	public Interestlabelmap(Interestcard interestcard,
 			Globalinterestlabel globalinterestlabel, Integer order,
 			Integer matchCount, String validFlag) {
 		this.interestcard = interestcard;

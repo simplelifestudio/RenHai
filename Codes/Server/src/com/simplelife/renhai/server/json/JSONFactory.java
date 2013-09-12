@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 
 
@@ -27,8 +26,8 @@ public class JSONFactory
 		Logger logger = JSONModule.instance.getLogger();
 		try
 		{
-			JSONObject header = messageObject.getJSONObject(JSONKey.FieldName.Header);
-			String strMessageId = header.getString(JSONKey.FieldName.MessageId);
+			JSONObject header = messageObject.getJSONObject(JSONKey.Header);
+			String strMessageId = header.getString(JSONKey.MessageId);
 			if (strMessageId == null || strMessageId.length() == 0)
 			{
 				logger.debug("Message ID is missed");

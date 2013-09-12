@@ -17,23 +17,6 @@ import com.simplelife.renhai.server.util.AbstractModule;
 /** */
 public class DBModule extends AbstractModule
 {
-	private static DBModule instance;
+	public final static DBModule instance = new DBModule();
 	
-	public static DBModule instance()
-	{
-		if (instance != null)
-		{
-			return instance;
-		}
-		
-		synchronized (instance)
-		{
-			if (instance != null)
-			{
-				return instance;
-			}
-			instance = new DBModule();
-			return instance;
-		}
-	}
 }

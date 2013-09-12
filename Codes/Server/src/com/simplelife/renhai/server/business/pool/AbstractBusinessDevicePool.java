@@ -32,6 +32,11 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     // Map for saving devices in chat
     protected HashMap<String, IDeviceWrapper> chatDeviceMap;
     
+    public HashMap<String, IDeviceWrapper> getDeviceMap()
+    {
+    	return chatDeviceMap;
+    }
+    
     /**
      * Return if current BusinessDevicePool reaches its capacity
      */
@@ -118,7 +123,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     		chatDeviceMap.remove(sn);
     	}
     	
-    	if (device.getBusinessStatus() == Consts.DeviceBusinessStatus.SessionBound)
+    	if (device.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
     	{
     		IBusinessSession session = device.getOwnerBusinessSession();
     		session.onDeviceLeave(device);
@@ -170,5 +175,12 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 				deviceMap.put(sn, device);
 			}
 		}
+	}
+	
+	@Override
+	public void clearPool()
+	{
+		deviceMap.clear();
+		chatDeviceMap.clear();
 	}
 }

@@ -10,7 +10,6 @@
 package com.simplelife.renhai.server.json;
 
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 
 /**

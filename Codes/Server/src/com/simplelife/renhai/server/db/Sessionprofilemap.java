@@ -10,31 +10,28 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * Sessionprofilecollection entity. @author MyEclipse Persistence Tools
+ * Sessionprofilemap entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "sessionprofilecollection", catalog = "renhai")
-public class Sessionprofilecollection implements java.io.Serializable {
+@Table(name = "sessionprofilemap", catalog = "renhai")
+public class Sessionprofilemap implements java.io.Serializable {
 
 	// Fields
 
 	private Integer sessionImpressMapId;
 	private Profile profile;
 	private Sessionrecord sessionrecord;
-	private Integer count;
 
 	// Constructors
 
 	/** default constructor */
-	public Sessionprofilecollection() {
+	public Sessionprofilemap() {
 	}
 
 	/** full constructor */
-	public Sessionprofilecollection(Profile profile,
-			Sessionrecord sessionrecord, Integer count) {
+	public Sessionprofilemap(Profile profile, Sessionrecord sessionrecord) {
 		this.profile = profile;
 		this.sessionrecord = sessionrecord;
-		this.count = count;
 	}
 
 	// Property accessors
@@ -67,15 +64,6 @@ public class Sessionprofilecollection implements java.io.Serializable {
 
 	public void setSessionrecord(Sessionrecord sessionrecord) {
 		this.sessionrecord = sessionrecord;
-	}
-
-	@Column(name = "count", nullable = false)
-	public Integer getCount() {
-		return this.count;
-	}
-
-	public void setCount(Integer count) {
-		this.count = count;
 	}
 
 }

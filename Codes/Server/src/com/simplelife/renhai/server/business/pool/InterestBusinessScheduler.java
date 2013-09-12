@@ -29,4 +29,12 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
     public void schedule()
     {
     }
+
+
+	@Override
+	public void run()
+	{
+		
+		// TODO Auto-generated method stub
+	}
 }

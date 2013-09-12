@@ -25,7 +25,7 @@ public class Globalinterestlabel implements java.io.Serializable {
 	private Integer globalMatchCount;
 	private Set<Hotinterestlabelstatistics> hotinterestlabelstatisticses = new HashSet<Hotinterestlabelstatistics>(
 			0);
-	private Set<Interestlabelcollection> interestlabelcollections = new HashSet<Interestlabelcollection>(
+	private Set<Interestlabelmap> interestlabelmaps = new HashSet<Interestlabelmap>(
 			0);
 
 	// Constructors
@@ -43,11 +43,11 @@ public class Globalinterestlabel implements java.io.Serializable {
 	/** full constructor */
 	public Globalinterestlabel(String interestLabel, Integer globalMatchCount,
 			Set<Hotinterestlabelstatistics> hotinterestlabelstatisticses,
-			Set<Interestlabelcollection> interestlabelcollections) {
+			Set<Interestlabelmap> interestlabelmaps) {
 		this.interestLabel = interestLabel;
 		this.globalMatchCount = globalMatchCount;
 		this.hotinterestlabelstatisticses = hotinterestlabelstatisticses;
-		this.interestlabelcollections = interestlabelcollections;
+		this.interestlabelmaps = interestlabelmaps;
 	}
 
 	// Property accessors
@@ -91,13 +91,12 @@ public class Globalinterestlabel implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "globalinterestlabel")
-	public Set<Interestlabelcollection> getInterestlabelcollections() {
-		return this.interestlabelcollections;
+	public Set<Interestlabelmap> getInterestlabelmaps() {
+		return this.interestlabelmaps;
 	}
 
-	public void setInterestlabelcollections(
-			Set<Interestlabelcollection> interestlabelcollections) {
-		this.interestlabelcollections = interestlabelcollections;
+	public void setInterestlabelmaps(Set<Interestlabelmap> interestlabelmaps) {
+		this.interestlabelmaps = interestlabelmaps;
 	}
 
 }

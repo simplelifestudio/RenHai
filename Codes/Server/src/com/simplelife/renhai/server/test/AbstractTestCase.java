@@ -9,28 +9,18 @@
 
 package com.simplelife.renhai.server.test;
 
-import java.util.HashMap;
-
-import org.hibernate.Session;
-
 import junit.framework.TestCase;
 
 import com.simplelife.renhai.server.db.Devicecard;
-import com.simplelife.renhai.server.db.DevicecardDAO;
-import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
-import com.simplelife.renhai.server.db.ImpresscardDAO;
 import com.simplelife.renhai.server.db.Interestcard;
-import com.simplelife.renhai.server.db.InterestcardDAO;
 import com.simplelife.renhai.server.db.Profile;
-import com.simplelife.renhai.server.db.ProfileDAO;
-import com.simplelife.renhai.server.business.device.Device;
+import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
-import com.simplelife.renhai.server.util.JSONKey;
 
 /**
  * 
@@ -51,40 +41,28 @@ public abstract class AbstractTestCase extends TestCase
 	{
 		// Create new impress card
 		Impresscard impressCard = new Impresscard();
-		ImpresscardDAO impressCardDAO = new ImpresscardDAO();
 		impressCard.setChatLossCount(0);
 		impressCard.setChatTotalCount(0);
 		impressCard.setChatTotalDuration(0);
 		
 		// Create new interest card
 		Interestcard interestCard = new Interestcard();
-		InterestcardDAO interestCardDAO = new InterestcardDAO();
-		interestCard.setCreateTime(DateUtil.getNowDate().getTime());
 		
 		// Create new profile
 		Profile profile = new Profile();
-		profile.setImpresscard(impressCard);
-		profile.setInterestcard(interestCard);
 		long now = DateUtil.getNowDate().getTime();
 		profile.setLastActivityTime(now);
 		profile.setCreateTime(now);
+		profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
 		
 		// Bind profile with cards
-		profile.setInterestcard(interestCard);
-		profile.setImpresscard(impressCard);
+		interestCard.setProfile(profile);
+		impressCard.setProfile(profile);
 		
-		// Save profile
-		ProfileDAO profileDAO = new ProfileDAO();
-		
-		// Create new deviceCard and update to data from APP
+		// Create new deviceCard
 		Devicecard deviceCard = new Devicecard();
 		setDevicecardDefaultValue(deviceCard);
-		
-		// Save device card
-		DevicecardDAO deviceCardDAO = new DevicecardDAO();
-		deviceCard.setProfile(profile);
 		deviceCard.setRegisterTime(now);
-		deviceCard.setServiceStatus(Consts.DeviceServiceStatus.Normal.name());
 		
 		// Create Device object and bind with cards
 		Device device = new Device();
@@ -108,7 +86,6 @@ public abstract class AbstractTestCase extends TestCase
 		card.setAppVersion(AppVersion);
 		card.setIsJailed(IsJailed);
 		card.setLocation(Location);
-		card.setDeviceSn(DeviceSN);
 		card.setDeviceModel(DeviceModel);
 	}
 	

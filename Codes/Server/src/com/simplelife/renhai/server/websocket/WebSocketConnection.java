@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.InvalidRequest;
-import com.simplelife.renhai.server.json.UnkownRequest;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.json.TimeoutRequest;
@@ -141,17 +140,17 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 			appMessage.setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
 			appMessage.setErrorDescription("Invalid JSON string.");
 		}
-		else if (!obj.containsKey(JSONKey.FieldName.JsonEnvelope))
+		else if (!obj.containsKey(JSONKey.JsonEnvelope))
 		{
 			logger.error("Invalid JSON string ");
 			appMessage = new InvalidRequest(obj);
 			appMessage.setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
-			appMessage.setErrorDescription("Invalid JSON request: " + JSONKey.FieldName.JsonEnvelope + " was not found.");
+			appMessage.setErrorDescription("Invalid JSON request: " + JSONKey.JsonEnvelope + " was not found.");
 		}
 		else
 		{
 			logger.debug("Enveloped JSON string.");
-			message = obj.getString(JSONKey.FieldName.JsonEnvelope);
+			message = obj.getString(JSONKey.JsonEnvelope);
 	    	if (GlobalSetting.BusinessSetting.Encrypt)
 	    	{
 	    		logger.debug("Try to decrypt message");

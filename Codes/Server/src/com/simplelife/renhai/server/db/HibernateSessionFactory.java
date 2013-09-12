@@ -23,14 +23,15 @@ public class HibernateSessionFactory {
      */
 	private static final ThreadLocal<Session> threadLocal = new ThreadLocal<Session>();
     private static org.hibernate.SessionFactory sessionFactory;
-    private static final String configFile = "/com/simplelife/renhai/server/db/hibernate.cfg.xml";
+    //private static final String configFile = "/com/simplelife/renhai/server/db/hibernate.cfg.xml";
 	
     private static Configuration configuration = new Configuration();
     private static ServiceRegistry serviceRegistry; 
 
 	static {
     	try {
-			configuration.configure(configFile);
+			//configuration.configure(configFile);
+    		configuration.configure();
 			serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
 			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		} catch (Exception e) {

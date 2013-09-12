@@ -16,25 +16,22 @@ import java.util.Date;
 
 import org.slf4j.Logger;
 
-import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
-import com.simplelife.renhai.server.util.IAppJSONMessage;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
-import com.simplelife.renhai.server.util.IJSONObject;
 import com.simplelife.renhai.server.util.INode;
-import com.simplelife.renhai.server.websocket.WebSocketConnection;
 
 
 /** */
-public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwner, IJSONObject
+public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwner
 {
     /** */
     protected IBaseConnection webSocketConnection;
@@ -54,10 +51,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     protected String deviceSn;
     
     /** */
-    protected Consts.DeviceServiceStatus serviceStatus;
+    protected Consts.ServiceStatus serviceStatus;
     
     /** */
-    protected Consts.DeviceBusinessStatus businessStatus;
+    protected Consts.BusinessStatus businessStatus;
     
     protected OnlineDevicePool ownerOnlinePool;
     
@@ -80,14 +77,14 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     }
     
     /** */
-    public void changeBusinessStatus(Consts.DeviceBusinessStatus targetStatus)
+    public void changeBusinessStatus(Consts.BusinessStatus targetStatus)
     {
     	switch(targetStatus)
     	{
     		case Idle:
     			break;
     		case Init:
-    			if (businessStatus == Consts.DeviceBusinessStatus.Idle)
+    			if (businessStatus == Consts.BusinessStatus.Idle)
     			{
     				ownerOnlinePool.synchronizeDevice(this);
     			}
@@ -126,13 +123,13 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     }
     
     /** */
-    public Consts.DeviceBusinessStatus getBusinessStatus()
+    public Consts.BusinessStatus getBusinessStatus()
     {
         return businessStatus;
     }
     
     /** */
-    public Consts.DeviceServiceStatus getServiceStatus()
+    public Consts.ServiceStatus getServiceStatus()
     {
         return serviceStatus;
     }
@@ -183,12 +180,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
         return null;
     }
     
-    /** */
-    public JSONObject toJSONObject()
-    {
-        return null;
-    }
-
+    
     @Override
     public void onClose(IBaseConnection connection)
     {
@@ -270,7 +262,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
 	public void setDevice(Device device)
 	{
 		this.device = device;
-		deviceSn = device.getDevicecard().getDeviceSn();
+		deviceSn = device.getDeviceSn();
 	}
 	
 	public String getDeviceSn()

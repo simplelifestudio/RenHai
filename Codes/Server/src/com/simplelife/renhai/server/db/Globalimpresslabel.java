@@ -23,7 +23,7 @@ public class Globalimpresslabel implements java.io.Serializable {
 	private Integer globalImpressLabelId;
 	private String impressLabel;
 	private Integer globalAssessCount;
-	private Set<Impresslabelcollection> impresslabelcollections = new HashSet<Impresslabelcollection>(
+	private Set<Impresslabelmap> impresslabelmaps = new HashSet<Impresslabelmap>(
 			0);
 
 	// Constructors
@@ -40,10 +40,10 @@ public class Globalimpresslabel implements java.io.Serializable {
 
 	/** full constructor */
 	public Globalimpresslabel(String impressLabel, Integer globalAssessCount,
-			Set<Impresslabelcollection> impresslabelcollections) {
+			Set<Impresslabelmap> impresslabelmaps) {
 		this.impressLabel = impressLabel;
 		this.globalAssessCount = globalAssessCount;
-		this.impresslabelcollections = impresslabelcollections;
+		this.impresslabelmaps = impresslabelmaps;
 	}
 
 	// Property accessors
@@ -77,13 +77,12 @@ public class Globalimpresslabel implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "globalimpresslabel")
-	public Set<Impresslabelcollection> getImpresslabelcollections() {
-		return this.impresslabelcollections;
+	public Set<Impresslabelmap> getImpresslabelmaps() {
+		return this.impresslabelmaps;
 	}
 
-	public void setImpresslabelcollections(
-			Set<Impresslabelcollection> impresslabelcollections) {
-		this.impresslabelcollections = impresslabelcollections;
+	public void setImpresslabelmaps(Set<Impresslabelmap> impresslabelmaps) {
+		this.impresslabelmaps = impresslabelmaps;
 	}
 
 }

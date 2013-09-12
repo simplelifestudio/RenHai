@@ -11,16 +11,11 @@ package com.simplelife.renhai.server.test;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.simplelife.renhai.server.business.device.AbstractLabel;
 import com.simplelife.renhai.server.db.Interestcard;
-import com.simplelife.renhai.server.db.InterestlabelcollectionDAO;
-import com.simplelife.renhai.server.business.device.InterestLabel;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
@@ -81,8 +76,8 @@ public class Test21UpdateInterestcard extends AbstractTestCase
 	{
 		// TODO: 
 		/*
-		// InterestlabelcollectionDAO dao = new InterestlabelcollectionDAO();
-		LinkedList<AbstractLabel> labelList = card.getInterestlabelcollections();
+		// InterestlabelmapDAO dao = new InterestlabelmapDAO();
+		LinkedList<AbstractLabel> labelList = card.getInterestlabelmaps();
 		assertTrue(labelList.get(0) instanceof InterestLabel);
 		
 		InterestLabel label = (InterestLabel)labelList.get(0); 
@@ -121,7 +116,7 @@ public class Test21UpdateInterestcard extends AbstractTestCase
 		mockApp1.updateInterestcard(labels);
 		
 		// Step_03 调用：DeviceWrapper::getInterestcard
-		Interestcard card = deviceWrapper1.getDevice().getInterestcard();
+		Interestcard card = deviceWrapper1.getDevice().getProfile().getInterestcard();
 		checkLabel(card);
 		
 		// Step_04 调用：DaoWrapper::flush

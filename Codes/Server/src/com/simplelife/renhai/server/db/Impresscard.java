@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,11 +23,11 @@ public class Impresscard implements java.io.Serializable {
 	// Fields
 
 	private Integer impressCardId;
+	private Profile profile;
 	private Integer chatTotalCount;
 	private Integer chatTotalDuration;
 	private Integer chatLossCount;
-	private Set<Profile> profiles = new HashSet<Profile>(0);
-	private Set<Impresslabelcollection> impresslabelcollections = new HashSet<Impresslabelcollection>(
+	private Set<Impresslabelmap> impresslabelmaps = new HashSet<Impresslabelmap>(
 			0);
 
 	// Constructors
@@ -43,26 +45,36 @@ public class Impresscard implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Impresscard(Integer chatTotalCount, Integer chatTotalDuration,
-			Integer chatLossCount, Set<Profile> profiles,
-			Set<Impresslabelcollection> impresslabelcollections) {
+	public Impresscard(Profile profile, Integer chatTotalCount,
+			Integer chatTotalDuration, Integer chatLossCount,
+			Set<Impresslabelmap> impresslabelmaps) {
+		this.profile = profile;
 		this.chatTotalCount = chatTotalCount;
 		this.chatTotalDuration = chatTotalDuration;
 		this.chatLossCount = chatLossCount;
-		this.profiles = profiles;
-		this.impresslabelcollections = impresslabelcollections;
+		this.impresslabelmaps = impresslabelmaps;
 	}
 
 	// Property accessors
 	@Id
 	@GeneratedValue
 	@Column(name = "impressCardId", unique = true, nullable = false)
-	public Integer getImpresscardId() {
+	public Integer getImpressCardId() {
 		return this.impressCardId;
 	}
 
-	public void setImpresscardId(Integer impressCardId) {
+	public void setImpressCardId(Integer impressCardId) {
 		this.impressCardId = impressCardId;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "profileId")
+	public Profile getProfile() {
+		return this.profile;
+	}
+
+	public void setProfile(Profile profile) {
+		this.profile = profile;
 	}
 
 	@Column(name = "chatTotalCount", nullable = false)
@@ -93,22 +105,12 @@ public class Impresscard implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "impresscard")
-	public Set<Profile> getProfiles() {
-		return this.profiles;
+	public Set<Impresslabelmap> getImpresslabelmaps() {
+		return this.impresslabelmaps;
 	}
 
-	public void setProfiles(Set<Profile> profiles) {
-		this.profiles = profiles;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "impresscard")
-	public Set<Impresslabelcollection> getImpresslabelcollections() {
-		return this.impresslabelcollections;
-	}
-
-	public void setImpresslabelcollections(
-			Set<Impresslabelcollection> impresslabelcollections) {
-		this.impresslabelcollections = impresslabelcollections;
+	public void setImpresslabelmaps(Set<Impresslabelmap> impresslabelmaps) {
+		this.impresslabelmaps = impresslabelmaps;
 	}
 
 }

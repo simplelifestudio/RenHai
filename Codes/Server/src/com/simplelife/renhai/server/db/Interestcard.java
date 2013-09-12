@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -21,10 +23,9 @@ public class Interestcard implements java.io.Serializable {
 	// Fields
 
 	private Integer interestCardId;
-	private Long createTime;
-	private Set<Interestlabelcollection> interestlabelcollections = new HashSet<Interestlabelcollection>(
+	private Profile profile;
+	private Set<Interestlabelmap> interestlabelmaps = new HashSet<Interestlabelmap>(
 			0);
-	private Set<Profile> profiles = new HashSet<Profile>(0);
 
 	// Constructors
 
@@ -33,57 +34,45 @@ public class Interestcard implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Interestcard(Long createTime) {
-		this.createTime = createTime;
+	public Interestcard(Profile profile) {
+		this.profile = profile;
 	}
 
 	/** full constructor */
-	public Interestcard(Long createTime,
-			Set<Interestlabelcollection> interestlabelcollections,
-			Set<Profile> profiles) {
-		this.createTime = createTime;
-		this.interestlabelcollections = interestlabelcollections;
-		this.profiles = profiles;
+	public Interestcard(Profile profile, Set<Interestlabelmap> interestlabelmaps) {
+		this.profile = profile;
+		this.interestlabelmaps = interestlabelmaps;
 	}
 
 	// Property accessors
 	@Id
 	@GeneratedValue
 	@Column(name = "interestCardId", unique = true, nullable = false)
-	public Integer getInterestcardId() {
+	public Integer getInterestCardId() {
 		return this.interestCardId;
 	}
 
-	public void setInterestcardId(Integer interestCardId) {
+	public void setInterestCardId(Integer interestCardId) {
 		this.interestCardId = interestCardId;
 	}
 
-	@Column(name = "createTime", nullable = false)
-	public Long getCreateTime() {
-		return this.createTime;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "profileId", nullable = false)
+	public Profile getProfile() {
+		return this.profile;
 	}
 
-	public void setCreateTime(Long createTime) {
-		this.createTime = createTime;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "interestcard")
-	public Set<Interestlabelcollection> getInterestlabelcollections() {
-		return this.interestlabelcollections;
-	}
-
-	public void setInterestlabelcollections(
-			Set<Interestlabelcollection> interestlabelcollections) {
-		this.interestlabelcollections = interestlabelcollections;
+	public void setProfile(Profile profile) {
+		this.profile = profile;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "interestcard")
-	public Set<Profile> getProfiles() {
-		return this.profiles;
+	public Set<Interestlabelmap> getInterestlabelmaps() {
+		return this.interestlabelmaps;
 	}
 
-	public void setProfiles(Set<Profile> profiles) {
-		this.profiles = profiles;
+	public void setInterestlabelmaps(Set<Interestlabelmap> interestlabelmaps) {
+		this.interestlabelmaps = interestlabelmaps;
 	}
 
 }

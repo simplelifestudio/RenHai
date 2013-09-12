@@ -14,9 +14,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.TableColumnName;
 import com.simplelife.renhai.server.db.TableName;
 import com.simplelife.renhai.server.util.Consts;
@@ -58,17 +58,17 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		mockApp = createMockApp();
 		
 		// Step_01 数据库操作：将设备A的服务状态更新为禁聊，到期日期为昨天
-		String sql = "update " + TableName.Devicecard 
+		String sql = "update " + TableName.DeviceCard 
 				+ " set " + TableColumnName.ServiceStatus + " = 1, "
-				+ TableColumnName.ForbiddenExpiredDate + " = " + DateUtil.getDateByDayBack(1)
-				+ " where " + TableColumnName.DeviceSn + " = '" + deviceCard.getDeviceSn() + "'";
+				+ TableColumnName.UnbanDate + " = " + DateUtil.getDateByDayBack(1)
+				+ " where " + TableColumnName.DeviceSn + " = '" + deviceWrapper.getDevice().getDeviceSn() + "'";
 		DAOWrapper.executeSql(sql);
 		
 		// Step_02 调用：OnlineDevicePool::getCount
 		int deviceCount = pool.getElementCount();
 		
 		// Step_03 调用：DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.DeviceBusinessStatus.Init, deviceWrapper.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.Init, deviceWrapper.getBusinessStatus());
 		
 		// Step_04 Mock请求：设备同步
 		
@@ -76,7 +76,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		mockApp.syncDevice();
 		
 		// Step_05 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.DeviceBusinessStatus.Idle, deviceWrapper.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper.getBusinessStatus());
 		
 		// Step_06 调用：OnlineDevicePool::getCount
 		assertEquals(deviceCount, pool.getElementCount());

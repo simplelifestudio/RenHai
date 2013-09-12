@@ -39,10 +39,10 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 			return false;
 		}
 		
-		if (!body.containsKey(JSONKey.FieldName.OperationType));
+		if (!body.containsKey(JSONKey.OperationType));
 		{
 			setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-			setErrorDescription(JSONKey.FieldName.OperationType + " can't be found.");
+			setErrorDescription(JSONKey.OperationType + " can't be found.");
 		}
 		return true;
     }

@@ -15,11 +15,10 @@ import java.util.LinkedList;
 import java.util.Timer;
 
 import com.simplelife.renhai.server.business.pool.AbstractPool;
-import com.simplelife.renhai.server.util.IDbOperation;
 
 
 /** */
-public class WebRTCSessionPool extends AbstractPool implements IDbOperation
+public class WebRTCSessionPool extends AbstractPool
 {
     /** */
     private LinkedList webRTCSessionLink;

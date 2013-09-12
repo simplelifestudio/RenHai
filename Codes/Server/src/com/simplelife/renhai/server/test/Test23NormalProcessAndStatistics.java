@@ -35,7 +35,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 	{
 		mockApp1 = createMockApp();
 		mockApp2 = createMockApp();
-		mockApp2.getDeviceWrapper().getDevice().getDevicecard().setDeviceSn("SNOfDeviceB");
+		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
 	}
 	
 	/**

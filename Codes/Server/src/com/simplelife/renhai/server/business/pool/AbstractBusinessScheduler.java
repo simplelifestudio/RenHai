@@ -11,33 +11,31 @@
 
 package com.simplelife.renhai.server.business.pool;
 
-import com.simplelife.renhai.server.util.IBusinessPool;
+import java.util.HashMap;
 import com.simplelife.renhai.server.util.IBusinessScheduler;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
 /** */
-public class AbstractBusinessScheduler implements IBusinessScheduler
+public abstract class AbstractBusinessScheduler extends Thread implements IBusinessScheduler
 {
     /** */
-    private IBusinessPool ownerBusinessPool;
+    protected AbstractBusinessDevicePool ownerBusinessPool;
+    protected HashMap<String, IDeviceWrapper> deviceMap;
     
     /** */
-    public void startScheduler()
-    {
-    }
+    public abstract void startScheduler();
     
     /** */
-    public void bind(IBusinessPool pool)
-    {
-    }
+    public abstract void stopScheduler();
     
     /** */
-    public void stopScheduler()
-    {
-    }
+    public abstract void schedule();
     
     /** */
-    public void schedule()
+    public void bind(AbstractBusinessDevicePool pool)
     {
+    	this.ownerBusinessPool = pool;
+    	deviceMap = pool.getDeviceMap();
     }
 }

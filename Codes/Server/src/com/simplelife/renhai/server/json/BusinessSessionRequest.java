@@ -42,29 +42,29 @@ public class BusinessSessionRequest extends AppJSONMessage
 			return false;
 		}
 		
-		if (!body.containsKey(JSONKey.FieldName.BusinessType));
+		if (!body.containsKey(JSONKey.BusinessType));
 		{
 			setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-			setErrorDescription(JSONKey.FieldName.BusinessType + " can't be found.");
+			setErrorDescription(JSONKey.BusinessType + " can't be found.");
 		}
 		
-		if (!body.containsKey(JSONKey.FieldName.OperationType));
+		if (!body.containsKey(JSONKey.OperationType));
 		{
 			setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-			setErrorDescription(JSONKey.FieldName.OperationType + " can't be found.");
+			setErrorDescription(JSONKey.OperationType + " can't be found.");
 		}
 		
-		String operationType = body.getString(JSONKey.FieldName.OperationType);
+		String operationType = body.getString(JSONKey.OperationType);
 		if (!isValidOperationType(operationType))
 		{
 			setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-			setErrorDescription("Invalid " + JSONKey.FieldName.OperationType + ": " + operationType);
+			setErrorDescription("Invalid " + JSONKey.OperationType + ": " + operationType);
 		}
 		
-		if (!body.containsKey(JSONKey.FieldName.OperationType));
+		if (!body.containsKey(JSONKey.OperationType));
 		{
 			setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-			setErrorDescription(JSONKey.FieldName.OperationType + " can't be found.");
+			setErrorDescription(JSONKey.OperationType + " can't be found.");
 		}
 		return true;
     }

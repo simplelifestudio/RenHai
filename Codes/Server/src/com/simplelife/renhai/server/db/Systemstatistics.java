@@ -50,7 +50,7 @@ public class Systemstatistics implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "statisticsItem", nullable = false)
+	@JoinColumn(name = "statisticsItemId", nullable = false)
 	public Statisticsitem getStatisticsitem() {
 		return this.statisticsitem;
 	}

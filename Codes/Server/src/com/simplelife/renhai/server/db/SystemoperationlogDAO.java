@@ -1,5 +1,6 @@
 package com.simplelife.renhai.server.db;
 
+import com.simplelife.renhai.server.db.AbstractHibernateDAO;
 import java.util.List;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
@@ -18,7 +19,7 @@ import org.slf4j.LoggerFactory;
  * @see com.simplelife.renhai.server.db.Systemoperationlog
  * @author MyEclipse Persistence Tools
  */
-public class SystemoperationlogDAO extends BaseHibernateDAO {
+public class SystemoperationlogDAO extends AbstractHibernateDAO {
 	private static final Logger log = LoggerFactory
 			.getLogger(SystemoperationlogDAO.class);
 	// property constants

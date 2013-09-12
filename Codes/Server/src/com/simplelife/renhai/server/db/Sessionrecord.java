@@ -26,7 +26,7 @@ public class Sessionrecord implements java.io.Serializable {
 	private Integer duration;
 	private String endStatus;
 	private String endReason;
-	private Set<Sessionprofilecollection> sessionprofilecollections = new HashSet<Sessionprofilecollection>(
+	private Set<Sessionprofilemap> sessionprofilemaps = new HashSet<Sessionprofilemap>(
 			0);
 
 	// Constructors
@@ -48,13 +48,13 @@ public class Sessionrecord implements java.io.Serializable {
 	/** full constructor */
 	public Sessionrecord(String businessType, Long startTime, Integer duration,
 			String endStatus, String endReason,
-			Set<Sessionprofilecollection> sessionprofilecollections) {
+			Set<Sessionprofilemap> sessionprofilemaps) {
 		this.businessType = businessType;
 		this.startTime = startTime;
 		this.duration = duration;
 		this.endStatus = endStatus;
 		this.endReason = endReason;
-		this.sessionprofilecollections = sessionprofilecollections;
+		this.sessionprofilemaps = sessionprofilemaps;
 	}
 
 	// Property accessors
@@ -115,13 +115,12 @@ public class Sessionrecord implements java.io.Serializable {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "sessionrecord")
-	public Set<Sessionprofilecollection> getSessionprofilecollections() {
-		return this.sessionprofilecollections;
+	public Set<Sessionprofilemap> getSessionprofilemaps() {
+		return this.sessionprofilemaps;
 	}
 
-	public void setSessionprofilecollections(
-			Set<Sessionprofilecollection> sessionprofilecollections) {
-		this.sessionprofilecollections = sessionprofilecollections;
+	public void setSessionprofilemaps(Set<Sessionprofilemap> sessionprofilemaps) {
+		this.sessionprofilemaps = sessionprofilemaps;
 	}
 
 }
