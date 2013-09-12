@@ -46,12 +46,12 @@ public abstract class AbstractMockApp implements IMockApp
     protected void init()
     {
     	jsonMap.clear();
-    	jsonMap.put(JSONKey.FieldName.Header, jsonMapHeader);
-    	jsonMap.put(JSONKey.FieldName.Body, jsonMapBody);
+    	jsonMap.put(JSONKey.Header, jsonMapHeader);
+    	jsonMap.put(JSONKey.Body, jsonMapBody);
     	
-    	jsonMapHeader.put(JSONKey.FieldName.DeviceId, deviceWrapper.getDevice().getDevicecard().getDeviceId());
-    	jsonMapHeader.put(JSONKey.FieldName.DeviceSn, deviceWrapper.getDeviceSn());
-    	jsonMapHeader.put(JSONKey.FieldName.TimeStamp, DateUtil.getNow());
+    	jsonMapHeader.put(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
+    	jsonMapHeader.put(JSONKey.DeviceSn, deviceWrapper.getDeviceSn());
+    	jsonMapHeader.put(JSONKey.TimeStamp, DateUtil.getNow());
     }
     
     protected HashMap<String, Object> getDeviceJSONMap()
@@ -61,11 +61,11 @@ public abstract class AbstractMockApp implements IMockApp
     		return jsonMapDevice;
     	}
     	
-    	Devicecard card = deviceWrapper.getDevice().getDevicecard();
-    	jsonMapDevice.put(JSONKey.FieldName.OsVersion, card.getOsVersion());
-    	jsonMapDevice.put(JSONKey.FieldName.AppVersion, card.getAppVersion());
-    	jsonMapDevice.put(JSONKey.FieldName.IsJailed, card.getIsJailed());
-    	jsonMapDevice.put(JSONKey.FieldName.Location, card.getLocation());
+    	Devicecard card = (Devicecard) deviceWrapper.getDevice().getDevicecard();
+    	jsonMapDevice.put(JSONKey.OsVersion, card.getOsVersion());
+    	jsonMapDevice.put(JSONKey.AppVersion, card.getAppVersion());
+    	jsonMapDevice.put(JSONKey.IsJailed, card.getIsJailed());
+    	jsonMapDevice.put(JSONKey.Location, card.getLocation());
     	
     	return jsonMapDevice;
     }

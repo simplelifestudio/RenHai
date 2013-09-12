@@ -10,16 +10,14 @@
 package com.simplelife.renhai.server.test;
 
 
-import java.util.List;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
+import com.simplelife.renhai.server.db.Devicecard;
+import com.simplelife.renhai.server.db.DevicecardDAO;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -68,21 +66,18 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		long lastActivityTime = deviceWrapper.getLastActivityTime().getTime();
 		
 		// Step_02 调用：DeviceWrapper::getBusinessStatus
-		Consts.DeviceBusinessStatus businessStatus = deviceWrapper.getBusinessStatus();
-		assertEquals(businessStatus, Consts.DeviceBusinessStatus.Init);
+		Consts.BusinessStatus businessStatus = deviceWrapper.getBusinessStatus();
+		assertEquals(businessStatus, Consts.BusinessStatus.Init);
 		
 		// Step_03 Mock请求：设备同步
 		mockApp.syncDevice();
 		
 		// Step_04 数据库检查：设备卡片信息
-		String sql = "select * from Devicecard where deviceSn = '" + deviceCard.getDeviceSn() + "";
-		List<Devicecard> deviceList = DAOWrapper.query(sql, Devicecard.class);
-		assertEquals(1, deviceList.size());
-		Devicecard cardInDB = deviceList.get(0);
-		
+		DevicecardDAO dao = new DevicecardDAO();
+		Devicecard cardInDB = (Devicecard) dao.findByProperty("deviceId", deviceWrapper.getDevice().getDeviceId()).get(0); 
 		assertEquals(AppVersion, cardInDB.getAppVersion());
 		assertEquals(DeviceModel, cardInDB.getDeviceModel());
-		assertEquals(DeviceSN, cardInDB.getDeviceSn());
+		assertEquals(DeviceSN, deviceWrapper.getDevice().getDeviceSn());
 		assertEquals(IsJailed, cardInDB.getIsJailed());
 		assertEquals(Location, cardInDB.getLocation());
 		assertEquals(OSVersion, cardInDB.getOsVersion());
@@ -95,7 +90,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		
 		// Step_07 调用：DeviceWrapper::getBusinessStatus
 		businessStatus = deviceWrapper.getBusinessStatus();
-		assertEquals(businessStatus, Consts.DeviceBusinessStatus.Idle);
+		assertEquals(businessStatus, Consts.BusinessStatus.Idle);
 		
 		// Step_08 调用：OnlineDevicePool::getCount
 		assertEquals(deviceCount + 1, pool.getElementCount());
@@ -139,7 +134,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		deviceCard = deviceWrapper.getDevice().getDevicecard();
 		
 		// Step_19 停止数据库服务
-		DBModule.instance().stopService();
+		DBModule.instance.stopService();
 		
 		// Step_20 Mock请求：设备同步
 		mockApp.syncDevice();

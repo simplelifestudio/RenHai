@@ -16,11 +16,9 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.business.device.Device;
-import com.simplelife.renhai.server.db.Devicecard;
+import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.IJSONObject;
 import com.simplelife.renhai.server.util.JSONKey;
 
@@ -28,9 +26,25 @@ import com.simplelife.renhai.server.util.JSONKey;
 /** */
 public abstract class ServerJSONMessage extends AbstractJSONMessage implements IJSONObject
 {
-	protected HashMap<String, Object> jsonMap = new HashMap<String, Object>();
-    protected HashMap<String, Object> jsonMapHeader = new HashMap<String, Object>();
-    protected HashMap<String, Object> jsonMapBody = new HashMap<String, Object>();
+	protected JSONObject jsonObject = new JSONObject();
+    protected JSONObject header = new JSONObject();
+    protected JSONObject body = new JSONObject();
+    
+	public JSONObject getJsonObject()
+	{
+		return jsonObject;
+	}
+
+	public JSONObject getHeader()
+	{
+		return header;
+	}
+
+	public JSONObject getBody()
+	{
+		return body;
+	}
+
     
     protected ServerJSONMessage(AppJSONMessage request)
     {
@@ -41,67 +55,66 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     protected void init(AppJSONMessage request)
     {
     	Logger logger = JSONModule.instance.getLogger();
-    	jsonMap.clear();
-    	jsonMap.put(JSONKey.FieldName.Header, jsonMapHeader);
-    	jsonMap.put(JSONKey.FieldName.Body, jsonMapBody);
+    	jsonObject.clear();
+    	jsonObject.put(JSONKey.Header, header);
+    	jsonObject.put(JSONKey.Body, body);
     	
-    	addToHeader(JSONKey.FieldName.MessageSn, request.getMessageSn());
-		addToHeader(JSONKey.FieldName.TimeStamp, DateUtil.getNow());
+    	addToHeader(JSONKey.MessageSn, request.getMessageSn());
+		addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
     	
     	Device device = request.getDeviceWrapper().getDevice();
     	if (device == null)
     	{
-    		//addToHeader(JSONKey.FieldName.MessageType, 2);
-    		addToHeader(JSONKey.FieldName.DeviceId, "");
-    		addToHeader(JSONKey.FieldName.DeviceSn, "");
+    		//addToHeader(JSONKey.MessageType, 2);
+    		addToHeader(JSONKey.DeviceId, "");
+    		addToHeader(JSONKey.DeviceSn, "");
     	}
     	else
     	{
-    		Devicecard card = deviceWrapper.getDevice().getDevicecard();
-    		addToHeader(JSONKey.FieldName.DeviceId, card.getDeviceId());
-    		addToHeader(JSONKey.FieldName.DeviceSn, card.getDeviceSn());
+    		addToHeader(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
+    		addToHeader(JSONKey.DeviceSn, deviceWrapper.getDevice().getDeviceSn());
     	}
     }
     
     /** */
     public JSONObject toJSONObject()
     {
-    	return new JSONObject(jsonMap); 
+    	return jsonObject; 
     }
     
     protected void addToHeader(String key, Object object)
     {
-    	jsonMapHeader.put(key, object);
+    	header.put(key, object);
     }
     
     protected void addToBody(String key, Object object)
     {
-    	jsonMapBody.put(key, object);
+    	body.put(key, object);
     }
     
     protected void setMessageType(Consts.MessageType messageType)
     {
-    	addToHeader(JSONKey.FieldName.MessageType, String.valueOf(messageType.ordinal()));
+    	addToHeader(JSONKey.MessageType, String.valueOf(messageType.ordinal()));
     }
     
     protected void setMessageSn(String messageSn)
     {
-    	addToHeader(JSONKey.FieldName.MessageSn, messageSn);
+    	addToHeader(JSONKey.MessageSn, messageSn);
     }
     
     protected void setMessageId(Consts.MessageId messageId)
     {
-    	addToHeader(JSONKey.FieldName.MessageId, messageId.toString());
+    	addToHeader(JSONKey.MessageId, messageId.toString());
     }
     
     public Consts.MessageType getMessageType()
     {
-    	return Consts.MessageType.valueOf(jsonMapHeader.get(JSONKey.FieldName.MessageType).toString());
+    	return Consts.MessageType.valueOf(header.get(JSONKey.MessageType).toString());
     }
 
     public String getMessageSn()
     {
-    	return jsonMapHeader.get(JSONKey.FieldName.MessageSn).toString();
+    	return header.get(JSONKey.MessageSn).toString();
     }
     
     public abstract Consts.MessageId getMessageId();

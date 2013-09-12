@@ -29,6 +29,14 @@ public class DateUtil
 		
 	}
 	
+	public static String getDateStringByLongValue(long dateInMilliSeconds)
+	{
+		Date date = new Date(dateInMilliSeconds);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+		sdf.setTimeZone(getDefaultTimeZone());
+		return sdf.format(date);
+	}
+	
 	/**
 	 * Get simple date formatter with default time zone of GMT+8
 	 * @return simple date formatter

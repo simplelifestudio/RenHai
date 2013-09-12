@@ -51,9 +51,9 @@ public class AlohaRequest extends AppJSONMessage
     	{
     		logger.debug("checkJSONRequest failed");
     		ServerErrorResponse response = new ServerErrorResponse(this);
-    		response.addToBody(JSONKey.FieldName.ReceivedMessage, Consts.MessageId.AlohaResponse);
-    		response.addToBody(JSONKey.FieldName.ErrorCode, this.getErrorCode());
-    		response.addToBody(JSONKey.FieldName.ErrorDescription, this.getErrorDescription());
+    		response.addToBody(JSONKey.ReceivedMessage, Consts.MessageId.AlohaResponse);
+    		response.addToBody(JSONKey.ErrorCode, this.getErrorCode());
+    		response.addToBody(JSONKey.ErrorDescription, this.getErrorDescription());
     		response.asyncResponse();
     	}
     	
@@ -64,7 +64,7 @@ public class AlohaRequest extends AppJSONMessage
     		return;
     	}
     	
-    	response.addToBody(JSONKey.FieldName.Content, helloApp);
+    	response.addToBody(JSONKey.Content, helloApp);
     	response.asyncResponse();
     }
 

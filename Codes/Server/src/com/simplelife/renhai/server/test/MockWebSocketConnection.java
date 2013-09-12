@@ -11,15 +11,22 @@ package com.simplelife.renhai.server.test;
 
 import java.io.IOException;
 
+import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
-import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
 
 
 /** */
 public class MockWebSocketConnection extends WebSocketConnection
 {
+	private JSONObject lastSentMessage;
+	
+	public JSONObject getLastSentMessage()
+	{
+		return lastSentMessage;
+	}
+	
 	public MockWebSocketConnection(String connectionId)
 	{
 		super(connectionId);
@@ -63,12 +70,9 @@ public class MockWebSocketConnection extends WebSocketConnection
     
     /** */
     @Override
-    protected void sendMessage(String messge) throws IOException
+    protected void sendMessage(String message) throws IOException
     {
-    	if (disabled)
-    	{
-    		throw new IOException();
-    	}
+    	System.out.print(message);
     }
     
     /** */
@@ -79,17 +83,21 @@ public class MockWebSocketConnection extends WebSocketConnection
     	{
     		throw new IOException();
     	}
+    	
+    	lastSentMessage = message.toJSONObject();
+    	sendMessage(lastSentMessage.toJSONString());
     }
     
     /**
      * @return  */
     @Override
-    public AppJSONMessage syncSendMessage(String messageSn, String messge) throws IOException
+    public AppJSONMessage syncSendMessage(String messageSn, String message) throws IOException
     {
     	if (disabled)
     	{
     		throw new IOException();
     	}
+    	sendMessage(message);
     	return null;
     }
     
@@ -102,7 +110,9 @@ public class MockWebSocketConnection extends WebSocketConnection
     	{
     		throw new IOException();
     	}
-		return null;
+    	lastSentMessage = message.toJSONObject();
+    	sendMessage(lastSentMessage.toJSONString());
+    	return null;
     }
     
     

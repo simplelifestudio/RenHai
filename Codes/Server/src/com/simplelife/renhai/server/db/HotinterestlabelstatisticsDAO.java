@@ -1,5 +1,6 @@
 package com.simplelife.renhai.server.db;
 
+import com.simplelife.renhai.server.db.AbstractHibernateDAO;
 import java.util.List;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
@@ -19,7 +20,7 @@ import org.slf4j.LoggerFactory;
  * @see com.simplelife.renhai.server.db.Hotinterestlabelstatistics
  * @author MyEclipse Persistence Tools
  */
-public class HotinterestlabelstatisticsDAO extends BaseHibernateDAO {
+public class HotinterestlabelstatisticsDAO extends AbstractHibernateDAO {
 	private static final Logger log = LoggerFactory
 			.getLogger(HotinterestlabelstatisticsDAO.class);
 	// property constants

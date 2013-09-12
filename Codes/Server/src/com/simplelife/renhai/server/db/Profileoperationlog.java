@@ -21,7 +21,6 @@ public class Profileoperationlog implements java.io.Serializable {
 	private Integer profileOperationLogId;
 	private Profile profile;
 	private Operationcode operationcode;
-	private Devicecard devicecard;
 	private Integer logTime;
 	private String logInfo;
 
@@ -33,19 +32,17 @@ public class Profileoperationlog implements java.io.Serializable {
 
 	/** minimal constructor */
 	public Profileoperationlog(Profile profile, Operationcode operationcode,
-			Devicecard devicecard, Integer logTime) {
+			Integer logTime) {
 		this.profile = profile;
 		this.operationcode = operationcode;
-		this.devicecard = devicecard;
 		this.logTime = logTime;
 	}
 
 	/** full constructor */
 	public Profileoperationlog(Profile profile, Operationcode operationcode,
-			Devicecard devicecard, Integer logTime, String logInfo) {
+			Integer logTime, String logInfo) {
 		this.profile = profile;
 		this.operationcode = operationcode;
-		this.devicecard = devicecard;
 		this.logTime = logTime;
 		this.logInfo = logInfo;
 	}
@@ -73,23 +70,13 @@ public class Profileoperationlog implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "operationCode", nullable = false)
+	@JoinColumn(name = "operationCodeId", nullable = false)
 	public Operationcode getOperationcode() {
 		return this.operationcode;
 	}
 
 	public void setOperationcode(Operationcode operationcode) {
 		this.operationcode = operationcode;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "deviceId", nullable = false)
-	public Devicecard getDevicecard() {
-		return this.devicecard;
-	}
-
-	public void setDevicecard(Devicecard devicecard) {
-		this.devicecard = devicecard;
 	}
 
 	@Column(name = "logTime", nullable = false)

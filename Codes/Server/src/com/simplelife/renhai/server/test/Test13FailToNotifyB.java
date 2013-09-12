@@ -38,7 +38,7 @@ public class Test13FailToNotifyB extends AbstractTestCase
 	{
 		mockApp1 = createMockApp();
 		mockApp2 = createMockApp();
-		mockApp2.getDeviceWrapper().getDevice().getDevicecard().setDeviceSn("SNOfDeviceB");
+		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
 	}
 	
 	/**
@@ -75,10 +75,10 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		int sessionCount = sessionPool.getElementCount();
 		
 		// Step_04 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.DeviceBusinessStatus.Idle, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper1.getBusinessStatus());
 		
 		// Step_05 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.DeviceBusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.enterPool(Consts.BusinessType.Random);
@@ -87,10 +87,10 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		mockApp2.enterPool(Consts.BusinessType.Random);
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.DeviceBusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
 		
 		// Step_09 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.DeviceBusinessStatus.WaitMatch, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper2.getBusinessStatus());
 		
 		// Step_10 调用：RandomBusinessDevicePool::getCount
 		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
@@ -105,10 +105,10 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		sessionCount = sessionPool.getElementCount();
 		
 		// Step_15 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.DeviceBusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
 		
 		// Step_16 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.DeviceBusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
 		
 		// Step_17 调用：BusinessSession::getStatus
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
@@ -124,10 +124,10 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
 		// Step_20 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.DeviceBusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
 		
 		// Step_21 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.DeviceBusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
 		
 		// Step_22 Mock事件：A同意聊天
 		mockApp1.chatConfirm(true);
@@ -145,6 +145,6 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		assertEquals(sessionCount + 1, sessionPool.getElementCount());
 		
 		// Step_27 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.DeviceBusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
 	}
 }

@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -23,14 +24,15 @@ public class Profile implements java.io.Serializable {
 	// Fields
 
 	private Integer profileId;
-	private Interestcard interestcard;
-	private Impresscard impresscard;
+	private Device device;
+	private String serviceStatus;
+	private Long unbanDate;
 	private Long lastActivityTime;
 	private Long createTime;
-	private Set<Deviceprofilemap> deviceprofilemaps = new HashSet<Deviceprofilemap>(
-			0);
-	private Set<Devicecard> devicecards = new HashSet<Devicecard>(0);
-	private Set<Sessionprofilecollection> sessionprofilecollections = new HashSet<Sessionprofilecollection>(
+	private String active;
+	private Impresscard impresscard = new Impresscard();
+	private Interestcard interestcard = new Interestcard();
+	private Set<Sessionprofilemap> sessionprofilemaps = new HashSet<Sessionprofilemap>(
 			0);
 	private Set<Profileoperationlog> profileoperationlogs = new HashSet<Profileoperationlog>(
 			0);
@@ -42,28 +44,29 @@ public class Profile implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Profile(Interestcard interestcard, Impresscard impresscard,
-			Long lastActivityTime, Long createTime) {
-		this.interestcard = interestcard;
-		this.impresscard = impresscard;
+	public Profile(Device device, String serviceStatus, Long lastActivityTime,
+			Long createTime) {
+		this.device = device;
+		this.serviceStatus = serviceStatus;
 		this.lastActivityTime = lastActivityTime;
 		this.createTime = createTime;
 	}
 
 	/** full constructor */
-	public Profile(Interestcard interestcard, Impresscard impresscard,
-			Long lastActivityTime, Long createTime,
-			Set<Deviceprofilemap> deviceprofilemaps,
-			Set<Devicecard> devicecards,
-			Set<Sessionprofilecollection> sessionprofilecollections,
+	public Profile(Device device, String serviceStatus, Long unbanDate,
+			Long lastActivityTime, Long createTime, String active,
+			Impresscard impresscard, Interestcard interestcard,
+			Set<Sessionprofilemap> sessionprofilemaps,
 			Set<Profileoperationlog> profileoperationlogs) {
-		this.interestcard = interestcard;
-		this.impresscard = impresscard;
+		this.device = device;
+		this.serviceStatus = serviceStatus;
+		this.unbanDate = unbanDate;
 		this.lastActivityTime = lastActivityTime;
 		this.createTime = createTime;
-		this.deviceprofilemaps = deviceprofilemaps;
-		this.devicecards = devicecards;
-		this.sessionprofilecollections = sessionprofilecollections;
+		this.active = active;
+		this.impresscard = impresscard;
+		this.interestcard = interestcard;
+		this.sessionprofilemaps = sessionprofilemaps;
 		this.profileoperationlogs = profileoperationlogs;
 	}
 
@@ -80,23 +83,31 @@ public class Profile implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "interestCardId", nullable = false)
-	public Interestcard getInterestcard() {
-		return this.interestcard;
+	@JoinColumn(name = "deviceId", nullable = false)
+	public Device getDevice() {
+		return this.device;
 	}
 
-	public void setInterestcard(Interestcard interestcard) {
-		this.interestcard = interestcard;
+	public void setDevice(Device device) {
+		this.device = device;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "impressCardId", nullable = false)
-	public Impresscard getImpresscard() {
-		return this.impresscard;
+	@Column(name = "serviceStatus", nullable = false, length = 6)
+	public String getServiceStatus() {
+		return this.serviceStatus;
 	}
 
-	public void setImpresscard(Impresscard impresscard) {
-		this.impresscard = impresscard;
+	public void setServiceStatus(String serviceStatus) {
+		this.serviceStatus = serviceStatus;
+	}
+
+	@Column(name = "unbanDate")
+	public Long getUnbanDate() {
+		return this.unbanDate;
+	}
+
+	public void setUnbanDate(Long unbanDate) {
+		this.unbanDate = unbanDate;
 	}
 
 	@Column(name = "lastActivityTime", nullable = false)
@@ -117,32 +128,40 @@ public class Profile implements java.io.Serializable {
 		this.createTime = createTime;
 	}
 
+	@Column(name = "active", length = 3)
+	public String getActive() {
+		return this.active;
+	}
+
+	public void setActive(String active) {
+		this.active = active;
+	}
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
+	public Impresscard getImpresscard() {
+		return this.impresscard;
+	}
+
+	public void setImpresscard(Impresscard impresscard) {
+		this.impresscard = impresscard;
+	}
+
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
+	public Interestcard getInterestcard() {
+		return this.interestcard;
+	}
+
+	public void setInterestcard(Interestcard interestcard) {
+		this.interestcard = interestcard;
+	}
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
-	public Set<Deviceprofilemap> getDeviceprofilemaps() {
-		return this.deviceprofilemaps;
+	public Set<Sessionprofilemap> getSessionprofilemaps() {
+		return this.sessionprofilemaps;
 	}
 
-	public void setDeviceprofilemaps(Set<Deviceprofilemap> deviceprofilemaps) {
-		this.deviceprofilemaps = deviceprofilemaps;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
-	public Set<Devicecard> getDevicecards() {
-		return this.devicecards;
-	}
-
-	public void setDevicecards(Set<Devicecard> devicecards) {
-		this.devicecards = devicecards;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
-	public Set<Sessionprofilecollection> getSessionprofilecollections() {
-		return this.sessionprofilecollections;
-	}
-
-	public void setSessionprofilecollections(
-			Set<Sessionprofilecollection> sessionprofilecollections) {
-		this.sessionprofilecollections = sessionprofilecollections;
+	public void setSessionprofilemaps(Set<Sessionprofilemap> sessionprofilemaps) {
+		this.sessionprofilemaps = sessionprofilemaps;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")

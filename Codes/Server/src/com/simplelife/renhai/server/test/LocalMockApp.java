@@ -48,10 +48,10 @@ public class LocalMockApp extends AbstractMockApp
 	public void sendAlohaRequest()
 	{
 		// Add command type
-		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.MessageId.AlohaRequest);
+		jsonMapHeader.put(JSONKey.MessageId, Consts.MessageId.AlohaRequest.name());
 		
 		// Add command body
-		jsonMapBody.put(JSONKey.FieldName.Content, "Hello Server!");
+		jsonMapBody.put(JSONKey.Content, "Hello Server!");
 		
 		// Send
 		connection.onTextMessage(JSONObject.toJSONString(jsonMap));
@@ -62,21 +62,21 @@ public class LocalMockApp extends AbstractMockApp
 	public void sendAppDataSyncRequest(HashMap<String, Object> queryMap, HashMap<String, Object> updateMap)
 	{
 		// Add command type
-		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.MessageId.AppDataSyncRequest);
+		jsonMapHeader.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.name());
 		
 		// Add command body
 		if (queryMap != null)
 		{
-			jsonMapBody.put(JSONKey.FieldName.DataQuery, queryMap);
+			jsonMapBody.put(JSONKey.DataQuery, queryMap);
 		}
 		
 		if (updateMap != null)
 		{
-			jsonMapBody.put(JSONKey.FieldName.DataUpdate, updateMap);
+			jsonMapBody.put(JSONKey.DataUpdate, updateMap);
 		}
 		
 		JSONObject envelopeObj = new JSONObject();
-		envelopeObj.put(JSONKey.FieldName.JsonEnvelope, jsonMap);
+		envelopeObj.put(JSONKey.JsonEnvelope, jsonMap);
 		
 		// Send
 		connection.onTextMessage(envelopeObj.toJSONString());
@@ -87,15 +87,15 @@ public class LocalMockApp extends AbstractMockApp
 	public void sendServerDataSyncRequest()
 	{
 		// Add command type
-		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.MessageId.AppDataSyncRequest);
+		jsonMapHeader.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.name());
 		
 		// Add command body
-		jsonMapBody.put(JSONKey.FieldName.OnlineDeviceCount, "");
-		jsonMapBody.put(JSONKey.FieldName.InterestDeviceCount, "");
-		jsonMapBody.put(JSONKey.FieldName.ChatDeviceCount, "");
-		jsonMapBody.put(JSONKey.FieldName.InterestChatDeviceCount, "");
-		jsonMapBody.put(JSONKey.FieldName.CurrentHotInterestLabels, "");
-		jsonMapBody.put(JSONKey.FieldName.HistoryHotInterestLabels, "");
+		jsonMapBody.put(JSONKey.Online, "");
+		jsonMapBody.put(JSONKey.Interest, "");
+		jsonMapBody.put(JSONKey.Chat, "");
+		jsonMapBody.put(JSONKey.Interest, "");
+		jsonMapBody.put(JSONKey.RandomChat, "");
+		jsonMapBody.put(JSONKey.InterestChat, "");
 		
 		// Send
 		connection.onTextMessage(JSONObject.toJSONString(jsonMap));
@@ -118,13 +118,13 @@ public class LocalMockApp extends AbstractMockApp
 	public void sendNotificationResponse()
 	{
 		// Add command type
-		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.MessageId.BusinessSessionNotificationResponse);
+		jsonMapHeader.put(JSONKey.MessageId, Consts.MessageId.BusinessSessionNotificationResponse.name());
 		
 		// Add command body
-		jsonMapBody.put(JSONKey.FieldName.BusinessSessionId, businessSessionId);
-		jsonMapBody.put(JSONKey.FieldName.BusinessType, Consts.BusinessType.Interest);
-		jsonMapBody.put(JSONKey.FieldName.OperationType, Consts.OperationType.Received);
-		jsonMapBody.put(JSONKey.FieldName.OperationValue, "");
+		jsonMapBody.put(JSONKey.BusinessSessionId, businessSessionId);
+		jsonMapBody.put(JSONKey.BusinessType, Consts.BusinessType.Interest);
+		jsonMapBody.put(JSONKey.OperationType, Consts.OperationType.Received);
+		jsonMapBody.put(JSONKey.OperationValue, "");
 		
 		// Send
 		connection.onTextMessage(JSONObject.toJSONString(jsonMap));
@@ -135,13 +135,13 @@ public class LocalMockApp extends AbstractMockApp
 	public void sendBusinessSessionRequest(Consts.OperationType operationType, String operationValue)
 	{
 		// Add command type
-		jsonMapHeader.put(JSONKey.FieldName.MessageId, JSONKey.MessageId.BusinessSessionRequest);
+		jsonMapHeader.put(JSONKey.MessageId, Consts.MessageId.BusinessSessionRequest.name());
 		
 		// Add command body
-		jsonMapBody.put(JSONKey.FieldName.BusinessSessionId, businessSessionId);
-		jsonMapBody.put(JSONKey.FieldName.BusinessType, businessType);
-		jsonMapBody.put(JSONKey.FieldName.OperationType, operationType.name());
-		jsonMapBody.put(JSONKey.FieldName.OperationValue, operationValue);
+		jsonMapBody.put(JSONKey.BusinessSessionId, businessSessionId);
+		jsonMapBody.put(JSONKey.BusinessType, businessType);
+		jsonMapBody.put(JSONKey.OperationType, operationType.name());
+		jsonMapBody.put(JSONKey.OperationValue, operationValue);
 		
 		// Send
 		connection.onTextMessage(JSONObject.toJSONString(jsonMap));
@@ -199,7 +199,7 @@ public class LocalMockApp extends AbstractMockApp
 			return;
 		}
 		
-		sendBusinessSessionRequest(Consts.OperationType.Assess, impressLabelList);
+		sendBusinessSessionRequest(Consts.OperationType.AssessAndContinue, impressLabelList);
 	}
 	
 	/* (non-Javadoc)
@@ -210,8 +210,8 @@ public class LocalMockApp extends AbstractMockApp
 	public void updateInterestcard(HashMap<String, Object> interestLabels)
 	{
 		HashMap<String, Object> updateMap = new HashMap<String, Object>();
-		updateMap.put(JSONKey.FieldName.Devicecard, getDeviceJSONMap());
-		updateMap.put(JSONKey.FieldName.Interestcard, interestLabels);
+		updateMap.put(JSONKey.DeviceCard, getDeviceJSONMap());
+		updateMap.put(JSONKey.InterestCard, interestLabels);
 		sendAppDataSyncRequest(null, updateMap);
 	}
 
@@ -236,28 +236,28 @@ public class LocalMockApp extends AbstractMockApp
 	protected void syncDevice()
 	{
 		HashMap<String, Object> queryMap = new HashMap<String, Object>();
-		queryMap.put(JSONKey.FieldName.Devicecard, new HashMap<String, Object>());
+		queryMap.put(JSONKey.DeviceCard, new HashMap<String, Object>());
 		
 		HashMap<String, Object> impressCardMap = new HashMap<String, Object>();
-		impressCardMap.put(JSONKey.FieldName.LabelListCount, "10");
-		queryMap.put(JSONKey.FieldName.Impresscard, impressCardMap);
+		impressCardMap.put(JSONKey.ImpressLabelList, "10");
+		queryMap.put(JSONKey.ImpressCard, impressCardMap);
 		
 		HashMap<String, Object> interestCardMap = new HashMap<String, Object>();
-		impressCardMap.put(JSONKey.FieldName.LabelListCount, "5");
-		queryMap.put(JSONKey.FieldName.Interestcard, interestCardMap);
+		impressCardMap.put(JSONKey.InterestLabelList, "5");
+		queryMap.put(JSONKey.InterestCard, interestCardMap);
 		
 		HashMap<String, Object> updateMap = new HashMap<String, Object>();
 		
 		HashMap<String, Object> deviceCardMap = new HashMap<String, Object>();
 		Devicecard card = new Devicecard();
 		
-		deviceCardMap.put(JSONKey.FieldName.OsVersion, "iOS 6.1.2");
-		deviceCardMap.put(JSONKey.FieldName.AppVersion, "1.2");
-		deviceCardMap.put(JSONKey.FieldName.IsJailed, "No");
-		deviceCardMap.put(JSONKey.FieldName.Location, "22.511962,113.380301");
-		deviceCardMap.put(JSONKey.FieldName.DeviceSn, "AFLNWERJL3203598FDLGSLDF");
-		deviceCardMap.put(JSONKey.FieldName.DeviceModel, "iPhone5");
-		updateMap.put(JSONKey.FieldName.Devicecard, deviceCardMap);
+		deviceCardMap.put(JSONKey.OsVersion, "iOS 6.1.2");
+		deviceCardMap.put(JSONKey.AppVersion, "1.2");
+		deviceCardMap.put(JSONKey.IsJailed, "No");
+		deviceCardMap.put(JSONKey.Location, "22.511962,113.380301");
+		deviceCardMap.put(JSONKey.DeviceSn, "AFLNWERJL3203598FDLGSLDF");
+		deviceCardMap.put(JSONKey.DeviceModel, "iPhone5");
+		updateMap.put(JSONKey.DeviceCard, deviceCardMap);
 		
 		sendAppDataSyncRequest(queryMap, updateMap);
 	}

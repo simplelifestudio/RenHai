@@ -13,7 +13,7 @@ package com.simplelife.renhai.server.util;
 
 import java.util.Date;
 
-import com.simplelife.renhai.server.business.device.Device;
+import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 
 
@@ -21,10 +21,10 @@ import com.simplelife.renhai.server.json.ServerJSONMessage;
 public interface IDeviceWrapper
 {
     /** */
-    public Consts.DeviceBusinessStatus getBusinessStatus();
+    public Consts.BusinessStatus getBusinessStatus();
     
     /** */
-    public Consts.DeviceServiceStatus getServiceStatus();
+    public Consts.ServiceStatus getServiceStatus();
     
     /** */
     public boolean checkExistenceInDb();

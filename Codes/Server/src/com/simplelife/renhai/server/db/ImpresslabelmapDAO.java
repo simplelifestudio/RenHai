@@ -1,5 +1,6 @@
 package com.simplelife.renhai.server.db;
 
+import com.simplelife.renhai.server.db.AbstractHibernateDAO;
 import java.util.List;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
@@ -9,23 +10,25 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * Deviceprofilemap entities. Transaction control of the save(), update() and
+ * Impresslabelmap entities. Transaction control of the save(), update() and
  * delete() operations can directly support Spring container-managed
  * transactions or they can be augmented to handle user-managed Spring
  * transactions. Each of these methods provides additional information for how
  * to configure it for the desired type of transaction control.
  * 
- * @see com.simplelife.renhai.server.db.Deviceprofilemap
+ * @see com.simplelife.renhai.server.db.Impresslabelmap
  * @author MyEclipse Persistence Tools
  */
-public class DeviceprofilemapDAO extends BaseHibernateDAO {
+public class ImpresslabelmapDAO extends AbstractHibernateDAO {
 	private static final Logger log = LoggerFactory
-			.getLogger(DeviceprofilemapDAO.class);
-
+			.getLogger(ImpresslabelmapDAO.class);
 	// property constants
+	public static final String COUNT = "count";
+	public static final String UPDATE_TIME = "updateTime";
+	public static final String ASSESS_COUNT = "assessCount";
 
-	public void save(Deviceprofilemap transientInstance) {
-		log.debug("saving Deviceprofilemap instance");
+	public void save(Impresslabelmap transientInstance) {
+		log.debug("saving Impresslabelmap instance");
 		try {
 			getSession().save(transientInstance);
 			log.debug("save successful");
@@ -35,8 +38,8 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void delete(Deviceprofilemap persistentInstance) {
-		log.debug("deleting Deviceprofilemap instance");
+	public void delete(Impresslabelmap persistentInstance) {
+		log.debug("deleting Impresslabelmap instance");
 		try {
 			getSession().delete(persistentInstance);
 			log.debug("delete successful");
@@ -46,11 +49,11 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public Deviceprofilemap findById(java.lang.Integer id) {
-		log.debug("getting Deviceprofilemap instance with id: " + id);
+	public Impresslabelmap findById(java.lang.Integer id) {
+		log.debug("getting Impresslabelmap instance with id: " + id);
 		try {
-			Deviceprofilemap instance = (Deviceprofilemap) getSession().get(
-					"com.simplelife.renhai.server.db.Deviceprofilemap", id);
+			Impresslabelmap instance = (Impresslabelmap) getSession().get(
+					"com.simplelife.renhai.server.db.Impresslabelmap", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -58,12 +61,12 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List<Deviceprofilemap> findByExample(Deviceprofilemap instance) {
-		log.debug("finding Deviceprofilemap instance by example");
+	public List<Impresslabelmap> findByExample(Impresslabelmap instance) {
+		log.debug("finding Impresslabelmap instance by example");
 		try {
-			List<Deviceprofilemap> results = (List<Deviceprofilemap>) getSession()
+			List<Impresslabelmap> results = (List<Impresslabelmap>) getSession()
 					.createCriteria(
-							"com.simplelife.renhai.server.db.Deviceprofilemap")
+							"com.simplelife.renhai.server.db.Impresslabelmap")
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -75,10 +78,10 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding Deviceprofilemap instance with property: "
+		log.debug("finding Impresslabelmap instance with property: "
 				+ propertyName + ", value: " + value);
 		try {
-			String queryString = "from Deviceprofilemap as model where model."
+			String queryString = "from Impresslabelmap as model where model."
 					+ propertyName + "= ?";
 			Query queryObject = getSession().createQuery(queryString);
 			queryObject.setParameter(0, value);
@@ -89,10 +92,22 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO {
 		}
 	}
 
+	public List<Impresslabelmap> findByCount(Object count) {
+		return findByProperty(COUNT, count);
+	}
+
+	public List<Impresslabelmap> findByUpdateTime(Object updateTime) {
+		return findByProperty(UPDATE_TIME, updateTime);
+	}
+
+	public List<Impresslabelmap> findByAssessCount(Object assessCount) {
+		return findByProperty(ASSESS_COUNT, assessCount);
+	}
+
 	public List findAll() {
-		log.debug("finding all Deviceprofilemap instances");
+		log.debug("finding all Impresslabelmap instances");
 		try {
-			String queryString = "from Deviceprofilemap";
+			String queryString = "from Impresslabelmap";
 			Query queryObject = getSession().createQuery(queryString);
 			return queryObject.list();
 		} catch (RuntimeException re) {
@@ -101,10 +116,10 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public Deviceprofilemap merge(Deviceprofilemap detachedInstance) {
-		log.debug("merging Deviceprofilemap instance");
+	public Impresslabelmap merge(Impresslabelmap detachedInstance) {
+		log.debug("merging Impresslabelmap instance");
 		try {
-			Deviceprofilemap result = (Deviceprofilemap) getSession().merge(
+			Impresslabelmap result = (Impresslabelmap) getSession().merge(
 					detachedInstance);
 			log.debug("merge successful");
 			return result;
@@ -114,8 +129,8 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void attachDirty(Deviceprofilemap instance) {
-		log.debug("attaching dirty Deviceprofilemap instance");
+	public void attachDirty(Impresslabelmap instance) {
+		log.debug("attaching dirty Impresslabelmap instance");
 		try {
 			getSession().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -125,8 +140,8 @@ public class DeviceprofilemapDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public void attachClean(Deviceprofilemap instance) {
-		log.debug("attaching clean Deviceprofilemap instance");
+	public void attachClean(Impresslabelmap instance) {
+		log.debug("attaching clean Impresslabelmap instance");
 		try {
 			getSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");

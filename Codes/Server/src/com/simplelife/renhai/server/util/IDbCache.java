@@ -16,7 +16,7 @@ package com.simplelife.renhai.server.util;
 public interface IDbCache
 {
     /** */
-    public boolean saveToDb();
+    public boolean saveToDb(Class daoClass);
     
     public void cache();
 }

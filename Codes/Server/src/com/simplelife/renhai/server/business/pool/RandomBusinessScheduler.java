@@ -11,8 +11,6 @@
 
 package com.simplelife.renhai.server.business.pool;
 
-import com.simplelife.renhai.server.util.IBusinessPool;
-
 
 /** */
 public class RandomBusinessScheduler extends AbstractBusinessScheduler
@@ -22,10 +20,6 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
     {
     }
     
-    /** */
-    public void bind(IBusinessPool pool)
-    {
-    }
     
     /** */
     public void stopScheduler()
@@ -36,4 +30,23 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
     public void schedule()
     {
     }
+
+
+	@Override
+	public void run()
+	{
+		// TODO
+		if (deviceMap.size() <=2)
+		{
+			try
+			{
+				this.sleep(5);
+			}
+			catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
 }

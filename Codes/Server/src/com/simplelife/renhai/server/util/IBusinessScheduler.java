@@ -11,6 +11,8 @@
 
 package com.simplelife.renhai.server.util;
 
+import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
+
 
 /** */
 public interface IBusinessScheduler
@@ -19,7 +21,7 @@ public interface IBusinessScheduler
     public void startScheduler();
     
     /** */
-    public void bind(IBusinessPool pool);
+    public void bind(AbstractBusinessDevicePool pool);
     
     /** */
     public void stopScheduler();

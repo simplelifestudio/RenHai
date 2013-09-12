@@ -20,17 +20,9 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
-import com.simplelife.renhai.server.db.Devicecard;
-import com.simplelife.renhai.server.db.DevicecardDAO;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
-import com.simplelife.renhai.server.db.Impresscard;
-import com.simplelife.renhai.server.db.ImpresscardDAO;
-import com.simplelife.renhai.server.db.Interestcard;
-import com.simplelife.renhai.server.db.InterestcardDAO;
 import com.simplelife.renhai.server.db.Operationcode;
 import com.simplelife.renhai.server.db.OperationcodeDAO;
-import com.simplelife.renhai.server.db.Profile;
-import com.simplelife.renhai.server.db.ProfileDAO;
 import com.simplelife.renhai.server.db.Systemmodule;
 import com.simplelife.renhai.server.db.SystemmoduleDAO;
 import com.simplelife.renhai.server.db.Systemoperationlog;
@@ -39,7 +31,6 @@ import com.simplelife.renhai.server.json.AlohaRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.util.DateUtil;
-import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
 
 
@@ -128,7 +119,7 @@ public class MainFunction extends TestCase
 	@Test
 	public void testSyncDevice()
 	{
-		String jsonMessage = "{\"header\":{\"messageType\":\"1\",\"messageSn\":\"AFLNWERJ2228FDLGSLDF\",\"messageId\":\"104\",\"deviceId\":\"1234\",\"deviceSn\":\"ABCD77fdsdGGWQ\",\"timeStamp\":\"2013-08-14 21:18:49\"},\"body\":{\"dataQuery\":{\"deviceCard\":{},\"impressCard\":{\"labelListCount\":\"10\"},\"interestCard\":{\"labelListCount\":\"5\"}},\"dataUpdate\":{\"deviceCard\":{\"osVersion\":\"iOS 6.1.2\",\"deviceModel\":\"iPhone5s\",\"appVersion\":\"1.3\",\"isJailed\":\"No\",\"location\":\"22.511962,113.380301\"},\"interestCard\":{\"soccer\":{\"order\":\"0\",\"matchCount\":\"7\"},\"music\":{\"order\":\"1\",\"matchCount\":\"3\"}}}}}";
+		String jsonMessage = "{\"header\":{\"messageType\":\"1\",\"messageSn\":\"AFLNWERJ2228FDLGSLDF\",\"messageId\":\"104\",\"deviceId\":\"1234\",\"deviceSn\":\"ABCD77fdsdGGWQ\",\"timeStamp\":\"2013-08-14 21:18:49\"},\"body\":{\"dataQuery\":{\"deviceCard\":{},\"impressCard\":{\"labelListCount\":\"10\"},\"interestCard\":{\"labelListCount\":\"5\"}},\"dataUpdate\":{\"deviceCard\":{\"osVersion\":\"iOS 6.1.3\",\"deviceModel\":\"iPhone5s\",\"appVersion\":\"1.5\",\"isJailed\":\"No\",\"location\":\"22.511962,113.380301\"},\"interestCard\":{\"soccer\":{\"order\":\"0\",\"matchCount\":\"7\"},\"music\":{\"order\":\"1\",\"matchCount\":\"3\"}}}}}";
 		JSONObject obj = JSONObject.parseObject(jsonMessage);
 		
 		AppJSONMessage appRequest = JSONFactory.createAppJSONMessage(obj);

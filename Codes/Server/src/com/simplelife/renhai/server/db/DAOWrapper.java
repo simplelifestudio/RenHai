@@ -21,18 +21,35 @@ import org.hibernate.Session;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
-import com.simplelife.renhai.server.util.IDbOperation;
+import com.simplelife.renhai.server.util.IDbCache;
 
 
 /** */
 public class DAOWrapper
 {
     /** */
-    protected static LinkedList<IDbOperation> linkToBeSaved;
+    protected static LinkedList<Object> linkToBeSaved;
     
     /** */
     protected static Timer timer;
     
+    public static void cache(Object obj)
+    {
+    	if (GlobalSetting.DBSetting.CacheEnabled)
+    	{
+    		synchronized(linkToBeSaved)
+        	{
+        		linkToBeSaved.add(obj);
+        	}
+    	}
+    	else
+    	{
+    		Session session = HibernateSessionFactory.getSession();
+        	session.beginTransaction();
+        	session.save(obj);
+        	session.getTransaction().commit();
+    	}
+    }
     
     /**
 	 * Execute given SQL string
@@ -230,7 +247,7 @@ public class DAOWrapper
 	}
 
 	/** */
-    public static void toBeSaved(IDbOperation object)
+    public static void toBeSaved(IDbCache object)
     {
     	linkToBeSaved.addLast(object);
     	
@@ -243,16 +260,25 @@ public class DAOWrapper
     /** */
     public static void flushToDB()
     {
+    	if (!GlobalSetting.DBSetting.CacheEnabled)
+    	{
+    		return;
+    	}
+    	
     	if (linkToBeSaved.size() == 0)
     	{
     		return;
     	}
     	
-    	IDbOperation obj;
+    	Object obj;
     	while (linkToBeSaved.size() > 0)
     	{
     		obj = linkToBeSaved.removeFirst();
-    		obj.saveToDb();
+    		
+    		Session session = HibernateSessionFactory.getSession();
+        	session.beginTransaction();
+        	session.save(obj);
+        	session.getTransaction().commit();
     	}
     }
 }

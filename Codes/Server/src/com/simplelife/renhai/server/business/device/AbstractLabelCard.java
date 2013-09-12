@@ -16,12 +16,11 @@ import java.util.LinkedList;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.IAbstractLabelCard;
-import com.simplelife.renhai.server.util.IDbOperation;
 import com.simplelife.renhai.server.util.IJSONObject;
 
 
 /** */
-public abstract class AbstractLabelCard implements IAbstractLabelCard, IJSONObject, IDbOperation
+public abstract class AbstractLabelCard implements IAbstractLabelCard, IJSONObject
 {
     /** */
     public LinkedList<AbstractLabel> labelList;

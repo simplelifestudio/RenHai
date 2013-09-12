@@ -38,18 +38,18 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     	Logger logger = JSONModule.instance.getLogger();
     	this.jsonObject = jsonObject;
     	
-    	if (jsonObject.containsKey(JSONKey.FieldName.Header))
+    	if (jsonObject.containsKey(JSONKey.Header))
     	{
-    		header = jsonObject.getJSONObject(JSONKey.FieldName.Header);
+    		header = jsonObject.getJSONObject(JSONKey.Header);
     	}
     	else
     	{
     		logger.error("Trying to create APP JSON request bases on invalid string: " + jsonObject.toJSONString());
     	}
     	
-    	if (jsonObject.containsKey(JSONKey.FieldName.Body))
+    	if (jsonObject.containsKey(JSONKey.Body))
     	{
-    		body = jsonObject.getJSONObject(JSONKey.FieldName.Body);
+    		body = jsonObject.getJSONObject(JSONKey.Body);
     	}
     	else
     	{
@@ -61,7 +61,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     {
     	if (header == null)
     	{
-    		header = jsonObject.getJSONObject(JSONKey.FieldName.Header);
+    		header = jsonObject.getJSONObject(JSONKey.Header);
     	}
     	return header;
     }
@@ -70,7 +70,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     {
     	if (body == null)
     	{
-    		body = jsonObject.getJSONObject(JSONKey.FieldName.Body);
+    		body = jsonObject.getJSONObject(JSONKey.Body);
     	}
     	return body;
     }
@@ -101,7 +101,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     	JSONObject header = getHeader();
     	if (header == null)
     	{
-    		setErrorDescription("Invalid request: " + JSONKey.FieldName.Header+ " can't be found in request");
+    		setErrorDescription("Invalid request: " + JSONKey.Header+ " can't be found in request");
     		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
     		logger.error(errorDescription);
     		return false;
@@ -109,64 +109,64 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     	
     	if (getBody() == null)
     	{
-    		setErrorDescription("Invalid request: " + JSONKey.FieldName.Body + " can't be found in request");
+    		setErrorDescription("Invalid request: " + JSONKey.Body + " can't be found in request");
     		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
     		logger.error(errorDescription);
     		return false;
     	}
     
-    	if (!header.containsKey(JSONKey.FieldName.MessageType))
+    	if (!header.containsKey(JSONKey.MessageType))
     	{
-    		setErrorDescription("Invalid request: " + JSONKey.FieldName.MessageType + " can't be found in request");
+    		setErrorDescription("Invalid request: " + JSONKey.MessageType + " can't be found in request");
     		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
     		logger.error(errorDescription);
     		return false;
     	}
     	
-    	if (!header.containsKey(JSONKey.FieldName.MessageSn))
+    	if (!header.containsKey(JSONKey.MessageSn))
     	{
-    		setErrorDescription("Invalid request: " + JSONKey.FieldName.MessageSn + " can't be found in request");
+    		setErrorDescription("Invalid request: " + JSONKey.MessageSn + " can't be found in request");
     		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
     		logger.error(errorDescription);
     		return false;
     	}
     	
-    	if (!header.containsKey(JSONKey.FieldName.MessageId))
+    	if (!header.containsKey(JSONKey.MessageId))
     	{
-    		setErrorDescription("Invalid request: " + JSONKey.FieldName.MessageId + " can't be found in request");
+    		setErrorDescription("Invalid request: " + JSONKey.MessageId + " can't be found in request");
     		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
     		logger.error(errorDescription);
     		return false;
     	}
     	
-    	String messageId = header.getString(JSONKey.FieldName.MessageId); 
+    	String messageId = header.getString(JSONKey.MessageId); 
     	if (!CommonFunctions.IsNumric(messageId))
     	{
-    		setErrorDescription("Invalid request: " + JSONKey.FieldName.MessageId + " must be numric");
+    		setErrorDescription("Invalid request: " + JSONKey.MessageId + " must be numric");
     		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
     		logger.error(errorDescription);
     		return false;
     	}
     	
     	/*
-    	if (!header.containsKey(JSONKey.FieldName.DeviceId))
+    	if (!header.containsKey(JSONKey.DeviceId))
     	{
-    		errorMessage = "Invalid request: " + JSONKey.FieldName.DeviceId + " can't be found in request";
+    		errorMessage = "Invalid request: " + JSONKey.DeviceId + " can't be found in request";
     		return false;
     	}
     	*/
     	
-    	if (!header.containsKey(JSONKey.FieldName.DeviceSn))
+    	if (!header.containsKey(JSONKey.DeviceSn))
     	{
-    		setErrorDescription("Invalid request: " + JSONKey.FieldName.DeviceSn + " can't be found in request");
+    		setErrorDescription("Invalid request: " + JSONKey.DeviceSn + " can't be found in request");
     		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
     		logger.error(errorDescription);
     		return false;
     	}
     	
-    	if (!header.containsKey(JSONKey.FieldName.TimeStamp))
+    	if (!header.containsKey(JSONKey.TimeStamp))
     	{
-    		setErrorDescription("Invalid request: " + JSONKey.FieldName.TimeStamp + " can't be found in request");
+    		setErrorDescription("Invalid request: " + JSONKey.TimeStamp + " can't be found in request");
     		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
     		logger.error(errorDescription);
     		return false;
@@ -185,9 +185,9 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     protected void responseError(String messageId)
     {
     	ServerErrorResponse response = createErrorResponse();
-    	response.addToBody(JSONKey.FieldName.ReceivedMessage, messageId);
-    	response.addToBody(JSONKey.FieldName.ErrorCode, this.errorCode);
-    	response.addToBody(JSONKey.FieldName.ErrorDescription, this.errorDescription);
+    	response.addToBody(JSONKey.ReceivedMessage, messageId);
+    	response.addToBody(JSONKey.ErrorCode, this.errorCode);
+    	response.addToBody(JSONKey.ErrorDescription, this.errorDescription);
     	response.asyncResponse();
     }
 
@@ -224,12 +224,12 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     		return Consts.MessageType.Invalid;
     	}
     	
-    	if (!header.containsKey(JSONKey.FieldName.MessageType))
+    	if (!header.containsKey(JSONKey.MessageType))
     	{
     		return Consts.MessageType.Invalid;
     	}
     	
-    	return Consts.MessageType.getEnumItemByValue(header.getIntValue(JSONKey.FieldName.MessageType)); 
+    	return Consts.MessageType.getEnumItemByValue(header.getIntValue(JSONKey.MessageType)); 
     }
     
 
@@ -240,12 +240,12 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     		return "";
     	}
     	
-    	if (!header.containsKey(JSONKey.FieldName.MessageType))
+    	if (!header.containsKey(JSONKey.MessageType))
     	{
     		return "";
     	}
     	
-    	return header.getString(JSONKey.FieldName.MessageSn); 
+    	return header.getString(JSONKey.MessageSn); 
     }
     
     
@@ -253,4 +253,22 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     {
     	return deviceWrapper;
     }
+    
+    protected boolean checkNoEmptyAllowed(JSONObject obj, String fieldName)
+	{
+		if (header.containsKey(JSONKey.OsVersion))
+		{
+			String fieldValue = obj.getString(fieldName);
+			
+			if (fieldValue.trim().length() == 0)
+			{
+				String temp = fieldName + " can't be empty.";
+				logger.error(temp);
+				setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+				setErrorDescription(temp);
+				return false;
+			}
+		}
+		return true;
+	}
 }

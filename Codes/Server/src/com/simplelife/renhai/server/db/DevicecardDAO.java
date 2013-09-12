@@ -1,7 +1,7 @@
 package com.simplelife.renhai.server.db;
 
+import com.simplelife.renhai.server.db.AbstractHibernateDAO;
 import java.util.List;
-import java.util.Set;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import static org.hibernate.criterion.Example.create;
@@ -19,14 +19,11 @@ import org.slf4j.LoggerFactory;
  * @see com.simplelife.renhai.server.db.Devicecard
  * @author MyEclipse Persistence Tools
  */
-public class DevicecardDAO extends BaseHibernateDAO {
+public class DevicecardDAO extends AbstractHibernateDAO {
 	private static final Logger log = LoggerFactory
 			.getLogger(DevicecardDAO.class);
 	// property constants
-	public static final String DEVICE_SN = "deviceSn";
 	public static final String REGISTER_TIME = "registerTime";
-	public static final String SERVICE_STATUS = "serviceStatus";
-	public static final String FORBIDDEN_EXPIRED_DATE = "forbiddenExpiredDate";
 	public static final String DEVICE_MODEL = "deviceModel";
 	public static final String OS_VERSION = "osVersion";
 	public static final String APP_VERSION = "appVersion";
@@ -98,21 +95,8 @@ public class DevicecardDAO extends BaseHibernateDAO {
 		}
 	}
 
-	public List<Devicecard> findByDeviceSn(Object deviceSn) {
-		return findByProperty(DEVICE_SN, deviceSn);
-	}
-
 	public List<Devicecard> findByRegisterTime(Object registerTime) {
 		return findByProperty(REGISTER_TIME, registerTime);
-	}
-
-	public List<Devicecard> findByServiceStatus(Object serviceStatus) {
-		return findByProperty(SERVICE_STATUS, serviceStatus);
-	}
-
-	public List<Devicecard> findByForbiddenExpiredDate(
-			Object forbiddenExpiredDate) {
-		return findByProperty(FORBIDDEN_EXPIRED_DATE, forbiddenExpiredDate);
 	}
 
 	public List<Devicecard> findByDeviceModel(Object deviceModel) {

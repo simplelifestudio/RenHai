@@ -13,7 +13,6 @@ package com.simplelife.renhai.server.business.pool;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -22,7 +21,6 @@ import java.util.Vector;
 import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
-import com.simplelife.renhai.server.business.device.Device;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -136,9 +134,8 @@ public class OnlineDevicePool extends AbstractDevicePool
     	String sn = deviceWrapper.getDeviceSn();
     	deviceMap.remove(sn);
     	
-    	
-    	if ((deviceWrapper.getBusinessStatus() == Consts.DeviceBusinessStatus.WaitMatch)
-    			|| (deviceWrapper.getBusinessStatus() == Consts.DeviceBusinessStatus.SessionBound))
+    	if ((deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.WaitMatch)
+    			|| (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound))
     	{
     		for (AbstractBusinessDevicePool pool : businessPoolList)
     		{

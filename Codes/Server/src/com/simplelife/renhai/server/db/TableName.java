@@ -13,14 +13,23 @@ package com.simplelife.renhai.server.db;
 /** */
 public class TableName
 {
-	public static final String Impresscard = "Impresscard";
-	public static final String Devicecard = "Devicecard";
-	public static final String ImpressLabel = "ImpressLabel";
-	public static final String Interestcard = "Interestcard";
-	public static final String InterestLabel = "InterestLabel";
-	public static final String Profile = "Profile";
-	public static final String ChatRecord = "ChatRecord";
-	public static final String OperationLog = "OperationLog";
-	public static final String OperationLogDefinition = "OperationLogDefinition";
-	public static final String WebRTCSession = "WebRTCSession";
+	public static final String Device										= "device";
+	public static final String DeviceCard									= "devicecard";
+	public static final String GlobalImpressLabel							= "globalimpresslabel";
+	public static final String GlobalInterestLabel							= "globalinterestlabel";
+	public static final String HotInterestLabelStatistics					= "hotinterestlabelstatistics";
+	public static final String ImpressCard									= "impresscard";
+	public static final String ImpressLabelMap								= "impresslabelmap";
+	public static final String InterestCard									= "interestcard";
+	public static final String InterestLabelMap								= "interestlabelmap";
+	public static final String OperationCode								= "operationcode";
+	public static final String Profile										= "profile";
+	public static final String ProfileOperationLog							= "profileoperationlog";
+	public static final String SessionProfileMap							= "sessionprofilemap";
+	public static final String SessionRecord								= "sessionrecord";
+	public static final String StatisticsItem								= "statisticsitem";
+	public static final String SystemModule									= "systemmodule";
+	public static final String SystemOperationLog							= "systemoperationlog";
+	public static final String SystemStatistics								= "systemstatistics";
+	public static final String WebRtcSession								= "webrtcsession";
 }

@@ -10,26 +10,22 @@ import org.slf4j.LoggerFactory;
 
 /**
  * A data access object (DAO) providing persistence and search support for
- * Profile entities. Transaction control of the save(), update() and delete()
+ * Device entities. Transaction control of the save(), update() and delete()
  * operations can directly support Spring container-managed transactions or they
  * can be augmented to handle user-managed Spring transactions. Each of these
  * methods provides additional information for how to configure it for the
  * desired type of transaction control.
  * 
- * @see com.simplelife.renhai.server.db.Profile
+ * @see com.simplelife.renhai.server.db.Device
  * @author MyEclipse Persistence Tools
  */
-public class ProfileDAO extends AbstractHibernateDAO {
-	private static final Logger log = LoggerFactory.getLogger(ProfileDAO.class);
+public class DeviceDAO extends AbstractHibernateDAO {
+	private static final Logger log = LoggerFactory.getLogger(DeviceDAO.class);
 	// property constants
-	public static final String SERVICE_STATUS = "serviceStatus";
-	public static final String UNBAN_DATE = "unbanDate";
-	public static final String LAST_ACTIVITY_TIME = "lastActivityTime";
-	public static final String CREATE_TIME = "createTime";
-	public static final String ACTIVE = "active";
+	public static final String DEVICE_SN = "deviceSn";
 
-	public void save(Profile transientInstance) {
-		log.debug("saving Profile instance");
+	public void save(Device transientInstance) {
+		log.debug("saving Device instance");
 		try {
 			getSession().save(transientInstance);
 			log.debug("save successful");
@@ -39,8 +35,8 @@ public class ProfileDAO extends AbstractHibernateDAO {
 		}
 	}
 
-	public void delete(Profile persistentInstance) {
-		log.debug("deleting Profile instance");
+	public void delete(Device persistentInstance) {
+		log.debug("deleting Device instance");
 		try {
 			getSession().delete(persistentInstance);
 			log.debug("delete successful");
@@ -50,11 +46,11 @@ public class ProfileDAO extends AbstractHibernateDAO {
 		}
 	}
 
-	public Profile findById(java.lang.Integer id) {
-		log.debug("getting Profile instance with id: " + id);
+	public Device findById(java.lang.Integer id) {
+		log.debug("getting Device instance with id: " + id);
 		try {
-			Profile instance = (Profile) getSession().get(
-					"com.simplelife.renhai.server.db.Profile", id);
+			Device instance = (Device) getSession().get(
+					"com.simplelife.renhai.server.db.Device", id);
 			return instance;
 		} catch (RuntimeException re) {
 			log.error("get failed", re);
@@ -62,11 +58,11 @@ public class ProfileDAO extends AbstractHibernateDAO {
 		}
 	}
 
-	public List<Profile> findByExample(Profile instance) {
-		log.debug("finding Profile instance by example");
+	public List<Device> findByExample(Device instance) {
+		log.debug("finding Device instance by example");
 		try {
-			List<Profile> results = (List<Profile>) getSession()
-					.createCriteria("com.simplelife.renhai.server.db.Profile")
+			List<Device> results = (List<Device>) getSession()
+					.createCriteria("com.simplelife.renhai.server.db.Device")
 					.add(create(instance)).list();
 			log.debug("find by example successful, result size: "
 					+ results.size());
@@ -78,10 +74,10 @@ public class ProfileDAO extends AbstractHibernateDAO {
 	}
 
 	public List findByProperty(String propertyName, Object value) {
-		log.debug("finding Profile instance with property: " + propertyName
+		log.debug("finding Device instance with property: " + propertyName
 				+ ", value: " + value);
 		try {
-			String queryString = "from Profile as model where model."
+			String queryString = "from Device as model where model."
 					+ propertyName + "= ?";
 			Query queryObject = getSession().createQuery(queryString);
 			queryObject.setParameter(0, value);
@@ -92,30 +88,14 @@ public class ProfileDAO extends AbstractHibernateDAO {
 		}
 	}
 
-	public List<Profile> findByServiceStatus(Object serviceStatus) {
-		return findByProperty(SERVICE_STATUS, serviceStatus);
-	}
-
-	public List<Profile> findByUnbanDate(Object unbanDate) {
-		return findByProperty(UNBAN_DATE, unbanDate);
-	}
-
-	public List<Profile> findByLastActivityTime(Object lastActivityTime) {
-		return findByProperty(LAST_ACTIVITY_TIME, lastActivityTime);
-	}
-
-	public List<Profile> findByCreateTime(Object createTime) {
-		return findByProperty(CREATE_TIME, createTime);
-	}
-
-	public List<Profile> findByActive(Object active) {
-		return findByProperty(ACTIVE, active);
+	public List<Device> findByDeviceSn(Object deviceSn) {
+		return findByProperty(DEVICE_SN, deviceSn);
 	}
 
 	public List findAll() {
-		log.debug("finding all Profile instances");
+		log.debug("finding all Device instances");
 		try {
-			String queryString = "from Profile";
+			String queryString = "from Device";
 			Query queryObject = getSession().createQuery(queryString);
 			return queryObject.list();
 		} catch (RuntimeException re) {
@@ -124,10 +104,10 @@ public class ProfileDAO extends AbstractHibernateDAO {
 		}
 	}
 
-	public Profile merge(Profile detachedInstance) {
-		log.debug("merging Profile instance");
+	public Device merge(Device detachedInstance) {
+		log.debug("merging Device instance");
 		try {
-			Profile result = (Profile) getSession().merge(detachedInstance);
+			Device result = (Device) getSession().merge(detachedInstance);
 			log.debug("merge successful");
 			return result;
 		} catch (RuntimeException re) {
@@ -136,8 +116,8 @@ public class ProfileDAO extends AbstractHibernateDAO {
 		}
 	}
 
-	public void attachDirty(Profile instance) {
-		log.debug("attaching dirty Profile instance");
+	public void attachDirty(Device instance) {
+		log.debug("attaching dirty Device instance");
 		try {
 			getSession().saveOrUpdate(instance);
 			log.debug("attach successful");
@@ -147,8 +127,8 @@ public class ProfileDAO extends AbstractHibernateDAO {
 		}
 	}
 
-	public void attachClean(Profile instance) {
-		log.debug("attaching clean Profile instance");
+	public void attachClean(Device instance) {
+		log.debug("attaching clean Device instance");
 		try {
 			getSession().lock(instance, LockMode.NONE);
 			log.debug("attach successful");

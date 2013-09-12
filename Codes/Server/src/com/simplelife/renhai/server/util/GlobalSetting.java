@@ -30,6 +30,7 @@ public class GlobalSetting
 	public static class DBSetting
 	{
 		public static int MaxRecordCountForFlush = 100;
+		public static boolean CacheEnabled = false;
 	}
 	
 	public static class BusinessSetting

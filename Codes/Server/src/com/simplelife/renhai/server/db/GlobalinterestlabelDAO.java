@@ -1,7 +1,7 @@
 package com.simplelife.renhai.server.db;
 
+import com.simplelife.renhai.server.db.AbstractHibernateDAO;
 import java.util.List;
-import java.util.Set;
 import org.hibernate.LockMode;
 import org.hibernate.Query;
 import static org.hibernate.criterion.Example.create;
@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  * @see com.simplelife.renhai.server.db.Globalinterestlabel
  * @author MyEclipse Persistence Tools
  */
-public class GlobalinterestlabelDAO extends BaseHibernateDAO {
+public class GlobalinterestlabelDAO extends AbstractHibernateDAO {
 	private static final Logger log = LoggerFactory
 			.getLogger(GlobalinterestlabelDAO.class);
 	// property constants

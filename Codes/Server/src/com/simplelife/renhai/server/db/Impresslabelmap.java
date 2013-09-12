@@ -10,34 +10,34 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * Impresslabelcollection entity. @author MyEclipse Persistence Tools
+ * Impresslabelmap entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "impresslabelcollection", catalog = "renhai")
-public class Impresslabelcollection implements java.io.Serializable {
+@Table(name = "impresslabelmap", catalog = "renhai")
+public class Impresslabelmap implements java.io.Serializable {
 
 	// Fields
 
 	private Integer impressLabelMaplId;
 	private Globalimpresslabel globalimpresslabel;
 	private Impresscard impresscard;
-	private Integer count;
+	private Integer assessedCount;
 	private Long updateTime;
 	private Integer assessCount;
 
 	// Constructors
 
 	/** default constructor */
-	public Impresslabelcollection() {
+	public Impresslabelmap() {
 	}
 
 	/** full constructor */
-	public Impresslabelcollection(Globalimpresslabel globalimpresslabel,
-			Impresscard impresscard, Integer count, Long updateTime,
+	public Impresslabelmap(Globalimpresslabel globalimpresslabel,
+			Impresscard impresscard, Integer assessedCount, Long updateTime,
 			Integer assessCount) {
 		this.globalimpresslabel = globalimpresslabel;
 		this.impresscard = impresscard;
-		this.count = count;
+		this.assessedCount = assessedCount;
 		this.updateTime = updateTime;
 		this.assessCount = assessCount;
 	}
@@ -74,13 +74,13 @@ public class Impresslabelcollection implements java.io.Serializable {
 		this.impresscard = impresscard;
 	}
 
-	@Column(name = "count", nullable = false)
-	public Integer getCount() {
-		return this.count;
+	@Column(name = "assessedCount", nullable = false)
+	public Integer getAssessedCount() {
+		return this.assessedCount;
 	}
 
-	public void setCount(Integer count) {
-		this.count = count;
+	public void setAssessedCount(Integer assessedCount) {
+		this.assessedCount = assessedCount;
 	}
 
 	@Column(name = "updateTime", nullable = false)
