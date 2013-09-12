@@ -43,8 +43,8 @@ Server接收到App消息后，向App回应的消息
 ##100. 测试请求 AlohaRequest <--> 402. 测试响应 AlohaResponse
 ##101. App数据同步请求 AppDataSyncRequest <--> 403. App数据同步响应
 ##102. Server数据同步请求 ServerDataSyncRequest <--> 404. Server数据同步响应 ServerDataSyncResponse
-##103. 业务会话请求 BusinessSessionRequest <--> 业务会话响应 BusinessSessionResponse
-##300. 业务会话通知 BusinessSessionNotification <--> 业务会话通知响应 BusinessSessionNotificationResponse
+##103. 业务会话请求 BusinessSessionRequest <--> 405. 业务会话响应 BusinessSessionResponse
+##300. 业务会话通知 BusinessSessionNotification <--> 202. 业务会话通知响应 BusinessSessionNotificationResponse
 
 #消息格式 MessageFormat
 以"jsonEnvelop"作为JSON消息的信封外套，对应的值即实际的业务消息（已编码/已加密/已压缩）
@@ -84,7 +84,6 @@ Server接收到App消息后，向App回应的消息
 		"deviceCard":
 		{
 			"deviceCardId":"",
-			"deviceId":"",
 			"registerTime":"",
 			"deviceModel":"",
 			"osVersion":"",
@@ -303,7 +302,6 @@ App与Server通过消息交互完成的数据操作
 				"deviceCard":
 				{
 					"deviceCardId":"",
-					"deviceId":"",
 					"registerTime":"",
 					"deviceModel":"",
 					"osVersion":"",
