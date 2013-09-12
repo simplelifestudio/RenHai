@@ -8,13 +8,24 @@
 
 #import "RHDevice.h"
 
-#define SERIALIZE_KEY_DEVICECARD @"Device.deviceCard"
-#define SERIALIZE_KEY_PROFILELIST @"Device.profileList"
+#import "SSKeychain.h"
 
+#import "AppDataModule.h"
+
+#define SERIALIZE_KEY_DEVICEID @"device.deviceId"
+#define SERIALIZE_KEY_DEVICESN @"device.deviceSn"
+#define SERIALIZE_KEY_DEVICECARD @"device.deviceCard"
+#define SERIALIZE_KEY_PROFILELIST @"device.profileList"
+
+#define JSON_KEY_DEVICEID @"deviceId"
+#define JSON_KEY_DEVICESN @"deviceSn"
 #define JSON_KEY_DEVICECARD @"deviceCard"
 #define JSON_KEY_PROFILELIST @"profileList"
 
 @implementation RHDevice
+
+@synthesize deviceId = _deviceId;
+@synthesize deviceSn = _deviceSn;
 
 @synthesize deviceCard = _deviceCard;
 @synthesize profileList = _profileList;
@@ -25,6 +36,8 @@
 {
     if (self = [super init])
     {
+        _deviceSn = [self _computeDeviceSn];
+        
         _deviceCard = [[RHDeviceCard alloc] init];
         
         _profileList = [NSMutableArray array];        
@@ -35,8 +48,6 @@
     return self;
 }
 
-#pragma mark - Public Methods
-
 -(RHProfile*) currentProfile
 {
     RHProfile* profile = nil;
@@ -46,11 +57,44 @@
     return profile;
 }
 
+#pragma mark - Private Methods
+
+-(NSString*) _computeDeviceSn
+{
+    NSString* idfv = [SSKeychain passwordForService:KEYCHAIN_SERVICE_DEVICE account:KEYCHAIN_ACCOUNT_IDFV];
+    if (nil == idfv)
+    {
+        idfv = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        [SSKeychain setPassword:idfv forService:KEYCHAIN_SERVICE_DEVICE account:KEYCHAIN_ACCOUNT_IDFV];
+    }
+    
+    return idfv;
+}
+
+-(id) _getODeviceId
+{
+    id oDeviceId = nil;
+    if (0 >= _deviceId)
+    {
+        oDeviceId = [NSNull null];
+    }
+    else
+    {
+        oDeviceId = [NSNumber numberWithInteger:_deviceId];
+    }
+    return oDeviceId;
+}
+
 #pragma mark - CBJSONable
 
 -(NSDictionary*) toJSONObject
 {
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
+    
+    id oDeviceId = [self _getODeviceId];
+    [dic setObject:oDeviceId forKey:JSON_KEY_DEVICEID];
+    
+    [dic setObject:_deviceSn forKey:JSON_KEY_DEVICESN];
     
     [dic setObject:_deviceCard forKey:JSON_KEY_DEVICECARD];
     
@@ -65,6 +109,14 @@
 {
     if (self = [super init])
     {
+        NSNumber* oDeviceId = [aDecoder decodeObjectForKey:SERIALIZE_KEY_DEVICEID];
+        if (nil != oDeviceId)
+        {
+            _deviceId = oDeviceId.integerValue;
+        }
+        
+        _deviceSn = [aDecoder decodeObjectForKey:SERIALIZE_KEY_DEVICESN];
+        
         _deviceCard = [aDecoder decodeObjectForKey:SERIALIZE_KEY_DEVICECARD];
         
         _profileList = [aDecoder decodeObjectForKey:SERIALIZE_KEY_PROFILELIST];
@@ -75,6 +127,11 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
+    id oDeviceId = [self _getODeviceId];
+    [aCoder encodeObject:oDeviceId forKey:SERIALIZE_KEY_DEVICEID];
+    
+    [aCoder encodeObject:_deviceSn forKey:SERIALIZE_KEY_DEVICESN];
+    
     [aCoder encodeObject:_deviceCard forKey:SERIALIZE_KEY_DEVICECARD];
     
     [aCoder encodeObject:_profileList forKey:SERIALIZE_KEY_PROFILELIST];

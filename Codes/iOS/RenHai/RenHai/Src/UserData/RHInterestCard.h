@@ -12,7 +12,7 @@
 
 @interface RHInterestCard : NSObject <CBJSONable>
 
-@property (nonatomic) NSUInteger cardId;
+@property (nonatomic) NSUInteger interestCardId;
 
 -(BOOL) addLabel:(NSString*) labelName;
 -(BOOL) removeLabel:(NSString*) labelName;

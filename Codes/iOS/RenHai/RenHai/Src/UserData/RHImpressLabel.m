@@ -8,22 +8,22 @@
 
 #import "RHImpressLabel.h"
 
-#define SERIALIZE_KEY_LABELID @"ImpressLabel.labelId"
-#define SERIALIZE_KEY_COUNT @"ImpressLabel.count"
-#define SERIALIZE_KEY_UPDATETIME @"ImpressLabel.updateTime"
-#define SERIALIZE_KEY_ASSESSCOUNT @"ImpressLabel.assessCount"
-#define SERIALIZE_KEY_NAME @"ImpressLabel.name"
+#define SERIALIZE_KEY_LABELID @"impressLabel.labelId"
+#define SERIALIZE_KEY_ASSESSEDCOUNT @"impressLabel.assessedCount"
+#define SERIALIZE_KEY_UPDATETIME @"impressLabel.updateTime"
+#define SERIALIZE_KEY_ASSESSCOUNT @"impressLabel.assessCount"
+#define SERIALIZE_KEY_NAME @"impressLabel.name"
 
-#define JSON_KEY_LABELID @"labelId"
-#define JSON_KEY_COUNT @"count"
+#define JSON_KEY_LABELID @"globalImpressLabelId"
+#define JSON_KEY_ASSESSEDCOUNT @"assessedCount"
 #define JSON_KEY_UPDATETIME @"updateTime"
 #define JSON_KEY_ASSESSCOUNT @"assessCount"
-#define JSON_KEY_NAME @"name"
+#define JSON_KEY_NAME @"impressLabel"
 
 @implementation RHImpressLabel
 
 @synthesize labelId = _labelId;
-@synthesize count = _count;
+@synthesize assessedCount = _assessedCount;
 @synthesize updateTime = _updateTime;
 @synthesize assessCount = _assessCount;
 @synthesize name = _name;
@@ -40,17 +40,33 @@
     return self;
 }
 
+#pragma mark - Private Methods
+
+-(id) _getOLabelId
+{
+    id oLabelId = nil;
+    if (0 >= _labelId)
+    {
+        oLabelId = [NSNull null];
+    }
+    else
+    {
+        oLabelId = [NSNumber numberWithInteger:_labelId];
+    }
+    return oLabelId;
+}
+
 #pragma mark - CBJSONable
 
 -(NSDictionary*) toJSONObject
 {
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
-    NSNumber* oLabelId = [NSNumber numberWithInteger:_labelId];
+    id oLabelId = [self _getOLabelId];
     [dic setObject:oLabelId forKey:JSON_KEY_LABELID];
     
-    NSNumber* oCount = [NSNumber numberWithInteger:_count];
-    [dic setObject:oCount forKey:JSON_KEY_COUNT];
+    NSNumber* oAssessedCount = [NSNumber numberWithInteger:_assessedCount];
+    [dic setObject:oAssessedCount forKey:JSON_KEY_ASSESSEDCOUNT];
 
     [dic setObject:_updateTime forKey:JSON_KEY_UPDATETIME];
     
@@ -71,13 +87,11 @@
         NSNumber* oLabelId = [aDecoder decodeObjectForKey:SERIALIZE_KEY_LABELID];
         _labelId = oLabelId.integerValue;
         
-        NSNumber* oCount = [aDecoder decodeObjectForKey:SERIALIZE_KEY_COUNT];
-        _count = oCount.integerValue;
+        _assessedCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_ASSESSEDCOUNT];
         
         _updateTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_UPDATETIME];
         
-        NSNumber* oAssessCount = [aDecoder decodeObjectForKey:SERIALIZE_KEY_ASSESSCOUNT];
-        _assessCount = oAssessCount.integerValue;
+        _assessCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_ASSESSCOUNT];
         
         _name = [aDecoder decodeObjectForKey:SERIALIZE_KEY_NAME];
     }
@@ -86,16 +100,14 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    NSNumber* oLabelId = [NSNumber numberWithInteger:_labelId];
+    id oLabelId = [self _getOLabelId];
     [aCoder encodeObject:oLabelId forKey:SERIALIZE_KEY_LABELID];
     
-    NSNumber* oCount = [NSNumber numberWithInteger:_count];
-    [aCoder encodeObject:oCount forKey:SERIALIZE_KEY_COUNT];
+    [aCoder encodeInteger:_assessedCount forKey:SERIALIZE_KEY_ASSESSEDCOUNT];
     
     [aCoder encodeObject:_updateTime forKey:SERIALIZE_KEY_UPDATETIME];
     
-    NSNumber* oAssessCount = [NSNumber numberWithInteger:_assessCount];
-    [aCoder encodeObject:oAssessCount forKey:SERIALIZE_KEY_ASSESSCOUNT];
+    [aCoder encodeInteger:_assessCount forKey:SERIALIZE_KEY_ASSESSCOUNT];
     
     [aCoder encodeObject:_name forKey:SERIALIZE_KEY_NAME];
 }

@@ -8,22 +8,25 @@
 
 #import "RHImpressCard.h"
 
-#define SERIALIZE_KEY_CARDID @"ImpressCard.cardId"
-#define SERIALIZE_KEY_LABELIST @"ImpressCard.labelList"
-#define SERIALIZE_KEY_CHATTOTALCOUNT @"ImpressCard.chatTotalCount"
-#define SERIALIZE_KEY_CHATTOTALDURATION @"ImpressCard.chatTotalDuration"
-#define SERIALIZE_KEY_CHATLOSSCOUNT @"ImpressCard.chatLossCount"
+#define SERIALIZE_KEY_CARDID @"impressCard.impressCardId"
+#define SERIALIZE_KEY_ASSESSLABELIST @"impressCard.assessLabelList"
+#define SERIALIZE_KEY_IMPRESSLABELIST @"impressCard.impressLabelList"
+#define SERIALIZE_KEY_CHATTOTALCOUNT @"impressCard.chatTotalCount"
+#define SERIALIZE_KEY_CHATTOTALDURATION @"impressCard.chatTotalDuration"
+#define SERIALIZE_KEY_CHATLOSSCOUNT @"impressCard.chatLossCount"
 
-#define JSON_KEY_CARDID @"cardId"
-#define JSON_KEY_LABELLIST @"labelList"
+#define JSON_KEY_CARDID @"impressCardId"
+#define JSON_KEY_ASSESSLABELLIST @"assessLabelList"
+#define JSON_KEY_IMPRESSLABELLIST @"impressLabelList"
 #define JSON_KEY_CHATTOTALCOUNT @"chatTotalCount"
 #define JSON_KEY_CHATTOTALDURATION @"chatTotalDuration"
 #define JSON_KEY_CHATLOSSCOUNT @"chatLossCount"
 
 @implementation RHImpressCard
 
-@synthesize cardId = _cardId;
-@synthesize labelList = _labelList;
+@synthesize impressCardId = _impressCardId;
+@synthesize assessLabelList = _assessLabelList;
+@synthesize impressLabelList = _impressLabelList;
 @synthesize chatTotalCount = _chatTotalCount;
 @synthesize chatTotalDuration = _chatTotalDuration;
 @synthesize chatLossCount = _chatLossCount;
@@ -34,10 +37,27 @@
 {
     if (self = [super init])
     {
-        _labelList = [NSMutableArray array];
+        _assessLabelList = [NSMutableArray array];
+        _impressLabelList = [NSMutableArray array];
     }
     
     return self;
+}
+
+#pragma mark - Private Methods
+
+-(id) _getOCardId
+{
+    id oCardId = nil;
+    if (0 >= _impressCardId)
+    {
+        oCardId = [NSNull null];
+    }
+    else
+    {
+        oCardId = [NSNumber numberWithInteger:_impressCardId];
+    }
+    return oCardId;
 }
 
 #pragma mark - CBJSONable
@@ -46,10 +66,12 @@
 {
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
-    NSNumber* oCardId = [NSNumber numberWithInteger:_cardId];
+    id oCardId = [self _getOCardId];
     [dic setObject:oCardId forKey:JSON_KEY_CARDID];
     
-    [dic setObject:_labelList forKey:JSON_KEY_LABELLIST];
+    [dic setObject:_assessLabelList forKey:JSON_KEY_ASSESSLABELLIST];
+    
+    [dic setObject:_impressLabelList forKey:JSON_KEY_IMPRESSLABELLIST];
     
     NSNumber* oChatTotalCount = [NSNumber numberWithInteger:_chatTotalCount];
     [dic setObject:oChatTotalCount forKey:JSON_KEY_CHATTOTALCOUNT];
@@ -70,18 +92,17 @@
     if (self = [super init])
     {
         NSNumber* oCardId = [aDecoder decodeObjectForKey:SERIALIZE_KEY_CARDID];
-        _cardId = oCardId.integerValue;
+        _impressCardId = oCardId.integerValue;
         
-        _labelList = [aDecoder decodeObjectForKey:SERIALIZE_KEY_LABELIST];
+        _assessLabelList = [aDecoder decodeObjectForKey:SERIALIZE_KEY_ASSESSLABELIST];
         
-        NSNumber* oChatTotalCount = [aDecoder decodeObjectForKey:SERIALIZE_KEY_CHATTOTALCOUNT];
-        _chatTotalCount = oChatTotalCount.integerValue;
+        _impressLabelList = [aDecoder decodeObjectForKey:SERIALIZE_KEY_IMPRESSLABELIST];
         
-        NSNumber* oChatTotalDuration = [aDecoder decodeObjectForKey:SERIALIZE_KEY_CHATTOTALDURATION];
-        _chatTotalDuration = oChatTotalDuration.integerValue;
+        _chatTotalCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CHATTOTALCOUNT];
         
-        NSNumber* oChatLossCount = [aDecoder decodeObjectForKey:SERIALIZE_KEY_CHATLOSSCOUNT];
-        _chatLossCount = oChatLossCount.integerValue;
+        _chatTotalDuration = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CHATTOTALDURATION];
+        
+        _chatLossCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CHATLOSSCOUNT];
     }
     
     return self;
@@ -89,19 +110,18 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    NSNumber* oCardId = [NSNumber numberWithInteger:_cardId];
+    id oCardId = [self _getOCardId];
     [aCoder encodeObject:oCardId forKey:SERIALIZE_KEY_CARDID];
+
+    [aCoder encodeObject:_assessLabelList forKey:SERIALIZE_KEY_ASSESSLABELIST];
     
-    [aCoder encodeObject:_labelList forKey:SERIALIZE_KEY_LABELIST];
+    [aCoder encodeObject:_impressLabelList forKey:SERIALIZE_KEY_IMPRESSLABELIST];
+        
+    [aCoder encodeInteger:_chatTotalCount forKey:SERIALIZE_KEY_CHATTOTALCOUNT];
+
+    [aCoder encodeInteger:_chatTotalDuration forKey:SERIALIZE_KEY_CHATTOTALDURATION];
     
-    NSNumber* oChatTotalCount = [NSNumber numberWithInteger:_chatTotalCount];
-    [aCoder encodeObject:oChatTotalCount forKey:SERIALIZE_KEY_CHATTOTALCOUNT];
-    
-    NSNumber* oChatTotalDuration = [NSNumber numberWithInteger:_chatTotalDuration];
-    [aCoder encodeObject:oChatTotalDuration forKey:SERIALIZE_KEY_CHATTOTALDURATION];
-    
-    NSNumber* oChatLossCount = [NSNumber numberWithInteger:_chatLossCount];
-    [aCoder encodeObject:oChatLossCount forKey:SERIALIZE_KEY_CHATLOSSCOUNT];
+    [aCoder encodeInteger:_chatLossCount forKey:SERIALIZE_KEY_CHATLOSSCOUNT];
 }
 
 @end
