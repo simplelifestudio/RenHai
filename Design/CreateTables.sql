@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50610
 File Encoding         : 65001
 
-Date: 2013-09-11 12:55:59
+Date: 2013-09-12 18:26:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -128,7 +128,7 @@ CREATE TABLE `impresslabelmap` (
   `impressLabelMaplId` int(11) NOT NULL,
   `impressCardId` int(11) NOT NULL,
   `globalImpressLabelId` int(11) NOT NULL,
-  `count` int(11) NOT NULL,
+  `assessedCount` int(11) NOT NULL,
   `updateTime` bigint(20) NOT NULL,
   `assessCount` int(11) NOT NULL,
   PRIMARY KEY (`impressLabelMaplId`),
@@ -362,8 +362,8 @@ CREATE TABLE `systemoperationlog` (
   PRIMARY KEY (`systemOperationLogId`),
   KEY `fk_SysOpLog_moduleId_idx` (`moduleId`),
   KEY `fk_SysOpLog_operCode_idx` (`operationCodeId`),
-  CONSTRAINT `fk_SysOpLog_operCode` FOREIGN KEY (`operationCodeId`) REFERENCES `operationcode` (`operationCodeId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_SysOpLog_moduleId` FOREIGN KEY (`moduleId`) REFERENCES `systemmodule` (`moduleId`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_SysOpLog_moduleId` FOREIGN KEY (`moduleId`) REFERENCES `systemmodule` (`moduleId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_SysOpLog_operCode` FOREIGN KEY (`operationCodeId`) REFERENCES `operationcode` (`operationCodeId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
