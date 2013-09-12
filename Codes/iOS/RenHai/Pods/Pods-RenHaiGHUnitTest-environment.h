@@ -18,11 +18,11 @@
 #define COCOAPODS_VERSION_MINOR_CocoaLumberjack 6
 #define COCOAPODS_VERSION_PATCH_CocoaLumberjack 2
 
-// EGOTableViewPullRefresh
-#define COCOAPODS_POD_AVAILABLE_EGOTableViewPullRefresh
-#define COCOAPODS_VERSION_MAJOR_EGOTableViewPullRefresh 0
-#define COCOAPODS_VERSION_MINOR_EGOTableViewPullRefresh 1
-#define COCOAPODS_VERSION_PATCH_EGOTableViewPullRefresh 0
+// DraggableCollectionView
+#define COCOAPODS_POD_AVAILABLE_DraggableCollectionView
+#define COCOAPODS_VERSION_MAJOR_DraggableCollectionView 0
+#define COCOAPODS_VERSION_MINOR_DraggableCollectionView 1
+#define COCOAPODS_VERSION_PATCH_DraggableCollectionView 0
 
 // FlatUIKit
 #define COCOAPODS_POD_AVAILABLE_FlatUIKit
