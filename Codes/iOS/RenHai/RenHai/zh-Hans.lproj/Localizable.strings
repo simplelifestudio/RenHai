@@ -8,6 +8,8 @@
 
 "Common_Yes" = "是";
 "Common_No" = "否";
+"Common_PullToRefresh" = "下拉刷新";
+"Common_Refreshing" = "刷新...";
 
 "DeviceCard_DeviceModel" = "设备类型";
 "DeviceCard_OSVersion" = "系统平台";
