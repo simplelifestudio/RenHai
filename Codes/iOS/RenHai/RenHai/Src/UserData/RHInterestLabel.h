@@ -13,9 +13,9 @@
 @interface RHInterestLabel : NSObject <CBJSONable>
 
 @property (nonatomic) NSUInteger labelId;
-@property (nonatomic, strong) NSString* name;
+@property (nonatomic, strong) NSString* labelName;
 @property (nonatomic) NSUInteger globalMatchCount;
-@property (nonatomic) NSUInteger order;
+@property (nonatomic) NSUInteger labelOrder;
 @property (nonatomic) NSUInteger matchCount;
 @property (nonatomic) BOOL validFlag;
 

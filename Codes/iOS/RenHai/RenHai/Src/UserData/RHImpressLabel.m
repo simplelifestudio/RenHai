@@ -12,13 +12,13 @@
 #define SERIALIZE_KEY_ASSESSEDCOUNT @"impressLabel.assessedCount"
 #define SERIALIZE_KEY_UPDATETIME @"impressLabel.updateTime"
 #define SERIALIZE_KEY_ASSESSCOUNT @"impressLabel.assessCount"
-#define SERIALIZE_KEY_NAME @"impressLabel.name"
+#define SERIALIZE_KEY_NAME @"impressLabel.impressLabelName"
 
 #define JSON_KEY_LABELID @"globalImpressLabelId"
 #define JSON_KEY_ASSESSEDCOUNT @"assessedCount"
 #define JSON_KEY_UPDATETIME @"updateTime"
 #define JSON_KEY_ASSESSCOUNT @"assessCount"
-#define JSON_KEY_NAME @"impressLabel"
+#define JSON_KEY_NAME @"impressLabelName"
 
 @implementation RHImpressLabel
 
@@ -26,7 +26,7 @@
 @synthesize assessedCount = _assessedCount;
 @synthesize updateTime = _updateTime;
 @synthesize assessCount = _assessCount;
-@synthesize name = _name;
+@synthesize labelName = _labelName;
 
 #pragma mark - Public Methods
 
@@ -73,7 +73,7 @@
     NSNumber* oAssessCount = [NSNumber numberWithInteger:_assessCount];
     [dic setObject:oAssessCount forKey:JSON_KEY_ASSESSCOUNT];
     
-    [dic setObject:_name forKey:JSON_KEY_NAME];
+    [dic setObject:_labelName forKey:JSON_KEY_NAME];
     
     return dic;
 }
@@ -93,7 +93,7 @@
         
         _assessCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_ASSESSCOUNT];
         
-        _name = [aDecoder decodeObjectForKey:SERIALIZE_KEY_NAME];
+        _labelName = [aDecoder decodeObjectForKey:SERIALIZE_KEY_NAME];
     }
     return self;
 }
@@ -109,7 +109,7 @@
     
     [aCoder encodeInteger:_assessCount forKey:SERIALIZE_KEY_ASSESSCOUNT];
     
-    [aCoder encodeObject:_name forKey:SERIALIZE_KEY_NAME];
+    [aCoder encodeObject:_labelName forKey:SERIALIZE_KEY_NAME];
 }
 
 @end

@@ -57,7 +57,7 @@
     if (![self isLabelExists:labelName])
     {
         RHInterestLabel* label = [[RHInterestLabel alloc] init];
-        label.name = labelName;
+        label.labelName = labelName;
         
         [_labelList setObject:label forKey:labelName];
         
@@ -89,7 +89,7 @@
     {
         [_labelList enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
             RHInterestLabel* label = (RHInterestLabel*)obj;
-            if ([label.name isEqualToString:labelName])
+            if ([label.labelName isEqualToString:labelName])
             {
                 flag = YES;
                 *stop = YES;

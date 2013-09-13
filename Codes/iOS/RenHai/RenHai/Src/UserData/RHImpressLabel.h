@@ -13,7 +13,7 @@
 @interface RHImpressLabel : NSObject <CBJSONable>
 
 @property (nonatomic) NSUInteger labelId;
-@property (nonatomic, strong) NSString* name;
+@property (nonatomic, strong) NSString* labelName;
 @property (nonatomic) NSUInteger assessedCount;
 @property (nonatomic) NSDate* updateTime;
 @property (nonatomic) NSUInteger assessCount;
