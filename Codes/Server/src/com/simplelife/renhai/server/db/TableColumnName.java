@@ -64,7 +64,7 @@ public class TableColumnName
 	public static final String OperationCodeId					= "operationCodeId";
 
 	public static final String OperationType					= "operationType";
-	public static final String Order							= "order";
+	public static final String LabelOrder						= "labelOrder";
 	public static final String OsVersion						= "osVersion";
 	public static final String ProfileId						= "profileId";
 	public static final String ProfileOperationLogId			= "profileOperationLogId";

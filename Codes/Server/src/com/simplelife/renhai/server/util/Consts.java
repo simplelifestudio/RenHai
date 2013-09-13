@@ -48,12 +48,35 @@ public class Consts
 		}
 	}
 
+	public enum YesNo
+	{
+		Yes(1),
+		No(0);
+		
+		private int value;
+		private YesNo(int value)
+		{
+			this.value = value;
+		}
+	
+		public static YesNo parseValue(String value)
+		{
+			int intValue = Integer.valueOf(value);
+			for (YesNo item : values())
+			{
+				if (item.value == intValue)
+				{
+					return item;
+				}
+			}
+			return null;
+		}
+	}
+	
 	public enum JSONExecuteResult
 	{
 		Success(1),
-		Fail(0),
-		Yes(1),
-		No(0);
+		Fail(0);
 		
 		private int value;
 		private JSONExecuteResult(int value)
@@ -91,7 +114,7 @@ public class Consts
 			this.value = value;
 		}
 		
-		public static MessageType getEnumItemByValue(int value)
+		public static MessageType parseValue(int value)
 		{
 			for (MessageType item : values())
 			{
@@ -101,6 +124,12 @@ public class Consts
 				}
 			}
 			return null;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return String.valueOf(value);
 		}
 	}
 	
@@ -139,7 +168,7 @@ public class Consts
 		{
 			return String.valueOf(this.messageId);
 		}
-		public static MessageId getEnumItemByValue(int value)
+		public static MessageId parseValue(int value)
 		{
 			for (MessageId item : values())
 			{
@@ -153,7 +182,7 @@ public class Consts
 		
 		public static MessageId getEnumItemByValue(String value)
 		{
-			return getEnumItemByValue(Integer.parseInt(value));
+			return parseValue(Integer.parseInt(value));
 		}
 	}
 	
@@ -181,6 +210,12 @@ public class Consts
     	private GlobalErrorCode(int code)
     	{
     		this.code = code; 
+    	}
+    	
+    	@Override
+    	public String toString()
+    	{
+    		return String.valueOf(code);
     	}
 	}
 	

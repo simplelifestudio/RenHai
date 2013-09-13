@@ -48,8 +48,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     /** */
     protected Device device;
     
-    protected String deviceSn;
-    
     /** */
     protected Consts.ServiceStatus serviceStatus;
     
@@ -57,6 +55,16 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     protected Consts.BusinessStatus businessStatus;
     
     protected OnlineDevicePool ownerOnlinePool;
+    
+    public void setServiceStatus(Consts.ServiceStatus serviceStatus)
+    {
+    	this.serviceStatus = serviceStatus;
+    }
+    
+    public void setBusinessStatus(Consts.BusinessStatus businessStatus)
+    {
+    	this.businessStatus = businessStatus;
+    }
     
     /** */
     protected void updatePingTime()
@@ -74,6 +82,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     public DeviceWrapper(IBaseConnection connection)
     {
     	this.webSocketConnection = connection;
+    	connection.bind(this);
     }
     
     /** */
@@ -262,12 +271,23 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
 	public void setDevice(Device device)
 	{
 		this.device = device;
-		deviceSn = device.getDeviceSn();
 	}
 	
 	public String getDeviceSn()
 	{
-		return this.deviceSn;
+		return this.device.getDeviceSn();
+	}
+
+	@Override
+	public void setLastActivityTime(Date date)
+	{
+		this.lastActivityTime = date;
+	}
+
+	@Override
+	public void setLastPingTime(Date date)
+	{
+		this.lastPingTime = date;
 	}
 }
 

@@ -38,6 +38,12 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     	Logger logger = JSONModule.instance.getLogger();
     	this.jsonObject = jsonObject;
     	
+    	if (jsonObject == null)
+    	{
+    		// It may be null for invalid JSON string
+    		return;
+    	}
+    	
     	if (jsonObject.containsKey(JSONKey.Header))
     	{
     		header = jsonObject.getJSONObject(JSONKey.Header);
@@ -114,6 +120,14 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     		logger.error(errorDescription);
     		return false;
     	}
+    	
+    	if (body.isEmpty())
+    	{
+    		setErrorDescription("Invalid request: " + JSONKey.Body + " can't be empty.");
+    		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+    		logger.error(errorDescription);
+    		return false;
+    	}
     
     	if (!header.containsKey(JSONKey.MessageType))
     	{
@@ -126,6 +140,15 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     	if (!header.containsKey(JSONKey.MessageSn))
     	{
     		setErrorDescription("Invalid request: " + JSONKey.MessageSn + " can't be found in request");
+    		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+    		logger.error(errorDescription);
+    		return false;
+    	}
+    	
+    	String messageSn = header.getString(JSONKey.MessageSn).trim();
+    	if (messageSn.length() == 0)
+    	{
+    		setErrorDescription("Invalid request: " + JSONKey.MessageSn + " can't be empty.");
     		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
     		logger.error(errorDescription);
     		return false;
@@ -186,7 +209,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     {
     	ServerErrorResponse response = createErrorResponse();
     	response.addToBody(JSONKey.ReceivedMessage, messageId);
-    	response.addToBody(JSONKey.ErrorCode, this.errorCode);
+    	response.addToBody(JSONKey.ErrorCode, this.errorCode.toString());
     	response.addToBody(JSONKey.ErrorDescription, this.errorDescription);
     	response.asyncResponse();
     }
@@ -229,7 +252,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     		return Consts.MessageType.Invalid;
     	}
     	
-    	return Consts.MessageType.getEnumItemByValue(header.getIntValue(JSONKey.MessageType)); 
+    	return Consts.MessageType.parseValue(header.getIntValue(JSONKey.MessageType)); 
     }
     
 

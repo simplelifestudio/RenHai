@@ -25,7 +25,7 @@ public abstract class AbstractDevicePool extends AbstractPool
     /** */
     public IDeviceWrapper getDevice(String deviceSn)
     {
-        return deviceMap.get(deviceSn);
+   		return deviceMap.get(deviceSn);
     }
     
     /** */

@@ -54,4 +54,13 @@ public interface IDeviceWrapper
     public IBusinessSession getOwnerBusinessSession();
     
     public String getDeviceSn();
+    
+    public void setLastActivityTime(Date date);
+    
+    public void setLastPingTime(Date date);
+    
+    public void setServiceStatus(Consts.ServiceStatus serviceStatus);
+    
+    public void setBusinessStatus(Consts.BusinessStatus businessStatus);
+    
 }

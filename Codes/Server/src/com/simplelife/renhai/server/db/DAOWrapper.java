@@ -44,10 +44,17 @@ public class DAOWrapper
     	}
     	else
     	{
-    		Session session = HibernateSessionFactory.getSession();
-        	session.beginTransaction();
-        	session.save(obj);
-        	session.getTransaction().commit();
+    		try
+    		{
+	    		Session session = HibernateSessionFactory.getSession();
+	        	session.beginTransaction();
+	        	session.saveOrUpdate(obj);
+	        	session.getTransaction().commit();
+    		}
+    		catch(Exception e)
+    		{
+    			DBModule.instance.getLogger().error(e.getMessage());
+    		}
     	}
     }
     

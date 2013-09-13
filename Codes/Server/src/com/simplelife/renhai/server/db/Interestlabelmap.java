@@ -1,5 +1,6 @@
 package com.simplelife.renhai.server.db;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,7 +22,7 @@ public class Interestlabelmap implements java.io.Serializable {
 	private Integer interestLabelMaplId;
 	private Interestcard interestcard;
 	private Globalinterestlabel globalinterestlabel;
-	private Integer order;
+	private Integer labelOrder;
 	private Integer matchCount;
 	private String validFlag;
 
@@ -37,7 +38,7 @@ public class Interestlabelmap implements java.io.Serializable {
 			Integer matchCount, String validFlag) {
 		this.interestcard = interestcard;
 		this.globalinterestlabel = globalinterestlabel;
-		this.order = order;
+		this.labelOrder = order;
 		this.matchCount = matchCount;
 		this.validFlag = validFlag;
 	}
@@ -64,7 +65,7 @@ public class Interestlabelmap implements java.io.Serializable {
 		this.interestcard = interestcard;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "globalInterestLabelId", nullable = false)
 	public Globalinterestlabel getGlobalinterestlabel() {
 		return this.globalinterestlabel;
@@ -74,13 +75,13 @@ public class Interestlabelmap implements java.io.Serializable {
 		this.globalinterestlabel = globalinterestlabel;
 	}
 
-	@Column(name = "order", nullable = false)
-	public Integer getOrder() {
-		return this.order;
+	@Column(name = "labelOrder", nullable = false)
+	public Integer getlabelOrder() {
+		return this.labelOrder;
 	}
 
-	public void setOrder(Integer order) {
-		this.order = order;
+	public void setLabelOrder(Integer labelOrder) {
+		this.labelOrder = labelOrder;
 	}
 
 	@Column(name = "matchCount", nullable = false)

@@ -1,5 +1,6 @@
 package com.simplelife.renhai.server.db;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -54,7 +55,7 @@ public class Impresslabelmap implements java.io.Serializable {
 		this.impressLabelMaplId = impressLabelMaplId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "globalImpressLabelId", nullable = false)
 	public Globalimpresslabel getGlobalimpresslabel() {
 		return this.globalimpresslabel;

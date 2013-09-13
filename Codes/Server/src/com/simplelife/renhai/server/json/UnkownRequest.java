@@ -11,6 +11,7 @@ package com.simplelife.renhai.server.json;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 
 /**
@@ -33,7 +34,15 @@ public class UnkownRequest extends AppJSONMessage
 	@Override
 	public void run()
 	{
-    	responseError(Consts.MessageId.UnkownRequest.name());
+		String messageId = Consts.MessageId.UnkownRequest.name();  
+		if (header != null)
+		{
+			if (header.containsKey(JSONKey.MessageId))
+			{
+				messageId = header.getString(JSONKey.MessageId);
+			}
+		}
+		responseError(messageId);
 	}
 
 	/* (non-Javadoc)

@@ -122,6 +122,7 @@ public class OnlineDevicePool extends AbstractDevicePool
         return deviceWrapper;
     }
     
+    
     /** */
     public void releaseDevice(IDeviceWrapper deviceWrapper)
     {
@@ -186,8 +187,20 @@ public class OnlineDevicePool extends AbstractDevicePool
     		return;
     	}
     	
-    	tmpDeviceMap.remove(connection.getConnectionId());
-    	deviceMap.put(deviceWrapper.getDeviceSn(), deviceWrapper);
+    	if (deviceMap.containsKey(deviceWrapper.getDeviceSn()))
+    	{
+    		return;
+    	}
+    	
+    	synchronized(tmpDeviceMap)
+    	{
+    		tmpDeviceMap.remove(connection.getConnectionId());
+    	}
+    	
+    	synchronized(deviceMap)
+    	{
+    		deviceMap.put(deviceWrapper.getDeviceSn(), deviceWrapper);
+    	}
     }
 
 	@Override

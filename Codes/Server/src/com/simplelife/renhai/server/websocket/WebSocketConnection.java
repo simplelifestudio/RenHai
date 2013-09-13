@@ -131,7 +131,15 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	Logger logger = WebSocketModule.instance.getLogger();
     	logger.debug("Text message received.");
     	
-    	JSONObject obj = JSONObject.parseObject(message);
+    	JSONObject obj = null;
+    	try
+    	{
+    		obj = JSONObject.parseObject(message);
+    	}
+    	catch(Exception e)
+    	{
+    	}
+    	
     	AppJSONMessage appMessage;
 		if (obj == null)
 		{
@@ -250,7 +258,9 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     /** */
     public void asyncSendMessage(ServerJSONMessage message) throws IOException
     {
-    	sendMessage(message.toString());
+    	JSONObject obj = new JSONObject();
+    	obj.put(JSONKey.JsonEnvelope, message.toJSONObject());
+    	sendMessage(obj.toJSONString());
     }
     
     /** */

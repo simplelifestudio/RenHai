@@ -14,6 +14,7 @@ import java.io.IOException;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
+import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
 
 
@@ -64,8 +65,13 @@ public class MockWebSocketConnection extends WebSocketConnection
     }
     
     /** */
-    public void onTextMessage()
+    @Override
+    public void onTextMessage(String message)
     {
+    	System.out.print("Send message by mock WebSocket connection: \n");
+    	System.out.print(message);
+    	
+    	super.onTextMessage(message);
     }
     
     /** */
@@ -84,7 +90,8 @@ public class MockWebSocketConnection extends WebSocketConnection
     		throw new IOException();
     	}
     	
-    	lastSentMessage = message.toJSONObject();
+    	lastSentMessage = new JSONObject();
+    	lastSentMessage.put(JSONKey.JsonEnvelope, message.toJSONObject());
     	sendMessage(lastSentMessage.toJSONString());
     }
     
@@ -110,7 +117,10 @@ public class MockWebSocketConnection extends WebSocketConnection
     	{
     		throw new IOException();
     	}
-    	lastSentMessage = message.toJSONObject();
+    	
+    	lastSentMessage = new JSONObject();
+    	lastSentMessage.put(JSONKey.JsonEnvelope, message.toJSONObject());
+
     	sendMessage(lastSentMessage.toJSONString());
     	return null;
     }
@@ -124,5 +134,10 @@ public class MockWebSocketConnection extends WebSocketConnection
     /** */
     public void close(int status)
     {
+    }
+    
+    public void clear()
+    {
+    	lastSentMessage = null;
     }
 }

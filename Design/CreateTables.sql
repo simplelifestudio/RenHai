@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50610
 File Encoding         : 65001
 
-Date: 2013-09-12 18:26:51
+Date: 2013-09-13 07:59:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -41,7 +41,7 @@ CREATE TABLE `devicecard` (
   `osVersion` varchar(128) NOT NULL,
   `appVersion` varchar(128) NOT NULL,
   `location` varchar(256) DEFAULT NULL,
-  `isJailed` enum('True','False') NOT NULL,
+  `isJailed` enum('Yes','No') NOT NULL,
   PRIMARY KEY (`deviceCardId`),
   KEY `devicecard_ibfk_1` (`deviceId`),
   CONSTRAINT `devicecard_ibfk_1` FOREIGN KEY (`deviceId`) REFERENCES `device` (`deviceId`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -134,7 +134,7 @@ CREATE TABLE `impresslabelmap` (
   PRIMARY KEY (`impressLabelMaplId`),
   KEY `fk_impressCardId_idx` (`impressCardId`),
   KEY `fk_globalImpressLabelId_idx` (`globalImpressLabelId`),
-  CONSTRAINT `fk_globalImpressLabelId` FOREIGN KEY (`globalImpressLabelId`) REFERENCES `globalimpresslabel` (`globalImpressLabelId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_globalImpressLabelId` FOREIGN KEY (`globalImpressLabelId`) REFERENCES `globalimpresslabel` (`globalImpressLabelId`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_impressCardId` FOREIGN KEY (`impressCardId`) REFERENCES `impresscard` (`impressCardId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -166,13 +166,13 @@ CREATE TABLE `interestlabelmap` (
   `interestLabelMaplId` int(11) NOT NULL AUTO_INCREMENT,
   `interestCardId` int(11) NOT NULL,
   `globalInterestLabelId` int(11) NOT NULL,
-  `order` int(11) NOT NULL,
+  `labelOrder` int(11) NOT NULL,
   `matchCount` int(11) NOT NULL,
   `validFlag` enum('Valid','Invalid') NOT NULL,
   PRIMARY KEY (`interestLabelMaplId`),
   KEY `interestCardId_idx` (`interestCardId`),
   KEY `fk_globalInterestLabelId_idx` (`globalInterestLabelId`),
-  CONSTRAINT `fk_globalInterestLabelId` FOREIGN KEY (`globalInterestLabelId`) REFERENCES `globalinterestlabel` (`globalInterestLabelId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_globalInterestLabelId` FOREIGN KEY (`globalInterestLabelId`) REFERENCES `globalinterestlabel` (`globalInterestLabelId`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_interestCardId` FOREIGN KEY (`interestCardId`) REFERENCES `interestcard` (`interestCardId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -318,13 +318,13 @@ CREATE TABLE `statisticsitem` (
 -- ----------------------------
 -- Records of statisticsitem
 -- ----------------------------
-INSERT INTO `statisticsitem` VALUES ('1', '0', '在线设备数');
-INSERT INTO `statisticsitem` VALUES ('2', '0', '随机业务设备数');
-INSERT INTO `statisticsitem` VALUES ('3', '0', '兴趣业务设备数');
-INSERT INTO `statisticsitem` VALUES ('4', '0', '处于聊天状态设备数');
-INSERT INTO `statisticsitem` VALUES ('5', '0', '随机聊天设备数');
-INSERT INTO `statisticsitem` VALUES ('6', '0', '兴趣聊天设备数');
-INSERT INTO `statisticsitem` VALUES ('7', '0', '热门标签');
+INSERT INTO `statisticsitem` VALUES ('1', '1', '在线设备数');
+INSERT INTO `statisticsitem` VALUES ('2', '2', '随机业务设备数');
+INSERT INTO `statisticsitem` VALUES ('3', '3', '兴趣业务设备数');
+INSERT INTO `statisticsitem` VALUES ('4', '4', '处于聊天状态设备数');
+INSERT INTO `statisticsitem` VALUES ('5', '5', '随机聊天设备数');
+INSERT INTO `statisticsitem` VALUES ('6', '6', '兴趣聊天设备数');
+INSERT INTO `statisticsitem` VALUES ('7', '7', '热门标签');
 
 -- ----------------------------
 -- Table structure for `systemmodule`
