@@ -10,11 +10,11 @@
 
 #import "RHInterestLabel.h"
 
-#define SERIALIZE_KEY_CARDID @"InterestCard.cardId"
-#define SERIALIZE_KEY_LABELLIST @"InterestCard.labelList"
+#define SERIALIZE_KEY_CARDID @"interestCard.interestCardId"
+#define SERIALIZE_KEY_LABELLIST @"interestCard.interestLabelList"
 
-#define JSON_KEY_CARDID @"cardId"
-#define JSON_KEY_LABELLIST @"labelList"
+#define JSON_KEY_CARDID @"interestCardId"
+#define JSON_KEY_LABELLIST @"interestLabelList"
 
 @interface RHInterestCard()
 {
@@ -25,7 +25,7 @@
 
 @implementation RHInterestCard
 
-@synthesize cardId = _cardId;
+@synthesize interestCardId = _interestCardId;
 
 #pragma mark - Public Methods
 
@@ -57,7 +57,7 @@
     if (![self isLabelExists:labelName])
     {
         RHInterestLabel* label = [[RHInterestLabel alloc] init];
-        label.name = labelName;
+        label.labelName = labelName;
         
         [_labelList setObject:label forKey:labelName];
         
@@ -89,7 +89,7 @@
     {
         [_labelList enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
             RHInterestLabel* label = (RHInterestLabel*)obj;
-            if ([label.name isEqualToString:labelName])
+            if ([label.labelName isEqualToString:labelName])
             {
                 flag = YES;
                 *stop = YES;
@@ -102,13 +102,27 @@
 
 #pragma mark - Private Methods
 
+-(id) _getOCardId
+{
+    id oCardId = nil;
+    if (0 >= _interestCardId)
+    {
+        oCardId = [NSNull null];
+    }
+    else
+    {
+        oCardId = [NSNumber numberWithInteger:_interestCardId];
+    }
+    return oCardId;
+}
+
 #pragma mark - CBJSONable
 
 -(NSDictionary*) toJSONObject
 {
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
-    NSNumber* oCardId = [NSNumber numberWithInteger:_cardId];
+    id oCardId = [self _getOCardId];
     [dic setObject:oCardId forKey:JSON_KEY_CARDID];
     
     [dic setObject:_labelList forKey:JSON_KEY_LABELLIST];
@@ -123,7 +137,7 @@
     if (self = [super init])
     {
         NSNumber* oCardId = [aDecoder decodeObjectForKey:SERIALIZE_KEY_CARDID];
-        _cardId = oCardId.integerValue;
+        _interestCardId = oCardId.integerValue;
         
         _labelList = [aDecoder decodeObjectForKey:SERIALIZE_KEY_LABELLIST];
     }
@@ -133,7 +147,7 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    NSNumber* oCardId = [NSNumber numberWithInteger:_cardId];
+    id oCardId = [self _getOCardId];
     [aCoder encodeObject:oCardId forKey:SERIALIZE_KEY_CARDID];
     
     [aCoder encodeObject:_labelList forKey:SERIALIZE_KEY_LABELLIST];

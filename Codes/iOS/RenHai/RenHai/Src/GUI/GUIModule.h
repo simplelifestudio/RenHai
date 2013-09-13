@@ -55,6 +55,17 @@
 #define NAVIGATIONBAR_TITLE_CONFIG NSLocalizedString(@"LeftBar_Config", nil)
 #define NAVIGATIONBAR_TITLE_HELP NSLocalizedString(@"LeftBar_Help", nil)
 
+#define NIB_ID_COLLECTIONLABELCELL @"RHCollectionLabelCell_iPhone"
+
+#define CELL_ID_INTERESTLABEL @"RHCollectionLabelCell_iPhone"
+#define CELL_ID_IMPRESSLABEL @"RHCollectionLabelCell_iPhone"
+
+#define REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW @"InterestLabelsHeaderView"
+#define REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW @"ServerInterestLabelsHeaderView"
+
+#define DELAY_UIREFRESHCONTROL_SHOW 0.75f
+#define DELAY_UIREFRESHCONTROL_RESET 0.75f
+
 typedef enum
 {
     LEFTBAR_CELL_HOME = 0,

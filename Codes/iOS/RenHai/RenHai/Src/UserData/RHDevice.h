@@ -15,6 +15,9 @@
 
 @interface RHDevice : NSObject <CBJSONable>
 
+@property (nonatomic) NSInteger deviceId;
+@property (nonatomic, strong) NSString* deviceSn;
+
 @property (nonatomic, strong) RHDeviceCard* deviceCard;
 @property (nonatomic, strong) NSMutableArray* profileList;
 

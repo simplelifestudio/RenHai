@@ -173,9 +173,9 @@ sup {
 
 <h2>102. Server数据同步请求 ServerDataSyncRequest &lt;--> 404. Server数据同步响应 ServerDataSyncResponse</h2>
 
-<h2>103. 业务会话请求 BusinessSessionRequest &lt;--> 业务会话响应 BusinessSessionResponse</h2>
+<h2>103. 业务会话请求 BusinessSessionRequest &lt;--> 405. 业务会话响应 BusinessSessionResponse</h2>
 
-<h2>300. 业务会话通知 BusinessSessionNotification &lt;--> 业务会话通知响应 BusinessSessionNotificationResponse</h2>
+<h2>300. 业务会话通知 BusinessSessionNotification &lt;--> 202. 业务会话通知响应 BusinessSessionNotificationResponse</h2>
 
 <h1>消息格式 MessageFormat</h1>
 
@@ -220,7 +220,6 @@ sup {
         "deviceCard":
         {
             "deviceCardId":"",
-            "deviceId":"",
             "registerTime":"",
             "deviceModel":"",
             "osVersion":"",
@@ -243,25 +242,25 @@ sup {
                 [
                     {
                         "globalInterestLabelId":"",
-                        "interestLabel":"",
+                        "interestLabelName":"",
                         "globalMatchCount":"",
-                        "order":"",
+                        "labelOrder":"",
                         "matchCount":"",
                         "validFlag":""
                     },
                     {
                         "globalInterestLabelId":"",
-                        "interestLabel":"",
+                        "interestLabelName":"",
                         "globalMatchCount":"",
-                        "order":"",
+                        "labelOrder":"",
                         "matchCount":"",
                         "validFlag":""
                     },
                     {
                         "globalInterestLabelId":"",
-                        "interestLabel":"",
+                        "interestLabelName":"",
                         "globalMatchCount":"",
-                        "order":"",
+                        "labelOrder":"",
                         "matchCount":"",
                         "validFlag":""
                     }
@@ -273,26 +272,50 @@ sup {
                 "chatTotalCount":"",
                 "chatTotalDuration":"",
                 "chatLossCount":"",
-                "impressLabelList": // 这里还是别扭，三个评分标签也在里面
+                "assessLabelList":
+                {
+                    {
+                        "impressLabelName":"",
+                        "globalImpressLabelId":"",
+                        "assessedCount":"",
+                        "updateTime":"",
+                        "assessCount":""
+                    },
+                    {
+                        "impressLabelName":"",
+                        "globalImpressLabelId":"",
+                        "assessedCount":"",
+                        "updateTime":"",
+                        "assessCount":""
+                    },
+                    {
+                        "impressLabelName":"",
+                        "globalImpressLabelId":"",
+                        "assessedCount":"",
+                        "updateTime":"",
+                        "assessCount":""
+                    }                   
+                }
+                "impressLabelList":
                 [
                     {
-                        "impressLabel":"",
+                        "impressLabelName":"",
                         "globalImpressLabelId":"",
-                        "count":"",
+                        "assessedCount":"",
                         "updateTime":"",
                         "assessCount":""
                     },
                     {
-                        "impressLabel":"",
+                        "impressLabelName":"",
                         "globalImpressLabelId":"",
-                        "count":"",
+                        "assessedCount":"",
                         "updateTime":"",
                         "assessCount":""
                     },
                     {
-                        "impressLabel":"",
+                        "impressLabelName":"",
                         "globalImpressLabelId":"",
-                        "count":"",
+                        "assessedCount":"",
                         "updateTime":"",
                         "assessCount":""
                     }
@@ -419,6 +442,7 @@ sup {
                         "chatTotalCount":"",
                         "chatTotalDuration":"",
                         "chatLossCount":"",
+                        "assessLabelList":"",
                         "impressLabelList":"7"
                     }
                 }
@@ -433,7 +457,6 @@ sup {
                 "deviceCard":
                 {
                     "deviceCardId":"",
-                    "deviceId":"",
                     "registerTime":"",
                     "deviceModel":"",
                     "osVersion":"",
@@ -456,25 +479,25 @@ sup {
                         [
                             {
                                 "globalInterestLabelId":"",
-                                "interestLabel":"",
+                                "interestLabelName":"",
                                 "globalMatchCount":"",
-                                "order":"",
+                                "labelOrder":"",
                                 "matchCount":"",
                                 "validFlag":""
                             },
                             {
                                 "globalInterestLabelId":"",
-                                "interestLabel":"",
+                                "interestLabelName":"",
                                 "globalMatchCount":"",
-                                "order":"",
+                                "labelOrder":"",
                                 "matchCount":"",
                                 "validFlag":""
                             },
                             {
                                 "globalInterestLabelId":"",
-                                "interestLabel":"",
+                                "interestLabelName":"",
                                 "globalMatchCount":"",
-                                "order":"",
+                                "labelOrder":"",
                                 "matchCount":"",
                                 "validFlag":""
                             }
@@ -486,26 +509,27 @@ sup {
                         "chatTotalCount":"",
                         "chatTotalDuration":"",
                         "chatLossCount":"",
+                        "assessLabelList":"",
                         "impressLabelList":
                         [
                             {
-                                "impressLabel":"",
+                                "impressLabelName":"",
                                 "globalImpressLabelId":"",
-                                "count":"",
+                                "assessedCount":"",
                                 "updateTime":"",
                                 "assessCount":""
                             },
                             {
-                                "impressLabel":"",
+                                "impressLabelName":"",
                                 "globalImpressLabelId":"",
-                                "count":"",
+                                "assessedCount":"",
                                 "updateTime":"",
                                 "assessCount":""
                             },
                             {
-                                "impressLabel":"",
+                                "impressLabelName":"",
                                 "globalImpressLabelId":"",
-                                "count":"",
+                                "assessedCount":"",
                                 "updateTime":"",
                                 "assessCount":""
                             }

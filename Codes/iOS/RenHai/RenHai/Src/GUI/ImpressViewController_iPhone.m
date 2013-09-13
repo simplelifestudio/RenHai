@@ -23,11 +23,11 @@
 
 #define SECTION_INDEX_LABELS 2
 
-#define CELL_ID_IMPRESSCARDLABEL @"RHCollectionLabelCell_iPhone"
-
 @interface ImpressViewController_iPhone ()
 {
     GUIModule* _guiModule;
+    
+    UIRefreshControl* _refresher;
 }
 
 @end
@@ -72,9 +72,9 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView dequeueReusableCellWithReuseIdentifier:CELL_ID_IMPRESSCARDLABEL forIndexPath:indexPath];
+    RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView dequeueReusableCellWithReuseIdentifier:CELL_ID_IMPRESSLABEL forIndexPath:indexPath];
 
-    cell.textField.text = @"标签";
+    cell.textField.text = @"印象标签";
     cell.countLabel.text = @"9";
     
     return cell;
@@ -94,8 +94,48 @@
 
 -(void)_setupCollectionView
 {
-    UINib* nib = [UINib nibWithNibName:CELL_ID_IMPRESSCARDLABEL bundle:nil];
-    [self.collectionView registerNib:nib forCellWithReuseIdentifier:CELL_ID_IMPRESSCARDLABEL];
+    UINib* nib = [UINib nibWithNibName:NIB_ID_COLLECTIONLABELCELL bundle:nil];
+    [self.collectionView registerNib:nib forCellWithReuseIdentifier:CELL_ID_IMPRESSLABEL];
+    
+    [self _setupRefresher];
+}
+
+-(void)_setupRefresher
+{
+    [self _resetRefresher];
+    [_refresher addTarget:self action:@selector(_onPullToRefresh) forControlEvents:UIControlEventValueChanged];
+    [self.collectionView addSubview:_refresher];
+}
+
+-(void)_onPullToRefresh
+{
+    _refresher.attributedTitle = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"Common_Refreshing", nil)];
+    
+    [self performSelector:@selector(_refreshImpressData) withObject:nil afterDelay:DELAY_UIREFRESHCONTROL_SHOW];
+}
+
+-(void)_resetRefresher
+{
+    if (nil == _refresher)
+    {
+        _refresher = [[UIRefreshControl alloc] init];
+    }
+    
+    [self performSelector:@selector(_resetRefresherTitle) withObject:nil afterDelay:DELAY_UIREFRESHCONTROL_RESET];
+}
+
+-(void)_resetRefresherTitle
+{
+    _refresher.attributedTitle = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"Common_PullToRefresh", nil)];
+}
+
+-(void)_refreshImpressData
+{
+    sleep(1);
+    
+    [_refresher endRefreshing];
+    
+    [self _resetRefresher];
 }
 
 -(void)_setupNavigationBar

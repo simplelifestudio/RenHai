@@ -13,12 +13,21 @@
 #import "RHInterestCard.h"
 #import "RHImpressCard.h"
 
+typedef enum
+{
+    ServiceStatusNormal = 0,
+    ServiceStatusBanned = 1
+}
+RHProfileServieStatus;
+
 @interface RHProfile : NSObject <CBJSONable>
 
 @property (nonatomic) NSInteger profileId;
+@property (nonatomic) RHProfileServieStatus serviceStatus;
+@property (nonatomic, strong) NSDate* unbanDate;
+@property (nonatomic) BOOL active;
+@property (nonatomic, strong) NSDate* createTime;
 @property (nonatomic, strong) RHInterestCard* interestCard;
 @property (nonatomic, strong) RHImpressCard* impressCard;
-@property (nonatomic, strong) NSDate* lastActivityTime; // This field might not be necessary in App.
-@property (nonatomic, strong) NSDate* createTime;
 
 @end

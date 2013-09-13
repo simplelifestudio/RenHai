@@ -13,5 +13,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UILabel *countLabel;
 
+- (IBAction)textFieldDoneEditing:(id)sender;
 
 @end

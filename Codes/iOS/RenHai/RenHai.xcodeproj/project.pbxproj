@@ -112,6 +112,10 @@
 		C55B446817CF8632009BB21B /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C55B445B17CF8632009BB21B /* Icon@2x.png */; };
 		C55B446917CF8632009BB21B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = C55B445C17CF8632009BB21B /* iTunesArtwork */; };
 		C55B446A17CF8632009BB21B /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = C55B445C17CF8632009BB21B /* iTunesArtwork */; };
+		C580526D17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C580526C17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m */; };
+		C580526E17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C580526C17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m */; };
+		C580527117E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C580527017E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m */; };
+		C580527217E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C580527017E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m */; };
 		C593C41517D2F55B00C26367 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C593C41417D2F55B00C26367 /* MainStoryboard_iPhone.storyboard */; };
 		C593C41817D2F5BF00C26367 /* HomeViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C41717D2F5BF00C26367 /* HomeViewController_iPhone.m */; };
 		C593C41B17D3244000C26367 /* AppDataModule.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C41A17D3244000C26367 /* AppDataModule.m */; };
@@ -303,6 +307,10 @@
 		C55B445A17CF8632009BB21B /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		C55B445B17CF8632009BB21B /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		C55B445C17CF8632009BB21B /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
+		C580526B17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InterestLabelsHeaderView_iPhone.h; sourceTree = "<group>"; };
+		C580526C17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InterestLabelsHeaderView_iPhone.m; sourceTree = "<group>"; };
+		C580526F17E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerInterestLabelsHeaderView_iPhone.h; sourceTree = "<group>"; };
+		C580527017E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerInterestLabelsHeaderView_iPhone.m; sourceTree = "<group>"; };
 		C593C41417D2F55B00C26367 /* MainStoryboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
 		C593C41617D2F5BF00C26367 /* HomeViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController_iPhone.h; sourceTree = "<group>"; };
 		C593C41717D2F5BF00C26367 /* HomeViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController_iPhone.m; sourceTree = "<group>"; };
@@ -729,6 +737,10 @@
 				C53A7F0F17DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.h */,
 				C53A7F1017DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m */,
 				C53A7F1317DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib */,
+				C580526B17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.h */,
+				C580526C17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m */,
+				C580526F17E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.h */,
+				C580527017E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m */,
 			);
 			path = GUI;
 			sourceTree = "<group>";
@@ -1052,6 +1064,8 @@
 				C54DC8E417DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.m in Sources */,
 				C54DC8EA17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */,
 				C53A7F1117DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m in Sources */,
+				C580526D17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m in Sources */,
+				C580527117E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1122,6 +1136,8 @@
 				C54DC8E517DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.m in Sources */,
 				C54DC8EB17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */,
 				C53A7F1217DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m in Sources */,
+				C580526E17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m in Sources */,
+				C580527217E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

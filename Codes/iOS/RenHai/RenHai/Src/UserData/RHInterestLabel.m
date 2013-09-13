@@ -8,22 +8,29 @@
 
 #import "RHInterestLabel.h"
 
-#define SERIALIZE_KEY_LABELID @"InterestLabel.labelId"
-#define SERIALIZE_KEY_ORDER @"InterestLabel.order"
-#define SERIALIZE_KEY_MATCHCOUNT @"InterestLabel.matchCount"
-#define SERIALIZE_KEY_NAME @"InterestLabel.name"
+#define SERIALIZE_KEY_LABELID @"interestLabel.labelId"
+#define SERIALIZE_KEY_NAME @"interestLabel.interestLabelName"
+#define SERIALIZE_KEY_GLOBALMATCHCOUNT @"interestLabel.globalMatchCount"
+#define SERIALIZE_KEY_ORDER @"interestLabel.labelOrder"
+#define SERIALIZE_KEY_MATCHCOUNT @"interestLabel.matchCount"
+#define SERIALIZE_KEY_VALIDFLAG @"interestLabel.validFlag"
 
-#define JSON_KEY_LABELID @"labelId"
-#define JSON_KEY_ORDER @"order"
+
+#define JSON_KEY_LABELID @"globalInterestLabelId"
+#define JSON_KEY_NAME @"impressLabelName"
+#define JSON_KEY_GLOBALMATCHCOUNT @"globalMatchCount"
+#define JSON_KEY_ORDER @"labelOrder"
 #define JSON_KEY_MATCHCOUNT @"matchCount"
-#define JSON_KEY_NAME @"name"
+#define JSON_KEY_VALIDFLAG @"validFlag"
 
 @implementation RHInterestLabel
 
 @synthesize labelId = _labelId;
-@synthesize order = _order;
+@synthesize labelName = _labelName;
+@synthesize globalMatchCount = _globalMatchCount;
+@synthesize labelOrder = _labelOrder;
 @synthesize matchCount = _matchCount;
-@synthesize name = _name;
+@synthesize validFlag = _validFlag;
 
 #pragma mark - Public Methods
 
@@ -37,22 +44,44 @@
     return self;
 }
 
+#pragma mark - Private Methods
+
+-(id) _getOLabelId
+{
+    id oLabelId = nil;
+    if (0 >= _labelId)
+    {
+        oLabelId = [NSNull null];
+    }
+    else
+    {
+        oLabelId = [NSNumber numberWithInteger:_labelId];
+    }
+    return oLabelId;
+}
+
 #pragma mark - CBJSONable
 
 -(NSDictionary*) toJSONObject
 {
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
 
-    NSNumber* oLabelId = [NSNumber numberWithInteger:_labelId];
+    id oLabelId = [self _getOLabelId];
     [dic setObject:oLabelId forKey:SERIALIZE_KEY_LABELID];
+
+    [dic setObject:_labelName forKey:SERIALIZE_KEY_NAME];
+
+    NSNumber* oGlobalMatchCount = [NSNumber numberWithInteger:_globalMatchCount];
+    [dic setObject:oGlobalMatchCount forKey:SERIALIZE_KEY_GLOBALMATCHCOUNT];
     
-    NSNumber* oOrder = [NSNumber numberWithInteger:_order];
+    NSNumber* oOrder = [NSNumber numberWithInteger:_labelOrder];
     [dic setObject:oOrder forKey:SERIALIZE_KEY_ORDER];
     
     NSNumber* oMatchCount = [NSNumber numberWithInteger:_matchCount];
     [dic setObject:oMatchCount forKey:SERIALIZE_KEY_MATCHCOUNT];
     
-    [dic setObject:_name forKey:SERIALIZE_KEY_NAME];
+    NSNumber* oValidFlag = [NSNumber numberWithBool:_validFlag];
+    [dic setObject:oValidFlag forKey:SERIALIZE_KEY_VALIDFLAG];
     
     return dic;
 }
@@ -65,14 +94,16 @@
     {
         NSNumber* oLabelId = [aDecoder decodeObjectForKey:SERIALIZE_KEY_LABELID];
         _labelId = oLabelId.integerValue;
+
+        _labelName = [aDecoder decodeObjectForKey:SERIALIZE_KEY_NAME];
         
-        NSNumber* oOrder = [aDecoder decodeObjectForKey:SERIALIZE_KEY_ORDER];
-        _order = oOrder.integerValue;
+        _globalMatchCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_GLOBALMATCHCOUNT];
         
-        NSNumber* oMatchCount = [aDecoder decodeObjectForKey:SERIALIZE_KEY_MATCHCOUNT];
-        _matchCount = oMatchCount.integerValue;
+        _labelOrder = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_ORDER];
         
-        _name = [aDecoder decodeObjectForKey:SERIALIZE_KEY_NAME];
+        _matchCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_MATCHCOUNT];
+        
+        _validFlag = [aDecoder decodeBoolForKey:SERIALIZE_KEY_VALIDFLAG];
     }
     
     return self;
@@ -80,16 +111,18 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    NSNumber* oLabelId = [NSNumber numberWithInteger:_labelId];
+    id oLabelId = [self _getOLabelId];
     [aCoder encodeObject:oLabelId forKey:SERIALIZE_KEY_LABELID];
+
+    [aCoder encodeObject:_labelName forKey:SERIALIZE_KEY_NAME];
     
-    NSNumber* oOrder = [NSNumber numberWithInteger:_order];
-    [aCoder encodeObject:oOrder forKey:SERIALIZE_KEY_ORDER];
+    [aCoder encodeInteger:_globalMatchCount forKey:SERIALIZE_KEY_GLOBALMATCHCOUNT];
     
-    NSNumber* oMatchCount = [NSNumber numberWithInteger:_matchCount];
-    [aCoder encodeObject:oMatchCount forKey:SERIALIZE_KEY_MATCHCOUNT];
+    [aCoder encodeInteger:_labelOrder forKey:SERIALIZE_KEY_ORDER];
     
-    [aCoder encodeObject:_name forKey:SERIALIZE_KEY_NAME];
+    [aCoder encodeInteger:_matchCount forKey:SERIALIZE_KEY_MATCHCOUNT];
+    
+    [aCoder encodeBool:_validFlag forKey:SERIALIZE_KEY_VALIDFLAG];
 }
 
 @end

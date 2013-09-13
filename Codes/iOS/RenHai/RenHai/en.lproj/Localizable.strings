@@ -8,6 +8,8 @@
 
 "Common_Yes" = "Yes";
 "Common_No" = "No";
+"Common_PullToRefresh" = "Pull to Refresh";
+"Common_Refreshing" = "Refreshing...";
 
 "DeviceCard_DeviceModel" = "Model";
 "DeviceCard_OSVersion" = "OS";

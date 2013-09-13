@@ -14,9 +14,10 @@
 
 @interface RHImpressCard : NSObject <CBJSONable>
 
-@property (nonatomic) NSUInteger cardId;
+@property (nonatomic) NSUInteger impressCardId;
 
-@property (nonatomic, strong) NSMutableArray* labelList;
+@property (nonatomic, strong, readonly) NSArray* assessLabelList;
+@property (nonatomic, strong) NSMutableArray* impressLabelList;
 
 @property (nonatomic) NSUInteger chatTotalCount;
 @property (nonatomic) NSUInteger chatTotalDuration;
