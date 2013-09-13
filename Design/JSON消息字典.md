@@ -106,25 +106,25 @@ Server接收到App消息后，向App回应的消息
 				[
 					{
 						"globalInterestLabelId":"",
-						"interestLabel":"",
+						"interestLabelName":"",
 						"globalMatchCount":"",
-						"order":"",
+						"labelOrder":"",
 						"matchCount":"",
 						"validFlag":""
 					},
 					{
 						"globalInterestLabelId":"",
-						"interestLabel":"",
+						"interestLabelName":"",
 						"globalMatchCount":"",
-						"order":"",
+						"labelOrder":"",
 						"matchCount":"",
 						"validFlag":""
 					},
 					{
 						"globalInterestLabelId":"",
-						"interestLabel":"",
+						"interestLabelName":"",
 						"globalMatchCount":"",
-						"order":"",
+						"labelOrder":"",
 						"matchCount":"",
 						"validFlag":""
 					}
@@ -139,21 +139,21 @@ Server接收到App消息后，向App回应的消息
 				"assessLabelList":
 				{
 					{
-						"impressLabel":"",
+						"impressLabelName":"",
 						"globalImpressLabelId":"",
 						"assessedCount":"",
 						"updateTime":"",
 						"assessCount":""
 					},
 					{
-						"impressLabel":"",
+						"impressLabelName":"",
 						"globalImpressLabelId":"",
 						"assessedCount":"",
 						"updateTime":"",
 						"assessCount":""
 					},
 					{
-						"impressLabel":"",
+						"impressLabelName":"",
 						"globalImpressLabelId":"",
 						"assessedCount":"",
 						"updateTime":"",
@@ -163,21 +163,21 @@ Server接收到App消息后，向App回应的消息
 				"impressLabelList":
 				[
 					{
-						"impressLabel":"",
+						"impressLabelName":"",
 						"globalImpressLabelId":"",
 						"assessedCount":"",
 						"updateTime":"",
 						"assessCount":""
 					},
 					{
-						"impressLabel":"",
+						"impressLabelName":"",
 						"globalImpressLabelId":"",
 						"assessedCount":"",
 						"updateTime":"",
 						"assessCount":""
 					},
 					{
-						"impressLabel":"",
+						"impressLabelName":"",
 						"globalImpressLabelId":"",
 						"assessedCount":"",
 						"updateTime":"",
@@ -324,25 +324,25 @@ App与Server通过消息交互完成的数据操作
 						[
 							{
 								"globalInterestLabelId":"",
-								"interestLabel":"",
+								"interestLabelName":"",
 								"globalMatchCount":"",
-								"order":"",
+								"labelOrder":"",
 								"matchCount":"",
 								"validFlag":""
 							},
 							{
 								"globalInterestLabelId":"",
-								"interestLabel":"",
+								"interestLabelName":"",
 								"globalMatchCount":"",
-								"order":"",
+								"labelOrder":"",
 								"matchCount":"",
 								"validFlag":""
 							},
 							{
 								"globalInterestLabelId":"",
-								"interestLabel":"",
+								"interestLabelName":"",
 								"globalMatchCount":"",
-								"order":"",
+								"labelOrder":"",
 								"matchCount":"",
 								"validFlag":""
 							}
@@ -358,21 +358,21 @@ App与Server通过消息交互完成的数据操作
 						"impressLabelList":
 						[
 							{
-								"impressLabel":"",
+								"impressLabelName":"",
 								"globalImpressLabelId":"",
 								"assessedCount":"",
 								"updateTime":"",
 								"assessCount":""
 							},
 							{
-								"impressLabel":"",
+								"impressLabelName":"",
 								"globalImpressLabelId":"",
 								"assessedCount":"",
 								"updateTime":"",
 								"assessCount":""
 							},
 							{
-								"impressLabel":"",
+								"impressLabelName":"",
 								"globalImpressLabelId":"",
 								"assessedCount":"",
 								"updateTime":"",
