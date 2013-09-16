@@ -4,7 +4,7 @@
 
 *.DS_Store
 
-Codes/iOS/RenHai/RenHai.xcworkspace/xcuserdata/motodexter.xcuserdatad/UserInterfaceState.xcuserstate
+*.xcbkptlist
 
 /Documents/~$数据表设计.xlsx
 
@@ -14,6 +14,6 @@ Codes/iOS/RenHai/RenHai.xcworkspace/xcuserdata/motodexter.xcuserdatad/UserInterf
 
 /Test/~$Server测试用例.xlsm
 
-*.xcbkptlist
+Codes/iOS/RenHai/RenHai.xcworkspace/xcuserdata/*.*
 
-Codes/iOS/RenHai/RenHai.xcworkspace/xcuserdata/motodexter.xcuserdatad/xcdebugger/Breakpoints.xcbkptlist
+Codes/iOS/RenHai/Pods/Pods.xcodeproj/xcuserdata/*.*
