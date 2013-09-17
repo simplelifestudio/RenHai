@@ -21,13 +21,13 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="穿过" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dix-5b-p0q" userLabel="label1">
-                                <rect key="frame" x="60" y="163" width="60" height="44"/>
+                                <rect key="frame" x="50" y="163" width="60" height="44"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="人海" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LCa-5k-1zF" userLabel="label2">
-                                <rect key="frame" x="110" y="213" width="100" height="88"/>
+                                <rect key="frame" x="100" y="213" width="100" height="88"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="40"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -39,7 +39,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="易生活工作室" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="MOv-da-WD3" userLabel="studioLabel">
-                                <rect key="frame" x="60" y="207" width="200" height="100"/>
+                                <rect key="frame" x="60" y="445" width="200" height="100"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -397,6 +397,7 @@
                     <connections>
                         <outlet property="enterButton" destination="Wmn-PD-PdJ" id="eRy-Rk-cO4"/>
                         <outlet property="enterButtonProgressView" destination="jnU-fI-8d8" id="wYr-7G-hqY"/>
+                        <outlet property="enterLabel" destination="ttM-mN-h2w" id="E6X-5v-V7A"/>
                         <outlet property="helpButton" destination="nCy-mU-nrv" id="5n0-VK-jjN"/>
                     </connections>
                 </viewController>
@@ -456,7 +457,7 @@
                                 <size key="customSize" width="90" height="64"/>
                             </collectionViewCell>
                         </cells>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImpressHeaderView" id="M2H-yy-fIG">
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImpressSectionHeaderView" id="M2H-yy-fIG" customClass="InterestLabelsHeaderView_iPhone">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
                             <autoresizingMask key="autoresizingMask"/>
                         </collectionReusableView>

@@ -23,6 +23,7 @@
 
 @synthesize enterButtonProgressView = _enterButtonProgressView;
 @synthesize enterButton = _enterButton;
+@synthesize enterLabel = _enterLabel;
 @synthesize helpButton = _helpButton;
 
 - (void)viewDidLoad
@@ -84,6 +85,7 @@
 {
     _enterButton.highlighted = YES;
     _enterButton.enabled = NO;
+    _enterLabel.hidden = YES;
     _helpButton.enabled = NO;
     
     self.navigationItem.leftBarButtonItem.enabled = NO;
@@ -96,6 +98,7 @@
 {
     _enterButton.highlighted = NO;
     _enterButton.enabled = YES;
+    _enterLabel.hidden = NO;
     _helpButton.enabled = YES;
     
     self.navigationItem.leftBarButtonItem.enabled = YES;
