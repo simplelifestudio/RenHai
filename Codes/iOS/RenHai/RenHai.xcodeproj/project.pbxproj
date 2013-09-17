@@ -197,6 +197,10 @@
 		C59E2C1817D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
+		CD32013A17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
+		CD32013B17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
+		CD32013C17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */; };
+		CD32013D17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -390,6 +394,9 @@
 		C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController_iPhone.m; sourceTree = "<group>"; };
 		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; };
+		CD32013717E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTableViewSwitcherCell_iPhone.h; sourceTree = "<group>"; };
+		CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTableViewSwitcherCell_iPhone.m; sourceTree = "<group>"; };
+		CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHTableViewSwitcherCell_iPhone.xib; sourceTree = "<group>"; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -731,6 +738,9 @@
 				C593C46217D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m */,
 				C593C45D17D32AC800C26367 /* ChatImpressViewController_iPhone.h */,
 				C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */,
+				CD32013717E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.h */,
+				CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */,
+				CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */,
 				C54DC8E117DC73DC00BBD498 /* RHTableViewLabelCell_iPhone.h */,
 				C54DC8E217DC73DC00BBD498 /* RHTableViewLabelCell_iPhone.m */,
 				C54DC8E317DC73DD00BBD498 /* RHTableViewLabelCell_iPhone.xib */,
@@ -887,6 +897,7 @@
 				C54DC8E617DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.xib in Resources */,
 				C54DC8EF17DD5ECE00BBD498 /* Localizable.strings in Resources */,
 				C53A7F1417DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib in Resources */,
+				CD32013C17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -920,6 +931,7 @@
 				C54DC8E717DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.xib in Resources */,
 				C54DC8F017DD5ECE00BBD498 /* Localizable.strings in Resources */,
 				C53A7F1517DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib in Resources */,
+				CD32013D17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1080,6 +1092,7 @@
 				C53A7F1117DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m in Sources */,
 				C580526D17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m in Sources */,
 				C580527117E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m in Sources */,
+				CD32013A17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1152,6 +1165,7 @@
 				C53A7F1217DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m in Sources */,
 				C580526E17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m in Sources */,
 				C580527217E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m in Sources */,
+				CD32013B17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

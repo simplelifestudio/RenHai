@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="DgF-zo-nqX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12F37" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="DgF-zo-nqX">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
     </dependencies>
@@ -20,8 +20,8 @@
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="穿过" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dix-5b-p0q" userLabel="label1">
-                                <rect key="frame" x="66" y="163" width="60" height="44"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="穿过" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="dix-5b-p0q" userLabel="label1">
+                                <rect key="frame" x="60" y="163" width="60" height="44"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
@@ -33,8 +33,8 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="来你面前" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fet-Pn-p8B" userLabel="label3">
-                                <rect key="frame" x="154" y="313" width="120" height="44"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="22"/>
+                                <rect key="frame" x="156" y="313" width="120" height="44"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -62,23 +62,26 @@
         <scene sceneID="2XR-3H-66m">
             <objects>
                 <viewController storyboardIdentifier="config_iphone" id="Hx6-hH-w8F" customClass="ConfigViewController_iPhone" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="H1F-lY-EeO">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="FGr-2F-H8R">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="配置" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5fK-CA-AKv">
-                                <rect key="frame" x="120" y="252" width="80" height="44"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="RHTableViewSwitcherCell_iPhone" id="miR-gu-1Ir">
+                                <rect key="frame" x="0.0" y="46" width="320" height="45"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                    <rect key="frame" x="10" y="1" width="300" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                </view>
+                            </tableViewCell>
+                        </prototypes>
+                    </tableView>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L7e-o9-YOz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-317" y="1178"/>
+            <point key="canvasLocation" x="-327" y="1178"/>
         </scene>
         <!--Chat Impress View Controller i Phone-->
         <scene sceneID="bn4-Bc-kHz">
@@ -167,7 +170,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9vd-TX-Lng" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-317" y="-327"/>
+            <point key="canvasLocation" x="-327" y="-327"/>
         </scene>
         <!--Help View Controller i Phone-->
         <scene sceneID="YZc-Dp-bQm">
@@ -189,7 +192,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BPW-TB-TDH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="110" y="424"/>
+            <point key="canvasLocation" x="117" y="424"/>
         </scene>
         <!--Chat Wait View Controller i Phone-->
         <scene sceneID="lxn-CJ-Ljo">
@@ -211,7 +214,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SpY-7A-QfI" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="546" y="424"/>
+            <point key="canvasLocation" x="541" y="424"/>
         </scene>
         <!--Chat Confirm View Controller i Phone-->
         <scene sceneID="LvM-7V-czb">
@@ -233,7 +236,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iEh-wB-Ngp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="952" y="424"/>
+            <point key="canvasLocation" x="952" y="420"/>
         </scene>
         <!--Chat WebRTC View Controller i Phone-->
         <scene sceneID="gbj-pg-eqa">
@@ -255,7 +258,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mov-Tt-rJQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1352" y="420"/>
+            <point key="canvasLocation" x="1356" y="420"/>
         </scene>
         <!--Home View Controller i Phone-->
         <scene sceneID="lRd-QE-GlH">
@@ -363,7 +366,7 @@
         <scene sceneID="chS-id-q6j">
             <objects>
                 <viewController storyboardIdentifier="device_iphone" id="Fe4-oS-0Lu" customClass="DeviceViewController_iPhone" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="O8g-zJ-AUf">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="O8g-zJ-AUf">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -564,7 +567,7 @@
         <class className="ChatWebRTCViewController_iPhone" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ChatWebRTCViewController_iPhone.h"/>
         </class>
-        <class className="ConfigViewController_iPhone" superclassName="UIViewController">
+        <class className="ConfigViewController_iPhone" superclassName="UITableViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/ConfigViewController_iPhone.h"/>
         </class>
         <class className="DeviceViewController_iPhone" superclassName="UITableViewController">
@@ -658,6 +661,9 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
+        </class>
+        <class className="UICollectionViewLayout" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
         <class className="WarningViewController_iPhone" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/WarningViewController_iPhone.h"/>

@@ -10,6 +10,8 @@
 
 @interface RHTableViewLabelCell_iPhone : UITableViewCell
 
++(RHTableViewLabelCell_iPhone*) configureFlatCellWithColor:(UIColor *)color selectedColor:(UIColor *)selectedColor style:(UITableViewCellStyle)style reuseIdentifier:(NSString*)reuseIdentifier;
+
 @property (weak, nonatomic) IBOutlet UILabel *majorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *minorLabel;
 

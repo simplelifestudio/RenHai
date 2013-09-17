@@ -11,14 +11,14 @@
 "Common_PullToRefresh" = "Pull to Refresh";
 "Common_Refreshing" = "Refreshing...";
 
-"DeviceCard_DeviceModel" = "Model";
-"DeviceCard_OSVersion" = "OS";
-"DeviceCard_IsJailed" = "Jailed";
-"DeviceCard_DeviceSN" = "SN";
-"DeviceCard_AppVersion" = "App";
-"DeviceCard_RegisterTime" = "Reg Time";
-"DeviceCard_ServiceStatus" = "Status";
-"DeviceCard_ForbiddenExpiredDate" = "Banned";
+"Device_DeviceModel" = "Model";
+"Device_OSVersion" = "OS";
+"Device_IsJailed" = "Jailed";
+"Device_DeviceSN" = "SN";
+"Device_AppVersion" = "App";
+"Device_RegisterTime" = "Reg Time";
+"Device_ServiceStatus" = "Status";
+"Device_UnbanDate" = "Unban Date";
 
 "LeftBar_Home" = "Home";
 "LeftBar_Device" = "Device";
@@ -26,3 +26,7 @@
 "LeftBar_Interest" = "Interest";
 "LeftBar_Config" = "Config";
 "LeftBar_Help" = "Help";
+
+"Config_PushNotification" = "Push Notification";
+"Config_Broadcast" = "Broadcast";
+"Config_ChatOn3G" = "Connect on 3G";

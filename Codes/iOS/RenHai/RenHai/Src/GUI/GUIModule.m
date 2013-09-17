@@ -15,6 +15,10 @@
 
 #import "UIFont+FlatUI.h"
 
+#import "GUIStyle.h"
+
+#import "RHTableViewLabelCell_iPhone.h"
+
 
 @interface GUIModule()
 {

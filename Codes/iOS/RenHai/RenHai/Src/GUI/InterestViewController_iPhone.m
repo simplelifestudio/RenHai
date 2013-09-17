@@ -88,10 +88,10 @@
 
 -(void)_setupCollectionView
 {
-    UINib* nib = [UINib nibWithNibName:NIB_ID_COLLECTIONLABELCELL bundle:nil];
+    UINib* nib = [UINib nibWithNibName:NIB_COLLECTIONCELL_LABEL bundle:nil];
     
-    [_interestLabelCollectionView registerNib:nib forCellWithReuseIdentifier:CELL_ID_INTERESTLABEL];
-    [_serverInterestLabelCollectionView registerNib:nib forCellWithReuseIdentifier:CELL_ID_INTERESTLABEL];
+    [_interestLabelCollectionView registerNib:nib forCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL];
+    [_serverInterestLabelCollectionView registerNib:nib forCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL];
     
     [_interestLabelCollectionView registerClass:[InterestLabelsHeaderView_iPhone class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW];
     [_serverInterestLabelCollectionView registerClass:[ServerInterestLabelsHeaderView_iPhone class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW];
@@ -203,7 +203,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[cv dequeueReusableCellWithReuseIdentifier:CELL_ID_INTERESTLABEL forIndexPath:indexPath];
+    RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[cv dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL forIndexPath:indexPath];
     
     if (cv == _interestLabelCollectionView)
     {

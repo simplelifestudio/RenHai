@@ -32,10 +32,6 @@
 #define ITEM_INDEX_SERVICESTATUS 2
 #define ITEM_INDEX_FORBIDDENEXPIREDDATE 3
 
-#define CELL_ID_DEVICEITEM @"RHTableViewLabelCell_iPhone"
-
-#define NIB_TABLEVIEWLABELCELL @"RHTableViewLabelCell_iPhone"
-
 @interface DeviceViewController_iPhone ()
 {
     GUIModule* _guiModule;
@@ -44,6 +40,8 @@
 @end
 
 @implementation DeviceViewController_iPhone
+
+#pragma mark - Public Methods
 
 - (void)viewDidLoad
 {
@@ -85,7 +83,9 @@
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    RHTableViewLabelCell_iPhone* cell = (RHTableViewLabelCell_iPhone*)[tableView dequeueReusableCellWithIdentifier:CELL_ID_DEVICEITEM forIndexPath:indexPath];
+//    RHTableViewLabelCell_iPhone* cell = (RHTableViewLabelCell_iPhone*)[tableView dequeueReusableCellWithIdentifier:TABLECELL_ID_DEVICEITEM forIndexPath:indexPath];
+    
+    RHTableViewLabelCell_iPhone* cell = [RHTableViewLabelCell_iPhone configureFlatCellWithColor:FLATUI_COLOR_TABLECELL selectedColor:FLATUI_COLOR_TABLECELL_SELECTED style:UITableViewCellStyleValue1 reuseIdentifier:TABLECELL_ID_LABELER];
     
     NSString* itemName = @"";
     NSString* itemVal = @"";
@@ -100,25 +100,25 @@
             {
                 case ITEM_INDEX_DEVICEMODEL:
                 {
-                    itemName = NSLocalizedString(@"DeviceCard_DeviceModel", nil);
+                    itemName = NSLocalizedString(@"Device_DeviceModel", nil);
                     itemVal = [UIDevice deviceSimpleModel];
                     break;
                 }
                 case ITEM_INDEX_OSVER:
                 {
-                    itemName = NSLocalizedString(@"DeviceCard_OSVersion", nil);
+                    itemName = NSLocalizedString(@"Device_OSVersion", nil);
                     itemVal = [UIDevice osVersion];
                     break;
                 }
                 case ITEM_INDEX_ISJAILED:
                 {
-                    itemName = NSLocalizedString(@"DeviceCard_IsJailed", nil);
+                    itemName = NSLocalizedString(@"Device_IsJailed", nil);
                     itemVal = ([UIDevice isJailed]) ? NSLocalizedString(@"Common_Yes", nil) : NSLocalizedString(@"Common_No", nil);
                     break;
                 }
                 case ITEM_INDEX_DEVICESN:
                 {
-                    itemName = NSLocalizedString(@"DeviceCard_DeviceSN", nil);
+                    itemName = NSLocalizedString(@"Device_DeviceSN", nil);
                     break;
                 }
                 default:
@@ -135,22 +135,22 @@
             {
                 case ITEM_INDEX_APPVER:
                 {
-                    itemName = NSLocalizedString(@"DeviceCard_AppVersion", nil);                    
+                    itemName = NSLocalizedString(@"Device_AppVersion", nil);                    
                     break;
                 }
                 case ITEM_INDEX_REGTIME:
                 {
-                    itemName = NSLocalizedString(@"DeviceCard_RegisterTime", nil);                    
+                    itemName = NSLocalizedString(@"Device_RegisterTime", nil);                    
                     break;
                 }
                 case ITEM_INDEX_SERVICESTATUS:
                 {
-                    itemName = NSLocalizedString(@"DeviceCard_ServiceStatus", nil);
+                    itemName = NSLocalizedString(@"Device_ServiceStatus", nil);
                     break;
                 }
                 case ITEM_INDEX_FORBIDDENEXPIREDDATE:
                 {
-                    itemName = NSLocalizedString(@"DeviceCard_ForbiddenExpiredDate", nil);                    
+                    itemName = NSLocalizedString(@"Device_UnbanDate", nil);                    
                     break;
                 }
                 default:
@@ -179,8 +179,8 @@
 
 -(void)_setupTableView
 {
-    UINib* nib = [UINib nibWithNibName:NIB_TABLEVIEWLABELCELL bundle:nil];
-    [self.tableView registerNib:nib forCellReuseIdentifier:CELL_ID_DEVICEITEM];
+    UINib* nib = [UINib nibWithNibName:NIB_TABLECELL_LABELER bundle:nil];
+    [self.tableView registerNib:nib forCellReuseIdentifier:TABLECELL_ID_DEVICEITEM];
 }
 
 -(void)_setupNavigationBar

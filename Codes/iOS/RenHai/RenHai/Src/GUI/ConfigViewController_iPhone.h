@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ConfigViewController_iPhone : UIViewController
+@interface ConfigViewController_iPhone : UITableViewController <UITableViewDelegate, UITableViewDataSource>
 
 @end

@@ -8,12 +8,40 @@
 
 #import "RHTableViewLabelCell_iPhone.h"
 
+#import "CBUIUtils.h"
+
+#import "GUIModule.h"
 #import "GUIStyle.h"
 
 @implementation RHTableViewLabelCell_iPhone
 
 @synthesize majorLabel = _majorLabel;
 @synthesize minorLabel = _minorLabel;
+
+#pragma mark - Static Methods
+
++(RHTableViewLabelCell_iPhone*) configureFlatCellWithColor:(UIColor *)color selectedColor:(UIColor *)selectedColor style:(UITableViewCellStyle)style reuseIdentifier:(NSString*)reuseIdentifier
+{
+    RHTableViewLabelCell_iPhone* cell = [CBUIUtils componentFromNib:TABLECELL_ID_LABELER owner:nil options:nil];
+    
+    FUICellBackgroundView* backgroundView = [FUICellBackgroundView new];
+    backgroundView.backgroundColor = color;
+    cell.backgroundView = backgroundView;
+    
+    FUICellBackgroundView* selectedBackgroundView = [FUICellBackgroundView new];
+    selectedBackgroundView.backgroundColor = selectedColor;
+    cell.selectedBackgroundView = selectedBackgroundView;
+    
+    cell.majorLabel.backgroundColor = [UIColor clearColor];
+    cell.minorLabel.backgroundColor = [UIColor clearColor];
+    
+    cell.majorLabel.textColor = COLOR_TEXT_INFO;
+    cell.minorLabel.textColor = COLOR_TEXT_INFO;
+    
+    return cell;
+}
+
+#pragma mark - Public Methods
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -41,10 +69,7 @@
 
 -(void) _formatFlatUI
 {
-    [GUIStyle formatFlatUILabel:_majorLabel textColor:COLOR_TEXT_INFO];
-    [GUIStyle formatFlatUILabel:_minorLabel textColor:COLOR_TEXT_INFO];
-    
-    [RHTableViewLabelCell_iPhone configureFlatCellWithColor:[UIColor greenColor] selectedColor:FLATUI_COLOR_TABLECELL_SELECTED style:UITableViewCellStyleValue1 reuseIdentifier:@"RHTableViewLabelCell_iPhone"];
+
 }
 
 @end

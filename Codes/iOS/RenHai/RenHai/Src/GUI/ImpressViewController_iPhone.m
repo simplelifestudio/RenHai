@@ -72,7 +72,7 @@
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView dequeueReusableCellWithReuseIdentifier:CELL_ID_IMPRESSLABEL forIndexPath:indexPath];
+    RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_IMPRESSLABEL forIndexPath:indexPath];
 
     cell.textField.text = @"印象标签";
     cell.countLabel.text = @"9";
@@ -94,8 +94,8 @@
 
 -(void)_setupCollectionView
 {
-    UINib* nib = [UINib nibWithNibName:NIB_ID_COLLECTIONLABELCELL bundle:nil];
-    [self.collectionView registerNib:nib forCellWithReuseIdentifier:CELL_ID_IMPRESSLABEL];
+    UINib* nib = [UINib nibWithNibName:NIB_COLLECTIONCELL_LABEL bundle:nil];
+    [self.collectionView registerNib:nib forCellWithReuseIdentifier:COLLECTIONCELL_ID_IMPRESSLABEL];
     
     [self _setupRefresher];
 }

@@ -55,16 +55,24 @@
 #define NAVIGATIONBAR_TITLE_CONFIG NSLocalizedString(@"LeftBar_Config", nil)
 #define NAVIGATIONBAR_TITLE_HELP NSLocalizedString(@"LeftBar_Help", nil)
 
-#define NIB_ID_COLLECTIONLABELCELL @"RHCollectionLabelCell_iPhone"
+#define NIB_COLLECTIONCELL_LABEL @"RHCollectionLabelCell_iPhone"
 
-#define CELL_ID_INTERESTLABEL @"RHCollectionLabelCell_iPhone"
-#define CELL_ID_IMPRESSLABEL @"RHCollectionLabelCell_iPhone"
+#define COLLECTIONCELL_ID_INTERESTLABEL @"RHCollectionLabelCell_iPhone"
+#define COLLECTIONCELL_ID_IMPRESSLABEL @"RHCollectionLabelCell_iPhone"
 
 #define REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW @"InterestLabelsHeaderView"
 #define REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW @"ServerInterestLabelsHeaderView"
 
 #define DELAY_UIREFRESHCONTROL_SHOW 0.75f
 #define DELAY_UIREFRESHCONTROL_RESET 0.75f
+
+#define TABLECELL_ID_LABELER @"RHTableViewLabelCell_iPhone"
+#define NIB_TABLECELL_LABELER @"RHTableViewLabelCell_iPhone"
+
+#define TABLECELL_ID_SWITCHER @"RHTableViewSwitcherCell_iPhone"
+#define NIB_TABLECELL_SWITCHER @"RHTableViewSwitcherCell_iPhone"
+
+#define TABLECELL_ID_DEVICEITEM @"RHTableViewLabelCell_iPhone"
 
 typedef enum
 {
