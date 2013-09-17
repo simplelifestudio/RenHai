@@ -75,6 +75,9 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
         }
         
         [self layoutChanged];
+        
+        // Updated by RenHai
+        [self _fixCrashIssueOnceDragsCellIfKeyboardIsVisible];
     }
     return self;
 }
@@ -418,5 +421,35 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
     NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:mockCell.center];
     [self warpToIndexPath:indexPath];
 }
+
+// Updated by RenHai
+// {
+static BOOL _originEnableVal;
+static BOOL _isKeyboardVisible;
+-(void) _fixCrashIssueOnceDragsCellIfKeyboardIsVisible
+{    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onKeyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onKeyboardDidHide) name:UIKeyboardDidHideNotification object:nil];
+}
+
+-(void) _onKeyboardWillShow
+{
+    if (!_isKeyboardVisible)
+    {
+        _originEnableVal = self.enabled;
+        
+        _isKeyboardVisible = YES;
+    }
+    
+    self.enabled = NO;
+}
+
+-(void) _onKeyboardDidHide
+{
+    self.enabled = _originEnableVal;
+    
+    _isKeyboardVisible = NO;
+}
+// }
 
 @end
