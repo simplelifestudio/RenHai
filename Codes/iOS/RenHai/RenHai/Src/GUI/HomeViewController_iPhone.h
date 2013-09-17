@@ -15,7 +15,9 @@
 
 @property (weak, nonatomic) IBOutlet CBRoundProgressView *enterButtonProgressView;
 @property (weak, nonatomic) IBOutlet OBShapedButton *enterButton;
+@property (weak, nonatomic) IBOutlet FUIButton *helpButton;
 
 - (IBAction)onPressEnterButton:(id)sender;
+- (IBAction)onPressHelpButton:(id)sender;
 
 @end

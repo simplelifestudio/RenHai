@@ -77,10 +77,6 @@
     {
         _selectedRow = LEFTBAR_CELL_CONFIG;
     }
-    else if (presentingVC == _guiModule.helpViewController)
-    {
-        _selectedRow = LEFTBAR_CELL_HELP;
-    }
     
     [self.tableView reloadData];
     
@@ -137,11 +133,6 @@
             cellText = NAVIGATIONBAR_TITLE_CONFIG;
             break;
         }
-        case LEFTBAR_CELL_HELP:
-        {
-            cellText = NAVIGATIONBAR_TITLE_HELP;
-            break;
-        }
         default:
         {
             cellText = @"";
@@ -174,14 +165,17 @@
 {
     UINavigationController* navigationVC = _guiModule.navigationController;
     MainViewController_iPhone* mainVC = _guiModule.mainViewController;
-
+    
     NSInteger row = indexPath.row;
     switch (row)
     {
         case LEFTBAR_CELL_HOME:
         {
             [navigationVC popToRootViewControllerAnimated:NO];
-            [navigationVC pushViewController:_guiModule.homeViewController animated:NO];
+            if (navigationVC.visibleViewController != _guiModule.homeViewController)
+            {
+                [navigationVC pushViewController:_guiModule.homeViewController animated:NO];
+            }
             [mainVC showViewController:navigationVC animated:YES completion:nil];
             
             break;
@@ -214,14 +208,6 @@
         {
             [navigationVC popToRootViewControllerAnimated:NO];
             [navigationVC pushViewController:_guiModule.configViewController animated:NO];
-            [mainVC showViewController:navigationVC animated:YES completion:nil];
-            
-            break;
-        }
-        case LEFTBAR_CELL_HELP:
-        {
-            [navigationVC popToRootViewControllerAnimated:NO];
-            [navigationVC pushViewController:_guiModule.helpViewController animated:NO];
             [mainVC showViewController:navigationVC animated:YES completion:nil];
             
             break;

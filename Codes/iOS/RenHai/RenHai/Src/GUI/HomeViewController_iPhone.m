@@ -23,6 +23,7 @@
 
 @synthesize enterButtonProgressView = _enterButtonProgressView;
 @synthesize enterButton = _enterButton;
+@synthesize helpButton = _helpButton;
 
 - (void)viewDidLoad
 {
@@ -126,6 +127,12 @@ static float progress = 0.1;
     
     _enterButtonTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(_timerUpdated) userInfo:nil repeats:YES];
     [_enterButtonTimer fire];
+}
+
+- (IBAction)onPressHelpButton:(id)sender
+{
+    [_guiModule.helpViewController resetDisplayStatus];
+    [_guiModule.navigationController presentViewController:_guiModule.helpViewController animated:YES completion:nil];
 }
 
 #pragma mark - CBRoundProgressViewDelegate

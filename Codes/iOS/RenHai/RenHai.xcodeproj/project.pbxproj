@@ -201,6 +201,12 @@
 		CD32013B17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
 		CD32013C17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */; };
 		CD32013D17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */; };
+		CD734AA617E83E3000EF6CD4 /* help_01.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA017E83E3000EF6CD4 /* help_01.JPG */; };
+		CD734AA717E83E3000EF6CD4 /* help_02.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA117E83E3000EF6CD4 /* help_02.JPG */; };
+		CD734AA817E83E3000EF6CD4 /* help_03.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA217E83E3000EF6CD4 /* help_03.JPG */; };
+		CD734AA917E83E3000EF6CD4 /* help_04.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA317E83E3000EF6CD4 /* help_04.JPG */; };
+		CD734AAA17E83E3000EF6CD4 /* help_05.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA417E83E3000EF6CD4 /* help_05.JPG */; };
+		CD734AAB17E83E3000EF6CD4 /* help_06.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA517E83E3000EF6CD4 /* help_06.JPG */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -397,6 +403,12 @@
 		CD32013717E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTableViewSwitcherCell_iPhone.h; sourceTree = "<group>"; };
 		CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTableViewSwitcherCell_iPhone.m; sourceTree = "<group>"; };
 		CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHTableViewSwitcherCell_iPhone.xib; sourceTree = "<group>"; };
+		CD734AA017E83E3000EF6CD4 /* help_01.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_01.JPG; sourceTree = "<group>"; };
+		CD734AA117E83E3000EF6CD4 /* help_02.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_02.JPG; sourceTree = "<group>"; };
+		CD734AA217E83E3000EF6CD4 /* help_03.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_03.JPG; sourceTree = "<group>"; };
+		CD734AA317E83E3000EF6CD4 /* help_04.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_04.JPG; sourceTree = "<group>"; };
+		CD734AA417E83E3000EF6CD4 /* help_05.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_05.JPG; sourceTree = "<group>"; };
+		CD734AA517E83E3000EF6CD4 /* help_06.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_06.JPG; sourceTree = "<group>"; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -515,6 +527,12 @@
 		C55B441317CF587A009BB21B /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CD734AA017E83E3000EF6CD4 /* help_01.JPG */,
+				CD734AA117E83E3000EF6CD4 /* help_02.JPG */,
+				CD734AA217E83E3000EF6CD4 /* help_03.JPG */,
+				CD734AA317E83E3000EF6CD4 /* help_04.JPG */,
+				CD734AA417E83E3000EF6CD4 /* help_05.JPG */,
+				CD734AA517E83E3000EF6CD4 /* help_06.JPG */,
 				C54DC8C317DC069900BBD498 /* enterbutton_highlighted.png */,
 				C54DC8C417DC069900BBD498 /* enterbutton_highlighted@2x.png */,
 				C54DC8C517DC069900BBD498 /* enterbutton_normal.png */,
@@ -898,6 +916,12 @@
 				C54DC8EF17DD5ECE00BBD498 /* Localizable.strings in Resources */,
 				C53A7F1417DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib in Resources */,
 				CD32013C17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */,
+				CD734AA617E83E3000EF6CD4 /* help_01.JPG in Resources */,
+				CD734AA717E83E3000EF6CD4 /* help_02.JPG in Resources */,
+				CD734AA817E83E3000EF6CD4 /* help_03.JPG in Resources */,
+				CD734AA917E83E3000EF6CD4 /* help_04.JPG in Resources */,
+				CD734AAA17E83E3000EF6CD4 /* help_05.JPG in Resources */,
+				CD734AAB17E83E3000EF6CD4 /* help_06.JPG in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

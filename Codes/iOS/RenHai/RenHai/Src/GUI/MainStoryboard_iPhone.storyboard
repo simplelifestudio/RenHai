@@ -164,9 +164,6 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="7CO-W0-pfR">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
-                    <connections>
-                        <segue destination="KTb-47-hxa" kind="relationship" relationship="rootViewController" id="cMV-cy-XN3"/>
-                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9vd-TX-Lng" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -176,19 +173,48 @@
         <scene sceneID="YZc-Dp-bQm">
             <objects>
                 <viewController storyboardIdentifier="help_iphone" id="Imt-vO-xvM" customClass="HelpViewController_iPhone" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="JjY-o6-NsQ">
+                    <view key="view" contentMode="scaleToFill" id="JjY-o6-NsQ" userLabel="helpView">
                         <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="帮助" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Xu1-LP-xKk">
-                                <rect key="frame" x="120" y="252" width="80" height="44"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="WdT-NA-lby">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <subviews>
+                                    <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="9" id="oKY-uf-spv" userLabel="pageControl">
+                                        <rect key="frame" x="60" y="492" width="200" height="36"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <connections>
+                                            <action selector="onPageTurn:" destination="Imt-vO-xvM" eventType="valueChanged" id="6gN-Pu-pac"/>
+                                        </connections>
+                                    </pageControl>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="A7x-d0-d3Q" userLabel="closeButton" customClass="FUIButton">
+                                        <rect key="frame" x="124" y="441" width="73" height="44"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="关闭">
+                                            <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onClickCloseButton:" destination="Imt-vO-xvM" eventType="touchUpInside" id="Rc7-k4-uwz"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </scrollView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <connections>
+                        <outlet property="closeButton" destination="A7x-d0-d3Q" id="Mn6-Q1-vNS"/>
+                        <outlet property="helpView" destination="JjY-o6-NsQ" id="7As-ZG-jy0"/>
+                        <outlet property="pageControl" destination="oKY-uf-spv" id="mJC-Bo-9tq"/>
+                        <outlet property="scrollView" destination="WdT-NA-lby" id="uf0-OC-DLG"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BPW-TB-TDH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -265,16 +291,16 @@
             <objects>
                 <viewController storyboardIdentifier="home_iphone" id="KTb-47-hxa" customClass="HomeViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="e4l-i9-iJx">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="jnU-fI-8d8" userLabel="progressView" customClass="CBRoundProgressView">
-                                <rect key="frame" x="100" y="288" width="120" height="120"/>
+                                <rect key="frame" x="100" y="321" width="120" height="120"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Wmn-PD-PdJ" userLabel="enterButton" customClass="OBShapedButton">
-                                <rect key="frame" x="100" y="288" width="120" height="120"/>
+                                <rect key="frame" x="100" y="321" width="120" height="120"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal" title="Button" image="enterbutton_normal.png">
@@ -289,7 +315,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RoM-5d-5RC" userLabel="onlineDeviceCountValue5">
-                                <rect key="frame" x="20" y="108" width="40" height="50"/>
+                                <rect key="frame" x="20" y="118" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="40"/>
@@ -297,7 +323,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gEw-sh-86p" userLabel="onlineDeviceCountValue4">
-                                <rect key="frame" x="80" y="108" width="40" height="50"/>
+                                <rect key="frame" x="80" y="118" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="40"/>
@@ -305,7 +331,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JKn-0q-G7t" userLabel="onlineDeviceCountValue3">
-                                <rect key="frame" x="140" y="108" width="40" height="50"/>
+                                <rect key="frame" x="140" y="118" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="40"/>
@@ -313,7 +339,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ncg-rv-Jtn" userLabel="onlineDeviceCountValue2">
-                                <rect key="frame" x="200" y="108" width="40" height="50"/>
+                                <rect key="frame" x="200" y="118" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="40"/>
@@ -321,7 +347,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="H7v-a7-UBI" userLabel="onlineDeviceCountValue1">
-                                <rect key="frame" x="260" y="108" width="40" height="50"/>
+                                <rect key="frame" x="260" y="118" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="40"/>
@@ -329,26 +355,41 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="在线人数" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RbL-l7-KkM" userLabel="onlineDeviceCountLabel">
-                                <rect key="frame" x="30" y="28" width="260" height="60"/>
+                                <rect key="frame" x="30" y="30" width="260" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="点击进入人海" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ttM-mN-h2w" userLabel="enterLabel">
-                                <rect key="frame" x="40" y="435" width="240" height="44"/>
+                                <rect key="frame" x="40" y="476" width="240" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="信息栏" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xAC-9J-OUo" userLabel="infoScreen">
-                                <rect key="frame" x="20" y="191" width="280" height="66"/>
+                                <rect key="frame" x="20" y="207" width="280" height="71"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoDark" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="nCy-mU-nrv" userLabel="helpButton" customClass="FUIButton">
+                                <rect key="frame" x="282" y="507" width="18" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal">
+                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onPressHelpButton:" destination="KTb-47-hxa" eventType="touchUpInside" id="Gte-da-hJq"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -356,6 +397,7 @@
                     <connections>
                         <outlet property="enterButton" destination="Wmn-PD-PdJ" id="eRy-Rk-cO4"/>
                         <outlet property="enterButtonProgressView" destination="jnU-fI-8d8" id="wYr-7G-hqY"/>
+                        <outlet property="helpButton" destination="nCy-mU-nrv" id="5n0-VK-jjN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3NT-bM-sTE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -576,15 +618,28 @@
         <class className="DraggableCollectionViewFlowLayout" superclassName="UICollectionViewFlowLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/DraggableCollectionViewFlowLayout.h"/>
         </class>
+        <class className="FUIButton" superclassName="UIButton">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/FUIButton.h"/>
+        </class>
         <class className="HelpViewController_iPhone" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/HelpViewController_iPhone.h"/>
+            <relationships>
+                <relationship kind="action" name="onClickCloseButton:"/>
+                <relationship kind="action" name="onPageTurn:"/>
+                <relationship kind="outlet" name="closeButton" candidateClass="FUIButton"/>
+                <relationship kind="outlet" name="helpView" candidateClass="UIView"/>
+                <relationship kind="outlet" name="pageControl" candidateClass="UIPageControl"/>
+                <relationship kind="outlet" name="scrollView" candidateClass="UIScrollView"/>
+            </relationships>
         </class>
         <class className="HomeViewController_iPhone" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/HomeViewController_iPhone.h"/>
             <relationships>
                 <relationship kind="action" name="onPressEnterButton:"/>
+                <relationship kind="action" name="onPressHelpButton:"/>
                 <relationship kind="outlet" name="enterButton" candidateClass="OBShapedButton"/>
                 <relationship kind="outlet" name="enterButtonProgressView" candidateClass="CBRoundProgressView"/>
+                <relationship kind="outlet" name="helpButton" candidateClass="FUIButton"/>
             </relationships>
         </class>
         <class className="ImpressViewController_iPhone" superclassName="UICollectionViewController">
@@ -661,9 +716,6 @@
         </class>
         <class className="UICollectionViewFlowLayout" superclassName="UICollectionViewLayout">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewFlowLayout.h"/>
-        </class>
-        <class className="UICollectionViewLayout" superclassName="NSObject">
-            <source key="sourceIdentifier" type="project" relativePath="./Classes/UICollectionViewLayout.h"/>
         </class>
         <class className="WarningViewController_iPhone" superclassName="UIViewController">
             <source key="sourceIdentifier" type="project" relativePath="./Classes/WarningViewController_iPhone.h"/>
