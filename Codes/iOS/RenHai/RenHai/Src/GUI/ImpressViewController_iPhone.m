@@ -13,6 +13,8 @@
 
 #import "RHCollectionLabelCell_iPhone.h"
 
+#import "ImpressSectionHeaderView_iPhone.h"
+
 #define SECTION_COUNT 3
 
 #define SECTION_INDEX_ASSESSES 0
@@ -85,10 +87,45 @@
     return SECTION_COUNT;
 }
 
-//- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-//{
-//    
-//}
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView* reusableView = nil;
+    
+    NSInteger section = indexPath.section;
+    
+    if ([kind isEqualToString:UICollectionElementKindSectionHeader])
+    {
+        ImpressSectionHeaderView_iPhone* sectionHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_IMPRESSSECTIONHEADERVIEW forIndexPath:indexPath];
+
+        switch (section)
+        {
+            case SECTION_INDEX_ASSESSES:
+            {
+                sectionHeaderView.titleLabel.text = NSLocalizedString(@"Impress_Assesses", nil);
+                break;
+            }
+            case SECTION_INDEX_CHATS:
+            {
+                sectionHeaderView.titleLabel.text = NSLocalizedString(@"Impress_Chats", nil);
+                break;
+            }
+            case SECTION_INDEX_LABELS:
+            {
+                sectionHeaderView.titleLabel.text = NSLocalizedString(@"Impress_Labels", nil);                
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+        
+        reusableView = sectionHeaderView;        
+    }
+    
+    
+return reusableView;
+}
 
 #pragma mark - Private Methods
 
@@ -96,6 +133,9 @@
 {
     UINib* nib = [UINib nibWithNibName:NIB_COLLECTIONCELL_LABEL bundle:nil];
     [self.collectionView registerNib:nib forCellWithReuseIdentifier:COLLECTIONCELL_ID_IMPRESSLABEL];
+    
+    nib = [UINib nibWithNibName:NIB_IMPRESSSECTIONHEADERVIEW bundle:nil];
+    [self.collectionView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_IMPRESSSECTIONHEADERVIEW];
     
     [self _setupRefresher];
 }

@@ -11,6 +11,13 @@
 "Common_PullToRefresh" = "Pull to Refresh";
 "Common_Refreshing" = "Refreshing...";
 
+"LeftBar_Home" = "Home";
+"LeftBar_Device" = "Device";
+"LeftBar_Impress" = "Impress";
+"LeftBar_Interest" = "Interest";
+"LeftBar_Config" = "Config";
+"LeftBar_Help" = "Help";
+
 "Device_DeviceModel" = "Model";
 "Device_OSVersion" = "OS";
 "Device_IsJailed" = "Jailed";
@@ -20,12 +27,9 @@
 "Device_ServiceStatus" = "Status";
 "Device_UnbanDate" = "Unban Date";
 
-"LeftBar_Home" = "Home";
-"LeftBar_Device" = "Device";
-"LeftBar_Impress" = "Impress";
-"LeftBar_Interest" = "Interest";
-"LeftBar_Config" = "Config";
-"LeftBar_Help" = "Help";
+"Impress_Assesses" = "Gained Assess";
+"Impress_Chats" = "Chat Records";
+"Impress_Labels" = "Gained Labels";
 
 "Config_PushNotification" = "Push Notification";
 "Config_Broadcast" = "Broadcast";
