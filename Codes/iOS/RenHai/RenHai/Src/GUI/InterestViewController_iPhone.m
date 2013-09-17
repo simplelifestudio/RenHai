@@ -101,9 +101,9 @@
 
 -(void)_setupRefreshers
 {
-    [self _resetInterestRefresher];
-    [_interestRefresher addTarget:self action:@selector(_onInterestPullToRefresh) forControlEvents:UIControlEventValueChanged];
-    [_interestLabelCollectionView addSubview:_interestRefresher];
+//    [self _resetInterestRefresher];
+//    [_interestRefresher addTarget:self action:@selector(_onInterestPullToRefresh) forControlEvents:UIControlEventValueChanged];
+//    [_interestLabelCollectionView addSubview:_interestRefresher];
     
 //    [self _resetServerInterestRefresher];
 //    [_serverInterestRefresher addTarget:self action:@selector(_onServerInterestPullToRefresh) forControlEvents:UIControlEventValueChanged];

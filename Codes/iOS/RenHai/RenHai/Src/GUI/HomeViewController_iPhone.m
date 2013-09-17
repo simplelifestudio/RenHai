@@ -84,6 +84,7 @@
 {
     _enterButton.highlighted = YES;
     _enterButton.enabled = NO;
+    _helpButton.enabled = NO;
     
     self.navigationItem.leftBarButtonItem.enabled = NO;
     
@@ -95,6 +96,7 @@
 {
     _enterButton.highlighted = NO;
     _enterButton.enabled = YES;
+    _helpButton.enabled = YES;
     
     self.navigationItem.leftBarButtonItem.enabled = YES;
     
