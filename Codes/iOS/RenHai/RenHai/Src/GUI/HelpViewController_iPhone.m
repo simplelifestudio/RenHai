@@ -18,7 +18,7 @@
     GUIModule* _guiModule;
     AppDataModule* _appDataModule;
     
-    NSMutableArray *_imageArray;
+    NSArray *_imageArray;
     NSTimer *_displayTimer;
 }
 
