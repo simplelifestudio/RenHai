@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>EE8DDD00-DC29-4EC3-9553-6B5440520A2E</string>
+	<key>IDESourceControlProjectName</key>
+	<string>RenHai</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1B7F9006-5FC1-4D13-ACA8-8A7E953634E4</key>
+		<string>https://github.com/simplelifestudio/RenHai.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Codes/iOS/RenHai/RenHai.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1B7F9006-5FC1-4D13-ACA8-8A7E953634E4</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/simplelifestudio/RenHai.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>1B7F9006-5FC1-4D13-ACA8-8A7E953634E4</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1B7F9006-5FC1-4D13-ACA8-8A7E953634E4</string>
+			<key>IDESourceControlWCCName</key>
+			<string>RenHai</string>
+		</dict>
+	</array>
+</dict>
+</plist>
