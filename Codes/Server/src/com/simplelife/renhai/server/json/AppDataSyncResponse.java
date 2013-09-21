@@ -21,6 +21,7 @@ public class AppDataSyncResponse extends ServerJSONMessage
 	{
 		super(request);
 		setMessageType(Consts.MessageType.ServerResponse);
+		setMessageId(Consts.MessageId.AppDataSyncResponse);
 	}
 	
 	@Override

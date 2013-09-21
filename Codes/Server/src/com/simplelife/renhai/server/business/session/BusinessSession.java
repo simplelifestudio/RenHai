@@ -11,10 +11,21 @@
 
 package com.simplelife.renhai.server.business.session;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
+import org.slf4j.Logger;
 
+import com.simplelife.renhai.server.business.BusinessModule;
+import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
+import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.json.JSONFactory;
+import com.simplelife.renhai.server.json.ServerJSONMessage;
+import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
+import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
@@ -22,17 +33,24 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 /** */
 public class BusinessSession implements IBusinessSession
 {
+	private Logger logger = BusinessModule.instance.getLogger();
+	private String sessionId;
+	
+	public BusinessSession()
+	{
+		this.sessionId = CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfSessionId);
+	}
+	
+	public String getSessionId()
+	{
+		return sessionId;
+	}
+	
     /** */
-    private Consts.BusinessSessionStatus status;
+    private Consts.BusinessSessionStatus status = Consts.BusinessSessionStatus.Idle;
     
     /** */
-    private LinkedList deviceList;
-    
-    /** */
-    public void onImpressAssess(IDeviceWrapper sourceDevice, IDeviceWrapper targetDevice, String impressLabels)
-    {
-    
-    }
+    private LinkedList<IDeviceWrapper> deviceList;
     
     /** */
     public void checkWebRTCToken()
@@ -41,16 +59,27 @@ public class BusinessSession implements IBusinessSession
     }
     
     /** */
-    public void onBindConfirm()
+    public void onBindConfirm(IDeviceWrapper device)
     {
-    
+    	for (IDeviceWrapper deviceWrapper : deviceList)
+    	{
+    		if (!deviceWrapper.isSessionBindConfirmed())
+    		{
+    			return;
+    		}
+    	}
+    	
+    	changeStatus(Consts.BusinessSessionStatus.ChatConfirm);
     }
-    
-   
    
     /** */
-    public void bind(LinkedList deviceList)
+    public void bind(LinkedList<IDeviceWrapper> deviceList)
     {
+    	this.deviceList = deviceList; 
+    	for (IDeviceWrapper device : deviceList)
+    	{
+    		device.bindBusinessSession(this);
+    	}
     }
     
     /**
@@ -61,55 +90,163 @@ public class BusinessSession implements IBusinessSession
      *
      * @param    status
     **/
-    public void changeStatus(Consts.BusinessSessionStatus status)
+    public void changeStatus(Consts.BusinessSessionStatus targetStatus)
     {
+    	switch(targetStatus)
+    	{
+    		case Idle:
+    			unbindDevices();
+    			break;
+    			
+    		case ChatConfirm:
+    			if (status == Consts.BusinessSessionStatus.Idle)
+    			{
+    				status = targetStatus;
+    				sendChatConfirm();
+    			}
+    			else
+    			{
+    				logger.error("Invalid status change from " + status.name() + " to " + targetStatus.name());
+    			}
+    			break;
+    			
+    		case VideoChat:
+    			if (status == Consts.BusinessSessionStatus.ChatConfirm)
+    			{
+    				status = targetStatus;
+    			}
+    			else
+    			{
+    				logger.error("Invalid status change from " + status.name() + " to " + targetStatus.name());
+    			}
+    			break;
+    			
+    		case Assess:
+    			if (status == Consts.BusinessSessionStatus.VideoChat)
+    			{
+    				status = targetStatus;
+    			}
+    			else
+    			{
+    				logger.error("Invalid status change from " + status.name() + " to " + targetStatus.name());
+    			}
+    			break;
+    			
+			default:
+				break;
+    	}
     }
     
-    /** */
-    public void endChat()
+    private void sendChatConfirm()
     {
+    	ServerJSONMessage notification = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
+    	
+    	for (IDeviceWrapper device : deviceList)
+    	{
+    		notification.setDeviceWrapper(device);
+    		notification.asyncResponse();
+    	}
+    }
+    
+    private void unbindDevices()
+    {
+    	for (IDeviceWrapper device : deviceList)
+    	{
+    		device.unbindBusinessSession();
+    	}
+    }
+    /** */
+    public void onEndChat()
+    {
+    	changeStatus(Consts.BusinessSessionStatus.Assess);
     }
     
     /** */
     public LinkedList getDeviceList()
     {
-        return null;
+        return deviceList;
     }
     
     /** */
     public BusinessSessionStatus getStatus()
     {
-        return null;
+        return status;
     }
     
-  
-    /* (non-Javadoc)
-     * @see com.simplelife.renhai.server.util.IBusinessSession#onChatConfirm(com.simplelife.renhai.server.util.IDeviceWrapper)
-     */
     @Override
-    public void onChatConfirm(IDeviceWrapper device)
+    public void onAgreeChat(IDeviceWrapper device)
     {
-        // TODO Auto-generated method stub
-        
+    	for (IDeviceWrapper deviceWrapper : deviceList)
+    	{
+    		if (!deviceWrapper.isChatConfirmed())
+    		{
+    			return;
+    		}
+    	}
+    	changeStatus(Consts.BusinessSessionStatus.VideoChat);
+    }
+    
+    @Override
+    public void onRejectChat(IDeviceWrapper device)
+    {
+    	changeStatus(Consts.BusinessSessionStatus.Idle);
     }
 
-    /* (non-Javadoc)
-     * @see com.simplelife.renhai.server.util.IBusinessSession#onDeviceLeave(com.simplelife.renhai.server.util.IDeviceWrapper)
-     */
     @Override
     public void onDeviceLeave(IDeviceWrapper device)
     {
-        // TODO Auto-generated method stub
-        
+    	device.unbindBusinessSession();
+    	switch(status)
+    	{
+    		case ChatConfirm:
+    			changeStatus(Consts.BusinessSessionStatus.Idle);
+    			break;
+    		case Idle:
+    			changeStatus(Consts.BusinessSessionStatus.Idle);
+    			break;
+    		case Assess:
+    			for (IDeviceWrapper deviceWrapper : deviceList)
+    			{
+    				// If not all devices finished assess
+    				if (!deviceWrapper.isAssessProvided() && !deviceWrapper.isConnectionLost())
+    				{
+    					return;
+    				}
+    			}
+    			changeStatus(Consts.BusinessSessionStatus.Idle);
+    			break;
+    		case VideoChat:
+    			changeStatus(Consts.BusinessSessionStatus.VideoChat);
+    			break;
+			default:
+				logger.error("Invalid status of BusinessSession: {}", status.name());
+				break;
+    	}
     }
 
-    /* (non-Javadoc)
-     * @see com.simplelife.renhai.server.util.IBusinessSession#impressAssess(com.simplelife.renhai.server.util.IDeviceWrapper, java.lang.String)
-     */
     @Override
-    public void impressAssess(IDeviceWrapper sourceDevice, String impressLabels)
+    public void onAssessAndContinue(IDeviceWrapper sourceDevice, IDeviceWrapper targetDevice)
     {
-        // TODO Auto-generated method stub
-        
+    	if (targetDevice.getDeviceSn().equals(sourceDevice.getDeviceSn()))
+    	{
+    		return;
+    	}
+    	
+    	BusinessType type = sourceDevice.getBusinessType();
+    	AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
+    	pool.endChat(sourceDevice);
     }
+    
+	@Override
+	public void onAssessAndQuit(IDeviceWrapper sourceDevice, IDeviceWrapper targetDevice)
+	{
+    	if (targetDevice.getDeviceSn().equals(sourceDevice.getDeviceSn()))
+    	{
+    		return;
+    	}
+    	
+    	BusinessType type = sourceDevice.getBusinessType();
+    	AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
+    	pool.deviceLeave(sourceDevice);
+	}
 }

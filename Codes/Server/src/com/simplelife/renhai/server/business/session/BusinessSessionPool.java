@@ -10,7 +10,8 @@
 package com.simplelife.renhai.server.business.session;
 
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 
 import com.simplelife.renhai.server.business.pool.AbstractPool;
@@ -20,35 +21,42 @@ import com.simplelife.renhai.server.util.IBusinessSession;
 /** */
 public class BusinessSessionPool extends AbstractPool
 {
-	/** */
+	// Timer designed for checking expiration of token
 	private Timer timer;
 	
-	private HashMap<String, IBusinessSession> sessionMap;
+	private List<IBusinessSession> sessionList = new ArrayList<IBusinessSession>();
 	
 	public final static BusinessSessionPool instance = new BusinessSessionPool();
     
 	private BusinessSessionPool()
 	{
-		
+		init();
 	}
     
 	/** */
 	public IBusinessSession getBusinessSession()
 	{
-		return null;
-		
+		if (sessionList.isEmpty())
+		{
+			return null;
+		}
+		return sessionList.remove(0);
 	}
 	
 	/** */
 	public void recycleBusinessSession(IBusinessSession session)
 	{
-		
+		sessionList.add(session);
 	}
 	
 	/** */
 	public void init()
 	{
-		
+		clearPool();
+		for (int i = 0; i < this.capacity; i++)
+		{
+			sessionList.add(new BusinessSession());
+		}
 	}
 	
 	/** */
@@ -60,28 +68,18 @@ public class BusinessSessionPool extends AbstractPool
 	/** */
 	public boolean isPoolFull()
 	{
-		return false;
-	}
-	
-	/** */
-	public void updateCount()
-	{
+		return (sessionList.size() >= capacity);
 	}
 	
 	/** */
 	public int getElementCount()
 	{
-		return 0;
+		return sessionList.size();
 	}
 	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.simplelife.renhai.server.util.IPool#clearPool()
-	 */
 	@Override
 	public void clearPool()
 	{
-		sessionMap.clear();
+		sessionList.clear();
 	}
 }

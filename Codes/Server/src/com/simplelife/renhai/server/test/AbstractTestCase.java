@@ -9,6 +9,10 @@
 
 package com.simplelife.renhai.server.test;
 
+import org.junit.internal.runners.TestMethod;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import junit.framework.TestCase;
 
 import com.simplelife.renhai.server.db.Devicecard;
@@ -16,6 +20,7 @@ import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.db.Device;
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -34,6 +39,13 @@ public abstract class AbstractTestCase extends TestCase
 	public final static String DeviceSN = "fjdskafjdksla;juijkl;a43243211dadfs";
 	public final static String DeviceModel = "iPhone5";
 	
+	protected Logger logger = LoggerFactory.getLogger(AbstractTestCase.class);
+	
+	public AbstractTestCase()
+	{
+		
+	}
+	
 	/**
 	 * Create new device in pool, and bind with mock App
 	 */
@@ -50,7 +62,7 @@ public abstract class AbstractTestCase extends TestCase
 		
 		// Create new profile
 		Profile profile = new Profile();
-		long now = DateUtil.getNowDate().getTime();
+		long now = System.currentTimeMillis();
 		profile.setLastActivityTime(now);
 		profile.setCreateTime(now);
 		profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
@@ -70,7 +82,7 @@ public abstract class AbstractTestCase extends TestCase
 		device.setProfile(profile);
 		
 		// Bind DeviceWrapper with Device
-		MockWebSocketConnection conn = new MockWebSocketConnection("1111");
+		MockWebSocketConnection conn = new MockWebSocketConnection();
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = pool.newDevice(conn);
 		deviceWrapper.setDevice(device);

@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.business.pool;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -26,6 +27,7 @@ import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
+import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 import com.simplelife.renhai.server.util.IBusinessPool;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
@@ -33,6 +35,8 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 /** */
 public class OnlineDevicePool extends AbstractDevicePool
 {
+	private Logger logger = BusinessModule.instance.getLogger();
+	
 	private class InactiveCheckTask extends TimerTask
     {
 		@Override
@@ -51,14 +55,16 @@ public class OnlineDevicePool extends AbstractDevicePool
     
     private OnlineDevicePool()
     {
+    	startTimers();
     }
     
     private void checkDeviceMap(HashMap<String, IDeviceWrapper> deviceMap)
     {
+    	logger.debug("Start to check inactive connections.");
     	Iterator<Entry<String, IDeviceWrapper>> entryKeyIterator = deviceMap.entrySet().iterator();
         IDeviceWrapper deviceWrapper;
         long lastTime;
-        long now = DateUtil.getNowDate().getTime();
+        long now = System.currentTimeMillis();
 		while (entryKeyIterator.hasNext())
 		{
 			Entry<String, IDeviceWrapper> e = entryKeyIterator.next();
@@ -112,11 +118,13 @@ public class OnlineDevicePool extends AbstractDevicePool
     /** */
     public IDeviceWrapper newDevice(IBaseConnection connection)
     {
-    	Logger logger = BusinessModule.instance.getLogger();
-    	logger.debug("newDevice");
+    	logger.debug("Create device bases on connection with id: {}", connection.getConnectionId());
     	DeviceWrapper deviceWrapper = new DeviceWrapper(connection);
     	deviceWrapper.bindOnlineDevicePool(this);
-    	deviceWrapper.updateLastActivityTime();
+    	Date now = DateUtil.getNowDate();
+    	deviceWrapper.setLastActivityTime(now);
+    	deviceWrapper.setLastPingTime(now);
+    	
     	connection.bind(deviceWrapper);
     	tmpDeviceMap.put(connection.getConnectionId(), deviceWrapper);
         return deviceWrapper;
@@ -126,14 +134,40 @@ public class OnlineDevicePool extends AbstractDevicePool
     /** */
     public void releaseDevice(IDeviceWrapper deviceWrapper)
     {
-    	Logger logger = BusinessModule.instance.getLogger();
     	if (deviceWrapper == null)
     	{
     		return;
     	}
     	
     	String sn = deviceWrapper.getDeviceSn();
-    	deviceMap.remove(sn);
+    	
+    	if (sn != null && sn.length() > 0)
+    	{
+    		if (deviceMap.containsKey(sn))
+    		{
+	    		deviceMap.remove(sn);
+	    		deviceWrapper.unbindOnlineDevicePool();
+	    		logger.debug("Device <{}> was removed from online device pool.", sn);
+    		}
+    		else
+    		{
+    			logger.error("The device <{}> to be removed is not in online device pool.");
+    		}
+    	}
+    	else
+    	{
+	    	// Check if device exists in tmpDeviceMap
+	    	String id = ((IBaseConnectionOwner)deviceWrapper).getConnection().getConnectionId();
+	    	if (tmpDeviceMap.containsKey(id))
+	    	{
+	    		tmpDeviceMap.remove(id);
+	    		logger.debug("Device with connection id {} was removed from online device pool.", id);
+	    	}
+	    	else
+	    	{
+	    		logger.error("The device with connection id {} to be removed is not in online device pool.");
+	    	}
+    	}    			
     	
     	if ((deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.WaitMatch)
     			|| (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound))
@@ -143,7 +177,6 @@ public class OnlineDevicePool extends AbstractDevicePool
     			pool.deviceLeave(deviceWrapper);
     		}
     	}
-    	logger.debug("Device: {} was released.", sn);
     }
     
     /** */
@@ -161,11 +194,13 @@ public class OnlineDevicePool extends AbstractDevicePool
     public void startTimers()
     {
     	inactiveTimer.scheduleAtFixedRate(new InactiveCheckTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.OnlineDeviceConnection);
+    	logger.debug("Timers of online device pool started.");
     }
     
     public void stopTimers()
     {
     	inactiveTimer.cancel();
+    	logger.debug("Timers of online device pool stopped.");
     }
     
     /**
@@ -221,4 +256,21 @@ public class OnlineDevicePool extends AbstractDevicePool
 	{
 		return ((tmpDeviceMap.size() + deviceMap.size()) >= capacity);
 	}
+	
+	@Override
+	public IDeviceWrapper getDevice(String deviceSnOrConnectionId)
+    {
+		if (deviceMap.containsKey(deviceSnOrConnectionId))
+		{
+			return deviceMap.get(deviceSnOrConnectionId);
+		}
+		else if (tmpDeviceMap.containsKey(deviceSnOrConnectionId))
+		{
+			return tmpDeviceMap.get(deviceSnOrConnectionId);
+		}
+		else
+		{
+			return null;
+		}
+    }
 }

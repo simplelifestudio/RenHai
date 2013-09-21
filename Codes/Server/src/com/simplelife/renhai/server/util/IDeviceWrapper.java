@@ -13,6 +13,7 @@ package com.simplelife.renhai.server.util;
 
 import java.util.Date;
 
+import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 
@@ -63,4 +64,31 @@ public interface IDeviceWrapper
     
     public void setBusinessStatus(Consts.BusinessStatus businessStatus);
     
+    public void changeBusinessStatus(Consts.BusinessStatus targetStatus);
+    
+    public void onSessionBindConfirmed();
+    
+    public void onChatConfirmed();
+    
+    public void onConnectionLost();
+    
+    public void onAssessProvided();
+    
+    public boolean isSessionBindConfirmed();
+    
+    public boolean isChatConfirmed();
+    
+    public boolean isConnectionLost();
+    
+    public boolean isAssessProvided();
+    
+    public void setBusinessType(Consts.BusinessType businessType);
+    
+    public Consts.BusinessType getBusinessType();
+    
+    public void bindOnlineDevicePool(OnlineDevicePool pool);
+    
+    public void unbindOnlineDevicePool();
+    
+    public OnlineDevicePool getOwnerOnlineDevicePool();
 }

@@ -76,7 +76,7 @@ public class MainFunction extends TestCase
 		Operationcode operCode = dao.findByOperationCode(1003).get(0);
 		log.setOperationcode(operCode);
 	
-		long time = DateUtil.getNowDate().getTime();
+		long time = System.currentTimeMillis();
 		log.setLogTime(time);
 		log.setLogInfo("This is log info");
 		

@@ -14,6 +14,7 @@ import java.io.IOException;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
+import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
 
@@ -28,9 +29,9 @@ public class MockWebSocketConnection extends WebSocketConnection
 		return lastSentMessage;
 	}
 	
-	public MockWebSocketConnection(String connectionId)
+	public MockWebSocketConnection()
 	{
-		super(connectionId);
+		super(DateUtil.getNow());
 	}
 
 	/** */
@@ -128,11 +129,6 @@ public class MockWebSocketConnection extends WebSocketConnection
     
     /** */
     public void onTimeout()
-    {
-    }
-    
-    /** */
-    public void close(int status)
     {
     }
     

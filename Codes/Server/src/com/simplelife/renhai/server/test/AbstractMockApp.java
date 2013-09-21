@@ -40,6 +40,11 @@ public abstract class AbstractMockApp implements IMockApp
     protected HashMap<String, Object> jsonMapBody = new HashMap<String, Object>();
     protected HashMap<String, Object> jsonMapDevice = new HashMap<String, Object>();
     
+    public AbstractMockApp()
+    {
+    	 
+    }
+    
     /**
      * Clear jsonMap and add default fields
      */

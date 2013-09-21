@@ -21,6 +21,7 @@ public class AlohaResponse extends ServerJSONMessage
 	{
 		super(request);
 		setMessageType(Consts.MessageType.ServerResponse);
+		setMessageId(Consts.MessageId.AlohaResponse);
 	}
 
 	/* (non-Javadoc)

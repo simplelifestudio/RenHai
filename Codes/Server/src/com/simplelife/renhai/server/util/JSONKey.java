@@ -97,4 +97,7 @@ public class JSONKey
 	public final static String ValidFlag					= "validFlag";
 	public final static String AssessLabelList				= "assessLabelList";
 	public final static String AssessedCount				= "assessedCount";
+	public final static String OperationInfo				= "operationInfo";
+	
+	public final static String ImpressLabelName				= "impressLabelName";
 }

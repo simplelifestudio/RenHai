@@ -20,13 +20,10 @@ import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
 public interface IBusinessSession
 {
     /** */
-    public void onChatConfirm(IDeviceWrapper device);
-    
-    /** */
     public void onDeviceLeave(IDeviceWrapper device);
     
     /** */
-    public void bind(LinkedList deviceList);
+    public void bind(LinkedList<IDeviceWrapper> deviceList);
     
     /**
      * BusinessSession需要调用该方法切换状态，该方法中会检查绑定的两个设备的连接情况，如果有设备的连接已经断开，BusinessSession需要根据对应的业务逻辑决定接下来的业务流程，比如：
@@ -39,7 +36,7 @@ public interface IBusinessSession
     public void changeStatus(Consts.BusinessSessionStatus status);
     
     /** */
-    public void endChat();
+    public void onEndChat();
     
     /** */
     public LinkedList<IDeviceWrapper> getDeviceList();
@@ -48,5 +45,13 @@ public interface IBusinessSession
     public BusinessSessionStatus getStatus();
     
     /** */
-    public void impressAssess(IDeviceWrapper sourceDevice, String impressLabels);
+    public void onAssessAndContinue(IDeviceWrapper sourceDevice, IDeviceWrapper targetDevice);
+    
+    public void onAssessAndQuit(IDeviceWrapper sourceDevice, IDeviceWrapper targetDevice);
+    
+    public void onBindConfirm(IDeviceWrapper device);
+    
+    public void onAgreeChat(IDeviceWrapper device);
+    
+    public void onRejectChat(IDeviceWrapper device);
 }

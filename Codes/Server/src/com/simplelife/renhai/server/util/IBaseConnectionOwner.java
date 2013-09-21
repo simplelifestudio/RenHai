@@ -11,6 +11,8 @@
 
 package com.simplelife.renhai.server.util;
 
+import java.nio.ByteBuffer;
+
 import com.simplelife.renhai.server.json.AppJSONMessage;
 
 
@@ -21,7 +23,7 @@ public interface IBaseConnectionOwner
     public void onClose(IBaseConnection connection);
     
     /** */
-    public void onPing(IBaseConnection conection);
+    public void onPing(IBaseConnection conection, ByteBuffer payload);
     
     /** */
     public void onJSONCommand(AppJSONMessage command);

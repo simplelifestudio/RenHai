@@ -9,10 +9,7 @@
 
 package com.simplelife.renhai.server.json;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,7 +17,6 @@ import java.util.Set;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
-import com.simplelife.renhai.server.business.device.ImpressLabel;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBQueryUtil;
@@ -753,7 +749,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		Profile profile = new Profile();
 		profile.setImpresscard(impressCard);
 		profile.setInterestcard(interestCard);
-		long now = DateUtil.getNowDate().getTime();
+		long now = System.currentTimeMillis();
 		profile.setLastActivityTime(now);
 		profile.setCreateTime(now);
 		profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
@@ -835,11 +831,11 @@ public class AppDataSyncRequest extends AppJSONMessage
 				}
 				interestLabelMapObj.setValidFlag("Valid");
 			}
-			responseObj.put(JSONKey.InterestLabel, Consts.JSONExecuteResult.Success);
+			responseObj.put(JSONKey.InterestLabel, Consts.SuccessOrFail.Success);
 			interestLabelMapObj.setGlobalinterestlabel(globalInterestObj);
 			
 			interestLabelMapObj.setLabelOrder(Integer.parseInt(tmpJSONObj.getString(JSONKey.Order)));
-			responseObj.put(JSONKey.Order, Consts.JSONExecuteResult.Success);
+			responseObj.put(JSONKey.Order, Consts.SuccessOrFail.Success);
 			labelMapList.add(interestLabelMapObj);
 			
 			interestLabelMapObj.setInterestcard(card);
@@ -875,28 +871,28 @@ public class AppDataSyncRequest extends AppJSONMessage
 		String temp = jsonObj.getString(JSONKey.DeviceModel);
 		if (temp != null)
 		{
-			response.put(JSONKey.DeviceModel, Consts.JSONExecuteResult.Success);
+			response.put(JSONKey.DeviceModel, Consts.SuccessOrFail.Success);
 			deviceCard.setDeviceModel(temp);
 		}
 		
 		temp = jsonObj.getString(JSONKey.OsVersion);
 		if (temp != null)
 		{
-			response.put(JSONKey.OsVersion, Consts.JSONExecuteResult.Success);
+			response.put(JSONKey.OsVersion, Consts.SuccessOrFail.Success);
 			deviceCard.setOsVersion(temp);
 		}
 		
 		temp = jsonObj.getString(JSONKey.AppVersion);
 		if (temp != null)
 		{
-			response.put(JSONKey.AppVersion, Consts.JSONExecuteResult.Success);
+			response.put(JSONKey.AppVersion, Consts.SuccessOrFail.Success);
 			deviceCard.setAppVersion(temp);
 		}
 		
 		temp = jsonObj.getString(JSONKey.IsJailed);
 		if (temp != null)
 		{
-			response.put(JSONKey.IsJailed, Consts.JSONExecuteResult.Success);
+			response.put(JSONKey.IsJailed, Consts.SuccessOrFail.Success);
 			Consts.YesNo isJailed = Consts.YesNo .parseValue(jsonObj.getString(JSONKey.IsJailed)); 
 			deviceCard.setIsJailed(isJailed.name());
 		}
@@ -904,7 +900,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		temp = jsonObj.getString(JSONKey.Location);
 		if (temp != null)
 		{
-			response.put(JSONKey.Location, Consts.JSONExecuteResult.Success);
+			response.put(JSONKey.Location, Consts.SuccessOrFail.Success);
 			deviceCard.setLocation(temp);
 		}
 	}

@@ -137,7 +137,7 @@ public abstract class StreamInbound implements UpgradeInbound {
                     closeOutboundConnection(frame);
                     return SocketState.CLOSED;
                 } else if (opCode == Constants.OPCODE_PING) {
-                    getWsOutbound().pong(frame.getPayLoad());
+                    //getWsOutbound().pong(frame.getPayLoad());
                     doOnPing(frame.getPayLoad());
                 } else if (opCode == Constants.OPCODE_PONG) {
                     doOnPong(frame.getPayLoad());

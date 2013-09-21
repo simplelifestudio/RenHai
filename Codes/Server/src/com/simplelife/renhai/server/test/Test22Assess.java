@@ -65,11 +65,11 @@ public class Test22Assess extends AbstractTestCase
 		businessPool.getBusinessScheduler().schedule();
 		
 		// Step_05 Mock事件：A同意聊天
-		mockApp1.sendNotificationResponse();
+		mockApp1.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
 		mockApp1.chatConfirm(true);
 		
 		// Step_06 Mock事件：B同意聊天
-		mockApp2.sendNotificationResponse();
+		mockApp2.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
 		mockApp2.chatConfirm(true);
 		
 		// Step_07 调用：BusinessSession::getStatus

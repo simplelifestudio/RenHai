@@ -28,4 +28,14 @@ public abstract class AbstractJSONMessage
     public abstract String getMessageSn();
     
     public abstract Consts.MessageId getMessageId();
+    
+    public IDeviceWrapper getDeviceWrapper()
+    {
+    	return deviceWrapper;
+    }
+    
+    public void setDeviceWrapper(IDeviceWrapper deviceWrapper)
+    {
+    	this.deviceWrapper = deviceWrapper;
+    }
 }

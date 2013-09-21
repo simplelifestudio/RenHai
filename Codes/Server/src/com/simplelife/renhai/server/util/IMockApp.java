@@ -32,10 +32,10 @@ public interface IMockApp
 	public void sendRawJSONMessage(JSONObject jsonObject);
 	
 	/** */
-	public void sendNotificationResponse();
+	public void sendNotificationResponse(Consts.NotificationType notificationType, String operationInfo, String operationValue);
 	
 	/** */
-	public void sendBusinessSessionRequest(Consts.OperationType operationType, String operationValue);
+	public void sendBusinessSessionRequest(Consts.OperationType operationType, String operationInfo, String operationValue);
 	
 	/** */
 	public void close();

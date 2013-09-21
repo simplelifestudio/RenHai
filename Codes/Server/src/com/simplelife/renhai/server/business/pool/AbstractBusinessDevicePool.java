@@ -135,22 +135,17 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
      * Starts chat, move device from deviceMap to chatDeviceMap
      */
 	@Override
-	public void startChat(IBusinessSession session)
+	public void startChat(IDeviceWrapper device)
 	{
-		LinkedList<IDeviceWrapper> deviceList =  session.getDeviceList();
-		String sn;
-		for (IDeviceWrapper device : deviceList)
+		String sn = device.getDeviceSn();
+		
+		synchronized(deviceMap)
 		{
-			sn = device.getDeviceSn();
-			
-			synchronized(deviceMap)
-			{
-				deviceMap.remove(sn);
-			}
-			synchronized(chatDeviceMap)
-			{
-				chatDeviceMap.put(sn, device);
-			}
+			deviceMap.remove(sn);
+		}
+		synchronized(chatDeviceMap)
+		{
+			chatDeviceMap.put(sn, device);
 		}
 	}
 
@@ -158,22 +153,17 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
      * Chat ends, move device from chatDeviceMap to deviceMap
      */
 	@Override
-	public void endChat(IBusinessSession session)
+	public void endChat(IDeviceWrapper device)
 	{
-		LinkedList<IDeviceWrapper> deviceList =  session.getDeviceList();
-		String sn;
-		for (IDeviceWrapper device : deviceList)
+		String sn = device.getDeviceSn();
+		
+		synchronized(chatDeviceMap)
 		{
-			sn = device.getDeviceSn();
-			
-			synchronized(chatDeviceMap)
-			{
-				chatDeviceMap.remove(sn);
-			}
-			synchronized(deviceMap)
-			{
-				deviceMap.put(sn, device);
-			}
+			chatDeviceMap.remove(sn);
+		}
+		synchronized(deviceMap)
+		{
+			deviceMap.put(sn, device);
 		}
 	}
 	

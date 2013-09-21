@@ -11,17 +11,19 @@
 
 package com.simplelife.renhai.server.business.session;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 
 import com.simplelife.renhai.server.business.pool.AbstractPool;
+import com.simplelife.renhai.server.db.DAOWrapper;
 
 
 /** */
 public class WebRTCSessionPool extends AbstractPool
 {
     /** */
-    private LinkedList webRTCSessionLink;
+    private List<WebRTCSession> webRTCSessionList = new ArrayList<WebRTCSession>();
     
     /** */
     protected Timer timer;
@@ -29,55 +31,57 @@ public class WebRTCSessionPool extends AbstractPool
     /** */
     public WebRTCSession getWebRTCSession()
     {
-        return null;
-    
+		if (webRTCSessionList.isEmpty())
+		{
+			return null;
+		}
+		return webRTCSessionList.remove(0);
     }
-    
-    /** */
-    public WebRTCSession getSession()
-    {
-        return null;
-    
-    }
+
     
     /** */
     public void init()
     {
-    
+    	clearPool();
+    	loadFromDb();
     }
     
     /** */
     public boolean isPoolFull()
     {
-        return false;
-    }
-    
-    /** */
-    public void updateCount()
-    {
+        return (webRTCSessionList.size() > capacity);
     }
     
     /** */
     public int getElementCount()
     {
-        return 0;
+        return webRTCSessionList.size();
     }
     
     /** */
     public boolean saveToDb()
     {
-        return false;
+    	for (WebRTCSession session : webRTCSessionList)
+    	{
+    		DAOWrapper.cache(session);
+    	}
+        return true;
     }
     
     /** */
     public boolean loadFromDb()
     {
-        return false;
+    	for (int i = 0; i < this.capacity; i++)
+		{
+    		webRTCSessionList.add(new WebRTCSession());
+		}
+    	
+        return true;
     }
     
 	@Override
 	public void clearPool()
 	{
-		webRTCSessionLink.clear();
+		webRTCSessionList.clear();
 	}
 }

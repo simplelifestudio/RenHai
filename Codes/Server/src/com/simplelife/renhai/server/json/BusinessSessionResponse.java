@@ -21,6 +21,7 @@ public class BusinessSessionResponse extends ServerJSONMessage
 	{
 		super(request);
 		setMessageType(Consts.MessageType.ServerResponse);
+		setMessageId(Consts.MessageId.BusinessSessionResponse);
 	}
 	
 	@Override

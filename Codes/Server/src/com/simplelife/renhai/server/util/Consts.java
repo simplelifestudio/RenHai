@@ -17,34 +17,77 @@ public class Consts
 {
 	public enum ServiceStatus
 	{
-		Normal, Banned;
+		Invalid(0), Normal(1), Banned(2);
 		
-		public static boolean isValidStatus(String status)
+		private int value;
+		private ServiceStatus(int value)
 		{
+			this.value = value;
+		}
+	
+		public static ServiceStatus parseValue(int value)
+		{
+			int intValue = Integer.valueOf(value);
 			for (ServiceStatus item : values())
 			{
-				if (item.name().equals(status))
+				if (item.value == intValue)
 				{
-					return true;
+					return item;
 				}
 			}
-			return false;
+			return null;
 		}
 	}
-	public enum BusinessStatus
+	
+	public enum NotificationType
 	{
-		Init, Idle, WaitMatch, SessionBound;
+		Invalid(0),
+		SessionBinded(1), 
+		OthersideRejected(2),
+		OthersideAgreed(3), 
+		OthersideLost(4);
 		
-		public boolean isValidStatus(String status)
+		private int value;
+		private NotificationType(int value)
 		{
-			for (BusinessStatus item : values())
+			this.value = value;
+		}
+	
+		public static NotificationType parseValue(int value)
+		{
+			int intValue = Integer.valueOf(value);
+			for (NotificationType item : values())
 			{
-				if (item.name().equals(status))
+				if (item.value == intValue)
 				{
-					return true;
+					return item;
 				}
 			}
-			return false;
+			return null;
+		}
+	}
+	
+	public enum BusinessStatus
+	{
+		Invalid(0), Init(1), Idle(2), WaitMatch(3), SessionBound(4);
+		
+		private int value;
+		private BusinessStatus(int value)
+		{
+			this.value = value;
+		}
+	
+		public static BusinessStatus parseValue(int value)
+		{
+			int intValue = Integer.valueOf(value);
+			for (BusinessStatus item : values())
+			{
+				if (item.value == intValue)
+				{
+					return item;
+				}
+			}
+			return null;
 		}
 	}
 
@@ -73,26 +116,69 @@ public class Consts
 		}
 	}
 	
-	public enum JSONExecuteResult
+	public enum SuccessOrFail
 	{
 		Success(1),
 		Fail(0);
 		
 		private int value;
-		private JSONExecuteResult(int value)
+		private SuccessOrFail(int value)
 		{
 			this.value = value;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return String.valueOf(value);
 		}
 	}
 	
 	public enum BusinessSessionStatus
 	{
-		Idle, ChatConfirm, VideoChat, Assess
+		Invalid(0), Idle(1), ChatConfirm(2), VideoChat(3), Assess(4);
+		
+		private int value;
+		private BusinessSessionStatus(int value)
+		{
+			this.value = value;
+		}
+	
+		public static BusinessSessionStatus parseValue(String value)
+		{
+			int intValue = Integer.valueOf(value);
+			for (BusinessSessionStatus item : values())
+			{
+				if (item.value == intValue)
+				{
+					return item;
+				}
+			}
+			return null;
+		}
 	}
 	
 	public enum BusinessType
 	{
-		Random, Interest;
+		Invalid(0), Random(1), Interest(2);
+		
+		private int value;
+		private BusinessType(int value)
+		{
+			this.value = value;
+		}
+		
+		public static BusinessType parseValue(int value)
+		{
+			for (BusinessType item : values())
+			{
+				if (item.value == value)
+				{
+					return item;
+				}
+			}
+			return null;
+		}
 	}
 	
 	public enum DBExistResult
@@ -123,7 +209,7 @@ public class Consts
 					return item;
 				}
 			}
-			return null;
+			return Invalid;
 		}
 		
 		@Override
@@ -135,7 +221,7 @@ public class Consts
 	
 	public enum MessageId
 	{
-		InvalidRequest(0),
+		Invalid(0),
 		UnkownRequest(1),
 		TimeoutRequest(2),
 		
@@ -221,15 +307,15 @@ public class Consts
 	
 	public enum OperationType
     {
-    	EnterPool(1),
+    	Invalid(0),
+		EnterPool(1),
     	LeavePool(2),
     	AgreeChat(3),
     	RejectChat(4),
     	EndChat(5),
 
     	AssessAndContinue(6),
-    	AssessAndQuit(7),
-    	Received(8);
+    	AssessAndQuit(7);
 
     	private int value;
     	
@@ -237,6 +323,18 @@ public class Consts
     	{
     		this.value = value; 
     	}
+    	
+		public static OperationType parseValue(int value)
+		{
+			for (OperationType item : values())
+			{
+				if (item.value == value)
+				{
+					return item;
+				}
+			}
+			return Invalid;
+		}
     }
 	
 	public enum ConnectionSetting

@@ -21,6 +21,7 @@ public class BroadcastNotification extends ServerJSONMessage
 	{
 		super(null);
 		setMessageType(Consts.MessageType.ServerNotification);
+		setMessageId(Consts.MessageId.BroadcastNotification);
 	}
 	
 	@Override

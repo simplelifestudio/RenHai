@@ -115,7 +115,7 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
 		// Step_17 Mock事件：B 确认绑定
-		mockApp2.sendNotificationResponse();
+		mockApp2.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
 		
 		// Step_18 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
@@ -129,7 +129,7 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 		// Step_21 等待绑定确认超时时间
 		try
 		{
-			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 1000 + 1000);
+			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection + 1000);
 		}
 		catch (InterruptedException e)
 		{

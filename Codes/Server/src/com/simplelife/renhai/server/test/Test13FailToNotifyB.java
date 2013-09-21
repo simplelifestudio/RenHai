@@ -118,7 +118,7 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		connection2.disableConnection();
 				
 		// Step_18 Mock事件：A确认绑定
-		mockApp1.sendNotificationResponse();
+		mockApp1.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
 		
 		// Step_19 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);

@@ -15,40 +15,34 @@ package com.simplelife.renhai.server.business.session;
 /** */
 public class WebRTCSession
 {
-    /** */
-    public WebRTCSessionPool Unnamed1;
-    
+	private String sessionId;
+	
     /** */
     public String getSessionId()
     {
-        return null;
-    
+        return sessionId;
     }
     
     /** */
     public boolean updateToken()
     {
         return false;
-    
     }
     
     /** */
     public boolean requestToken()
     {
         return false;
-    
     }
     
     /** */
     public void WebRTCSession()
     {
-    
     }
     
     /** */
     public boolean requestSession()
     {
         return false;
-    
     }
 }

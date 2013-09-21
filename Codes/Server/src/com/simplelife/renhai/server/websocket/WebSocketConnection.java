@@ -216,8 +216,20 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     public void onPing(ByteBuffer payload)
     {
     	WebSocketModule.instance.getLogger().debug("onPing triggered");
-    	connectionOwner.onPing(this);
-    	super.onPing(payload);
+    	connectionOwner.onPing(this, payload);
+    	//super.onPing(payload);
+    }
+    
+    public void pong(ByteBuffer payload)
+    {
+    	try
+		{
+			getWsOutbound().pong(payload);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
     }
     
     @Override

@@ -64,7 +64,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 		// Step_05 等待Server的Websocket通信异常时间
 		try
 		{
-			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 1000 + 1000);
+			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection + 1000);
 		}
 		catch (InterruptedException e)
 		{

@@ -31,7 +31,7 @@ public class JSONFactory
 			if (strMessageId == null || strMessageId.length() == 0)
 			{
 				logger.debug("Message ID is missed");
-				return Consts.MessageId.InvalidRequest;
+				return Consts.MessageId.Invalid;
 			}
 			return Consts.MessageId.getEnumItemByValue(strMessageId);
 		}
@@ -39,7 +39,7 @@ public class JSONFactory
 		{
 			logger.error(e.getMessage());
 		}
-		return Consts.MessageId.InvalidRequest;
+		return Consts.MessageId.Invalid;
 	}
 	
 	

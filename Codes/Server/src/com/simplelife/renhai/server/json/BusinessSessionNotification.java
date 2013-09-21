@@ -21,6 +21,7 @@ public class BusinessSessionNotification extends ServerJSONMessage
 	{
 		super(request);
 		setMessageType(Consts.MessageType.ServerNotification);
+		setMessageId(Consts.MessageId.BusinessSessionNotification);
 	}
 	
 	@Override

@@ -16,10 +16,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.DeviceDAO;
 import com.simplelife.renhai.server.db.Devicecard;
-import com.simplelife.renhai.server.json.AppJSONMessage;
-import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.test.MockWebSocketConnection;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -45,7 +42,7 @@ public class TestAppDataSyncRequest extends TestCase
 	private String location = "x, y";
 	private String isJailed = "0";
 	
-	MockWebSocketConnection conn = new MockWebSocketConnection("1");
+	MockWebSocketConnection conn = new MockWebSocketConnection();
 	
 	private void clear()
 	{

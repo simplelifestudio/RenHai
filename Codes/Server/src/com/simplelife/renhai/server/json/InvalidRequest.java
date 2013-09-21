@@ -32,7 +32,7 @@ public class InvalidRequest extends AppJSONMessage
 	@Override
 	public void run()
 	{
-		responseError(Consts.MessageId.InvalidRequest.name());
+		responseError(Consts.MessageId.Invalid.name());
 	}
 	
 	@Override
@@ -61,7 +61,7 @@ public class InvalidRequest extends AppJSONMessage
 	@Override
     public Consts.MessageId getMessageId()
     {
-    	return Consts.MessageId.InvalidRequest;
+    	return Consts.MessageId.Invalid;
     }
 	
 	@Override

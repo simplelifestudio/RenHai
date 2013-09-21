@@ -16,8 +16,13 @@ import org.junit.Test;
 
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DBModule;
+import com.simplelife.renhai.server.db.Device;
+import com.simplelife.renhai.server.db.DeviceDAO;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.DevicecardDAO;
+import com.simplelife.renhai.server.db.Impresscard;
+import com.simplelife.renhai.server.db.Interestcard;
+import com.simplelife.renhai.server.db.InterestcardDAO;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -73,27 +78,33 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		mockApp.syncDevice();
 		
 		// Step_04 数据库检查：设备卡片信息
-		DevicecardDAO dao = new DevicecardDAO();
-		Devicecard cardInDB = (Devicecard) dao.findByProperty("deviceId", deviceWrapper.getDevice().getDeviceId()).get(0); 
-		assertEquals(AppVersion, cardInDB.getAppVersion());
-		assertEquals(DeviceModel, cardInDB.getDeviceModel());
-		assertEquals(DeviceSN, deviceWrapper.getDevice().getDeviceSn());
-		assertEquals(IsJailed, cardInDB.getIsJailed());
-		assertEquals(Location, cardInDB.getLocation());
-		assertEquals(OSVersion, cardInDB.getOsVersion());
+		DeviceDAO deviceDAO = new DeviceDAO();
+		Device deviceInDB = deviceDAO.findByDeviceSn(deviceWrapper.getDeviceSn()).get(0);
+		Devicecard deviceCardInDB = deviceInDB.getDevicecard(); 
+		assertEquals(AppVersion, deviceCardInDB.getAppVersion());
+		assertEquals(DeviceModel, deviceCardInDB.getDeviceModel());
+		assertEquals(DeviceSN, deviceCardInDB.getDevice().getDeviceSn());
+		assertEquals(IsJailed, deviceCardInDB.getIsJailed());
+		assertEquals(Location, deviceCardInDB.getLocation());
+		assertEquals(OSVersion, deviceCardInDB.getOsVersion());
 		
 		// Step_05 数据库检查：兴趣卡片信息
-		fail("数据库检查待实现");
-		
+		Interestcard interCardInDB = deviceInDB.getProfile().getInterestcard();
+		assertTrue(interCardInDB.getInterestlabelmaps().isEmpty());
+				
 		// Step_06 数据库检查：印象卡片信息
-		fail("数据库检查待实现");
+		Impresscard impressCardInDB = deviceInDB.getProfile().getImpresscard();
+		assertTrue(impressCardInDB.getChatLossCount() == 0);
+		assertTrue(impressCardInDB.getChatTotalCount() == 0);
+		assertTrue(impressCardInDB.getChatTotalDuration() == 0);
+		assertTrue(impressCardInDB.getImpresslabelmaps().isEmpty());
 		
 		// Step_07 调用：DeviceWrapper::getBusinessStatus
 		businessStatus = deviceWrapper.getBusinessStatus();
 		assertEquals(businessStatus, Consts.BusinessStatus.Idle);
 		
 		// Step_08 调用：OnlineDevicePool::getCount
-		assertEquals(deviceCount + 1, pool.getElementCount());
+		assertTrue(pool.getDevice(mockApp.getDeviceWrapper().getDeviceSn()) != null);
 		
 		// Step_09 调用：DeviceWrapper::getLastActivityTime
 		assertTrue(deviceWrapper.getLastActivityTime().getTime() > lastActivityTime);
@@ -103,7 +114,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		connectionOwner.getConnection().onClose(0);
 		
 		// Step_11 调用：OnlineDevicePool::getCount
-		assertEquals(deviceCount, pool.getElementCount());
+		assertTrue(pool.getDevice(mockApp.getDeviceWrapper().getDeviceSn()) == null);
 		
 		// Step_12 建立WebSocket连接
 		deviceWrapper = mockApp.getDeviceWrapper();

@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.util.DateUtil;
 
 
 /**
@@ -40,7 +41,7 @@ public class Test01KeepWebsocket extends AbstractTestCase
 	public void test()
 	{
 		// Step_01 创建MockWebSocketConnection对象
-		MockWebSocketConnection conn = new MockWebSocketConnection("1111");
+		MockWebSocketConnection conn = new MockWebSocketConnection();
 		
 		// Step_02 调用：OnlineDevicePool::getCount
 		OnlineDevicePool pool = OnlineDevicePool.instance;

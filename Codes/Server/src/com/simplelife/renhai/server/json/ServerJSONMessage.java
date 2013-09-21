@@ -11,14 +11,14 @@
 
 package com.simplelife.renhai.server.json;
 
-import java.util.HashMap;
-
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.db.Device;
+import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
+import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IJSONObject;
 import com.simplelife.renhai.server.util.JSONKey;
 
@@ -48,7 +48,10 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     
     protected ServerJSONMessage(AppJSONMessage request)
     {
-    	this.deviceWrapper = request.getDeviceWrapper();
+    	if (request != null)
+    	{
+    		this.deviceWrapper = request.getDeviceWrapper();
+    	}
     	init(request);
     }
     
@@ -59,21 +62,31 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     	jsonObject.put(JSONKey.Header, header);
     	jsonObject.put(JSONKey.Body, body);
     	
-    	addToHeader(JSONKey.MessageSn, request.getMessageSn());
-		addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
-    	
-    	Device device = request.getDeviceWrapper().getDevice();
-    	if (device == null)
+    	if (request == null)
     	{
-    		//addToHeader(JSONKey.MessageType, 2);
+    		addToHeader(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
     		addToHeader(JSONKey.DeviceId, "");
     		addToHeader(JSONKey.DeviceSn, "");
     	}
     	else
     	{
-    		addToHeader(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
-    		addToHeader(JSONKey.DeviceSn, deviceWrapper.getDevice().getDeviceSn());
+    		addToHeader(JSONKey.MessageSn, request.getMessageSn());
+    		
+    		Device device = request.getDeviceWrapper().getDevice();
+        	if (device == null)
+        	{
+        		//addToHeader(JSONKey.MessageType, 2);
+        		addToHeader(JSONKey.DeviceId, "");
+        		addToHeader(JSONKey.DeviceSn, "");
+        	}
+        	else
+        	{
+        		addToHeader(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
+        		addToHeader(JSONKey.DeviceSn, deviceWrapper.getDevice().getDeviceSn());
+        	}
     	}
+		
+    	addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
     }
     
     /** */
@@ -120,7 +133,7 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     public abstract Consts.MessageId getMessageId();
     
     
-    protected void asyncResponse()
+    public void asyncResponse()
     {
     	Logger logger = JSONModule.instance.getLogger();
     	if (deviceWrapper == null)
@@ -132,7 +145,7 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     	deviceWrapper.asyncSendMessage(this);
     }
     
-    protected void syncResponse()
+    public void syncResponse()
     {
     	if (deviceWrapper == null)
     	{

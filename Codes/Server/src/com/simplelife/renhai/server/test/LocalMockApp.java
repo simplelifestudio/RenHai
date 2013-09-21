@@ -32,6 +32,11 @@ public class LocalMockApp extends AbstractMockApp
 		this.connection = connection;
 	}
 	
+	public String getConnectionId()
+	{
+		return connection.getConnectionId();
+	}
+	
 	@Override
 	public void assessAndQuit(String impressLabelList)
 	{
@@ -40,7 +45,7 @@ public class LocalMockApp extends AbstractMockApp
 			return;
 		}
 		
-		sendBusinessSessionRequest(Consts.OperationType.AssessAndQuit, impressLabelList);
+		sendBusinessSessionRequest(Consts.OperationType.AssessAndQuit, "", impressLabelList);
 	}
 	
 	/** */
@@ -115,7 +120,7 @@ public class LocalMockApp extends AbstractMockApp
 	
 	/** */
 	@Override
-	public void sendNotificationResponse()
+	public void sendNotificationResponse(Consts.NotificationType notificationType, String operationInfo, String operationValue)
 	{
 		// Add command type
 		jsonMapHeader.put(JSONKey.MessageId, Consts.MessageId.BusinessSessionNotificationResponse.name());
@@ -123,7 +128,8 @@ public class LocalMockApp extends AbstractMockApp
 		// Add command body
 		jsonMapBody.put(JSONKey.BusinessSessionId, businessSessionId);
 		jsonMapBody.put(JSONKey.BusinessType, Consts.BusinessType.Interest);
-		jsonMapBody.put(JSONKey.OperationType, Consts.OperationType.Received);
+		jsonMapBody.put(JSONKey.OperationInfo, operationInfo);
+		jsonMapBody.put(JSONKey.OperationType, notificationType);
 		jsonMapBody.put(JSONKey.OperationValue, "");
 		
 		// Send
@@ -132,7 +138,7 @@ public class LocalMockApp extends AbstractMockApp
 	
 	/** */
 	@Override
-	public void sendBusinessSessionRequest(Consts.OperationType operationType, String operationValue)
+	public void sendBusinessSessionRequest(Consts.OperationType operationType, String operationInfo, String operationValue)
 	{
 		// Add command type
 		jsonMapHeader.put(JSONKey.MessageId, Consts.MessageId.BusinessSessionRequest.name());
@@ -141,6 +147,7 @@ public class LocalMockApp extends AbstractMockApp
 		jsonMapBody.put(JSONKey.BusinessSessionId, businessSessionId);
 		jsonMapBody.put(JSONKey.BusinessType, businessType);
 		jsonMapBody.put(JSONKey.OperationType, operationType.name());
+		jsonMapBody.put(JSONKey.OperationInfo, operationInfo);
 		jsonMapBody.put(JSONKey.OperationValue, operationValue);
 		
 		// Send
@@ -158,14 +165,14 @@ public class LocalMockApp extends AbstractMockApp
 	@Override
 	public void enterPool(Consts.BusinessType poolType)
 	{
-		sendBusinessSessionRequest(Consts.OperationType.EnterPool, poolType.name());
+		sendBusinessSessionRequest(Consts.OperationType.EnterPool, "", poolType.name());
 	}
 	
 	/** */
 	@Override
 	public void endChat()
 	{
-		sendBusinessSessionRequest(Consts.OperationType.EndChat, "");
+		sendBusinessSessionRequest(Consts.OperationType.EndChat, "", "");
 	}
 	
 	/** */
@@ -174,11 +181,11 @@ public class LocalMockApp extends AbstractMockApp
 	{
 		if (agree)
 		{
-			sendBusinessSessionRequest(Consts.OperationType.AgreeChat, "");
+			sendBusinessSessionRequest(Consts.OperationType.AgreeChat, "", "");
 		}
 		else
 		{
-			sendBusinessSessionRequest(Consts.OperationType.RejectChat, "");
+			sendBusinessSessionRequest(Consts.OperationType.RejectChat, "", "");
 		}
 	}
 	
@@ -199,7 +206,7 @@ public class LocalMockApp extends AbstractMockApp
 			return;
 		}
 		
-		sendBusinessSessionRequest(Consts.OperationType.AssessAndContinue, impressLabelList);
+		sendBusinessSessionRequest(Consts.OperationType.AssessAndContinue, "", impressLabelList);
 	}
 	
 	/* (non-Javadoc)

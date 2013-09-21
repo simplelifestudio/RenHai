@@ -21,7 +21,7 @@ public interface IBusinessPool
     /** */
     public void deviceLeave(IDeviceWrapper device);
     
-    public void startChat(IBusinessSession session);
+    public void startChat(IDeviceWrapper device);
     
-    public void endChat(IBusinessSession session);
+    public void endChat(IDeviceWrapper device);
 }

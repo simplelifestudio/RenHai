@@ -15,7 +15,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 /**
  * 
@@ -39,15 +42,21 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 	public void test()
 	{
 		// Step_01 创建MockWebSocketConnection对象
-		MockWebSocketConnection conn = new MockWebSocketConnection("1111");
 		
 		// Step_02 调用：OnlineDevicePool::newDevice
 		mockApp = createMockApp();
+		String connectionId = mockApp.getConnectionId();
+		
+		//String deviceSn = mockApp.getDeviceWrapper().getDeviceSn();
+		IDeviceWrapper device = OnlineDevicePool.instance.getDevice(connectionId); 
+		assertTrue(device != null);
+		assertTrue(device.getOwnerOnlineDevicePool() == OnlineDevicePool.instance);
 		
 		// Step_02 等待Server的Websocket通信异常时间
 		try
 		{
-			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 1000 + 1000);
+			logger.debug("Wait for timeout, be patient...\n");
+			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection + 1000);
 		}
 		catch (InterruptedException e)
 		{
@@ -55,12 +64,12 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 		}
 		
 		// Step_03 Mock事件：onPing
-		mockApp.ping();
-		Date lastPingTime = mockApp.getDeviceWrapper().getLastPingTime();
+		logger.debug("Recover from sleep, start to check connection again.");
+		device = OnlineDevicePool.instance.getDevice(connectionId); 
+		assertTrue(device == null);
+		//assertTrue(device.getOwnerOnlineDevicePool() == null);
 		
-		mockApp.ping();
-		assertTrue(lastPingTime.getTime() < mockApp.getDeviceWrapper().getLastPingTime().getTime());
-		
+		//assertTrue(OnlineDevicePool.instance.getDevice(deviceSn) == null);
 		// Step_04 建立Websocket连接
 		
 	}

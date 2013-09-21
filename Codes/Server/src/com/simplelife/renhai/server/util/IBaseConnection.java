@@ -52,6 +52,8 @@ public interface IBaseConnection
 	/** */
 	public void ping();
 	
+	public void pong(ByteBuffer payload);
+	
 	/** */
 	public void bind(IBaseConnectionOwner owner);
 	

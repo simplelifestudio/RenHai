@@ -21,6 +21,7 @@ public class ServerDataSyncResponse extends ServerJSONMessage
 	{
 		super(request);
 		setMessageType(Consts.MessageType.ServerResponse);
+		setMessageId(Consts.MessageId.ServerDataSyncResponse);
 	}
 	
 	@Override

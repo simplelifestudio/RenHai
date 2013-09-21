@@ -70,13 +70,13 @@ public class RemoteMockApp extends AbstractMockApp
     
     /** */
     @Override
-    public void sendNotificationResponse()
+    public void sendNotificationResponse(Consts.NotificationType notificationType, String operationInfo, String operationValue)
     {
     }
     
     /** */
     @Override
-    public void sendBusinessSessionRequest(Consts.OperationType operationType, String operationValue)
+    public void sendBusinessSessionRequest(Consts.OperationType operationType, String operationInfo, String operationValue)
     {
     }
     

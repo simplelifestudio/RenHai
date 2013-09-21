@@ -21,6 +21,7 @@ public class ServerErrorResponse extends ServerJSONMessage
 	{
 		super(request);
 		setMessageType(Consts.MessageType.ServerResponse);
+		setMessageId(Consts.MessageId.ServerErrorResponse);
 	}
 	
 	@Override

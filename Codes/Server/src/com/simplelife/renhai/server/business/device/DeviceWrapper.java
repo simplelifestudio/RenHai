@@ -12,6 +12,7 @@
 package com.simplelife.renhai.server.business.device;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IBaseConnectionOwner;
@@ -36,25 +38,35 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     /** */
     protected IBaseConnection webSocketConnection;
     
-    /** */
+    // Time of last ping from APP
     protected Date lastPingTime;
     
-    /** */
+    // Time of last request (including AlohaRequest and AppDataSyncRequest) from APP
     protected Date lastActivityTime;
     
-    /** */
+    // Owner business session of this device, be null if device is not in status of SessionBound
     protected IBusinessSession ownerBusinessSession;
     
-    /** */
+    // Real device object enclosed in this DeviceWrapper
     protected Device device;
     
-    /** */
+    // Service status of device, to indicate if device is out of service
     protected Consts.ServiceStatus serviceStatus;
     
-    /** */
+    // Business session
     protected Consts.BusinessStatus businessStatus;
     
+    protected Consts.BusinessType businessType;
+    
     protected OnlineDevicePool ownerOnlinePool;
+    
+    protected boolean sessionBindConfirmed;
+    
+    protected boolean chatConfirmed;
+    
+    protected boolean connectionLost;
+    
+    protected boolean assessProvided;
     
     public void setServiceStatus(Consts.ServiceStatus serviceStatus)
     {
@@ -88,29 +100,44 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     /** */
     public void changeBusinessStatus(Consts.BusinessStatus targetStatus)
     {
+    	Logger logger = BusinessModule.instance.getLogger();
     	switch(targetStatus)
     	{
     		case Idle:
     			break;
     		case Init:
-    			if (businessStatus == Consts.BusinessStatus.Idle)
+    			switch(businessStatus)
     			{
-    				ownerOnlinePool.synchronizeDevice(this);
+    				case Idle:
+    					ownerOnlinePool.synchronizeDevice(this);
+    					break;
+    				case SessionBound:
+    					this.unbindBusinessSession();
+    					break;
+    				default:
+    					logger.error("Abnormal business status change for device:" + device.getDeviceSn() + ", source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+    					break;
     			}
     			break;
     		case SessionBound:
     			break;
     		case WaitMatch:
+    			switch(businessStatus)
+    			{
+    				case Init:
+    					break;
+    				case SessionBound:
+    					this.unbindBusinessSession();
+    					break;
+    				default:
+    					logger.error("Abnormal business status change for device:" + device.getDeviceSn() + ", source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+    					break;
+    			}
     			break;
     		default:
+    			logger.error("Abnormal target business status for device:" + device.getDeviceSn());
     			break;
     	}
-    }
-    
-    /** */
-    public void updateLastActivityTime()
-    {
-    	lastActivityTime = DateUtil.getNowDate();
     }
     
     /** */
@@ -119,11 +146,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
         return ownerBusinessSession;
     }
     
-    /** */
-    public void bindOnlineDevicePool(OnlineDevicePool pool)
-    {
-    	this.ownerOnlinePool = pool;
-    }
     
     /** */
     public Device getDevice()
@@ -159,6 +181,11 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     /** */
     public void unbindBusinessSession()
     {
+    	ownerBusinessSession = null;
+    	sessionBindConfirmed = false;
+    	chatConfirmed = false;
+    	connectionLost = false;
+    	assessProvided = false;
     }
     
     /** */
@@ -211,9 +238,16 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     }
 
     @Override
-    public void onPing(IBaseConnection conection)
+    public void onPing(IBaseConnection connection, ByteBuffer payload)
     {
+    	if (this.ownerOnlinePool == null)
+    	{
+    		return;
+    	}
+    	
+    	// 只有没有被释放的连接才回应ping
         this.updatePingTime();
+        connection.pong(payload);
     }
 
 
@@ -288,6 +322,85 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
 	public void setLastPingTime(Date date)
 	{
 		this.lastPingTime = date;
+	}
+
+	@Override
+	public void onSessionBindConfirmed()
+	{
+		sessionBindConfirmed = true;
+	}
+
+	@Override
+	public void onChatConfirmed()
+	{
+		chatConfirmed = true;
+	}
+
+	@Override
+	public void onConnectionLost()
+	{
+		connectionLost = true;
+	}
+
+	@Override
+	public void onAssessProvided()
+	{
+		assessProvided = true;
+	}
+
+	@Override
+	public boolean isSessionBindConfirmed()
+	{
+		return sessionBindConfirmed;
+	}
+
+	@Override
+	public boolean isChatConfirmed()
+	{
+		return chatConfirmed;
+	}
+
+	@Override
+	public boolean isConnectionLost()
+	{
+		return connectionLost;
+	}
+
+	@Override
+	public boolean isAssessProvided()
+	{
+		return assessProvided;
+	}
+
+	@Override
+	public void setBusinessType(BusinessType businessType)
+	{
+		this.businessType = businessType;
+	}
+
+	@Override
+	public BusinessType getBusinessType()
+	{
+		return businessType;
+	}
+
+	/** */
+    public void bindOnlineDevicePool(OnlineDevicePool pool)
+    {
+    	this.ownerOnlinePool = pool;
+    }
+    
+    
+	@Override
+	public void unbindOnlineDevicePool()
+	{
+		this.ownerOnlinePool = null;
+	}
+
+	@Override
+	public OnlineDevicePool getOwnerOnlineDevicePool()
+	{
+		return ownerOnlinePool;
 	}
 }
 

@@ -112,10 +112,10 @@ public class Test20MatchConfirmBReject extends AbstractTestCase
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
 		// Step_17 Mock事件：A确认绑定
-		mockApp1.sendNotificationResponse();
+		mockApp1.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
 		
 		// Step_18 Mock事件：B确认绑定
-		mockApp2.sendNotificationResponse();
+		mockApp2.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
 		
 		// Step_19 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);
