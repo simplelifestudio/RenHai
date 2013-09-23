@@ -29,12 +29,13 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
-		
+		GlobalSetting.TimeOut.OnlineDeviceConnection = 5 * 1000;
 	}
 	
 	@After
 	public void tearDown() throws Exception
 	{
+		GlobalSetting.TimeOut.OnlineDeviceConnection = 30 * 1000;
 		deleteDevice(mockApp);
 	}
 	
@@ -44,7 +45,7 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 		// Step_01 创建MockWebSocketConnection对象
 		
 		// Step_02 调用：OnlineDevicePool::newDevice
-		mockApp = createMockApp();
+		mockApp = createNewMockApp();
 		String connectionId = mockApp.getConnectionId();
 		
 		//String deviceSn = mockApp.getDeviceWrapper().getDeviceSn();

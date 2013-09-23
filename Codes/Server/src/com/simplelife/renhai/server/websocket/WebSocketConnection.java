@@ -31,7 +31,7 @@ import com.simplelife.renhai.server.json.TimeoutRequest;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
-import com.simplelife.renhai.server.util.IBaseConnectionOwner;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 
 
@@ -46,7 +46,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 	}
 	
     /** */
-    protected IBaseConnectionOwner connectionOwner;
+    protected IDeviceWrapper connectionOwner;
     protected String remoteIPAddress;
     protected HashMap<String, SyncController> syncMap = new HashMap<String, SyncController>();
     protected String connectionId;
@@ -80,18 +80,24 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void close()
     {
-        // TODO: value of status below
-        super.onClose(0);
+        try
+		{
+			getWsOutbound().close(0, null);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
     }
     
     /** */
-    public void bind(IBaseConnectionOwner owner)
+    public void bind(IDeviceWrapper owner)
     {
     	this.connectionOwner = owner;
     }
     
 	@Override
-	public IBaseConnectionOwner getOwner()
+	public IDeviceWrapper getOwner()
 	{
 		return connectionOwner;
 	}
@@ -224,7 +230,11 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     {
     	try
 		{
-			getWsOutbound().pong(payload);
+    		WsOutbound ws = getWsOutbound();
+    		if (ws != null)
+    		{
+    			ws.pong(payload);
+    		}
 		}
 		catch (IOException e)
 		{

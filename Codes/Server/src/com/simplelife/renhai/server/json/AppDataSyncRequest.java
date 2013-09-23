@@ -13,6 +13,10 @@ import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.apache.catalina.Globals;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -34,6 +38,8 @@ import com.simplelife.renhai.server.db.TableColumnName;
 import com.simplelife.renhai.server.db.TableName;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.GlobalSetting;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.JSONKey;
@@ -368,7 +374,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		{
 			if (body.containsKey(JSONKey.DataUpdate))
 			{
-				newDevice();
+				newDevice(deviceSn);
 			}
 			else
 			{
@@ -379,12 +385,48 @@ public class AppDataSyncRequest extends AppJSONMessage
 			}
 		}
 		
-		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.AppDataSyncResponse);
-		if (body.containsKey(JSONKey.DataUpdate))
+		// Check if profile is banned
+		Profile profile = deviceWrapper.getDevice().getProfile();
+		String strServiceStatus = profile.getServiceStatus();
+		Consts.ServiceStatus status = Consts.ServiceStatus.parseFromStringValue(strServiceStatus);  
+		if (status == Consts.ServiceStatus.Banned)
 		{
-			dataUpdate(body.getJSONObject(JSONKey.DataUpdate), response.getBody());
-			DAOWrapper.cache(this.deviceWrapper.getDevice());
-			OnlineDevicePool.instance.synchronizeDevice((DeviceWrapper)deviceWrapper);
+			long unbanDate = profile.getUnbanDate();
+			if (unbanDate <= System.currentTimeMillis())
+			{	
+				// Recover to normal
+				profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
+				profile.setUnbanDate(null);
+				
+				DAOWrapper.cache(profile);
+				//ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.AppDataSyncResponse);
+				deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
+			}
+			else
+			{
+				OnlineDevicePool.instance.IdentifyBannedDevice(deviceWrapper);
+			}
+		}
+		else
+		{
+			deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
+		}
+		
+		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.AppDataSyncResponse);
+		if (profile.getServiceStatus().equals(Consts.ServiceStatus.Normal.name()))
+		{
+			// Only allow normal device to update profile
+			if (body.containsKey(JSONKey.DataUpdate))
+			{
+				dataUpdate(body.getJSONObject(JSONKey.DataUpdate), response.getBody());
+				DAOWrapper.cache(this.deviceWrapper.getDevice());
+			}
+		}
+		
+		if (profile.getServiceStatus().equals(Consts.ServiceStatus.Banned.name()))
+		{
+			// Append query of profile status  
+			appendQueryServiceStatus();
 		}
 		
 		if (body.containsKey(JSONKey.DataQuery))
@@ -394,6 +436,36 @@ public class AppDataSyncRequest extends AppJSONMessage
 		response.asyncResponse();
 	}
 
+	private void appendQueryServiceStatus()
+	{
+		if (!body.containsKey(JSONKey.DataQuery))
+		{
+			body.put(JSONKey.DataQuery, new JSONObject());
+		}
+		
+		JSONObject queryObj = body.getJSONObject(JSONKey.DataQuery);
+		if (!queryObj.containsKey(JSONKey.Device))
+		{
+			queryObj.put(JSONKey.Device, new JSONObject());
+		}
+		
+		JSONObject deviceObj = queryObj.getJSONObject(JSONKey.Device);
+		if (!deviceObj.containsKey(JSONKey.Profile))
+		{
+			deviceObj.put(JSONKey.Profile, new JSONObject());
+		}
+		
+		JSONObject profileObj = deviceObj.getJSONObject(JSONKey.Profile);
+		if (!profileObj.containsKey(JSONKey.ServiceStatus))
+		{
+			profileObj.put(JSONKey.ServiceStatus, "");
+		}
+		
+		if (!profileObj.containsKey(JSONKey.UnbanDate))
+		{
+			profileObj.put(JSONKey.UnbanDate, "");
+		}
+	}
 	private void loadDevice(String deviceSn)
 	{
 		DeviceDAO deviceDAO = new DeviceDAO();
@@ -734,7 +806,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		parseDevicecard(deviceCardObj, deviceCardResponse);
 		deviceResponse.put(JSONKey.DeviceCard, deviceCardResponse);
 	}
-	private void newDevice()
+	private void newDevice(String deviceSn)
 	{
 		// Create new impress card
 		Impresscard impressCard = new Impresscard();
@@ -766,6 +838,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		// Create Device object and bind with cards
 		Device device = new Device();
+		device.setDeviceSn(deviceSn);
 		device.setDevicecard(deviceCard);
 		deviceCard.setDevice(device);
 		device.setProfile(profile);
@@ -775,13 +848,18 @@ public class AppDataSyncRequest extends AppJSONMessage
 		deviceWrapper.setDevice(device);
 		
 		Date date = DateUtil.getNowDate();
-		deviceWrapper.setLastActivityTime(date);
-		deviceWrapper.setLastPingTime(date);
+		deviceWrapper.updateActivityTime();
+		deviceWrapper.updatePingTime();
 		deviceWrapper.setServiceStatus(Consts.ServiceStatus.Normal);
 	}
 	
 	private void parseInterestCard(JSONObject interestCardObj, JSONObject response)
 	{
+		if (interestCardObj.isEmpty())
+		{
+			return;
+		}
+		
 		Interestcard card = deviceWrapper.getDevice().getProfile().getInterestcard();
 		JSONArray interestLabelList = interestCardObj.getJSONArray(JSONKey.InterestLabelList);
 		
@@ -871,28 +949,28 @@ public class AppDataSyncRequest extends AppJSONMessage
 		String temp = jsonObj.getString(JSONKey.DeviceModel);
 		if (temp != null)
 		{
-			response.put(JSONKey.DeviceModel, Consts.SuccessOrFail.Success);
+			response.put(JSONKey.DeviceModel, Consts.SuccessOrFail.Success.toString());
 			deviceCard.setDeviceModel(temp);
 		}
 		
 		temp = jsonObj.getString(JSONKey.OsVersion);
 		if (temp != null)
 		{
-			response.put(JSONKey.OsVersion, Consts.SuccessOrFail.Success);
+			response.put(JSONKey.OsVersion, Consts.SuccessOrFail.Success.toString());
 			deviceCard.setOsVersion(temp);
 		}
 		
 		temp = jsonObj.getString(JSONKey.AppVersion);
 		if (temp != null)
 		{
-			response.put(JSONKey.AppVersion, Consts.SuccessOrFail.Success);
+			response.put(JSONKey.AppVersion, Consts.SuccessOrFail.Success.toString());
 			deviceCard.setAppVersion(temp);
 		}
 		
 		temp = jsonObj.getString(JSONKey.IsJailed);
 		if (temp != null)
 		{
-			response.put(JSONKey.IsJailed, Consts.SuccessOrFail.Success);
+			response.put(JSONKey.IsJailed, Consts.SuccessOrFail.Success.toString());
 			Consts.YesNo isJailed = Consts.YesNo .parseValue(jsonObj.getString(JSONKey.IsJailed)); 
 			deviceCard.setIsJailed(isJailed.name());
 		}
@@ -900,7 +978,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		temp = jsonObj.getString(JSONKey.Location);
 		if (temp != null)
 		{
-			response.put(JSONKey.Location, Consts.SuccessOrFail.Success);
+			response.put(JSONKey.Location, Consts.SuccessOrFail.Success.toString());
 			deviceCard.setLocation(temp);
 		}
 	}

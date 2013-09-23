@@ -23,6 +23,12 @@ import com.simplelife.renhai.server.websocket.WebSocketConnection;
 public class MockWebSocketConnection extends WebSocketConnection
 {
 	private JSONObject lastSentMessage;
+	private AbstractMockApp ownerMockApp;
+	
+	public void bindMockApp(AbstractMockApp mockApp)
+	{
+		this.ownerMockApp = mockApp;
+	}
 	
 	public JSONObject getLastSentMessage()
 	{
@@ -93,6 +99,7 @@ public class MockWebSocketConnection extends WebSocketConnection
     	
     	lastSentMessage = new JSONObject();
     	lastSentMessage.put(JSONKey.JsonEnvelope, message.toJSONObject());
+    	this.ownerMockApp.onJSONCommand(lastSentMessage);
     	sendMessage(lastSentMessage.toJSONString());
     }
     
@@ -121,7 +128,7 @@ public class MockWebSocketConnection extends WebSocketConnection
     	
     	lastSentMessage = new JSONObject();
     	lastSentMessage.put(JSONKey.JsonEnvelope, message.toJSONObject());
-
+    	this.ownerMockApp.onJSONCommand(lastSentMessage);
     	sendMessage(lastSentMessage.toJSONString());
     	return null;
     }

@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.business.pool;
 
+import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IPool;
 
 

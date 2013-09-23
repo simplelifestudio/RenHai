@@ -37,8 +37,8 @@ public class Test16TimeoutNotifyAAfterBAgree extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
-		mockApp1 = createMockApp();
-		mockApp2 = createMockApp();
+		mockApp1 = createNewMockApp();
+		mockApp2 = createNewMockApp();
 		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
 	}
 	

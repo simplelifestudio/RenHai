@@ -12,7 +12,6 @@ package com.simplelife.renhai.server.json;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
-import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 
 /**
  * 
@@ -34,7 +33,7 @@ public class TimeoutRequest extends AppJSONMessage
 	@Override
 	public void run()
 	{
-		((IBaseConnectionOwner)deviceWrapper).onTimeOut(null);
+		deviceWrapper.onTimeOut(null);
 	}
 
 	/* (non-Javadoc)

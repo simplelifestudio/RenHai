@@ -37,6 +37,18 @@ public class Consts
 			}
 			return null;
 		}
+		
+		public static ServiceStatus parseFromStringValue(String value)
+		{
+			for (ServiceStatus item : values())
+			{
+				if (item.name().equals(value))
+				{
+					return item;
+				}
+			}
+			return null;
+		}
 	}
 	
 	public enum NotificationType
@@ -114,6 +126,12 @@ public class Consts
 			}
 			return null;
 		}
+		
+		@Override
+		public String toString()
+		{
+			return String.valueOf(value);
+		}
 	}
 	
 	public enum SuccessOrFail
@@ -178,6 +196,12 @@ public class Consts
 				}
 			}
 			return null;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return String.valueOf(value);
 		}
 	}
 	
@@ -334,6 +358,12 @@ public class Consts
 				}
 			}
 			return Invalid;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return String.valueOf(value);
 		}
     }
 	

@@ -21,7 +21,7 @@ public interface IMockApp
 	public void sendAlohaRequest();
 	
 	/** */
-	public void sendAppDataSyncRequest(HashMap<String, Object> queryMap, HashMap<String, Object> updateMap);
+	public void sendAppDataSyncRequest(JSONObject queryObj, JSONObject updateObj);
 	
 	/** */
 	public void sendServerDataSyncRequest();
@@ -57,8 +57,6 @@ public interface IMockApp
 	
 	public void assessAndQuit(String impressLabelList);
 	
-	public void updateInterestcard(HashMap<String, Object> interestLabels);
-
 	/**
 	 * @param obj
 	 */

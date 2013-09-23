@@ -31,7 +31,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
-		mockApp = createMockApp();
+		mockApp = createNewMockApp();
 	}
 	
 	/**

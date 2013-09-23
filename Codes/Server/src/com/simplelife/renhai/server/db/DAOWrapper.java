@@ -17,7 +17,9 @@ import java.util.Timer;
 
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.slf4j.Logger;
 
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -27,6 +29,7 @@ import com.simplelife.renhai.server.util.IDbCache;
 /** */
 public class DAOWrapper
 {
+	private static Logger logger = BusinessModule.instance.getLogger();
     /** */
     protected static LinkedList<Object> linkToBeSaved;
     
@@ -67,14 +70,14 @@ public class DAOWrapper
 	{
 		if (sql == null || sql.length() == 0)
 		{
-			FileLogger.severe("Invalid SQL string: " + sql);
+			logger.error("Invalid SQL string: " + sql);
 			return false;
 		}
 		
 		Session session = HibernateSessionFactory.getSession();
 		if (session == null)
 		{
-			FileLogger.severe("Null hibernate session, check DB parameters");
+			logger.error("Null hibernate session, check DB parameters");
 			return false;
 		}
 		
@@ -89,8 +92,9 @@ public class DAOWrapper
 		}
 		catch(Exception e)
 		{
-		    FileLogger.severe(sql);
-			FileLogger.printStackTrace(e);
+			logger.error(sql);
+			logger.error(e.getMessage());
+			//logger.printStackTrace(e);
 			if (session.getTransaction() != null)
 			{
 				session.getTransaction().rollback();
@@ -112,14 +116,14 @@ public class DAOWrapper
 	{
 		if (sql == null || sql.length() == 0)
 		{
-			FileLogger.severe("Invalid SQL string: " + sql);
+			logger.error("Invalid SQL string: " + sql);
 			return Consts.DBExistResult.NonExistent;
 		}
 		
 		Session session = HibernateSessionFactory.getSession();
 		if (session == null)
 		{
-			FileLogger.severe("Null hibernate session, check DB parameters");
+			logger.error("Null hibernate session, check DB parameters");
 			return Consts.DBExistResult.ErrorOccurred;
 		}
 		
@@ -137,8 +141,8 @@ public class DAOWrapper
 		}
 		catch(Exception e)
 		{
-		    FileLogger.severe(sql);
-			FileLogger.printStackTrace(e);
+			logger.error(sql);
+			logger.error(e.getMessage());
 			return Consts.DBExistResult.ErrorOccurred;
 		}
 		finally
@@ -157,14 +161,14 @@ public class DAOWrapper
 	{
 		if (sql == null || sql.length() == 0)
 		{
-			FileLogger.severe("Invalid SQL string: " + sql);
+			logger.error("Invalid SQL string: " + sql);
 			return null;
 		}
 		
 		Session session = HibernateSessionFactory.getSession();
 	    if (session == null)
 		{
-			FileLogger.severe("Null hibernate session, check DB parameters");
+	    	logger.error("Null hibernate session, check DB parameters");
 			return null;
 		}
 	    
@@ -175,8 +179,8 @@ public class DAOWrapper
 		}
 		catch(Exception e)
 		{
-		    FileLogger.severe(sql);
-			FileLogger.printStackTrace(e);
+			logger.error(sql);
+			logger.error(e.getMessage());
 			return null;
 		}
 	    finally
@@ -194,7 +198,7 @@ public class DAOWrapper
 		Session session = HibernateSessionFactory.getSession();
 		if (session == null)
 		{
-			FileLogger.severe("Null hibernate session, check DB parameters");
+			logger.error("Null hibernate session, check DB parameters");
 			return;
 		}
 		
@@ -210,7 +214,7 @@ public class DAOWrapper
 			{
 				session.getTransaction().rollback();
 			}
-			FileLogger.printStackTrace(e);
+			logger.error(e.getMessage());
 		}
 		finally
 		{
@@ -227,17 +231,17 @@ public class DAOWrapper
 		Session session = HibernateSessionFactory.getSession();
 		if (session == null)
 		{
-			FileLogger.severe("Null hibernate session, check DB parameters");
+			logger.error("Null hibernate session, check DB parameters");
 			return;
 		}
 		
 		try
 		{
-			FileLogger.info("Start to save data to DB");
+			logger.debug("Start to save data to DB");
 			session.beginTransaction();
 			session.save(obj);
 			session.getTransaction().commit();
-			FileLogger.info("Save data succeed");
+			logger.debug("Save data succeed");
 		}
 		catch(Exception e)
 		{
@@ -245,7 +249,7 @@ public class DAOWrapper
 			{
 				session.getTransaction().rollback();
 			}
-			FileLogger.printStackTrace(e);
+			logger.error(e.getMessage());
 		}
 		finally
 		{

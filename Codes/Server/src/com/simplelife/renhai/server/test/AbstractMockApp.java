@@ -15,8 +15,12 @@ import java.util.HashMap;
 import java.util.Timer;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
+import com.simplelife.renhai.server.util.CommonFunctions;
+import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
+import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.IMockApp;
 import com.simplelife.renhai.server.util.JSONKey;
@@ -32,17 +36,73 @@ public abstract class AbstractMockApp implements IMockApp
     protected IDeviceWrapper deviceWrapper;
     protected String peerDeviceId;
     protected String businessSessionId;
-    protected String businessType;
+    protected Consts.BusinessType businessType;
     protected JSONObject lastReceivedCommand;
     
-    protected HashMap<String, Object> jsonMap = new HashMap<String, Object>();
-    protected HashMap<String, Object> jsonMapHeader = new HashMap<String, Object>();
-    protected HashMap<String, Object> jsonMapBody = new HashMap<String, Object>();
-    protected HashMap<String, Object> jsonMapDevice = new HashMap<String, Object>();
+    protected JSONObject jsonObject = new JSONObject();
+    protected JSONObject header = new JSONObject();
+    protected JSONObject body = new JSONObject();
+    
+    
+	private String OSVersion = "iOS 6.1.2";
+	private String AppVersion = "0.1";
+	private String Location = "22.511962,113.380301";
+	private String DeviceModel = "iPhone6";
+	
+	public String getOSVersion()
+	{
+		return OSVersion;
+	}
+
+	public void setOSVersion(String oSVersion)
+	{
+		OSVersion = oSVersion;
+	}
+
+	public String getAppVersion()
+	{
+		return AppVersion;
+	}
+
+	public void setAppVersion(String appVersion)
+	{
+		AppVersion = appVersion;
+	}
+
+	public String getLocation()
+	{
+		return Location;
+	}
+
+	public void setLocation(String location)
+	{
+		Location = location;
+	}
+
+	public String getDeviceModel()
+	{
+		return DeviceModel;
+	}
+
+	public void setDeviceModel(String deviceModel)
+	{
+		DeviceModel = deviceModel;
+	}
+
+
+    
+    public void clearLastReceivedCommand()
+	{
+		lastReceivedCommand = null;
+	}
+    
+    public JSONObject getLastReceivedCommand()
+    {
+    	return lastReceivedCommand;
+    }
     
     public AbstractMockApp()
     {
-    	 
     }
     
     /**
@@ -50,34 +110,30 @@ public abstract class AbstractMockApp implements IMockApp
      */
     protected void init()
     {
-    	jsonMap.clear();
-    	jsonMap.put(JSONKey.Header, jsonMapHeader);
-    	jsonMap.put(JSONKey.Body, jsonMapBody);
+    	jsonObject.clear();
+    	jsonObject.put(JSONKey.Header, header);
+    	jsonObject.put(JSONKey.Body, body);
     	
-    	jsonMapHeader.put(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
-    	jsonMapHeader.put(JSONKey.DeviceSn, deviceWrapper.getDeviceSn());
-    	jsonMapHeader.put(JSONKey.TimeStamp, DateUtil.getNow());
-    }
-    
-    protected HashMap<String, Object> getDeviceJSONMap()
-    {
-    	if (jsonMapDevice.size() > 0)
-    	{
-    		return jsonMapDevice;
-    	}
-    	
-    	Devicecard card = (Devicecard) deviceWrapper.getDevice().getDevicecard();
-    	jsonMapDevice.put(JSONKey.OsVersion, card.getOsVersion());
-    	jsonMapDevice.put(JSONKey.AppVersion, card.getAppVersion());
-    	jsonMapDevice.put(JSONKey.IsJailed, card.getIsJailed());
-    	jsonMapDevice.put(JSONKey.Location, card.getLocation());
-    	
-    	return jsonMapDevice;
+    	header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
+    	header.put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
+    	header.put(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
+    	header.put(JSONKey.DeviceSn, deviceWrapper.getDeviceSn());
+    	header.put(JSONKey.TimeStamp, DateUtil.getNow());
     }
     
     public void bindDeviceWrapper(IDeviceWrapper deviceWrapper)
     {
     	this.deviceWrapper = deviceWrapper;
+    	
+    	Device device = deviceWrapper.getDevice();
+    	device.setDeviceSn(CommonFunctions.getRandomString(20));
+    	
+    	Devicecard card = deviceWrapper.getDevice().getDevicecard();
+		card.setOsVersion(OSVersion);
+		card.setAppVersion(AppVersion);
+		card.setIsJailed(Consts.YesNo.No.toString());
+		card.setLocation(Location);
+		card.setDeviceModel(DeviceModel);
     }
     
     public IDeviceWrapper getDeviceWrapper()

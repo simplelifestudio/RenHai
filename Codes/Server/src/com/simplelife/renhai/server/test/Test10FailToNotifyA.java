@@ -17,7 +17,6 @@ import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.session.BusinessSessionPool;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 /**
@@ -34,8 +33,8 @@ public class Test10FailToNotifyA extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
-		mockApp1 = createMockApp();
-		mockApp2 = createMockApp();
+		mockApp1 = createNewMockApp();
+		mockApp2 = createNewMockApp();
 		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
 	}
 	
@@ -58,11 +57,8 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
 		
-		assertTrue(deviceWrapper1 instanceof IBaseConnectionOwner);
-		IBaseConnectionOwner connectionOwner1 = (IBaseConnectionOwner) deviceWrapper1;
-		
-		assertTrue(connectionOwner1.getConnection() instanceof MockWebSocketConnection);
-		MockWebSocketConnection connection1 = (MockWebSocketConnection) connectionOwner1.getConnection();
+		assertTrue(deviceWrapper1.getConnection() instanceof MockWebSocketConnection);
+		MockWebSocketConnection connection1 = (MockWebSocketConnection) deviceWrapper1.getConnection();
 		
 		mockApp1.syncDevice();
 		mockApp2.syncDevice();

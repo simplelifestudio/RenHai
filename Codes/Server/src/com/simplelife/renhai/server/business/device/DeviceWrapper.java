@@ -26,14 +26,13 @@ import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IBaseConnection;
-import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.INode;
 
 
 /** */
-public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwner
+public class DeviceWrapper implements IDeviceWrapper, INode
 {
     /** */
     protected IBaseConnection webSocketConnection;
@@ -68,19 +67,18 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     
     protected boolean assessProvided;
     
+    private Logger logger = BusinessModule.instance.getLogger();
+    
     public void setServiceStatus(Consts.ServiceStatus serviceStatus)
     {
     	this.serviceStatus = serviceStatus;
     }
     
-    public void setBusinessStatus(Consts.BusinessStatus businessStatus)
-    {
-    	this.businessStatus = businessStatus;
-    }
-    
     /** */
-    protected void updatePingTime()
+    @Override
+    public void updatePingTime()
     {
+    	logger.debug("Update last ping time");
     	lastPingTime = DateUtil.getNowDate();
     }
             
@@ -94,6 +92,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     public DeviceWrapper(IBaseConnection connection)
     {
     	this.webSocketConnection = connection;
+    	this.businessStatus = Consts.BusinessStatus.Init;
     	connection.bind(this);
     }
     
@@ -103,12 +102,12 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     	Logger logger = BusinessModule.instance.getLogger();
     	switch(targetStatus)
     	{
-    		case Idle:
-    			break;
     		case Init:
+    			break;
+    		case Idle:
     			switch(businessStatus)
     			{
-    				case Idle:
+    				case Init:
     					ownerOnlinePool.synchronizeDevice(this);
     					break;
     				case SessionBound:
@@ -124,7 +123,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     		case WaitMatch:
     			switch(businessStatus)
     			{
-    				case Init:
+    				case Idle:
     					break;
     				case SessionBound:
     					this.unbindBusinessSession();
@@ -138,6 +137,8 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     			logger.error("Abnormal target business status for device:" + device.getDeviceSn());
     			break;
     	}
+    	
+    	businessStatus = targetStatus;
     }
     
     /** */
@@ -220,13 +221,17 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     @Override
     public void onClose(IBaseConnection connection)
     {
-        ownerOnlinePool.releaseDevice(this);
+    	if (ownerOnlinePool != null)
+    	{
+    		ownerOnlinePool.deleteDevice(this);
+    	}
     }
 
 
     @Override
     public void onJSONCommand(AppJSONMessage command)
     {
+    	this.updateActivityTime();
     	command.bindDeviceWrapper(this);
         (new Thread(command)).run();
     }
@@ -240,8 +245,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     @Override
     public void onPing(IBaseConnection connection, ByteBuffer payload)
     {
+    	logger.debug("Ping received from {}", connection.getConnectionId());
     	if (this.ownerOnlinePool == null)
     	{
+    		logger.debug("ownerOnlinePool == null and ping is ignored");
     		return;
     	}
     	
@@ -254,7 +261,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     @Override
     public void onTimeOut(IBaseConnection conection)
     {
-        this.ownerOnlinePool.releaseDevice(this);
+        this.ownerOnlinePool.deleteDevice(this);
     }
 
 
@@ -313,15 +320,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
 	}
 
 	@Override
-	public void setLastActivityTime(Date date)
+	public void updateActivityTime()
 	{
-		this.lastActivityTime = date;
-	}
-
-	@Override
-	public void setLastPingTime(Date date)
-	{
-		this.lastPingTime = date;
+		logger.debug("Update last activity time");
+		this.lastActivityTime = DateUtil.getNowDate();
 	}
 
 	@Override
@@ -395,6 +397,8 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
 	public void unbindOnlineDevicePool()
 	{
 		this.ownerOnlinePool = null;
+		this.webSocketConnection.close();
+		// TODO: support delay of closing websocket connection
 	}
 
 	@Override

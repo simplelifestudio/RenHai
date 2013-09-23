@@ -193,12 +193,14 @@ public class BusinessSessionRequest extends AppJSONMessage
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		onlinePool.getBusinessPool(type).deviceEnter(deviceWrapper);
 		deviceWrapper.setBusinessType(type);
+		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.BusinessSessionResponse);
 		response.addToBody(JSONKey.BusinessSessionId, "");
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.BusinessType, Consts.OperationType.EnterPool.name());
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.EnterPool.name());
 		response.addToBody(JSONKey.OperationInfo, "");
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.toString());
 		response.asyncResponse();
 	}
 

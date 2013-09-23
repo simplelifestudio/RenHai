@@ -30,8 +30,8 @@ public class Test22Assess extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
-		mockApp1 = createMockApp();
-		mockApp2 = createMockApp();
+		mockApp1 = createNewMockApp();
+		mockApp2 = createNewMockApp();
 	}
 	
 	@After

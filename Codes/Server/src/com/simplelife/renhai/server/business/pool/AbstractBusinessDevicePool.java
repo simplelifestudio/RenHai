@@ -30,7 +30,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     protected AbstractBusinessScheduler businessScheduler;
     
     // Map for saving devices in chat
-    protected HashMap<String, IDeviceWrapper> chatDeviceMap;
+    protected HashMap<String, IDeviceWrapper> chatDeviceMap = new HashMap<String, IDeviceWrapper>();
     
     public HashMap<String, IDeviceWrapper> getDeviceMap()
     {

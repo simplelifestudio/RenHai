@@ -39,7 +39,8 @@ public class CommonFunctions
 	    Random random = new Random();
 	    for (int i = 0; i < length; i++)
 	    {
-	        data[i] = baseData[random.nextInt() % baseDataLength]; 
+	        data[i] = baseData[random.nextInt(baseDataLength)]; 
+	    	//data[i] = baseData[i];
 	    }
 	    return new String(data);
 	}

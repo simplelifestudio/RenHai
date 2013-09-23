@@ -18,7 +18,7 @@ public class GlobalSetting
 	public static class TimeOut
 	{
 		public static int JSONMessageEcho = 9;
-		public static int OnlineDeviceConnection = 5 * 1000;
+		public static int OnlineDeviceConnection = 30 * 1000;
 		public static int ChatConfirm = 15;
 		public static int Assess = 60;
 		public static int CheckExpiredToken = 3600;

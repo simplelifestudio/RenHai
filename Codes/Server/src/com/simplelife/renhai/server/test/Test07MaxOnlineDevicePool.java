@@ -32,8 +32,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
-		mockApp1 = createMockApp();
-		mockApp2 = createMockApp();
+
 	}
 	
 	/**
@@ -43,8 +42,6 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 	public void tearDown() throws Exception
 	{
 		deleteDevice(mockApp1);
-		deleteDevice(mockApp2);
-		
 		OnlineDevicePool.instance.setCapacity(GlobalSetting.BusinessSetting.OnlinePoolCapacity);
 	}
 	
@@ -52,19 +49,32 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 	@Test
 	public void test()
 	{
+		
 		OnlineDevicePool pool = OnlineDevicePool.instance;
-		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
-		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
 		
 		// Step_01 调用：OnlineDevicePool::getCount
-		int deviceCount = pool.getElementCount();
-
+		
 		// Step_02 调用：OnlineDevicePool::setCapacity
-		pool.setCapacity(deviceCount + 1);
+		mockApp1 = createNewMockApp();
+		int deviceCount;
+		synchronized(pool)
+		{
+			deviceCount = pool.getElementCount();
+			pool.setCapacity(deviceCount);
+		}
+		
+		mockApp2 = createNewMockApp();
+		
+		assertTrue(mockApp1 != null);
+		assertTrue(mockApp2 == null);
+		
+		assertEquals(deviceCount, pool.getElementCount());
+		
+		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
+		
 		
 		// Step_03 调用：DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.Init, deviceWrapper1.getBusinessStatus());
-		assertEquals(Consts.BusinessStatus.Init, deviceWrapper2.getBusinessStatus());
 		
 		// Step_04 Mock请求：A设备同步
 		long lastActivity = deviceWrapper1.getLastActivityTime().getTime();
@@ -75,14 +85,12 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 		assertTrue(deviceWrapper1.getLastActivityTime().getTime() > lastActivity);
 		
 		// Step_06 调用：OnlineDevicePool::getCount
-		assertEquals(deviceCount, pool.getElementCount());
+		assertTrue(pool.getDevice(deviceWrapper1.getDeviceSn()) != null);
 		
 		// Step_07 Mock请求：B设备同步
-		lastActivity = deviceWrapper2.getLastActivityTime().getTime();
-		mockApp2.syncDevice();
+		
 		
 		// Step_08 调用：OnlineDevicePool::getCount
-		assertEquals(deviceCount - 1, pool.getElementCount());
-		assertTrue(deviceWrapper2.getLastActivityTime().getTime() > lastActivity);
+
 	}
 }

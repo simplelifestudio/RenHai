@@ -7,46 +7,53 @@
  * Copyright (c) 2013 SimpleLife Studio. All rights reserved.
  */
 
-
-
 package com.simplelife.renhai.server.business.pool;
 
 
 /** */
 public class RandomBusinessScheduler extends AbstractBusinessScheduler
 {
-    /** */
-    public void startScheduler()
-    {
-    }
-    
-    
-    /** */
-    public void stopScheduler()
-    {
-    }
-    
-    /** */
-    public void schedule()
-    {
-    }
-
-
+	private final int deviceCountPerSession = 2; 
+	
+	/** */
+	public void startScheduler()
+	{
+		
+	}
+	
+	/** */
+	public void stopScheduler()
+	{
+		lock.unlock();
+	}
+	
+	/** */
+	public void schedule()
+	{
+		if (deviceMap.size() < deviceCountPerSession)
+		{
+			
+		}
+	}
+	
 	@Override
 	public void run()
 	{
-		// TODO
-		if (deviceMap.size() <=2)
+		lock.lock();
+		try
 		{
-			try
-			{
-				this.sleep(5);
-			}
-			catch (InterruptedException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			//while ()
+			condition.await();
 		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void signal()
+	{
+		condition.signal();
 	}
 }
