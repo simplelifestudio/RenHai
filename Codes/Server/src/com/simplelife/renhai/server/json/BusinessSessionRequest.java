@@ -191,9 +191,13 @@ public class BusinessSessionRequest extends AppJSONMessage
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType type = Consts.BusinessType.parseValue(intType);
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		onlinePool.getBusinessPool(type).deviceEnter(deviceWrapper);
-		deviceWrapper.setBusinessType(type);
-		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
+		
+		synchronized (deviceWrapper)
+		{
+			onlinePool.getBusinessPool(type).deviceEnter(deviceWrapper);
+			deviceWrapper.setBusinessType(type);
+			deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
+		}
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.BusinessSessionResponse);
 		response.addToBody(JSONKey.BusinessSessionId, "");
@@ -245,7 +249,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 
 	private void endChat()
 	{
-		deviceWrapper.getOwnerBusinessSession().onEndChat();
+		deviceWrapper.getOwnerBusinessSession().onEndChat(deviceWrapper);
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.BusinessSessionResponse);
 		response.addToBody(JSONKey.BusinessSessionId, "");

@@ -16,6 +16,9 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.slf4j.Logger;
+
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.util.IBusinessScheduler;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
@@ -26,19 +29,34 @@ public abstract class AbstractBusinessScheduler extends Thread implements IBusin
     /** */
     protected AbstractBusinessDevicePool ownerBusinessPool;
     protected HashMap<String, IDeviceWrapper> deviceMap;
-    public final Lock lock = new ReentrantLock();
-	public final Condition condition = lock.newCondition(); 
+    protected final Lock lock = new ReentrantLock();
+    protected final Condition condition = lock.newCondition();
+	protected boolean runFlag = false;
+    protected Logger logger = BusinessModule.instance.getLogger();
+
+    public Lock getLock()
+    {
+    	return lock;
+    }
+    
     
     /** */
-    public abstract void startScheduler();
+    public void startScheduler()
+    {
+    	runFlag = true;
+    	this.start();
+    }
     
     /** */
-    public abstract void stopScheduler();
-    
-    /** */
-    public abstract void schedule();
-    
-    public abstract void signal();
+    public void stopScheduler()
+    {
+    	runFlag = false;
+    }
+
+    public void signal()
+    {
+    	condition.signal();
+    }
     
     /** */
     public void bind(AbstractBusinessDevicePool pool)

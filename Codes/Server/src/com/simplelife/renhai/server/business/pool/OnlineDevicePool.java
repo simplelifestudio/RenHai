@@ -81,16 +81,24 @@ public class OnlineDevicePool extends AbstractDevicePool
         IDeviceWrapper deviceWrapper;
         long lastTime;
         long now = System.currentTimeMillis();
+        logger.debug("1");
 		while (entryKeyIterator.hasNext())
 		{
+			logger.debug("11");
 			Entry<String, IDeviceWrapper> e = entryKeyIterator.next();
 			deviceWrapper = e.getValue();
 			
+			logger.debug("12");
 			lastTime = deviceWrapper.getLastPingTime().getTime();
+			
+			String temp = "last ping time: " + lastTime + ", now: " + now + ", diff: " + (now - lastTime) + ", setting: " + GlobalSetting.TimeOut.OnlineDeviceConnection;
+			logger.debug(temp);
 			if ((now - lastTime) > GlobalSetting.TimeOut.OnlineDeviceConnection)
 			{
 				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + deviceWrapper.getLastPingTime().toGMTString(), deviceWrapper.getConnection().getConnectionId());
+				logger.debug("2");
 				deleteDevice(deviceWrapper);
+				logger.debug("21");
 				continue;
 			}
 			
@@ -98,7 +106,9 @@ public class OnlineDevicePool extends AbstractDevicePool
 			if ((now - lastTime) > GlobalSetting.TimeOut.DeviceInIdel)
 			{
 				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + deviceWrapper.getLastActivityTime().toGMTString(), deviceWrapper.getConnection().getConnectionId());
+				logger.debug("3");
 				deleteDevice(deviceWrapper);
+				logger.debug("31");
 				continue;
 			}
 		}

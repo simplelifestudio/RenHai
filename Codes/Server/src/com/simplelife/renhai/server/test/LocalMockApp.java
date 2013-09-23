@@ -135,13 +135,35 @@ public class LocalMockApp extends AbstractMockApp
 	
 	/** */
 	@Override
-	public void sendNotificationResponse(Consts.NotificationType notificationType, String operationInfo,
+	public void sendNotificationResponse(
+			Consts.NotificationType notificationType, 
+			String operationInfo,
 			String operationValue)
 	{
 		init();
 		
 		// Add command type
 		header.put(JSONKey.MessageId, Consts.MessageId.BusinessSessionNotificationResponse.toString());
+		
+		String messageSn = null;
+		if (this.lastReceivedCommand != null)
+		{
+			if (lastReceivedCommand.containsKey(JSONKey.JsonEnvelope))
+			{
+				messageSn = lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope)
+						.getJSONObject(JSONKey.Header)
+						.getString(JSONKey.MessageSn);
+			}
+			else
+			{
+				logger.error("Invalid lastReceivedCommand: " + lastReceivedCommand.toJSONString());
+			}
+		}
+		
+		if (messageSn != null)
+		{
+			header.put(JSONKey.MessageSn, messageSn);
+		}
 		
 		// Add command body
 		body.put(JSONKey.BusinessSessionId, businessSessionId);

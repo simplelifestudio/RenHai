@@ -99,7 +99,10 @@ public class MockWebSocketConnection extends WebSocketConnection
     	
     	lastSentMessage = new JSONObject();
     	lastSentMessage.put(JSONKey.JsonEnvelope, message.toJSONObject());
-    	this.ownerMockApp.onJSONCommand(lastSentMessage);
+    	if (ownerMockApp != null)
+    	{
+    		this.ownerMockApp.onJSONCommand(lastSentMessage);
+    	}
     	sendMessage(lastSentMessage.toJSONString());
     }
     

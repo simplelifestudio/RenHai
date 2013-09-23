@@ -24,4 +24,6 @@ public interface IBusinessPool
     public void startChat(IDeviceWrapper device);
     
     public void endChat(IDeviceWrapper device);
+    
+    public Consts.BusinessType getBusinessType();
 }

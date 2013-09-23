@@ -77,7 +77,7 @@ public class JSONKey
 
 	public final static String OperationType				= "operationType";
 	public final static String OperationValue				= "operationValue";
-	public final static String Order						= "order";
+	public final static String LabelOrder					= "labelOrder";
 	public final static String OsVersion					= "osVersion";
 	public final static String Profile						= "profile";
 
@@ -99,5 +99,6 @@ public class JSONKey
 	public final static String AssessedCount				= "assessedCount";
 	public final static String OperationInfo				= "operationInfo";
 	
+	public final static String InterestLabelName			= "interestLabelName";
 	public final static String ImpressLabelName				= "impressLabelName";
 }

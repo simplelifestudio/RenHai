@@ -77,11 +77,14 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		// Step_05 调用：B DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
 		
+		businessPool.getBusinessScheduler().stopScheduler();
+		
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.enterPool(Consts.BusinessType.Random);
 		
 		// Step_07 Mock请求：B进入随机聊天
 		mockApp2.enterPool(Consts.BusinessType.Random);
+		
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
@@ -97,8 +100,24 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		businessPool.getBusinessScheduler().schedule();
 		
 		// Step_12 调用：BusinessSession::getStatus
+		//assertEquals(deviceWrapper1.getBusinessStatus(), Consts.BusinessStatus.SessionBound);
+		int count = 0;
+		while (deviceWrapper1.getOwnerBusinessSession() == null && count < 5)
+		{
+			try
+			{
+				Thread.sleep(1000);
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		assertTrue(deviceWrapper1.getOwnerBusinessSession() != null);
+		
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
-		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
+		//assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
 		// Step_13 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
@@ -106,9 +125,12 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		
 		// Step_14 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
+		assertTrue(deviceWrapper1.getOwnerBusinessSession() != null);
+		
 		
 		// Step_15 调用：B DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
+		assertTrue(deviceWrapper2.getOwnerBusinessSession() != null);
 		
 		// Step_16 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
@@ -118,6 +140,15 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		
 		// Step_18 Mock事件：B确认绑定
 		mockApp2.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
+		
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
 		
 		// Step_19 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);

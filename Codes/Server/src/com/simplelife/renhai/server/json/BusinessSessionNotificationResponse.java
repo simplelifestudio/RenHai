@@ -56,6 +56,24 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 			return;
 		}
 		
+		int intOperationType = body.getIntValue(JSONKey.OperationType);
+		Consts.NotificationType notificationType = Consts.NotificationType.parseValue(intOperationType);
+		switch(notificationType)
+		{
+			case SessionBinded:
+				deviceWrapper.getOwnerBusinessSession().onBindConfirm(deviceWrapper);
+				break;
+			case OthersideAgreed:
+				break;
+			case OthersideEndChat:
+				break;
+			case OthersideLost:
+				break;
+			case OthersideRejected:
+				break;
+			default:
+				break;
+		}
 	}
 
 	/* (non-Javadoc)

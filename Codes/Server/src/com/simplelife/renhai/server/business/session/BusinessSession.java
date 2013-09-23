@@ -24,6 +24,7 @@ import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
+import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.IBusinessSession;
@@ -33,8 +34,16 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 /** */
 public class BusinessSession implements IBusinessSession
 {
+	private AbstractBusinessDevicePool pool;
 	private Logger logger = BusinessModule.instance.getLogger();
 	private String sessionId;
+	
+	private List<IDeviceWrapper> deviceList = new ArrayList<IDeviceWrapper>(); 
+	
+	// Temp list for saving devices waiting for confirmation
+	private List<IDeviceWrapper> tmpConfirmDeviceList = new ArrayList<IDeviceWrapper>();
+	
+	private Consts.BusinessSessionStatus status = Consts.BusinessSessionStatus.Idle;
 	
 	public BusinessSession()
 	{
@@ -46,11 +55,6 @@ public class BusinessSession implements IBusinessSession
 		return sessionId;
 	}
 	
-    /** */
-    private Consts.BusinessSessionStatus status = Consts.BusinessSessionStatus.Idle;
-    
-    /** */
-    private LinkedList<IDeviceWrapper> deviceList;
     
     /** */
     public void checkWebRTCToken()
@@ -61,25 +65,157 @@ public class BusinessSession implements IBusinessSession
     /** */
     public void onBindConfirm(IDeviceWrapper device)
     {
-    	for (IDeviceWrapper deviceWrapper : deviceList)
+    	if (!tmpConfirmDeviceList.contains(device))
     	{
-    		if (!deviceWrapper.isSessionBindConfirmed())
-    		{
-    			return;
-    		}
+    		logger.error("Received confirmation from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
+    		return;
     	}
+    	
+    	if (this.status != Consts.BusinessSessionStatus.Idle)
+    	{
+    		logger.error("Bind confirm received from {} while curret session status is: " + status.name(), device.getDeviceSn());
+    		return;
+    	}
+    	
+    	synchronized (tmpConfirmDeviceList)
+		{
+    		tmpConfirmDeviceList.remove(device);
+		}
+    	
+    	synchronized(deviceList)
+    	{
+    		deviceList.add(device);
+    	}
+    	
+    	// If not all devices confirmed
+		if (tmpConfirmDeviceList.size() > 0)
+		{
+			return;
+		}
     	
     	changeStatus(Consts.BusinessSessionStatus.ChatConfirm);
     }
    
-    /** */
-    public void bind(LinkedList<IDeviceWrapper> deviceList)
+    private boolean checkBind(List<String> deviceList)
+    {
+    	if (deviceList == null)
+    	{
+    		return false;
+    	}
+    	
+    	if (deviceList.isEmpty())
+    	{
+    		return false;
+    	}
+    	
+    	IDeviceWrapper device;
+    	Consts.BusinessStatus status;
+    	for (String deviceSn : deviceList)
+    	{
+    		device = OnlineDevicePool.instance.getDevice(deviceSn);
+    		status = device.getBusinessStatus();
+    		
+    		if ( status != Consts.BusinessStatus.WaitMatch)
+    		{
+    			logger.error("Abnormal business status of device <{}>: " + status.name(), deviceSn);
+    			return false;
+    		}
+    	}
+    	return true;
+    }
+    
+    @Override
+    public void startSession(List<String> deviceList)
+    {
+    	if (!checkBind(deviceList))
+    	{
+    		return;
+    	}
+    	
+    	IDeviceWrapper device;
+    	for (String deviceSn : deviceList)
+    	{
+    		device = OnlineDevicePool.instance.getDevice(deviceSn);
+    		pool.startChat(device);
+    		device.bindBusinessSession(this);
+    		
+    		tmpConfirmDeviceList.add(device);
+    	}
+    	
+    	notifyDevices(null, Consts.NotificationType.SessionBinded);
+    }
+    
+    private void notifyDevices(IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
+    {
+    	if (tmpConfirmDeviceList.size() == 0)
+    	{
+    		return;
+    	}
+    	
+    	ServerJSONMessage notify = null;
+    	switch(this.status)
+    	{
+    		case Assess:
+    			break;
+    			
+    		case ChatConfirm:
+    			notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
+    			notify.getBody().put(JSONKey.BusinessSessionId, this.sessionId);
+    			notify.getBody().put(JSONKey.BusinessType, this.pool.getBusinessType().toString());
+    			notify.getBody().put(JSONKey.OperationType, notificationType.toString());
+    			notify.getBody().put(JSONKey.OperationValue, "");
+    			break;
+    			
+    		case Idle:
+    			notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
+    			notify.getBody().put(JSONKey.BusinessSessionId, this.sessionId);
+    			notify.getBody().put(JSONKey.BusinessType, this.pool.getBusinessType().toString());
+    			notify.getBody().put(JSONKey.OperationType, Consts.NotificationType.SessionBinded.toString());
+    			notify.getBody().put(JSONKey.OperationValue, "");
+    			break;
+    			
+    		case VideoChat:
+    			break;
+			default:
+				break;
+    	}
+    	
+		for (IDeviceWrapper device : tmpConfirmDeviceList)
+    	{
+			if (device == triggerDevice)
+			{
+				continue;
+			}
+			
+			notify.getHeader().put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
+			notify.getBody().put(JSONKey.OperationInfo, triggerDevice.toJSONObject());
+    		notify.setDeviceWrapper(device);
+    		notify.syncResponse();
+    	}
+	}
+    
+    /*
+    public void startSession(LinkedList<IDeviceWrapper> deviceList)
     {
     	this.deviceList = deviceList; 
     	for (IDeviceWrapper device : deviceList)
     	{
+    		pool.startChat(device);
     		device.bindBusinessSession(this);
     	}
+    }
+    */
+    
+    private void resetDeviceForConfirm()
+    {
+    	synchronized (tmpConfirmDeviceList)
+		{
+			tmpConfirmDeviceList.addAll(deviceList);
+		}
+		synchronized (deviceList)
+		{
+			deviceList.clear();
+		}
     }
     
     /**
@@ -102,7 +238,8 @@ public class BusinessSession implements IBusinessSession
     			if (status == Consts.BusinessSessionStatus.Idle)
     			{
     				status = targetStatus;
-    				sendChatConfirm();
+    				//sendChatConfirm();
+    				resetDeviceForConfirm();
     			}
     			else
     			{
@@ -125,6 +262,7 @@ public class BusinessSession implements IBusinessSession
     			if (status == Consts.BusinessSessionStatus.VideoChat)
     			{
     				status = targetStatus;
+    				resetDeviceForConfirm();
     			}
     			else
     			{
@@ -135,6 +273,8 @@ public class BusinessSession implements IBusinessSession
 			default:
 				break;
     	}
+    	
+    	status = targetStatus;
     }
     
     private void sendChatConfirm()
@@ -154,15 +294,44 @@ public class BusinessSession implements IBusinessSession
     	{
     		device.unbindBusinessSession();
     	}
-    }
-    /** */
-    public void onEndChat()
-    {
-    	changeStatus(Consts.BusinessSessionStatus.Assess);
+    	
+    	tmpConfirmDeviceList.clear();
+    	deviceList.clear();
     }
     
     /** */
-    public LinkedList getDeviceList()
+    public void onEndChat(IDeviceWrapper device)
+    {
+    	// Change status to Assess for any of App ends chat 
+    	changeStatus(Consts.BusinessSessionStatus.Assess);
+    	
+    	if (!tmpConfirmDeviceList.contains(device))
+    	{
+    		logger.error("Received confirmation from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
+    		return;
+    	}
+    	
+    	synchronized (tmpConfirmDeviceList)
+		{
+    		tmpConfirmDeviceList.remove(device);
+		}
+    	
+    	synchronized(deviceList)
+    	{
+    		deviceList.add(device);
+    	}
+    	
+    	// If not all devices assess
+		if (tmpConfirmDeviceList.size() > 0)
+		{
+			return;
+		}
+    	
+    	changeStatus(Consts.BusinessSessionStatus.Idle);
+    }
+    
+    /** */
+    public List<IDeviceWrapper> getDeviceList()
     {
         return deviceList;
     }
@@ -176,49 +345,94 @@ public class BusinessSession implements IBusinessSession
     @Override
     public void onAgreeChat(IDeviceWrapper device)
     {
-    	for (IDeviceWrapper deviceWrapper : deviceList)
+    	if (!tmpConfirmDeviceList.contains(device))
     	{
-    		if (!deviceWrapper.isChatConfirmed())
-    		{
-    			return;
-    		}
+    		logger.error("Received confirmation from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
+    		return;
     	}
+    	
+    	synchronized (tmpConfirmDeviceList)
+		{
+    		tmpConfirmDeviceList.remove(device);
+		}
+    	
+    	synchronized(deviceList)
+    	{
+    		deviceList.add(device);
+    	}
+    	
+    	// If not all devices confirmed
+		if (tmpConfirmDeviceList.size() > 0)
+		{
+			return;
+		}
+		
+		notifyDevices(device, Consts.NotificationType.OthersideAgreed);
     	changeStatus(Consts.BusinessSessionStatus.VideoChat);
     }
     
     @Override
     public void onRejectChat(IDeviceWrapper device)
     {
+    	if (!tmpConfirmDeviceList.contains(device))
+    	{
+    		logger.error("Received confirmation from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
+    		return;
+    	}
+    	
+    	synchronized (tmpConfirmDeviceList)
+		{
+    		tmpConfirmDeviceList.remove(device);
+		}
+    	
+    	synchronized(deviceList)
+    	{
+    		deviceList.add(device);
+    	}
+    	
+    	// If not all devices confirmed
+		if (tmpConfirmDeviceList.size() > 0)
+		{
+			return;
+		}
+		
+		notifyDevices(device, Consts.NotificationType.OthersideRejected);
     	changeStatus(Consts.BusinessSessionStatus.Idle);
     }
 
     @Override
     public void onDeviceLeave(IDeviceWrapper device)
     {
+    	tmpConfirmDeviceList.remove(device);
+    	deviceList.remove(device);
+    	
     	device.unbindBusinessSession();
     	switch(status)
     	{
-    		case ChatConfirm:
-    			changeStatus(Consts.BusinessSessionStatus.Idle);
-    			break;
     		case Idle:
     			changeStatus(Consts.BusinessSessionStatus.Idle);
     			break;
-    		case Assess:
-    			for (IDeviceWrapper deviceWrapper : deviceList)
-    			{
-    				// If not all devices finished assess
-    				if (!deviceWrapper.isAssessProvided() && !deviceWrapper.isConnectionLost())
-    				{
-    					return;
-    				}
-    			}
+    			
+    		case ChatConfirm:
     			changeStatus(Consts.BusinessSessionStatus.Idle);
     			break;
+    			
     		case VideoChat:
-    			changeStatus(Consts.BusinessSessionStatus.VideoChat);
+    			// Do nothing if
+    			//changeStatus(Consts.BusinessSessionStatus.VideoChat);
     			break;
-			default:
+			
+    		case Assess:
+    			// If not all devices finished assess
+				if (tmpConfirmDeviceList.size() > 0)
+				{
+					return;
+				}
+    			
+    			changeStatus(Consts.BusinessSessionStatus.Idle);
+    			break;
+    			
+    		default:
 				logger.error("Invalid status of BusinessSession: {}", status.name());
 				break;
     	}
@@ -248,5 +462,11 @@ public class BusinessSession implements IBusinessSession
     	BusinessType type = sourceDevice.getBusinessType();
     	AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
     	pool.deviceLeave(sourceDevice);
+	}
+
+	@Override
+	public void bind(AbstractBusinessDevicePool pool)
+	{
+		this.pool = pool;
 	}
 }

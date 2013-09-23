@@ -15,6 +15,34 @@ package com.simplelife.renhai.server.util;
  */
 public class Consts
 {
+	public enum SolidAssessLabel
+	{
+		Invalid(""), Good("∫√∆¿"), Normal("÷–∆¿"), Bad("≤Ó∆¿");
+		private String value;
+		private SolidAssessLabel(String value)
+		{
+			this.value = value;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return value;
+		}
+		
+		public static boolean isSolidAssessLabel(String label)
+		{
+			for (SolidAssessLabel tmpValue : values())
+			{
+				if (tmpValue.name().equals(label))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	
 	public enum ServiceStatus
 	{
 		Invalid(0), Normal(1), Banned(2);
@@ -49,6 +77,12 @@ public class Consts
 			}
 			return null;
 		}
+		
+		@Override
+		public String toString()
+		{
+			return String.valueOf(value);
+		}
 	}
 	
 	public enum NotificationType
@@ -57,7 +91,8 @@ public class Consts
 		SessionBinded(1), 
 		OthersideRejected(2),
 		OthersideAgreed(3), 
-		OthersideLost(4);
+		OthersideLost(4),
+		OthersideEndChat(5);
 		
 		private int value;
 		private NotificationType(int value)
@@ -76,6 +111,12 @@ public class Consts
 				}
 			}
 			return null;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return String.valueOf(value);
 		}
 	}
 	
@@ -101,6 +142,12 @@ public class Consts
 			}
 			return null;
 		}
+		
+		@Override
+		public String toString()
+		{
+			return String.valueOf(value);
+		}
 	}
 
 	public enum YesNo
@@ -114,12 +161,23 @@ public class Consts
 			this.value = value;
 		}
 	
-		public static YesNo parseValue(String value)
+		public static YesNo parseValue(int value)
 		{
-			int intValue = Integer.valueOf(value);
 			for (YesNo item : values())
 			{
-				if (item.value == intValue)
+				if (item.value == value)
+				{
+					return item;
+				}
+			}
+			return null;
+		}
+		
+		public static YesNo parseValue(String value)
+		{
+			for (YesNo item : values())
+			{
+				if (item.name() == value)
 				{
 					return item;
 				}
@@ -173,6 +231,12 @@ public class Consts
 				}
 			}
 			return null;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return String.valueOf(value);
 		}
 	}
 	
@@ -266,23 +330,24 @@ public class Consts
 		ServerDataSyncResponse(404), 
 		BusinessSessionResponse(405); 
 		
-		private int messageId ;
+		private int value ;
 		
 		private MessageId(int messageId)
 		{
-			this.messageId = messageId;
+			this.value = messageId;
 		}
 		
 		@Override
 		public String toString()
 		{
-			return String.valueOf(this.messageId);
+			return String.valueOf(this.value);
 		}
+		
 		public static MessageId parseValue(int value)
 		{
 			for (MessageId item : values())
 			{
-				if (item.messageId == value)
+				if (item.value == value)
 				{
 					return item;
 				}
@@ -315,17 +380,17 @@ public class Consts
 		CapacityReached_1202(1202),
 		QuitBusiDevicePoolUnkown_1203(1203);
 		
-		private int code;
+		private int value;
     	
     	private GlobalErrorCode(int code)
     	{
-    		this.code = code; 
+    		this.value = code; 
     	}
     	
     	@Override
     	public String toString()
     	{
-    		return String.valueOf(code);
+    		return String.valueOf(value);
     	}
 	}
 	

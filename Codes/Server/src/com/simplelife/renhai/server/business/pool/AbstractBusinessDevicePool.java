@@ -13,6 +13,8 @@ package com.simplelife.renhai.server.business.pool;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import org.slf4j.Logger;
 
@@ -28,13 +30,20 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 {
     // Scheduler of current BusinessDevicePool
     protected AbstractBusinessScheduler businessScheduler;
+    protected Consts.BusinessType businessType;
     
     // Map for saving devices in chat
     protected HashMap<String, IDeviceWrapper> chatDeviceMap = new HashMap<String, IDeviceWrapper>();
     
+    
+    public Consts.BusinessType getBusinessType()
+    {
+    	return businessType;
+    }
+    
     public HashMap<String, IDeviceWrapper> getDeviceMap()
     {
-    	return chatDeviceMap;
+    	return deviceMap;
     }
     
     /**
@@ -92,6 +101,11 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	}
     	
     	deviceMap.put(sn, device);
+    	logger.debug("Device <{}> has entered " + businessType.name() + "pool", device.getDeviceSn());
+    	
+    	businessScheduler.getLock().lock();
+    	businessScheduler.signal();
+    	businessScheduler.getLock().unlock();
     	return true;
     }
 
@@ -130,7 +144,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	}
     }
     
-
+    
     /**
      * Starts chat, move device from deviceMap to chatDeviceMap
      */

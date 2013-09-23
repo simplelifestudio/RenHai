@@ -94,7 +94,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 	{
 		if (!deviceObj.containsKey(JSONKey.DeviceSn))
 		{
-			String temp = JSONKey.Order + " must be provided for device.";
+			String temp = JSONKey.LabelOrder + " must be provided for device.";
 			logger.error(temp);
 			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
 			this.setErrorDescription(temp);
@@ -133,7 +133,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 	{
 		if (!interestCardObj.containsKey(JSONKey.InterestLabelList))
 		{
-			String temp = JSONKey.Order + " must be provided for interestCard.";
+			String temp = JSONKey.LabelOrder + " must be provided for interestCard.";
 			logger.error(temp);
 			setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
 			setErrorDescription(temp);
@@ -182,19 +182,19 @@ public class AppDataSyncRequest extends AppJSONMessage
 				return false;
 			}
 			
-			if (!tmpObj.containsKey(JSONKey.Order))
+			if (!tmpObj.containsKey(JSONKey.LabelOrder))
 			{
-				String temp = JSONKey.Order + " must be provided in " + i + " label in " + JSONKey.InterestLabelList;
+				String temp = JSONKey.LabelOrder + " must be provided in " + i + " label in " + JSONKey.InterestLabelList;
 				logger.error(temp);
 				setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
 				setErrorDescription(temp);
 				return false;
 			}
 			
-			tmpStr = tmpObj.getString(JSONKey.Order);
+			tmpStr = tmpObj.getString(JSONKey.LabelOrder);
 			if (!CommonFunctions.IsNumric(tmpStr))
 			{
-				String temp = JSONKey.Order + " must be numric in " +  i + " label in " + JSONKey.InterestLabelList;
+				String temp = JSONKey.LabelOrder + " must be numric in " +  i + " label in " + JSONKey.InterestLabelList;
 				logger.error(temp);
 				setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
 				setErrorDescription(temp);
@@ -680,7 +680,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 				labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalinterestlabel().getGlobalInterestLabelId());
 				labelObj.put(JSONKey.InterestLabel, label.getGlobalinterestlabel().getInterestLabel());
 				labelObj.put(JSONKey.GlobalMatchCount, label.getGlobalinterestlabel().getGlobalMatchCount());
-				labelObj.put(JSONKey.Order, label.getlabelOrder());
+				labelObj.put(JSONKey.LabelOrder, label.getlabelOrder());
 				labelObj.put(JSONKey.MatchCount, label.getMatchCount());
 				
 				labels.add(labelObj);
@@ -912,8 +912,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 			responseObj.put(JSONKey.InterestLabel, Consts.SuccessOrFail.Success);
 			interestLabelMapObj.setGlobalinterestlabel(globalInterestObj);
 			
-			interestLabelMapObj.setLabelOrder(Integer.parseInt(tmpJSONObj.getString(JSONKey.Order)));
-			responseObj.put(JSONKey.Order, Consts.SuccessOrFail.Success);
+			interestLabelMapObj.setLabelOrder(Integer.parseInt(tmpJSONObj.getString(JSONKey.LabelOrder)));
+			responseObj.put(JSONKey.LabelOrder, Consts.SuccessOrFail.Success);
 			labelMapList.add(interestLabelMapObj);
 			
 			interestLabelMapObj.setInterestcard(card);
@@ -971,7 +971,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		if (temp != null)
 		{
 			response.put(JSONKey.IsJailed, Consts.SuccessOrFail.Success.toString());
-			Consts.YesNo isJailed = Consts.YesNo .parseValue(jsonObj.getString(JSONKey.IsJailed)); 
+			Consts.YesNo isJailed = Consts.YesNo.parseValue(jsonObj.getIntValue(JSONKey.IsJailed)); 
 			deviceCard.setIsJailed(isJailed.name());
 		}
 		

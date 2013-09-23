@@ -12,7 +12,9 @@
 package com.simplelife.renhai.server.util;
 
 import java.util.LinkedList;
+import java.util.List;
 
+import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
 
 
@@ -23,7 +25,9 @@ public interface IBusinessSession
     public void onDeviceLeave(IDeviceWrapper device);
     
     /** */
-    public void bind(LinkedList<IDeviceWrapper> deviceList);
+    //public void startSession(LinkedList<IDeviceWrapper> deviceList);
+    
+    public void startSession(List<String> deviceList);
     
     /**
      * BusinessSession需要调用该方法切换状态，该方法中会检查绑定的两个设备的连接情况，如果有设备的连接已经断开，BusinessSession需要根据对应的业务逻辑决定接下来的业务流程，比如：
@@ -36,10 +40,10 @@ public interface IBusinessSession
     public void changeStatus(Consts.BusinessSessionStatus status);
     
     /** */
-    public void onEndChat();
+    public void onEndChat(IDeviceWrapper device);
     
     /** */
-    public LinkedList<IDeviceWrapper> getDeviceList();
+    public List<IDeviceWrapper> getDeviceList();
     
     /** */
     public BusinessSessionStatus getStatus();
@@ -54,4 +58,6 @@ public interface IBusinessSession
     public void onAgreeChat(IDeviceWrapper device);
     
     public void onRejectChat(IDeviceWrapper device);
+    
+    public void bind(AbstractBusinessDevicePool pool);
 }

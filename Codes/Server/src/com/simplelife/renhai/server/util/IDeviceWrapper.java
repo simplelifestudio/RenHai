@@ -14,6 +14,7 @@ package com.simplelife.renhai.server.util;
 import java.nio.ByteBuffer;
 import java.util.Date;
 
+import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.json.AppJSONMessage;
@@ -74,13 +75,13 @@ public interface IDeviceWrapper
     
     public void onAssessProvided();
     
-    public boolean isSessionBindConfirmed();
+    //public boolean isSessionBindConfirmed();
     
-    public boolean isChatConfirmed();
+    //public boolean isChatConfirmed();
     
-    public boolean isConnectionLost();
+    //public boolean isConnectionLost();
     
-    public boolean isAssessProvided();
+    //public boolean isAssessProvided();
     
     public void setBusinessType(Consts.BusinessType businessType);
     
@@ -105,5 +106,6 @@ public interface IDeviceWrapper
     public void onTimeOut(IBaseConnection conection);
     
     public IBaseConnection getConnection();
-
+    
+    public JSONObject toJSONObject();
 }
