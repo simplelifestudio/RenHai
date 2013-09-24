@@ -14,6 +14,7 @@
 
 // Warning: This method CAN NOT be invoked in Main Thread!
 -(RHJSONMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHJSONMessage*) requestMessage;
+-(RHJSONMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread;
 
 @optional
 -(void) requestAsync:(NSString*) serviceTarget

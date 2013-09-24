@@ -8,6 +8,7 @@
 
 #import "GHTestCase.h"
 
+
 @interface RenHaiCommunicationModuleTest : GHTestCase
 
 @end

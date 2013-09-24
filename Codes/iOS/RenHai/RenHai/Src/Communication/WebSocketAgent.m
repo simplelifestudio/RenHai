@@ -51,6 +51,7 @@
     _webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:remotePath]]];
     _webSocket.delegate = self;
     
+    NSLog(@"BEGIN OPEN - %@", [NSDate date]);
     [_webSocket open];
     
     [_pingTimer invalidate];
@@ -62,6 +63,13 @@
     _webSocket.delegate = nil;
     [_webSocket close];
     _webSocket = nil;
+}
+
+-(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread
+{
+    RHJSONMessage* responseMessage = [self requestSync:SERVICE_TARGET_WEBSOCKET requestMessage:requestMessage syncInMainThread:syncInMainThread];
+    
+    return responseMessage;
 }
 
 -(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage
@@ -82,7 +90,12 @@
 // Warning: This method CAN NOT be invoked in Main Thread!
 -(RHJSONMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHJSONMessage*) requestMessage
 {
-    if ([[NSThread currentThread] isMainThread])
+    return [self requestSync:serviceTarget requestMessage:requestMessage syncInMainThread:NO];
+}
+
+-(RHJSONMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL)syncInMainThread
+{
+    if (!syncInMainThread && [[NSThread currentThread] isMainThread])
     {
         DDLogWarn(@"Warning: This method CAN NOT be invoked in Main Thread!");
         return nil;
@@ -97,6 +110,7 @@
     NSString* messageSn = requestMessage.messageSn;
     NSCondition* _messageLock = [self _newMessageLock:messageSn];
     
+    requestMessage.enveloped = YES;
     NSString* jsonString = requestMessage.toJSONString;
     [self _sendJSONStringToWebSocket:jsonString];
     
@@ -121,6 +135,8 @@
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket;
 {
+    NSLog(@"FINISH OPEN - %@", [NSDate date]);    
+    
     DDLogInfo(@"Websocket Connected");
 }
 
@@ -136,8 +152,8 @@
     DDLogInfo(@"WebSocket Received Message Uncrypted: \"%@\"", message);
     
     NSDictionary* dic = [CBJSONUtils toJSONObject:message];
-    NSString* jsonString = [dic objectForKey:JSON_ENVELOPE];
-    RHJSONMessage* jsonMessage = [RHJSONMessage constructWithString:jsonString];
+    dic = [dic objectForKey:MESSAGE_KEY_ENVELOPE];
+    RHJSONMessage* jsonMessage = [RHJSONMessage constructWithContent:dic];
     
     DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", jsonMessage.toJSONString);
     
@@ -164,13 +180,9 @@
             
             break;
         }
-        case MessageType_Unkown:
-        {
-            break;
-        }
         default:
         {
-
+            NSAssert(NO, @"Received an unexpected message!");
             break;
         }
     }
@@ -195,7 +207,7 @@
 {
     if ([RHJSONMessage isMessageNeedEncrypt])
     {
-        jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:JSONMESSAGE_SECURITY_KEY];
+        jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:MESSAGE_SECURITY_KEY];
     }
     
     [_webSocket send:jsonString];

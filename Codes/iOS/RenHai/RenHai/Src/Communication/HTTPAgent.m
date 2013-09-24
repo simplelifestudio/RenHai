@@ -31,10 +31,10 @@
         NSString* jsonString = message.toJSONString;
         if ([RHJSONMessage isMessageNeedEncrypt])
         {
-            jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:JSONMESSAGE_SECURITY_KEY];
+            jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:MESSAGE_SECURITY_KEY];
         }
 
-        NSDictionary* params = [NSDictionary dictionaryWithObject:jsonString forKey:JSON_ENVELOPE];
+        NSDictionary* params = [NSDictionary dictionaryWithObject:jsonString forKey:MESSAGE_KEY_ENVELOPE];
         
         request = [httpClient
                    requestWithMethod:@"POST"
@@ -54,6 +54,13 @@
     return responseMessage;
 }
 
+-(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread
+{
+    RHJSONMessage* responseMessage = [self requestSync:REMOTEPATH_SERVICE_HTTP requestMessage:requestMessage syncInMainThread:syncInMainThread];
+    
+    return responseMessage;
+}
+
 #pragma mark - CBJSONMessageComm
 
 -(void) requestAsync:(NSString*) serviceTarget
@@ -69,7 +76,12 @@
 // Warning: This method CAN NOT be invoked in Main Thread!
 -(RHJSONMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHJSONMessage*) requestMessage
 {
-    if ([[NSThread currentThread] isMainThread])
+    return [self requestSync:serviceTarget requestMessage:requestMessage syncInMainThread:NO];
+}
+
+-(RHJSONMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread
+{
+    if (!syncInMainThread && [[NSThread currentThread] isMainThread])
     {
         DDLogWarn(@"Warning: This method CAN NOT be invoked in Main Thread!");
         return nil;
@@ -86,8 +98,8 @@
     id syncSuccessBlock = ^(NSURLRequest* request, NSHTTPURLResponse* response, id JSON)
     {
         NSDictionary* content = (NSDictionary*)JSON;
-        NSString* jsonString = [content objectForKey:JSON_ENVELOPE];
-        responseMessage = [RHJSONMessage constructWithString:jsonString];
+        content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
+        responseMessage = [RHJSONMessage constructWithContent:content];
         
         [lock lock];
         [lock signal];
@@ -97,8 +109,8 @@
     id syncFailureBlock = ^(NSURLRequest* request, NSHTTPURLResponse* response, NSError* error, id JSON)
     {
         NSDictionary* content = (NSDictionary*)JSON;
-        NSString* jsonString = [content objectForKey:JSON_ENVELOPE];
-        responseMessage = [RHJSONMessage constructWithString:jsonString];
+        content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
+        responseMessage = [RHJSONMessage constructWithContent:content];
         
         [lock lock];
         [lock signal];

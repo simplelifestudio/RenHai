@@ -22,6 +22,7 @@
 -(void) connectWebSocket;
 -(void) closeWebSocket;
 -(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage;
+-(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread;
 -(void) asyncMessage:(RHJSONMessage*) requestMessage;
 
 @end

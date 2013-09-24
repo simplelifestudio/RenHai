@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+#define FULL_DATE_TIME_FORMAT @"yyyy-MM-dd HH:mm:ss.SSS"
 #define STANDARD_DATE_TIME_FORMAT @"yyyy-MM-dd HH:mm:ss"
 #define STANDARD_DATE_FORMAT @"yyyy-MM-dd"
 #define SHORT_DATE_FORMAT @"M-dd"
