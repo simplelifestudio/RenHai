@@ -81,7 +81,15 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     public void updatePingTime()
     {
     	Date now = DateUtil.getNowDate();
-    	logger.debug("Update last ping time: " + now.getTime());
+    	String temp = "Update last ping time: " + now.getTime();
+    	
+    	temp += ", connection ID: " + getConnection().getConnectionId();
+    	if (device != null)
+    	{
+    		temp += " for device <" + device.getDeviceSn() + ">";
+    	}
+    	
+    	logger.debug(temp);
     	lastPingTime = now;
     }
             
@@ -110,8 +118,12 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     		case Idle:
     			switch(businessStatus)
     			{
+    				case Idle:
+    					break;
     				case Init:
     					ownerOnlinePool.synchronizeDevice(this);
+    					break;
+    				case WaitMatch:
     					break;
     				case SessionBound:
     					this.unbindBusinessSession();
@@ -245,7 +257,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     @Override
     public void onPing(IBaseConnection connection, ByteBuffer payload)
     {
-    	logger.debug("Ping received from {}", connection.getConnectionId());
     	if (this.ownerOnlinePool == null)
     	{
     		logger.debug("ownerOnlinePool == null and ping is ignored");
@@ -350,7 +361,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 	{
 		this.ownerOnlinePool = null;
 		this.webSocketConnection.close();
-		// TODO: support delay of closing websocket connection
 	}
 
 	@Override

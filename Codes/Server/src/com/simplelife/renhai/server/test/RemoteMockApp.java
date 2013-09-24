@@ -56,13 +56,13 @@ public class RemoteMockApp extends AbstractMockApp
     }
     
     @Override
-    public void sendRawJSONMessage(String jsonString)
+    public void sendRawJSONMessage(String jsonString, boolean syncSend)
     {
         
     }
     
     @Override
-    public void sendRawJSONMessage(JSONObject jsonObject)
+    public void sendRawJSONMessage(JSONObject jsonObject, boolean syncSend)
     {
     }
     

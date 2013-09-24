@@ -102,7 +102,7 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 		sessionCount = sessionPool.getElementCount();
 		
 		// Step_13 周期性Mock事件：A onPing
-		mockApp1.startPingTimer();
+		
 		
 		// Step_14 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());

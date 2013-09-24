@@ -279,7 +279,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     
     protected boolean checkNoEmptyAllowed(JSONObject obj, String fieldName)
 	{
-		if (header.containsKey(JSONKey.OsVersion))
+		if (header.containsKey(fieldName))
 		{
 			String fieldValue = obj.getString(fieldName);
 			

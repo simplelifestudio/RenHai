@@ -61,6 +61,8 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 		// Step_04 调用：OnlineDevicePool::getCount
 		assertEquals(deviceCount, pool.getElementCount());
 		
+		mockApp.stopTimer();
+		
 		// Step_05 等待Server的Websocket通信异常时间
 		try
 		{

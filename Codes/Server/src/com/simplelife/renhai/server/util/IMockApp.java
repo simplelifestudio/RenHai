@@ -26,9 +26,9 @@ public interface IMockApp
 	public void sendServerDataSyncRequest();
 	
 	/** */
-	public void sendRawJSONMessage(String jsonString);
+	public void sendRawJSONMessage(String jsonString, boolean syncSend);
 	
-	public void sendRawJSONMessage(JSONObject jsonObject);
+	public void sendRawJSONMessage(JSONObject jsonObject, boolean syncSend);
 	
 	/** */
 	public void sendNotificationResponse(

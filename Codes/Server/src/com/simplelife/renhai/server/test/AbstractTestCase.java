@@ -99,6 +99,7 @@ public abstract class AbstractTestCase extends TestCase
 	
 	protected void deleteDevice(LocalMockApp mockApp)
 	{
+		mockApp.pingTimer.cancel();
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		pool.deleteDevice(mockApp.getDeviceWrapper());
 	}

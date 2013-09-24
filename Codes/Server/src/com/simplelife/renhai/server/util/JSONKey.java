@@ -101,19 +101,20 @@ public class JSONKey
 	
 	public final static String InterestLabelName			= "interestLabelName";
 	public final static String ImpressLabelName				= "impressLabelName";
-	public final static String DeviceInOnlinePool			= "DeviceInOnlinePool";
-	public final static String CapacityOfOnlinePool			= "capacityOfOnlinePool";
-	public final static String DeviceInRandomPool			= "DeviceInRandomPool";
-	
-	public final static String CapacityOfRandomPool			= "CapacityOfRandomPool";
-	public final static String DeviceInInterestPool			= "DeviceInInterestPool";
-	public final static String CapacityOfInterestPool		= "CapacityOfInterestPool";
-	public final static String DeviceInChat					= "DeviceInChat";
-	public final static String DeviceInRandomChat			= "DeviceInRandomChat";
-	
-	public final static String DeviceInInterestChat			= "DeviceInInterestChat";
-	public final static String CurrentHotLabels				= "currentHotLabels";
-	public final static String HistoryHotLabels				= "historyHotLabels";
+	public final static String DeviceCapacity				= "deviceCapacity";
+//	public final static String DeviceInOnlinePool			= "DeviceInOnlinePool";
+//	public final static String CapacityOfOnlinePool			= "capacityOfOnlinePool";
+//	public final static String DeviceInRandomPool			= "DeviceInRandomPool";
+//	
+//	public final static String CapacityOfRandomPool			= "CapacityOfRandomPool";
+//	public final static String DeviceInInterestPool			= "DeviceInInterestPool";
+//	public final static String CapacityOfInterestPool		= "CapacityOfInterestPool";
+//	public final static String DeviceInChat					= "DeviceInChat";
+//	public final static String DeviceInRandomChat			= "DeviceInRandomChat";
+//	
+//	public final static String DeviceInInterestChat			= "DeviceInInterestChat";
+//	public final static String CurrentHotLabels				= "currentHotLabels";
+//	public final static String HistoryHotLabels				= "historyHotLabels";
 	
 	
 }
