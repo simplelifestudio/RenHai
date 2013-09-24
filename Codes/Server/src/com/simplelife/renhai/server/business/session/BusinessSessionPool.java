@@ -14,7 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
+import org.slf4j.Logger;
+
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractPool;
+import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBusinessSession;
 
 
@@ -27,9 +31,12 @@ public class BusinessSessionPool extends AbstractPool
 	private List<IBusinessSession> sessionList = new ArrayList<IBusinessSession>();
 	
 	public final static BusinessSessionPool instance = new BusinessSessionPool();
+	
+	private Logger logger = BusinessModule.instance.getLogger();
     
 	private BusinessSessionPool()
 	{
+		capacity = GlobalSetting.BusinessSetting.RandomBusinessPoolCapacity;
 		init();
 	}
     
@@ -38,6 +45,7 @@ public class BusinessSessionPool extends AbstractPool
 	{
 		if (sessionList.isEmpty())
 		{
+			logger.error("All business sessions are used.");
 			return null;
 		}
 		return sessionList.remove(0);

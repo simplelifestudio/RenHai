@@ -55,9 +55,9 @@ public interface IBaseConnection
 	public void pong(ByteBuffer payload);
 	
 	/** */
-	public void bind(IBaseConnectionOwner owner);
+	public void bind(IDeviceWrapper owner);
 	
-	public IBaseConnectionOwner getOwner();
+	public IDeviceWrapper getOwner();
 	
 	public String getConnectionId();
 }

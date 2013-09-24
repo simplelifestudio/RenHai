@@ -37,4 +37,14 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 		
 		// TODO Auto-generated method stub
 	}
+
+	/* (non-Javadoc)
+	 * @see com.simplelife.renhai.server.business.pool.AbstractBusinessScheduler#signal()
+	 */
+	@Override
+	public void signal()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

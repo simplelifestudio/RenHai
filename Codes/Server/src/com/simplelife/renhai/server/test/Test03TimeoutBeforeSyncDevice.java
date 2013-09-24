@@ -9,14 +9,11 @@
 
 package com.simplelife.renhai.server.test;
 
-import java.util.Date;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
@@ -29,12 +26,13 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
-		
+		GlobalSetting.TimeOut.OnlineDeviceConnection = 5 * 1000;
 	}
 	
 	@After
 	public void tearDown() throws Exception
 	{
+		GlobalSetting.TimeOut.OnlineDeviceConnection = 30 * 1000;
 		deleteDevice(mockApp);
 	}
 	
@@ -44,7 +42,7 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 		// Step_01 创建MockWebSocketConnection对象
 		
 		// Step_02 调用：OnlineDevicePool::newDevice
-		mockApp = createMockApp();
+		mockApp = createNewMockApp();
 		String connectionId = mockApp.getConnectionId();
 		
 		//String deviceSn = mockApp.getDeviceWrapper().getDeviceSn();

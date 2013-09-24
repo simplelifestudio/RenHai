@@ -13,7 +13,6 @@ import org.junit.Test;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
@@ -62,7 +61,7 @@ public class TestAppDataSyncRequest extends TestCase
 	@Test
 	public void testInvalidJSON_InvalidString()
 	{
-		DeviceWrapper deviceWrapper = new DeviceWrapper(conn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
 		conn.onTextMessage("fjdskajsdklaj{");
 		
 		JSONObject obj = conn.getLastSentMessage();
@@ -75,7 +74,7 @@ public class TestAppDataSyncRequest extends TestCase
 	{
 		wholeObj.clear();
 		
-		DeviceWrapper deviceWrapper = new DeviceWrapper(conn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
 		conn.onTextMessage(wholeObj.toJSONString());
 		
 		JSONObject obj = conn.getLastSentMessage();
@@ -88,7 +87,7 @@ public class TestAppDataSyncRequest extends TestCase
 	{
 		wholeObj.clear();
 		
-		DeviceWrapper deviceWrapper = new DeviceWrapper(conn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
 		conn.onTextMessage(wholeObj.toJSONString());
 		
 		JSONObject obj = conn.getLastSentMessage();
@@ -104,7 +103,7 @@ public class TestAppDataSyncRequest extends TestCase
 		//envelope.put(JSONKey.Header, header);
 		envelope.put(JSONKey.Body, body);
 		
-		DeviceWrapper deviceWrapper = new DeviceWrapper(conn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
 		conn.onTextMessage(wholeObj.toJSONString());
 		
 		JSONObject obj = conn.getLastSentMessage();
@@ -120,7 +119,7 @@ public class TestAppDataSyncRequest extends TestCase
 		envelope.put(JSONKey.Header, header);
 		//envelope.put(JSONKey.Body, body);
 		
-		DeviceWrapper deviceWrapper = new DeviceWrapper(conn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
 		conn.onTextMessage(wholeObj.toJSONString());
 		
 		JSONObject obj = conn.getLastSentMessage();
@@ -140,7 +139,7 @@ public class TestAppDataSyncRequest extends TestCase
 		header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		DeviceWrapper deviceWrapper = new DeviceWrapper(conn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
 		conn.onTextMessage(wholeObj.toJSONString());
 		
 		JSONObject obj = conn.getLastSentMessage();
@@ -160,7 +159,7 @@ public class TestAppDataSyncRequest extends TestCase
 		header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		DeviceWrapper deviceWrapper = new DeviceWrapper(conn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
 		conn.onTextMessage(wholeObj.toJSONString());
 		
 		JSONObject obj = conn.getLastSentMessage();
@@ -180,7 +179,7 @@ public class TestAppDataSyncRequest extends TestCase
 		//header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		DeviceWrapper deviceWrapper = new DeviceWrapper(conn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
 		conn.onTextMessage(wholeObj.toJSONString());
 		
 		JSONObject obj = conn.getLastSentMessage();
@@ -200,7 +199,7 @@ public class TestAppDataSyncRequest extends TestCase
 		header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		DeviceWrapper deviceWrapper = new DeviceWrapper(conn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
 		conn.onTextMessage(wholeObj.toJSONString());
 		
 		JSONObject obj = conn.getLastSentMessage();
@@ -220,7 +219,7 @@ public class TestAppDataSyncRequest extends TestCase
 		header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		new DeviceWrapper(conn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
 		conn.onTextMessage(wholeObj.toJSONString());
 		
 		JSONObject obj = conn.getLastSentMessage();
@@ -248,7 +247,7 @@ public class TestAppDataSyncRequest extends TestCase
 		
 		queryObj.put(JSONKey.Device, "");
 		
-		DeviceWrapper deviceWrapper = new DeviceWrapper(conn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
 		conn.onTextMessage(wholeObj.toJSONString());
 		
 		JSONObject obj = conn.getLastSentMessage();
@@ -274,7 +273,7 @@ public class TestAppDataSyncRequest extends TestCase
 		
 		body.put(JSONKey.DataQuery, newQueryObject());
 		
-		DeviceWrapper deviceWrapper = new DeviceWrapper(conn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
 		conn.onTextMessage(wholeObj.toJSONString());
 		
 		JSONObject obj = conn.getLastSentMessage();
@@ -396,7 +395,7 @@ public class TestAppDataSyncRequest extends TestCase
 		{
 			JSONObject label = new JSONObject();
 			label.put(JSONKey.InterestLabel, "InterestLabel" + i);
-			label.put(JSONKey.Order, i);
+			label.put(JSONKey.LabelOrder, i);
 			labelArray.add(label);
 		}
 		interestCardObj.put(JSONKey.InterestLabelList, labelArray);
@@ -416,6 +415,7 @@ public class TestAppDataSyncRequest extends TestCase
 	{
 		clear();
 		
+		deviceSn = "demoDeviceSn2";
 		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
 		header.put(JSONKey.MessageSn, "fdsafdsareafds");
 		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
@@ -423,7 +423,6 @@ public class TestAppDataSyncRequest extends TestCase
 		header.put(JSONKey.DeviceSn, deviceSn);
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		deviceSn = "demoDeviceSn2"; 
 		body.put(JSONKey.DataQuery, newQueryObject());
 		body.put(JSONKey.DataUpdate, newUpdateObject());
 		
@@ -455,7 +454,7 @@ public class TestAppDataSyncRequest extends TestCase
 		
 		body.put(JSONKey.DataQuery, newQueryObject());
 		
-		DeviceWrapper deviceWrapper = new DeviceWrapper(conn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
 		conn.onTextMessage(wholeObj.toJSONString());
 		
 		JSONObject obj = conn.getLastSentMessage();

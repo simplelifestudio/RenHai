@@ -77,7 +77,7 @@ public class JSONKey
 
 	public final static String OperationType				= "operationType";
 	public final static String OperationValue				= "operationValue";
-	public final static String Order						= "order";
+	public final static String LabelOrder					= "labelOrder";
 	public final static String OsVersion					= "osVersion";
 	public final static String Profile						= "profile";
 
@@ -99,5 +99,21 @@ public class JSONKey
 	public final static String AssessedCount				= "assessedCount";
 	public final static String OperationInfo				= "operationInfo";
 	
+	public final static String InterestLabelName			= "interestLabelName";
 	public final static String ImpressLabelName				= "impressLabelName";
+	public final static String DeviceInOnlinePool			= "DeviceInOnlinePool";
+	public final static String CapacityOfOnlinePool			= "capacityOfOnlinePool";
+	public final static String DeviceInRandomPool			= "DeviceInRandomPool";
+	
+	public final static String CapacityOfRandomPool			= "CapacityOfRandomPool";
+	public final static String DeviceInInterestPool			= "DeviceInInterestPool";
+	public final static String CapacityOfInterestPool		= "CapacityOfInterestPool";
+	public final static String DeviceInChat					= "DeviceInChat";
+	public final static String DeviceInRandomChat			= "DeviceInRandomChat";
+	
+	public final static String DeviceInInterestChat			= "DeviceInInterestChat";
+	public final static String CurrentHotLabels				= "currentHotLabels";
+	public final static String HistoryHotLabels				= "historyHotLabels";
+	
+	
 }

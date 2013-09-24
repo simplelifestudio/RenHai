@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import com.simplelife.renhai.server.business.device.AbstractLabel;
+import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
@@ -24,18 +25,37 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     /** */
     private HashMap<String, LinkedList> interestLabelMap;
     
-    /** */
-    public LinkedList<AbstractLabel> getHotInterestLabel(Object count)
-    {
-        return null;
     
+    public InterestBusinessDevicePool()
+    {
+    	businessType = Consts.BusinessType.Interest;
+    }
+    
+    /** */
+    public LinkedList<AbstractLabel> getHotInterestLabel(int count)
+    {
+    	LinkedList<AbstractLabel> labelList = new LinkedList<AbstractLabel>();
+    	if (count <= 0)
+    	{
+    		return labelList;
+    	}
+    	
+    	// TODO: 
+        return labelList;
     }
     
     /** */
     public LinkedList<AbstractLabel> getHistoryHotInterestLabel(int count)
     {
-        return null;
-    
+    	// TODO:
+    	LinkedList<AbstractLabel> labelList = new LinkedList<AbstractLabel>();
+    	if (count <= 0)
+    	{
+    		return labelList;
+    	}
+    	
+    	// TODO: 
+        return labelList;
     }
     
     /** */

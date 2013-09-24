@@ -231,7 +231,7 @@ DROP TABLE IF EXISTS `profile`;
 CREATE TABLE `profile` (
   `profileId` int(11) NOT NULL AUTO_INCREMENT,
   `deviceId` int(11) NOT NULL,
-  `serviceStatus` enum('Ban','Normal') NOT NULL,
+  `serviceStatus` enum('Banned','Normal') NOT NULL,
   `unbanDate` bigint(20) DEFAULT NULL,
   `lastActivityTime` bigint(20) NOT NULL,
   `createTime` bigint(20) NOT NULL,

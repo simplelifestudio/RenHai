@@ -16,6 +16,8 @@ import org.junit.Test;
 
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.Device;
+import com.simplelife.renhai.server.db.DeviceDAO;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.TableColumnName;
 import com.simplelife.renhai.server.db.TableName;
@@ -37,7 +39,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
-		mockApp = createMockApp();
+		mockApp = createDemoMockApp();
 	}
 	
 	/**
@@ -55,13 +57,16 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
 		Devicecard deviceCard = deviceWrapper.getDevice().getDevicecard();
-		mockApp = createMockApp();
 		
-		// Step_01 数据库操作：将设备A的服务状态更新为禁聊，到期日期为昨天
-		String sql = "update " + TableName.DeviceCard 
-				+ " set " + TableColumnName.ServiceStatus + " = 1, "
-				+ TableColumnName.UnbanDate + " = " + DateUtil.getDateByDayBack(1)
-				+ " where " + TableColumnName.DeviceSn + " = '" + deviceWrapper.getDevice().getDeviceSn() + "'";
+		DeviceDAO dao = new DeviceDAO();
+		Device device = dao.findByDeviceSn(deviceWrapper.getDeviceSn()).get(0);
+		String deviceId = String.valueOf(device.getDeviceId()); 
+		
+		// Step_01 数据库操作：将设备A的服务状态更新为禁聊，到期日期为明年
+		String sql = "update " + TableName.Profile 
+				+ " set " + TableColumnName.ServiceStatus + " = '" + Consts.ServiceStatus.Banned.name() + "', "
+				+ TableColumnName.UnbanDate + " = " + DateUtil.getDateByDayBack(1).getTime()
+				+ " where " + TableColumnName.DeviceId + " = " + deviceId;
 		DAOWrapper.executeSql(sql);
 		
 		// Step_02 调用：OnlineDevicePool::getCount

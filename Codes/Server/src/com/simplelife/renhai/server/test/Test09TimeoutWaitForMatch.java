@@ -30,7 +30,7 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
-		mockApp = createMockApp();
+		mockApp = createNewMockApp();
 	}
 	
 	/**

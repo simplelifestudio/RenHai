@@ -11,10 +11,23 @@
 
 package com.simplelife.renhai.server.business.pool;
 
+import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.GlobalSetting;
+
 
 /** */
 public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 {
-
+	public RandomBusinessDevicePool()
+	{
+		businessType = Consts.BusinessType.Random;
+		
+		businessScheduler = new RandomBusinessScheduler();
+		businessScheduler.bind(this);
+		
+		businessScheduler.startScheduler();
+		
+		setCapacity(GlobalSetting.BusinessSetting.RandomBusinessPoolCapacity);
+	}
 
 }

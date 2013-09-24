@@ -18,7 +18,7 @@ public class GlobalSetting
 	public static class TimeOut
 	{
 		public static int JSONMessageEcho = 9;
-		public static int OnlineDeviceConnection = 5 * 1000;
+		public static int OnlineDeviceConnection = 30 * 1000;
 		public static int ChatConfirm = 15;
 		public static int Assess = 60;
 		public static int CheckExpiredToken = 3600;
@@ -38,7 +38,8 @@ public class GlobalSetting
 		public static int OnlinePoolCapacity = 10000;
 		public static int RandomBusinessPoolCapacity = 10000;
 		public static int InterestBusinessPoolCapacity = 0;
-		public static int DefaultLoadedImpressLabel = 10;
+		public static int DefaultImpressLabelCount = 10;
+		public static int HotInterestLabelCount = 10;
 		
 		public static boolean Encrypt = false;
 		public static String EncryptKey = "20120801";

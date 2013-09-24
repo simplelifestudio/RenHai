@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.util.DateUtil;
 
 
 /**
@@ -48,7 +47,7 @@ public class Test01KeepWebsocket extends AbstractTestCase
 		int deviceCount = pool.getElementCount();
 		
 		// Step_03 调用：OnlineDevicePool::newDevice
-		mockApp = createMockApp();
+		mockApp = createNewMockApp();
 		
 		// Step_04 调用：OnlineDevicePool::getCount
 		assertEquals(pool.getElementCount(), deviceCount + 1);

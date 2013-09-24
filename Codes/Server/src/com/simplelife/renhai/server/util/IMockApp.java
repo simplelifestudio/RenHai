@@ -10,7 +10,6 @@
 package com.simplelife.renhai.server.util;
 
 
-import java.util.HashMap;
 import com.alibaba.fastjson.JSONObject;
 
 
@@ -21,7 +20,7 @@ public interface IMockApp
 	public void sendAlohaRequest();
 	
 	/** */
-	public void sendAppDataSyncRequest(HashMap<String, Object> queryMap, HashMap<String, Object> updateMap);
+	public void sendAppDataSyncRequest(JSONObject queryObj, JSONObject updateObj);
 	
 	/** */
 	public void sendServerDataSyncRequest();
@@ -32,7 +31,10 @@ public interface IMockApp
 	public void sendRawJSONMessage(JSONObject jsonObject);
 	
 	/** */
-	public void sendNotificationResponse(Consts.NotificationType notificationType, String operationInfo, String operationValue);
+	public void sendNotificationResponse(
+			Consts.NotificationType notificationType, 
+			String operationInfo, 
+			String operationValue);
 	
 	/** */
 	public void sendBusinessSessionRequest(Consts.OperationType operationType, String operationInfo, String operationValue);
@@ -57,8 +59,6 @@ public interface IMockApp
 	
 	public void assessAndQuit(String impressLabelList);
 	
-	public void updateInterestcard(HashMap<String, Object> interestLabels);
-
 	/**
 	 * @param obj
 	 */

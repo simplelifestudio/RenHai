@@ -14,6 +14,7 @@ package com.simplelife.renhai.server.json;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
@@ -29,6 +30,7 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
 	protected JSONObject jsonObject = new JSONObject();
     protected JSONObject header = new JSONObject();
     protected JSONObject body = new JSONObject();
+    private Logger logger = BusinessModule.instance.getLogger();
     
 	public JSONObject getJsonObject()
 	{
@@ -57,7 +59,6 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     
     protected void init(AppJSONMessage request)
     {
-    	Logger logger = JSONModule.instance.getLogger();
     	jsonObject.clear();
     	jsonObject.put(JSONKey.Header, header);
     	jsonObject.put(JSONKey.Body, body);
@@ -149,7 +150,7 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     {
     	if (deviceWrapper == null)
     	{
-    		// TODO: log error here
+    		logger.error("deviceWrapper of ServerJSONMessage is null! message Id: {}", this.header.getString(JSONKey.MessageId));
     		return;
     	}
     	

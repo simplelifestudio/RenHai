@@ -9,8 +9,6 @@
 
 package com.simplelife.renhai.server.test;
 
-import java.util.HashMap;
-
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.Consts;
 
@@ -47,7 +45,7 @@ public class RemoteMockApp extends AbstractMockApp
     
     /** */
     @Override
-    public void sendAppDataSyncRequest(HashMap<String, Object> queryMap, HashMap<String, Object> updateMap)
+    public void sendAppDataSyncRequest(JSONObject queryObj, JSONObject updateObj)
     {
     }
     
@@ -107,16 +105,6 @@ public class RemoteMockApp extends AbstractMockApp
 	 */
 	@Override
 	public void chatConfirm(boolean agree)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.util.IMockApp#updateInterestcard(java.lang.String)
-	 */
-	@Override
-	public void updateInterestcard(HashMap<String, Object> interestLabels)
 	{
 		// TODO Auto-generated method stub
 		

@@ -14,26 +14,35 @@ package com.simplelife.renhai.server.business.device;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Date;
+import java.util.Set;
 
 import org.slf4j.Logger;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
+import com.simplelife.renhai.server.db.Devicecard;
+import com.simplelife.renhai.server.db.Impresscard;
+import com.simplelife.renhai.server.db.Impresslabelmap;
+import com.simplelife.renhai.server.db.Interestcard;
+import com.simplelife.renhai.server.db.Interestlabelmap;
+import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IBaseConnection;
-import com.simplelife.renhai.server.util.IBaseConnectionOwner;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.INode;
+import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */
-public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwner
+public class DeviceWrapper implements IDeviceWrapper, INode
 {
     /** */
     protected IBaseConnection webSocketConnection;
@@ -60,28 +69,20 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     
     protected OnlineDevicePool ownerOnlinePool;
     
-    protected boolean sessionBindConfirmed;
-    
-    protected boolean chatConfirmed;
-    
-    protected boolean connectionLost;
-    
-    protected boolean assessProvided;
+    private Logger logger = BusinessModule.instance.getLogger();
     
     public void setServiceStatus(Consts.ServiceStatus serviceStatus)
     {
     	this.serviceStatus = serviceStatus;
     }
     
-    public void setBusinessStatus(Consts.BusinessStatus businessStatus)
-    {
-    	this.businessStatus = businessStatus;
-    }
-    
     /** */
-    protected void updatePingTime()
+    @Override
+    public void updatePingTime()
     {
-    	lastPingTime = DateUtil.getNowDate();
+    	Date now = DateUtil.getNowDate();
+    	logger.debug("Update last ping time: " + now.getTime());
+    	lastPingTime = now;
     }
             
     /** */
@@ -94,6 +95,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     public DeviceWrapper(IBaseConnection connection)
     {
     	this.webSocketConnection = connection;
+    	this.businessStatus = Consts.BusinessStatus.Init;
     	connection.bind(this);
     }
     
@@ -103,12 +105,12 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     	Logger logger = BusinessModule.instance.getLogger();
     	switch(targetStatus)
     	{
-    		case Idle:
-    			break;
     		case Init:
+    			break;
+    		case Idle:
     			switch(businessStatus)
     			{
-    				case Idle:
+    				case Init:
     					ownerOnlinePool.synchronizeDevice(this);
     					break;
     				case SessionBound:
@@ -124,7 +126,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     		case WaitMatch:
     			switch(businessStatus)
     			{
-    				case Init:
+    				case Idle:
     					break;
     				case SessionBound:
     					this.unbindBusinessSession();
@@ -138,6 +140,8 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     			logger.error("Abnormal target business status for device:" + device.getDeviceSn());
     			break;
     	}
+    	
+    	businessStatus = targetStatus;
     }
     
     /** */
@@ -182,10 +186,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     public void unbindBusinessSession()
     {
     	ownerBusinessSession = null;
-    	sessionBindConfirmed = false;
-    	chatConfirmed = false;
-    	connectionLost = false;
-    	assessProvided = false;
     }
     
     /** */
@@ -220,13 +220,17 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     @Override
     public void onClose(IBaseConnection connection)
     {
-        ownerOnlinePool.releaseDevice(this);
+    	if (ownerOnlinePool != null)
+    	{
+    		ownerOnlinePool.deleteDevice(this);
+    	}
     }
 
 
     @Override
     public void onJSONCommand(AppJSONMessage command)
     {
+    	this.updateActivityTime();
     	command.bindDeviceWrapper(this);
         (new Thread(command)).run();
     }
@@ -235,13 +239,16 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     public void bindBusinessSession(IBusinessSession session)
     {
         this.ownerBusinessSession = session;
+        this.changeBusinessStatus(Consts.BusinessStatus.SessionBound);
     }
 
     @Override
     public void onPing(IBaseConnection connection, ByteBuffer payload)
     {
+    	logger.debug("Ping received from {}", connection.getConnectionId());
     	if (this.ownerOnlinePool == null)
     	{
+    		logger.debug("ownerOnlinePool == null and ping is ignored");
     		return;
     	}
     	
@@ -254,7 +261,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
     @Override
     public void onTimeOut(IBaseConnection conection)
     {
-        this.ownerOnlinePool.releaseDevice(this);
+        this.ownerOnlinePool.deleteDevice(this);
     }
 
 
@@ -313,65 +320,12 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
 	}
 
 	@Override
-	public void setLastActivityTime(Date date)
+	public void updateActivityTime()
 	{
-		this.lastActivityTime = date;
+		logger.debug("Update last activity time");
+		this.lastActivityTime = DateUtil.getNowDate();
 	}
-
-	@Override
-	public void setLastPingTime(Date date)
-	{
-		this.lastPingTime = date;
-	}
-
-	@Override
-	public void onSessionBindConfirmed()
-	{
-		sessionBindConfirmed = true;
-	}
-
-	@Override
-	public void onChatConfirmed()
-	{
-		chatConfirmed = true;
-	}
-
-	@Override
-	public void onConnectionLost()
-	{
-		connectionLost = true;
-	}
-
-	@Override
-	public void onAssessProvided()
-	{
-		assessProvided = true;
-	}
-
-	@Override
-	public boolean isSessionBindConfirmed()
-	{
-		return sessionBindConfirmed;
-	}
-
-	@Override
-	public boolean isChatConfirmed()
-	{
-		return chatConfirmed;
-	}
-
-	@Override
-	public boolean isConnectionLost()
-	{
-		return connectionLost;
-	}
-
-	@Override
-	public boolean isAssessProvided()
-	{
-		return assessProvided;
-	}
-
+	
 	@Override
 	public void setBusinessType(BusinessType businessType)
 	{
@@ -395,12 +349,111 @@ public class DeviceWrapper implements IDeviceWrapper, INode, IBaseConnectionOwne
 	public void unbindOnlineDevicePool()
 	{
 		this.ownerOnlinePool = null;
+		this.webSocketConnection.close();
+		// TODO: support delay of closing websocket connection
 	}
 
 	@Override
 	public OnlineDevicePool getOwnerOnlineDevicePool()
 	{
 		return ownerOnlinePool;
+	}
+
+	@Override
+	public JSONObject toJSONObject()
+	{
+		JSONObject deviceObj = new JSONObject();
+		JSONObject deviceCardObj = new JSONObject();
+		JSONObject profileObj = new JSONObject();
+		JSONObject interestCardObj = new JSONObject();
+		JSONObject impressCardObj = new JSONObject();
+		
+		deviceObj.put(JSONKey.DeviceId, device.getDeviceId().toString());
+		deviceObj.put(JSONKey.DeviceSn, device.getDeviceSn());
+		deviceObj.put(JSONKey.DeviceCard, deviceCardObj);
+		deviceObj.put(JSONKey.Profile, profileObj);
+		profileObj.put(JSONKey.InterestCard, interestCardObj);
+		profileObj.put(JSONKey.ImpressCard, impressCardObj);
+		
+		Devicecard deviceCard = device.getDevicecard();
+		deviceCardObj.put(JSONKey.DeviceCardId, deviceCard.getDeviceCardId().toString());
+		deviceCardObj.put(JSONKey.RegisterTime, DateUtil.getDateStringByLongValue(deviceCard.getRegisterTime()));
+		deviceCardObj.put(JSONKey.DeviceModel, deviceCard.getDeviceModel());
+		deviceCardObj.put(JSONKey.OsVersion, deviceCard.getOsVersion());
+		deviceCardObj.put(JSONKey.AppVersion, deviceCard.getAppVersion());
+		deviceCardObj.put(JSONKey.Location, deviceCard.getLocation());
+		deviceCardObj.put(JSONKey.IsJailed, deviceCard.getIsJailed());
+		
+		Profile profile = device.getProfile();
+		profileObj.put(JSONKey.ProfileId, profile.getProfileId());
+		profileObj.put(JSONKey.ServiceStatus, Consts.ServiceStatus.parseFromStringValue(profile.getServiceStatus()).toString());
+		
+		if (profile.getUnbanDate() != null)
+		{
+			profileObj.put(JSONKey.UnbanDate, DateUtil.getDateStringByLongValue(profile.getUnbanDate()));
+		}
+		else
+		{
+			profileObj.put(JSONKey.UnbanDate, "");
+		}
+		profileObj.put(JSONKey.LastActivityTime, DateUtil.getDateStringByLongValue(profile.getLastActivityTime()));
+		profileObj.put(JSONKey.CreateTime, DateUtil.getDateStringByLongValue(profile.getCreateTime()));
+		profileObj.put(JSONKey.Active, Consts.YesNo.parseValue(profile.getActive()).toString());
+
+		Interestcard interestCard = profile.getInterestcard();
+		interestCardObj.put(JSONKey.InterestCardId, interestCard.getInterestCardId().toString());
+		
+		JSONArray interestLabelListObj = new JSONArray();
+		interestCardObj.put(JSONKey.InterestLabelList, interestLabelListObj);
+		
+		Set<Interestlabelmap> interestLabelList = interestCard.getInterestlabelmaps();
+		for (Interestlabelmap map : interestLabelList)
+		{
+			JSONObject mapObj = new JSONObject();
+			mapObj.put(JSONKey.GlobalInterestLabelId, map.getGlobalinterestlabel().getGlobalInterestLabelId().toString());
+			mapObj.put(JSONKey.InterestLabelName, map.getGlobalinterestlabel().getInterestLabel());
+			mapObj.put(JSONKey.GlobalMatchCount, map.getGlobalinterestlabel().getGlobalMatchCount().toString());
+			mapObj.put(JSONKey.LabelOrder, map.getGlobalinterestlabel().getGlobalMatchCount().toString());
+			mapObj.put(JSONKey.MatchCount, map.getMatchCount().toString());
+			mapObj.put(JSONKey.ValidFlag, map.getValidFlag());
+			
+			interestLabelListObj.add(mapObj);
+		}
+		
+		Impresscard impressCard = profile.getImpresscard();
+		impressCardObj.put(JSONKey.ImpressCardId, impressCard.getImpressCardId().toString());
+		impressCardObj.put(JSONKey.ChatTotalCount, impressCard.getChatTotalCount().toString());
+		impressCardObj.put(JSONKey.ChatTotalDuration, impressCard.getChatTotalDuration().toString());
+		impressCardObj.put(JSONKey.ChatLossCount, impressCard.getChatLossCount().toString());
+		
+		JSONArray assessLabelListObj = new JSONArray();
+		JSONArray impressLabelListObj = new JSONArray();
+		
+		impressCardObj.put(JSONKey.AssessLabelList, assessLabelListObj);
+		impressCardObj.put(JSONKey.ImpressLabelList, impressLabelListObj);
+		
+		Set<Impresslabelmap> impressLabelList = impressCard.getImpresslabelmaps();
+		String label;
+		for (Impresslabelmap map : impressLabelList)
+		{
+			JSONObject mapObj = new JSONObject();
+			label = map.getGlobalimpresslabel().getImpressLabel();
+			mapObj.put(JSONKey.ImpressLabelName, label);
+			mapObj.put(JSONKey.GlobalImpressLabelId, map.getGlobalimpresslabel().getGlobalImpressLabelId().toString());
+			mapObj.put(JSONKey.AssessedCount, map.getAssessedCount().toString());
+			mapObj.put(JSONKey.UpdateTime, DateUtil.getDateStringByLongValue(map.getUpdateTime()));
+			mapObj.put(JSONKey.AssessCount, map.getAssessCount().toString());
+			
+			if (Consts.SolidAssessLabel.isSolidAssessLabel(label))
+			{
+				assessLabelListObj.add(mapObj);
+			}
+			else
+			{
+				impressLabelListObj.add(mapObj);
+			}
+		}
+		return deviceObj;
 	}
 }
 
