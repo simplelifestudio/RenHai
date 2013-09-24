@@ -11,6 +11,10 @@
 "Common_PullToRefresh" = "下拉刷新";
 "Common_Refreshing" = "刷新...";
 
+"Communication_InternetDisconnected" = "网络已断开";
+"Communication_WiFiConnected" = "WiFi已连接";
+"Communication_3G/GPRSConnected" = "3G/GPRS已连接";
+
 "LeftBar_Home" = "主屏";
 "LeftBar_Device" = "设备";
 "LeftBar_Impress" = "印象";

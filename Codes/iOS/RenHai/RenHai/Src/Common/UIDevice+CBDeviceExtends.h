@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import <UIKit/UIKit.h>
-
 enum
 {
     // iPhone 1,3,3GS 标准分辨率(320x480px)
@@ -46,5 +44,7 @@ typedef NSUInteger UIDeviceResolution;
 + (NSString*) osVersion;
 
 + (BOOL) isJailed;
+
++ (NSString*) identifierForVendor;
 
 @end

@@ -1,5 +1,5 @@
 //
-//  RenHaiCommunicationModuleTest.h
+//  CommunicationModuleTest.h
 //  RenHai
 //
 //  Created by Patrick Deng on 13-9-4.
@@ -8,6 +8,7 @@
 
 #import "GHTestCase.h"
 
-@interface RenHaiCommunicationModuleTest : GHTestCase
+
+@interface CommunicationModuleTest : GHTestCase
 
 @end

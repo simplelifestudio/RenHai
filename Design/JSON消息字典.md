@@ -46,6 +46,11 @@ Server接收到App消息后，向App回应的消息
 ##103. 业务会话请求 BusinessSessionRequest <--> 405. 业务会话响应 BusinessSessionResponse
 ##300. 业务会话通知 BusinessSessionNotification <--> 202. 业务会话通知响应 BusinessSessionNotificationResponse
 
+#数据类型
+##null用来指代所有数据类型的空值
+##数字用Integer(Java)/NSInteger(Objective-C)来表示
+##只有在表达零长度的字符串数据时，空字符串null才是合法的
+
 #消息格式 MessageFormat
 以"jsonEnvelop"作为JSON消息的信封外套，对应的值即实际的业务消息（已编码/已加密/已压缩）
 <pre><code>
@@ -54,18 +59,18 @@ Server接收到App消息后，向App回应的消息
 	{
 		"header": // 业务消息头部
 		{
-			"messageType":"1", // 消息类型
+			"messageType":1, // 消息类型
 			"messageSn":"AFLNWERJL3203598FDLGSLDF", // 消息序列号（请求和响应一对消息使用同一个序列号）
-			"messageId":"100", // 消息编号
-			"deviceId":"1234", // 设备编号（数据库字段）
+			"messageId":100, // 消息编号
+			"deviceId":1234, // 设备编号（数据库字段）
 			"deviceSn":"ABCD77631GGWQ", // 设备唯一序列号
-			"timeStamp":"2013-08-14 21:18:49" // 时间戳（App启动后首次收到Server发来的消息时需要计算两边时间差并保存留用）
+			"timeStamp":"2013-08-14 21:18:49.029" // 时间戳（App启动后首次收到Server发来的消息时需要计算两边时间差并保存留用）
     	},
     	"body": // 业务消息主体
     	{		
-			"param1":"value1",
-			"param2":"value2",
-			"paramn":"valuen"
+			"param1":intValue,
+			"param2":"stringValue",
+			"paramn":null
     	}
 	}
 }
@@ -79,109 +84,109 @@ Server接收到App消息后，向App回应的消息
 {
 	"device":
 	{
-		"deviceId":"",
-		"deviceSn":"",
+		"deviceId":null,
+		"deviceSn":null,
 		"deviceCard":
 		{
-			"deviceCardId":"",
-			"registerTime":"",
-			"deviceModel":"",
-			"osVersion":"",
-			"appVersion":"",
-			"location":"",
-			"isJailed":""
+			"deviceCardId":null,
+			"registerTime":null,
+			"deviceModel":null,
+			"osVersion":null,
+			"appVersion":null,
+			"location":null,
+			"isJailed":null
 		},
 		"profile":
 		{
-			"profileId":"",
-			"serviceStatus":"",
-			"unbanDate":"",
-			"lastActivityTime":"",
-			"createTime":"",
-			"active":"",
+			"profileId":null,
+			"serviceStatus":null,
+			"unbanDate":null,
+			"lastActivityTime":null,
+			"createTime":null,
+			"active":null,
 			"interestCard":
 			{
-				"interestCardId":"",
+				"interestCardId":null,
 				"interestLabelList":
 				[
 					{
-						"globalInterestLabelId":"",
-						"interestLabelName":"",
-						"globalMatchCount":"",
-						"labelOrder":"",
-						"matchCount":"",
-						"validFlag":""
+						"globalInterestLabelId":null,
+						"interestLabelName":null,
+						"globalMatchCount":null,
+						"labelOrder":null,
+						"matchCount":null,
+						"validFlag":null
 					},
 					{
-						"globalInterestLabelId":"",
-						"interestLabelName":"",
-						"globalMatchCount":"",
-						"labelOrder":"",
-						"matchCount":"",
-						"validFlag":""
+						"globalInterestLabelId":null,
+						"interestLabelName":null,
+						"globalMatchCount":null,
+						"labelOrder":null,
+						"matchCount":null,
+						"validFlag":null
 					},
 					{
-						"globalInterestLabelId":"",
-						"interestLabelName":"",
-						"globalMatchCount":"",
-						"labelOrder":"",
-						"matchCount":"",
-						"validFlag":""
+						"globalInterestLabelId":null,
+						"interestLabelName":null,
+						"globalMatchCount":null,
+						"labelOrder":null,
+						"matchCount":null,
+						"validFlag":null
 					}
 				]
 			},
 			"impressCard":
 			{
-				"impressCardId":"",
-				"chatTotalCount":"",
-				"chatTotalDuration":"",
-				"chatLossCount":"",
+				"impressCardId":null,
+				"chatTotalCount":null,
+				"chatTotalDuration":null,
+				"chatLossCount":null,
 				"assessLabelList":
 				{
 					{
-						"impressLabelName":"",
-						"globalImpressLabelId":"",
-						"assessedCount":"",
-						"updateTime":"",
-						"assessCount":""
+						"impressLabelName":null,
+						"globalImpressLabelId":null,
+						"assessedCount":null,
+						"updateTime":null,
+						"assessCount":null
 					},
 					{
-						"impressLabelName":"",
-						"globalImpressLabelId":"",
-						"assessedCount":"",
-						"updateTime":"",
-						"assessCount":""
+						"impressLabelName":null,
+						"globalImpressLabelId":null,
+						"assessedCount":null,
+						"updateTime":null,
+						"assessCount":null
 					},
 					{
-						"impressLabelName":"",
-						"globalImpressLabelId":"",
-						"assessedCount":"",
-						"updateTime":"",
-						"assessCount":""
+						"impressLabelName":null,
+						"globalImpressLabelId":null,
+						"assessedCount":null,
+						"updateTime":null,
+						"assessCount":null
 					}					
 				}
 				"impressLabelList":
 				[
 					{
-						"impressLabelName":"",
-						"globalImpressLabelId":"",
-						"assessedCount":"",
-						"updateTime":"",
-						"assessCount":""
+						"impressLabelName":null,
+						"globalImpressLabelId":null,
+						"assessedCount":null,
+						"updateTime":null,
+						"assessCount":null
 					},
 					{
-						"impressLabelName":"",
-						"globalImpressLabelId":"",
-						"assessedCount":"",
-						"updateTime":"",
-						"assessCount":""
+						"impressLabelName":null,
+						"globalImpressLabelId":null,
+						"assessedCount":null,
+						"updateTime":null,
+						"assessCount":null
 					},
 					{
-						"impressLabelName":"",
-						"globalImpressLabelId":"",
-						"assessedCount":"",
-						"updateTime":"",
-						"assessCount":""
+						"impressLabelName":null,
+						"globalImpressLabelId":null,
+						"assessedCount":null,
+						"updateTime":null,
+						"assessCount":null
 					}
 				]
 			}
@@ -197,20 +202,26 @@ Server接收到App消息后，向App回应的消息
 	{
 		"deviceCount":
 		{
-			"online":"",
-			"random":"",
-			"interest":"",
-			"chat":"",
-			"randomChat":"",
-			"interestChat":""
+			"online":null,
+			"random":null,
+			"interest":null,
+			"chat":null,
+			"randomChat":null,
+			"interestChat":null
+		},
+		"deviceCapacity":
+		{
+			"online":null,
+			"random":null,
+			"interest":null
 		},
 		"interestLabelList":
 		{
-			"current":"10",
+			"current":10,
 			"history":
 			{
-				"startTime":"",
-				"endTime":""
+				"startTime":null,
+				"endTime":null
 			}
 		}
 	}
@@ -263,31 +274,31 @@ App与Server通过消息交互完成的数据操作
     	{
 			"device":
 			{
-				"deviceId":"",
-				"deviceSn":"",
+				"deviceId":null,
+				"deviceSn":null,
 				"deviceCard":
 				{
 				},
 				"profile":
 				{
-					"profileId":"",
-					"serviceStatus":"",
-					"unbanDate":"",
-					"lastActivityTime":"",
-					"createTime":"",
-					"active":"",
+					"profileId":null,
+					"serviceStatus":null,
+					"unbanDate":null,
+					"lastActivityTime":null,
+					"createTime":null,
+					"active":null,
 					"interestCard":
 					{
-						"interestCardId":"",
+						"interestCardId":null,
 						"interestLabelList":"9"
 					},
 					"impressCard":
 					{
-						"impressCardId":"",
-						"chatTotalCount":"",
-						"chatTotalDuration":"",
-						"chatLossCount":"",
-						"assessLabelList":"",
+						"impressCardId":null,
+						"chatTotalCount":null,
+						"chatTotalDuration":null,
+						"chatLossCount":null,
+						"assessLabelList":null,
 						"impressLabelList":"7"
 					}
 				}
@@ -297,86 +308,86 @@ App与Server通过消息交互完成的数据操作
 		{	
 			"device":
 			{
-				"deviceId":"",
-				"deviceSn":"",
+				"deviceId":null,
+				"deviceSn":null,
 				"deviceCard":
 				{
-					"deviceCardId":"",
-					"registerTime":"",
-					"deviceModel":"",
-					"osVersion":"",
-					"appVersion":"",
-					"location":"",
-					"isJailed":""
+					"deviceCardId":null,
+					"registerTime":null,
+					"deviceModel":null,
+					"osVersion":null,
+					"appVersion":null,
+					"location":null,
+					"isJailed":null
 				},
 				"profile":
 				{
-					"profileId":"",
-					"serviceStatus":"",
-					"unbanDate":"",
-					"lastActivityTime":"",
-					"createTime":"",
-					"active":"",
+					"profileId":null,
+					"serviceStatus":null,
+					"unbanDate":null,
+					"lastActivityTime":null,
+					"createTime":null,
+					"active":null,
 					"interestCard":
 					{
-						"interestCardId":"",
+						"interestCardId":null,
 						"interestLabelList":
 						[
 							{
-								"globalInterestLabelId":"",
-								"interestLabelName":"",
-								"globalMatchCount":"",
-								"labelOrder":"",
-								"matchCount":"",
-								"validFlag":""
+								"globalInterestLabelId":null,
+								"interestLabelName":null,
+								"globalMatchCount":null,
+								"labelOrder":null,
+								"matchCount":null,
+								"validFlag":null
 							},
 							{
-								"globalInterestLabelId":"",
-								"interestLabelName":"",
-								"globalMatchCount":"",
-								"labelOrder":"",
-								"matchCount":"",
-								"validFlag":""
+								"globalInterestLabelId":null,
+								"interestLabelName":null,
+								"globalMatchCount":null,
+								"labelOrder":null,
+								"matchCount":null,
+								"validFlag":null
 							},
 							{
-								"globalInterestLabelId":"",
-								"interestLabelName":"",
-								"globalMatchCount":"",
-								"labelOrder":"",
-								"matchCount":"",
-								"validFlag":""
+								"globalInterestLabelId":null,
+								"interestLabelName":null,
+								"globalMatchCount":null,
+								"labelOrder":null,
+								"matchCount":null,
+								"validFlag":null
 							}
 						]
 					},
 					"impressCard":
 					{
-						"impressCardId":"",
-						"chatTotalCount":"",
-						"chatTotalDuration":"",
-						"chatLossCount":"",
-						"assessLabelList":"",
+						"impressCardId":null,
+						"chatTotalCount":null,
+						"chatTotalDuration":null,
+						"chatLossCount":null,
+						"assessLabelList":null,
 						"impressLabelList":
 						[
 							{
-								"impressLabelName":"",
-								"globalImpressLabelId":"",
-								"assessedCount":"",
-								"updateTime":"",
-								"assessCount":""
+								"impressLabelName":null,
+								"globalImpressLabelId":null,
+								"assessedCount":null,
+								"updateTime":null,
+								"assessCount":null
 							},
 							{
-								"impressLabelName":"",
-								"globalImpressLabelId":"",
-								"assessedCount":"",
-								"updateTime":"",
-								"assessCount":""
+								"impressLabelName":null,
+								"globalImpressLabelId":null,
+								"assessedCount":null,
+								"updateTime":null,
+								"assessCount":null
 							},
 							{
-								"impressLabelName":"",
-								"globalImpressLabelId":"",
-								"assessedCount":"",
-								"updateTime":"",
-								"assessCount":""
+								"impressLabelName":null,
+								"globalImpressLabelId":null,
+								"assessedCount":null,
+								"updateTime":null,
+								"assessCount":null
 							}
 						]
 					}
@@ -424,11 +435,11 @@ App与Server通过消息交互完成的数据操作
 {
 	"body": 
 	{
-		"businessSessionId":"",
+		"businessSessionId":null,
 		"businessType":"Interest",
 		"operationType":"EnterPool",
-		"operationInfo":"",
-		"operationValue":"" 
+		"operationInfo":null,
+		"operationValue":null 
 	}	
 }
 </code></pre>
@@ -440,10 +451,10 @@ App与Server通过消息交互完成的数据操作
 	"body": 
 	{
 		"businessSessionId":"9861ASFDE",
-		"businessType":"Interest",
-		"operationType":"EnterPool",
-		"operationInfo":"",		
-		"operationValue":"1" 
+		"businessType":2,
+		"operationType":1,
+		"operationInfo":null,		
+		"operationValue":1 
 	}	
 }
 </code></pre>
@@ -454,13 +465,13 @@ App与Server通过消息交互完成的数据操作
 	"body": 
 	{
 		"businessSessionId":"9861ASFDE"，
-		"businessType":"Interest",
-		"operationType":"SessionBinded"
+		"businessType":2,
+		"operationType":3
 		"operationInfo":
 		{
 			// 这里存放匹配对象的信息
 		},
-		"operationValue":""
+		"operationValue":null
 	}
 }
 </code></pre>
@@ -471,10 +482,10 @@ App与Server通过消息交互完成的数据操作
 	"body": 
 	{
 		"businessSessionId":"9861ASFDE",
-		"businessType":"Interest",
-		"operationType":"SessionBinded",
-		"operationInfo":"",
-		"operationValue":"1" 
+		"businessType":2,
+		"operationType":3,
+		"operationInfo":null,
+		"operationValue":1
 	}
 }
 </code></pre>
@@ -488,7 +499,7 @@ App与Server通过消息交互完成的数据操作
 		{
 			// 此处存放收到的信息原文
 		},
-		"errorCode":"-7",
+		"errorCode":-7,
       	"errorDescription":"Empty Content"
     }
 }
@@ -503,7 +514,7 @@ App与Server通过消息交互完成的数据操作
 		{
 			// 此处存放收到的信息原文		
 		},
-		"errorCode":"-7",
+		"errorCode":1103,
       	"errorDescription":"Empty Content"
     }
 }

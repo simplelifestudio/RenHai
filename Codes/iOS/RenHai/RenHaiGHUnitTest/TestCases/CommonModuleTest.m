@@ -1,22 +1,23 @@
 //
-//  RenHaiCommonModuleTest.m
+//  CommonModuleTest.m
 //  RenHai
 //
 //  Created by Patrick Deng on 13-9-3.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
-#import "RenHaiCommonModuleTest.h"
+#import "CommonModuleTest.h"
 
 #import "CBJSONUtils.h"
+#import "CBStringUtils.h"
 
 #import "TestTitle.h"
 
-@interface RenHaiCommonModuleTest()
+@interface CommonModuleTest()
 
 @end
 
-@implementation RenHaiCommonModuleTest
+@implementation CommonModuleTest
 
 -(void) testNSDictionaryToJSONString
 {
@@ -42,6 +43,12 @@
     TestTitle* o = [[TestTitle alloc] init];
     o.obj.password = @"Aloha";
     NSLog(@"password = %@", [o objPassword]);
+}
+
+-(void) testRandomString
+{
+    NSString *randomStr = [CBStringUtils randomString:32];
+    NSLog(@"random string is %@", randomStr);
 }
 
 @end

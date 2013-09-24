@@ -11,6 +11,10 @@
 "Common_PullToRefresh" = "Pull to Refresh";
 "Common_Refreshing" = "Refreshing...";
 
+"Communication_InternetDisconnected" = "Internet Disconnected";
+"Communication_WiFiConnected" = "WiFi Connected";
+"Communication_3G/GPRSConnected" = "3G/GPRS Connected";
+
 "LeftBar_Home" = "Home";
 "LeftBar_Device" = "Device";
 "LeftBar_Impress" = "Impress";

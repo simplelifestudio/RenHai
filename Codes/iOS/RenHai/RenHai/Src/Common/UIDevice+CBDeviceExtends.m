@@ -8,6 +8,10 @@
 
 #import "UIDevice+CBDeviceExtends.h"
 
+#import "SSKeychain.h"
+
+#define KEYCHAIN_ACCOUNT_IDFV @"idfv"
+
 @implementation UIDevice (CBDeviceExtends)
 
 + (UIDeviceResolution) currentResolution
@@ -171,6 +175,20 @@
         jailbroken = YES;
     }
     return jailbroken;
+}
+
++ (NSString*) identifierForVendor
+{
+    NSString* bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+    
+    NSString* idfv = [SSKeychain passwordForService:bundleIdentifier account:KEYCHAIN_ACCOUNT_IDFV];
+    if (nil == idfv)
+    {
+        idfv = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        [SSKeychain setPassword:idfv forService:bundleIdentifier account:KEYCHAIN_ACCOUNT_IDFV];
+    }
+    
+    return idfv;
 }
 
 @end

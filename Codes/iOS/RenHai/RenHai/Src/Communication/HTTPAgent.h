@@ -15,5 +15,6 @@
 +(NSMutableURLRequest*) constructURLRequest:(RHJSONMessage*) message serviceTarget:(NSString*) serviceTarget;
 
 -(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage;
+-(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread;
 
 @end

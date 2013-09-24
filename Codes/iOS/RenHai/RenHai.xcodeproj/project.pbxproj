@@ -176,10 +176,10 @@
 		C593C4A217D4831200C26367 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C593C49D17D482C400C26367 /* CoreLocation.framework */; };
 		C5945F5B17D56DDF0084BB10 /* CBJSONUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C5945F5A17D56DDF0084BB10 /* CBJSONUtils.m */; };
 		C5945F5C17D56DDF0084BB10 /* CBJSONUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C5945F5A17D56DDF0084BB10 /* CBJSONUtils.m */; };
-		C5945F5F17D56F5D0084BB10 /* RenHaiCommonModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = C5945F5E17D56F5D0084BB10 /* RenHaiCommonModuleTest.m */; };
+		C5945F5F17D56F5D0084BB10 /* CommonModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = C5945F5E17D56F5D0084BB10 /* CommonModuleTest.m */; };
 		C594602A17D6C7C90084BB10 /* HTTPAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = C594602917D6C7C90084BB10 /* HTTPAgent.m */; };
 		C594602B17D6C7C90084BB10 /* HTTPAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = C594602917D6C7C90084BB10 /* HTTPAgent.m */; };
-		C594602E17D6C9410084BB10 /* RenHaiCommunicationModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = C594602D17D6C9410084BB10 /* RenHaiCommunicationModuleTest.m */; };
+		C594602E17D6C9410084BB10 /* CommunicationModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = C594602D17D6C9410084BB10 /* CommunicationModuleTest.m */; };
 		C594603117D6CEA60084BB10 /* WebSocketAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = C594603017D6CEA60084BB10 /* WebSocketAgent.m */; };
 		C594603217D6CEA60084BB10 /* WebSocketAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = C594603017D6CEA60084BB10 /* WebSocketAgent.m */; };
 		C594603517D7352F0084BB10 /* RHJSONMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = C594603417D7352F0084BB10 /* RHJSONMessage.m */; };
@@ -383,13 +383,13 @@
 		C593C49D17D482C400C26367 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		C5945F5917D56DDF0084BB10 /* CBJSONUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBJSONUtils.h; sourceTree = "<group>"; };
 		C5945F5A17D56DDF0084BB10 /* CBJSONUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CBJSONUtils.m; sourceTree = "<group>"; };
-		C5945F5D17D56F5C0084BB10 /* RenHaiCommonModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenHaiCommonModuleTest.h; sourceTree = "<group>"; };
-		C5945F5E17D56F5D0084BB10 /* RenHaiCommonModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenHaiCommonModuleTest.m; sourceTree = "<group>"; };
+		C5945F5D17D56F5C0084BB10 /* CommonModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonModuleTest.h; sourceTree = "<group>"; };
+		C5945F5E17D56F5D0084BB10 /* CommonModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonModuleTest.m; sourceTree = "<group>"; };
 		C594602717D6C6DF0084BB10 /* CBJSONMessageComm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CBJSONMessageComm.h; sourceTree = "<group>"; };
 		C594602817D6C7C90084BB10 /* HTTPAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPAgent.h; sourceTree = "<group>"; };
 		C594602917D6C7C90084BB10 /* HTTPAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPAgent.m; sourceTree = "<group>"; };
-		C594602C17D6C9410084BB10 /* RenHaiCommunicationModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenHaiCommunicationModuleTest.h; sourceTree = "<group>"; };
-		C594602D17D6C9410084BB10 /* RenHaiCommunicationModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RenHaiCommunicationModuleTest.m; sourceTree = "<group>"; };
+		C594602C17D6C9410084BB10 /* CommunicationModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunicationModuleTest.h; sourceTree = "<group>"; };
+		C594602D17D6C9410084BB10 /* CommunicationModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommunicationModuleTest.m; sourceTree = "<group>"; };
 		C594602F17D6CEA60084BB10 /* WebSocketAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WebSocketAgent.h; sourceTree = "<group>"; };
 		C594603017D6CEA60084BB10 /* WebSocketAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WebSocketAgent.m; sourceTree = "<group>"; };
 		C594603317D7352F0084BB10 /* RHJSONMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHJSONMessage.h; sourceTree = "<group>"; };
@@ -608,10 +608,10 @@
 			children = (
 				C55B444517CF5B72009BB21B /* GHUnitSampleTest.h */,
 				C55B444617CF5B72009BB21B /* GHUnitSampleTest.m */,
-				C5945F5D17D56F5C0084BB10 /* RenHaiCommonModuleTest.h */,
-				C5945F5E17D56F5D0084BB10 /* RenHaiCommonModuleTest.m */,
-				C594602C17D6C9410084BB10 /* RenHaiCommunicationModuleTest.h */,
-				C594602D17D6C9410084BB10 /* RenHaiCommunicationModuleTest.m */,
+				C5945F5D17D56F5C0084BB10 /* CommonModuleTest.h */,
+				C5945F5E17D56F5D0084BB10 /* CommonModuleTest.m */,
+				C594602C17D6C9410084BB10 /* CommunicationModuleTest.h */,
+				C594602D17D6C9410084BB10 /* CommunicationModuleTest.m */,
 				C54DC8DB17DC497000BBD498 /* TestTitle.h */,
 				C54DC8DC17DC497000BBD498 /* TestTitle.m */,
 				C54DC8DE17DC4A4500BBD498 /* TestObj.h */,
@@ -1197,9 +1197,9 @@
 				C593C49217D46CB800C26367 /* RHImpressLabel.m in Sources */,
 				C593C49617D46CC400C26367 /* RHInterestLabel.m in Sources */,
 				C5945F5C17D56DDF0084BB10 /* CBJSONUtils.m in Sources */,
-				C5945F5F17D56F5D0084BB10 /* RenHaiCommonModuleTest.m in Sources */,
+				C5945F5F17D56F5D0084BB10 /* CommonModuleTest.m in Sources */,
 				C594602B17D6C7C90084BB10 /* HTTPAgent.m in Sources */,
-				C594602E17D6C9410084BB10 /* RenHaiCommunicationModuleTest.m in Sources */,
+				C594602E17D6C9410084BB10 /* CommunicationModuleTest.m in Sources */,
 				C594603217D6CEA60084BB10 /* WebSocketAgent.m in Sources */,
 				C594603617D7352F0084BB10 /* RHJSONMessage.m in Sources */,
 				C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */,
@@ -1357,6 +1357,11 @@
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHai/RenHai-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"COCOAPODS=1",
+					NS_BLOCK_ASSERTIONS,
+				);
 				INFOPLIST_FILE = "RenHai/RenHai-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
