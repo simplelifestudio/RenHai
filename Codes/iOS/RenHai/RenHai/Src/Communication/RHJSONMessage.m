@@ -12,7 +12,8 @@
 #import "CBStringUtils.h"
 #import "CBDateUtils.h"
 #import "CBSecurityUtils.h"
-#import "UIDevice+CBDeviceExtends.h"
+
+#import "AppDataModule.h"
 
 static BOOL s_messageEncrypted;
 
@@ -159,7 +160,8 @@ static BOOL s_messageEncrypted;
 {
     NSString* messageSn = [CBStringUtils randomString:MESSAGE_MESSAGESN_LENGTH];
     NSInteger deviceId = 0;
-    NSString* deviceSn = [UIDevice identifierForVendor];
+    AppDataModule* appDataModule = [AppDataModule sharedInstance];
+    NSString* deviceSn = appDataModule.deviceSn;
     NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AlohaRequest messageSn:messageSn deviceId:deviceId deviceSn:deviceSn timeStamp:nil];
     
     NSMutableDictionary* messageBody = [NSMutableDictionary dictionary];
@@ -173,7 +175,8 @@ static BOOL s_messageEncrypted;
 +(RHJSONMessage*) newServerTimeoutResponseMessage
 {
     NSInteger deviceId = 0;
-    NSString* deviceSn = [UIDevice identifierForVendor];
+    AppDataModule* appDataModule = [AppDataModule sharedInstance];
+    NSString* deviceSn = appDataModule.deviceSn;
     NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:nil deviceId:deviceId deviceSn:deviceSn timeStamp:nil];
     
     NSDictionary* messageBody = [NSDictionary dictionary];

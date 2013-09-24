@@ -8,6 +8,8 @@
 
 #import "AppDataModule.h"
 
+#import "SSKeychain.h"
+
 #define PERSISTENTDOMAIN_APPDATA @"com.simplelife.RenHai.appdata"
 #define APPDATA_KEY_APPLAUNCHEDBEFORE @"appLaunchedBefore"
 
@@ -126,6 +128,18 @@ SINGLETON(AppDataModule)
 {
     NSString* sVal = @"YES";
     [self setValueForKeyInPersistentDomain:sVal forKey:APPDATA_KEY_APPLAUNCHEDBEFORE inPersistentDomain:PERSISTENTDOMAIN_APPDATA];
+}
+
+#pragma mark - Device
+-(NSString*) deviceSn
+{
+    NSString* idfv = [SSKeychain passwordForService:KEYCHAIN_SERVICE_DEVICE account:KEYCHAIN_ACCOUNT_IDFV];
+    if (nil == idfv)
+    {
+        idfv = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+        [SSKeychain setPassword:idfv forService:KEYCHAIN_SERVICE_DEVICE account:KEYCHAIN_ACCOUNT_IDFV];
+    }
+    return idfv;
 }
 
 #pragma mark - UIApplicationDelegate

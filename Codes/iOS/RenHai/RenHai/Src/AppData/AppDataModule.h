@@ -34,4 +34,7 @@
 -(BOOL) isAppLaunchedBefore;
 -(void) recordAppLaunchedBefore;
 
+#pragma mark - Device
+-(NSString*) deviceSn;
+
 @end

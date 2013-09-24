@@ -61,14 +61,8 @@
 
 -(NSString*) _computeDeviceSn
 {
-    NSString* idfv = [SSKeychain passwordForService:KEYCHAIN_SERVICE_DEVICE account:KEYCHAIN_ACCOUNT_IDFV];
-    if (nil == idfv)
-    {
-        idfv = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-        [SSKeychain setPassword:idfv forService:KEYCHAIN_SERVICE_DEVICE account:KEYCHAIN_ACCOUNT_IDFV];
-    }
-    
-    return idfv;
+    AppDataModule* appDataModule = [AppDataModule sharedInstance];
+    return appDataModule.deviceSn;
 }
 
 -(id) _getODeviceId
