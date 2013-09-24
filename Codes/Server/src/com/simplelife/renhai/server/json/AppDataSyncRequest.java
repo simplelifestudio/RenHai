@@ -67,14 +67,14 @@ public class AppDataSyncRequest extends AppJSONMessage
 			return false;
 		}
 		
-		if (!dataUpdateObj.containsKey(JSONKey.Device))
+		JSONObject deviceObj = getJSONObject(dataUpdateObj, JSONKey.Device); 
+		if (deviceObj == null)
 		{
 			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-			this.setErrorDescription(JSONKey.Device + " must be provided.");
+			this.setErrorDescription(JSONKey.Device + " must be provided correctly.");
 			return false;
 		}
 		
-		JSONObject deviceObj = dataUpdateObj.getJSONObject(JSONKey.Device);
 		if (!checkUpdateDevice(deviceObj))
 		{
 			return false;
@@ -95,7 +95,14 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		if (deviceObj.containsKey(JSONKey.DeviceCard))
 		{
-			JSONObject deviceCardObj = deviceObj.getJSONObject(JSONKey.DeviceCard);
+			JSONObject deviceCardObj = getJSONObject(deviceObj, JSONKey.DeviceCard);
+			if (deviceCardObj == null)
+			{
+				this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+				this.setErrorDescription(JSONKey.DeviceCard + " must be provided correctly.");
+				return false;
+			}
+				
 			if (!checkUpdateDeviceCard(deviceCardObj))
 			{
 				return false;
@@ -103,7 +110,16 @@ public class AppDataSyncRequest extends AppJSONMessage
 		}
 		else if (deviceObj.containsKey(JSONKey.Profile))
 		{
-			JSONObject profileObj = deviceObj.getJSONObject(JSONKey.Profile);
+			JSONObject profileObj = getJSONObject(deviceObj, JSONKey.Profile);
+			
+			if (profileObj == null)
+			{
+				this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+				this.setErrorDescription(JSONKey.Profile + " must be provided correctly.");
+				return false;
+			}
+			
+			
 			if (!checkUpdateProfile(profileObj))
 			{
 				return false;
@@ -198,9 +214,26 @@ public class AppDataSyncRequest extends AppJSONMessage
 	
 	protected boolean checkUpdateProfile(JSONObject profileObj)
 	{
+		if (profileObj.isEmpty())
+		{
+			String temp = JSONKey.Profile + " can't be empty.";
+			logger.error(temp);
+			setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+			setErrorDescription(temp);
+			return false;
+		}
+		
 		if (profileObj.containsKey(JSONKey.InterestCard))
 		{
-			JSONObject interestCardObj = profileObj.getJSONObject(JSONKey.InterestCard);
+			JSONObject interestCardObj = getJSONObject(profileObj, JSONKey.InterestCard);
+			
+			if (interestCardObj == null)
+			{
+				this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+				this.setErrorDescription(JSONKey.InterestCard + " must be provided correctly.");
+				return false;
+			}
+			
 			if (!checkUpdateInterestCard(interestCardObj))
 			{
 				return false;
@@ -316,6 +349,14 @@ public class AppDataSyncRequest extends AppJSONMessage
     {
 		if (body.containsKey(JSONKey.DataUpdate))
 		{
+			JSONObject updateObj = getJSONObject(body, JSONKey.DataUpdate);
+			if (updateObj == null)
+			{
+				this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+				this.setErrorDescription(JSONKey.DataUpdate + " must be provided correctly.");
+				return false;
+			}
+			
 			if (!checkUpdate(body.getJSONObject(JSONKey.DataUpdate)))
 			{
 				return false;
@@ -565,7 +606,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		if (profileObj.containsKey(JSONKey.Active))
 		{
-			profileResponse.put(JSONKey.Active, profile.getActive());
+			profileResponse.put(JSONKey.Active, Consts.YesNo.parseValue(profile.getActive()).ordinal());
 		}
 		
 		if (profileObj.containsKey(JSONKey.InterestCard))
@@ -901,11 +942,11 @@ public class AppDataSyncRequest extends AppJSONMessage
 				}
 				interestLabelMapObj.setValidFlag("Valid");
 			}
-			responseObj.put(JSONKey.InterestLabel, Consts.SuccessOrFail.Success);
+			responseObj.put(JSONKey.InterestLabel, Consts.SuccessOrFail.Success.ordinal());
 			interestLabelMapObj.setGlobalinterestlabel(globalInterestObj);
 			
 			interestLabelMapObj.setLabelOrder(Integer.parseInt(tmpJSONObj.getString(JSONKey.LabelOrder)));
-			responseObj.put(JSONKey.LabelOrder, Consts.SuccessOrFail.Success);
+			responseObj.put(JSONKey.LabelOrder, Consts.SuccessOrFail.Success.ordinal());
 			labelMapList.add(interestLabelMapObj);
 			
 			interestLabelMapObj.setInterestcard(card);
@@ -941,28 +982,28 @@ public class AppDataSyncRequest extends AppJSONMessage
 		String temp = jsonObj.getString(JSONKey.DeviceModel);
 		if (temp != null)
 		{
-			response.put(JSONKey.DeviceModel, Consts.SuccessOrFail.Success.toString());
+			response.put(JSONKey.DeviceModel, Consts.SuccessOrFail.Success.ordinal());
 			deviceCard.setDeviceModel(temp);
 		}
 		
 		temp = jsonObj.getString(JSONKey.OsVersion);
 		if (temp != null)
 		{
-			response.put(JSONKey.OsVersion, Consts.SuccessOrFail.Success.toString());
+			response.put(JSONKey.OsVersion, Consts.SuccessOrFail.Success.ordinal());
 			deviceCard.setOsVersion(temp);
 		}
 		
 		temp = jsonObj.getString(JSONKey.AppVersion);
 		if (temp != null)
 		{
-			response.put(JSONKey.AppVersion, Consts.SuccessOrFail.Success.toString());
+			response.put(JSONKey.AppVersion, Consts.SuccessOrFail.Success.ordinal());
 			deviceCard.setAppVersion(temp);
 		}
 		
 		temp = jsonObj.getString(JSONKey.IsJailed);
 		if (temp != null)
 		{
-			response.put(JSONKey.IsJailed, Consts.SuccessOrFail.Success.toString());
+			response.put(JSONKey.IsJailed, Consts.SuccessOrFail.Success.ordinal());
 			Consts.YesNo isJailed = Consts.YesNo.parseValue(jsonObj.getIntValue(JSONKey.IsJailed)); 
 			deviceCard.setIsJailed(isJailed.name());
 		}
@@ -970,7 +1011,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		temp = jsonObj.getString(JSONKey.Location);
 		if (temp != null)
 		{
-			response.put(JSONKey.Location, Consts.SuccessOrFail.Success.toString());
+			response.put(JSONKey.Location, Consts.SuccessOrFail.Success.ordinal());
 			deviceCard.setLocation(temp);
 		}
 	}

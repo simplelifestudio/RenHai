@@ -11,6 +11,7 @@ package com.simplelife.renhai.server.json;
 
 import org.slf4j.Logger;
 
+import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
@@ -37,5 +38,32 @@ public abstract class AbstractJSONMessage
     public void setDeviceWrapper(IDeviceWrapper deviceWrapper)
     {
     	this.deviceWrapper = deviceWrapper;
+    }
+    
+    public JSONObject getJSONObject(JSONObject obj, String key)
+    {
+    	if (!obj.containsKey(key))
+    	{
+    		return null;
+    	}
+    	
+    	if (obj.getString(key).trim().length() == 0)
+    	{
+    		return null;
+    	}
+    	
+    	JSONObject returnObj = obj.getJSONObject(key);
+    	
+    	if (returnObj == null)
+    	{
+    		return null;
+    	}
+    	
+    	if (returnObj.isEmpty())
+    	{
+    		return null;
+    	}
+    	
+    	return returnObj;
     }
 }

@@ -61,6 +61,7 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 		assertEquals(randomDeviceCount + 1, pool.getBusinessPool(Consts.BusinessType.Random).getElementCount());
 		
 		// Step_05 等待Server的Websocket通信异常时间
+		mockApp.stopTimer();
 		try
 		{
 			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection + 1000);
@@ -75,6 +76,7 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 		
 		// Step_07 调用：OnlineDevicePool::getCount
 		assertEquals(deviceCount-1, pool.getElementCount());
+		assertTrue(mockApp.getDeviceWrapper().getOwnerOnlineDevicePool() == null);
 		
 		// Step_08 调用：RandomBusinessDevicePool::getCount
 		assertEquals(randomDeviceCount, pool.getBusinessPool(Consts.BusinessType.Random).getElementCount());

@@ -119,7 +119,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	String sn = device.getDeviceSn();
     	if (!(deviceMap.containsKey(sn) || chatDeviceMap.containsKey(sn)))
     	{
-    		logger.warn("Device ({}) was not in BusinessDevicePool", sn);
+    		logger.warn("Device <{}> was not in BusinessDevicePool", sn);
     		return;
     	}
     	
@@ -158,7 +158,8 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 			chatDeviceMap.put(sn, device);
 		}
 	}
-
+	
+	
 	/**
      * Chat ends, move device from chatDeviceMap to deviceMap
      */

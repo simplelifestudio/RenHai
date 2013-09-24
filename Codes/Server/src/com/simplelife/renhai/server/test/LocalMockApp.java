@@ -11,6 +11,8 @@ package com.simplelife.renhai.server.test;
 
 
 import java.nio.ByteBuffer;
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +68,7 @@ public class LocalMockApp extends AbstractMockApp
 		
 		JSONObject envelopeObj = new JSONObject();
 		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
-		connection.onTextMessage(envelopeObj.toJSONString());
+		sendRawJSONMessage(envelopeObj, true);
 	}
 	
 	/** */
@@ -91,7 +93,7 @@ public class LocalMockApp extends AbstractMockApp
 		
 		JSONObject envelopeObj = new JSONObject();
 		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
-		connection.onTextMessage(envelopeObj.toJSONString());
+		sendRawJSONMessage(envelopeObj, true);
 	}
 	
 	/** */
@@ -113,19 +115,41 @@ public class LocalMockApp extends AbstractMockApp
 		
 		JSONObject envelopeObj = new JSONObject();
 		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
-		connection.onTextMessage(envelopeObj.toJSONString());
+		sendRawJSONMessage(envelopeObj, true);
 	}
 	
 	@Override
-	public void sendRawJSONMessage(String jsonString)
+	public void sendRawJSONMessage(String jsonString, boolean syncSend)
 	{
+		if (!syncSend)
+		{
+			connection.onTextMessage(jsonString);
+			return;
+		}
 		connection.onTextMessage(jsonString);
 	}
 	
 	@Override
-	public void sendRawJSONMessage(JSONObject jsonObject)
+	public void sendRawJSONMessage(JSONObject jsonObject, boolean syncSend)
 	{
+		if (!syncSend)
+		{
+			connection.onTextMessage(jsonObject.toJSONString());
+			return;
+		}
+		
+		lock.lock();
 		connection.onTextMessage(jsonObject.toJSONString());
+		try
+		{
+			condition.await(3, TimeUnit.SECONDS);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		lock.unlock();
 	}
 	
 	/** */
@@ -169,7 +193,7 @@ public class LocalMockApp extends AbstractMockApp
 		
 		JSONObject envelopeObj = new JSONObject();
 		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
-		connection.onTextMessage(envelopeObj.toJSONString());
+		sendRawJSONMessage(envelopeObj, false);
 	}
 	
 	/** */
@@ -191,7 +215,7 @@ public class LocalMockApp extends AbstractMockApp
 		
 		JSONObject envelopeObj = new JSONObject();
 		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
-		connection.onTextMessage(envelopeObj.toJSONString());
+		sendRawJSONMessage(envelopeObj, true);
 	}
 	
 	/** */
@@ -234,6 +258,11 @@ public class LocalMockApp extends AbstractMockApp
 	@Override
 	public void ping()
 	{
+		if (connection == null)
+		{
+			return;
+		}
+		
 		ByteBuffer pingData = ByteBuffer.allocate(5);
 		connection.onPing(pingData);
 	}
@@ -254,12 +283,10 @@ public class LocalMockApp extends AbstractMockApp
 	public void onJSONCommand(JSONObject obj)
 	{
 		lastReceivedCommand = obj;
+		lock.lock();
+		condition.signal();
+		lock.unlock();
 		logger.debug("App received command: \n{}", obj.toJSONString());
-	}
-	
-	public void startPingTimer()
-	{
-		
 	}
 	
 	/**

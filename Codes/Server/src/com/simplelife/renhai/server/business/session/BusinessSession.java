@@ -112,6 +112,11 @@ public class BusinessSession implements IBusinessSession
     	for (String deviceSn : deviceList)
     	{
     		device = OnlineDevicePool.instance.getDevice(deviceSn);
+    		if (device == null)
+    		{
+    			logger.error("Device <{}> is not in online device pool when trying to bind with session.", deviceSn);
+    			return false;
+    		}
     		status = device.getBusinessStatus();
     		
     		if ( status != Consts.BusinessStatus.WaitMatch)
@@ -124,8 +129,23 @@ public class BusinessSession implements IBusinessSession
     }
     
     @Override
+    public void endSession()
+    {
+    	logger.debug("Enter endSession.");
+    	for (IDeviceWrapper device : deviceList)
+    	{
+    		device.unbindBusinessSession();
+    		pool.endChat(device);
+    	}
+    	
+    	tmpConfirmDeviceList.clear();
+    	deviceList.clear();
+    }
+    
+    @Override
     public void startSession(List<String> deviceList)
     {
+    	logger.debug("Enter startSession.");
     	if (!checkBind(deviceList))
     	{
     		return;
@@ -179,24 +199,27 @@ public class BusinessSession implements IBusinessSession
 				break;
     	}
     	
-		for (IDeviceWrapper device : tmpConfirmDeviceList)
+    	synchronized(tmpConfirmDeviceList)
     	{
-			if (device == triggerDevice)
-			{
-				continue;
-			}
-			
-			notify.getHeader().put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
-			if (triggerDevice == null)
-			{
-				notify.getBody().put(JSONKey.OperationInfo, "");
-			}
-			else
-			{
-				notify.getBody().put(JSONKey.OperationInfo, triggerDevice.toJSONObject());
-			}
-    		notify.setDeviceWrapper(device);
-    		notify.syncResponse();
+			for (IDeviceWrapper device : tmpConfirmDeviceList)
+	    	{
+				if (device == triggerDevice)
+				{
+					continue;
+				}
+				
+				notify.getHeader().put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
+				if (triggerDevice == null)
+				{
+					notify.getBody().put(JSONKey.OperationInfo, "");
+				}
+				else
+				{
+					notify.getBody().put(JSONKey.OperationInfo, triggerDevice.toJSONObject());
+				}
+	    		notify.setDeviceWrapper(device);
+	    		notify.syncResponse();
+	    	}
     	}
 	}
     
@@ -237,13 +260,13 @@ public class BusinessSession implements IBusinessSession
     	switch(targetStatus)
     	{
     		case Idle:
-    			unbindDevices();
+    			endSession();
+    			BusinessSessionPool.instance.recycleBusinessSession(this);
     			break;
     			
     		case ChatConfirm:
     			if (status == Consts.BusinessSessionStatus.Idle)
     			{
-    				status = targetStatus;
     				//sendChatConfirm();
     				resetDeviceForConfirm();
     			}
@@ -254,11 +277,7 @@ public class BusinessSession implements IBusinessSession
     			break;
     			
     		case VideoChat:
-    			if (status == Consts.BusinessSessionStatus.ChatConfirm)
-    			{
-    				status = targetStatus;
-    			}
-    			else
+    			if (status != Consts.BusinessSessionStatus.ChatConfirm)
     			{
     				logger.error("Invalid status change from " + status.name() + " to " + targetStatus.name());
     			}
@@ -267,7 +286,6 @@ public class BusinessSession implements IBusinessSession
     		case Assess:
     			if (status == Consts.BusinessSessionStatus.VideoChat)
     			{
-    				status = targetStatus;
     				resetDeviceForConfirm();
     			}
     			else
@@ -292,17 +310,6 @@ public class BusinessSession implements IBusinessSession
     		notification.setDeviceWrapper(device);
     		notification.asyncResponse();
     	}
-    }
-    
-    private void unbindDevices()
-    {
-    	for (IDeviceWrapper device : deviceList)
-    	{
-    		device.unbindBusinessSession();
-    	}
-    	
-    	tmpConfirmDeviceList.clear();
-    	deviceList.clear();
     }
     
     /** */
@@ -420,6 +427,7 @@ public class BusinessSession implements IBusinessSession
     			break;
     			
     		case ChatConfirm:
+    			logger.debug("Business session will be released due to device leave, current status: ChatConfirm");
     			changeStatus(Consts.BusinessSessionStatus.Idle);
     			break;
     			

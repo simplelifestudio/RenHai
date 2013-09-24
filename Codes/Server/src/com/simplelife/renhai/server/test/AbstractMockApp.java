@@ -12,6 +12,10 @@
 package com.simplelife.renhai.server.test;
 
 import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.db.Device;
@@ -27,9 +31,23 @@ import com.simplelife.renhai.server.util.JSONKey;
 /** */
 public abstract class AbstractMockApp implements IMockApp
 {
+	private class PingTask extends TimerTask
+	{
+		private AbstractMockApp mockApp;
+		public PingTask(AbstractMockApp mockApp)
+		{
+			this.mockApp = mockApp;
+		}
+		
+		@Override
+		public void run()
+		{
+			mockApp.ping();
+		}
+	}
     /** */
     protected int sessionId;
-    protected Timer pingTimer;
+    protected Timer pingTimer = new Timer();
     
     /** */
     protected IDeviceWrapper deviceWrapper;
@@ -47,6 +65,9 @@ public abstract class AbstractMockApp implements IMockApp
 	private String AppVersion = "0.1";
 	private String Location = "22.511962,113.380301";
 	private String DeviceModel = "iPhone6";
+	
+	protected Lock lock = new ReentrantLock();
+	protected Condition condition = lock.newCondition();
 	
 	public String getOSVersion()
 	{
@@ -102,6 +123,17 @@ public abstract class AbstractMockApp implements IMockApp
     
     public AbstractMockApp()
     {
+    	startTimer();
+    }
+
+    public void startTimer()
+    {
+    	this.pingTimer.scheduleAtFixedRate(new PingTask(this), DateUtil.getNowDate(), GlobalSetting.TimeOut.PingInterval);
+    }
+    
+    public void stopTimer()
+    {
+    	this.pingTimer.cancel();
     }
     
     /**
@@ -138,5 +170,20 @@ public abstract class AbstractMockApp implements IMockApp
     public IDeviceWrapper getDeviceWrapper()
     {
     	return deviceWrapper;
+    }
+    
+    public void waitMessage()
+    {
+    	lock.lock();
+    	try
+		{
+			condition.await();
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	lock.unlock();
     }
 }

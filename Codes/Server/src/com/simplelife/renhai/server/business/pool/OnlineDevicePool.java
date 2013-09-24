@@ -78,45 +78,53 @@ public class OnlineDevicePool extends AbstractDevicePool
         IDeviceWrapper deviceWrapper;
         long lastTime;
         long now = System.currentTimeMillis();
-        logger.debug("1");
 		while (entryKeyIterator.hasNext())
 		{
-			logger.debug("11");
 			Entry<String, IDeviceWrapper> e = entryKeyIterator.next();
 			deviceWrapper = e.getValue();
 			
-			logger.debug("12");
-			lastTime = deviceWrapper.getLastPingTime().getTime();
 			
-			String temp = "last ping time: " + lastTime + ", now: " + now + ", diff: " + (now - lastTime) + ", setting: " + GlobalSetting.TimeOut.OnlineDeviceConnection;
-			logger.debug(temp);
+			lastTime = deviceWrapper.getLastActivityTime().getTime();
+			if ((now - lastTime) > GlobalSetting.TimeOut.DeviceInIdle)
+			{
+				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime())
+						, deviceWrapper.getConnection().getConnectionId());
+				deleteDevice(deviceWrapper);
+				continue;
+			}
+			
+			/*
+			//                   Ping超时                     Ping未超时
+			// Activity超时                     释放                               释放
+			// Activity未超时                不释放                            不释放
+			// 所以逻辑上等价于以activity超时时间为准
+			lastTime = deviceWrapper.getLastPingTime().getTime();
+			//String temp = "last ping time: " + lastTime + ", now: " + now + ", diff: " + (now - lastTime) + ", setting: " + GlobalSetting.TimeOut.OnlineDeviceConnection;
+			//logger.debug(temp);
 			if ((now - lastTime) > GlobalSetting.TimeOut.OnlineDeviceConnection)
 			{
 				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime()),
 						deviceWrapper.getConnection().getConnectionId());
-				logger.debug("2");
 				deleteDevice(deviceWrapper);
-				logger.debug("21");
 				continue;
 			}
+			*/
 			
-			lastTime = deviceWrapper.getLastActivityTime().getTime();
-			if ((now - lastTime) > GlobalSetting.TimeOut.DeviceInIdel)
-			{
-				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime())
-						, deviceWrapper.getConnection().getConnectionId());
-				logger.debug("3");
-				deleteDevice(deviceWrapper);
-				logger.debug("31");
-				continue;
-			}
+			
 		}
     }
     /** */
     private void checkInactiveDevice()
     {
-    	checkDeviceMap(this.deviceMap);
-    	checkDeviceMap(this.queueDeviceMap);
+    	synchronized(deviceMap)
+    	{
+    		checkDeviceMap(this.deviceMap);
+    	}
+    	
+    	synchronized(queueDeviceMap)
+    	{
+    		checkDeviceMap(this.queueDeviceMap);
+    	}
 	}
     
     /** */

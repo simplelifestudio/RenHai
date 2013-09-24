@@ -28,6 +28,8 @@ public interface IBusinessSession
     
     public void startSession(List<String> deviceList);
     
+    public void endSession();
+    
     /**
      * BusinessSession需要调用该方法切换状态，该方法中会检查绑定的两个设备的连接情况，如果有设备的连接已经断开，BusinessSession需要根据对应的业务逻辑决定接下来的业务流程，比如：
      * 1. 如果处于双方确认状态，直接取消匹配
@@ -46,6 +48,8 @@ public interface IBusinessSession
     
     /** */
     public BusinessSessionStatus getStatus();
+    
+    public String getSessionId();
     
     /** */
     public void onAssessAndContinue(IDeviceWrapper sourceDevice, IDeviceWrapper targetDevice);

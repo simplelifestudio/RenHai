@@ -10,6 +10,9 @@
 package com.simplelife.renhai.server.test;
 
 import java.io.IOException;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.json.AppJSONMessage;
@@ -77,20 +80,24 @@ public class MockWebSocketConnection extends WebSocketConnection
     {
     	System.out.print("Send message by mock WebSocket connection: \n");
     	System.out.print(message);
+    	System.out.print("\n");
     	
     	super.onTextMessage(message);
     }
     
     /** */
     @Override
-    protected void sendMessage(String message) throws IOException
+    protected void sendMessage(ServerJSONMessage message)
     {
-    	lastSentMessage = new JSONObject();
-    	JSONObject obj = JSONObject.parseObject(message);
-    	lastSentMessage.put(JSONKey.JsonEnvelope, obj);
-    	this.ownerMockApp.onJSONCommand(lastSentMessage);
+    	if (disabled)
+    	{
+    		this.connectionOwner.onClose(this);
+    		return;
+    	}
     	
-    	System.out.print(message);
+    	lastSentMessage = new JSONObject();
+    	lastSentMessage.put(JSONKey.JsonEnvelope, message.toJSONObject());
+    	this.ownerMockApp.onJSONCommand(lastSentMessage);
     }
     
     /* 
@@ -154,5 +161,11 @@ public class MockWebSocketConnection extends WebSocketConnection
     public void clear()
     {
     	lastSentMessage = null;
+    }
+    
+    @Override
+    public void close()
+    {
+    	
     }
 }
