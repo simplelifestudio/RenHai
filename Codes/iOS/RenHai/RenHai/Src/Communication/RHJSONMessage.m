@@ -120,20 +120,32 @@ static BOOL s_messageEncrypted;
 {
     NSMutableDictionary* header = [NSMutableDictionary dictionary];
     
-    NSString* sMessageType = [NSString stringWithFormat:@"%d", messageType];
-    [header setObject:sMessageType forKey:MESSAGE_KEY_MESSAGETYPE];
+    NSNumber* oMessageType = [NSNumber numberWithInt:messageType];
+    [header setObject:oMessageType forKey:MESSAGE_KEY_MESSAGETYPE];
     
-    NSString* sMessageId = [NSString stringWithFormat:@"%d", messageId];
-    [header setObject:sMessageId forKey:MESSAGE_KEY_MESSAGEID];
+    NSNumber* oMessageId = [NSNumber numberWithInt:messageId];
+    [header setObject:oMessageId forKey:MESSAGE_KEY_MESSAGEID];
     
-    messageSn = (nil != messageSn) ? messageSn : @"";
-    [header setObject:messageSn forKey:MESSAGE_KEY_MESSAGESN];
+    if (nil == messageSn)
+    {
+        [header setObject:[NSNull null] forKey:MESSAGE_KEY_MESSAGESN];
+    }
+    else
+    {
+        [header setObject:messageSn forKey:MESSAGE_KEY_MESSAGESN];
+    }
+
+    NSNumber* oDeviceId = [NSNumber numberWithInt:deviceId];
+    [header setObject:oDeviceId forKey:MESSAGE_KEY_DEVICEID];
     
-    NSString* sDeviceId = (0 < deviceId) ? ([NSString stringWithFormat:@"%d", deviceId]) : @"";
-    [header setObject:sDeviceId forKey:MESSAGE_KEY_DEVICEID];
-    
-    deviceSn = (nil != deviceSn) ? deviceSn : @"";
-    [header setObject:deviceSn forKey:MESSAGE_KEY_DEVICESN];
+    if (nil == deviceSn)
+    {
+        [header setObject:[NSNull null] forKey:MESSAGE_KEY_DEVICESN];
+    }
+    else
+    {
+        [header setObject:deviceSn forKey:MESSAGE_KEY_DEVICESN];
+    }
     
     timeStamp = (nil != timeStamp) ? timeStamp : [NSDate date];
     NSString* sTimeStamp = [CBDateUtils dateStringInLocalTimeZone:FULL_DATE_TIME_FORMAT andDate:timeStamp];
@@ -162,8 +174,7 @@ static BOOL s_messageEncrypted;
 {
     NSInteger deviceId = 0;
     NSString* deviceSn = [UIDevice identifierForVendor];
-    NSString* messageSn = @"";
-    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:messageSn deviceId:deviceId deviceSn:deviceSn timeStamp:nil];
+    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:nil deviceId:deviceId deviceSn:deviceSn timeStamp:nil];
     
     NSDictionary* messageBody = [NSDictionary dictionary];
     

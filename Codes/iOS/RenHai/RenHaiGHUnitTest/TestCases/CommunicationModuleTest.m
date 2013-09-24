@@ -30,6 +30,7 @@
     WebSocketAgent* webSocketAgent = [[WebSocketAgent alloc] init];
     [webSocketAgent connectWebSocket];
     NSLog(@"WebSocket opened.");
+    
     sleep(1);
     
     dispatch_async(dispatch_queue_create("testQueue", DISPATCH_QUEUE_SERIAL), ^(){
@@ -54,6 +55,11 @@
             NSLog(@"WebSocket closed.");
         }
     });
+}
+
+-(void) testAppDataSyncRequest
+{
+    
 }
 
 
