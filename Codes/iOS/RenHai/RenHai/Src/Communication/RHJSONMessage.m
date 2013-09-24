@@ -48,8 +48,13 @@ static BOOL s_messageEncrypted;
     return message;
 }
 
-+(RHJSONMessage*) constructWithContent:(NSDictionary*) content
++(RHJSONMessage*) constructWithContent:(NSDictionary*) content enveloped:(BOOL) enveloped;
 {
+    if (enveloped)
+    {
+        content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
+    }
+
     NSDictionary* header = [content objectForKey:MESSAGE_KEY_HEADER];
     NSDictionary* body = [content objectForKey:MESSAGE_KEY_BODY];
     
@@ -58,8 +63,15 @@ static BOOL s_messageEncrypted;
     return message;
 }
 
-+(RHJSONMessage*) constructWithString:(NSString*) jsonString
++(RHJSONMessage*) constructWithString:(NSString*) jsonString enveloped:(BOOL)enveloped
 {
+    NSDictionary* content = [CBJSONUtils toJSONObject:jsonString];
+    
+    if (enveloped)
+    {
+        content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
+    }
+    
     RHJSONMessage* message = nil;
     
     if (nil != jsonString && 0 < jsonString.length)
@@ -70,7 +82,7 @@ static BOOL s_messageEncrypted;
         }
         
         NSDictionary* dic = [CBJSONUtils toJSONObject:jsonString];
-        message = [RHJSONMessage constructWithContent:dic];
+        message = [RHJSONMessage constructWithContent:dic enveloped:NO];
     }
     
     return message;

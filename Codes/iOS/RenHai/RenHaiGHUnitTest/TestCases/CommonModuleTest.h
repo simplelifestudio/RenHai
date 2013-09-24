@@ -1,5 +1,5 @@
 //
-//  RenHaiCommonModuleTest.h
+//  CommonModuleTest.h
 //  RenHai
 //
 //  Created by Patrick Deng on 13-9-3.
@@ -8,7 +8,7 @@
 
 #import "GHTestCase.h"
 
-@interface RenHaiCommonModuleTest : GHTestCase
+@interface CommonModuleTest : GHTestCase
 
 
 @end

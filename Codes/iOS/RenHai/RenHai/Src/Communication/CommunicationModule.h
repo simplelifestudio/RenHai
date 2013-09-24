@@ -16,10 +16,10 @@
 #define BASEURL_HTTP_SERVER @"http://192.81.135.31/RenHai/"
 #define REMOTEPATH_SERVICE_HTTP @"httpService"
 
-#define BASEURL_WEBSOCKET_SERVER @"http://192.81.135.31/renhai/"
+#define BASEURL_WEBSOCKET_SERVER @"ws://192.81.135.31/renhai/"
 #define REMOTEPATH_SERVICE_WEBSOCKET @"websocket"
 
-#define WEBSOCKET_COMM_TIMEOUT 60
+#define WEBSOCKET_COMM_TIMEOUT 5
 #define HTTP_COMM_TIMEOUT 7.0
 
 @interface CommunicationModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>

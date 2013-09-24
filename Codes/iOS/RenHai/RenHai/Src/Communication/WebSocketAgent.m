@@ -152,8 +152,7 @@
     DDLogInfo(@"WebSocket Received Message Uncrypted: \"%@\"", message);
     
     NSDictionary* dic = [CBJSONUtils toJSONObject:message];
-    dic = [dic objectForKey:MESSAGE_KEY_ENVELOPE];
-    RHJSONMessage* jsonMessage = [RHJSONMessage constructWithContent:dic];
+    RHJSONMessage* jsonMessage = [RHJSONMessage constructWithContent:dic enveloped:YES];
     
     DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", jsonMessage.toJSONString);
     

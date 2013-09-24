@@ -33,7 +33,7 @@
         {
             jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:MESSAGE_SECURITY_KEY];
         }
-
+        
         NSDictionary* params = [NSDictionary dictionaryWithObject:jsonString forKey:MESSAGE_KEY_ENVELOPE];
         
         request = [httpClient
@@ -99,7 +99,7 @@
     {
         NSDictionary* content = (NSDictionary*)JSON;
         content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
-        responseMessage = [RHJSONMessage constructWithContent:content];
+        responseMessage = [RHJSONMessage constructWithContent:content enveloped:NO];
         
         [lock lock];
         [lock signal];
@@ -110,7 +110,7 @@
     {
         NSDictionary* content = (NSDictionary*)JSON;
         content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
-        responseMessage = [RHJSONMessage constructWithContent:content];
+        responseMessage = [RHJSONMessage constructWithContent:content enveloped:NO];
         
         [lock lock];
         [lock signal];

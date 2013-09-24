@@ -1,12 +1,12 @@
 //
-//  RenHaiCommunicationModuleTest.m
+//  CommunicationModuleTest.m
 //  RenHai
 //
 //  Created by Patrick Deng on 13-9-4.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
-#import "RenHaiCommunicationModuleTest.h"
+#import "CommunicationModuleTest.h"
 
 #import "SRWebSocket.h"
 
@@ -16,26 +16,20 @@
 #import "WebSocketAgent.h"
 #import "RHJSONMessage.h"
 
-@interface RenHaiCommunicationModuleTest()
+@interface CommunicationModuleTest()
 {
     
 }
 
 @end
 
-@implementation RenHaiCommunicationModuleTest
-
--(void) testRandomString
-{
-    NSString *randomStr = [CBStringUtils randomString:32];
-    NSLog(@"random string is %@", randomStr);
-}
+@implementation CommunicationModuleTest
 
 -(void) testAlohaRequest
 {    
     WebSocketAgent* webSocketAgent = [[WebSocketAgent alloc] init];
     [webSocketAgent connectWebSocket];
-    
+    NSLog(@"WebSocket opened.");
     sleep(1);
     
     dispatch_async(dispatch_queue_create("testQueue", DISPATCH_QUEUE_SERIAL), ^(){
@@ -44,6 +38,8 @@
             RHJSONMessage* alohaReuqestMessage = [RHJSONMessage newAlohaRequestMessage];
             
             RHJSONMessage* responseMessage = [webSocketAgent syncMessage:alohaReuqestMessage syncInMainThread:NO];
+            
+            NSLog(@"Sent Message: %@", alohaReuqestMessage.toJSONString);            
             
             NSLog(@"Received Message: %@", responseMessage.toJSONString);
         }
@@ -55,6 +51,7 @@
         {
             sleep(16);
             [webSocketAgent closeWebSocket];
+            NSLog(@"WebSocket closed.");
         }
     });
 }

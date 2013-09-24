@@ -123,8 +123,8 @@ RHProfileStatus;
 +(BOOL) isMessageNeedEncrypt;
 
 +(RHJSONMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body;
-+(RHJSONMessage*) constructWithContent:(NSDictionary*) content;
-+(RHJSONMessage*) constructWithString:(NSString*) jsonString;
++(RHJSONMessage*) constructWithContent:(NSDictionary*) content enveloped:(BOOL) enveloped;
++(RHJSONMessage*) constructWithString:(NSString*) jsonString enveloped:(BOOL) enveloped;;
 +(RHMessageErrorCode) verify:(RHJSONMessage*) message;
 
 +(NSDictionary*) constructMessageHeader:(RHMessageType) messageType messageId:(RHMessageId) messageId messageSn:(NSString*) messageSn deviceId:(NSInteger) deviceId deviceSn:(NSString*) deviceSn timeStamp:(NSDate*) timeStamp;
