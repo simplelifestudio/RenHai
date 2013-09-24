@@ -20,7 +20,6 @@ import org.hibernate.Session;
 import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
-import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDbCache;

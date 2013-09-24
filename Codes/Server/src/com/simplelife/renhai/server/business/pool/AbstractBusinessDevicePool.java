@@ -12,10 +12,6 @@
 package com.simplelife.renhai.server.business.pool;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
 import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
@@ -186,5 +182,10 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	{
 		deviceMap.clear();
 		chatDeviceMap.clear();
+	}
+	
+	public int getDeviceCountInChat()
+	{
+		return chatDeviceMap.size();
 	}
 }

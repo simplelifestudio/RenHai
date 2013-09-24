@@ -11,7 +11,6 @@
 
 package com.simplelife.renhai.server.test;
 
-import java.util.HashMap;
 import java.util.Timer;
 
 import com.alibaba.fastjson.JSONObject;

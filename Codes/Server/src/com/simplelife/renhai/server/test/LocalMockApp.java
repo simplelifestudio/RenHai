@@ -11,15 +11,10 @@ package com.simplelife.renhai.server.test;
 
 
 import java.nio.ByteBuffer;
-import java.util.HashMap;
-
-import org.junit.internal.runners.TestMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.db.Devicecard;
-import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.JSONKey;
 
@@ -169,7 +164,7 @@ public class LocalMockApp extends AbstractMockApp
 		body.put(JSONKey.BusinessSessionId, businessSessionId);
 		body.put(JSONKey.BusinessType, Consts.BusinessType.Interest);
 		body.put(JSONKey.OperationInfo, operationInfo);
-		body.put(JSONKey.OperationType, notificationType);
+		body.put(JSONKey.OperationType, notificationType.toString());
 		body.put(JSONKey.OperationValue, "");
 		
 		JSONObject envelopeObj = new JSONObject();

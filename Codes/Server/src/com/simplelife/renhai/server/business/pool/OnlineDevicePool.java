@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
-
 import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
@@ -29,7 +27,6 @@ import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
-import com.simplelife.renhai.server.util.IBusinessPool;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
@@ -95,7 +92,8 @@ public class OnlineDevicePool extends AbstractDevicePool
 			logger.debug(temp);
 			if ((now - lastTime) > GlobalSetting.TimeOut.OnlineDeviceConnection)
 			{
-				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + deviceWrapper.getLastPingTime().toGMTString(), deviceWrapper.getConnection().getConnectionId());
+				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime()),
+						deviceWrapper.getConnection().getConnectionId());
 				logger.debug("2");
 				deleteDevice(deviceWrapper);
 				logger.debug("21");
@@ -105,7 +103,8 @@ public class OnlineDevicePool extends AbstractDevicePool
 			lastTime = deviceWrapper.getLastActivityTime().getTime();
 			if ((now - lastTime) > GlobalSetting.TimeOut.DeviceInIdel)
 			{
-				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + deviceWrapper.getLastActivityTime().toGMTString(), deviceWrapper.getConnection().getConnectionId());
+				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime())
+						, deviceWrapper.getConnection().getConnectionId());
 				logger.debug("3");
 				deleteDevice(deviceWrapper);
 				logger.debug("31");
@@ -164,6 +163,15 @@ public class OnlineDevicePool extends AbstractDevicePool
         return deviceWrapper;
     }
     
+    public int getDeviceCountInChat()
+    {
+    	int count = 0;
+    	for (AbstractBusinessDevicePool pool : this.businessPoolMap.values())
+    	{
+    		count += pool.getDeviceCountInChat();
+    	}
+        return count;
+    }
     
     /** */
     public void deleteDevice(IDeviceWrapper deviceWrapper)

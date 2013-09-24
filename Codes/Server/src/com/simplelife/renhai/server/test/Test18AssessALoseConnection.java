@@ -177,6 +177,15 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		// Step_26 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Assess);
 		
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		
 		// Step_27 Mock事件：A onClose
 		mockApp1.close();
 		

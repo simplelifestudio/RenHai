@@ -11,7 +11,6 @@
 
 package com.simplelife.renhai.server.util;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;

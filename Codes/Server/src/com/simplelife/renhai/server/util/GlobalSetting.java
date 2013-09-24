@@ -38,7 +38,8 @@ public class GlobalSetting
 		public static int OnlinePoolCapacity = 10000;
 		public static int RandomBusinessPoolCapacity = 10000;
 		public static int InterestBusinessPoolCapacity = 0;
-		public static int DefaultLoadedImpressLabel = 10;
+		public static int DefaultImpressLabelCount = 10;
+		public static int HotInterestLabelCount = 10;
 		
 		public static boolean Encrypt = false;
 		public static String EncryptKey = "20120801";

@@ -67,22 +67,6 @@ public interface IDeviceWrapper
     
     public void changeBusinessStatus(Consts.BusinessStatus targetStatus);
     
-    public void onSessionBindConfirmed();
-    
-    public void onChatConfirmed();
-    
-    public void onConnectionLost();
-    
-    public void onAssessProvided();
-    
-    //public boolean isSessionBindConfirmed();
-    
-    //public boolean isChatConfirmed();
-    
-    //public boolean isConnectionLost();
-    
-    //public boolean isAssessProvided();
-    
     public void setBusinessType(Consts.BusinessType businessType);
     
     public Consts.BusinessType getBusinessType();

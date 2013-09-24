@@ -9,7 +9,6 @@
 
 package com.simplelife.renhai.server.test;
 
-import org.junit.internal.runners.TestMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +19,8 @@ import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 /**

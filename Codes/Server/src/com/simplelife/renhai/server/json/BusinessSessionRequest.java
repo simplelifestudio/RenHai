@@ -48,11 +48,6 @@ public class BusinessSessionRequest extends AppJSONMessage
 	@Override
 	protected boolean checkJSONRequest()
     {
-		if (!super.checkJSONRequest())
-		{
-			return false;
-		}
-		
 		if (!body.containsKey(JSONKey.BusinessType))
 		{
 			setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
@@ -299,7 +294,6 @@ public class BusinessSessionRequest extends AppJSONMessage
 			updateOrAppendImpressLabel(impressLabelMap, target, impressLabels.getJSONObject(i));
 		}
 		
-		deviceWrapper.onAssessProvided();
 		if (quitAfterAssess)
 		{
 			deviceWrapper.getOwnerBusinessSession().onAssessAndQuit(this.deviceWrapper, target);

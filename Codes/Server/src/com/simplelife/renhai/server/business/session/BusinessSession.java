@@ -12,7 +12,6 @@
 package com.simplelife.renhai.server.business.session;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import org.slf4j.Logger;
 
@@ -188,7 +187,14 @@ public class BusinessSession implements IBusinessSession
 			}
 			
 			notify.getHeader().put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
-			notify.getBody().put(JSONKey.OperationInfo, triggerDevice.toJSONObject());
+			if (triggerDevice == null)
+			{
+				notify.getBody().put(JSONKey.OperationInfo, "");
+			}
+			else
+			{
+				notify.getBody().put(JSONKey.OperationInfo, triggerDevice.toJSONObject());
+			}
     		notify.setDeviceWrapper(device);
     		notify.syncResponse();
     	}

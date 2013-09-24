@@ -32,17 +32,30 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     }
     
     /** */
-    public LinkedList<AbstractLabel> getHotInterestLabel(Object count)
+    public LinkedList<AbstractLabel> getHotInterestLabel(int count)
     {
-        return null;
-    
+    	LinkedList<AbstractLabel> labelList = new LinkedList<AbstractLabel>();
+    	if (count <= 0)
+    	{
+    		return labelList;
+    	}
+    	
+    	// TODO: 
+        return labelList;
     }
     
     /** */
     public LinkedList<AbstractLabel> getHistoryHotInterestLabel(int count)
     {
-        return null;
-    
+    	// TODO:
+    	LinkedList<AbstractLabel> labelList = new LinkedList<AbstractLabel>();
+    	if (count <= 0)
+    	{
+    		return labelList;
+    	}
+    	
+    	// TODO: 
+        return labelList;
     }
     
     /** */

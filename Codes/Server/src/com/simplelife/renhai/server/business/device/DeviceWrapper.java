@@ -37,7 +37,6 @@ import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
-import com.simplelife.renhai.server.util.IJSONObject;
 import com.simplelife.renhai.server.util.INode;
 import com.simplelife.renhai.server.util.JSONKey;
 

@@ -85,10 +85,15 @@ public class MockWebSocketConnection extends WebSocketConnection
     @Override
     protected void sendMessage(String message) throws IOException
     {
+    	lastSentMessage = new JSONObject();
+    	JSONObject obj = JSONObject.parseObject(message);
+    	lastSentMessage.put(JSONKey.JsonEnvelope, obj);
+    	this.ownerMockApp.onJSONCommand(lastSentMessage);
+    	
     	System.out.print(message);
     }
     
-    /** */
+    /* 
     @Override
     public void asyncSendMessage(ServerJSONMessage message) throws IOException
     {
@@ -105,9 +110,11 @@ public class MockWebSocketConnection extends WebSocketConnection
     	}
     	sendMessage(lastSentMessage.toJSONString());
     }
+    */
     
-    /**
-     * @return  */
+    
+    /*
+     * 
     @Override
     public AppJSONMessage syncSendMessage(String messageSn, String message) throws IOException
     {
@@ -118,9 +125,10 @@ public class MockWebSocketConnection extends WebSocketConnection
     	sendMessage(message);
     	return null;
     }
+    */
     
-    /**
-     * @return  */
+    /*
+     *
     @Override
     public AppJSONMessage syncSendMessage(ServerJSONMessage message) throws IOException
     {
@@ -135,6 +143,7 @@ public class MockWebSocketConnection extends WebSocketConnection
     	sendMessage(lastSentMessage.toJSONString());
     	return null;
     }
+    */
     
     
     /** */
