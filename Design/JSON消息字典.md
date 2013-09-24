@@ -204,6 +204,12 @@ Server接收到App消息后，向App回应的消息
 			"randomChat":"",
 			"interestChat":""
 		},
+		"deviceCapacity":
+		{
+			"online":"",
+			"random":"",
+			"interest":""
+		},
 		"interestLabelList":
 		{
 			"current":"10",
