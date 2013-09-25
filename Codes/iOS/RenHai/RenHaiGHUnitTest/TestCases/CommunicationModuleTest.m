@@ -12,9 +12,9 @@
 
 #import "CBStringUtils.h"
 
-#import "CommunicationModule.h"
 #import "WebSocketAgent.h"
 #import "RHJSONMessage.h"
+#import "RHDevice.h"
 
 @interface CommunicationModuleTest()
 {
@@ -59,7 +59,9 @@
 
 -(void) testAppDataSyncRequest
 {
-    
+    RHDevice* device = [[RHDevice alloc] init];
+    NSLog(@"device's json: %@", device.toJSONString);
+
 }
 
 

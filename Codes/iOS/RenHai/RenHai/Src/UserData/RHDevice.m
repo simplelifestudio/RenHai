@@ -10,17 +10,20 @@
 
 #import "SSKeychain.h"
 
+#import "CBJSONUtils.h"
+
 #import "AppDataModule.h"
 
 #define SERIALIZE_KEY_DEVICEID @"device.deviceId"
 #define SERIALIZE_KEY_DEVICESN @"device.deviceSn"
 #define SERIALIZE_KEY_DEVICECARD @"device.deviceCard"
-#define SERIALIZE_KEY_PROFILELIST @"device.profileList"
+#define SERIALIZE_KEY_PROFILE @"device.profile"
 
+#define JSON_KEY_DEVICE @"device"
 #define JSON_KEY_DEVICEID @"deviceId"
 #define JSON_KEY_DEVICESN @"deviceSn"
 #define JSON_KEY_DEVICECARD @"deviceCard"
-#define JSON_KEY_PROFILELIST @"profileList"
+#define JSON_KEY_PROFILE @"profile"
 
 @implementation RHDevice
 
@@ -28,7 +31,7 @@
 @synthesize deviceSn = _deviceSn;
 
 @synthesize deviceCard = _deviceCard;
-@synthesize profileList = _profileList;
+@synthesize profile = _profile;
 
 #pragma mark - Public Methods
 
@@ -40,21 +43,10 @@
         
         _deviceCard = [[RHDeviceCard alloc] init];
         
-        _profileList = [NSMutableArray array];        
-        RHProfile* profile = [[RHProfile alloc] init];
-        [_profileList addObject:profile];
+        _profile = [[RHProfile alloc] init];
     }
     
     return self;
-}
-
--(RHProfile*) currentProfile
-{
-    RHProfile* profile = nil;
-    
-    profile = (0 < _profileList.count) ? [_profileList objectAtIndex:0] : nil;
-    
-    return profile;
 }
 
 #pragma mark - Private Methods
@@ -90,11 +82,23 @@
     
     [dic setObject:_deviceSn forKey:JSON_KEY_DEVICESN];
     
-    [dic setObject:_deviceCard forKey:JSON_KEY_DEVICECARD];
+    NSDictionary* deviceCardDic = [_deviceCard toJSONObject];
+    [dic setObject:deviceCardDic forKey:JSON_KEY_DEVICECARD];
     
-    [dic setObject:_profileList forKey:JSON_KEY_PROFILELIST];
+    NSDictionary* profileDic = _profile.toJSONObject;
+    [dic setObject:profileDic forKey:JSON_KEY_PROFILE];
     
-    return dic;
+    NSDictionary* rootDic = [NSDictionary dictionaryWithObject:dic forKey:JSON_KEY_DEVICE];
+    
+    return rootDic;
+}
+
+-(NSString*) toJSONString
+{
+    NSDictionary* dic = [self toJSONObject];
+    NSString* str = [CBJSONUtils toJSONString:dic];
+    
+    return str;
 }
 
 #pragma mark - CBSerializable
@@ -113,7 +117,7 @@
         
         _deviceCard = [aDecoder decodeObjectForKey:SERIALIZE_KEY_DEVICECARD];
         
-        _profileList = [aDecoder decodeObjectForKey:SERIALIZE_KEY_PROFILELIST];
+        _profile = [aDecoder decodeObjectForKey:SERIALIZE_KEY_PROFILE];
     }
     
     return self;
@@ -128,7 +132,7 @@
     
     [aCoder encodeObject:_deviceCard forKey:SERIALIZE_KEY_DEVICECARD];
     
-    [aCoder encodeObject:_profileList forKey:SERIALIZE_KEY_PROFILELIST];
+    [aCoder encodeObject:_profile forKey:SERIALIZE_KEY_PROFILE];
 }
 
 @end

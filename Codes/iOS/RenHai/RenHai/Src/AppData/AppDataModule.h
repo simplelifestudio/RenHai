@@ -36,5 +36,9 @@
 
 #pragma mark - Device
 -(NSString*) deviceSn;
+-(NSString*) deviceModel;
+-(NSString*) osVersion;
+-(NSString*) appVersion;
+-(BOOL) isJailed;
 
 @end

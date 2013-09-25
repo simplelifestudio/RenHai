@@ -8,6 +8,8 @@
 
 #import "RHImpressLabel.h"
 
+#import "CBJSONUtils.h"
+
 #define SERIALIZE_KEY_LABELID @"impressLabel.labelId"
 #define SERIALIZE_KEY_ASSESSEDCOUNT @"impressLabel.assessedCount"
 #define SERIALIZE_KEY_UPDATETIME @"impressLabel.updateTime"
@@ -56,6 +58,22 @@
     return oLabelId;
 }
 
+-(id) _getOUpdateTime
+{
+    id oUpdateTime = nil;
+    
+    if (nil == _updateTime)
+    {
+        oUpdateTime = [NSNull null];
+    }
+    else
+    {
+        oUpdateTime = _updateTime;
+    }
+    
+    return oUpdateTime;
+}
+
 #pragma mark - CBJSONable
 
 -(NSDictionary*) toJSONObject
@@ -68,7 +86,8 @@
     NSNumber* oAssessedCount = [NSNumber numberWithInteger:_assessedCount];
     [dic setObject:oAssessedCount forKey:JSON_KEY_ASSESSEDCOUNT];
 
-    [dic setObject:_updateTime forKey:JSON_KEY_UPDATETIME];
+    id oUpdateTime = [self _getOUpdateTime];
+    [dic setObject:oUpdateTime forKey:JSON_KEY_UPDATETIME];
     
     NSNumber* oAssessCount = [NSNumber numberWithInteger:_assessCount];
     [dic setObject:oAssessCount forKey:JSON_KEY_ASSESSCOUNT];
@@ -76,6 +95,14 @@
     [dic setObject:_labelName forKey:JSON_KEY_NAME];
     
     return dic;
+}
+
+-(NSString*) toJSONString
+{
+    NSDictionary* dic = [self toJSONObject];
+    NSString* str = [CBJSONUtils toJSONString:dic];
+    
+    return str;
 }
 
 #pragma mark - CBSerializable
@@ -89,7 +116,11 @@
         
         _assessedCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_ASSESSEDCOUNT];
         
-        _updateTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_UPDATETIME];
+        id oUpdateTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_UPDATETIME];
+        if (oUpdateTime != [NSNull null] && [oUpdateTime isMemberOfClass:[NSDate class]])
+        {
+            _updateTime = (NSDate*)oUpdateTime;
+        }
         
         _assessCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_ASSESSCOUNT];
         
@@ -105,7 +136,8 @@
     
     [aCoder encodeInteger:_assessedCount forKey:SERIALIZE_KEY_ASSESSEDCOUNT];
     
-    [aCoder encodeObject:_updateTime forKey:SERIALIZE_KEY_UPDATETIME];
+    id oUpdateTime = [self _getOUpdateTime];
+    [aCoder encodeObject:oUpdateTime forKey:SERIALIZE_KEY_UPDATETIME];
     
     [aCoder encodeInteger:_assessCount forKey:SERIALIZE_KEY_ASSESSCOUNT];
     
