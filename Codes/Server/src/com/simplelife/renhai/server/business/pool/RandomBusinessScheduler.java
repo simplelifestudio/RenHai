@@ -63,7 +63,7 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
 		{
 			return;
 		}
-		session.bind(this.ownerBusinessPool);
+		session.bindBusinessDevicePool(this.ownerBusinessPool);
 		session.startSession(selectedDevice);
 	}
 	

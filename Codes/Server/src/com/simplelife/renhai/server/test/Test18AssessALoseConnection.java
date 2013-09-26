@@ -214,7 +214,7 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		
 		// Step_33 Mock事件：B对A评价，且之后退出业务
 		JSONObject obj = mockApp1.getDeviceWrapper().toJSONObject();
-		mockApp2.assessAndQuit(obj.toJSONString());
+		mockApp2.assessAndQuit(mockApp1.getDeviceWrapper(), obj.toJSONString());
 		
 		// Step_34 数据库检查：A 印象卡片信息
 		// Step_35 数据库检查：B 印象卡片信息

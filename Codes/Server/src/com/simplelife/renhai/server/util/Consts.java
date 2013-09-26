@@ -17,7 +17,7 @@ public class Consts
 {
 	public enum SolidAssessLabel
 	{
-		Invalid(""), Good("好评"), Normal("中评"), Bad("差评");
+		Invalid(""), Good("喜欢"), Normal("一般"), Bad("反感");
 		private String value;
 		private SolidAssessLabel(String value)
 		{
@@ -34,7 +34,7 @@ public class Consts
 		{
 			for (SolidAssessLabel tmpValue : values())
 			{
-				if (tmpValue.name().equals(label))
+				if (tmpValue.value.equals(label))
 				{
 					return true;
 				}
@@ -89,6 +89,8 @@ public class Consts
 			return String.valueOf(value);
 		}
 	}
+	
+
 	
 	public enum NotificationType
 	{
@@ -157,6 +159,42 @@ public class Consts
 			}
 			return null;
 		}
+		
+		@Override
+		public String toString()
+		{
+			return String.valueOf(value);
+		}
+	}
+	
+	public enum SessionEndReason
+	{
+		Invalid(0), Reject(1), ConnectionLoss(2), NormalEnd(3), CheckFailed(4);
+		
+		private int value;
+		private SessionEndReason(int value)
+		{
+			this.value = value;
+		}
+	
+		public int getValue()
+		{
+			return value;
+		}
+		
+		public static SessionEndReason parseValue(int value)
+		{
+			int intValue = Integer.valueOf(value);
+			for (SessionEndReason item : values())
+			{
+				if (item.value == intValue)
+				{
+					return item;
+				}
+			}
+			return null;
+		}
+		
 		
 		@Override
 		public String toString()

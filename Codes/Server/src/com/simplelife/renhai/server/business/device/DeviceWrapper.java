@@ -30,6 +30,8 @@ import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.json.AppJSONMessage;
+import com.simplelife.renhai.server.json.InvalidRequest;
+import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
@@ -44,7 +46,25 @@ import com.simplelife.renhai.server.util.JSONKey;
 /** */
 public class DeviceWrapper implements IDeviceWrapper, INode
 {
-    /** */
+	private class SyncSendMessageTask implements Runnable
+	{
+		private DeviceWrapper device;
+		private ServerJSONMessage message;
+		
+		public SyncSendMessageTask(DeviceWrapper device, ServerJSONMessage message)
+		{
+			this.device = device;
+			this.message = message;
+		}
+		
+		@Override
+		public void run()
+		{
+			device.syncSendMessageByThread(message);
+		}
+		
+	}
+	/** */
     protected IBaseConnection webSocketConnection;
     
     // Time of last ping from APP
@@ -243,6 +263,18 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     public void onJSONCommand(AppJSONMessage command)
     {
     	this.updateActivityTime();
+    	
+    	if (this.businessStatus == Consts.BusinessStatus.Init)
+    	{
+    		Consts.MessageId messageId =  command.getMessageId();
+    		if (messageId != Consts.MessageId.AlohaRequest 
+    				&& messageId != Consts.MessageId.AppDataSyncRequest)
+    		{
+    			command = new InvalidRequest(command.getJSONObject());
+    			command.setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
+    			command.setErrorDescription("Command is not supported before APP data synchronized");
+    		}
+    	}
     	command.bindDeviceWrapper(this);
         (new Thread(command)).run();
     }
@@ -275,9 +307,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
         this.ownerOnlinePool.deleteDevice(this);
     }
 
-
-    @Override
-    public void syncSendMessage(ServerJSONMessage message)
+    public void syncSendMessageByThread(ServerJSONMessage message)
     {
     	Logger logger = BusinessModule.instance.getLogger();
         try
@@ -287,12 +317,19 @@ public class DeviceWrapper implements IDeviceWrapper, INode
         		logger.error("webSocketConnection == null");
         		return;
         	}
-			webSocketConnection.syncSendMessage(message);
+			AppJSONMessage appResponse = webSocketConnection.syncSendMessage(message);
+			this.onJSONCommand(appResponse);
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
+    }
+    
+    @Override
+    public void syncSendMessage(ServerJSONMessage message)
+    {
+    	(new SyncSendMessageTask(this, message)).run();
     }
 
     @Override
@@ -380,12 +417,14 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 	@Override
 	public JSONObject toJSONObject()
 	{
+		JSONObject wholeObj = new JSONObject();
 		JSONObject deviceObj = new JSONObject();
 		JSONObject deviceCardObj = new JSONObject();
 		JSONObject profileObj = new JSONObject();
 		JSONObject interestCardObj = new JSONObject();
 		JSONObject impressCardObj = new JSONObject();
 		
+		wholeObj.put(JSONKey.Device, deviceObj);
 		deviceObj.put(JSONKey.DeviceId, device.getDeviceId().toString());
 		deviceObj.put(JSONKey.DeviceSn, device.getDeviceSn());
 		deviceObj.put(JSONKey.DeviceCard, deviceCardObj);
@@ -471,7 +510,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 				impressLabelListObj.add(mapObj);
 			}
 		}
-		return deviceObj;
+		return wholeObj;
 	}
 
 }

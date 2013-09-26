@@ -11,6 +11,7 @@ package com.simplelife.renhai.server.test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
 /** */
@@ -23,18 +24,6 @@ public class RemoteMockApp extends AbstractMockApp
     @Override
     public void ping()
     {
-    }
-    
-    /** */
-    @Override
-    public void assess(String impressLabelList)
-    {
-    }
-    
-    @Override
-    public void assessAndQuit(String impressLabelList)
-    {
-    	
     }
     
     /** */
@@ -115,6 +104,26 @@ public class RemoteMockApp extends AbstractMockApp
 	 */
 	@Override
 	public void onJSONCommand(JSONObject obj)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplelife.renhai.server.util.IMockApp#assessAndQuit(com.simplelife.renhai.server.util.IDeviceWrapper, java.lang.String)
+	 */
+	@Override
+	public void assessAndQuit(IDeviceWrapper targetDevice, String impressLabelList)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplelife.renhai.server.util.IMockApp#assessAndContinue(com.simplelife.renhai.server.util.IDeviceWrapper, java.lang.String)
+	 */
+	@Override
+	public void assessAndContinue(IDeviceWrapper targetDevice, String impressLabelList)
 	{
 		// TODO Auto-generated method stub
 		

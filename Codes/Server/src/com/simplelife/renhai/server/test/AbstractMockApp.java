@@ -13,6 +13,7 @@ package com.simplelife.renhai.server.test;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -174,14 +175,18 @@ public abstract class AbstractMockApp implements IMockApp
     
     public void waitMessage()
     {
+    	if (lastReceivedCommand != null)
+    	{
+    		return;
+    	}
+    	
     	lock.lock();
     	try
 		{
-			condition.await();
+			condition.await(10, TimeUnit.SECONDS);
 		}
 		catch (InterruptedException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	lock.unlock();

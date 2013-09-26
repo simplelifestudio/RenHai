@@ -59,7 +59,7 @@ public class Test22Assess extends AbstractTestCase
 		mockApp2.enterPool(Consts.BusinessType.Random);
 		
 		// Step_03 Mock请求：A更新B的印象卡片
-		mockApp1.assess("帅哥");
+		mockApp1.assessAndContinue(mockApp2.getDeviceWrapper(), "帅哥");
 		fail("检验server的回复");
 		
 		// Step_04 调用：RandomBusinessScheduler::schedule
@@ -78,7 +78,7 @@ public class Test22Assess extends AbstractTestCase
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);
 		
 		// Step_08 Mock请求：A更新B的印象卡片
-		mockApp1.assess("帅哥");
+		mockApp1.assessAndContinue(mockApp2.getDeviceWrapper(), "帅哥");
 		fail("检验server的回复");
 		
 		// Step_09 Mock事件：A结束通话
@@ -91,10 +91,10 @@ public class Test22Assess extends AbstractTestCase
 		//mockApp1.assess("帅哥");
 		
 		// Step_12 Mock事件：A对B评价
-		mockApp1.assess("帅哥");
+		mockApp1.assessAndContinue(mockApp2.getDeviceWrapper(), "帅哥");
 		
 		// Step_13 Mock事件：B对A评价
-		mockApp2.assess("美女");
+		mockApp2.assessAndContinue(mockApp1.getDeviceWrapper(), "美女,气质");
 		
 		// Step_14 数据库检查：A 印象卡片信息
 		fail("检查数据库中的印象卡片");

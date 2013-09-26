@@ -18,6 +18,8 @@ import org.slf4j.Logger;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.Sessionrecord;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.CommonFunctions;
@@ -37,12 +39,19 @@ public class BusinessSession implements IBusinessSession
 	private Logger logger = BusinessModule.instance.getLogger();
 	private String sessionId;
 	
+	private long sessionStartTime;
+	private long chatStartTime;
+	private long chatEndTime;
+	
+	private Consts.SessionEndReason endReason = Consts.SessionEndReason.Invalid;
+	
 	private List<IDeviceWrapper> deviceList = new ArrayList<IDeviceWrapper>(); 
 	
 	// Temp list for saving devices waiting for confirmation
 	private List<IDeviceWrapper> tmpConfirmDeviceList = new ArrayList<IDeviceWrapper>();
 	
 	private Consts.BusinessSessionStatus status = Consts.BusinessSessionStatus.Idle;
+	private Consts.BusinessSessionStatus previousStatus = Consts.BusinessSessionStatus.Idle;
 	
 	public BusinessSession()
 	{
@@ -76,11 +85,14 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-    	synchronized (tmpConfirmDeviceList)
+    	synchronized(tmpConfirmDeviceList)
 		{
+    		logger.debug("lock tmpConfirmDeviceList in onBindConfirm");
     		tmpConfirmDeviceList.remove(device);
 		}
+    	logger.debug("unlock tmpConfirmDeviceList in onBindConfirm");
     	
+
     	synchronized(deviceList)
     	{
     		deviceList.add(device);
@@ -134,6 +146,7 @@ public class BusinessSession implements IBusinessSession
     public void endSession()
     {
     	logger.debug("Enter endSession.");
+    	System.currentTimeMillis();
     	
     	synchronized(deviceList)
     	{
@@ -147,6 +160,7 @@ public class BusinessSession implements IBusinessSession
     	
     	synchronized(tmpConfirmDeviceList)
     	{
+    		logger.debug("lock tmpConfirmDeviceList in endSession");
     		for (IDeviceWrapper device : tmpConfirmDeviceList)
 	    	{
     			device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
@@ -154,13 +168,39 @@ public class BusinessSession implements IBusinessSession
 	    	}
     		tmpConfirmDeviceList.clear();
     	}
+    	logger.debug("unlock tmpConfirmDeviceList in endSession");
     	
+    	saveSessionRecord();
+    	unbindBusinessDevicePool();
     	BusinessSessionPool.instance.recycleBusinessSession(this);
+    	
+    }
+    
+    private void saveSessionRecord()
+    {
+    	if (endReason == Consts.SessionEndReason.CheckFailed 
+    			|| endReason == Consts.SessionEndReason.Invalid)
+    	{
+    		return;
+    	}
+    	
+    	Sessionrecord record = new Sessionrecord();
+    	record.setBusinessType(pool.getBusinessType().name());
+    	record.setStartTime(this.sessionStartTime);
+    	
+    	int chatDuration = (int)(chatEndTime - chatStartTime)/1000;
+    	record.setDuration(chatDuration);
+    	record.setEndStatus(previousStatus.name());
+    	record.setEndReason(endReason.name());
+    	
+    	DAOWrapper.cache(record);
     }
     
     @Override
     public void startSession(List<String> deviceList)
     {
+    	sessionStartTime = System.currentTimeMillis();
+    	
     	logger.debug("Enter startSession.");
     	if (!checkBind(deviceList))
     	{
@@ -175,10 +215,12 @@ public class BusinessSession implements IBusinessSession
     		pool.startChat(device);
     		device.bindBusinessSession(this);
     		
-    		synchronized (tmpConfirmDeviceList)
+    		synchronized(tmpConfirmDeviceList)
 			{
+    			logger.debug("lock tmpConfirmDeviceList in startSession");
     			tmpConfirmDeviceList.add(device);
 			}
+    		logger.debug("unlock tmpConfirmDeviceList in startSession");
     	}
     	
     	notifyDevices(null, Consts.NotificationType.SessionBinded);
@@ -219,28 +261,36 @@ public class BusinessSession implements IBusinessSession
 				break;
     	}
     	
+    	
+    	List<IDeviceWrapper> tmpList;
     	synchronized(tmpConfirmDeviceList)
     	{
-			for (IDeviceWrapper device : tmpConfirmDeviceList)
-	    	{
-				if (device == triggerDevice)
-				{
-					continue;
-				}
-				
-				notify.getHeader().put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
-				if (triggerDevice == null)
-				{
-					notify.getBody().put(JSONKey.OperationInfo, null);
-				}
-				else
-				{
-					notify.getBody().put(JSONKey.OperationInfo, triggerDevice.toJSONObject());
-				}
-	    		notify.setDeviceWrapper(device);
-	    		notify.syncResponse();
-	    	}
+    		logger.debug("lock tmpConfirmDeviceList in notifyDevices");
+    		tmpList = new ArrayList<IDeviceWrapper>(tmpConfirmDeviceList);
     	}
+    	logger.debug("unlock tmpConfirmDeviceList in notifyDevices");
+    	
+		for (IDeviceWrapper device : tmpList)
+    	{
+			if (device == triggerDevice)
+			{
+				continue;
+			}
+			
+			notify.getHeader().put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
+			if (triggerDevice == null)
+			{
+				notify.getBody().put(JSONKey.OperationInfo, null);
+			}
+			else
+			{
+				notify.getBody().put(JSONKey.OperationInfo, triggerDevice.toJSONObject());
+			}
+    		notify.setDeviceWrapper(device);
+    		notify.syncResponse();
+    		//notify.asyncResponse();
+    	}
+    	
 	}
     
     /*
@@ -257,10 +307,13 @@ public class BusinessSession implements IBusinessSession
     
     private void resetDeviceForConfirm()
     {
-    	synchronized (tmpConfirmDeviceList)
+    	synchronized(tmpConfirmDeviceList)
 		{
+    		logger.debug("lock tmpConfirmDeviceList in resetDeviceForConfirm");
 			tmpConfirmDeviceList.addAll(deviceList);
 		}
+    	logger.debug("unlock tmpConfirmDeviceList in resetDeviceForConfirm");
+    	
 		synchronized (deviceList)
 		{
 			deviceList.clear();
@@ -296,15 +349,21 @@ public class BusinessSession implements IBusinessSession
     			break;
     			
     		case VideoChat:
-    			if (status != Consts.BusinessSessionStatus.ChatConfirm)
+    			if (status == Consts.BusinessSessionStatus.ChatConfirm)
+    			{
+    				this.chatStartTime = System.currentTimeMillis();
+    			}
+    			else
     			{
     				logger.error("Invalid status change from " + status.name() + " to " + targetStatus.name());
     			}
+    			
     			break;
     			
     		case Assess:
     			if (status == Consts.BusinessSessionStatus.VideoChat)
     			{
+    				this.chatEndTime = System.currentTimeMillis();
     				resetDeviceForConfirm();
     			}
     			else
@@ -317,6 +376,7 @@ public class BusinessSession implements IBusinessSession
 				break;
     	}
     	
+    	previousStatus = status;
     	status = targetStatus;
     }
     
@@ -343,10 +403,12 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-    	synchronized (tmpConfirmDeviceList)
+    	synchronized(tmpConfirmDeviceList)
 		{
+    		logger.debug("lock tmpConfirmDeviceList in onEndChat");
     		tmpConfirmDeviceList.remove(device);
 		}
+    	logger.debug("unlock tmpConfirmDeviceList in onEndChat");
     	
     	synchronized(deviceList)
     	{
@@ -384,10 +446,12 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-    	synchronized (tmpConfirmDeviceList)
+    	synchronized(tmpConfirmDeviceList)
 		{
+    		logger.debug("lock tmpConfirmDeviceList in onAgreeChat");
     		tmpConfirmDeviceList.remove(device);
 		}
+    	logger.debug("unlock tmpConfirmDeviceList in onAgreeChat");
     	
     	synchronized(deviceList)
     	{
@@ -414,10 +478,12 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-    	synchronized (tmpConfirmDeviceList)
+    	synchronized(tmpConfirmDeviceList)
 		{
+    		logger.debug("lock tmpConfirmDeviceList in onRejectChat");
     		tmpConfirmDeviceList.remove(device);
 		}
+    	logger.debug("unlock tmpConfirmDeviceList in onRejectChat");
     	
     	synchronized(deviceList)
     	{
@@ -431,6 +497,7 @@ public class BusinessSession implements IBusinessSession
 		}
 		
 		notifyDevices(device, Consts.NotificationType.OthersideRejected);
+		endReason = Consts.SessionEndReason.Reject;
     	changeStatus(Consts.BusinessSessionStatus.Idle);
     }
 
@@ -439,9 +506,11 @@ public class BusinessSession implements IBusinessSession
     {
     	synchronized(tmpConfirmDeviceList)
     	{
+    		logger.debug("lock tmpConfirmDeviceList in onDeviceLeave");
     		tmpConfirmDeviceList.remove(device);
     	}
-    	
+    	logger.debug("unlock tmpConfirmDeviceList in onDeviceLeave");
+
     	synchronized(deviceList)
     	{
     		deviceList.remove(device);
@@ -456,12 +525,14 @@ public class BusinessSession implements IBusinessSession
     			
     		case ChatConfirm:
     			logger.debug("Business session will be released due to device leave, current status: ChatConfirm");
+    			endReason = Consts.SessionEndReason.ConnectionLoss;
     			changeStatus(Consts.BusinessSessionStatus.Idle);
     			break;
     			
     		case VideoChat:
     			// Do nothing if
     			//changeStatus(Consts.BusinessSessionStatus.VideoChat);
+    			endReason = Consts.SessionEndReason.ConnectionLoss;
     			break;
 			
     		case Assess:
@@ -472,6 +543,7 @@ public class BusinessSession implements IBusinessSession
 				}
     			
     			changeStatus(Consts.BusinessSessionStatus.Idle);
+    			endReason = Consts.SessionEndReason.NormalEnd;
     			break;
     			
     		default:
@@ -507,8 +579,14 @@ public class BusinessSession implements IBusinessSession
 	}
 
 	@Override
-	public void bind(AbstractBusinessDevicePool pool)
+	public void bindBusinessDevicePool(AbstractBusinessDevicePool pool)
 	{
 		this.pool = pool;
+	}
+
+	@Override
+	public void unbindBusinessDevicePool()
+	{
+		this.pool = null;
 	}
 }

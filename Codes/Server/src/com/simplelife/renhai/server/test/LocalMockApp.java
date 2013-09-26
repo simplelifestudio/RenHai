@@ -17,10 +17,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 
 
@@ -45,17 +47,6 @@ public class LocalMockApp extends AbstractMockApp
 	public MockWebSocketConnection getConnection()
 	{
 		return connection;
-	}
-	
-	@Override
-	public void assessAndQuit(String impressLabelList)
-	{
-		if (impressLabelList == null || impressLabelList.length() == 0)
-		{
-			return;
-		}
-		
-		sendBusinessSessionRequest(Consts.OperationType.AssessAndQuit, "", impressLabelList);
 	}
 	
 	/** */
@@ -112,16 +103,16 @@ public class LocalMockApp extends AbstractMockApp
 		
 		JSONObject deviceCountObj = new JSONObject();
 		deviceCountObj.put(JSONKey.Online, null);
+		deviceCountObj.put(JSONKey.Random, null);
 		deviceCountObj.put(JSONKey.Interest, null);
 		deviceCountObj.put(JSONKey.Chat, null);
-		deviceCountObj.put(JSONKey.Interest, null);
 		deviceCountObj.put(JSONKey.RandomChat, null);
 		deviceCountObj.put(JSONKey.InterestChat, null);
 		
 		JSONObject deviceCapacityObj = new JSONObject();
-		deviceCountObj.put(JSONKey.Online, null);
-		deviceCountObj.put(JSONKey.Random, null);
-		deviceCountObj.put(JSONKey.Interest, null);
+		deviceCapacityObj.put(JSONKey.Online, null);
+		deviceCapacityObj.put(JSONKey.Random, null);
+		deviceCapacityObj.put(JSONKey.Interest, null);
 		
 		JSONObject interestObj = new JSONObject();
 		interestObj.put(JSONKey.Current, 10);
@@ -149,27 +140,28 @@ public class LocalMockApp extends AbstractMockApp
 	@Override
 	public void sendRawJSONMessage(JSONObject jsonObject, boolean syncSend)
 	{
+		String message = JSON.toJSONString(jsonObject, SerializerFeature.WriteMapNullValue);
+		logger.debug("Device <{}> send message: \n" + message, getDeviceWrapper().getDeviceSn());
 		if (!syncSend)
 		{
-			connection.onTextMessage(jsonObject.toJSONString());
+			connection.onTextMessage(message);
 			return;
 		}
 		
 		lock.lock();
 		clearLastReceivedCommand();
-		connection.onTextMessage(JSON.toJSONString(jsonObject, SerializerFeature.WriteMapNullValue));
+		connection.onTextMessage(message);
 		try
 		{
 			if (lastReceivedCommand == null)
 			{
-				logger.debug("Mock App sent message and await for response.");
+				logger.debug("Device <{}> sent message and await for response.", getDeviceWrapper().getDeviceSn());
 				condition.await(10, TimeUnit.SECONDS);
-				logger.debug("Mock App recovers from await.");
+				logger.debug("Device <{}> recovers from await.", getDeviceWrapper().getDeviceSn());
 			}
 		}
 		catch (InterruptedException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		lock.unlock();
@@ -178,7 +170,7 @@ public class LocalMockApp extends AbstractMockApp
 	/** */
 	@Override
 	public void sendNotificationResponse(
-			Consts.NotificationType notificationType, 
+			Consts.NotificationType operationType, 
 			String operationInfo,
 			String operationValue)
 	{
@@ -211,7 +203,7 @@ public class LocalMockApp extends AbstractMockApp
 		body.put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(businessSessionId));
 		body.put(JSONKey.BusinessType, Consts.BusinessType.Interest.getValue());
 		body.put(JSONKey.OperationInfo, CommonFunctions.getJSONValue(operationInfo));
-		body.put(JSONKey.OperationType, notificationType.getValue());
+		body.put(JSONKey.OperationType, operationType.getValue());
 		body.put(JSONKey.OperationValue, null);
 		
 		JSONObject envelopeObj = new JSONObject();
@@ -292,15 +284,47 @@ public class LocalMockApp extends AbstractMockApp
 	}
 	
 	/** */
-	@Override
-	public void assess(String impressLabelList)
+	private void assess(IDeviceWrapper targetDevice, String impressLabelList, boolean continueFlag)
 	{
 		if (impressLabelList == null || impressLabelList.length() == 0)
 		{
 			return;
 		}
 		
-		sendBusinessSessionRequest(Consts.OperationType.AssessAndContinue, "", impressLabelList);
+		JSONObject obj = targetDevice.toJSONObject();
+		JSONArray assessObj = obj.getJSONObject(JSONKey.Device)
+				.getJSONObject(JSONKey.Profile)
+				.getJSONObject(JSONKey.ImpressCard)
+				.getJSONArray(JSONKey.AssessLabelList);
+		
+		JSONArray impressObj = obj.getJSONObject(JSONKey.Device)
+				.getJSONObject(JSONKey.Profile)
+				.getJSONObject(JSONKey.ImpressCard)
+				.getJSONArray(JSONKey.ImpressLabelList);
+		
+		assessObj.clear();
+		impressObj.clear();
+		String[] labelArray =  impressLabelList.split(",");
+		for (String label : labelArray)
+		{
+			if (Consts.SolidAssessLabel.isSolidAssessLabel(label))
+			{
+				assessObj.add(label);
+			}
+			else
+			{
+				impressObj.add(label);
+			}
+		}
+		
+		if (continueFlag)
+		{
+			sendBusinessSessionRequest(Consts.OperationType.AssessAndContinue, "", obj.toJSONString());
+		}
+		else
+		{
+			sendBusinessSessionRequest(Consts.OperationType.AssessAndQuit, "", obj.toJSONString());
+		}
 	}
 	
 	@Override
@@ -310,7 +334,21 @@ public class LocalMockApp extends AbstractMockApp
 		lock.lock();
 		condition.signal();
 		lock.unlock();
-		logger.debug("App received command: \n{}", obj.toJSONString());
+		logger.debug("Device<{}> received command: \n" + obj.toJSONString(), getDeviceWrapper().getDeviceSn());
+		
+		// Check if it's notification, and respose if it is
+		JSONObject header = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
+		if (header.containsKey(JSONKey.MessageId))
+		{
+			int messageId = header.getIntValue(JSONKey.MessageId);
+			if (messageId == Consts.MessageId.BusinessSessionNotification.getValue())
+			{
+				logger.debug("Mock app received BusinessSessionNotification, trying to response");
+				JSONObject body = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
+				Consts.NotificationType operationType = Consts.NotificationType.parseValue(body.getIntValue(JSONKey.OperationType)); 
+				this.sendNotificationResponse(operationType, "", "1");
+			}
+		}
 	}
 	
 	/**
@@ -340,6 +378,18 @@ public class LocalMockApp extends AbstractMockApp
 		deviceCardObj.put(JSONKey.DeviceModel, CommonFunctions.getJSONValue(getDeviceModel()));
 		
 		sendAppDataSyncRequest(null, updateObj);
+	}
+
+	@Override
+	public void assessAndQuit(IDeviceWrapper targetDevice, String impressLabelList)
+	{
+		assess(targetDevice, impressLabelList, false);
+	}
+
+	@Override
+	public void assessAndContinue(IDeviceWrapper targetDevice, String impressLabelList)
+	{
+		assess(targetDevice, impressLabelList, true);
 	}
 
 }

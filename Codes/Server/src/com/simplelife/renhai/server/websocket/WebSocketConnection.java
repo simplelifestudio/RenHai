@@ -163,7 +163,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		}
 		else
 		{
-			message = obj.getString(JSONKey.JsonEnvelope);
+			JSONObject messageObj = obj.getJSONObject(JSONKey.JsonEnvelope);
 	    	if (GlobalSetting.BusinessSetting.Encrypt)
 	    	{
 	    		logger.debug("Try to decrypt message");
@@ -178,10 +178,17 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 				}
 	    	}
 	    	
-	    	appMessage = JSONFactory.createAppJSONMessage(JSONObject.parseObject(message));
+	    	appMessage = JSONFactory.createAppJSONMessage(messageObj);
 	    	
 		}
 
+		//JSONObject obj = JSONObject.parseObject(temp);
+		//JSONObject deviceCount = obj.getJSONObject("jsonEnvelope").getJSONObject("body").getJSONObject("deviceCount");
+		//System.out.print(JSON.toJSONString(deviceCount, SerializerFeature.WriteMapNullValue) + "\n");
+		
+		//deviceCount = appMessage.getBody().getJSONObject("deviceCount");
+		//System.out.print(JSON.toJSONString(deviceCount, SerializerFeature.WriteMapNullValue) + "\n");
+		
     	logger.debug("Received message: {}", appMessage.getMessageId().name());
     	String messageSn = appMessage.getMessageSn();
     	if (!syncMap.containsKey(messageSn))
@@ -329,6 +336,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	
     	if (controller.message == null)
     	{
+    		logger.debug("Timeout when waiting for synchronized response");
     		controller.message = new TimeoutRequest(null);
     	}
     	
