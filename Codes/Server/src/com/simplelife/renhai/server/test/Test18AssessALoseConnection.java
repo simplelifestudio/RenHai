@@ -37,6 +37,7 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp1 = createNewMockApp();
 		mockApp2 = createNewMockApp();
 		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
@@ -97,7 +98,7 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		randomDeviceCount = businessPool.getElementCount();
 		
 		// Step_11 调用：RandomBusinessScheduler::schedule
-		businessPool.getBusinessScheduler().schedule();
+		//businessPool.getBusinessScheduler().schedule();
 		
 		// Step_12 调用：BusinessSession::getStatus
 		//assertEquals(deviceWrapper1.getBusinessStatus(), Consts.BusinessStatus.SessionBound);
@@ -206,10 +207,10 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
 		
 		// Step_31 Mock事件：A onPing
-		mockApp1.ping();
+		//mockApp1.ping();
 		
 		// Step_32 Mock事件：B onPing
-		mockApp2.ping();
+		//mockApp2.ping();
 		
 		// Step_33 Mock事件：B对A评价，且之后退出业务
 		JSONObject obj = mockApp1.getDeviceWrapper().toJSONObject();

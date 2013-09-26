@@ -16,10 +16,10 @@ package com.simplelife.renhai.server.util;
 public interface IBusinessPool
 {
     /** */
-    public boolean deviceEnter(IDeviceWrapper device);
+    public boolean onDeviceEnter(IDeviceWrapper device);
     
     /** */
-    public void deviceLeave(IDeviceWrapper device);
+    public void onDeviceLeave(IDeviceWrapper device);
     
     public void startChat(IDeviceWrapper device);
     

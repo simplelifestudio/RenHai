@@ -48,6 +48,7 @@ public class BusinessSessionPool extends AbstractPool
 			logger.error("All business sessions are used.");
 			return null;
 		}
+		logger.debug("Dispatch session, session count before dispatch: {}", sessionList.size());
 		return sessionList.remove(0);
 	}
 	
@@ -55,6 +56,7 @@ public class BusinessSessionPool extends AbstractPool
 	public void recycleBusinessSession(IBusinessSession session)
 	{
 		sessionList.add(session);
+		logger.debug("Recycle session, session count after recycle: {}", sessionList.size());
 	}
 	
 	/** */

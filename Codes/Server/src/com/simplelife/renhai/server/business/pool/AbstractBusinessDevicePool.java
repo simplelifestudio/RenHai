@@ -70,7 +70,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     /**
      * Device enters BusinessDevicePool, it's triggered by entering business 
      */
-    public boolean deviceEnter(IDeviceWrapper device)
+    public boolean onDeviceEnter(IDeviceWrapper device)
     {
     	if (device == null)
     	{
@@ -80,6 +80,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	Logger logger = BusinessModule.instance.getLogger();
     	if (isPoolFull())
     	{
+    		logger.warn("Pool is full and request of entering pool is rejected");
     		return false;
     	}
     	
@@ -97,7 +98,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	}
     	
     	deviceMap.put(sn, device);
-    	logger.debug("Device <{}> has entered " + businessType.name() + "pool", device.getDeviceSn());
+    	logger.debug("Device <{}> has entered " + businessType.name() + " pool", device.getDeviceSn());
     	
     	businessScheduler.getLock().lock();
     	businessScheduler.signal();
@@ -108,7 +109,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     /**
      * Device leaves BusinessDevicePool, it may be caused by exit business or device is released
      */
-    public void deviceLeave(IDeviceWrapper device)
+    public void onDeviceLeave(IDeviceWrapper device)
     {
     	Logger logger = BusinessModule.instance.getLogger();
     	if (device == null)
@@ -119,18 +120,26 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	String sn = device.getDeviceSn();
     	if (!(deviceMap.containsKey(sn) || chatDeviceMap.containsKey(sn)))
     	{
-    		logger.warn("Device <{}> was not in BusinessDevicePool", sn);
+    		logger.debug("Device <{}> was not in BusinessDevicePool", sn);
     		return;
     	}
     	
-    	synchronized(deviceMap)
+    	if (deviceMap.containsKey(sn))
     	{
-    		deviceMap.remove(sn);
+	    	synchronized(deviceMap)
+	    	{
+	    		deviceMap.remove(sn);
+	    	}
+	    	logger.debug("Device <{}> was removed from deviceMap of BusinessDevicePool", sn);
     	}
     	
-    	synchronized(chatDeviceMap)
+    	if (chatDeviceMap.containsKey(sn))
     	{
-    		chatDeviceMap.remove(sn);
+	    	synchronized(chatDeviceMap)
+	    	{
+	    		chatDeviceMap.remove(sn);
+	    	}
+	    	logger.debug("Device <{}> was removed from chatDeviceMap of BusinessDevicePool", sn);
     	}
     	
     	if (device.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
@@ -159,6 +168,19 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 		}
 	}
 	
+	@Override
+	public IDeviceWrapper getDevice(String deviceSn)
+    {
+		if (deviceMap.containsKey(deviceSn))
+		{
+			return deviceMap.get(deviceSn);
+		}
+		else if (chatDeviceMap.containsKey(deviceSn))
+		{
+			return chatDeviceMap.get(deviceSn);
+		}
+   		return null;
+    }
 	
 	/**
      * Chat ends, move device from chatDeviceMap to deviceMap

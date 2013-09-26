@@ -32,7 +32,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
-
+		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 	}
 	
 	/**

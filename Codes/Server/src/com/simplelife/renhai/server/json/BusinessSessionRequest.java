@@ -198,9 +198,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		synchronized (deviceWrapper)
 		{
-			onlinePool.getBusinessPool(type).deviceEnter(deviceWrapper);
-			deviceWrapper.setBusinessType(type);
-			deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
+			deviceWrapper.enterPool(type);
 		}
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
@@ -212,12 +210,12 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		else
 		{
-			response.addToBody(JSONKey.BusinessSessionId, "");
+			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.OperationType, Consts.OperationType.EnterPool.toString());
-		response.addToBody(JSONKey.OperationInfo, "");
-		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.toString());
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.EnterPool.getValue());
+		response.addToBody(JSONKey.OperationInfo, null);
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		response.asyncResponse();
 	}
 	
@@ -226,7 +224,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType type = Consts.BusinessType.parseValue(intType);
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		onlinePool.getBusinessPool(type).deviceEnter(deviceWrapper);
+		onlinePool.getBusinessPool(type).onDeviceEnter(deviceWrapper);
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
@@ -238,12 +236,12 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		else
 		{
-			response.addToBody(JSONKey.BusinessSessionId, "");
+			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.BusinessType, Consts.OperationType.LeavePool.toString());
-		response.addToBody(JSONKey.OperationInfo, "");
+		response.addToBody(JSONKey.BusinessType, Consts.OperationType.LeavePool.getValue());
+		response.addToBody(JSONKey.OperationInfo, null);
 		response.asyncResponse();
 	}
 	
@@ -260,12 +258,12 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		else
 		{
-			response.addToBody(JSONKey.BusinessSessionId, "");
+			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.BusinessType, Consts.OperationType.AgreeChat.toString());
-		response.addToBody(JSONKey.OperationInfo, "");
+		response.addToBody(JSONKey.BusinessType, Consts.OperationType.AgreeChat.getValue());
+		response.addToBody(JSONKey.OperationInfo, null);
 		response.asyncResponse();
 	}
 	
@@ -283,12 +281,12 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		else
 		{
-			response.addToBody(JSONKey.BusinessSessionId, "");
+			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.BusinessType, Consts.OperationType.RejectChat.toString());
-		response.addToBody(JSONKey.OperationInfo, "");
+		response.addToBody(JSONKey.BusinessType, Consts.OperationType.RejectChat.getValue());
+		response.addToBody(JSONKey.OperationInfo, null);
 		response.asyncResponse();
 	}
 	
@@ -306,12 +304,12 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		else
 		{
-			response.addToBody(JSONKey.BusinessSessionId, "");
+			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.BusinessType, Consts.OperationType.EndChat.toString());
-		response.addToBody(JSONKey.OperationInfo, "");
+		response.addToBody(JSONKey.BusinessType, Consts.OperationType.EndChat.getValue());
+		response.addToBody(JSONKey.OperationInfo, null);
 		response.asyncResponse();
 	}
 	
@@ -333,7 +331,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 					Consts.MessageId.BusinessSessionResponse);
 			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession().getStatus());
 			response.addToBody(JSONKey.OperationInfo, temp);
-			response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Fail.toString());
+			response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Fail.getValue());
 			response.asyncResponse();
 			return;
 		}

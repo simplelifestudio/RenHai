@@ -22,7 +22,9 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import org.slf4j.Logger;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.InvalidRequest;
 import com.simplelife.renhai.server.json.JSONFactory;
@@ -50,7 +52,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     protected String remoteIPAddress;
     protected HashMap<String, SyncController> syncMap = new HashMap<String, SyncController>();
     protected String connectionId;
-    
+    protected Logger logger = WebSocketModule.instance.getLogger();
     
     /**
 	 * @return the remoteIPAddress
@@ -72,8 +74,8 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     public WebSocketConnection(String connectionId)
     {
     	super();
-    	setByteBufferMaxSize(Consts.ConnectionSetting.ByteBufferMaxSize.ordinal());
-    	setByteBufferMaxSize(Consts.ConnectionSetting.ByteBufferMaxSize.ordinal());
+    	setByteBufferMaxSize(Consts.ConnectionSetting.ByteBufferMaxSize.getValue());
+    	setByteBufferMaxSize(Consts.ConnectionSetting.ByteBufferMaxSize.getValue());
     	this.connectionId = connectionId;
     }
     
@@ -105,9 +107,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     /** */
     public void ping()
     {
-    	Logger logger = WebSocketModule.instance.getLogger();
-    	
-        ByteBuffer pingData = ByteBuffer.allocate(5);
+    	ByteBuffer pingData = ByteBuffer.allocate(5);
         try
         {
             getWsOutbound().ping(pingData);
@@ -134,7 +134,6 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onTextMessage(String message)
     {
-    	Logger logger = WebSocketModule.instance.getLogger();
     	logger.debug("Text message received.");
     	
     	JSONObject obj = null;
@@ -187,7 +186,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	String messageSn = appMessage.getMessageSn();
     	if (!syncMap.containsKey(messageSn))
     	{
-    		logger.debug("Request message from App.");
+    		logger.debug("New request message from App.");
     		if (connectionOwner != null)
     		{
     			connectionOwner.onJSONCommand(appMessage);
@@ -259,15 +258,14 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 
     
     /** */
-    protected void sendMessage(ServerJSONMessage message)
+    protected void sendMessage(ServerJSONMessage message) throws IOException
     {
-    	Logger logger = WebSocketModule.instance.getLogger();
     	logger.debug("Send message: " + message);
     	
     	JSONObject obj = new JSONObject();
     	obj.put(JSONKey.JsonEnvelope, message.toJSONObject());
     	
-    	String strMessage = obj.toJSONString();
+    	String strMessage = JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue);
     	
     	CharBuffer buffer = CharBuffer.allocate(strMessage.length());
         buffer.put(strMessage);
@@ -280,21 +278,28 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
         catch (IOException e)
         {
         	logger.error(e.getMessage());
-        	this.connectionOwner.onClose(this);
+        	throw(e);
         }
     }
     
     /** */
     public void asyncSendMessage(ServerJSONMessage message)
     {
-    	sendMessage(message);
+    	try
+		{
+			sendMessage(message);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			logger.error("Connection of device <{}> was broken and will be released.", connectionOwner.getDeviceSn());
+			connectionOwner.onClose(this);
+		}
     }
     
     /** */
     protected AppJSONMessage syncSendMessage(String messageSn, ServerJSONMessage message)
     {
-    	Logger logger = WebSocketModule.instance.getLogger();
-    	
     	if (!syncMap.containsKey(messageSn))
     	{
     		logger.error("messageSn <" + messageSn+"> is not saved in syncMap!");
@@ -311,6 +316,11 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		catch (InterruptedException e)
 		{
 			logger.error(e.getMessage());
+		}
+		catch (IOException e)
+		{
+			logger.error("Connection of device <{}> was broken and will be released.", connectionOwner.getDeviceSn());
+			connectionOwner.onClose(this);
 		}
     	finally
     	{

@@ -37,6 +37,7 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp1 = createNewMockApp();
 		mockApp2 = createNewMockApp();
 		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
@@ -95,7 +96,7 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		randomDeviceCount = businessPool.getElementCount();
 		
 		// Step_11 调用：RandomBusinessScheduler::schedule
-		businessPool.getBusinessScheduler().schedule();
+		//businessPool.getBusinessScheduler().schedule();
 		
 		// Step_12 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
@@ -140,10 +141,10 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		}
 		
 		// Step_23 Mock事件：A onPing
-		mockApp1.ping();
+		//mockApp1.ping();
 		
 		// Step_24 Mock事件：B onPing
-		mockApp2.ping();
+		//mockApp2.ping();
 		
 		// Step_25 调用：OnlineDevicePool::getCount
 		assertEquals(deviceCount - 1, onlinePool.getElementCount());

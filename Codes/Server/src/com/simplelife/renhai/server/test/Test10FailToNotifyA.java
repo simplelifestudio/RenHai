@@ -33,6 +33,7 @@ public class Test10FailToNotifyA extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp1 = createNewMockApp();
 		mockApp2 = createNewMockApp();
 		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
@@ -52,10 +53,13 @@ public class Test10FailToNotifyA extends AbstractTestCase
 	public void test()
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random); 
+		AbstractBusinessDevicePool randomPool = onlinePool.getBusinessPool(Consts.BusinessType.Random); 
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;  
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
+		
+		String deviceSn1 = deviceWrapper1.getDeviceSn();
+		String deviceSn2 = deviceWrapper2.getDeviceSn();
 		
 		assertTrue(deviceWrapper1.getConnection() instanceof MockWebSocketConnection);
 		MockWebSocketConnection connection1 = (MockWebSocketConnection) deviceWrapper1.getConnection();
@@ -67,7 +71,8 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		int deviceCount = onlinePool.getElementCount();
 		
 		// Step_02 调用：RandomBusinessDevicePool::getCount
-		int randomDeviceCount = businessPool.getElementCount();
+		int randomDeviceCount = randomPool.getElementCount();
+		logger.debug("Original device count of random pool: {}", randomPool.getElementCount());
 		
 		// Step_03 调用：BusinessSessionPool::getCount
 		int sessionCount = sessionPool.getElementCount();
@@ -79,54 +84,87 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
+		assertTrue(randomPool.getDevice(deviceSn1) == null);
 		mockApp1.enterPool(Consts.BusinessType.Random);
+		assertTrue(randomPool.getDevice(deviceSn1) != null);
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
 		
+		// Step_11 调用：MockWebSocketConnection::disableConnection，禁用A的通信功能
+		connection1.disableConnection();
+		
+		mockApp1.clearLastReceivedCommand();
+		mockApp2.clearLastReceivedCommand();
+		
 		// Step_07 Mock请求：B进入随机聊天
+		assertTrue(randomPool.getDevice(deviceSn2) == null);
 		mockApp2.enterPool(Consts.BusinessType.Random);
+		assertTrue(randomPool.getDevice(deviceSn2) != null);
 		
 		// Step_09 调用：B DeviceWrapper::getBusinessStatus
 		//assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper2.getBusinessStatus());
 		
 		// Step_10 调用：RandomBusinessDevicePool::getCount
-		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
-		randomDeviceCount = businessPool.getElementCount();
-		
-		// Step_11 调用：MockWebSocketConnection::disableConnection，禁用A的通信功能
-		connection1.disableConnection();
+		logger.debug("Device count of random pool after B entered: {}", randomPool.getElementCount());
+		if (deviceWrapper1.getOwnerOnlineDevicePool() == null)
+		{
+			assertEquals(randomDeviceCount + 1, randomPool.getElementCount());
+		}
+		else
+		{
+			assertEquals(randomDeviceCount + 2, randomPool.getElementCount());
+		}
+		randomDeviceCount = randomPool.getElementCount();
 		
 		// Step_12 调用：RandomBusinessScheduler::schedule
 		//businessPool.getBusinessScheduler().schedule();
 		
 		// Step_13 调用：BusinessSessionPool::getCount
-		if (businessPool.getDeviceCountInChat() > 0)
+		if (randomPool.getDeviceCountInChat() > 0)
 		{
 			// Maybe devices have not been scheduled yet
 			assertEquals(sessionCount-1, sessionPool.getElementCount());
 		}
 		else
 		{
-			// Status of session was changed to init due to communication error with mockApp1
-			// So the session was released to session pool
+			// Status of session was changed to idle and returned to pool
+			// Due to communication error with mockApp1
 			assertEquals(sessionCount, sessionPool.getElementCount());
 		}
 		
 		// Step_14 Mock事件：A的通信被禁用掉后，抛出IOException
 		// Step_15 Mock事件：A onPing
-		mockApp1.ping();
+		//mockApp1.ping();
 		
 		// Step_16 Mock事件：B onPing
-		mockApp2.ping();
+		//mockApp2.ping();
 		
 		// Step_17 调用：OnlineDevicePool::getCount
-		assertEquals(deviceCount - 1, onlinePool.getElementCount());
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		
-		// Step_18 调用：BusinessSessionPool::getCount
-		assertEquals(sessionCount, sessionPool.getElementCount());
+		if (deviceWrapper1.getOwnerOnlineDevicePool() == null)
+		{
+			assertTrue(onlinePool.getDevice(deviceSn1) == null);
+			
+			// Step_18 调用：BusinessSessionPool::getCount
+			assertEquals(sessionCount, sessionPool.getElementCount());
+			
+			// Step_19 调用：B DeviceWrapper::getBusinessStatus
+			assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper2.getBusinessStatus());
+		}
+		else
+		{
+			// Step_19 调用：B DeviceWrapper::getBusinessStatus
+			assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
+		}
 		
-		// Step_19 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper2.getBusinessStatus());
 	}
 }

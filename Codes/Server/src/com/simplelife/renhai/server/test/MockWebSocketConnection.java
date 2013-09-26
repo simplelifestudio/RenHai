@@ -10,12 +10,7 @@
 package com.simplelife.renhai.server.test;
 
 import java.io.IOException;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.JSONKey;
@@ -59,22 +54,6 @@ public class MockWebSocketConnection extends WebSocketConnection
     }
     
     /** */
-    public void onClose()
-    {
-    	getOwner().onClose(this);
-    }
-    
-    /** */
-    public void onOpen()
-    {
-    }
-    
-    /** */
-    public void onPong()
-    {
-    }
-    
-    /** */
     @Override
     public void onTextMessage(String message)
     {
@@ -87,12 +66,12 @@ public class MockWebSocketConnection extends WebSocketConnection
     
     /** */
     @Override
-    protected void sendMessage(ServerJSONMessage message)
+    protected void sendMessage(ServerJSONMessage message) throws IOException
     {
     	if (disabled)
     	{
-    		this.connectionOwner.onClose(this);
-    		return;
+    		logger.debug("Mock IOException due to connection is disabled");
+    		throw new IOException();
     	}
     	
     	lastSentMessage = new JSONObject();

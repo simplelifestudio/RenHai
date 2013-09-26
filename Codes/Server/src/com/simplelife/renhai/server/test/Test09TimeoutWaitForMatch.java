@@ -13,6 +13,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -30,6 +31,7 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp = createNewMockApp();
 	}
 	
@@ -47,24 +49,28 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		mockApp.syncDevice();
+		String deviceSn = mockApp.getDeviceWrapper().getDeviceSn();
+		AbstractBusinessDevicePool randomPool = pool.getBusinessPool(Consts.BusinessType.Random);
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		int deviceCount = pool.getElementCount();
 		
 		// Step_02 调用：RandomBusinessDevicePool::getCount
-		int randomDeviceCount = pool.getBusinessPool(Consts.BusinessType.Random).getElementCount();
+		//int randomDeviceCount = pool.getBusinessPool(Consts.BusinessType.Random).getElementCount();
 		
 		// Step_03 Mock请求：进入随机聊天
+		assertTrue(randomPool.getDevice(deviceSn) == null);
 		mockApp.enterPool(Consts.BusinessType.Random);
 		
 		// Step_04 调用：RandomBusinessDevicePool::getCount
-		assertEquals(randomDeviceCount + 1, pool.getBusinessPool(Consts.BusinessType.Random).getElementCount());
+		//assertEquals(randomDeviceCount + 1.getElementCount());
+		assertTrue(randomPool.getDevice(deviceSn) != null);
 		
 		// Step_05 等待Server的Websocket通信异常时间
 		mockApp.stopTimer();
 		try
 		{
-			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection + 1000);
+			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 2);
 		}
 		catch (InterruptedException e)
 		{
@@ -72,13 +78,13 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 		}
 		
 		// Step_06 Mock事件：onPing
-		mockApp.ping();
+		//mockApp.ping();
 		
 		// Step_07 调用：OnlineDevicePool::getCount
-		assertEquals(deviceCount-1, pool.getElementCount());
 		assertTrue(mockApp.getDeviceWrapper().getOwnerOnlineDevicePool() == null);
+		assertTrue(pool.getDevice(deviceSn) == null);
 		
 		// Step_08 调用：RandomBusinessDevicePool::getCount
-		assertEquals(randomDeviceCount, pool.getBusinessPool(Consts.BusinessType.Random).getElementCount());
+		assertTrue(randomPool.getDevice(deviceSn) == null);
 	}
 }

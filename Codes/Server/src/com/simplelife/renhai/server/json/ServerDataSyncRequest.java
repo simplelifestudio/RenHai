@@ -11,8 +11,11 @@ package com.simplelife.renhai.server.json;
 
 import java.util.LinkedList;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializeConfig;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.simplelife.renhai.server.business.device.AbstractLabel;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.InterestBusinessDevicePool;
@@ -198,6 +201,10 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.ServerDataSyncResponse);
 		AbstractBusinessDevicePool randomPool = OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Random);
 		InterestBusinessDevicePool interestPool = (InterestBusinessDevicePool) OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Interest);
+	
+		JSONObject deviceCount = body.getJSONObject("deviceCount");
+		System.out.print(JSON.toJSONString(deviceCount, SerializerFeature.WriteMapNullValue));
+
 		
 		if (body.containsKey(JSONKey.DeviceCapacity))
 		{
@@ -213,6 +220,8 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		{
 			responseHotLabels(response, randomPool, interestPool);
 		}
+		
+		response.asyncResponse();
 	}
 
 

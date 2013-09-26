@@ -49,7 +49,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 		@Override
 		public void run()
 		{
-			OnlineDevicePool.instance.DeleteBannedDevice();
+			OnlineDevicePool.instance.deleteBannedDevice();
 		}
     }
 	
@@ -76,7 +76,8 @@ public class OnlineDevicePool extends AbstractDevicePool
     	logger.debug("Start to check inactive connections.");
     	Iterator<Entry<String, IDeviceWrapper>> entryKeyIterator = deviceMap.entrySet().iterator();
         IDeviceWrapper deviceWrapper;
-        long lastTime;
+        long lastPingTime;
+        long lastActivityTime;
         long now = System.currentTimeMillis();
 		while (entryKeyIterator.hasNext())
 		{
@@ -84,8 +85,8 @@ public class OnlineDevicePool extends AbstractDevicePool
 			deviceWrapper = e.getValue();
 			
 			
-			lastTime = deviceWrapper.getLastActivityTime().getTime();
-			if ((now - lastTime) > GlobalSetting.TimeOut.DeviceInIdle)
+			lastActivityTime = deviceWrapper.getLastActivityTime().getTime();
+			if ((now - lastActivityTime) > GlobalSetting.TimeOut.DeviceInIdle)
 			{
 				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime())
 						, deviceWrapper.getConnection().getConnectionId());
@@ -93,24 +94,21 @@ public class OnlineDevicePool extends AbstractDevicePool
 				continue;
 			}
 			
-			/*
-			//                   Ping超时                     Ping未超时
-			// Activity超时                     释放                               释放
-			// Activity未超时                不释放                            不释放
-			// 所以逻辑上等价于以activity超时时间为准
-			lastTime = deviceWrapper.getLastPingTime().getTime();
+			lastPingTime = deviceWrapper.getLastPingTime().getTime();
 			//String temp = "last ping time: " + lastTime + ", now: " + now + ", diff: " + (now - lastTime) + ", setting: " + GlobalSetting.TimeOut.OnlineDeviceConnection;
 			//logger.debug(temp);
-			if ((now - lastTime) > GlobalSetting.TimeOut.OnlineDeviceConnection)
+			if ((now - lastPingTime) > GlobalSetting.TimeOut.OnlineDeviceConnection)
 			{
+				if ((now - lastActivityTime) < GlobalSetting.TimeOut.OnlineDeviceConnection)
+				{
+					// The extreme case of there is activity but no ping 
+					continue;
+				}
 				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime()),
 						deviceWrapper.getConnection().getConnectionId());
 				deleteDevice(deviceWrapper);
 				continue;
 			}
-			*/
-			
-			
 		}
     }
     /** */
@@ -189,36 +187,43 @@ public class OnlineDevicePool extends AbstractDevicePool
     		return;
     	}
     	
-    	deviceWrapper.getConnection().close();
+    	deviceWrapper.unbindOnlineDevicePool();
     	
     	Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
     	deviceWrapper.unbindOnlineDevicePool();
     	if (status == Consts.BusinessStatus.Init)
     	{
     		String id = deviceWrapper.getConnection().getConnectionId();
-    		synchronized(queueDeviceMap)
+    		if (queueDeviceMap.containsKey(id))
     		{
-    			queueDeviceMap.remove(id);
+	    		synchronized(queueDeviceMap)
+	    		{
+	    			queueDeviceMap.remove(id);
+	    		}
+	    		logger.debug("Device <id> was removed from queueDeviceMap of online device pool.", id);
     		}
     	}
     	else
     	{
     		String sn = deviceWrapper.getDeviceSn();
-    		synchronized(deviceMap)
-			{
-				deviceMap.remove(sn);
-			}
-    		logger.debug("Device <{}> was removed from online device pool.", sn);
+    		if (deviceMap.containsKey(sn))
+    		{
+	    		synchronized(deviceMap)
+				{
+					deviceMap.remove(sn);
+				}
+	    		logger.debug("Device <{}> was removed from deviceMap of online device pool.", sn);
+    		}
     		
-    		if ((deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.WaitMatch)
-        			|| (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound))
+    		if ((status == Consts.BusinessStatus.WaitMatch)
+        			|| (status == Consts.BusinessStatus.SessionBound))
         	{
         		for (Consts.BusinessType type: Consts.BusinessType.values())
         		{
         			AbstractBusinessDevicePool pool = this.getBusinessPool(type);
         			if (pool != null)
         			{
-        				pool.deviceLeave(deviceWrapper);
+        				pool.onDeviceLeave(deviceWrapper);
         			}
         		}
         	}
@@ -329,7 +334,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 		}
 	}
 	
-	public void DeleteBannedDevice()
+	public void deleteBannedDevice()
 	{
 		if (bannedDeviceList.size() > 0)
 		{
@@ -340,7 +345,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 		while (bannedDeviceList.size() > 0)
 		{
 			device = bannedDeviceList.remove(0);
-			device.getConnection().close();
+			device.unbindOnlineDevicePool();
 		}
 	}
 }

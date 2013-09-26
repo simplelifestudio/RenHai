@@ -36,6 +36,7 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp1 = createNewMockApp();
 		mockApp2 = createNewMockApp();
 		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
@@ -97,7 +98,7 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		randomDeviceCount = businessPool.getElementCount();
 		
 		// Step_12 调用：RandomBusinessScheduler::schedule
-		businessPool.getBusinessScheduler().schedule();
+		//businessPool.getBusinessScheduler().schedule();
 		
 		// Step_13 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
@@ -156,10 +157,10 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
 		
 		// Step_30 Mock事件：A onPing
-		mockApp1.ping();
+		//mockApp1.ping();
 		
 		// Step_31 Mock事件：B onPing
-		mockApp2.ping();
+		//mockApp2.ping();
 		
 		// Step_32 Mock事件：B对A评价
 		mockApp2.assess("帅哥");

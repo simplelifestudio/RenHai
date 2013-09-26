@@ -33,7 +33,7 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
 		
 		List<String> selectedDevice = new ArrayList<String>();
 		
-		synchronized (ownerBusinessPool.getDeviceMap())
+		synchronized (deviceMap)
 		{
 			if (deviceCountPerSession == deviceMap.size())
 			{

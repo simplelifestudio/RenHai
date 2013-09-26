@@ -16,7 +16,10 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.JSONKey;
 
@@ -61,7 +64,7 @@ public class LocalMockApp extends AbstractMockApp
 	{
 		init();
 		// Add command type
-		header.put(JSONKey.MessageId, Consts.MessageId.AlohaRequest.toString());
+		header.put(JSONKey.MessageId, Consts.MessageId.AlohaRequest.getValue());
 		
 		// Add command body
 		body.put(JSONKey.Content, "Hello Server!");
@@ -78,7 +81,7 @@ public class LocalMockApp extends AbstractMockApp
 		init();
 		
 		// Add command type
-		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
+		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
 		
 		// Add command body
 		if (queryObj != null)
@@ -103,15 +106,29 @@ public class LocalMockApp extends AbstractMockApp
 		init();
 		
 		// Add command type
-		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
+		header.put(JSONKey.MessageId, Consts.MessageId.ServerDataSyncRequest.getValue());
 		
 		// Add command body
-		body.put(JSONKey.Online, "");
-		body.put(JSONKey.Interest, "");
-		body.put(JSONKey.Chat, "");
-		body.put(JSONKey.Interest, "");
-		body.put(JSONKey.RandomChat, "");
-		body.put(JSONKey.InterestChat, "");
+		
+		JSONObject deviceCountObj = new JSONObject();
+		deviceCountObj.put(JSONKey.Online, null);
+		deviceCountObj.put(JSONKey.Interest, null);
+		deviceCountObj.put(JSONKey.Chat, null);
+		deviceCountObj.put(JSONKey.Interest, null);
+		deviceCountObj.put(JSONKey.RandomChat, null);
+		deviceCountObj.put(JSONKey.InterestChat, null);
+		
+		JSONObject deviceCapacityObj = new JSONObject();
+		deviceCountObj.put(JSONKey.Online, null);
+		deviceCountObj.put(JSONKey.Random, null);
+		deviceCountObj.put(JSONKey.Interest, null);
+		
+		JSONObject interestObj = new JSONObject();
+		interestObj.put(JSONKey.Current, 10);
+		
+		body.put(JSONKey.DeviceCount, deviceCountObj);
+		body.put(JSONKey.DeviceCapacity, deviceCapacityObj);
+		body.put(JSONKey.InterestLabelList, interestObj);
 		
 		JSONObject envelopeObj = new JSONObject();
 		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
@@ -139,10 +156,16 @@ public class LocalMockApp extends AbstractMockApp
 		}
 		
 		lock.lock();
-		connection.onTextMessage(jsonObject.toJSONString());
+		clearLastReceivedCommand();
+		connection.onTextMessage(JSON.toJSONString(jsonObject, SerializerFeature.WriteMapNullValue));
 		try
 		{
-			condition.await(3, TimeUnit.SECONDS);
+			if (lastReceivedCommand == null)
+			{
+				logger.debug("Mock App sent message and await for response.");
+				condition.await(10, TimeUnit.SECONDS);
+				logger.debug("Mock App recovers from await.");
+			}
 		}
 		catch (InterruptedException e)
 		{
@@ -162,7 +185,7 @@ public class LocalMockApp extends AbstractMockApp
 		init();
 		
 		// Add command type
-		header.put(JSONKey.MessageId, Consts.MessageId.BusinessSessionNotificationResponse.toString());
+		header.put(JSONKey.MessageId, Consts.MessageId.BusinessSessionNotificationResponse.getValue());
 		
 		String messageSn = null;
 		if (this.lastReceivedCommand != null)
@@ -185,11 +208,11 @@ public class LocalMockApp extends AbstractMockApp
 		}
 		
 		// Add command body
-		body.put(JSONKey.BusinessSessionId, businessSessionId);
-		body.put(JSONKey.BusinessType, Consts.BusinessType.Interest);
-		body.put(JSONKey.OperationInfo, operationInfo);
-		body.put(JSONKey.OperationType, notificationType.toString());
-		body.put(JSONKey.OperationValue, "");
+		body.put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(businessSessionId));
+		body.put(JSONKey.BusinessType, Consts.BusinessType.Interest.getValue());
+		body.put(JSONKey.OperationInfo, CommonFunctions.getJSONValue(operationInfo));
+		body.put(JSONKey.OperationType, notificationType.getValue());
+		body.put(JSONKey.OperationValue, null);
 		
 		JSONObject envelopeObj = new JSONObject();
 		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
@@ -204,14 +227,15 @@ public class LocalMockApp extends AbstractMockApp
 		init();
 		
 		// Add command type
-		header.put(JSONKey.MessageId, Consts.MessageId.BusinessSessionRequest.toString());
+		header.put(JSONKey.MessageId, Consts.MessageId.BusinessSessionRequest.getValue());
 		
 		// Add command body
-		body.put(JSONKey.BusinessSessionId, businessSessionId);
-		body.put(JSONKey.BusinessType, businessType.toString());
-		body.put(JSONKey.OperationType, operationType.toString());
-		body.put(JSONKey.OperationInfo, operationInfo);
-		body.put(JSONKey.OperationValue, operationValue);
+		body.put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(businessSessionId));
+		body.put(JSONKey.BusinessType, businessType.getValue());
+		body.put(JSONKey.OperationType, operationType.getValue());
+		
+		body.put(JSONKey.OperationInfo, CommonFunctions.getJSONValue(operationInfo));
+		body.put(JSONKey.OperationValue, CommonFunctions.getJSONValue(operationValue));
 		
 		JSONObject envelopeObj = new JSONObject();
 		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
@@ -222,7 +246,7 @@ public class LocalMockApp extends AbstractMockApp
 	@Override
 	public void close()
 	{
-		connection.onClose();
+		connection.onClose(0);
 	}
 	
 	/** */
@@ -230,7 +254,7 @@ public class LocalMockApp extends AbstractMockApp
 	public void enterPool(Consts.BusinessType businessType)
 	{
 		this.businessType = businessType;
-		sendBusinessSessionRequest(Consts.OperationType.EnterPool, "", businessType.name());
+		sendBusinessSessionRequest(Consts.OperationType.EnterPool, "", businessType.toString());
 	}
 	
 	/** */
@@ -307,13 +331,13 @@ public class LocalMockApp extends AbstractMockApp
 		
 		profileObj.put(JSONKey.InterestCard, interestCardObj);
 		
-		deviceObj.put(JSONKey.DeviceSn, this.deviceWrapper.getDeviceSn());
-		deviceCardObj.put(JSONKey.OsVersion, this.getOSVersion());
-		deviceCardObj.put(JSONKey.AppVersion, this.getAppVersion());
-		deviceCardObj.put(JSONKey.IsJailed, Consts.YesNo.No.toString());
-		deviceCardObj.put(JSONKey.Location, this.getLocation());
-		deviceCardObj.put(JSONKey.DeviceSn, this.getDeviceWrapper().getDeviceSn());
-		deviceCardObj.put(JSONKey.DeviceModel, this.getDeviceModel());
+		deviceObj.put(JSONKey.DeviceSn, CommonFunctions.getJSONValue(deviceWrapper.getDeviceSn()));
+		deviceCardObj.put(JSONKey.OsVersion, CommonFunctions.getJSONValue(getOSVersion()));
+		deviceCardObj.put(JSONKey.AppVersion, CommonFunctions.getJSONValue(getAppVersion()));
+		deviceCardObj.put(JSONKey.IsJailed, Consts.YesNo.No.getValue());
+		deviceCardObj.put(JSONKey.Location, CommonFunctions.getJSONValue(getLocation()));
+		deviceCardObj.put(JSONKey.DeviceSn, CommonFunctions.getJSONValue(getDeviceWrapper().getDeviceSn()));
+		deviceCardObj.put(JSONKey.DeviceModel, CommonFunctions.getJSONValue(getDeviceModel()));
 		
 		sendAppDataSyncRequest(null, updateObj);
 	}

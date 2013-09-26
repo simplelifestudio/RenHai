@@ -27,7 +27,7 @@ public class Test01KeepWebsocket extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
-		
+		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 	}
 	
 	@After

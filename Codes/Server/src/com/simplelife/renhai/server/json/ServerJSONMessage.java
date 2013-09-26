@@ -66,8 +66,8 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     	if (request == null)
     	{
     		addToHeader(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
-    		addToHeader(JSONKey.DeviceId, "");
-    		addToHeader(JSONKey.DeviceSn, "");
+    		addToHeader(JSONKey.DeviceId, null);
+    		addToHeader(JSONKey.DeviceSn, null);
     	}
     	else
     	{
@@ -77,8 +77,8 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
         	if (device == null)
         	{
         		//addToHeader(JSONKey.MessageType, 2);
-        		addToHeader(JSONKey.DeviceId, "");
-        		addToHeader(JSONKey.DeviceSn, "");
+        		addToHeader(JSONKey.DeviceId, null);
+        		addToHeader(JSONKey.DeviceSn, null);
         	}
         	else
         	{
@@ -108,7 +108,7 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     
     protected void setMessageType(Consts.MessageType messageType)
     {
-    	addToHeader(JSONKey.MessageType, String.valueOf(messageType.ordinal()));
+    	addToHeader(JSONKey.MessageType, messageType.getValue());
     }
     
     protected void setMessageSn(String messageSn)
@@ -118,17 +118,17 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     
     protected void setMessageId(Consts.MessageId messageId)
     {
-    	addToHeader(JSONKey.MessageId, messageId.toString());
+    	addToHeader(JSONKey.MessageId, messageId.getValue());
     }
     
     public Consts.MessageType getMessageType()
     {
-    	return Consts.MessageType.valueOf(header.get(JSONKey.MessageType).toString());
+    	return Consts.MessageType.valueOf(header.getString(JSONKey.MessageType));
     }
 
     public String getMessageSn()
     {
-    	return header.get(JSONKey.MessageSn).toString();
+    	return header.getString(JSONKey.MessageSn);
     }
     
     public abstract Consts.MessageId getMessageId();

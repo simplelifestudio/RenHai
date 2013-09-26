@@ -67,7 +67,7 @@ public interface IDeviceWrapper
     
     public void changeBusinessStatus(Consts.BusinessStatus targetStatus);
     
-    public void setBusinessType(Consts.BusinessType businessType);
+	public void enterPool(Consts.BusinessType businessType);
     
     public Consts.BusinessType getBusinessType();
     

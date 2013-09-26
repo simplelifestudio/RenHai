@@ -281,8 +281,16 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
 	{
 		if (header.containsKey(fieldName))
 		{
-			String fieldValue = obj.getString(fieldName);
+			if (obj.get(fieldName) == null)
+			{
+				String temp = fieldName + " can't be empty.";
+				logger.error(temp);
+				setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+				setErrorDescription(temp);
+				return false;
+			}
 			
+			String fieldValue = obj.getString(fieldName);
 			if (fieldValue.trim().length() == 0)
 			{
 				String temp = fieldName + " can't be empty.";

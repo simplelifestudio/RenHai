@@ -26,6 +26,7 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		GlobalSetting.TimeOut.OnlineDeviceConnection = 5 * 1000;
 	}
 	
@@ -51,10 +52,11 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 		assertTrue(device.getOwnerOnlineDevicePool() == OnlineDevicePool.instance);
 		
 		// Step_02 等待Server的Websocket通信异常时间
+		mockApp.stopTimer();
 		try
 		{
 			logger.debug("Wait for timeout, be patient...\n");
-			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection + 1000);
+			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 2);
 		}
 		catch (InterruptedException e)
 		{
@@ -62,7 +64,6 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 		}
 		
 		// Step_03 Mock事件：onPing
-		logger.debug("Recover from sleep, start to check connection again.");
 		device = OnlineDevicePool.instance.getDevice(connectionId); 
 		assertTrue(device == null);
 		//assertTrue(device.getOwnerOnlineDevicePool() == null);

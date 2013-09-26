@@ -259,7 +259,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     {
     	if (this.ownerOnlinePool == null)
     	{
-    		logger.debug("ownerOnlinePool == null and ping is ignored");
+    		logger.debug("ownerOnlinePool of device <{}> is null and ping is ignored", getDeviceSn());
     		return;
     	}
     	
@@ -338,9 +338,17 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 	}
 	
 	@Override
-	public void setBusinessType(BusinessType businessType)
+	public void enterPool(BusinessType businessType)
 	{
-		this.businessType = businessType;
+		if (ownerOnlinePool.getBusinessPool(businessType).onDeviceEnter(this))
+		{
+			changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
+			this.businessType = businessType;
+		}
+		else
+		{
+			logger.warn("Device <{}> failed to enter business pool", getDeviceSn());
+		}
 	}
 
 	@Override
@@ -465,5 +473,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		}
 		return deviceObj;
 	}
+
 }
 

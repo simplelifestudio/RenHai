@@ -39,6 +39,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp = createDemoMockApp();
 	}
 	

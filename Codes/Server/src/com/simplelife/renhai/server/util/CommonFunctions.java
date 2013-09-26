@@ -42,5 +42,12 @@ public class CommonFunctions
 	    return new String(data);
 	}
 	
-	
+	public static String getJSONValue(String value)
+    {
+    	if (value == null || value.trim().length() == 0)
+    	{
+    		return null;
+    	}
+    	return value;
+    }
 }

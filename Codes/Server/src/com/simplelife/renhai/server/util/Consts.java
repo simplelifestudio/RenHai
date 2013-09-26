@@ -53,6 +53,11 @@ public class Consts
 			this.value = value;
 		}
 	
+		public int getValue()
+		{
+			return value;
+		}
+		
 		public static ServiceStatus parseValue(int value)
 		{
 			int intValue = Integer.valueOf(value);
@@ -100,6 +105,11 @@ public class Consts
 			this.value = value;
 		}
 	
+		public int getValue()
+		{
+			return value;
+		}
+		
 		public static NotificationType parseValue(int value)
 		{
 			int intValue = Integer.valueOf(value);
@@ -130,6 +140,11 @@ public class Consts
 			this.value = value;
 		}
 	
+		public int getValue()
+		{
+			return value;
+		}
+		
 		public static BusinessStatus parseValue(int value)
 		{
 			int intValue = Integer.valueOf(value);
@@ -161,6 +176,11 @@ public class Consts
 			this.value = value;
 		}
 	
+		public int getValue()
+		{
+			return value;
+		}
+		
 		public static YesNo parseValue(int value)
 		{
 			for (YesNo item : values())
@@ -203,6 +223,11 @@ public class Consts
 			this.value = value;
 		}
 		
+		public int getValue()
+		{
+			return value;
+		}
+		
 		@Override
 		public String toString()
 		{
@@ -220,6 +245,11 @@ public class Consts
 			this.value = value;
 		}
 	
+		public int getValue()
+		{
+			return value;
+		}
+		
 		public static BusinessSessionStatus parseValue(String value)
 		{
 			int intValue = Integer.valueOf(value);
@@ -248,6 +278,11 @@ public class Consts
 		private BusinessType(int value)
 		{
 			this.value = value;
+		}
+		
+		public int getValue()
+		{
+			return value;
 		}
 		
 		public static BusinessType parseValue(int value)
@@ -286,6 +321,11 @@ public class Consts
 		private MessageType(int value)
 		{
 			this.value = value;
+		}
+		
+		public int getValue()
+		{
+			return value;
 		}
 		
 		public static MessageType parseValue(int value)
@@ -335,6 +375,11 @@ public class Consts
 		private MessageId(int messageId)
 		{
 			this.value = messageId;
+		}
+		
+		public int getValue()
+		{
+			return value;
 		}
 		
 		@Override
@@ -387,6 +432,11 @@ public class Consts
     		this.value = code; 
     	}
     	
+    	public int getValue()
+		{
+			return value;
+		}
+    	
     	@Override
     	public String toString()
     	{
@@ -413,6 +463,11 @@ public class Consts
     		this.value = value; 
     	}
     	
+    	public int getValue()
+		{
+			return value;
+		}
+    	
 		public static OperationType parseValue(int value)
 		{
 			for (OperationType item : values())
@@ -438,6 +493,11 @@ public class Consts
 		CharBufferMaxSize (2097152);
 		
 		private int value;
+		
+		public int getValue()
+		{
+			return value;
+		}
 		
 		private ConnectionSetting(int value)
 		{

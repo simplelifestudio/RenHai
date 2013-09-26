@@ -59,13 +59,13 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     }
     
     /** */
-    public boolean deviceEnter(IDeviceWrapper device)
+    public boolean onDeviceEnter(IDeviceWrapper device)
     {
         return false;
     }
     
     /** */
-    public void deviceLeave(IDeviceWrapper device)
+    public void onDeviceLeave(IDeviceWrapper device)
     {
     }
 

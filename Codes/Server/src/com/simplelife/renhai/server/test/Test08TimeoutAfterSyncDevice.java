@@ -31,6 +31,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp = createNewMockApp();
 	}
 	
@@ -62,19 +63,19 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 		assertEquals(deviceCount, pool.getElementCount());
 		
 		mockApp.stopTimer();
-		
+		logger.debug("Stop ping timer and wait for timeout");
 		// Step_05 等待Server的Websocket通信异常时间
 		try
 		{
-			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection + 1000);
+			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 2);
 		}
 		catch (InterruptedException e)
 		{
 			e.printStackTrace();
 		}
-		
+		logger.debug("Recovered from sleep");
 		// Step_06 Mock事件：onPing
-		mockApp.ping();
+		//mockApp.ping();
 		
 		// Step_07 调用：OnlineDevicePool::getCount
 		assertEquals(deviceCount-1, pool.getElementCount());

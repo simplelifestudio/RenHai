@@ -37,6 +37,7 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp1 = createNewMockApp();
 		mockApp2 = createNewMockApp();
 		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
@@ -129,7 +130,7 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 		// Step_21 等待绑定确认超时时间
 		try
 		{
-			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection + 1000);
+			Thread.sleep(GlobalSetting.TimeOut.ChatConfirm * 2);
 		}
 		catch (InterruptedException e)
 		{
@@ -137,10 +138,10 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 		}
 		
 		// Step_22 Mock事件：A onPing
-		mockApp1.ping();
+		//mockApp1.ping();
 		
 		// Step_23 Mock事件：B onPing
-		mockApp2.ping();
+		//mockApp2.ping();
 		
 		// Step_24 调用：OnlineDevicePool::getCount
 		assertEquals(deviceCount - 1, onlinePool.getElementCount());

@@ -115,6 +115,8 @@ public class BusinessSession implements IBusinessSession
     		if (device == null)
     		{
     			logger.error("Device <{}> is not in online device pool when trying to bind with session.", deviceSn);
+    			device = pool.getDevice(deviceSn);
+    			pool.onDeviceLeave(device);
     			return false;
     		}
     		status = device.getBusinessStatus();
@@ -132,14 +134,28 @@ public class BusinessSession implements IBusinessSession
     public void endSession()
     {
     	logger.debug("Enter endSession.");
-    	for (IDeviceWrapper device : deviceList)
+    	
+    	synchronized(deviceList)
     	{
-    		device.unbindBusinessSession();
-    		pool.endChat(device);
+	    	for (IDeviceWrapper device : deviceList)
+	    	{
+	    		device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
+	    		pool.endChat(device);
+	    	}
+	    	deviceList.clear();
     	}
     	
-    	tmpConfirmDeviceList.clear();
-    	deviceList.clear();
+    	synchronized(tmpConfirmDeviceList)
+    	{
+    		for (IDeviceWrapper device : tmpConfirmDeviceList)
+	    	{
+    			device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
+	    		pool.endChat(device);
+	    	}
+    		tmpConfirmDeviceList.clear();
+    	}
+    	
+    	BusinessSessionPool.instance.recycleBusinessSession(this);
     }
     
     @Override
@@ -148,6 +164,7 @@ public class BusinessSession implements IBusinessSession
     	logger.debug("Enter startSession.");
     	if (!checkBind(deviceList))
     	{
+    		endSession();
     		return;
     	}
     	
@@ -158,7 +175,10 @@ public class BusinessSession implements IBusinessSession
     		pool.startChat(device);
     		device.bindBusinessSession(this);
     		
-    		tmpConfirmDeviceList.add(device);
+    		synchronized (tmpConfirmDeviceList)
+			{
+    			tmpConfirmDeviceList.add(device);
+			}
     	}
     	
     	notifyDevices(null, Consts.NotificationType.SessionBinded);
@@ -179,18 +199,18 @@ public class BusinessSession implements IBusinessSession
     			
     		case ChatConfirm:
     			notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
-    			notify.getBody().put(JSONKey.BusinessSessionId, this.sessionId);
-    			notify.getBody().put(JSONKey.BusinessType, this.pool.getBusinessType().toString());
-    			notify.getBody().put(JSONKey.OperationType, notificationType.toString());
-    			notify.getBody().put(JSONKey.OperationValue, "");
+    			notify.getBody().put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(sessionId));
+    			notify.getBody().put(JSONKey.BusinessType, pool.getBusinessType().getValue());
+    			notify.getBody().put(JSONKey.OperationType, notificationType.getValue());
+    			notify.getBody().put(JSONKey.OperationValue, null);
     			break;
     			
     		case Idle:
     			notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
-    			notify.getBody().put(JSONKey.BusinessSessionId, this.sessionId);
-    			notify.getBody().put(JSONKey.BusinessType, this.pool.getBusinessType().toString());
-    			notify.getBody().put(JSONKey.OperationType, Consts.NotificationType.SessionBinded.toString());
-    			notify.getBody().put(JSONKey.OperationValue, "");
+    			notify.getBody().put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(sessionId));
+    			notify.getBody().put(JSONKey.BusinessType, pool.getBusinessType().getValue());
+    			notify.getBody().put(JSONKey.OperationType, Consts.NotificationType.SessionBinded.getValue());
+    			notify.getBody().put(JSONKey.OperationValue, null);
     			break;
     			
     		case VideoChat:
@@ -211,7 +231,7 @@ public class BusinessSession implements IBusinessSession
 				notify.getHeader().put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
 				if (triggerDevice == null)
 				{
-					notify.getBody().put(JSONKey.OperationInfo, "");
+					notify.getBody().put(JSONKey.OperationInfo, null);
 				}
 				else
 				{
@@ -261,7 +281,6 @@ public class BusinessSession implements IBusinessSession
     	{
     		case Idle:
     			endSession();
-    			BusinessSessionPool.instance.recycleBusinessSession(this);
     			break;
     			
     		case ChatConfirm:
@@ -358,6 +377,7 @@ public class BusinessSession implements IBusinessSession
     @Override
     public void onAgreeChat(IDeviceWrapper device)
     {
+    	logger.debug("onAgreeChat of device <{}>", device.getDeviceSn());
     	if (!tmpConfirmDeviceList.contains(device))
     	{
     		logger.error("Received confirmation from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
@@ -387,6 +407,7 @@ public class BusinessSession implements IBusinessSession
     @Override
     public void onRejectChat(IDeviceWrapper device)
     {
+    	logger.debug("onRejectChat of device <{}>", device.getDeviceSn());
     	if (!tmpConfirmDeviceList.contains(device))
     	{
     		logger.error("Received confirmation from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
@@ -416,8 +437,15 @@ public class BusinessSession implements IBusinessSession
     @Override
     public void onDeviceLeave(IDeviceWrapper device)
     {
-    	tmpConfirmDeviceList.remove(device);
-    	deviceList.remove(device);
+    	synchronized(tmpConfirmDeviceList)
+    	{
+    		tmpConfirmDeviceList.remove(device);
+    	}
+    	
+    	synchronized(deviceList)
+    	{
+    		deviceList.remove(device);
+    	}
     	
     	device.unbindBusinessSession();
     	switch(status)
@@ -475,7 +503,7 @@ public class BusinessSession implements IBusinessSession
     	
     	BusinessType type = sourceDevice.getBusinessType();
     	AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
-    	pool.deviceLeave(sourceDevice);
+    	pool.onDeviceLeave(sourceDevice);
 	}
 
 	@Override

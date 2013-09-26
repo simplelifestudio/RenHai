@@ -606,7 +606,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		if (profileObj.containsKey(JSONKey.Active))
 		{
-			profileResponse.put(JSONKey.Active, Consts.YesNo.parseValue(profile.getActive()).ordinal());
+			profileResponse.put(JSONKey.Active, Consts.YesNo.parseValue(profile.getActive()).getValue());
 		}
 		
 		if (profileObj.containsKey(JSONKey.InterestCard))
@@ -942,11 +942,11 @@ public class AppDataSyncRequest extends AppJSONMessage
 				}
 				interestLabelMapObj.setValidFlag("Valid");
 			}
-			responseObj.put(JSONKey.InterestLabel, Consts.SuccessOrFail.Success.ordinal());
+			responseObj.put(JSONKey.InterestLabel, Consts.SuccessOrFail.Success.getValue());
 			interestLabelMapObj.setGlobalinterestlabel(globalInterestObj);
 			
 			interestLabelMapObj.setLabelOrder(Integer.parseInt(tmpJSONObj.getString(JSONKey.LabelOrder)));
-			responseObj.put(JSONKey.LabelOrder, Consts.SuccessOrFail.Success.ordinal());
+			responseObj.put(JSONKey.LabelOrder, Consts.SuccessOrFail.Success.getValue());
 			labelMapList.add(interestLabelMapObj);
 			
 			interestLabelMapObj.setInterestcard(card);
@@ -982,28 +982,28 @@ public class AppDataSyncRequest extends AppJSONMessage
 		String temp = jsonObj.getString(JSONKey.DeviceModel);
 		if (temp != null)
 		{
-			response.put(JSONKey.DeviceModel, Consts.SuccessOrFail.Success.ordinal());
+			response.put(JSONKey.DeviceModel, Consts.SuccessOrFail.Success.getValue());
 			deviceCard.setDeviceModel(temp);
 		}
 		
 		temp = jsonObj.getString(JSONKey.OsVersion);
 		if (temp != null)
 		{
-			response.put(JSONKey.OsVersion, Consts.SuccessOrFail.Success.ordinal());
+			response.put(JSONKey.OsVersion, Consts.SuccessOrFail.Success.getValue());
 			deviceCard.setOsVersion(temp);
 		}
 		
 		temp = jsonObj.getString(JSONKey.AppVersion);
 		if (temp != null)
 		{
-			response.put(JSONKey.AppVersion, Consts.SuccessOrFail.Success.ordinal());
+			response.put(JSONKey.AppVersion, Consts.SuccessOrFail.Success.getValue());
 			deviceCard.setAppVersion(temp);
 		}
 		
 		temp = jsonObj.getString(JSONKey.IsJailed);
 		if (temp != null)
 		{
-			response.put(JSONKey.IsJailed, Consts.SuccessOrFail.Success.ordinal());
+			response.put(JSONKey.IsJailed, Consts.SuccessOrFail.Success.getValue());
 			Consts.YesNo isJailed = Consts.YesNo.parseValue(jsonObj.getIntValue(JSONKey.IsJailed)); 
 			deviceCard.setIsJailed(isJailed.name());
 		}
@@ -1011,7 +1011,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		temp = jsonObj.getString(JSONKey.Location);
 		if (temp != null)
 		{
-			response.put(JSONKey.Location, Consts.SuccessOrFail.Success.ordinal());
+			response.put(JSONKey.Location, Consts.SuccessOrFail.Success.getValue());
 			deviceCard.setLocation(temp);
 		}
 	}
