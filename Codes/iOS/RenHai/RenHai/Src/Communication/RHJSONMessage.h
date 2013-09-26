@@ -28,11 +28,9 @@
 #define MESSAGE_KEY_DEVICESN @"deviceSn"
 
 #define MESSAGE_KEY_CONTENT @"content"
-#define MESSAGE_KEY_DEVICECARD @"deviceCard"
-#define MESSAGE_KEY_INTERESTCARD @"interestCard"
-#define MESSAGE_KEY_IMPRESSCARD @"impressCard"
 
-#define MESSAGE_KEY_CONTENT @"content"
+#define MESSAGE_KEY_DATAQUERY @"dataQuery"
+#define MESSAGE_KEY_DATAUPDATE @"dataUpdate"
 
 typedef enum
 {
@@ -121,6 +119,8 @@ RHProfileStatus;
 // MessageNeedEncrypt flag should be same with server side
 +(void) setMessageNeedEncrypt:(BOOL) encrypt;
 +(BOOL) isMessageNeedEncrypt;
+
++(NSString*) generateMessageSn;
 
 +(RHJSONMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body;
 +(RHJSONMessage*) constructWithContent:(NSDictionary*) content enveloped:(BOOL) enveloped;

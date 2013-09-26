@@ -1,13 +1,13 @@
 //
-//  GHUnitSampleTest.h
+//  UserDataModuleTest.h
 //  RenHai
 //
-//  Created by Patrick Deng on 13-8-29.
+//  Created by DENG KE on 13-9-26.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
 #import "GHTestCase.h"
 
-@interface GHUnitSampleTest : GHTestCase
+@interface UserDataModuleTest : GHTestCase
 
 @end

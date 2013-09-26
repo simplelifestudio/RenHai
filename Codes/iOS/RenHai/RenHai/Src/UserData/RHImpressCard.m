@@ -39,8 +39,7 @@
 {
     if (self = [super init])
     {
-        _assessLabelList = [NSMutableArray array];
-        _impressLabelList = [NSMutableArray array];
+
     }
     
     return self;
@@ -62,6 +61,124 @@
     return oCardId;
 }
 
+-(id) _getOChatTotalCount
+{
+    id oChatTotalCount = nil;
+    if (0 >= _chatTotalCount)
+    {
+        oChatTotalCount = [NSNull null];
+    }
+    else
+    {
+        oChatTotalCount = [NSNumber numberWithInteger:_chatTotalCount];
+    }
+    return oChatTotalCount;
+}
+
+-(id) _getOChatTotalDuration
+{
+    id oChatTotalDuration = nil;
+    if (0 >= _chatTotalDuration)
+    {
+        oChatTotalDuration = [NSNull null];
+    }
+    else
+    {
+        oChatTotalDuration = [NSNumber numberWithInteger:_chatTotalDuration];
+    }
+    return oChatTotalDuration;
+}
+
+-(id) _getOChatLossCount
+{
+    id oChatLossCount = nil;
+    if (0 >= _chatLossCount)
+    {
+        oChatLossCount = [NSNull null];
+    }
+    else
+    {
+        oChatLossCount = [NSNumber numberWithInteger:_chatLossCount];
+    }
+    return oChatLossCount;
+}
+
+-(id) _getOImpressLabelList
+{
+    id oLabelList = nil;
+    
+    if (nil == _impressLabelList)
+    {
+        oLabelList = [NSNull null];
+    }
+    else
+    {
+        oLabelList = _impressLabelList;
+    }
+    
+    return oLabelList;
+}
+
+-(id) _getOImpressLabelListDic
+{
+    id labelListDic = nil;
+    
+    id oLabelList = [self _getOImpressLabelList];
+    if (oLabelList == [NSNull null])
+    {
+        labelListDic = oLabelList;
+    }
+    else
+    {
+        labelListDic = [NSMutableArray arrayWithCapacity:_impressLabelList.count];
+        for (RHImpressLabel* label in _impressLabelList)
+        {
+            NSDictionary* labelDic = label.toJSONObject;
+            [labelListDic addObject:labelDic];
+        }
+    }
+    
+    return labelListDic;
+}
+
+-(id) _getOAssessLabelList
+{
+    id oLabelList = nil;
+    
+    if (nil == _assessLabelList)
+    {
+        oLabelList = [NSNull null];
+    }
+    else
+    {
+        oLabelList = _assessLabelList;
+    }
+    
+    return oLabelList;
+}
+
+-(id) _getOAssessLabelListDic
+{
+    id labelListDic = nil;
+    
+    id oLabelList = [self _getOAssessLabelList];
+    if (oLabelList == [NSNull null])
+    {
+        labelListDic = oLabelList;
+    }
+    else
+    {
+        labelListDic = [NSMutableArray arrayWithCapacity:_assessLabelList.count];
+        for (RHImpressLabel* label in _assessLabelList)
+        {
+            NSDictionary* labelDic = label.toJSONObject;
+            [labelListDic addObject:labelDic];
+        }
+    }
+    
+    return labelListDic;
+}
+
 #pragma mark - CBJSONable
 
 -(NSDictionary*) toJSONObject
@@ -71,29 +188,19 @@
     id oCardId = [self _getOCardId];
     [dic setObject:oCardId forKey:JSON_KEY_CARDID];
     
-    NSMutableArray* assessLabelListDic = [NSMutableArray arrayWithCapacity:_assessLabelList.count];
-    for (RHImpressLabel* label in _assessLabelList)
-    {
-        NSDictionary* labelDic = label.toJSONObject;
-        [assessLabelListDic addObject:labelDic];
-    }
+    id assessLabelListDic = [self _getOAssessLabelListDic];
     [dic setObject:assessLabelListDic forKey:JSON_KEY_ASSESSLABELLIST];
     
-    NSMutableArray* impressLabelListDic = [NSMutableArray arrayWithCapacity:_impressLabelList.count];
-    for (RHImpressLabel* label in _impressLabelList)
-    {
-        NSDictionary* labelDic = label.toJSONObject;
-        [impressLabelListDic addObject:labelDic];
-    }
+    id impressLabelListDic = [self _getOImpressLabelListDic];
     [dic setObject:impressLabelListDic forKey:JSON_KEY_IMPRESSLABELLIST];
     
-    NSNumber* oChatTotalCount = [NSNumber numberWithInteger:_chatTotalCount];
+    id oChatTotalCount = [self _getOChatTotalCount];
     [dic setObject:oChatTotalCount forKey:JSON_KEY_CHATTOTALCOUNT];
     
-    NSNumber* oChatTotalDuration = [NSNumber numberWithInteger:_chatTotalDuration];
+    id oChatTotalDuration = [self _getOChatTotalDuration];
     [dic setObject:oChatTotalDuration forKey:JSON_KEY_CHATTOTALDURATION];
     
-    NSNumber* oChatLossCount = [NSNumber numberWithInteger:_chatLossCount];
+    id oChatLossCount = [self _getOChatLossCount];
     [dic setObject:oChatLossCount forKey:JSON_KEY_CHATLOSSCOUNT];
     
     return dic;
@@ -113,8 +220,7 @@
 {
     if (self = [super init])
     {
-        NSNumber* oCardId = [aDecoder decodeObjectForKey:SERIALIZE_KEY_CARDID];
-        _impressCardId = oCardId.integerValue;
+        _impressCardId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CARDID];
         
         _assessLabelList = [aDecoder decodeObjectForKey:SERIALIZE_KEY_ASSESSLABELIST];
         
@@ -132,13 +238,12 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    id oCardId = [self _getOCardId];
-    [aCoder encodeObject:oCardId forKey:SERIALIZE_KEY_CARDID];
-
+    [aCoder encodeInteger:_impressCardId forKey:SERIALIZE_KEY_CARDID];
+    
     [aCoder encodeObject:_assessLabelList forKey:SERIALIZE_KEY_ASSESSLABELIST];
     
     [aCoder encodeObject:_impressLabelList forKey:SERIALIZE_KEY_IMPRESSLABELIST];
-        
+    
     [aCoder encodeInteger:_chatTotalCount forKey:SERIALIZE_KEY_CHATTOTALCOUNT];
 
     [aCoder encodeInteger:_chatTotalDuration forKey:SERIALIZE_KEY_CHATTOTALDURATION];

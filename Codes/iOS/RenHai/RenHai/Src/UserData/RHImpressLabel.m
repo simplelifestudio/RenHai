@@ -111,16 +111,11 @@
 {
     if (self = [super init])
     {
-        NSNumber* oLabelId = [aDecoder decodeObjectForKey:SERIALIZE_KEY_LABELID];
-        _labelId = oLabelId.integerValue;
+        _labelId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_LABELID];
         
         _assessedCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_ASSESSEDCOUNT];
         
-        id oUpdateTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_UPDATETIME];
-        if (oUpdateTime != [NSNull null] && [oUpdateTime isMemberOfClass:[NSDate class]])
-        {
-            _updateTime = (NSDate*)oUpdateTime;
-        }
+        _updateTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_UPDATETIME];
         
         _assessCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_ASSESSCOUNT];
         
@@ -131,13 +126,11 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    id oLabelId = [self _getOLabelId];
-    [aCoder encodeObject:oLabelId forKey:SERIALIZE_KEY_LABELID];
+    [aCoder encodeInteger:_labelId forKey:SERIALIZE_KEY_LABELID];
     
     [aCoder encodeInteger:_assessedCount forKey:SERIALIZE_KEY_ASSESSEDCOUNT];
     
-    id oUpdateTime = [self _getOUpdateTime];
-    [aCoder encodeObject:oUpdateTime forKey:SERIALIZE_KEY_UPDATETIME];
+    [aCoder encodeObject:_updateTime forKey:SERIALIZE_KEY_UPDATETIME];
     
     [aCoder encodeInteger:_assessCount forKey:SERIALIZE_KEY_ASSESSCOUNT];
     

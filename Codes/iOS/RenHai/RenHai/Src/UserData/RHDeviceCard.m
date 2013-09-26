@@ -122,17 +122,9 @@
 {
     if (self = [super init])
     {
-        NSNumber* oDeviceCardId = [aDecoder decodeObjectForKey:SERIALIZE_KEY_DEVICECARDID];
-        if (nil != oDeviceCardId)
-        {
-            _deviceCardId = oDeviceCardId.integerValue;
-        }
+        _deviceCardId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_DEVICECARDID];
         
-        id oRegisterTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_REGISTERTIME];
-        if (oRegisterTime != [NSNull null] && [oRegisterTime isMemberOfClass:[NSDate class]])
-        {
-            _registerTime = (NSDate*)oRegisterTime;
-        }
+        _registerTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_REGISTERTIME];
         
         _deviceModel = [aDecoder decodeObjectForKey:SERIALIZE_KEY_DEVICEMODEL];
         
@@ -143,16 +135,14 @@
         _isJailed = [aDecoder decodeBoolForKey:SERIALIZE_KEY_ISJAILED];
     }
     
-    return nil;
+    return self;
 }
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    id oDeviceCardId = [self _getODeviceCardId];
-    [aCoder encodeObject:oDeviceCardId forKey:SERIALIZE_KEY_DEVICECARDID];
+    [aCoder encodeInteger:_deviceCardId forKey:SERIALIZE_KEY_DEVICECARDID];
     
-    id oRegisterTime = [self _getORegisterTime];
-    [aCoder encodeObject:oRegisterTime forKey:SERIALIZE_KEY_REGISTERTIME];
+    [aCoder encodeObject:_registerTime forKey:SERIALIZE_KEY_REGISTERTIME];
     
     [aCoder encodeObject:_deviceModel forKey:SERIALIZE_KEY_DEVICEMODEL];
     

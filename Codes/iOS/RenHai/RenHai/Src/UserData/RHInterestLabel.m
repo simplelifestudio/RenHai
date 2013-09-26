@@ -102,8 +102,7 @@
 {
     if (self = [super init])
     {
-        NSNumber* oLabelId = [aDecoder decodeObjectForKey:SERIALIZE_KEY_LABELID];
-        _labelId = oLabelId.integerValue;
+        _labelId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_LABELID];
 
         _labelName = [aDecoder decodeObjectForKey:SERIALIZE_KEY_NAME];
         
@@ -121,9 +120,8 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    id oLabelId = [self _getOLabelId];
-    [aCoder encodeObject:oLabelId forKey:SERIALIZE_KEY_LABELID];
-
+    [aCoder encodeInteger:_labelId forKey:SERIALIZE_KEY_LABELID];
+    
     [aCoder encodeObject:_labelName forKey:SERIALIZE_KEY_NAME];
     
     [aCoder encodeInteger:_globalMatchCount forKey:SERIALIZE_KEY_GLOBALMATCHCOUNT];

@@ -39,6 +39,11 @@ static BOOL s_messageEncrypted;
     return s_messageEncrypted;
 }
 
++(NSString*) generateMessageSn
+{
+    return [CBStringUtils randomString:MESSAGE_MESSAGESN_LENGTH];
+}
+
 +(RHJSONMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body
 {
     RHJSONMessage* message = [[RHJSONMessage alloc] init];
@@ -158,7 +163,7 @@ static BOOL s_messageEncrypted;
 
 +(RHJSONMessage*) newAlohaRequestMessage
 {
-    NSString* messageSn = [CBStringUtils randomString:MESSAGE_MESSAGESN_LENGTH];
+    NSString* messageSn = [RHJSONMessage generateMessageSn];
     NSInteger deviceId = 0;
     AppDataModule* appDataModule = [AppDataModule sharedInstance];
     NSString* deviceSn = appDataModule.deviceSn;

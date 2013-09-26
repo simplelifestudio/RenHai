@@ -90,7 +90,18 @@ SINGLETON(UserDataModule)
     
     NSString* file = [self.dataDirectory stringByAppendingPathComponent:ARCHIVE_FILE_NAME];
     
-    _device = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+    @try
+    {
+        _device = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+    }
+    @catch (NSException *exception)
+    {
+        DDLogWarn(@"Failed to load user data from: %@", file);
+    }
+    @finally
+    {
+        
+    }
     
     flag = (nil != _device) ? YES : NO;
     

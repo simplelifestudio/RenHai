@@ -15,6 +15,7 @@
 #import "WebSocketAgent.h"
 #import "RHJSONMessage.h"
 #import "RHDevice.h"
+#import "UserDataModule.h"
 
 @interface CommunicationModuleTest()
 {
@@ -27,41 +28,98 @@
 
 -(void) testAlohaRequest
 {    
-    WebSocketAgent* webSocketAgent = [[WebSocketAgent alloc] init];
-    [webSocketAgent connectWebSocket];
-    NSLog(@"WebSocket opened.");
-    
-    sleep(1);
+    WebSocketAgent* agent = [self _connectWebSocket];
     
     dispatch_async(dispatch_queue_create("testQueue", DISPATCH_QUEUE_SERIAL), ^(){
         @try
         {
             RHJSONMessage* alohaReuqestMessage = [RHJSONMessage newAlohaRequestMessage];
             
-            RHJSONMessage* responseMessage = [webSocketAgent syncMessage:alohaReuqestMessage syncInMainThread:NO];
+            RHJSONMessage* responseMessage = [agent syncMessage:alohaReuqestMessage syncInMainThread:NO];
             
-            NSLog(@"Sent Message: %@", alohaReuqestMessage.toJSONString);            
+            GHTestLog(@"Sent Message: %@", alohaReuqestMessage.toJSONString);            
             
-            NSLog(@"Received Message: %@", responseMessage.toJSONString);
+            GHTestLog(@"Received Message: %@", responseMessage.toJSONString);
         }
         @catch (NSException *exception)
         {
-            NSLog(@"Caught Exception: %@", exception.debugDescription);
+            GHTestLog(@"Caught Exception: %@", exception.debugDescription);
         }
         @finally
         {
             sleep(16);
-            [webSocketAgent closeWebSocket];
-            NSLog(@"WebSocket closed.");
+            [self _disconnectWebSocket:agent];
         }
     });
 }
 
 -(void) testAppDataSyncRequest
 {
-    RHDevice* device = [[RHDevice alloc] init];
-    NSLog(@"device's json: %@", device.toJSONString);
+    WebSocketAgent* agent = [self _connectWebSocket];
+    
+    dispatch_async(dispatch_queue_create("testQueue", DISPATCH_QUEUE_SERIAL), ^(){
+        @try
+        {
+            RHJSONMessage* deviceCardUpdateMessage = [self _createDeviceCardUpdateMessage];
+            
+            RHJSONMessage* responseMessage = [agent syncMessage:deviceCardUpdateMessage syncInMainThread:NO];
+            
+            GHTestLog(@"Sent Message: %@", deviceCardUpdateMessage.toJSONString);
+            
+            GHTestLog(@"Received Message: %@", responseMessage.toJSONString);
+        }
+        @catch (NSException *exception)
+        {
+            GHTestLog(@"Caught Exception: %@", exception.debugDescription);
+        }
+        @finally
+        {
+            sleep(16);
+            [self _disconnectWebSocket:agent];
+        }
+    });
+}
 
+-(void) testRootDataTree
+{
+    RHDevice* device = [[RHDevice alloc] init];
+    GHTestLog(@"device json string: %@", device.toJSONString);
+}
+
+#pragma mark - Private Methods
+
+-(WebSocketAgent*) _connectWebSocket
+{
+    WebSocketAgent* webSocketAgent = [[WebSocketAgent alloc] init];
+    [webSocketAgent connectWebSocket];
+    GHTestLog(@"WebSocket opened.");
+    
+    sleep(1);
+    
+    return webSocketAgent;
+}
+
+-(void) _disconnectWebSocket:(WebSocketAgent*) webSocketAgent
+{
+    [webSocketAgent closeWebSocket];
+    GHTestLog(@"WebSocket closed.");
+}
+
+-(RHJSONMessage*) _createDeviceCardUpdateMessage
+{
+    RHDevice* device = [[RHDevice alloc] init];
+//    RHDeviceCard* deviceCard = device.deviceCard;
+//    NSDictionary* deviceCardDic = deviceCard.toJSONObject;
+    
+    NSDictionary* body = [NSDictionary dictionaryWithObject:device.toJSONObject forKey:MESSAGE_KEY_DATAQUERY];
+    
+    NSString* messageSn = [RHJSONMessage generateMessageSn];
+    NSDictionary* header = [RHJSONMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AppDataSyncRequest messageSn:messageSn deviceId:device.deviceId deviceSn:device.deviceSn timeStamp:[NSDate date]];
+    RHJSONMessage* requestMessage = [RHJSONMessage constructWithMessageHeader:header messageBody:body];
+    
+//    NSLog(@"device's json: %@", device.toJSONString);
+    
+    return requestMessage;
 }
 
 

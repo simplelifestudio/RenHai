@@ -299,7 +299,7 @@ App与Server通过消息交互完成的数据操作
 						"chatTotalDuration":null,
 						"chatLossCount":null,
 						"assessLabelList":null,
-						"impressLabelList":"7"
+						"impressLabelList":null // 如果非null则应该为数字值例如7
 					}
 				}
 			}

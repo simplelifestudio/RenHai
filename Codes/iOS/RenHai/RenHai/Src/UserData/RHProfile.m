@@ -146,24 +146,15 @@
 {
     if (self = [super init])
     {
-        NSNumber* oProfileId = [aDecoder decodeObjectForKey:SERIALIZE_KEY_PROFILEID];
-        _profileId = oProfileId.integerValue;
+        _profileId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_PROFILEID];
         
         _serviceStatus = [aDecoder decodeIntForKey:SERIALIZE_KEY_SERVICESTATUS];
-        
-        id oUnbanDate = [aDecoder decodeObjectForKey:SERIALIZE_KEY_UNBANDATE];
-        if (oUnbanDate != [NSNull null] && [oUnbanDate isMemberOfClass:[NSDate class]])
-        {
-            _unbanDate = (NSDate*)oUnbanDate;
-        }
+
+        _unbanDate = [aDecoder decodeObjectForKey:SERIALIZE_KEY_UNBANDATE];
         
         _active = [aDecoder decodeBoolForKey:SERIALIZE_KEY_ACTIVE];
-        
-        id oCreateTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_CREATETIME];
-        if (oCreateTime != [NSNull null] && [oCreateTime isMemberOfClass:[NSDate class]])
-        {
-            _createTime = (NSDate*)oCreateTime;
-        }
+
+        _createTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_CREATETIME];
         
         _interestCard = [aDecoder decodeObjectForKey:SERIALIZE_KEY_INTERESTCARD];
         
@@ -175,18 +166,15 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    id oProfileId = [self _getOProfileId];
-    [aCoder encodeObject:oProfileId forKey:SERIALIZE_KEY_PROFILEID];
+    [aCoder encodeInteger:_profileId forKey:SERIALIZE_KEY_PROFILEID];
     
     [aCoder encodeInt:_serviceStatus forKey:SERIALIZE_KEY_SERVICESTATUS];
     
-    id oUnbanDate = [self _getOUnbanDate];
-    [aCoder encodeObject:oUnbanDate forKey:SERIALIZE_KEY_UNBANDATE];
+    [aCoder encodeObject:_unbanDate forKey:SERIALIZE_KEY_UNBANDATE];
     
     [aCoder encodeBool:_active forKey:SERIALIZE_KEY_ACTIVE];
     
-    id oCreateTime = [self _getOCreateTime];
-    [aCoder encodeObject:oCreateTime forKey:SERIALIZE_KEY_CREATETIME];
+    [aCoder encodeObject:_createTime forKey:SERIALIZE_KEY_CREATETIME];
     
     [aCoder encodeObject:_interestCard forKey:SERIALIZE_KEY_INTERESTCARD];
     

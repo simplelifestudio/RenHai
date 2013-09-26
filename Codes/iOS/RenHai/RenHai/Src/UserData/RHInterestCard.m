@@ -35,7 +35,7 @@
 {
     if (self = [super init])
     {
-        _labelList = [NSMutableDictionary dictionary];
+
     }
     
     return self;
@@ -45,9 +45,12 @@
 {
     NSMutableArray* list = [NSMutableArray array];
     
-    [_labelList enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
-        [list addObject:obj];
-    }];
+    if (nil != _labelList)
+    {
+        [_labelList enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
+            [list addObject:obj];
+        }];
+    }
     
     return list;
 }
@@ -85,6 +88,11 @@
 
 -(BOOL) isLabelExists:(NSString*) labelName
 {
+    if (nil == _labelList)
+    {
+        _labelList = [NSMutableDictionary dictionary];
+    }
+    
     __block BOOL flag = NO;
     
     if (nil != labelName && 0 < labelName.length)
@@ -118,6 +126,44 @@
     return oCardId;
 }
 
+-(id) _getOLabelList
+{
+    id oLabelList = nil;
+    
+    if (nil == _labelList)
+    {
+        oLabelList = [NSNull null];
+    }
+    else
+    {
+        oLabelList = _labelList;
+    }
+    
+    return oLabelList;
+}
+
+-(id) _getOLabelListDic
+{
+    id labelListDic = nil;
+    
+    id oLabelList = [self _getOLabelList];
+    if (oLabelList == [NSNull null])
+    {
+        labelListDic = oLabelList;
+    }
+    else
+    {
+        labelListDic = [NSMutableArray arrayWithCapacity:_labelList.count];
+        for (RHInterestLabel* label in _labelList)
+        {
+            NSDictionary* labelDic = label.toJSONObject;
+            [labelListDic addObject:labelDic];
+        }
+    }
+    
+    return labelListDic;
+}
+
 #pragma mark - CBJSONable
 
 -(NSDictionary*) toJSONObject
@@ -127,13 +173,7 @@
     id oCardId = [self _getOCardId];
     [dic setObject:oCardId forKey:JSON_KEY_CARDID];
     
-    NSMutableArray* labelListDic = [NSMutableArray arrayWithCapacity:_labelList.count];
-    for (RHInterestLabel* label in _labelList)
-    {
-        NSDictionary* labelDic = label.toJSONObject;
-        [labelListDic addObject:labelDic];
-    }
-    
+    id labelListDic = [self _getOLabelListDic];
     [dic setObject:labelListDic forKey:JSON_KEY_LABELLIST];
     
     return dic;
@@ -153,8 +193,7 @@
 {
     if (self = [super init])
     {
-        NSNumber* oCardId = [aDecoder decodeObjectForKey:SERIALIZE_KEY_CARDID];
-        _interestCardId = oCardId.integerValue;
+        _interestCardId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CARDID];
         
         _labelList = [aDecoder decodeObjectForKey:SERIALIZE_KEY_LABELLIST];
     }
@@ -164,8 +203,7 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    id oCardId = [self _getOCardId];
-    [aCoder encodeObject:oCardId forKey:SERIALIZE_KEY_CARDID];
+    [aCoder encodeInteger:_interestCardId forKey:SERIALIZE_KEY_CARDID];
     
     [aCoder encodeObject:_labelList forKey:SERIALIZE_KEY_LABELLIST];
 }

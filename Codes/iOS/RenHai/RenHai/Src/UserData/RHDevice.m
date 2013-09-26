@@ -107,11 +107,7 @@
 {
     if (self = [super init])
     {
-        NSNumber* oDeviceId = [aDecoder decodeObjectForKey:SERIALIZE_KEY_DEVICEID];
-        if (nil != oDeviceId)
-        {
-            _deviceId = oDeviceId.integerValue;
-        }
+        _deviceId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_DEVICEID];
         
         _deviceSn = [aDecoder decodeObjectForKey:SERIALIZE_KEY_DEVICESN];
         
@@ -125,8 +121,7 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    id oDeviceId = [self _getODeviceId];
-    [aCoder encodeObject:oDeviceId forKey:SERIALIZE_KEY_DEVICEID];
+    [aCoder encodeInteger:_deviceId forKey:SERIALIZE_KEY_DEVICEID];
     
     [aCoder encodeObject:_deviceSn forKey:SERIALIZE_KEY_DEVICESN];
     

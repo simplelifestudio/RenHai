@@ -94,7 +94,6 @@
 		C55B443917CF5993009BB21B /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B443817CF5993009BB21B /* ViewController.m */; };
 		C55B443C17CF5993009BB21B /* ViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = C55B443A17CF5993009BB21B /* ViewController_iPhone.xib */; };
 		C55B443F17CF5993009BB21B /* ViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = C55B443D17CF5993009BB21B /* ViewController_iPad.xib */; };
-		C55B444717CF5B72009BB21B /* GHUnitSampleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B444617CF5B72009BB21B /* GHUnitSampleTest.m */; };
 		C55B445117CF5C14009BB21B /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B444F17CF5C14009BB21B /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C55B445217CF5C14009BB21B /* GTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B444F17CF5C14009BB21B /* GTMBase64.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C55B445517CF5DFA009BB21B /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C55B445417CF5DFA009BB21B /* Crashlytics.framework */; };
@@ -197,6 +196,7 @@
 		C59E2C1817D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
+		CD26650D17F41DD20070934F /* UserDataModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = CD26650C17F41DD20070934F /* UserDataModuleTest.m */; };
 		CD32013A17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
 		CD32013B17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
 		CD32013C17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */; };
@@ -308,8 +308,6 @@
 		C55B443817CF5993009BB21B /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		C55B443B17CF5993009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPhone.xib; sourceTree = "<group>"; };
 		C55B443E17CF5993009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/ViewController_iPad.xib; sourceTree = "<group>"; };
-		C55B444517CF5B72009BB21B /* GHUnitSampleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GHUnitSampleTest.h; sourceTree = "<group>"; };
-		C55B444617CF5B72009BB21B /* GHUnitSampleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GHUnitSampleTest.m; sourceTree = "<group>"; };
 		C55B444E17CF5C14009BB21B /* GTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMBase64.h; sourceTree = "<group>"; };
 		C55B444F17CF5C14009BB21B /* GTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTMBase64.m; sourceTree = "<group>"; };
 		C55B445017CF5C14009BB21B /* GTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTMDefines.h; sourceTree = "<group>"; };
@@ -404,6 +402,8 @@
 		C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController_iPhone.m; sourceTree = "<group>"; };
 		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; };
+		CD26650B17F41DD20070934F /* UserDataModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataModuleTest.h; sourceTree = "<group>"; };
+		CD26650C17F41DD20070934F /* UserDataModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataModuleTest.m; sourceTree = "<group>"; };
 		CD32013717E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTableViewSwitcherCell_iPhone.h; sourceTree = "<group>"; };
 		CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTableViewSwitcherCell_iPhone.m; sourceTree = "<group>"; };
 		CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHTableViewSwitcherCell_iPhone.xib; sourceTree = "<group>"; };
@@ -606,12 +606,12 @@
 		C55B444417CF5B4A009BB21B /* TestCases */ = {
 			isa = PBXGroup;
 			children = (
-				C55B444517CF5B72009BB21B /* GHUnitSampleTest.h */,
-				C55B444617CF5B72009BB21B /* GHUnitSampleTest.m */,
 				C5945F5D17D56F5C0084BB10 /* CommonModuleTest.h */,
 				C5945F5E17D56F5D0084BB10 /* CommonModuleTest.m */,
 				C594602C17D6C9410084BB10 /* CommunicationModuleTest.h */,
 				C594602D17D6C9410084BB10 /* CommunicationModuleTest.m */,
+				CD26650B17F41DD20070934F /* UserDataModuleTest.h */,
+				CD26650C17F41DD20070934F /* UserDataModuleTest.m */,
 				C54DC8DB17DC497000BBD498 /* TestTitle.h */,
 				C54DC8DC17DC497000BBD498 /* TestTitle.m */,
 				C54DC8DE17DC4A4500BBD498 /* TestObj.h */,
@@ -1151,7 +1151,6 @@
 			files = (
 				C55B442C17CF5992009BB21B /* main.m in Sources */,
 				C55B443917CF5993009BB21B /* ViewController.m in Sources */,
-				C55B444717CF5B72009BB21B /* GHUnitSampleTest.m in Sources */,
 				C55B445217CF5C14009BB21B /* GTMBase64.m in Sources */,
 				C50505C117D2BD4800DB6589 /* CBAppUtils.m in Sources */,
 				C50505C317D2BD4800DB6589 /* CBDateUtils.m in Sources */,
@@ -1167,6 +1166,7 @@
 				C50505D717D2BD4800DB6589 /* CBStringUtils.m in Sources */,
 				C50505D917D2BD4800DB6589 /* CBUIUtils.m in Sources */,
 				C50505DB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
+				CD26650D17F41DD20070934F /* UserDataModuleTest.m in Sources */,
 				C50505DD17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */,
 				C50505E317D2C53A00DB6589 /* LoggerModule.m in Sources */,
 				C50505E917D2D26C00DB6589 /* GUIModule.m in Sources */,

@@ -13,8 +13,6 @@
 
 #import "CBJSONable.h"
 
-typedef enum{SERVICE_NORMAL = 0, SERVICE_FORBIDDEN} SERVICE_STATUS;
-
 @interface RHDeviceCard : NSObject <CBJSONable>
 
 @property (nonatomic) NSInteger deviceCardId;
