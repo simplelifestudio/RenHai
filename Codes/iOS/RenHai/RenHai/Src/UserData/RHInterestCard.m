@@ -10,6 +10,8 @@
 
 #import "RHInterestLabel.h"
 
+#import "CBJSONUtils.h"
+
 #define SERIALIZE_KEY_CARDID @"interestCard.interestCardId"
 #define SERIALIZE_KEY_LABELLIST @"interestCard.interestLabelList"
 
@@ -125,9 +127,24 @@
     id oCardId = [self _getOCardId];
     [dic setObject:oCardId forKey:JSON_KEY_CARDID];
     
-    [dic setObject:_labelList forKey:JSON_KEY_LABELLIST];
+    NSMutableArray* labelListDic = [NSMutableArray arrayWithCapacity:_labelList.count];
+    for (RHInterestLabel* label in _labelList)
+    {
+        NSDictionary* labelDic = label.toJSONObject;
+        [labelListDic addObject:labelDic];
+    }
+    
+    [dic setObject:labelListDic forKey:JSON_KEY_LABELLIST];
     
     return dic;
+}
+
+-(NSString*) toJSONString
+{
+    NSDictionary* dic = [self toJSONObject];
+    NSString* str = [CBJSONUtils toJSONString:dic];
+    
+    return str;
 }
 
 #pragma mark - CBSerializable

@@ -8,6 +8,8 @@
 
 #import "RHImpressCard.h"
 
+#import "CBJSONUtils.h"
+
 #define SERIALIZE_KEY_CARDID @"impressCard.impressCardId"
 #define SERIALIZE_KEY_ASSESSLABELIST @"impressCard.assessLabelList"
 #define SERIALIZE_KEY_IMPRESSLABELIST @"impressCard.impressLabelList"
@@ -69,9 +71,21 @@
     id oCardId = [self _getOCardId];
     [dic setObject:oCardId forKey:JSON_KEY_CARDID];
     
-    [dic setObject:_assessLabelList forKey:JSON_KEY_ASSESSLABELLIST];
+    NSMutableArray* assessLabelListDic = [NSMutableArray arrayWithCapacity:_assessLabelList.count];
+    for (RHImpressLabel* label in _assessLabelList)
+    {
+        NSDictionary* labelDic = label.toJSONObject;
+        [assessLabelListDic addObject:labelDic];
+    }
+    [dic setObject:assessLabelListDic forKey:JSON_KEY_ASSESSLABELLIST];
     
-    [dic setObject:_impressLabelList forKey:JSON_KEY_IMPRESSLABELLIST];
+    NSMutableArray* impressLabelListDic = [NSMutableArray arrayWithCapacity:_impressLabelList.count];
+    for (RHImpressLabel* label in _impressLabelList)
+    {
+        NSDictionary* labelDic = label.toJSONObject;
+        [impressLabelListDic addObject:labelDic];
+    }
+    [dic setObject:impressLabelListDic forKey:JSON_KEY_IMPRESSLABELLIST];
     
     NSNumber* oChatTotalCount = [NSNumber numberWithInteger:_chatTotalCount];
     [dic setObject:oChatTotalCount forKey:JSON_KEY_CHATTOTALCOUNT];
@@ -83,6 +97,14 @@
     [dic setObject:oChatLossCount forKey:JSON_KEY_CHATLOSSCOUNT];
     
     return dic;
+}
+
+-(NSString*) toJSONString
+{
+    NSDictionary* dic = [self toJSONObject];
+    NSString* str = [CBJSONUtils toJSONString:dic];
+    
+    return str;
 }
 
 #pragma mark - CBSerializable

@@ -51,4 +51,12 @@
     NSLog(@"random string is %@", randomStr);
 }
 
+-(void) testNullValueInJSON
+{
+    NSDictionary* dic = [NSDictionary dictionaryWithObject:[NSNull null] forKey:@"testKey"];
+    NSString* str = [CBJSONUtils toJSONString:dic];
+    NSLog(@"[NSNull null] in NSDictionary: %@", dic);
+    NSLog(@"[NSNull null] in JSON string: %@", str);
+}
+
 @end

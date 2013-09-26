@@ -8,6 +8,8 @@
 
 #import "RHInterestLabel.h"
 
+#import "CBJSONUtils.h"
+
 #define SERIALIZE_KEY_LABELID @"interestLabel.labelId"
 #define SERIALIZE_KEY_NAME @"interestLabel.interestLabelName"
 #define SERIALIZE_KEY_GLOBALMATCHCOUNT @"interestLabel.globalMatchCount"
@@ -84,6 +86,14 @@
     [dic setObject:oValidFlag forKey:SERIALIZE_KEY_VALIDFLAG];
     
     return dic;
+}
+
+-(NSString*) toJSONString
+{
+    NSDictionary* dic = [self toJSONObject];
+    NSString* str = [CBJSONUtils toJSONString:dic];
+    
+    return str;
 }
 
 #pragma mark - CBSerializable

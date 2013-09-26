@@ -19,8 +19,6 @@
 @property (nonatomic, strong) NSString* deviceSn;
 
 @property (nonatomic, strong) RHDeviceCard* deviceCard;
-@property (nonatomic, strong) NSMutableArray* profileList;
-
--(RHProfile*) currentProfile;
+@property (nonatomic, strong) RHProfile* profile;
 
 @end

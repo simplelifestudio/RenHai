@@ -8,6 +8,10 @@
 
 #import "RHDeviceCard.h"
 
+#import "CBJSONUtils.h"
+
+#import "AppDataModule.h"
+
 #define SERIALIZE_KEY_DEVICECARDID @"deviceCard.deviceCardId"
 #define SERIALIZE_KEY_REGISTERTIME @"deviceCard.registerTime"
 #define SERIALIZE_KEY_DEVICEMODEL @"deviceCard.deviceModel"
@@ -37,7 +41,12 @@
 {
     if (self = [super init])
     {
+        AppDataModule* appDataModule = [AppDataModule sharedInstance];
         
+        _deviceModel = appDataModule.deviceModel;
+        _osVersion = appDataModule.osVersion;
+        _appVersion = appDataModule.appVersion;
+        _isJailed = appDataModule.isJailed;
     }
     
     return self;
@@ -59,6 +68,22 @@
     return oDeviceCardId;
 }
 
+-(id) _getORegisterTime
+{
+    id oRegisterTime = nil;
+    
+    if (nil == _registerTime)
+    {
+        oRegisterTime = [NSNull null];
+    }
+    else
+    {
+        oRegisterTime = _registerTime;
+    }
+    
+    return oRegisterTime;
+}
+
 #pragma mark - CBJSONable
 
 -(NSDictionary*) toJSONObject
@@ -68,7 +93,8 @@
     id oDeviceCardId = [self _getODeviceCardId];
     [dic setObject:oDeviceCardId forKey:JSON_KEY_DEVICECARDID];
     
-    [dic setObject:_registerTime forKey:JSON_KEY_REGISTERTIME];
+    id oRegisterTime = [self _getORegisterTime];
+    [dic setObject:oRegisterTime forKey:JSON_KEY_REGISTERTIME];
     
     [dic setObject:_deviceModel forKey:JSON_KEY_DEVICEMODEL];
     
@@ -80,6 +106,14 @@
     [dic setObject:oIsJailed forKey:JSON_KEY_ISJAILED];
     
     return dic;
+}
+
+-(NSString*) toJSONString
+{
+    NSDictionary* dic = [self toJSONObject];
+    NSString* str = [CBJSONUtils toJSONString:dic];
+    
+    return str;
 }
 
 #pragma mark - CBSerializable
@@ -94,7 +128,11 @@
             _deviceCardId = oDeviceCardId.integerValue;
         }
         
-        _registerTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_REGISTERTIME];
+        id oRegisterTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_REGISTERTIME];
+        if (oRegisterTime != [NSNull null] && [oRegisterTime isMemberOfClass:[NSDate class]])
+        {
+            _registerTime = (NSDate*)oRegisterTime;
+        }
         
         _deviceModel = [aDecoder decodeObjectForKey:SERIALIZE_KEY_DEVICEMODEL];
         
@@ -113,7 +151,8 @@
     id oDeviceCardId = [self _getODeviceCardId];
     [aCoder encodeObject:oDeviceCardId forKey:SERIALIZE_KEY_DEVICECARDID];
     
-    [aCoder encodeObject:_registerTime forKey:SERIALIZE_KEY_REGISTERTIME];
+    id oRegisterTime = [self _getORegisterTime];
+    [aCoder encodeObject:oRegisterTime forKey:SERIALIZE_KEY_REGISTERTIME];
     
     [aCoder encodeObject:_deviceModel forKey:SERIALIZE_KEY_DEVICEMODEL];
     

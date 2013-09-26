@@ -8,6 +8,8 @@
 
 #import "RHProfile.h"
 
+#import "CBJSONUtils.h"
+
 #define SERIALIZE_KEY_PROFILEID @"profile.profileId"
 #define SERIALIZE_KEY_SERVICESTATUS @"profile.serviceStatus"
 #define SERIALIZE_KEY_UNBANDATE @"profile.unbanDate"
@@ -68,6 +70,38 @@
     return [NSNumber numberWithInt:_serviceStatus];
 }
 
+-(id) _getOUnbanDate
+{
+    id oUnbanDate = nil;
+    
+    if (nil == _unbanDate)
+    {
+        oUnbanDate = [NSNull null];
+    }
+    else
+    {
+        oUnbanDate = _unbanDate;
+    }
+    
+    return oUnbanDate;
+}
+
+-(id) _getOCreateTime
+{
+    id oRegisterTime = nil;
+    
+    if (nil == _createTime)
+    {
+        oRegisterTime = [NSNull null];
+    }
+    else
+    {
+        oRegisterTime = _createTime;
+    }
+    
+    return oRegisterTime;
+}
+
 #pragma mark - CBJSONable
 
 -(NSDictionary*) toJSONObject
@@ -80,18 +114,30 @@
     NSNumber* oServiceStatus = [self _getOServiceStatus];
     [dic setObject:oServiceStatus forKey:JSON_KEY_SERVICESTATUS];
     
-    [dic setObject:_unbanDate forKey:JSON_KEY_UNBANDATE];
+    id oUnbanDate = [self _getOUnbanDate];
+    [dic setObject:oUnbanDate forKey:JSON_KEY_UNBANDATE];
     
     NSNumber* oActive = [NSNumber numberWithBool:_active];
     [dic setObject:oActive forKey:JSON_KEY_ACTIVE];
     
-    [dic setObject:_createTime forKey:JSON_KEY_CREATETIME];
+    id oCreateTime = [self _getOCreateTime];
+    [dic setObject:oCreateTime forKey:JSON_KEY_CREATETIME];
 
-    [dic setObject:_interestCard forKey:JSON_KEY_INTERESTCARD];
+    NSDictionary* interestCardDic = _interestCard.toJSONObject;
+    [dic setObject:interestCardDic forKey:JSON_KEY_INTERESTCARD];
     
-    [dic setObject:_impressCard forKey:JSON_KEY_IMPRESSCARD];
+    NSDictionary* impressCardDic = _impressCard.toJSONObject;
+    [dic setObject:impressCardDic forKey:JSON_KEY_IMPRESSCARD];
     
     return dic;
+}
+
+-(NSString*) toJSONString
+{
+    NSDictionary* dic = [self toJSONObject];
+    NSString* str = [CBJSONUtils toJSONString:dic];
+    
+    return str;
 }
 
 #pragma mark - CBSerializable
@@ -105,11 +151,19 @@
         
         _serviceStatus = [aDecoder decodeIntForKey:SERIALIZE_KEY_SERVICESTATUS];
         
-        _unbanDate = [aDecoder decodeObjectForKey:SERIALIZE_KEY_UNBANDATE];
+        id oUnbanDate = [aDecoder decodeObjectForKey:SERIALIZE_KEY_UNBANDATE];
+        if (oUnbanDate != [NSNull null] && [oUnbanDate isMemberOfClass:[NSDate class]])
+        {
+            _unbanDate = (NSDate*)oUnbanDate;
+        }
         
         _active = [aDecoder decodeBoolForKey:SERIALIZE_KEY_ACTIVE];
         
-        _createTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_CREATETIME];
+        id oCreateTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_CREATETIME];
+        if (oCreateTime != [NSNull null] && [oCreateTime isMemberOfClass:[NSDate class]])
+        {
+            _createTime = (NSDate*)oCreateTime;
+        }
         
         _interestCard = [aDecoder decodeObjectForKey:SERIALIZE_KEY_INTERESTCARD];
         
@@ -126,11 +180,13 @@
     
     [aCoder encodeInt:_serviceStatus forKey:SERIALIZE_KEY_SERVICESTATUS];
     
-    [aCoder encodeObject:_unbanDate forKey:SERIALIZE_KEY_UNBANDATE];
+    id oUnbanDate = [self _getOUnbanDate];
+    [aCoder encodeObject:oUnbanDate forKey:SERIALIZE_KEY_UNBANDATE];
     
     [aCoder encodeBool:_active forKey:SERIALIZE_KEY_ACTIVE];
     
-    [aCoder encodeObject:_createTime forKey:SERIALIZE_KEY_CREATETIME];
+    id oCreateTime = [self _getOCreateTime];
+    [aCoder encodeObject:oCreateTime forKey:SERIALIZE_KEY_CREATETIME];
     
     [aCoder encodeObject:_interestCard forKey:SERIALIZE_KEY_INTERESTCARD];
     
