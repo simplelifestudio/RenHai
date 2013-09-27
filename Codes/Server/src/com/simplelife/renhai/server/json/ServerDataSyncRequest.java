@@ -88,7 +88,7 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		return true;
     }
 	
-	private void responseCapacity(ServerJSONMessage response, 
+	private void queryCapacity(ServerJSONMessage response, 
 			AbstractBusinessDevicePool randomPool, 
 			InterestBusinessDevicePool interestPool)
 	{
@@ -96,69 +96,94 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		response.addToBody(JSONKey.DeviceCapacity, responseObj);
 		
 		JSONObject capacityObj = body.getJSONObject(JSONKey.DeviceCapacity);
+		boolean queryAll = false;
+		if (capacityObj == null)
+		{
+			queryAll = true;
+		}
+		else
+		{
+			if (capacityObj.isEmpty())
+			{
+				return;
+			}
+		}
 		
-		if (capacityObj.containsKey(JSONKey.Online))
+		if (queryAll || capacityObj.containsKey(JSONKey.Online))
 		{
 			responseObj.put(JSONKey.Online, OnlineDevicePool.instance.getCapacity());
 		}
 		
-		if (capacityObj.containsKey(JSONKey.Random))
+		if (queryAll || capacityObj.containsKey(JSONKey.Random))
 		{
 			responseObj.put(JSONKey.Random, randomPool.getCapacity());
 		}
 		
-		if (capacityObj.containsKey(JSONKey.Interest))
+		if (queryAll || capacityObj.containsKey(JSONKey.Interest))
 		{
 			responseObj.put(JSONKey.Interest, interestPool.getCapacity());
 		}
 	}
 	
-	private void responseCount(ServerJSONMessage response, 
+	private void queryCount(ServerJSONMessage response, 
 			AbstractBusinessDevicePool randomPool, 
 			InterestBusinessDevicePool interestPool)
 	{
 		JSONObject responseObj = new JSONObject();
 		response.addToBody(JSONKey.DeviceCount, responseObj);
 		
-		JSONObject countObj = body.getJSONObject(JSONKey.DeviceCapacity);
+		JSONObject countObj = body.getJSONObject(JSONKey.DeviceCount);
 		
-		if (countObj.containsKey(JSONKey.Online))
+		boolean queryAll = false;
+		if (countObj == null)
+		{
+			queryAll = true;
+		}
+		else
+		{
+			if (countObj.isEmpty())
+			{
+				return;
+			}
+		}
+		
+		if (queryAll || countObj.containsKey(JSONKey.Online))
 		{
 			responseObj.put(JSONKey.Online, OnlineDevicePool.instance.getElementCount());
 		}
 		
-		if (countObj.containsKey(JSONKey.Random))
+		if (queryAll || countObj.containsKey(JSONKey.Random))
 		{
 			responseObj.put(JSONKey.Random, randomPool.getElementCount());
 		}
 		
-		if (countObj.containsKey(JSONKey.Interest))
+		if (queryAll || countObj.containsKey(JSONKey.Interest))
 		{
 			responseObj.put(JSONKey.Interest, interestPool.getElementCount());
 		}
 		
-		if (countObj.containsKey(JSONKey.Chat))
+		if (queryAll || countObj.containsKey(JSONKey.Chat))
 		{
 			responseObj.put(JSONKey.Chat, OnlineDevicePool.instance.getDeviceCountInChat());
 		}
 		
-		if (countObj.containsKey(JSONKey.RandomChat))
+		if (queryAll || countObj.containsKey(JSONKey.RandomChat))
 		{
 			responseObj.put(JSONKey.RandomChat, randomPool.getDeviceCountInChat());
 		}
 		
-		if (countObj.containsKey(JSONKey.InterestChat))
+		if (queryAll || countObj.containsKey(JSONKey.InterestChat))
 		{
 			responseObj.put(JSONKey.InterestChat, interestPool.getDeviceCountInChat());
 		}
 	}
 	
-	private void responseHotLabels(ServerJSONMessage response, 
+	private void queryHotLabels(ServerJSONMessage response, 
 			AbstractBusinessDevicePool randomPool, 
 			InterestBusinessDevicePool interestPool)
 	{
 		JSONObject responseObj = new JSONObject();
-		response.addToBody(JSONKey.DeviceCount, responseObj);
+		response.addToBody(JSONKey.InterestLabelList, responseObj);
 		
 		JSONObject hotObj = body.getJSONObject(JSONKey.InterestLabelList);
 		
@@ -202,23 +227,23 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		AbstractBusinessDevicePool randomPool = OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Random);
 		InterestBusinessDevicePool interestPool = (InterestBusinessDevicePool) OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Interest);
 	
-		JSONObject deviceCount = body.getJSONObject("deviceCount");
-		System.out.print(JSON.toJSONString(deviceCount, SerializerFeature.WriteMapNullValue));
+		//JSONObject deviceCount = body.getJSONObject("deviceCount");
+		//System.out.print(JSON.toJSONString(deviceCount, SerializerFeature.WriteMapNullValue));
 
 		
 		if (body.containsKey(JSONKey.DeviceCapacity))
 		{
-			responseCapacity(response, randomPool, interestPool);
+			queryCapacity(response, randomPool, interestPool);
 		}
 		
 		if (body.containsKey(JSONKey.DeviceCount))
 		{
-			responseCount(response, randomPool, interestPool);
+			queryCount(response, randomPool, interestPool);
 		}
 		
 		if (body.containsKey(JSONKey.InterestLabelList))
 		{
-			responseHotLabels(response, randomPool, interestPool);
+			queryHotLabels(response, randomPool, interestPool);
 		}
 		
 		response.asyncResponse();

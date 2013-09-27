@@ -72,16 +72,22 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		JSONObject deviceCapacityObject = body.getJSONObject(JSONKey.DeviceCapacity);
 		JSONObject interestObj = body.getJSONObject(JSONKey.InterestLabelList);
 		
+		// Invalid request before AppDataSyncRequest
+		JSONObject header = lastCmd.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
+		assertEquals(header.getIntValue(JSONKey.MessageId), Consts.MessageId.ServerErrorResponse.getValue());
+		
+		/*
 		assertEquals(onlinePool.getElementCount(), deviceCountObj.getIntValue(JSONKey.Online));
 		assertEquals(businessPool.getElementCount(), deviceCountObj.getIntValue(JSONKey.Random));
 		assertEquals(0, deviceCountObj.getIntValue(JSONKey.Interest));
 		assertEquals(onlinePool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.Chat));
 		assertEquals(businessPool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.RandomChat));
-		assertEquals(0, deviceCountObj.getIntValue(JSONKey.Interest));
+		assertEquals(0, deviceCountObj.getIntValue(JSONKey.InterestChat));
 		
 		assertEquals(GlobalSetting.BusinessSetting.OnlinePoolCapacity, deviceCapacityObject.getIntValue(JSONKey.Online));
 		assertEquals(GlobalSetting.BusinessSetting.RandomBusinessPoolCapacity, deviceCapacityObject.getIntValue(JSONKey.Random));
 		assertEquals(GlobalSetting.BusinessSetting.InterestBusinessPoolCapacity, deviceCapacityObject.getIntValue(JSONKey.Interest));
+		*/
 		
 		// Step_02 Mock请求：A进入随机聊天
 		mockApp1.syncDevice();
@@ -109,7 +115,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		assertEquals(0, deviceCountObj.getIntValue(JSONKey.Interest));
 		assertEquals(onlinePool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.Chat));
 		assertEquals(businessPool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.RandomChat));
-		assertEquals(0, deviceCountObj.getIntValue(JSONKey.Interest));
+		assertEquals(0, deviceCountObj.getIntValue(JSONKey.InterestChat));
 		
 		assertEquals(GlobalSetting.BusinessSetting.OnlinePoolCapacity, deviceCapacityObject.getIntValue(JSONKey.Online));
 		assertEquals(GlobalSetting.BusinessSetting.RandomBusinessPoolCapacity, deviceCapacityObject.getIntValue(JSONKey.Random));
@@ -117,11 +123,24 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 
 		
 		// Step_05 调用：RandomBusinessScheduler::schedule
+		mockApp1.clearLastReceivedCommand();
+		mockApp2.clearLastReceivedCommand();
 		businessPool.getBusinessScheduler().schedule();
+		
+		mockApp1.waitMessage();
+		mockApp2.waitMessage();
+		try
+		{
+			Thread.sleep(500);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
 		
 		// Step_06 调用：BusinessSession::getStatus
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
-		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
+		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);
 		
 		// Step_07 Mock请求：查询所有统计项
 		mockApp1.sendServerDataSyncRequest();
@@ -138,6 +157,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		// Step_11 Mock请求：查询所有统计项
 		mockApp1.clearLastReceivedCommand();
 		mockApp1.sendServerDataSyncRequest();
+		mockApp1.waitMessage();
 		
 		lastCmd = mockApp1.getLastReceivedCommand();
 		assertTrue(lastCmd != null);
@@ -153,7 +173,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		assertEquals(0, deviceCountObj.getIntValue(JSONKey.Interest));
 		assertEquals(onlinePool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.Chat));
 		assertEquals(businessPool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.RandomChat));
-		assertEquals(0, deviceCountObj.getIntValue(JSONKey.Interest));
+		assertEquals(0, deviceCountObj.getIntValue(JSONKey.InterestChat));
 		
 		
 		// Step_12 Mock事件：A结束通话
@@ -165,6 +185,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		// Step_14 Mock请求：查询所有统计项
 		mockApp1.clearLastReceivedCommand();
 		mockApp1.sendServerDataSyncRequest();
+		mockApp1.waitMessage();
 		
 		lastCmd = mockApp1.getLastReceivedCommand();
 		assertTrue(lastCmd != null);
@@ -180,7 +201,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		assertEquals(0, deviceCountObj.getIntValue(JSONKey.Interest));
 		assertEquals(onlinePool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.Chat));
 		assertEquals(businessPool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.RandomChat));
-		assertEquals(0, deviceCountObj.getIntValue(JSONKey.Interest));
+		assertEquals(0, deviceCountObj.getIntValue(JSONKey.InterestChat));
 		
 		// Step_15 Mock事件：B结束通话
 		mockApp2.endChat();
@@ -188,6 +209,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		// Step_16 Mock请求：查询所有统计项
 		mockApp1.clearLastReceivedCommand();
 		mockApp1.sendServerDataSyncRequest();
+		mockApp1.waitMessage();
 		
 		lastCmd = mockApp1.getLastReceivedCommand();
 		assertTrue(lastCmd != null);
@@ -203,7 +225,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		assertEquals(0, deviceCountObj.getIntValue(JSONKey.Interest));
 		assertEquals(onlinePool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.Chat));
 		assertEquals(businessPool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.RandomChat));
-		assertEquals(0, deviceCountObj.getIntValue(JSONKey.Interest));
+		assertEquals(0, deviceCountObj.getIntValue(JSONKey.InterestChat));
 		
 		
 		// Step_17 Mock事件：A onPing
@@ -213,10 +235,10 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_19 Mock事件：A对B评价
-		mockApp1.assess("TC23_评价");
+		mockApp1.assessAndContinue(mockApp2.getDeviceWrapper(), "TC23_评价,喜欢,帅哥");
 		
 		// Step_20 Mock事件：B对A评价
-		mockApp2.assess("TC24_评价");
+		mockApp2.assessAndQuit(mockApp1.getDeviceWrapper(), "TC24_评价,反感,变态");
 		
 		// Step_21 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
@@ -239,7 +261,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		assertEquals(0, deviceCountObj.getIntValue(JSONKey.Interest));
 		assertEquals(onlinePool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.Chat));
 		assertEquals(businessPool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.RandomChat));
-		assertEquals(0, deviceCountObj.getIntValue(JSONKey.Interest));
+		assertEquals(0, deviceCountObj.getIntValue(JSONKey.InterestChat));
 		
 	}
 }

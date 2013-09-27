@@ -47,7 +47,13 @@ public abstract class AbstractJSONMessage
     		return null;
     	}
     	
-    	if (obj.getString(key).trim().length() == 0)
+    	String temp = obj.getString(key);
+    	if (temp == null)
+    	{
+    		return null;
+    	}
+    	
+    	if (temp.trim().length() == 0)
     	{
     		return null;
     	}

@@ -88,7 +88,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 			lastActivityTime = deviceWrapper.getLastActivityTime().getTime();
 			if ((now - lastActivityTime) > GlobalSetting.TimeOut.DeviceInIdle)
 			{
-				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime())
+				logger.debug("Device with connection id {} was removed from online device pool due to last activity time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastActivityTime().getTime())
 						, deviceWrapper.getConnection().getConnectionId());
 				deleteDevice(deviceWrapper);
 				continue;

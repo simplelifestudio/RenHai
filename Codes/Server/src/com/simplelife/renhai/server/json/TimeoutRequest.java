@@ -10,6 +10,8 @@
 package com.simplelife.renhai.server.json;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 
@@ -27,18 +29,16 @@ public class TimeoutRequest extends AppJSONMessage
 		super(jsonObject);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.json.AppJSONMessage#run()
-	 */
 	@Override
 	public void run()
 	{
+		Impresscard card =  deviceWrapper.getDevice().getProfile().getImpresscard();
+		card.setChatLossCount(card.getChatLossCount() + 1);
+		DAOWrapper.cache(card);
+		
 		deviceWrapper.onTimeOut(null);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.json.AppJSONMessage#getMessageId()
-	 */
 	@Override
 	public MessageId getMessageId()
 	{

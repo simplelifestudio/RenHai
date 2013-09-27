@@ -66,6 +66,9 @@ CREATE TABLE `globalimpresslabel` (
 -- ----------------------------
 -- Records of globalimpresslabel
 -- ----------------------------
+INSERT INTO `globalimpresslabel` VALUES ('1', '喜欢', '0');
+INSERT INTO `globalimpresslabel` VALUES ('2', '一般', '0');
+INSERT INTO `globalimpresslabel` VALUES ('3', '反感', '0');
 
 -- ----------------------------
 -- Table structure for `globalinterestlabel`

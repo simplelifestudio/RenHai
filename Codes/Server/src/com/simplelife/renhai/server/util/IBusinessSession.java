@@ -62,5 +62,8 @@ public interface IBusinessSession
     
     public void onRejectChat(IDeviceWrapper device);
     
-    public void bind(AbstractBusinessDevicePool pool);
+    public void bindBusinessDevicePool(AbstractBusinessDevicePool pool);
+    
+    public void unbindBusinessDevicePool();
+    
 }

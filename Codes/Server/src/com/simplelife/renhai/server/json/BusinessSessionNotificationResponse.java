@@ -61,7 +61,14 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 		switch(notificationType)
 		{
 			case SessionBinded:
-				deviceWrapper.getOwnerBusinessSession().onBindConfirm(deviceWrapper);
+				if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+				{
+					deviceWrapper.getOwnerBusinessSession().onBindConfirm(deviceWrapper);
+				}
+				else
+				{
+					logger.warn("Device <{}> was released when session bind response received from it.", deviceWrapper.getDeviceSn());
+				}
 				break;
 			case OthersideAgreed:
 				break;

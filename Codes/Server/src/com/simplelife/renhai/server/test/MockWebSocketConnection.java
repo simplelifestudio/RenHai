@@ -57,9 +57,9 @@ public class MockWebSocketConnection extends WebSocketConnection
     @Override
     public void onTextMessage(String message)
     {
-    	System.out.print("Send message by mock WebSocket connection: \n");
-    	System.out.print(message);
-    	System.out.print("\n");
+    	//System.out.print("Send message by mock WebSocket connection: \n");
+    	//System.out.print(message);
+    	//System.out.print("\n");
     	
     	super.onTextMessage(message);
     }

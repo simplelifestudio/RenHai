@@ -163,7 +163,7 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_32 Mock事件：B对A评价
-		mockApp2.assess("帅哥");
+		mockApp2.assessAndContinue(mockApp1.getDeviceWrapper(), "帅哥");
 		
 		// Step_33 数据库检查：A 印象卡片信息
 		fail("需要检查数据库中的印象卡片信息");

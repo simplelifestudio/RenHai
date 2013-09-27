@@ -55,9 +55,9 @@ public interface IMockApp
 	public void ping();
 	
 	/** */
-	public void assess(String impressLabelList);
+	public void assessAndQuit(IDeviceWrapper targetDevice, String impressLabelList);
 	
-	public void assessAndQuit(String impressLabelList);
+	public void assessAndContinue(IDeviceWrapper targetDevice, String impressLabelList);
 	
 	/**
 	 * @param obj
