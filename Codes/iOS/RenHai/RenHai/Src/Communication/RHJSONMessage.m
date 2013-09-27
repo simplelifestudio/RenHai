@@ -13,8 +13,6 @@
 #import "CBDateUtils.h"
 #import "CBSecurityUtils.h"
 
-#import "AppDataModule.h"
-
 static BOOL s_messageEncrypted;
 
 @interface RHJSONMessage()
@@ -44,12 +42,14 @@ static BOOL s_messageEncrypted;
     return [CBStringUtils randomString:MESSAGE_MESSAGESN_LENGTH];
 }
 
-+(RHJSONMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body
++(RHJSONMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body enveloped:(BOOL) enveloped;
 {
     RHJSONMessage* message = [[RHJSONMessage alloc] init];
     
     message.header = header;
     message.body = body;
+    
+    message.enveloped = enveloped;
     
     return message;
 }
@@ -64,7 +64,7 @@ static BOOL s_messageEncrypted;
     NSDictionary* header = [content objectForKey:MESSAGE_KEY_HEADER];
     NSDictionary* body = [content objectForKey:MESSAGE_KEY_BODY];
     
-    RHJSONMessage* message = [RHJSONMessage constructWithMessageHeader:header messageBody:body];
+    RHJSONMessage* message = [RHJSONMessage constructWithMessageHeader:header messageBody:body enveloped:enveloped];
     
     return message;
 }
@@ -161,34 +161,172 @@ static BOOL s_messageEncrypted;
     return header;
 }
 
-+(RHJSONMessage*) newAlohaRequestMessage
++(RHJSONMessage*) newAlohaRequestMessage:(RHDevice*) device;
 {
+    NSAssert(nil != device, @"Device can not be null!");
+    
     NSString* messageSn = [RHJSONMessage generateMessageSn];
     NSInteger deviceId = 0;
-    AppDataModule* appDataModule = [AppDataModule sharedInstance];
-    NSString* deviceSn = appDataModule.deviceSn;
+    NSString* deviceSn = device.deviceSn;
     NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AlohaRequest messageSn:messageSn deviceId:deviceId deviceSn:deviceSn timeStamp:nil];
     
     NSMutableDictionary* messageBody = [NSMutableDictionary dictionary];
     [messageBody setObject:@"Aloha RenHai Server" forKey:MESSAGE_KEY_CONTENT];
     
-    RHJSONMessage* message = [RHJSONMessage constructWithMessageHeader:messageHeader messageBody:messageBody];
+    RHJSONMessage* message = [RHJSONMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    
+    message.enveloped = YES;
     
     return message;
 }
 
-+(RHJSONMessage*) newServerTimeoutResponseMessage
++(RHJSONMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn
 {
     NSInteger deviceId = 0;
-    AppDataModule* appDataModule = [AppDataModule sharedInstance];
-    NSString* deviceSn = appDataModule.deviceSn;
-    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:nil deviceId:deviceId deviceSn:deviceSn timeStamp:nil];
+    NSString* deviceSn = nil;
+    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:messageSn deviceId:deviceId deviceSn:deviceSn timeStamp:nil];
     
     NSDictionary* messageBody = [NSDictionary dictionary];
     
-    RHJSONMessage* message = [RHJSONMessage constructWithMessageHeader:messageHeader messageBody:messageBody];
+    RHJSONMessage* message = [RHJSONMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
     
     return message;
+}
+
++(RHJSONMessage*) newAppDataSyncRequestMessage:(AppDataSyncRequestType) type device:(RHDevice*) device;
+{
+    NSAssert(nil != device, @"Device can not be null!");
+    
+    RHJSONMessage* appDataSyncRequestMessage = nil;
+    
+    NSInteger deviceId = 0;
+    NSString* deviceSn = device.deviceSn;
+    NSString* messageSn = [RHJSONMessage generateMessageSn];
+    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:messageSn deviceId:deviceId deviceSn:deviceSn timeStamp:nil];
+    
+    NSMutableDictionary* messageBody = [NSMutableDictionary dictionary];
+    
+    NSMutableDictionary* dataQuery = [NSMutableDictionary dictionary];
+    NSMutableDictionary* dataUpdate = [NSMutableDictionary dictionary];
+    
+    id oNull = [NSNull null];
+    NSMutableDictionary* dataSource = [NSMutableDictionary dictionaryWithDictionary:device.toJSONObject];
+    switch (type)
+    {
+        case AppDataSyncRequestType_TotalSync:
+        {
+            // dataUpdate
+            NSMutableDictionary* dataUpdateSource = [dataSource copy];
+            NSMutableDictionary* deviceSource = [dataUpdateSource objectForKey:MESSAGE_KEY_DEVICE];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICEID];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_PROFILE];
+            NSMutableDictionary* deviceCardSource = [deviceSource objectForKey:MESSAGE_KEY_DEVICECARD];
+            [deviceCardSource removeObjectForKey:MESSAGE_KEY_DEVICECARDID];
+            [deviceCardSource removeObjectForKey:MESSAGE_KEY_REGISTERTIME];
+            dataUpdate = dataUpdateSource;
+            
+            // dataQuery
+            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICEID];
+            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICESN];
+            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICECARD];
+            [dataQuery setObject:oNull forKey:MESSAGE_KEY_PROFILE];
+            
+            break;
+        }
+        case AppDataSyncRequestType_DeviceCardSync:
+        {
+            // dataUpdate
+            NSMutableDictionary* dataUpdateSource = [dataSource copy];
+            NSMutableDictionary* deviceSource = [dataUpdateSource objectForKey:MESSAGE_KEY_DEVICE];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICEID];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICESN];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_PROFILE];
+            NSMutableDictionary* deviceCardSource = [deviceSource objectForKey:MESSAGE_KEY_DEVICECARD];
+            [deviceCardSource removeObjectForKey:MESSAGE_KEY_DEVICECARDID];
+            [deviceCardSource removeObjectForKey:MESSAGE_KEY_REGISTERTIME];
+            dataUpdate = dataUpdateSource;
+            
+            // dataQuery
+            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICEID];
+            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICESN];
+            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICECARD];
+            break;
+        }
+        case AppDataSyncRequestType_ImpressCardSync:
+        {
+            // dataUpdate
+            dataUpdate = nil;
+            
+            // dataQuery
+            NSMutableDictionary* dataQuerySource = [dataSource copy];
+            NSMutableDictionary* deviceSource = [dataQuerySource objectForKey:MESSAGE_KEY_DEVICE];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICEID];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICESN];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICECARD];
+            NSMutableDictionary* profileSource = [deviceSource objectForKey:MESSAGE_KEY_PROFILE];
+            [profileSource removeObjectForKey:MESSAGE_KEY_PROFILEID];
+            [profileSource removeObjectForKey:MESSAGE_KEY_SERVICESTATUS];
+            [profileSource removeObjectForKey:MESSAGE_KEY_UNBANDATE];
+            [profileSource removeObjectForKey:MESSAGE_KEY_ACTIVE];
+            [profileSource removeObjectForKey:MESSAGE_KEY_CREATETIME];
+            [profileSource removeObjectForKey:MESSAGE_KEY_INTERESTCARD];
+            [profileSource setObject:oNull forKey:MESSAGE_KEY_IMPRESSCARD];
+            dataQuery = dataQuerySource;
+            
+            break;
+        }
+        case AppDataSyncRequestType_InterestCardSync:
+        {
+            // dataUpdate
+            NSMutableDictionary* dataUpdateSource = [dataSource copy];
+            NSMutableDictionary* deviceSource = [dataUpdateSource objectForKey:MESSAGE_KEY_DEVICE];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICEID];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICESN];
+            NSMutableDictionary* profileSource = [deviceSource objectForKey:MESSAGE_KEY_PROFILE];
+            [profileSource removeObjectForKey:MESSAGE_KEY_PROFILEID];
+            [profileSource removeObjectForKey:MESSAGE_KEY_SERVICESTATUS];
+            [profileSource removeObjectForKey:MESSAGE_KEY_UNBANDATE];
+            [profileSource removeObjectForKey:MESSAGE_KEY_ACTIVE];
+            [profileSource removeObjectForKey:MESSAGE_KEY_CREATETIME];
+            [profileSource removeObjectForKey:MESSAGE_KEY_IMPRESSCARD];
+            dataUpdate = dataUpdateSource;
+            
+            // dataQuery
+            NSMutableDictionary* dataQuerySource = [dataSource copy];
+            deviceSource = [dataQuerySource objectForKey:MESSAGE_KEY_DEVICE];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICEID];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICESN];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICECARD];
+            profileSource = [deviceSource objectForKey:MESSAGE_KEY_PROFILE];
+            [profileSource removeObjectForKey:MESSAGE_KEY_PROFILEID];
+            [profileSource removeObjectForKey:MESSAGE_KEY_SERVICESTATUS];
+            [profileSource removeObjectForKey:MESSAGE_KEY_UNBANDATE];
+            [profileSource removeObjectForKey:MESSAGE_KEY_ACTIVE];
+            [profileSource removeObjectForKey:MESSAGE_KEY_CREATETIME];
+            [profileSource removeObjectForKey:MESSAGE_KEY_IMPRESSCARD];
+            [profileSource setObject:oNull forKey:MESSAGE_KEY_INTERESTCARD];
+            dataQuery = dataQuerySource;
+            
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    
+    if (nil != dataUpdate && 0 < dataUpdate.count)
+    {
+        [messageBody setObject:dataUpdate forKey:MESSAGE_KEY_DATAUPDATE];
+    }
+    if (nil != dataQuery &&  0 < dataQuery.count)
+    {
+        [messageBody setObject:dataQuery forKey:MESSAGE_KEY_DATAQUERY];
+    }
+    
+    appDataSyncRequestMessage = [RHJSONMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    
+    return appDataSyncRequestMessage;
 }
 
 +(BOOL) isServerTimeoutResponseMessage:(RHJSONMessage*) message

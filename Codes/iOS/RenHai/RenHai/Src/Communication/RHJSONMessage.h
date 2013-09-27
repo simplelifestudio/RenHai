@@ -10,27 +10,78 @@
 
 #import "CBJSONable.h"
 
+#import "RHDevice.h"
+
 #define MESSAGE_SECURITY_KEY @"19890604"
 
 #define MESSAGE_MESSAGESN_LENGTH 16
 
+// Envelope
 #define MESSAGE_KEY_ENVELOPE @"jsonEnvelope"
 
+// Message
 #define MESSAGE_KEY_HEADER @"header"
 #define MESSAGE_KEY_BODY @"body"
+#define MESSAGE_KEY_CONTENT @"content"
+#define MESSAGE_KEY_DATAQUERY @"dataQuery"
+#define MESSAGE_KEY_DATAUPDATE @"dataUpdate"
 
+// Header
 #define MESSAGE_KEY_MESSAGETYPE @"messageType"
 #define MESSAGE_KEY_MESSAGEID @"messageId"
 #define MESSAGE_KEY_MESSAGESN @"messageSn"
 #define MESSAGE_KEY_TIMESTAMP @"timeStamp"
 
+// Device
+#define MESSAGE_KEY_DEVICE @"device"
 #define MESSAGE_KEY_DEVICEID @"deviceId"
 #define MESSAGE_KEY_DEVICESN @"deviceSn"
 
-#define MESSAGE_KEY_CONTENT @"content"
+// DeviceCard
+#define MESSAGE_KEY_DEVICECARD @"deviceCard"
+#define MESSAGE_KEY_DEVICECARDID @"deviceCardId"
+#define MESSAGE_KEY_REGISTERTIME @"registerTime"
+#define MESSAGE_KEY_DEVICEMODEL @"deviceModel"
+#define MESSAGE_KEY_OSVERSION @"osVersion"
+#define MESSAGE_KEY_APPVERSION @"appVersion"
+#define MESSAGE_KEY_ISJAILED @"isJailed"
 
-#define MESSAGE_KEY_DATAQUERY @"dataQuery"
-#define MESSAGE_KEY_DATAUPDATE @"dataUpdate"
+// Profile
+#define MESSAGE_KEY_PROFILE @"profile"
+#define MESSAGE_KEY_PROFILEID @"profileId"
+#define MESSAGE_KEY_SERVICESTATUS @"serviceStatus"
+#define MESSAGE_KEY_UNBANDATE @"unbanDate"
+#define MESSAGE_KEY_ACTIVE @"active"
+#define MESSAGE_KEY_CREATETIME @"createTime"
+#define MESSAGE_KEY_IMPRESSCARD @"impressCard"
+#define MESSAGE_KEY_INTERESTCARD @"interestCard"
+
+// ImpressCard
+#define MESSAGE_KEY_IMPRESSCARDID @"impressCardId"
+#define MESSAGE_KEY_ASSESSLABELLIST @"assessLabelList"
+#define MESSAGE_KEY_IMPRESSLABELLIST @"impressLabelList"
+#define MESSAGE_KEY_CHATTOTALCOUNT @"chatTotalCount"
+#define MESSAGE_KEY_CHATTOTALDURATION @"chatTotalDuration"
+#define MESSAGE_KEY_CHATLOSSCOUNT @"chatLossCount"
+
+// InterestCard
+#define MESSAGE_KEY_INTERESTCARDID @"interestCardId"
+#define MESSAGE_KEY_INTERESTLABELLIST @"interestLabelList"
+
+// ImpressLabel
+#define MESSAGE_KEY_IMPRESSLABELID @"globalImpressLabelId"
+#define MESSAGE_KEY_ASSESSEDCOUNT @"assessedCount"
+#define MESSAGE_KEY_UPDATETIME @"updateTime"
+#define MESSAGE_KEY_ASSESSCOUNT @"assessCount"
+#define MESSAGE_KEY_IMPRESSLABELNAME @"impressLabelName"
+
+// InterestLabel
+#define MESSAGE_KEY_INTERESTLABELID @"globalInterestLabelId"
+#define MESSAGE_KEY_INTERESTLABELNAME @"impressLabelName"
+#define MESSAGE_KEY_GLOBALMATCHCOUNT @"globalMatchCount"
+#define MESSAGE_KEY_INTERESTLABELORDER @"labelOrder"
+#define MESSAGE_KEY_MATCHCOUNT @"matchCount"
+#define MESSAGE_KEY_VALIDFLAG @"validFlag"
 
 typedef enum
 {
@@ -114,6 +165,15 @@ typedef enum
 }
 RHProfileStatus;
 
+typedef enum
+{
+    AppDataSyncRequestType_TotalSync = 0,
+    AppDataSyncRequestType_DeviceCardSync,
+    AppDataSyncRequestType_ImpressCardSync,
+    AppDataSyncRequestType_InterestCardSync
+}
+AppDataSyncRequestType;
+
 @interface RHJSONMessage : NSObject <CBJSONable>
 
 // MessageNeedEncrypt flag should be same with server side
@@ -122,14 +182,18 @@ RHProfileStatus;
 
 +(NSString*) generateMessageSn;
 
-+(RHJSONMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body;
++(RHJSONMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body enveloped:(BOOL) enveloped;
 +(RHJSONMessage*) constructWithContent:(NSDictionary*) content enveloped:(BOOL) enveloped;
 +(RHJSONMessage*) constructWithString:(NSString*) jsonString enveloped:(BOOL) enveloped;;
 +(RHMessageErrorCode) verify:(RHJSONMessage*) message;
 
 +(NSDictionary*) constructMessageHeader:(RHMessageType) messageType messageId:(RHMessageId) messageId messageSn:(NSString*) messageSn deviceId:(NSInteger) deviceId deviceSn:(NSString*) deviceSn timeStamp:(NSDate*) timeStamp;
-+(RHJSONMessage*) newAlohaRequestMessage;
-+(RHJSONMessage*) newServerTimeoutResponseMessage;
+
++(RHJSONMessage*) newAlohaRequestMessage:(RHDevice*) device;
++(RHJSONMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn;
+
++(RHJSONMessage*) newAppDataSyncRequestMessage:(AppDataSyncRequestType) type device:(RHDevice*) device;
+
 +(BOOL) isServerTimeoutResponseMessage:(RHJSONMessage*) message;
 +(BOOL) isServerErrorResponseMessage:(RHJSONMessage*) message;
 

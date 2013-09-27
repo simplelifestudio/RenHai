@@ -17,14 +17,6 @@
 #define SERIALIZE_KEY_MATCHCOUNT @"interestLabel.matchCount"
 #define SERIALIZE_KEY_VALIDFLAG @"interestLabel.validFlag"
 
-
-#define JSON_KEY_LABELID @"globalInterestLabelId"
-#define JSON_KEY_NAME @"impressLabelName"
-#define JSON_KEY_GLOBALMATCHCOUNT @"globalMatchCount"
-#define JSON_KEY_ORDER @"labelOrder"
-#define JSON_KEY_MATCHCOUNT @"matchCount"
-#define JSON_KEY_VALIDFLAG @"validFlag"
-
 @implementation RHInterestLabel
 
 @synthesize labelId = _labelId;

@@ -11,6 +11,7 @@
 #import "CBJSONUtils.h"
 
 #import "AppDataModule.h"
+#import "RHJSONMessage.h"
 
 #define SERIALIZE_KEY_DEVICECARDID @"deviceCard.deviceCardId"
 #define SERIALIZE_KEY_REGISTERTIME @"deviceCard.registerTime"
@@ -18,13 +19,6 @@
 #define SERIALIZE_KEY_OSVERSION @"deviceCard.osVersion"
 #define SERIALIZE_KEY_APPVERSION @"deviceCard.appVersion"
 #define SERIALIZE_KEY_ISJAILED @"deviceCard.isJailed"
-
-#define JSON_KEY_DEVICECARDID @"deviceCardId"
-#define JSON_KEY_REGISTERTIME @"registerTime"
-#define JSON_KEY_DEVICEMODEL @"deviceModel"
-#define JSON_KEY_OSVERSION @"osVersion"
-#define JSON_KEY_APPVERSION @"appVersion"
-#define JSON_KEY_ISJAILED @"isJailed"
 
 @implementation RHDeviceCard
 
@@ -91,19 +85,19 @@
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
     id oDeviceCardId = [self _getODeviceCardId];
-    [dic setObject:oDeviceCardId forKey:JSON_KEY_DEVICECARDID];
+    [dic setObject:oDeviceCardId forKey:MESSAGE_KEY_DEVICECARDID];
     
     id oRegisterTime = [self _getORegisterTime];
-    [dic setObject:oRegisterTime forKey:JSON_KEY_REGISTERTIME];
+    [dic setObject:oRegisterTime forKey:MESSAGE_KEY_REGISTERTIME];
     
-    [dic setObject:_deviceModel forKey:JSON_KEY_DEVICEMODEL];
+    [dic setObject:_deviceModel forKey:MESSAGE_KEY_DEVICEMODEL];
     
-    [dic setObject:_osVersion forKey:JSON_KEY_OSVERSION];
+    [dic setObject:_osVersion forKey:MESSAGE_KEY_OSVERSION];
     
-    [dic setObject:_appVersion forKey:JSON_KEY_APPVERSION];
+    [dic setObject:_appVersion forKey:MESSAGE_KEY_APPVERSION];
     
     NSNumber* oIsJailed = [NSNumber numberWithBool:_isJailed];
-    [dic setObject:oIsJailed forKey:JSON_KEY_ISJAILED];
+    [dic setObject:oIsJailed forKey:MESSAGE_KEY_ISJAILED];
     
     return dic;
 }

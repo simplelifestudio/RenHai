@@ -19,12 +19,22 @@
 
 @interface CommunicationModuleTest()
 {
-    
+    RHDevice* _device;
 }
 
 @end
 
 @implementation CommunicationModuleTest
+
+-(void) setUp
+{
+    _device = [[RHDevice alloc] init];
+}
+
+-(void) tearDown
+{
+    
+}
 
 -(void) testAlohaRequest
 {    
@@ -33,7 +43,7 @@
     dispatch_async(dispatch_queue_create("testQueue", DISPATCH_QUEUE_SERIAL), ^(){
         @try
         {
-            RHJSONMessage* alohaReuqestMessage = [RHJSONMessage newAlohaRequestMessage];
+            RHJSONMessage* alohaReuqestMessage = [RHJSONMessage newAlohaRequestMessage:_device];
             
             RHJSONMessage* responseMessage = [agent syncMessage:alohaReuqestMessage syncInMainThread:NO];
             
@@ -51,6 +61,34 @@
             [self _disconnectWebSocket:agent];
         }
     });
+}
+
+-(void) testAppDataSyncRequest_TotalSync
+{
+    RHJSONMessage* appDataSyncRequestMessage = [RHJSONMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:_device];
+    
+    GHTestLog(@"AppDataSyncRequestType_TotalSync: %@", appDataSyncRequestMessage.toJSONString);
+}
+
+-(void) testAppDataSyncRequest_DeviceCardSync
+{
+    RHJSONMessage* appDataSyncRequestMessage = [RHJSONMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_DeviceCardSync device:_device];
+    
+    GHTestLog(@"AppDataSyncRequest_DeviceCardSync: %@", appDataSyncRequestMessage.toJSONString);
+}
+
+-(void) testAppDataSyncRequest_ImpressCardSync
+{
+    RHJSONMessage* appDataSyncRequestMessage = [RHJSONMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_ImpressCardSync device:_device];
+    
+    GHTestLog(@"AppDataSyncRequest_ImpressCardSync: %@", appDataSyncRequestMessage.toJSONString);
+}
+
+-(void) testAppDataSyncRequest_InterestCardSync
+{
+    RHJSONMessage* appDataSyncRequestMessage = [RHJSONMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:_device];
+    
+    GHTestLog(@"AppDataSyncRequest_InterestCardSync: %@", appDataSyncRequestMessage.toJSONString);
 }
 
 -(void) testAppDataSyncRequest
@@ -115,7 +153,7 @@
     
     NSString* messageSn = [RHJSONMessage generateMessageSn];
     NSDictionary* header = [RHJSONMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AppDataSyncRequest messageSn:messageSn deviceId:device.deviceId deviceSn:device.deviceSn timeStamp:[NSDate date]];
-    RHJSONMessage* requestMessage = [RHJSONMessage constructWithMessageHeader:header messageBody:body];
+    RHJSONMessage* requestMessage = [RHJSONMessage constructWithMessageHeader:header messageBody:body enveloped:YES];
     
 //    NSLog(@"device's json: %@", device.toJSONString);
     

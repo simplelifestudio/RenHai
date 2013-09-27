@@ -10,17 +10,13 @@
 
 #import "CBJSONUtils.h"
 
+#import "RHJSONMessage.h"
+
 #define SERIALIZE_KEY_LABELID @"impressLabel.labelId"
 #define SERIALIZE_KEY_ASSESSEDCOUNT @"impressLabel.assessedCount"
 #define SERIALIZE_KEY_UPDATETIME @"impressLabel.updateTime"
 #define SERIALIZE_KEY_ASSESSCOUNT @"impressLabel.assessCount"
 #define SERIALIZE_KEY_NAME @"impressLabel.impressLabelName"
-
-#define JSON_KEY_LABELID @"globalImpressLabelId"
-#define JSON_KEY_ASSESSEDCOUNT @"assessedCount"
-#define JSON_KEY_UPDATETIME @"updateTime"
-#define JSON_KEY_ASSESSCOUNT @"assessCount"
-#define JSON_KEY_NAME @"impressLabelName"
 
 @implementation RHImpressLabel
 
@@ -81,18 +77,18 @@
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
     id oLabelId = [self _getOLabelId];
-    [dic setObject:oLabelId forKey:JSON_KEY_LABELID];
+    [dic setObject:oLabelId forKey:MESSAGE_KEY_IMPRESSLABELID];
     
     NSNumber* oAssessedCount = [NSNumber numberWithInteger:_assessedCount];
-    [dic setObject:oAssessedCount forKey:JSON_KEY_ASSESSEDCOUNT];
+    [dic setObject:oAssessedCount forKey:MESSAGE_KEY_ASSESSEDCOUNT];
 
     id oUpdateTime = [self _getOUpdateTime];
-    [dic setObject:oUpdateTime forKey:JSON_KEY_UPDATETIME];
+    [dic setObject:oUpdateTime forKey:MESSAGE_KEY_UPDATETIME];
     
     NSNumber* oAssessCount = [NSNumber numberWithInteger:_assessCount];
-    [dic setObject:oAssessCount forKey:JSON_KEY_ASSESSCOUNT];
+    [dic setObject:oAssessCount forKey:MESSAGE_KEY_ASSESSCOUNT];
     
-    [dic setObject:_labelName forKey:JSON_KEY_NAME];
+    [dic setObject:_labelName forKey:MESSAGE_KEY_IMPRESSLABELNAME];
     
     return dic;
 }

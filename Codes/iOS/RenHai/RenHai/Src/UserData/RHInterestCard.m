@@ -12,11 +12,10 @@
 
 #import "CBJSONUtils.h"
 
+#import "RHJSONMessage.h"
+
 #define SERIALIZE_KEY_CARDID @"interestCard.interestCardId"
 #define SERIALIZE_KEY_LABELLIST @"interestCard.interestLabelList"
-
-#define JSON_KEY_CARDID @"interestCardId"
-#define JSON_KEY_LABELLIST @"interestLabelList"
 
 @interface RHInterestCard()
 {
@@ -171,10 +170,10 @@
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
     id oCardId = [self _getOCardId];
-    [dic setObject:oCardId forKey:JSON_KEY_CARDID];
+    [dic setObject:oCardId forKey:MESSAGE_KEY_INTERESTCARDID];
     
     id labelListDic = [self _getOLabelListDic];
-    [dic setObject:labelListDic forKey:JSON_KEY_LABELLIST];
+    [dic setObject:labelListDic forKey:MESSAGE_KEY_INTERESTLABELLIST];
     
     return dic;
 }

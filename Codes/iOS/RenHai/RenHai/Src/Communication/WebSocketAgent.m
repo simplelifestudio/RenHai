@@ -121,7 +121,7 @@
     
     if (!flag)
     {
-        responseMessage = [RHJSONMessage newServerTimeoutResponseMessage];
+        responseMessage = [RHJSONMessage newServerTimeoutResponseMessage:messageSn];
     }
     else
     {

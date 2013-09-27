@@ -88,7 +88,6 @@
     flag = (nil != _device) ? YES : NO;
     if (flag)
     {
-        GHTestLog(@"loaded test data's dictionary: %@", _device.toJSONObject);
         GHTestLog(@"loaded test data's json string: %@", _device.toJSONString);
     }
 

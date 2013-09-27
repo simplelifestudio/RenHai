@@ -128,7 +128,7 @@
     if (!flag)
     {
         [operation cancel];
-        responseMessage = [RHJSONMessage newServerTimeoutResponseMessage];
+        responseMessage = [RHJSONMessage newServerTimeoutResponseMessage:requestMessage.messageSn];
     }
     
     return responseMessage;

@@ -13,17 +13,12 @@
 #import "CBJSONUtils.h"
 
 #import "AppDataModule.h"
+#import "RHJSONMessage.h"
 
 #define SERIALIZE_KEY_DEVICEID @"device.deviceId"
 #define SERIALIZE_KEY_DEVICESN @"device.deviceSn"
 #define SERIALIZE_KEY_DEVICECARD @"device.deviceCard"
 #define SERIALIZE_KEY_PROFILE @"device.profile"
-
-#define JSON_KEY_DEVICE @"device"
-#define JSON_KEY_DEVICEID @"deviceId"
-#define JSON_KEY_DEVICESN @"deviceSn"
-#define JSON_KEY_DEVICECARD @"deviceCard"
-#define JSON_KEY_PROFILE @"profile"
 
 @implementation RHDevice
 
@@ -78,17 +73,17 @@
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
     id oDeviceId = [self _getODeviceId];
-    [dic setObject:oDeviceId forKey:JSON_KEY_DEVICEID];
+    [dic setObject:oDeviceId forKey:MESSAGE_KEY_DEVICEID];
     
-    [dic setObject:_deviceSn forKey:JSON_KEY_DEVICESN];
+    [dic setObject:_deviceSn forKey:MESSAGE_KEY_DEVICESN];
     
     NSDictionary* deviceCardDic = [_deviceCard toJSONObject];
-    [dic setObject:deviceCardDic forKey:JSON_KEY_DEVICECARD];
+    [dic setObject:deviceCardDic forKey:MESSAGE_KEY_DEVICECARD];
     
     NSDictionary* profileDic = _profile.toJSONObject;
-    [dic setObject:profileDic forKey:JSON_KEY_PROFILE];
+    [dic setObject:profileDic forKey:MESSAGE_KEY_PROFILE];
     
-    NSDictionary* rootDic = [NSDictionary dictionaryWithObject:dic forKey:JSON_KEY_DEVICE];
+    NSDictionary* rootDic = [NSDictionary dictionaryWithObject:dic forKey:MESSAGE_KEY_DEVICE];
     
     return rootDic;
 }

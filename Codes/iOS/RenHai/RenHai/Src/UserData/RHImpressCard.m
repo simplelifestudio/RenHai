@@ -9,6 +9,7 @@
 #import "RHImpressCard.h"
 
 #import "CBJSONUtils.h"
+#import "RHJSONMessage.h"
 
 #define SERIALIZE_KEY_CARDID @"impressCard.impressCardId"
 #define SERIALIZE_KEY_ASSESSLABELIST @"impressCard.assessLabelList"
@@ -16,13 +17,6 @@
 #define SERIALIZE_KEY_CHATTOTALCOUNT @"impressCard.chatTotalCount"
 #define SERIALIZE_KEY_CHATTOTALDURATION @"impressCard.chatTotalDuration"
 #define SERIALIZE_KEY_CHATLOSSCOUNT @"impressCard.chatLossCount"
-
-#define JSON_KEY_CARDID @"impressCardId"
-#define JSON_KEY_ASSESSLABELLIST @"assessLabelList"
-#define JSON_KEY_IMPRESSLABELLIST @"impressLabelList"
-#define JSON_KEY_CHATTOTALCOUNT @"chatTotalCount"
-#define JSON_KEY_CHATTOTALDURATION @"chatTotalDuration"
-#define JSON_KEY_CHATLOSSCOUNT @"chatLossCount"
 
 @implementation RHImpressCard
 
@@ -186,22 +180,22 @@
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
     id oCardId = [self _getOCardId];
-    [dic setObject:oCardId forKey:JSON_KEY_CARDID];
+    [dic setObject:oCardId forKey:MESSAGE_KEY_IMPRESSCARDID];
     
     id assessLabelListDic = [self _getOAssessLabelListDic];
-    [dic setObject:assessLabelListDic forKey:JSON_KEY_ASSESSLABELLIST];
+    [dic setObject:assessLabelListDic forKey:MESSAGE_KEY_ASSESSLABELLIST];
     
     id impressLabelListDic = [self _getOImpressLabelListDic];
-    [dic setObject:impressLabelListDic forKey:JSON_KEY_IMPRESSLABELLIST];
+    [dic setObject:impressLabelListDic forKey:MESSAGE_KEY_IMPRESSLABELLIST];
     
     id oChatTotalCount = [self _getOChatTotalCount];
-    [dic setObject:oChatTotalCount forKey:JSON_KEY_CHATTOTALCOUNT];
+    [dic setObject:oChatTotalCount forKey:MESSAGE_KEY_CHATTOTALCOUNT];
     
     id oChatTotalDuration = [self _getOChatTotalDuration];
-    [dic setObject:oChatTotalDuration forKey:JSON_KEY_CHATTOTALDURATION];
+    [dic setObject:oChatTotalDuration forKey:MESSAGE_KEY_CHATTOTALDURATION];
     
     id oChatLossCount = [self _getOChatLossCount];
-    [dic setObject:oChatLossCount forKey:JSON_KEY_CHATLOSSCOUNT];
+    [dic setObject:oChatLossCount forKey:MESSAGE_KEY_CHATLOSSCOUNT];
     
     return dic;
 }
