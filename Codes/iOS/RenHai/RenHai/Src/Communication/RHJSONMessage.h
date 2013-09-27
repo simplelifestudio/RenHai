@@ -16,6 +16,10 @@
 
 #define MESSAGE_MESSAGESN_LENGTH 16
 
+/*
+ Device Data Struct
+ */
+
 // Envelope
 #define MESSAGE_KEY_ENVELOPE @"jsonEnvelope"
 
@@ -82,6 +86,28 @@
 #define MESSAGE_KEY_INTERESTLABELORDER @"labelOrder"
 #define MESSAGE_KEY_MATCHCOUNT @"matchCount"
 #define MESSAGE_KEY_VALIDFLAG @"validFlag"
+
+/*
+ Server Data Struct
+ */
+
+// DeviceCount
+#define MESSAGE_KEY_DEVICECOUNT @"deviceCount"
+#define MESSAGE_KEY_ONLINE @"online"
+#define MESSAGE_KEY_RANDOM @"random"
+#define MESSAGE_KEY_INTEREST @"interest"
+#define MESSAGE_KEY_CHAT @"chat"
+#define MESSAGE_KEY_RANDOMCHAT @"randomChat"
+#define MESSAGE_KEY_INTERESTCHAT @"interestChat"
+
+// DeviceCapacity
+#define MESSAGE_KEY_DEVICECAPACITY @"deviceCapacity"
+
+// InterestLabelList
+#define MESSAGE_KEY_CURRENT @"current"
+#define MESSAGE_KEY_HISTORY @"history"
+#define MESSAGE_KEY_STARTTIME @"startTime"
+#define MESSAGE_KEY_ENDTIME @"endTime"
 
 typedef enum
 {
@@ -174,6 +200,15 @@ typedef enum
 }
 AppDataSyncRequestType;
 
+typedef enum
+{
+    ServerDataSyncRequestType_TotalSync = 0,
+    ServerDataSyncRequestType_DeviceCountSync,
+    ServerDataSyncRequestType_DeviceCapacitySync,
+    ServerDataSyncRequestType_InterestLabelListSync
+}
+ServerDataSyncRequestType;
+
 @interface RHJSONMessage : NSObject <CBJSONable>
 
 // MessageNeedEncrypt flag should be same with server side
@@ -193,6 +228,8 @@ AppDataSyncRequestType;
 +(RHJSONMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn;
 
 +(RHJSONMessage*) newAppDataSyncRequestMessage:(AppDataSyncRequestType) type device:(RHDevice*) device;
+
++(RHJSONMessage*) newServerDataSyncRequestMessage:(ServerDataSyncRequestType) type device:(RHDevice*) device info:(NSDictionary*) info;
 
 +(BOOL) isServerTimeoutResponseMessage:(RHJSONMessage*) message;
 +(BOOL) isServerErrorResponseMessage:(RHJSONMessage*) message;

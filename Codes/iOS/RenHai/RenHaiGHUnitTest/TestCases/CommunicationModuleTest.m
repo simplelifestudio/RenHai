@@ -10,6 +10,7 @@
 
 #import "SRWebSocket.h"
 
+#import "CBDateUtils.h"
 #import "CBStringUtils.h"
 
 #import "WebSocketAgent.h"
@@ -89,6 +90,41 @@
     RHJSONMessage* appDataSyncRequestMessage = [RHJSONMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:_device];
     
     GHTestLog(@"AppDataSyncRequest_InterestCardSync: %@", appDataSyncRequestMessage.toJSONString);
+}
+
+-(void) testServerDataSyncRequest_TotalSync
+{
+    RHJSONMessage* serverDataSyncRequestMessage = [RHJSONMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:_device info:nil];
+    
+    GHTestLog(@"ServerDataSyncRequest_TotalSync: %@", serverDataSyncRequestMessage.toJSONString);
+}
+
+-(void) testServerDataSyncRequest_DeviceCountSync
+{
+    RHJSONMessage* serverDataSyncRequestMessage = [RHJSONMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_DeviceCountSync device:_device info:nil];
+    
+    GHTestLog(@"ServerDataSyncRequest_DeviceCountSync: %@", serverDataSyncRequestMessage.toJSONString);
+}
+
+-(void) testServerDataSyncRequest_DeviceCapacitySync
+{
+    RHJSONMessage* serverDataSyncRequestMessage = [RHJSONMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_DeviceCapacitySync device:_device info:nil];
+    
+    GHTestLog(@"ServerDataSyncRequest_DeviceCapacitySync: %@", serverDataSyncRequestMessage.toJSONString);
+}
+
+-(void) testServerDataSyncRequest_InterestLabelListSync
+{
+    NSNumber* oCurrent = [NSNumber numberWithInt:10];
+    NSDate* startTime = [NSDate date];
+    NSString* sStartTime = [CBDateUtils dateStringInLocalTimeZoneWithFormat:STANDARD_DATE_FORMAT andDate:startTime];
+    NSDate* endTime = [NSDate dateWithTimeIntervalSinceNow:60*60*24*7];
+    NSString* sEndTime = [CBDateUtils dateStringInLocalTimeZoneWithFormat:STANDARD_DATE_FORMAT andDate:endTime];
+    NSDictionary* info = [NSDictionary dictionaryWithObjects:@[oCurrent, sStartTime, sEndTime] forKeys:@[MESSAGE_KEY_CURRENT, MESSAGE_KEY_STARTTIME, MESSAGE_KEY_ENDTIME]];
+    
+    RHJSONMessage* serverDataSyncRequestMessage = [RHJSONMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_InterestLabelListSync device:_device info:info];
+    
+    GHTestLog(@"ServerDataSyncRequest_InterestLabelListSync: %@", serverDataSyncRequestMessage.toJSONString);
 }
 
 -(void) testAppDataSyncRequest

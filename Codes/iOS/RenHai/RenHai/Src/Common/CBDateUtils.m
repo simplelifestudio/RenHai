@@ -23,7 +23,7 @@
     return localTime;
 }
 
-+(NSString*) dateStringInLocalTimeZone:(NSString*) format andDate:(NSDate*) date
++(NSString*) dateStringInLocalTimeZoneWithFormat:(NSString*) format andDate:(NSDate*) date
 {
     NSTimeZone *localTimeZone = [NSTimeZone localTimeZone];
     return [CBDateUtils dateString: localTimeZone andFormat:format andDate: date];
@@ -74,7 +74,7 @@
     
     for (NSDate* day in lastThreeDays)
     {
-        NSString* dayStr = [CBDateUtils dateStringInLocalTimeZone:formatString andDate:day];
+        NSString* dayStr = [CBDateUtils dateStringInLocalTimeZoneWithFormat:formatString andDate:day];
         [dayStrs addObject:dayStr];
     }
     
@@ -83,7 +83,7 @@
 
 +(NSString*) shortDateString:(NSDate*) date
 {
-    NSString* dateStr = [CBDateUtils dateStringInLocalTimeZone:SHORT_DATE_FORMAT andDate:date];
+    NSString* dateStr = [CBDateUtils dateStringInLocalTimeZoneWithFormat:SHORT_DATE_FORMAT andDate:date];
     return dateStr;
 }
 

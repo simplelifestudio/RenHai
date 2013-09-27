@@ -17,7 +17,7 @@
 
 +(NSString*) dateString:(NSTimeZone*) timeZone andFormat:(NSString*) format andDate:(NSDate*) date;
 
-+(NSString*) dateStringInLocalTimeZone:(NSString*) format andDate:(NSDate*) date;
++(NSString*) dateStringInLocalTimeZoneWithFormat:(NSString*) format andDate:(NSDate*) date;
 
 +(NSString*) dateStringInLocalTimeZoneWithStandardFormat:(NSDate*) date;
 

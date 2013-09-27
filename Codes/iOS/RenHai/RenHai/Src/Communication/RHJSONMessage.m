@@ -163,7 +163,7 @@ static BOOL s_messageEncrypted;
     NSAssert(nil != device, @"Device can not be null!");
     
     NSString* messageSn = [RHJSONMessage generateMessageSn];
-    NSInteger deviceId = 0;
+    NSInteger deviceId = device.deviceId;
     NSString* deviceSn = device.deviceSn;
     NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AlohaRequest messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
     
@@ -196,7 +196,7 @@ static BOOL s_messageEncrypted;
     
     RHJSONMessage* appDataSyncRequestMessage = nil;
     
-    NSInteger deviceId = 0;
+    NSInteger deviceId = device.deviceId;
     NSString* deviceSn = device.deviceSn;
     NSString* messageSn = [RHJSONMessage generateMessageSn];
     NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
@@ -326,6 +326,123 @@ static BOOL s_messageEncrypted;
     return appDataSyncRequestMessage;
 }
 
++(RHJSONMessage*) newServerDataSyncRequestMessage:(ServerDataSyncRequestType) type device:(RHDevice*) device info:(NSDictionary *)info
+{
+    NSAssert(nil != device, @"Device can not be null!");
+    
+    NSString* messageSn = [RHJSONMessage generateMessageSn];
+    NSInteger deviceId = device.deviceId;
+    NSString* deviceSn = device.deviceSn;
+    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AlohaRequest messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
+    
+    id oNull = [NSNull null];
+    NSMutableDictionary* messageBody = [NSMutableDictionary dictionary];
+
+    switch (type)
+    {
+        case ServerDataSyncRequestType_TotalSync:
+        {
+            NSMutableDictionary* deviceCount = [NSMutableDictionary dictionary];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_ONLINE];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_RANDOM];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_INTEREST];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_CHAT];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_RANDOMCHAT];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_INTERESTCHAT];
+            [messageBody setObject:deviceCount forKey:MESSAGE_KEY_DEVICECOUNT];
+            
+            NSMutableDictionary* deviceCapacity = [NSMutableDictionary dictionary];
+            [deviceCapacity setObject:oNull forKey:MESSAGE_KEY_ONLINE];
+            [deviceCapacity setObject:oNull forKey:MESSAGE_KEY_RANDOM];
+            [deviceCapacity setObject:oNull forKey:MESSAGE_KEY_INTEREST];
+            [messageBody setObject:deviceCapacity forKey:MESSAGE_KEY_DEVICECAPACITY];
+            
+            id oCurrent = nil;
+            id oStartTime = nil;
+            id oEndTime = nil;
+            if (nil != info)
+            {
+                NSNumber* obj = [info objectForKey:MESSAGE_KEY_CURRENT];
+                oCurrent = (nil != obj) ? obj : oNull;
+                
+                obj = [info objectForKey:MESSAGE_KEY_STARTTIME];
+                oStartTime = (nil != obj) ? obj : oNull;
+                
+                obj = [info objectForKey:MESSAGE_KEY_ENDTIME];
+                oEndTime = (nil != obj) ? obj : oNull;
+            }
+            
+            NSMutableDictionary* interestLabelList = [NSMutableDictionary dictionary];
+            [interestLabelList setObject:oCurrent forKey:MESSAGE_KEY_CURRENT];
+            NSMutableDictionary* history = [NSMutableDictionary dictionary];
+            [history setObject:oStartTime forKey:MESSAGE_KEY_STARTTIME];
+            [history setObject:oEndTime forKey:MESSAGE_KEY_ENDTIME];
+            [interestLabelList setObject:history forKey:MESSAGE_KEY_HISTORY];
+            [messageBody setObject:interestLabelList forKey:MESSAGE_KEY_INTERESTLABELLIST];
+            
+            break;
+        }
+        case ServerDataSyncRequestType_DeviceCountSync:
+        {
+            NSMutableDictionary* deviceCount = [NSMutableDictionary dictionary];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_ONLINE];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_RANDOM];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_INTEREST];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_CHAT];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_RANDOMCHAT];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_INTERESTCHAT];
+            [messageBody setObject:deviceCount forKey:MESSAGE_KEY_DEVICECOUNT];
+            
+            break;
+        }
+        case ServerDataSyncRequestType_DeviceCapacitySync:
+        {
+            NSMutableDictionary* deviceCapacity = [NSMutableDictionary dictionary];
+            [deviceCapacity setObject:oNull forKey:MESSAGE_KEY_ONLINE];
+            [deviceCapacity setObject:oNull forKey:MESSAGE_KEY_RANDOM];
+            [deviceCapacity setObject:oNull forKey:MESSAGE_KEY_INTEREST];
+            [messageBody setObject:deviceCapacity forKey:MESSAGE_KEY_DEVICECAPACITY];
+            
+            break;
+        }
+        case ServerDataSyncRequestType_InterestLabelListSync:
+        {
+            id oCurrent = nil;
+            id oStartTime = nil;
+            id oEndTime = nil;
+            if (nil != info)
+            {
+                NSNumber* obj = [info objectForKey:MESSAGE_KEY_CURRENT];
+                oCurrent = (nil != obj) ? obj : oNull;
+                
+                obj = [info objectForKey:MESSAGE_KEY_STARTTIME];
+                oStartTime = (nil != obj) ? obj : oNull;
+                
+                obj = [info objectForKey:MESSAGE_KEY_ENDTIME];
+                oEndTime = (nil != obj) ? obj : oNull;
+            }
+            
+            NSMutableDictionary* interestLabelList = [NSMutableDictionary dictionary];
+            [interestLabelList setObject:oCurrent forKey:MESSAGE_KEY_CURRENT];
+            NSMutableDictionary* history = [NSMutableDictionary dictionary];
+            [history setObject:oStartTime forKey:MESSAGE_KEY_STARTTIME];
+            [history setObject:oEndTime forKey:MESSAGE_KEY_ENDTIME];
+            [interestLabelList setObject:history forKey:MESSAGE_KEY_HISTORY];
+            [messageBody setObject:interestLabelList forKey:MESSAGE_KEY_INTERESTLABELLIST];
+            
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    
+    RHJSONMessage* serverDataSyncRequestMessage = [RHJSONMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    
+    return serverDataSyncRequestMessage;
+}
+
 +(BOOL) isServerTimeoutResponseMessage:(RHJSONMessage*) message
 {
     BOOL flag = NO;
@@ -399,7 +516,7 @@ static BOOL s_messageEncrypted;
 {
     if (nil != time)
     {
-        NSString* sTimeStamp = [CBDateUtils dateStringInLocalTimeZone:FULL_DATE_TIME_FORMAT andDate:time];
+        NSString* sTimeStamp = [CBDateUtils dateStringInLocalTimeZoneWithFormat:FULL_DATE_TIME_FORMAT andDate:time];
         [_header setValue:sTimeStamp forKey:MESSAGE_KEY_TIMESTAMP];
     }
     else
