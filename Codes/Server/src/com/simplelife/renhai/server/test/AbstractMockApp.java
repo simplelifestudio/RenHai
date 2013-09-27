@@ -19,6 +19,9 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
@@ -37,6 +40,8 @@ import com.simplelife.renhai.server.util.JSONKey;
 /** */
 public abstract class AbstractMockApp implements IMockApp
 {
+	Logger logger = LoggerFactory.getLogger(AbstractMockApp.class);
+	
 	private class PingTask extends TimerTask
 	{
 		private AbstractMockApp mockApp;
@@ -51,6 +56,28 @@ public abstract class AbstractMockApp implements IMockApp
 			mockApp.ping();
 		}
 	}
+	
+	protected class AutoReplyTask extends Thread
+	{
+		private JSONObject message;
+		private AbstractMockApp app;
+		
+		public AutoReplyTask(JSONObject message, AbstractMockApp app)
+		{
+			this.message = message;
+			this.app = app;
+		}
+		
+		@Override
+		public void run()
+		{
+			logger.debug("Mock app trying to response BusinessSessionNotification");
+			JSONObject body = message.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
+			Consts.NotificationType operationType = Consts.NotificationType.parseValue(body.getIntValue(JSONKey.OperationType)); 
+			app.sendNotificationResponse(operationType, "", "1");
+		}
+	}
+	
     /** */
     protected int sessionId;
     protected Timer pingTimer = new Timer();

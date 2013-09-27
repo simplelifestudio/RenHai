@@ -145,7 +145,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onTextMessage(String message)
     {
-    	logger.debug("Text message received.");
+    	logger.debug("Received message from Device <{}> : " + message, this.connectionOwner.getDeviceSn());
     	
     	JSONObject obj = null;
     	try
@@ -278,12 +278,11 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     /** */
     protected void sendMessage(ServerJSONMessage message) throws IOException
     {
-    	logger.debug("Send message: " + message);
-    	
     	JSONObject obj = new JSONObject();
     	obj.put(JSONKey.JsonEnvelope, message.toJSONObject());
     	
     	String strMessage = JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue);
+    	logger.debug("Send message to Device <{}> : " + message, this.connectionOwner.getDeviceSn());
     	
     	CharBuffer buffer = CharBuffer.allocate(strMessage.length());
         buffer.put(strMessage);

@@ -110,6 +110,17 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		assertTrue(deviceWrapper1.getOwnerBusinessSession() != null);
 		assertTrue(deviceWrapper2.getOwnerBusinessSession() != null);
 		
+		try
+		{
+			logger.debug("sleep 1000");
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e1)
+		{
+			e1.printStackTrace();
+		}
+		logger.debug("Recovered from sleep");
+		
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);
 		

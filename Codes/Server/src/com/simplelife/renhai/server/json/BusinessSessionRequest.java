@@ -265,6 +265,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.BusinessType, Consts.OperationType.AgreeChat.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.asyncResponse();
+		
+		
 	}
 	
 	private void rejectChat()
@@ -288,6 +290,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.BusinessType, Consts.OperationType.RejectChat.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.asyncResponse();
+		
+		aa: 通知其他设备
 	}
 	
 	private void endChat()
@@ -311,6 +315,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.BusinessType, Consts.OperationType.EndChat.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.asyncResponse();
+		
+		aa: 通知其他设备
 	}
 	
 	private void assessAndContinue()

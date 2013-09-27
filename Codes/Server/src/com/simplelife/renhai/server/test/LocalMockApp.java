@@ -30,7 +30,6 @@ import com.simplelife.renhai.server.util.JSONKey;
 /** */
 public class LocalMockApp extends AbstractMockApp
 {
-	Logger logger = LoggerFactory.getLogger(LocalMockApp.class);
 	/** */
 	protected MockWebSocketConnection connection;
 	
@@ -342,10 +341,8 @@ public class LocalMockApp extends AbstractMockApp
 			int messageId = header.getIntValue(JSONKey.MessageId);
 			if (messageId == Consts.MessageId.BusinessSessionNotification.getValue())
 			{
-				logger.debug("Mock app received BusinessSessionNotification, trying to response");
-				JSONObject body = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
-				Consts.NotificationType operationType = Consts.NotificationType.parseValue(body.getIntValue(JSONKey.OperationType)); 
-				this.sendNotificationResponse(operationType, "", "1");
+				AutoReplyTask task = new AutoReplyTask(obj, this);
+				task.start();
 			}
 		}
 	}

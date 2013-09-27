@@ -323,7 +323,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 
     public void syncSendMessageByThread(ServerJSONMessage message)
     {
-    	Logger logger = BusinessModule.instance.getLogger();
         try
 		{
         	if (webSocketConnection == null)

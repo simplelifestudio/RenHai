@@ -102,6 +102,7 @@ public class BusinessSession implements IBusinessSession
     	// If not all devices confirmed
 		if (tmpConfirmDeviceList.size() > 0)
 		{
+			logger.debug("Device <{}> responsed but not all devices responsed.", device.getDeviceSn());
 			return;
 		}
     	
@@ -331,6 +332,7 @@ public class BusinessSession implements IBusinessSession
     **/
     public void changeStatus(Consts.BusinessSessionStatus targetStatus)
     {
+    	logger.debug("Business session change status from {} to " + targetStatus.name(), status.name());
     	switch(targetStatus)
     	{
     		case Idle:
@@ -462,6 +464,7 @@ public class BusinessSession implements IBusinessSession
     	// If not all devices confirmed
 		if (tmpConfirmDeviceList.size() > 0)
 		{
+			logger.debug("Not all devices confirmed, keep waiting.");
 			return;
 		}
 		
