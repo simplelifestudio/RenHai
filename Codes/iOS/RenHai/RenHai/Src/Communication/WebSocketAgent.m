@@ -110,6 +110,7 @@
     NSString* messageSn = requestMessage.messageSn;
     NSCondition* _messageLock = [self _newMessageLock:messageSn];
     
+    [requestMessage setTimeStamp:startTimeStamp];
     requestMessage.enveloped = YES;
     NSString* jsonString = requestMessage.toJSONString;
     [self _sendJSONStringToWebSocket:jsonString];

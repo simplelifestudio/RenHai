@@ -91,6 +91,8 @@
     NSDate* startTimeStamp = [NSDate date];
     NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
     
+    [requestMessage setTimeStamp:startTimeStamp];
+    
     __block RHJSONMessage* responseMessage = nil;
     
     __block NSCondition* lock = [[NSCondition alloc] init];

@@ -187,7 +187,7 @@ AppDataSyncRequestType;
 +(RHJSONMessage*) constructWithString:(NSString*) jsonString enveloped:(BOOL) enveloped;;
 +(RHMessageErrorCode) verify:(RHJSONMessage*) message;
 
-+(NSDictionary*) constructMessageHeader:(RHMessageType) messageType messageId:(RHMessageId) messageId messageSn:(NSString*) messageSn deviceId:(NSInteger) deviceId deviceSn:(NSString*) deviceSn timeStamp:(NSDate*) timeStamp;
++(NSDictionary*) constructMessageHeader:(RHMessageType) messageType messageId:(RHMessageId) messageId messageSn:(NSString*) messageSn deviceId:(NSInteger) deviceId deviceSn:(NSString*) deviceSn;
 
 +(RHJSONMessage*) newAlohaRequestMessage:(RHDevice*) device;
 +(RHJSONMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn;
@@ -207,5 +207,6 @@ AppDataSyncRequestType;
 -(NSInteger) deviceId;
 -(NSString*) deviceSn;
 -(NSDate*) timeStamp;
+-(void) setTimeStamp:(NSDate*) time;
 
 @end

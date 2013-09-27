@@ -122,7 +122,7 @@ static BOOL s_messageEncrypted;
     return error;
 }
 
-+(NSDictionary*) constructMessageHeader:(RHMessageType) messageType messageId:(RHMessageId) messageId messageSn:(NSString*) messageSn deviceId:(NSInteger) deviceId deviceSn:(NSString*) deviceSn timeStamp:(NSDate*) timeStamp
++(NSDictionary*) constructMessageHeader:(RHMessageType) messageType messageId:(RHMessageId) messageId messageSn:(NSString*) messageSn deviceId:(NSInteger) deviceId deviceSn:(NSString*) deviceSn
 {
     NSMutableDictionary* header = [NSMutableDictionary dictionary];
     
@@ -153,10 +153,7 @@ static BOOL s_messageEncrypted;
         [header setObject:deviceSn forKey:MESSAGE_KEY_DEVICESN];
     }
     
-    timeStamp = (nil != timeStamp) ? timeStamp : [NSDate date];
-    NSString* sTimeStamp = [CBDateUtils dateStringInLocalTimeZone:FULL_DATE_TIME_FORMAT andDate:timeStamp];
-    
-    [header setObject:sTimeStamp forKey:MESSAGE_KEY_TIMESTAMP];
+    [header setObject:[NSNull null] forKey:MESSAGE_KEY_TIMESTAMP];
     
     return header;
 }
@@ -168,7 +165,7 @@ static BOOL s_messageEncrypted;
     NSString* messageSn = [RHJSONMessage generateMessageSn];
     NSInteger deviceId = 0;
     NSString* deviceSn = device.deviceSn;
-    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AlohaRequest messageSn:messageSn deviceId:deviceId deviceSn:deviceSn timeStamp:nil];
+    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AlohaRequest messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
     
     NSMutableDictionary* messageBody = [NSMutableDictionary dictionary];
     [messageBody setObject:@"Aloha RenHai Server" forKey:MESSAGE_KEY_CONTENT];
@@ -184,7 +181,7 @@ static BOOL s_messageEncrypted;
 {
     NSInteger deviceId = 0;
     NSString* deviceSn = nil;
-    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:messageSn deviceId:deviceId deviceSn:deviceSn timeStamp:nil];
+    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
     
     NSDictionary* messageBody = [NSDictionary dictionary];
     
@@ -202,7 +199,7 @@ static BOOL s_messageEncrypted;
     NSInteger deviceId = 0;
     NSString* deviceSn = device.deviceSn;
     NSString* messageSn = [RHJSONMessage generateMessageSn];
-    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:messageSn deviceId:deviceId deviceSn:deviceSn timeStamp:nil];
+    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
     
     NSMutableDictionary* messageBody = [NSMutableDictionary dictionary];
     
@@ -396,6 +393,19 @@ static BOOL s_messageEncrypted;
     NSDate* timeStamp = [CBDateUtils dateFromStringWithFormat:sTimeStamp andFormat:FULL_DATE_TIME_FORMAT];
     
     return timeStamp;
+}
+
+-(void) setTimeStamp:(NSDate*) time
+{
+    if (nil != time)
+    {
+        NSString* sTimeStamp = [CBDateUtils dateStringInLocalTimeZone:FULL_DATE_TIME_FORMAT andDate:time];
+        [_header setValue:sTimeStamp forKey:MESSAGE_KEY_TIMESTAMP];
+    }
+    else
+    {
+        [_header setValue:[NSNull null] forKey:MESSAGE_KEY_TIMESTAMP];
+    }
 }
 
 #pragma mark - CBJSONable

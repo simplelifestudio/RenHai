@@ -152,7 +152,7 @@
     NSDictionary* body = [NSDictionary dictionaryWithObject:device.toJSONObject forKey:MESSAGE_KEY_DATAQUERY];
     
     NSString* messageSn = [RHJSONMessage generateMessageSn];
-    NSDictionary* header = [RHJSONMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AppDataSyncRequest messageSn:messageSn deviceId:device.deviceId deviceSn:device.deviceSn timeStamp:[NSDate date]];
+    NSDictionary* header = [RHJSONMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AppDataSyncRequest messageSn:messageSn deviceId:device.deviceId deviceSn:device.deviceSn];
     RHJSONMessage* requestMessage = [RHJSONMessage constructWithMessageHeader:header messageBody:body enveloped:YES];
     
 //    NSLog(@"device's json: %@", device.toJSONString);
