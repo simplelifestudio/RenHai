@@ -10,7 +10,7 @@
 
 #import "SRWebSocket.h"
 
-#import "RHJSONMessage.h"
+#import "RHMessage.h"
 #import "CBJSONMessageComm.h"
 
 #define SERVICE_TARGET_WEBSOCKET @"websocketService"
@@ -21,8 +21,8 @@
 
 -(void) connectWebSocket;
 -(void) closeWebSocket;
--(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage;
--(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread;
--(void) asyncMessage:(RHJSONMessage*) requestMessage;
+-(RHMessage*) syncMessage:(RHMessage*) requestMessage;
+-(RHMessage*) syncMessage:(RHMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread;
+-(void) asyncMessage:(RHMessage*) requestMessage;
 
 @end

@@ -9,7 +9,7 @@
 #import "RHImpressCard.h"
 
 #import "CBJSONUtils.h"
-#import "RHJSONMessage.h"
+#import "RHMessage.h"
 
 #define SERIALIZE_KEY_CARDID @"impressCard.impressCardId"
 #define SERIALIZE_KEY_ASSESSLABELIST @"impressCard.assessLabelList"

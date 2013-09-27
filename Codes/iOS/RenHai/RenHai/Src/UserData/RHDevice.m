@@ -13,7 +13,7 @@
 #import "CBJSONUtils.h"
 
 #import "AppDataModule.h"
-#import "RHJSONMessage.h"
+#import "RHMessage.h"
 
 #define SERIALIZE_KEY_DEVICEID @"device.deviceId"
 #define SERIALIZE_KEY_DEVICESN @"device.deviceSn"

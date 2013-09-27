@@ -8,17 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
-#import "RHJSONMessage.h"
+#import "RHMessage.h"
 
 @protocol CBJSONMessageComm <NSObject>
 
 // Warning: This method CAN NOT be invoked in Main Thread!
--(RHJSONMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHJSONMessage*) requestMessage;
--(RHJSONMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread;
+-(RHMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHMessage*) requestMessage;
+-(RHMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread;
 
 @optional
 -(void) requestAsync:(NSString*) serviceTarget
-      requestMessage: (RHJSONMessage*) requestMessage
+      requestMessage: (RHMessage*) requestMessage
              success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON))success
              failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON))failure;
 

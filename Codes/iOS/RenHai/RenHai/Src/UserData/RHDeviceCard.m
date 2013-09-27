@@ -11,7 +11,7 @@
 #import "CBJSONUtils.h"
 
 #import "AppDataModule.h"
-#import "RHJSONMessage.h"
+#import "RHMessage.h"
 
 #define SERIALIZE_KEY_DEVICECARDID @"deviceCard.deviceCardId"
 #define SERIALIZE_KEY_REGISTERTIME @"deviceCard.registerTime"

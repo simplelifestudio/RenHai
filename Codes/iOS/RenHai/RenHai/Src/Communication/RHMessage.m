@@ -6,7 +6,7 @@
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
-#import "RHJSONMessage.h"
+#import "RHMessage.h"
 
 #import "CBJSONUtils.h"
 #import "CBStringUtils.h"
@@ -15,7 +15,7 @@
 
 static BOOL s_messageEncrypted;
 
-@interface RHJSONMessage()
+@interface RHMessage()
 {
     
 }
@@ -25,7 +25,7 @@ static BOOL s_messageEncrypted;
 
 @end
 
-@implementation RHJSONMessage
+@implementation RHMessage
 
 +(void) setMessageNeedEncrypt:(BOOL) encrypt
 {
@@ -42,9 +42,9 @@ static BOOL s_messageEncrypted;
     return [CBStringUtils randomString:MESSAGE_MESSAGESN_LENGTH];
 }
 
-+(RHJSONMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body enveloped:(BOOL) enveloped;
++(RHMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body enveloped:(BOOL) enveloped;
 {
-    RHJSONMessage* message = [[RHJSONMessage alloc] init];
+    RHMessage* message = [[RHMessage alloc] init];
     
     message.header = header;
     message.body = body;
@@ -54,7 +54,7 @@ static BOOL s_messageEncrypted;
     return message;
 }
 
-+(RHJSONMessage*) constructWithContent:(NSDictionary*) content enveloped:(BOOL) enveloped;
++(RHMessage*) constructWithContent:(NSDictionary*) content enveloped:(BOOL) enveloped;
 {
     if (enveloped)
     {
@@ -64,12 +64,12 @@ static BOOL s_messageEncrypted;
     NSDictionary* header = [content objectForKey:MESSAGE_KEY_HEADER];
     NSDictionary* body = [content objectForKey:MESSAGE_KEY_BODY];
     
-    RHJSONMessage* message = [RHJSONMessage constructWithMessageHeader:header messageBody:body enveloped:enveloped];
+    RHMessage* message = [RHMessage constructWithMessageHeader:header messageBody:body enveloped:enveloped];
     
     return message;
 }
 
-+(RHJSONMessage*) constructWithString:(NSString*) jsonString enveloped:(BOOL)enveloped
++(RHMessage*) constructWithString:(NSString*) jsonString enveloped:(BOOL)enveloped
 {
     NSDictionary* content = [CBJSONUtils toJSONObject:jsonString];
     
@@ -78,23 +78,23 @@ static BOOL s_messageEncrypted;
         content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
     }
     
-    RHJSONMessage* message = nil;
+    RHMessage* message = nil;
     
     if (nil != jsonString && 0 < jsonString.length)
     {
-        if ([RHJSONMessage isMessageNeedEncrypt])
+        if ([RHMessage isMessageNeedEncrypt])
         {
             jsonString = [CBSecurityUtils decryptByDESAndDecodeByBase64:jsonString key:MESSAGE_SECURITY_KEY];
         }
         
         NSDictionary* dic = [CBJSONUtils toJSONObject:jsonString];
-        message = [RHJSONMessage constructWithContent:dic enveloped:NO];
+        message = [RHMessage constructWithContent:dic enveloped:NO];
     }
     
     return message;
 }
 
-+(RHMessageErrorCode) verify:(RHJSONMessage*) message
++(RHMessageErrorCode) verify:(RHMessage*) message
 {
     RHMessageErrorCode error = ErrorCode_ServerLegalResponse;
     
@@ -158,48 +158,48 @@ static BOOL s_messageEncrypted;
     return header;
 }
 
-+(RHJSONMessage*) newAlohaRequestMessage:(RHDevice*) device;
++(RHMessage*) newAlohaRequestMessage:(RHDevice*) device;
 {
     NSAssert(nil != device, @"Device can not be null!");
     
-    NSString* messageSn = [RHJSONMessage generateMessageSn];
+    NSString* messageSn = [RHMessage generateMessageSn];
     NSInteger deviceId = device.deviceId;
     NSString* deviceSn = device.deviceSn;
-    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AlohaRequest messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
+    NSDictionary* messageHeader = [RHMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AlohaRequest messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
     
     NSMutableDictionary* messageBody = [NSMutableDictionary dictionary];
     [messageBody setObject:@"Aloha RenHai Server" forKey:MESSAGE_KEY_CONTENT];
     
-    RHJSONMessage* message = [RHJSONMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
     
     message.enveloped = YES;
     
     return message;
 }
 
-+(RHJSONMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn
++(RHMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn
 {
     NSInteger deviceId = 0;
     NSString* deviceSn = nil;
-    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
+    NSDictionary* messageHeader = [RHMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
     
     NSDictionary* messageBody = [NSDictionary dictionary];
     
-    RHJSONMessage* message = [RHJSONMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
     
     return message;
 }
 
-+(RHJSONMessage*) newAppDataSyncRequestMessage:(AppDataSyncRequestType) type device:(RHDevice*) device;
++(RHMessage*) newAppDataSyncRequestMessage:(AppDataSyncRequestType) type device:(RHDevice*) device;
 {
     NSAssert(nil != device, @"Device can not be null!");
     
-    RHJSONMessage* appDataSyncRequestMessage = nil;
+    RHMessage* appDataSyncRequestMessage = nil;
     
     NSInteger deviceId = device.deviceId;
     NSString* deviceSn = device.deviceSn;
-    NSString* messageSn = [RHJSONMessage generateMessageSn];
-    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
+    NSString* messageSn = [RHMessage generateMessageSn];
+    NSDictionary* messageHeader = [RHMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AppDataSyncRequest    messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
     
     NSMutableDictionary* messageBody = [NSMutableDictionary dictionary];
     
@@ -321,19 +321,19 @@ static BOOL s_messageEncrypted;
         [messageBody setObject:dataQuery forKey:MESSAGE_KEY_DATAQUERY];
     }
     
-    appDataSyncRequestMessage = [RHJSONMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    appDataSyncRequestMessage = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
     
     return appDataSyncRequestMessage;
 }
 
-+(RHJSONMessage*) newServerDataSyncRequestMessage:(ServerDataSyncRequestType) type device:(RHDevice*) device info:(NSDictionary *)info
++(RHMessage*) newServerDataSyncRequestMessage:(ServerDataSyncRequestType) type device:(RHDevice*) device info:(NSDictionary *)info
 {
     NSAssert(nil != device, @"Device can not be null!");
     
-    NSString* messageSn = [RHJSONMessage generateMessageSn];
+    NSString* messageSn = [RHMessage generateMessageSn];
     NSInteger deviceId = device.deviceId;
     NSString* deviceSn = device.deviceSn;
-    NSDictionary* messageHeader = [RHJSONMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AlohaRequest messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
+    NSDictionary* messageHeader = [RHMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_ServerDataSyncRequest messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
     
     id oNull = [NSNull null];
     NSMutableDictionary* messageBody = [NSMutableDictionary dictionary];
@@ -438,12 +438,75 @@ static BOOL s_messageEncrypted;
         }
     }
     
-    RHJSONMessage* serverDataSyncRequestMessage = [RHJSONMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    RHMessage* serverDataSyncRequestMessage = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
     
     return serverDataSyncRequestMessage;
 }
 
-+(BOOL) isServerTimeoutResponseMessage:(RHJSONMessage*) message
++(RHMessage*) newBusinessSessionRequestMessage:(NSString*) businessSessionId businessType:(RHBusinessType) businessType operationType:(BusinessSessionRequestType) operationType device:(RHDevice*) device info:(NSDictionary*) info
+{
+    NSAssert(nil != device, @"Device can not be null!");
+    
+    NSString* messageSn = [RHMessage generateMessageSn];
+    NSInteger deviceId = device.deviceId;
+    NSString* deviceSn = device.deviceSn;
+    NSDictionary* messageHeader = [RHMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_BusinessSessionRequest messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
+    
+    id oNull = [NSNull null];
+    NSMutableDictionary* messageBody = [NSMutableDictionary dictionary];
+    
+    businessSessionId = (nil != businessSessionId) ? businessSessionId : oNull;
+    [messageBody setObject:businessSessionId forKey:MESSAGE_KEY_BUSINESSSESSIONID];
+    
+    NSNumber* oBusinessType = [NSNumber numberWithInt:businessType];
+    [messageBody setObject:oBusinessType forKey:MESSAGE_KEY_BUSINESSTYPE];
+    
+    NSNumber* oOperationType = [NSNumber numberWithInt:operationType];
+    [messageBody setObject:oOperationType forKey:MESSAGE_KEY_OPERATIONTYPE];
+    
+    info = (nil != info) ? info : oNull;
+    [messageBody setObject:info forKey:MESSAGE_KEY_OPERATIONINFO];
+    
+    [messageBody setObject:oNull forKey:MESSAGE_KEY_OPERATIONVALUE];
+    
+    RHMessage* businessSessionRequestMessage = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    
+    return businessSessionRequestMessage;
+}
+
++(RHMessage*) newBusinessSessionNotificationResponseMessage:(NSString*) businessSessionId businessType:(RHBusinessType) businessType operationType:(BusinessSessionNotificationType) operationType operationValue:(BusinessSessionOperationValue) operationValue device:(RHDevice*) device info:(NSDictionary*) info
+{
+    NSAssert(nil != device, @"Device can not be null!");
+    
+    NSString* messageSn = [RHMessage generateMessageSn];
+    NSInteger deviceId = device.deviceId;
+    NSString* deviceSn = device.deviceSn;
+    NSDictionary* messageHeader = [RHMessage constructMessageHeader:MessageType_AppResponse messageId:MessageId_BusinessSessionNotificationResponse messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
+    
+    id oNull = [NSNull null];
+    NSMutableDictionary* messageBody = [NSMutableDictionary dictionary];
+    
+    businessSessionId = (nil != businessSessionId) ? businessSessionId : oNull;
+    [messageBody setObject:businessSessionId forKey:MESSAGE_KEY_BUSINESSSESSIONID];
+    
+    NSNumber* oBusinessType = [NSNumber numberWithInt:businessType];
+    [messageBody setObject:oBusinessType forKey:MESSAGE_KEY_BUSINESSTYPE];
+    
+    NSNumber* oOperationType = [NSNumber numberWithInt:operationType];
+    [messageBody setObject:oOperationType forKey:MESSAGE_KEY_OPERATIONTYPE];
+    
+    info = (nil != info) ? info : oNull;
+    [messageBody setObject:info forKey:MESSAGE_KEY_OPERATIONINFO];
+    
+    NSNumber* oOperationValue = [NSNumber numberWithInt:operationValue];
+    [messageBody setObject:oOperationValue forKey:MESSAGE_KEY_OPERATIONVALUE];
+    
+    RHMessage* businessSessionNotificationResponseMessage = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    
+    return businessSessionNotificationResponseMessage;
+}
+
++(BOOL) isServerTimeoutResponseMessage:(RHMessage*) message
 {
     BOOL flag = NO;
     
@@ -455,7 +518,7 @@ static BOOL s_messageEncrypted;
     return flag;
 }
 
-+(BOOL) isServerErrorResponseMessage:(RHJSONMessage*) message
++(BOOL) isServerErrorResponseMessage:(RHMessage*) message
 {
     BOOL flag = NO;
     

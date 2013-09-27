@@ -14,7 +14,7 @@
 #import "CBStringUtils.h"
 
 #import "WebSocketAgent.h"
-#import "RHJSONMessage.h"
+#import "RHMessage.h"
 #import "RHDevice.h"
 #import "UserDataModule.h"
 
@@ -44,9 +44,9 @@
     dispatch_async(dispatch_queue_create("testQueue", DISPATCH_QUEUE_SERIAL), ^(){
         @try
         {
-            RHJSONMessage* alohaReuqestMessage = [RHJSONMessage newAlohaRequestMessage:_device];
+            RHMessage* alohaReuqestMessage = [RHMessage newAlohaRequestMessage:_device];
             
-            RHJSONMessage* responseMessage = [agent syncMessage:alohaReuqestMessage syncInMainThread:NO];
+            RHMessage* responseMessage = [agent syncMessage:alohaReuqestMessage syncInMainThread:NO];
             
             GHTestLog(@"Sent Message: %@", alohaReuqestMessage.toJSONString);            
             
@@ -66,49 +66,49 @@
 
 -(void) testAppDataSyncRequest_TotalSync
 {
-    RHJSONMessage* appDataSyncRequestMessage = [RHJSONMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:_device];
+    RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:_device];
     
     GHTestLog(@"AppDataSyncRequestType_TotalSync: %@", appDataSyncRequestMessage.toJSONString);
 }
 
 -(void) testAppDataSyncRequest_DeviceCardSync
 {
-    RHJSONMessage* appDataSyncRequestMessage = [RHJSONMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_DeviceCardSync device:_device];
+    RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_DeviceCardSync device:_device];
     
     GHTestLog(@"AppDataSyncRequest_DeviceCardSync: %@", appDataSyncRequestMessage.toJSONString);
 }
 
 -(void) testAppDataSyncRequest_ImpressCardSync
 {
-    RHJSONMessage* appDataSyncRequestMessage = [RHJSONMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_ImpressCardSync device:_device];
+    RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_ImpressCardSync device:_device];
     
     GHTestLog(@"AppDataSyncRequest_ImpressCardSync: %@", appDataSyncRequestMessage.toJSONString);
 }
 
 -(void) testAppDataSyncRequest_InterestCardSync
 {
-    RHJSONMessage* appDataSyncRequestMessage = [RHJSONMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:_device];
+    RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:_device];
     
     GHTestLog(@"AppDataSyncRequest_InterestCardSync: %@", appDataSyncRequestMessage.toJSONString);
 }
 
 -(void) testServerDataSyncRequest_TotalSync
 {
-    RHJSONMessage* serverDataSyncRequestMessage = [RHJSONMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:_device info:nil];
+    RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:_device info:nil];
     
     GHTestLog(@"ServerDataSyncRequest_TotalSync: %@", serverDataSyncRequestMessage.toJSONString);
 }
 
 -(void) testServerDataSyncRequest_DeviceCountSync
 {
-    RHJSONMessage* serverDataSyncRequestMessage = [RHJSONMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_DeviceCountSync device:_device info:nil];
+    RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_DeviceCountSync device:_device info:nil];
     
     GHTestLog(@"ServerDataSyncRequest_DeviceCountSync: %@", serverDataSyncRequestMessage.toJSONString);
 }
 
 -(void) testServerDataSyncRequest_DeviceCapacitySync
 {
-    RHJSONMessage* serverDataSyncRequestMessage = [RHJSONMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_DeviceCapacitySync device:_device info:nil];
+    RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_DeviceCapacitySync device:_device info:nil];
     
     GHTestLog(@"ServerDataSyncRequest_DeviceCapacitySync: %@", serverDataSyncRequestMessage.toJSONString);
 }
@@ -122,7 +122,7 @@
     NSString* sEndTime = [CBDateUtils dateStringInLocalTimeZoneWithFormat:STANDARD_DATE_FORMAT andDate:endTime];
     NSDictionary* info = [NSDictionary dictionaryWithObjects:@[oCurrent, sStartTime, sEndTime] forKeys:@[MESSAGE_KEY_CURRENT, MESSAGE_KEY_STARTTIME, MESSAGE_KEY_ENDTIME]];
     
-    RHJSONMessage* serverDataSyncRequestMessage = [RHJSONMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_InterestLabelListSync device:_device info:info];
+    RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_InterestLabelListSync device:_device info:info];
     
     GHTestLog(@"ServerDataSyncRequest_InterestLabelListSync: %@", serverDataSyncRequestMessage.toJSONString);
 }
@@ -134,9 +134,9 @@
     dispatch_async(dispatch_queue_create("testQueue", DISPATCH_QUEUE_SERIAL), ^(){
         @try
         {
-            RHJSONMessage* deviceCardUpdateMessage = [self _createDeviceCardUpdateMessage];
+            RHMessage* deviceCardUpdateMessage = [self _createDeviceCardUpdateMessage];
             
-            RHJSONMessage* responseMessage = [agent syncMessage:deviceCardUpdateMessage syncInMainThread:NO];
+            RHMessage* responseMessage = [agent syncMessage:deviceCardUpdateMessage syncInMainThread:NO];
             
             GHTestLog(@"Sent Message: %@", deviceCardUpdateMessage.toJSONString);
             
@@ -152,6 +152,22 @@
             [self _disconnectWebSocket:agent];
         }
     });
+}
+
+-(void) testBusinessSessionRequest
+{
+    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Interest operationType:BusinessSessionRequestType_EnterPool device:_device info:nil];
+    
+    GHTestLog(@"BusinessSessionRequest: %@", businessSessionRequestMessage.toJSONString);
+}
+
+-(void) testBusinessSessionNotificationResponse
+{
+    NSString* businessSessionId = @"ASDFJL12DD";
+    
+    RHMessage* businessSessionNotificationResponseMessage = [RHMessage newBusinessSessionNotificationResponseMessage:businessSessionId businessType:BusinessType_Interest operationType:BusinessSessionNotificationType_OthersideAgreed operationValue:BusinessSessionOperationValue_Success device:_device info:nil];
+    
+    GHTestLog(@"BusinessSessionNotificationResponse: %@", businessSessionNotificationResponseMessage.toJSONString);
 }
 
 -(void) testRootDataTree
@@ -179,7 +195,7 @@
     GHTestLog(@"WebSocket closed.");
 }
 
--(RHJSONMessage*) _createDeviceCardUpdateMessage
+-(RHMessage*) _createDeviceCardUpdateMessage
 {
     RHDevice* device = [[RHDevice alloc] init];
 //    RHDeviceCard* deviceCard = device.deviceCard;
@@ -187,9 +203,9 @@
     
     NSDictionary* body = [NSDictionary dictionaryWithObject:device.toJSONObject forKey:MESSAGE_KEY_DATAQUERY];
     
-    NSString* messageSn = [RHJSONMessage generateMessageSn];
-    NSDictionary* header = [RHJSONMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AppDataSyncRequest messageSn:messageSn deviceId:device.deviceId deviceSn:device.deviceSn];
-    RHJSONMessage* requestMessage = [RHJSONMessage constructWithMessageHeader:header messageBody:body enveloped:YES];
+    NSString* messageSn = [RHMessage generateMessageSn];
+    NSDictionary* header = [RHMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AppDataSyncRequest messageSn:messageSn deviceId:device.deviceId deviceSn:device.deviceSn];
+    RHMessage* requestMessage = [RHMessage constructWithMessageHeader:header messageBody:body enveloped:YES];
     
 //    NSLog(@"device's json: %@", device.toJSONString);
     

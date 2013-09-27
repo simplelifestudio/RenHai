@@ -12,9 +12,9 @@
 
 @interface HTTPAgent : NSObject <CBJSONMessageComm>
 
-+(NSMutableURLRequest*) constructURLRequest:(RHJSONMessage*) message serviceTarget:(NSString*) serviceTarget;
++(NSMutableURLRequest*) constructURLRequest:(RHMessage*) message serviceTarget:(NSString*) serviceTarget;
 
--(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage;
--(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread;
+-(RHMessage*) syncMessage:(RHMessage*) requestMessage;
+-(RHMessage*) syncMessage:(RHMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread;
 
 @end

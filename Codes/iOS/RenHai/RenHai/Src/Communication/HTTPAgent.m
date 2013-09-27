@@ -17,7 +17,7 @@
 
 @implementation HTTPAgent
 
-+(NSMutableURLRequest*) constructURLRequest:(RHJSONMessage*) message serviceTarget:(NSString*) serviceTarget
++(NSMutableURLRequest*) constructURLRequest:(RHMessage*) message serviceTarget:(NSString*) serviceTarget
 {
     NSAssert(nil != message, @"Nil JSON Message");
     
@@ -29,7 +29,7 @@
     if ([serviceTarget isEqualToString:REMOTEPATH_SERVICE_HTTP])
     {
         NSString* jsonString = message.toJSONString;
-        if ([RHJSONMessage isMessageNeedEncrypt])
+        if ([RHMessage isMessageNeedEncrypt])
         {
             jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:MESSAGE_SECURITY_KEY];
         }
@@ -47,16 +47,16 @@
 
 #pragma mark - Public Methods
 
--(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage
+-(RHMessage*) syncMessage:(RHMessage*) requestMessage
 {
-    RHJSONMessage* responseMessage = [self requestSync:REMOTEPATH_SERVICE_HTTP requestMessage:requestMessage];
+    RHMessage* responseMessage = [self requestSync:REMOTEPATH_SERVICE_HTTP requestMessage:requestMessage];
     
     return responseMessage;
 }
 
--(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread
+-(RHMessage*) syncMessage:(RHMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread
 {
-    RHJSONMessage* responseMessage = [self requestSync:REMOTEPATH_SERVICE_HTTP requestMessage:requestMessage syncInMainThread:syncInMainThread];
+    RHMessage* responseMessage = [self requestSync:REMOTEPATH_SERVICE_HTTP requestMessage:requestMessage syncInMainThread:syncInMainThread];
     
     return responseMessage;
 }
@@ -64,7 +64,7 @@
 #pragma mark - CBJSONMessageComm
 
 -(void) requestAsync:(NSString*) serviceTarget
-      requestMessage:(RHJSONMessage*) requestMessage
+      requestMessage:(RHMessage*) requestMessage
              success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON))success
              failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON))failure
 {
@@ -74,12 +74,12 @@
 }
 
 // Warning: This method CAN NOT be invoked in Main Thread!
--(RHJSONMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHJSONMessage*) requestMessage
+-(RHMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHMessage*) requestMessage
 {
     return [self requestSync:serviceTarget requestMessage:requestMessage syncInMainThread:NO];
 }
 
--(RHJSONMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread
+-(RHMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread
 {
     if (!syncInMainThread && [[NSThread currentThread] isMainThread])
     {
@@ -93,7 +93,7 @@
     
     [requestMessage setTimeStamp:startTimeStamp];
     
-    __block RHJSONMessage* responseMessage = nil;
+    __block RHMessage* responseMessage = nil;
     
     __block NSCondition* lock = [[NSCondition alloc] init];
     
@@ -101,7 +101,7 @@
     {
         NSDictionary* content = (NSDictionary*)JSON;
         content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
-        responseMessage = [RHJSONMessage constructWithContent:content enveloped:NO];
+        responseMessage = [RHMessage constructWithContent:content enveloped:NO];
         
         [lock lock];
         [lock signal];
@@ -112,7 +112,7 @@
     {
         NSDictionary* content = (NSDictionary*)JSON;
         content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
-        responseMessage = [RHJSONMessage constructWithContent:content enveloped:NO];
+        responseMessage = [RHMessage constructWithContent:content enveloped:NO];
         
         [lock lock];
         [lock signal];
@@ -130,7 +130,7 @@
     if (!flag)
     {
         [operation cancel];
-        responseMessage = [RHJSONMessage newServerTimeoutResponseMessage:requestMessage.messageSn];
+        responseMessage = [RHMessage newServerTimeoutResponseMessage:requestMessage.messageSn];
     }
     
     return responseMessage;

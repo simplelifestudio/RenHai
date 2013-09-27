@@ -10,7 +10,7 @@
 
 #import "CBJSONUtils.h"
 
-#import "RHJSONMessage.h"
+#import "RHMessage.h"
 
 #define SERIALIZE_KEY_LABELID @"impressLabel.labelId"
 #define SERIALIZE_KEY_ASSESSEDCOUNT @"impressLabel.assessedCount"

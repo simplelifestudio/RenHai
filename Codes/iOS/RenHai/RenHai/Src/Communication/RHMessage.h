@@ -109,6 +109,15 @@
 #define MESSAGE_KEY_STARTTIME @"startTime"
 #define MESSAGE_KEY_ENDTIME @"endTime"
 
+/*
+ Business Session Data Struct
+ */
+#define MESSAGE_KEY_BUSINESSSESSIONID @"businessSessionId"
+#define MESSAGE_KEY_BUSINESSTYPE @"businessType"
+#define MESSAGE_KEY_OPERATIONTYPE @"operationType"
+#define MESSAGE_KEY_OPERATIONINFO @"operationInfo"
+#define MESSAGE_KEY_OPERATIONVALUE @"operationValue"
+
 typedef enum
 {
     MessageType_Unkown = 0,
@@ -157,39 +166,39 @@ RHMessageErrorCode;
 
 typedef enum
 {
-    BusinessSessionPool_Random = 1,
-    BusinessSessionPool_Interest = 2
+    BusinessType_Random = 1,
+    BusinessType_Interest = 2
 }
-RHBusinessSessionPool;
+RHBusinessType;
 
 typedef enum
 {
-    AppBusinessSessionAction_EnterPool = 1,
-    AppBusinessSessionAction_LeavePool,
-    AppBusinessSessionAction_AgreeChat,
-    AppBusinessSessionAction_RejectChat,
-    AppBusinessSessionAction_EndChat,
-    AppBusinessSessionAction_AssessAndContinue,
-    AppBusinessSessionAction_AssessAndQuit
+    BusinessSessionRequestType_EnterPool = 1,
+    BusinessSessionRequestType__LeavePool,
+    BusinessSessionRequestType__AgreeChat,
+    BusinessSessionRequestType_RejectChat,
+    BusinessSessionRequestType_EndChat,
+    BusinessSessionRequestType_AssessAndContinue,
+    BusinessSessionRequestType_AssessAndQuit
 }
-RHAppBusinessSessionAction;
+BusinessSessionRequestType;
 
 typedef enum
 {
-    ServerBusinessSessionAction_SessionBinded = 1,
-    ServerBusinessSessionAction_OthersideRejected,
-    ServerBusinessSessionAction_OthersideAgreed,
-    ServerBusinessSessionAction_OthersideLost,
-    ServerBusinessSessionAction_OthersideEndChat = 5 // 临时使用
+    BusinessSessionNotificationType_SessionBinded = 1,
+    BusinessSessionNotificationType_OthersideRejected,
+    BusinessSessionNotificationType_OthersideAgreed,
+    BusinessSessionNotificationType_OthersideLost,
+    BusinessSessionNotificationType_OthersideEndChat = 5 // 临时使用
 }
-RHServerBusinessSessionAction;
+BusinessSessionNotificationType;
 
 typedef enum
 {
-    ProfileStatus_Banned = 0,
-    ProfileStatus_Normal = 1
+    BusinessSessionOperationValue_Failed = 0,
+    BusinessSessionOperationValue_Success = 1
 }
-RHProfileStatus;
+BusinessSessionOperationValue;
 
 typedef enum
 {
@@ -209,7 +218,7 @@ typedef enum
 }
 ServerDataSyncRequestType;
 
-@interface RHJSONMessage : NSObject <CBJSONable>
+@interface RHMessage : NSObject <CBJSONable>
 
 // MessageNeedEncrypt flag should be same with server side
 +(void) setMessageNeedEncrypt:(BOOL) encrypt;
@@ -217,22 +226,25 @@ ServerDataSyncRequestType;
 
 +(NSString*) generateMessageSn;
 
-+(RHJSONMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body enveloped:(BOOL) enveloped;
-+(RHJSONMessage*) constructWithContent:(NSDictionary*) content enveloped:(BOOL) enveloped;
-+(RHJSONMessage*) constructWithString:(NSString*) jsonString enveloped:(BOOL) enveloped;;
-+(RHMessageErrorCode) verify:(RHJSONMessage*) message;
++(RHMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body enveloped:(BOOL) enveloped;
++(RHMessage*) constructWithContent:(NSDictionary*) content enveloped:(BOOL) enveloped;
++(RHMessage*) constructWithString:(NSString*) jsonString enveloped:(BOOL) enveloped;;
++(RHMessageErrorCode) verify:(RHMessage*) message;
 
 +(NSDictionary*) constructMessageHeader:(RHMessageType) messageType messageId:(RHMessageId) messageId messageSn:(NSString*) messageSn deviceId:(NSInteger) deviceId deviceSn:(NSString*) deviceSn;
 
-+(RHJSONMessage*) newAlohaRequestMessage:(RHDevice*) device;
-+(RHJSONMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn;
++(RHMessage*) newAlohaRequestMessage:(RHDevice*) device;
++(RHMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn;
 
-+(RHJSONMessage*) newAppDataSyncRequestMessage:(AppDataSyncRequestType) type device:(RHDevice*) device;
++(RHMessage*) newAppDataSyncRequestMessage:(AppDataSyncRequestType) type device:(RHDevice*) device;
 
-+(RHJSONMessage*) newServerDataSyncRequestMessage:(ServerDataSyncRequestType) type device:(RHDevice*) device info:(NSDictionary*) info;
++(RHMessage*) newServerDataSyncRequestMessage:(ServerDataSyncRequestType) type device:(RHDevice*) device info:(NSDictionary*) info;
 
-+(BOOL) isServerTimeoutResponseMessage:(RHJSONMessage*) message;
-+(BOOL) isServerErrorResponseMessage:(RHJSONMessage*) message;
++(RHMessage*) newBusinessSessionRequestMessage:(NSString*) businessSessionId businessType:(RHBusinessType) businessType operationType:(BusinessSessionRequestType) operationType device:(RHDevice*) device info:(NSDictionary*) info;
++(RHMessage*) newBusinessSessionNotificationResponseMessage:(NSString*) businessSessionId businessType:(RHBusinessType) businessType operationType:(BusinessSessionNotificationType) operationType operationValue:(BusinessSessionOperationValue) operationValue device:(RHDevice*) device info:(NSDictionary*) info;
+
++(BOOL) isServerTimeoutResponseMessage:(RHMessage*) message;
++(BOOL) isServerErrorResponseMessage:(RHMessage*) message;
 
 @property (nonatomic) BOOL enveloped;
 @property (nonatomic, strong, readonly) NSDictionary* header;

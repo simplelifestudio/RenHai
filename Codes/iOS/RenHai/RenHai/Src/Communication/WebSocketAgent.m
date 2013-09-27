@@ -65,21 +65,21 @@
     _webSocket = nil;
 }
 
--(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread
+-(RHMessage*) syncMessage:(RHMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread
 {
-    RHJSONMessage* responseMessage = [self requestSync:SERVICE_TARGET_WEBSOCKET requestMessage:requestMessage syncInMainThread:syncInMainThread];
+    RHMessage* responseMessage = [self requestSync:SERVICE_TARGET_WEBSOCKET requestMessage:requestMessage syncInMainThread:syncInMainThread];
     
     return responseMessage;
 }
 
--(RHJSONMessage*) syncMessage:(RHJSONMessage*) requestMessage
+-(RHMessage*) syncMessage:(RHMessage*) requestMessage
 {
-    RHJSONMessage* responseMessage = [self requestSync:SERVICE_TARGET_WEBSOCKET requestMessage:requestMessage];
+    RHMessage* responseMessage = [self requestSync:SERVICE_TARGET_WEBSOCKET requestMessage:requestMessage];
     
     return responseMessage;
 }
 
--(void) asyncMessage:(RHJSONMessage*) requestMessage
+-(void) asyncMessage:(RHMessage*) requestMessage
 {
     NSString* jsonString = requestMessage.toJSONString;
     [self _sendJSONStringToWebSocket:jsonString];
@@ -88,12 +88,12 @@
 #pragma mark - CBJSONMessageComm
 
 // Warning: This method CAN NOT be invoked in Main Thread!
--(RHJSONMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHJSONMessage*) requestMessage
+-(RHMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHMessage*) requestMessage
 {
     return [self requestSync:serviceTarget requestMessage:requestMessage syncInMainThread:NO];
 }
 
--(RHJSONMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHJSONMessage*) requestMessage syncInMainThread:(BOOL)syncInMainThread
+-(RHMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHMessage*) requestMessage syncInMainThread:(BOOL)syncInMainThread
 {
     if (!syncInMainThread && [[NSThread currentThread] isMainThread])
     {
@@ -105,7 +105,7 @@
     NSDate* startTimeStamp = [NSDate date];
     NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
     
-    RHJSONMessage* responseMessage = nil;
+    RHMessage* responseMessage = nil;
     
     NSString* messageSn = requestMessage.messageSn;
     NSCondition* _messageLock = [self _newMessageLock:messageSn];
@@ -122,7 +122,7 @@
     
     if (!flag)
     {
-        responseMessage = [RHJSONMessage newServerTimeoutResponseMessage:messageSn];
+        responseMessage = [RHMessage newServerTimeoutResponseMessage:messageSn];
     }
     else
     {
@@ -153,7 +153,7 @@
     DDLogInfo(@"WebSocket Received Message Uncrypted: \"%@\"", message);
     
     NSDictionary* dic = [CBJSONUtils toJSONObject:message];
-    RHJSONMessage* jsonMessage = [RHJSONMessage constructWithContent:dic enveloped:YES];
+    RHMessage* jsonMessage = [RHMessage constructWithContent:dic enveloped:YES];
     
     DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", jsonMessage.toJSONString);
     
@@ -205,7 +205,7 @@
 
 -(void) _sendJSONStringToWebSocket:(NSString*) jsonString
 {
-    if ([RHJSONMessage isMessageNeedEncrypt])
+    if ([RHMessage isMessageNeedEncrypt])
     {
         jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:MESSAGE_SECURITY_KEY];
     }
@@ -278,7 +278,7 @@
     }
 }
 
--(void) _saveResponseMessage:(RHJSONMessage*) message
+-(void) _saveResponseMessage:(RHMessage*) message
 {
     if (nil != message && nil != message.messageSn && 0 < message.messageSn.length)
     {
@@ -289,9 +289,9 @@
     }
 }
 
--(RHJSONMessage*) _getResponseMessage:(NSString*) messageSn
+-(RHMessage*) _getResponseMessage:(NSString*) messageSn
 {
-    RHJSONMessage* message = nil;
+    RHMessage* message = nil;
     
     if (nil != messageSn && 0 < messageSn.length)
     {

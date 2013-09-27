@@ -12,7 +12,7 @@
 
 #import "CBJSONUtils.h"
 
-#import "RHJSONMessage.h"
+#import "RHMessage.h"
 
 #define SERIALIZE_KEY_CARDID @"interestCard.interestCardId"
 #define SERIALIZE_KEY_LABELLIST @"interestCard.interestLabelList"
