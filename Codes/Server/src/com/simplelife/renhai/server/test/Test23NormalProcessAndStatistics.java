@@ -37,9 +37,8 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 	public void setUp() throws Exception
 	{
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
-		mockApp1 = createNewMockApp();
-		mockApp2 = createNewMockApp();
-		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
+		mockApp1 = createNewMockApp(demoDeviceSn);
+		mockApp2 = createNewMockApp(demoDeviceSn2);
 	}
 	
 	/**
@@ -155,9 +154,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.VideoChat);
 		
 		// Step_11 Mock请求：查询所有统计项
-		mockApp1.clearLastReceivedCommand();
 		mockApp1.sendServerDataSyncRequest();
-		mockApp1.waitMessage();
 		
 		lastCmd = mockApp1.getLastReceivedCommand();
 		assertTrue(lastCmd != null);
@@ -183,9 +180,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Assess);
 		
 		// Step_14 Mock请求：查询所有统计项
-		mockApp1.clearLastReceivedCommand();
 		mockApp1.sendServerDataSyncRequest();
-		mockApp1.waitMessage();
 		
 		lastCmd = mockApp1.getLastReceivedCommand();
 		assertTrue(lastCmd != null);
@@ -207,9 +202,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		mockApp2.endChat();
 		
 		// Step_16 Mock请求：查询所有统计项
-		mockApp1.clearLastReceivedCommand();
 		mockApp1.sendServerDataSyncRequest();
-		mockApp1.waitMessage();
 		
 		lastCmd = mockApp1.getLastReceivedCommand();
 		assertTrue(lastCmd != null);

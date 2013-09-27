@@ -128,7 +128,7 @@ CREATE TABLE `impresscard` (
 -- ----------------------------
 DROP TABLE IF EXISTS `impresslabelmap`;
 CREATE TABLE `impresslabelmap` (
-  `impressLabelMaplId` int(11) NOT NULL,
+  `impressLabelMaplId` int(11) NOT NULL AUTO_INCREMENT,
   `impressCardId` int(11) NOT NULL,
   `globalImpressLabelId` int(11) NOT NULL,
   `assessedCount` int(11) NOT NULL,

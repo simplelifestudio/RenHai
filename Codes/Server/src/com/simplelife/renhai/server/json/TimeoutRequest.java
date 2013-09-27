@@ -11,6 +11,7 @@ package com.simplelife.renhai.server.json;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
@@ -34,7 +35,7 @@ public class TimeoutRequest extends AppJSONMessage
 	{
 		Impresscard card =  deviceWrapper.getDevice().getProfile().getImpresscard();
 		card.setChatLossCount(card.getChatLossCount() + 1);
-		DAOWrapper.cache(card);
+		DBModule.instance.cache(card);
 		
 		deviceWrapper.onTimeOut(null);
 	}

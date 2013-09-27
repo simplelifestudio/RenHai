@@ -32,7 +32,7 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 	public void setUp() throws Exception
 	{
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
-		mockApp = createNewMockApp();
+		mockApp = createNewMockApp(demoDeviceSn);
 	}
 	
 	/**
@@ -48,7 +48,10 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 	public void test()
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
+		
 		mockApp.syncDevice();
+		assertTrue(!mockApp.lastReceivedCommandIsError());
+		
 		String deviceSn = mockApp.getDeviceWrapper().getDeviceSn();
 		AbstractBusinessDevicePool randomPool = pool.getBusinessPool(Consts.BusinessType.Random);
 		
@@ -61,6 +64,7 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 		// Step_03 Mock请求：进入随机聊天
 		assertTrue(randomPool.getDevice(deviceSn) == null);
 		mockApp.enterPool(Consts.BusinessType.Random);
+		assertTrue(!mockApp.lastReceivedCommandIsError());
 		
 		// Step_04 调用：RandomBusinessDevicePool::getCount
 		//assertEquals(randomDeviceCount + 1.getElementCount());
@@ -83,6 +87,7 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 		// Step_07 调用：OnlineDevicePool::getCount
 		assertTrue(mockApp.getDeviceWrapper().getOwnerOnlineDevicePool() == null);
 		assertTrue(pool.getDevice(deviceSn) == null);
+		assertTrue(randomPool.getDevice(deviceSn) == null);
 		
 		// Step_08 调用：RandomBusinessDevicePool::getCount
 		assertTrue(randomPool.getDevice(deviceSn) == null);

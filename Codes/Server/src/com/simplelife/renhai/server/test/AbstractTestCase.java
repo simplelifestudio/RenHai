@@ -9,18 +9,24 @@
 
 package com.simplelife.renhai.server.test;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import junit.framework.TestCase;
 
+import com.simplelife.renhai.server.db.DBModule;
+import com.simplelife.renhai.server.db.DeviceDAO;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 /**
@@ -29,62 +35,53 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 public abstract class AbstractTestCase extends TestCase
 {
 	protected Logger logger = LoggerFactory.getLogger(AbstractTestCase.class);
-	private final String demoDeviceSn = "demoDeviceSn"; 
+	protected final String demoDeviceSn = "demoDeviceSn"; 
+	protected final String demoDeviceSn2 = "demoDeviceSn2";
 	
 	public AbstractTestCase()
 	{
 		
 	}
 	
-	/**
-	 * Create new device in pool, and bind with mock app with SN: demoDeviceSn
-	 * @return
-	 */
-	public LocalMockApp createDemoMockApp()
+	private Device loadDevice(String deviceSn)
 	{
-		LocalMockApp app = createNewMockApp();
-		app.getDeviceWrapper().getDevice().setDeviceSn(demoDeviceSn);
-		return app;
+		DeviceDAO deviceDAO = new DeviceDAO();
+		List<Device> cardList = deviceDAO.findByDeviceSn(deviceSn);
+		if (cardList.size() == 0 )
+		{
+			return null;
+		}
+
+		Device device = cardList.get(0);
+		return device;
 	}
+
 	
 	/**
 	 * Create new device in pool, and bind with mock App with random device SN
 	 */
-	public LocalMockApp createNewMockApp()
+	public LocalMockApp createNewMockApp(String deviceSn)
 	{
-		// Create new impress card
-		Impresscard impressCard = new Impresscard();
-		impressCard.setChatLossCount(0);
-		impressCard.setChatTotalCount(0);
-		impressCard.setChatTotalDuration(0);
+		if (deviceSn == null || deviceSn.length() == 0)
+		{
+			deviceSn = CommonFunctions.getRandomString(24);
+		}
 		
-		// Create new interest card
-		Interestcard interestCard = new Interestcard();
+		MockWebSocketConnection conn = new MockWebSocketConnection();
+		LocalMockApp mockApp = new LocalMockApp(conn);
 		
-		// Create new profile
-		Profile profile = new Profile();
-		long now = System.currentTimeMillis();
-		profile.setLastActivityTime(now);
-		profile.setCreateTime(now);
-		profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
-		
-		// Bind profile with cards
-		interestCard.setProfile(profile);
-		impressCard.setProfile(profile);
-		
-		// Create new deviceCard
-		Devicecard deviceCard = new Devicecard();
-		deviceCard.setRegisterTime(now);
-		
-		// Create Device object and bind with cards
-		Device device = new Device();
-		device.setDevicecard(deviceCard);
-		device.setProfile(profile);
+		Device device = loadDevice(deviceSn);
+		if (device == null)
+		{
+			mockApp.stopTimer();
+			device =  mockApp.createNewDevice(deviceSn);	
+		}
 		
 		// Bind DeviceWrapper with Device
-		MockWebSocketConnection conn = new MockWebSocketConnection();
+		
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = pool.newDevice(conn);
+		conn.bind(deviceWrapper);
 		
 		if (deviceWrapper == null)
 		{
@@ -92,7 +89,6 @@ public abstract class AbstractTestCase extends TestCase
 		}
 		
 		deviceWrapper.setDevice(device);
-		LocalMockApp mockApp = new LocalMockApp(conn);
 		mockApp.bindDeviceWrapper(deviceWrapper);
 		return mockApp;
 	}

@@ -55,7 +55,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 		// Step_01 调用：OnlineDevicePool::getCount
 		
 		// Step_02 调用：OnlineDevicePool::setCapacity
-		mockApp1 = createNewMockApp();
+		mockApp1 = createNewMockApp(demoDeviceSn);
 		int deviceCount;
 		synchronized(pool)
 		{
@@ -63,7 +63,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 			pool.setCapacity(deviceCount);
 		}
 		
-		mockApp2 = createNewMockApp();
+		mockApp2 = createNewMockApp(demoDeviceSn2);
 		
 		assertTrue(mockApp1 != null);
 		assertTrue(mockApp2 == null);
@@ -72,13 +72,13 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 		
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		
-		
 		// Step_03 调用：DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.Init, deviceWrapper1.getBusinessStatus());
 		
 		// Step_04 Mock请求：A设备同步
 		long lastActivity = deviceWrapper1.getLastActivityTime().getTime();
 		mockApp1.syncDevice();
+		assertTrue(!mockApp1.lastReceivedCommandIsError());
 		
 		// Step_05 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper1.getBusinessStatus());

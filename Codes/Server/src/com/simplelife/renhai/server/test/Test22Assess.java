@@ -31,8 +31,8 @@ public class Test22Assess extends AbstractTestCase
 	public void setUp() throws Exception
 	{
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
-		mockApp1 = createNewMockApp();
-		mockApp2 = createNewMockApp();
+		mockApp1 = createNewMockApp(demoDeviceSn);
+		mockApp2 = createNewMockApp(demoDeviceSn2);
 	}
 	
 	@After

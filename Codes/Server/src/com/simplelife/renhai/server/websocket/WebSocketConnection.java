@@ -127,8 +127,19 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 	@Override
 	protected void onTextMessage(CharBuffer message) throws IOException
 	{
-		String strMessage = message.toString().trim();
-		onTextMessage(strMessage);
+		try
+		{
+			String strMessage = message.toString().trim();
+			onTextMessage(strMessage);
+		}
+		catch(Exception e)
+		{
+			AppJSONMessage appMessage;
+			logger.error("Exception caught in WebSocketConnection.onTextMessage!");
+			appMessage = new InvalidRequest(null);
+			appMessage.setErrorCode(Consts.GlobalErrorCode.DBException_1001);
+			appMessage.setErrorDescription("Server internal error.");
+		}
 	}
     
     @Override
@@ -220,7 +231,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onOpen(WsOutbound outbound)
     {
-    	WebSocketModule.instance.getLogger().debug("onOpen triggered");
+    	WebSocketModule.instance.getLogger().debug("WebSocketConnection onOpen triggered");
         super.onOpen(outbound);
     }
     
@@ -251,14 +262,14 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onPong(ByteBuffer payload)
     {
-    	WebSocketModule.instance.getLogger().debug("onPong triggered");
+    	WebSocketModule.instance.getLogger().debug("WebSocketConnection onPong triggered");
     	super.onPong(payload);
     }
     
     @Override
     public void onClose(int status)
     {
-    	WebSocketModule.instance.getLogger().debug("onClose triggered");
+    	WebSocketModule.instance.getLogger().debug("WebSocketConnection onClose triggered");
     	connectionOwner.onClose(this);
     	super.onClose(status);
     }

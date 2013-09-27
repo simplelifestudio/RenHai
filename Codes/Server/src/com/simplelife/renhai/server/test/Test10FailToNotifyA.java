@@ -34,8 +34,7 @@ public class Test10FailToNotifyA extends AbstractTestCase
 	public void setUp() throws Exception
 	{
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
-		mockApp1 = createNewMockApp();
-		mockApp2 = createNewMockApp();
+		mockApp1 = createNewMockApp(demoDeviceSn);
 		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
 	}
 	
@@ -65,7 +64,10 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		MockWebSocketConnection connection1 = (MockWebSocketConnection) deviceWrapper1.getConnection();
 		
 		mockApp1.syncDevice();
+		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		
 		mockApp2.syncDevice();
+		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		int deviceCount = onlinePool.getElementCount();
@@ -85,7 +87,9 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		
 		// Step_06 Mock请求：A进入随机聊天
 		assertTrue(randomPool.getDevice(deviceSn1) == null);
+		
 		mockApp1.enterPool(Consts.BusinessType.Random);
+		assertTrue(!mockApp1.lastReceivedCommandIsError());
 		assertTrue(randomPool.getDevice(deviceSn1) != null);
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
@@ -93,9 +97,6 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		
 		// Step_11 调用：MockWebSocketConnection::disableConnection，禁用A的通信功能
 		connection1.disableConnection();
-		
-		mockApp1.clearLastReceivedCommand();
-		mockApp2.clearLastReceivedCommand();
 		
 		// Step_07 Mock请求：B进入随机聊天
 		assertTrue(randomPool.getDevice(deviceSn2) == null);
@@ -106,19 +107,11 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		//assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper2.getBusinessStatus());
 		
 		// Step_10 调用：RandomBusinessDevicePool::getCount
-		logger.debug("Device count of random pool after B entered: {}", randomPool.getElementCount());
-		if (deviceWrapper1.getOwnerOnlineDevicePool() == null)
-		{
-			assertEquals(randomDeviceCount + 1, randomPool.getElementCount());
-		}
-		else
-		{
-			assertEquals(randomDeviceCount + 2, randomPool.getElementCount());
-		}
+		assertEquals(randomDeviceCount + 2, randomPool.getElementCount());
 		randomDeviceCount = randomPool.getElementCount();
 		
 		// Step_12 调用：RandomBusinessScheduler::schedule
-		//businessPool.getBusinessScheduler().schedule();
+		randomPool.getBusinessScheduler().schedule();
 		
 		// Step_13 调用：BusinessSessionPool::getCount
 		if (randomPool.getDeviceCountInChat() > 0)

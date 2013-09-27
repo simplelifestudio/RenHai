@@ -32,7 +32,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 	public void setUp() throws Exception
 	{
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
-		mockApp = createNewMockApp();
+		mockApp = createNewMockApp(demoDeviceSn);
 	}
 	
 	/**
@@ -55,6 +55,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 		
 		// Step_02 Mock请求：设备同步
 		mockApp.syncDevice();
+		assertTrue(!mockApp.lastReceivedCommandIsError());
 		
 		// Step_03 调用：DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper.getBusinessStatus());
@@ -77,6 +78,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 		// Step_06 Mock事件：onPing
 		//mockApp.ping();
 		
+		assertTrue(mockApp.getDeviceWrapper().getOwnerOnlineDevicePool() == null);
 		// Step_07 调用：OnlineDevicePool::getCount
 		assertEquals(deviceCount-1, pool.getElementCount());
 	}

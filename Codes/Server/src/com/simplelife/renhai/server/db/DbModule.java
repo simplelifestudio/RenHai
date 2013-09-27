@@ -24,6 +24,11 @@ public class DBModule extends AbstractModule
 		logger = LoggerFactory.getLogger(DBModule.class);
 	}
 	
+	
+	public void cache(Object obj)
+	{
+		DAOWrapper.cache(obj);
+	}
 	public final static DBModule instance = new DBModule();
 	
 }

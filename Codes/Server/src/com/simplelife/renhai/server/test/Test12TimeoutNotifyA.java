@@ -35,9 +35,8 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 	public void setUp() throws Exception
 	{
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
-		mockApp1 = createNewMockApp();
-		mockApp2 = createNewMockApp();
-		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
+		mockApp1 = createNewMockApp(demoDeviceSn);
+		mockApp2 = createNewMockApp(demoDeviceSn2);
 	}
 	
 	/**
@@ -58,8 +57,12 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;  
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
+		
 		mockApp1.syncDevice();
+		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		
 		mockApp2.syncDevice();
+		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		int deviceCount = onlinePool.getElementCount();
@@ -78,9 +81,14 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.enterPool(Consts.BusinessType.Random);
+		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		
+		businessPool.getBusinessScheduler().stopScheduler();
+		mockApp1.stopAutoReply();
 		
 		// Step_07 Mock请求：B进入随机聊天
 		mockApp2.enterPool(Consts.BusinessType.Random);
+		assertTrue(!mockApp2.lastReceivedCommandIsError());
 
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
@@ -93,7 +101,8 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		randomDeviceCount = businessPool.getElementCount();
 
 		// Step_11 调用：RandomBusinessScheduler::schedule
-		//businessPool.getBusinessScheduler().schedule();
+		assertEquals(sessionCount, sessionPool.getElementCount());
+		businessPool.getBusinessScheduler().schedule();
 		
 		// Step_12 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
@@ -108,7 +117,7 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		// Step_15 Mock事件：A timeOut
 		try
 		{
-			Thread.sleep(GlobalSetting.TimeOut.ChatConfirm * 1000 + 1000);
+			Thread.sleep(GlobalSetting.TimeOut.ChatConfirm + 1000);
 		}
 		catch (InterruptedException e)
 		{
@@ -128,6 +137,6 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		assertEquals(sessionCount + 1, sessionPool.getElementCount());
 		
 		// Step_20 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper2.getBusinessStatus());
 	}
 }

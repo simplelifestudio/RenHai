@@ -34,9 +34,8 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 	public void setUp() throws Exception
 	{
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
-		mockApp1 = createNewMockApp();
-		mockApp2 = createNewMockApp();
-		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
+		mockApp1 = createNewMockApp(demoDeviceSn);
+		mockApp2 = createNewMockApp(demoDeviceSn2);
 	}
 	
 	/**
@@ -62,7 +61,10 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		MockWebSocketConnection connection1 = getMockWebSocket(deviceWrapper1);
 		MockWebSocketConnection connection2 = getMockWebSocket(deviceWrapper2);
 		mockApp1.syncDevice();
+		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		
 		mockApp2.syncDevice();
+		assertTrue(!mockApp2.lastReceivedCommandIsError());
 
 		
 		// Step_01 调用：OnlineDevicePool::getCount
@@ -82,9 +84,13 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.enterPool(Consts.BusinessType.Random);
+		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		
+		businessPool.getBusinessScheduler().stopScheduler();
 		
 		// Step_07 Mock请求：B进入随机聊天
 		mockApp2.enterPool(Consts.BusinessType.Random);
+		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
@@ -103,11 +109,10 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		connection2.disableConnection();
 		
 		// Step_13 调用：RandomBusinessScheduler::schedule
-		//businessPool.getBusinessScheduler().schedule();
+		businessPool.getBusinessScheduler().schedule();
 		
 		// Step_14 调用：BusinessSessionPool::getCount
-		assertEquals(sessionCount - 1, sessionPool.getElementCount());
-		sessionCount = sessionPool.getElementCount();
+		assertEquals(sessionCount, sessionPool.getElementCount());
 		
 		// Step_15 Mock事件：A的通信被禁用掉后，抛出IOException
 		// Step_16 Mock事件：B的通信被禁用掉后，抛出IOException
@@ -119,9 +124,9 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_19 调用：OnlineDevicePool::getCount
-		assertEquals(deviceCount - 1, onlinePool.getElementCount());
+		assertEquals(deviceCount - 2, onlinePool.getElementCount());
 		
 		// Step_20 调用：BusinessSessionPool::getCount
-		assertEquals(sessionCount + 1, sessionPool.getElementCount());
+		assertEquals(sessionCount, sessionPool.getElementCount());
 	}
 }

@@ -112,7 +112,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     	JSONObject header = getHeader();
     	if (header == null)
     	{
-    		setErrorDescription("Invalid request: " + JSONKey.Header+ " can't be found in request");
+    		setErrorDescription("Invalid request: " + JSONKey.Header + " can't be found in request");
     		setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
     		logger.error(errorDescription);
     		return false;

@@ -19,6 +19,12 @@ public abstract class AbstractModule implements IModule
 {
 	protected Logger logger;
 	protected AbstractModule instance;
+	protected boolean moduleAvailable = false;;
+	
+	public boolean isAvailable()
+	{
+		return moduleAvailable;
+	}
 	
 	public Logger getLogger()
 	{
@@ -33,6 +39,7 @@ public abstract class AbstractModule implements IModule
     /** */
     public void startService()
     {
+    	moduleAvailable = true;
     }
     
     /** */
@@ -48,6 +55,7 @@ public abstract class AbstractModule implements IModule
     /** */
     public void stopService()
     {
+    	moduleAvailable = false;
     }
     
     /** */

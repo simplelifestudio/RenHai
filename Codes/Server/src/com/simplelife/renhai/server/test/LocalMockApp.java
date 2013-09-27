@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
@@ -60,9 +61,7 @@ public class LocalMockApp extends AbstractMockApp
 		// Add command body
 		body.put(JSONKey.Content, "Hello Server!");
 		
-		JSONObject envelopeObj = new JSONObject();
-		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
-		sendRawJSONMessage(envelopeObj, true);
+		sendRawJSONMessage(jsonObject, true);
 	}
 	
 	/** */
@@ -85,9 +84,7 @@ public class LocalMockApp extends AbstractMockApp
 			body.put(JSONKey.DataUpdate, updateObj);
 		}
 		
-		JSONObject envelopeObj = new JSONObject();
-		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
-		sendRawJSONMessage(envelopeObj, true);
+		sendRawJSONMessage(jsonObject, true);
 	}
 	
 	/** */
@@ -121,9 +118,7 @@ public class LocalMockApp extends AbstractMockApp
 		body.put(JSONKey.DeviceCapacity, deviceCapacityObj);
 		body.put(JSONKey.InterestLabelList, interestObj);
 		
-		JSONObject envelopeObj = new JSONObject();
-		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
-		sendRawJSONMessage(envelopeObj, true);
+		sendRawJSONMessage(jsonObject, true);
 	}
 	
 	@Override
@@ -140,7 +135,10 @@ public class LocalMockApp extends AbstractMockApp
 	@Override
 	public void sendRawJSONMessage(JSONObject jsonObject, boolean syncSend)
 	{
-		String message = JSON.toJSONString(jsonObject, SerializerFeature.WriteMapNullValue);
+		JSONObject envelopeObj = new JSONObject();
+		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
+		
+		String message = JSON.toJSONString(envelopeObj, SerializerFeature.WriteMapNullValue);
 		logger.debug("Device <{}> send message: \n" + message, getDeviceWrapper().getDeviceSn());
 		if (!syncSend)
 		{
@@ -206,9 +204,7 @@ public class LocalMockApp extends AbstractMockApp
 		body.put(JSONKey.OperationType, operationType.getValue());
 		body.put(JSONKey.OperationValue, null);
 		
-		JSONObject envelopeObj = new JSONObject();
-		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
-		sendRawJSONMessage(envelopeObj, false);
+		sendRawJSONMessage(jsonObject, false);
 	}
 	
 	/** */
@@ -229,9 +225,7 @@ public class LocalMockApp extends AbstractMockApp
 		body.put(JSONKey.OperationInfo, CommonFunctions.getJSONValue(operationInfo));
 		body.put(JSONKey.OperationValue, CommonFunctions.getJSONValue(operationValue));
 		
-		JSONObject envelopeObj = new JSONObject();
-		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
-		sendRawJSONMessage(envelopeObj, true);
+		sendRawJSONMessage(jsonObject, true);
 	}
 	
 	/** */
@@ -319,11 +313,11 @@ public class LocalMockApp extends AbstractMockApp
 		
 		if (continueFlag)
 		{
-			sendBusinessSessionRequest(Consts.OperationType.AssessAndContinue, "", obj.toJSONString());
+			sendBusinessSessionRequest(Consts.OperationType.AssessAndContinue, "", JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue));
 		}
 		else
 		{
-			sendBusinessSessionRequest(Consts.OperationType.AssessAndQuit, "", obj.toJSONString());
+			sendBusinessSessionRequest(Consts.OperationType.AssessAndQuit, "", JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue));
 		}
 	}
 	
@@ -337,6 +331,11 @@ public class LocalMockApp extends AbstractMockApp
 		logger.debug("Device<{}> received command: \n" + obj.toJSONString(), getDeviceWrapper().getDeviceSn());
 		
 		// Check if it's notification, and respose if it is
+		if (!autoReply)
+		{
+			return;
+		}
+		
 		JSONObject header = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
 		if (header.containsKey(JSONKey.MessageId))
 		{

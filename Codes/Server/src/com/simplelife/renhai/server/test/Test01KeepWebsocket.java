@@ -47,7 +47,7 @@ public class Test01KeepWebsocket extends AbstractTestCase
 		int deviceCount = pool.getElementCount();
 		
 		// Step_03 调用：OnlineDevicePool::newDevice
-		mockApp = createNewMockApp();
+		mockApp = createNewMockApp(demoDeviceSn);
 		
 		// Step_04 调用：OnlineDevicePool::getCount
 		assertEquals(pool.getElementCount(), deviceCount + 1);

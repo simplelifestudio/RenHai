@@ -210,7 +210,14 @@ public class ServerDataSyncRequest extends AppJSONMessage
 				hotLabelObj.add(label.getName());
 			}
 			//responseObj.addToBody(JSONKey.CurrentHotLabels, );
-			// TODO:
+			// TODO: 引入新的结构保存热门标签的计数/排序
+		}
+		
+		if (hotObj.containsKey(JSONKey.History))
+		{
+			JSONArray hotLabelObj = new JSONArray();
+			hotObj.put(JSONKey.History, hotLabelObj);
+			// TODO: 
 		}
 	}
 	

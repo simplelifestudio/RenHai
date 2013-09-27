@@ -38,7 +38,7 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 	public void setUp() throws Exception
 	{
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
-		mockApp = createDemoMockApp();
+		mockApp = createNewMockApp(demoDeviceSn);
 	}
 	
 	/**
@@ -58,8 +58,7 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
 		Devicecard deviceCard = deviceWrapper.getDevice().getDevicecard();
 		
-		DeviceDAO dao = new DeviceDAO();
-		Device device = dao.findByDeviceSn(deviceWrapper.getDeviceSn()).get(0);
+		Device device = mockApp.getDeviceWrapper().getDevice();
 		String deviceId = String.valueOf(device.getDeviceId()); 
 		
 		// Step_01 数据库操作：将设备A的服务状态更新为禁聊，到期日期为明年
@@ -78,6 +77,7 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 		// Step_04 Mock请求：设备同步
 		long lastActivity = deviceWrapper.getLastActivityTime().getTime();
 		mockApp.syncDevice();
+		assertTrue(mockApp.lastReceivedCommandIsError());
 		
 		// Step_05 调用：OnlineDevicePool::getCount
 		//assertEquals(deviceCount - 1, pool.getElementCount());
@@ -86,5 +86,11 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 		// Step_06 调用：DeviceWrapper::getLastActivityTime
 		assertTrue(deviceWrapper.getLastActivityTime().getTime() > lastActivity);
 		assertEquals(Consts.BusinessStatus.Init, deviceWrapper.getBusinessStatus());
+		
+		sql = "update " + TableName.Profile 
+				+ " set " + TableColumnName.ServiceStatus + " = '" + Consts.ServiceStatus.Normal.name() + "', "
+				+ TableColumnName.UnbanDate + " = null "
+				+ " where " + TableColumnName.DeviceId + " = " + deviceId;
+		DAOWrapper.executeSql(sql);
 	}
 }

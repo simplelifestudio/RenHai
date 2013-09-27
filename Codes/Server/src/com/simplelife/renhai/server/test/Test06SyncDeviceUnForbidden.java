@@ -40,7 +40,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 	public void setUp() throws Exception
 	{
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
-		mockApp = createDemoMockApp();
+		mockApp = createNewMockApp(demoDeviceSn);
 	}
 	
 	/**
@@ -59,11 +59,10 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
 		Devicecard deviceCard = deviceWrapper.getDevice().getDevicecard();
 		
-		DeviceDAO dao = new DeviceDAO();
-		Device device = dao.findByDeviceSn(deviceWrapper.getDeviceSn()).get(0);
+		Device device = mockApp.getDeviceWrapper().getDevice();
 		String deviceId = String.valueOf(device.getDeviceId()); 
 		
-		// Step_01 数据库操作：将设备A的服务状态更新为禁聊，到期日期为明年
+		// Step_01 数据库操作：将设备A的服务状态更新为禁聊，到期日期为明天
 		String sql = "update " + TableName.Profile 
 				+ " set " + TableColumnName.ServiceStatus + " = '" + Consts.ServiceStatus.Banned.name() + "', "
 				+ TableColumnName.UnbanDate + " = " + DateUtil.getDateByDayBack(1).getTime()
@@ -80,6 +79,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		
 		long lastActivity = deviceWrapper.getLastActivityTime().getTime();
 		mockApp.syncDevice();
+		assertTrue(!mockApp.lastReceivedCommandIsError());
 		
 		// Step_05 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper.getBusinessStatus());

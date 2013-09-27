@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.test;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -19,8 +20,12 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
+import com.simplelife.renhai.server.db.Impresscard;
+import com.simplelife.renhai.server.db.Interestcard;
+import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -60,15 +65,57 @@ public abstract class AbstractMockApp implements IMockApp
     protected JSONObject jsonObject = new JSONObject();
     protected JSONObject header = new JSONObject();
     protected JSONObject body = new JSONObject();
-    
-    
-	private String OSVersion = "iOS 6.1.2";
-	private String AppVersion = "0.1";
-	private String Location = "22.511962,113.380301";
-	private String DeviceModel = "iPhone6";
 	
 	protected Lock lock = new ReentrantLock();
 	protected Condition condition = lock.newCondition();
+	
+	protected String OSVersion = "iOS 6.1.2";
+	protected String AppVersion = "0.1";
+	protected String Location = "22.511962,113.380301";
+	protected String DeviceModel = "iPhone6";
+	
+	protected boolean autoReply = true;
+	
+	public Device createNewDevice(String deviceSn)
+	{
+		// Create new impress card
+		Impresscard impressCard = new Impresscard();
+		impressCard.setChatLossCount(0);
+		impressCard.setChatTotalCount(0);
+		impressCard.setChatTotalDuration(0);
+		
+		// Create new interest card
+		Interestcard interestCard = new Interestcard();
+		
+		// Create new profile
+		Profile profile = new Profile();
+		long now = System.currentTimeMillis();
+		profile.setLastActivityTime(now);
+		profile.setCreateTime(now);
+		profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
+		
+		// Bind profile with cards
+		interestCard.setProfile(profile);
+		impressCard.setProfile(profile);
+		
+		// Create new deviceCard
+		Devicecard deviceCard = new Devicecard();
+		deviceCard.setRegisterTime(now);
+		deviceCard.setOsVersion(OSVersion);
+		deviceCard.setAppVersion(AppVersion);
+		deviceCard.setIsJailed(Consts.YesNo.No.toString());
+		deviceCard.setLocation(Location);
+		deviceCard.setDeviceModel(DeviceModel);
+		
+		// Create Device object and bind with cards
+		Device device = new Device();
+		device.setDevicecard(deviceCard);
+		device.setProfile(profile);
+		device.setDeviceSn(deviceSn);
+		
+		DBModule.instance.cache(device);
+		return device;
+	}
 	
 	public String getOSVersion()
 	{
@@ -122,6 +169,15 @@ public abstract class AbstractMockApp implements IMockApp
     	return lastReceivedCommand;
     }
     
+    public boolean lastReceivedCommandIsError()
+    {
+    	JSONObject header = lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope)
+    			.getJSONObject(JSONKey.Header);
+    	int messageId = header.getIntValue(JSONKey.MessageId);
+    	return (messageId == Consts.MessageId.ServerErrorResponse.getValue());
+    }
+    
+    
     public AbstractMockApp()
     {
     	startTimer();
@@ -129,7 +185,7 @@ public abstract class AbstractMockApp implements IMockApp
 
     public void startTimer()
     {
-    	this.pingTimer.scheduleAtFixedRate(new PingTask(this), DateUtil.getNowDate(), GlobalSetting.TimeOut.PingInterval);
+    	this.pingTimer.scheduleAtFixedRate(new PingTask(this), new Date(System.currentTimeMillis() + 5000), GlobalSetting.TimeOut.PingInterval);
     }
     
     public void stopTimer()
@@ -156,16 +212,6 @@ public abstract class AbstractMockApp implements IMockApp
     public void bindDeviceWrapper(IDeviceWrapper deviceWrapper)
     {
     	this.deviceWrapper = deviceWrapper;
-    	
-    	Device device = deviceWrapper.getDevice();
-    	device.setDeviceSn(CommonFunctions.getRandomString(20));
-    	
-    	Devicecard card = deviceWrapper.getDevice().getDevicecard();
-		card.setOsVersion(OSVersion);
-		card.setAppVersion(AppVersion);
-		card.setIsJailed(Consts.YesNo.No.toString());
-		card.setLocation(Location);
-		card.setDeviceModel(DeviceModel);
     }
     
     public IDeviceWrapper getDeviceWrapper()
@@ -190,5 +236,15 @@ public abstract class AbstractMockApp implements IMockApp
 			e.printStackTrace();
 		}
     	lock.unlock();
+    }
+    
+    public void startAutoReply()
+    {
+    	autoReply = true;
+    }
+    
+    public void stopAutoReply()
+    {
+    	autoReply = false;
     }
 }

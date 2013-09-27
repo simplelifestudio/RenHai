@@ -37,9 +37,8 @@ public class Test13FailToNotifyB extends AbstractTestCase
 	public void setUp() throws Exception
 	{
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
-		mockApp1 = createNewMockApp();
-		mockApp2 = createNewMockApp();
-		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
+		mockApp1 = createNewMockApp(demoDeviceSn);
+		mockApp2 = createNewMockApp(demoDeviceSn2);
 	}
 	
 	/**
@@ -64,7 +63,10 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		MockWebSocketConnection connection2 = getMockWebSocket(deviceWrapper2);
 		
 		mockApp1.syncDevice();
+		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		
 		mockApp2.syncDevice();
+		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		int deviceCount = onlinePool.getElementCount();
@@ -84,6 +86,7 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.enterPool(Consts.BusinessType.Random);
 		
+		businessPool.getBusinessScheduler().stopScheduler();
 		// Step_07 Mock请求：B进入随机聊天
 		mockApp2.enterPool(Consts.BusinessType.Random);
 		
@@ -98,7 +101,8 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		randomDeviceCount = businessPool.getElementCount();
 		
 		// Step_12 调用：RandomBusinessScheduler::schedule
-		//businessPool.getBusinessScheduler().schedule();
+		connection2.disableConnection();
+		businessPool.getBusinessScheduler().schedule();
 		
 		// Step_13 Mock事件：B的通信被禁用掉后，抛出IOException
 		// Step_14 调用：BusinessSessionPool::getCount
@@ -109,19 +113,11 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
 		
 		// Step_16 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
+		assertTrue(OnlineDevicePool.instance.getDevice(demoDeviceSn2) == null);
+		assertTrue(businessPool.getDevice(demoDeviceSn2) == null);
 		
 		// Step_17 调用：BusinessSession::getStatus
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
-		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
-		
-		// Step_11 调用：MockWebSocketConnection::disableConnection，禁用B的通信功能
-		connection2.disableConnection();
-				
-		// Step_18 Mock事件：A确认绑定
-		mockApp1.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
-		
-		// Step_19 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
 		// Step_20 调用：A DeviceWrapper::getBusinessStatus
@@ -131,7 +127,7 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
 		
 		// Step_22 Mock事件：A同意聊天
-		mockApp1.chatConfirm(true);
+		//mockApp1.chatConfirm(true);
 		
 		// Step_23 Mock事件：A onPing
 		//mockApp1.ping();

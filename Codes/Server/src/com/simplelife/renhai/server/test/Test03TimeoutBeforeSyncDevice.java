@@ -43,7 +43,7 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 		// Step_01 创建MockWebSocketConnection对象
 		
 		// Step_02 调用：OnlineDevicePool::newDevice
-		mockApp = createNewMockApp();
+		mockApp = createNewMockApp(demoDeviceSn);
 		String connectionId = mockApp.getConnectionId();
 		
 		//String deviceSn = mockApp.getDeviceWrapper().getDeviceSn();

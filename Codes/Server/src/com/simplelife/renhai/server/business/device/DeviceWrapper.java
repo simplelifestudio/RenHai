@@ -46,7 +46,7 @@ import com.simplelife.renhai.server.util.JSONKey;
 /** */
 public class DeviceWrapper implements IDeviceWrapper, INode
 {
-	private class SyncSendMessageTask implements Runnable
+	private class SyncSendMessageTask extends Thread
 	{
 		private DeviceWrapper device;
 		private ServerJSONMessage message;
@@ -263,18 +263,29 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     public void onJSONCommand(AppJSONMessage command)
     {
     	this.updateActivityTime();
-    	
-    	if (this.businessStatus == Consts.BusinessStatus.Init)
+    	if (this.ownerOnlinePool == null 
+    			|| this.businessStatus == Consts.BusinessStatus.Init)
     	{
     		Consts.MessageId messageId =  command.getMessageId();
     		if (messageId != Consts.MessageId.AlohaRequest 
-    				&& messageId != Consts.MessageId.AppDataSyncRequest)
+    				&& messageId != Consts.MessageId.AppDataSyncRequest
+    				&& messageId != Consts.MessageId.TimeoutRequest
+    				&& messageId != Consts.MessageId.Invalid)
     		{
     			command = new InvalidRequest(command.getJSONObject());
     			command.setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
-    			command.setErrorDescription("Command is not supported before APP data synchronized");
+    			
+    			if (ownerOnlinePool == null)
+    			{
+    				command.setErrorDescription("No request is allowed if connection has been released, please synchronize device again.");
+    			}
+    			else
+    			{
+    				command.setErrorDescription("Command is not supported before device is synchonized.");
+    			}
     		}
     	}
+
     	command.bindDeviceWrapper(this);
         (new Thread(command)).run();
     }
@@ -304,7 +315,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     @Override
     public void onTimeOut(IBaseConnection conection)
     {
-        this.ownerOnlinePool.deleteDevice(this);
+    	if (ownerOnlinePool != null)
+    	{
+    		ownerOnlinePool.deleteDevice(this);
+    	}
     }
 
     public void syncSendMessageByThread(ServerJSONMessage message)
@@ -329,7 +343,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     @Override
     public void syncSendMessage(ServerJSONMessage message)
     {
-    	(new SyncSendMessageTask(this, message)).run();
+    	(new SyncSendMessageTask(this, message)).start();
     }
 
     @Override

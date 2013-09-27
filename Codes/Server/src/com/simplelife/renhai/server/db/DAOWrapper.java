@@ -14,6 +14,7 @@ package com.simplelife.renhai.server.db;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -21,6 +22,7 @@ import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDbCache;
 
@@ -28,6 +30,16 @@ import com.simplelife.renhai.server.util.IDbCache;
 /** */
 public class DAOWrapper
 {
+	private static class FlushTask extends TimerTask
+	{
+		@Override
+		public void run()
+		{
+			logger.debug("Start to flush DB cache");
+			DAOWrapper.flushToDB();
+			logger.debug("Finished flush DB cache");
+		}
+	}
 	private static Logger logger = BusinessModule.instance.getLogger();
     /** */
     protected static LinkedList<Object> linkToBeSaved;
@@ -35,14 +47,36 @@ public class DAOWrapper
     /** */
     protected static Timer timer;
     
+    
+    public static void startTimers()
+    {
+    	timer.scheduleAtFixedRate(new FlushTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.FlushCacheToDB);
+    }
+    
+    public static void stopTimers()
+    {
+    	timer.cancel();
+    }
+    
     public static void cache(Object obj)
     {
     	if (GlobalSetting.DBSetting.CacheEnabled)
     	{
     		synchronized(linkToBeSaved)
         	{
+	    		if (linkToBeSaved.size() >= GlobalSetting.DBSetting.MaxRecordCountForDiscard)
+	    		{
+	    			logger.error("The first records was discarded due to DB module is unavailable and cache is full!!!");
+	        		linkToBeSaved.removeFirst();
+	    		}
+    		
         		linkToBeSaved.add(obj);
         	}
+    		
+    		if (linkToBeSaved.size() >= GlobalSetting.DBSetting.MaxRecordCountForFlush)
+    		{
+    			flushToDB();
+    		}
     	}
     	else
     	{
@@ -270,23 +304,29 @@ public class DAOWrapper
     /** */
     public static void flushToDB()
     {
-    	if (!GlobalSetting.DBSetting.CacheEnabled)
+    	if (linkToBeSaved.size() == 0)
     	{
+    		if (!GlobalSetting.DBSetting.CacheEnabled)
+        	{
+        		DAOWrapper.stopTimers();
+        	}
     		return;
     	}
     	
-    	if (linkToBeSaved.size() == 0)
+    	if (!DBModule.instance.isAvailable())
     	{
     		return;
     	}
     	
     	Object obj;
+    	Session session = HibernateSessionFactory.getSession();
     	while (linkToBeSaved.size() > 0)
     	{
-    		obj = linkToBeSaved.removeFirst();
-    		
-    		Session session = HibernateSessionFactory.getSession();
-        	session.beginTransaction();
+    		synchronized (linkToBeSaved)
+			{
+    			obj = linkToBeSaved.removeFirst();
+			}
+    		session.beginTransaction();
         	session.save(obj);
         	session.getTransaction().commit();
     	}

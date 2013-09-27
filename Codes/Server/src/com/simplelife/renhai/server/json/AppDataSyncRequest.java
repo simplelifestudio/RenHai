@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceDAO;
@@ -35,6 +36,7 @@ import com.simplelife.renhai.server.db.TableColumnName;
 import com.simplelife.renhai.server.db.TableName;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.DBExistResult;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.JSONKey;
@@ -271,7 +273,10 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		DeviceDAO deviceDAO = new DeviceDAO();
 		String deviceSn = header.getString(JSONKey.DeviceSn);
-		if(deviceDAO.findByDeviceSn(deviceSn).size() == 0)
+		
+		String sql = "select * from " + TableName.Device 
+				+ " where " + TableColumnName.DeviceSn + " = '" + deviceSn + "' ";
+		if(DAOWrapper.exists(sql) == DBExistResult.NonExistent)
 		{
 			if (!deviceCardObj.containsKey(JSONKey.DeviceModel))
 			{
@@ -382,6 +387,12 @@ public class AppDataSyncRequest extends AppJSONMessage
 	@Override
 	public void run()
 	{
+		if (deviceWrapper.getOwnerOnlineDevicePool() == null)
+		{
+			logger.debug("Device <{}> synchronizing after connnection was released", deviceWrapper.getDeviceSn());
+			deviceWrapper.bindOnlineDevicePool(OnlineDevicePool.instance);
+		}
+		
 		if (!checkJSONRequest())
 		{
 			responseError(Consts.MessageId.AppDataSyncRequest.name());
@@ -452,13 +463,17 @@ public class AppDataSyncRequest extends AppJSONMessage
 				profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
 				profile.setUnbanDate(null);
 				
-				DAOWrapper.cache(profile);
+				DBModule.instance.cache(profile);
 				//ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.AppDataSyncResponse);
 				deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
 			}
 			else
 			{
 				OnlineDevicePool.instance.IdentifyBannedDevice(deviceWrapper);
+				this.setErrorCode(Consts.GlobalErrorCode.NoPermission_1102);
+				this.setErrorDescription("Device was banned till " + DateUtil.getDateStringByLongValue(unbanDate));
+				responseError(Consts.MessageId.AppDataSyncRequest.name());
+				return;
 			}
 		}
 		else
@@ -914,13 +929,19 @@ public class AppDataSyncRequest extends AppJSONMessage
 		List<Globalimpresslabel> globalLabelList;
 		for (Consts.SolidAssessLabel label : Consts.SolidAssessLabel.values())
 		{
+			if (label == Consts.SolidAssessLabel.Invalid)
+			{
+				continue;
+			}
+			
+			String strValue = label.getValue();
 			Globalimpresslabel impressLabel;
-			globalLabelList = dao.findByImpressLabel(label.name());
+			globalLabelList = dao.findByImpressLabel(strValue);
 			if (globalLabelList.size() == 0)
 			{
 				impressLabel = new Globalimpresslabel();
 				impressLabel.setGlobalAssessCount(0);
-				impressLabel.setImpressLabel(label.name());
+				impressLabel.setImpressLabel(label.getValue());
 			}
 			else
 			{
@@ -933,6 +954,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 			labelMap.setGlobalimpresslabel(impressLabel);
 			labelMap.setImpresscard(impressCard);
 			labelMap.setUpdateTime(System.currentTimeMillis());
+			
+			impressLabelMaps.add(labelMap);
 		}
 		
 		impressCard.setImpresslabelmaps(impressLabelMaps);

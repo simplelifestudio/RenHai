@@ -40,7 +40,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 	public void setUp() throws Exception
 	{
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
-		mockApp = createNewMockApp();
+		mockApp = createNewMockApp(demoDeviceSn);
 	}
 	
 	/**
@@ -61,10 +61,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
 		
-		Devicecard deviceCard = deviceWrapper.getDevice().getDevicecard();
-		
 		// Step_01 调用：OnlineDevicePool::getCount
-		int deviceCount = pool.getElementCount();
 		long lastActivityTime = deviceWrapper.getLastActivityTime().getTime();
 		
 		// Step_02 调用：DeviceWrapper::getBusinessStatus
@@ -72,9 +69,8 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertEquals(businessStatus, Consts.BusinessStatus.Init);
 		
 		// Step_03 Mock请求：设备同步
-		mockApp.clearLastReceivedCommand();
 		mockApp.syncDevice();
-		JSONObject lastMsg = mockApp.getLastReceivedCommand();
+		assertTrue(!mockApp.lastReceivedCommandIsError());
 		
 		// Step_04 数据库检查：设备卡片信息
 		DeviceDAO deviceDAO = new DeviceDAO();
@@ -96,7 +92,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertTrue(impressCardInDB.getChatLossCount() == 0);
 		assertTrue(impressCardInDB.getChatTotalCount() == 0);
 		assertTrue(impressCardInDB.getChatTotalDuration() == 0);
-		assertTrue(impressCardInDB.getImpresslabelmaps().isEmpty());
+		assertTrue(impressCardInDB.getImpresslabelmaps().size() == Consts.SolidAssessLabel.values().length - 1);
 		
 		// Step_07 调用：DeviceWrapper::getBusinessStatus
 		businessStatus = deviceWrapper.getBusinessStatus();
@@ -118,34 +114,37 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		
 		// Step_12 建立WebSocket连接
 		deviceWrapper = mockApp.getDeviceWrapper();
-		deviceCard = deviceWrapper.getDevice().getDevicecard();
 		
 		// Step_13 Mock请求：设备同步
+		mockApp.enterPool(Consts.BusinessType.Random);
+		assertTrue(mockApp.lastReceivedCommandIsError());		//设备同步之前不能使用其他命令
+		
 		mockApp.syncDevice();
+		assertTrue(!mockApp.lastReceivedCommandIsError());
 		
 		// Step_14 调用：DeviceWrapper::getLastActivityTime
 		assertTrue(deviceWrapper.getLastActivityTime().getTime() > lastActivityTime);
 		
 		// Step_15 Mock请求：进入随机聊天
 		mockApp.enterPool(Consts.BusinessType.Random);
+		assertTrue(!mockApp.lastReceivedCommandIsError());
 		
 		// Step_16 Mock请求：设备同步
-		mockApp.clearLastReceivedCommand();
 		mockApp.syncDevice();
-		lastMsg = mockApp.getLastReceivedCommand();
+		assertTrue(!mockApp.lastReceivedCommandIsError());
 		
 		// Step_17 Mock事件：onClose
 		mockApp.close();
 		
 		// Step_18 建立WebSocket连接
 		deviceWrapper = mockApp.getDeviceWrapper();
-		deviceCard = deviceWrapper.getDevice().getDevicecard();
 		
 		// Step_19 停止数据库服务
 		DBModule.instance.stopService();
 		
 		// Step_20 Mock请求：设备同步
 		mockApp.syncDevice();
+		assertTrue(!mockApp.lastReceivedCommandIsError());
 		// fail("需要检查此时应该收到系统故障，操作失败");
 	}
 }
