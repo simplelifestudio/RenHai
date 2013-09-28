@@ -139,6 +139,7 @@
     if (!flag)
     {
         responseMessage = [RHMessage newServerTimeoutResponseMessage:messageSn];
+        [responseMessage setTimeStamp:endTimeStamp];
     }
     else
     {

@@ -131,6 +131,7 @@
     {
         [operation cancel];
         responseMessage = [RHMessage newServerTimeoutResponseMessage:requestMessage.messageSn];
+        [responseMessage setTimeStamp:endTimeStamp];
     }
     
     return responseMessage;
