@@ -1,0 +1,739 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+*{margin:0;padding:0;}
+body {
+	font:13.34px helvetica,arial,freesans,clean,sans-serif;
+	color:black;
+	line-height:1.4em;
+	background-color: #F8F8F8;
+	padding: 0.7em;
+}
+p {
+	margin:1em 0;
+	line-height:1.5em;
+}
+table {
+	font-size:inherit;
+	font:100%;
+	margin:1em;
+}
+table th{border-bottom:1px solid #bbb;padding:.2em 1em;}
+table td{border-bottom:1px solid #ddd;padding:.2em 1em;}
+input[type=text],input[type=password],input[type=image],textarea{font:99% helvetica,arial,freesans,sans-serif;}
+select,option{padding:0 .25em;}
+optgroup{margin-top:.5em;}
+pre,code{font:12px Monaco,"Courier New","DejaVu Sans Mono","Bitstream Vera Sans Mono",monospace;}
+pre {
+	margin:1em 0;
+	font-size:12px;
+	background-color:#eee;
+	border:1px solid #ddd;
+	padding:5px;
+	line-height:1.5em;
+	color:#444;
+	overflow:auto;
+	-webkit-box-shadow:rgba(0,0,0,0.07) 0 1px 2px inset;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;border-radius:3px;
+}
+pre code {
+	padding:0;
+	font-size:12px;
+	background-color:#eee;
+	border:none;
+}
+code {
+	font-size:12px;
+	background-color:#f8f8ff;
+	color:#444;
+	padding:0 .2em;
+	border:1px solid #dedede;
+}
+img{border:0;max-width:100%;}
+abbr{border-bottom:none;}
+a{color:#4183c4;text-decoration:none;}
+a:hover{text-decoration:underline;}
+a code,a:link code,a:visited code{color:#4183c4;}
+h2,h3{margin:1em 0;}
+h1,h2,h3,h4,h5,h6{border:0;}
+h1{font-size:170%;border-top:4px solid #aaa;padding-top:.5em;margin-top:1.5em;}
+h1:first-child{margin-top:0;padding-top:.25em;border-top:none;}
+h2{font-size:150%;margin-top:1.5em;border-top:4px solid #e0e0e0;padding-top:.5em;}
+h3{margin-top:1em;}
+hr{border:1px solid #ddd;}
+ul{margin:1em 0 1em 2em;}
+ol{margin:1em 0 1em 2em;}
+ul li,ol li{margin-top:.5em;margin-bottom:.5em;}
+ul ul,ul ol,ol ol,ol ul{margin-top:0;margin-bottom:0;}
+blockquote{margin:1em 0;border-left:5px solid #ddd;padding-left:.6em;color:#555;}
+dt{font-weight:bold;margin-left:1em;}
+dd{margin-left:2em;margin-bottom:1em;}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:0 auto;
+    }
+}
+@media print {
+	table, pre {
+		page-break-inside: avoid;
+	}
+	pre {
+		word-wrap: break-word;
+	}
+}
+</style>
+<title><center>App方消息通信测试结果单</center></title>
+<script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax:{inlineMath:[['$$$','$$$']]}});</script><script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+<h1><center>App方消息通信测试结果单</center></h1>
+
+<h2>1. AlohaRequest</h2>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": "794AF3A8-FFB0-4997-B9DE-CD4CFB68252A",
+            "timeStamp": "2013-09-28 20:25:13.472",
+            "messageType": 1,
+            "messageId": 100,
+            "messageSn": "C2B38679BPIV4M93",
+            "deviceId": 0
+        },
+        "body": {
+            "content": "Hello Server!"
+        }
+    }
+}
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "messageSn": "C2B38679BPIV4M93",
+            "timeStamp": "2013-09-28 20:25:13.614",
+            "messageType": 4,
+            "messageId": 402,
+            "deviceSn": null,
+            "deviceId": null
+        },
+        "body": {
+            "content": "Hello App!"
+        }
+    }
+}
+</code></pre>
+
+
+<h4>测试结果</h4>
+
+<p>符合预期，最好可以将deviceSn和deviceId设定为一致</p>
+
+<h2>2. AppDataSyncRequest</h2>
+
+<h3>1. TotalSync</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": "794AF3A8-FFB0-4997-B9DE-CD4CFB68252A",
+            "timeStamp": "2013-09-28 20:40:22.884",
+            "messageType": 1,
+            "messageId": 101,
+            "messageSn": "40I60C6DVRPW7137",
+            "deviceId": 0
+        },
+        "body": {
+            "dataUpdate": {
+                "device": {
+                    "deviceCard": {
+                        "isJailed": false,
+                        "appVersion": "0.1",
+                        "deviceModel": "Simulator",
+                        "osVersion": "6.1"
+                    },
+                    "deviceSn": "794AF3A8-FFB0-4997-B9DE-CD4CFB68252A"
+                }
+            },
+            "dataQuery": {
+                "deviceCard": null,
+                "profile": null,
+                "deviceSn": null,
+                "deviceId": null
+            }
+        }
+    }
+}
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "messageSn": "40I60C6DVRPW7137",
+            "timeStamp": "2013-09-28 20:40:23.028",
+            "messageType": 4,
+            "messageId": 401,
+            "deviceSn": null,
+            "deviceId": null
+        },
+        "body": {
+            "errorDescription": "isJailed must be 0 or 1.",
+            "receivedMessage": "AppDataSyncRequest",
+            "errorCode": "1103"
+        }
+    }
+}
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<h5>1. 讨论isJailed字段值为0/1还是true/false</h5>
+
+<h5>2. receivedMessage字段的值应该是整个消息（原文）</h5>
+
+<h5>3. ServerErrorResponse的deviceSn和deviceId最好也能补上</h5>
+
+<h3>2. DeviceCardSync</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": "794AF3A8-FFB0-4997-B9DE-CD4CFB68252A",
+            "timeStamp": "2013-09-28 20:51:51.591",
+            "messageType": 1,
+            "messageId": 101,
+            "messageSn": "C5X6POX3LPTE508U",
+            "deviceId": 0
+        },
+        "body": {
+            "dataUpdate": {
+                "device": {
+                    "deviceCard": {
+                        "isJailed": false,
+                        "appVersion": "0.1",
+                        "deviceModel": "Simulator",
+                        "osVersion": "6.1"
+                    }
+                }
+            },
+            "dataQuery": {
+                "deviceId": null,
+                "deviceSn": null,
+                "deviceCard": null
+            }
+        }
+    }
+}
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "messageSn": "C5X6POX3LPTE508U",
+            "timeStamp": "2013-09-28 20:51:51.732",
+            "messageType": 4,
+            "messageId": 401,
+            "deviceSn": null,
+            "deviceId": null
+        },
+        "body": {
+            "errorDescription": "labelOrder must be provided for device.",
+            "receivedMessage": "AppDataSyncRequest",
+            "errorCode": "1103"
+        }
+    }
+}
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<h5>1. DeviceCardSync应该和InterestCard的labelOrder无关，Server需要修改并检查可能存在的类似情况</h5>
+
+<h3>3. ImpressCardSync</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": "794AF3A8-FFB0-4997-B9DE-CD4CFB68252A",
+            "timeStamp": "2013-09-28 21:00:35.520",
+            "messageType": 1,
+            "messageId": 101,
+            "messageSn": "HS2OJYQ2QI8300YN",
+            "deviceId": 0
+        },
+        "body": {
+            "dataQuery": {
+                "device": {
+                    "profile": {
+                        "impressCard": null
+                    }
+                }
+            }
+        }
+    }
+}
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": null,
+            "timeStamp": "2013-09-28 21:00:44.521",
+            "messageType": 4,
+            "messageId": 400,
+            "messageSn": "HS2OJYQ2QI8300YN",
+            "deviceId": 0
+        },
+        "body": {}
+    }
+}
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<p>无法收到响应消息，通信超时，Server需要检查</p>
+
+<h3>4. InterestCardSync</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": "794AF3A8-FFB0-4997-B9DE-CD4CFB68252A",
+            "timeStamp": "2013-09-28 21:03:09.741",
+            "messageType": 1,
+            "messageId": 101,
+            "messageSn": "XEBQM043A1X215CM",
+            "deviceId": 0
+        },
+        "body": {
+            "dataUpdate": {
+                "device": {
+                    "profile": {
+                        "interestCard": null
+                    }
+                }
+            },
+            "dataQuery": {
+                "device": {
+                    "profile": {
+                        "interestCard": null
+                    }
+                }
+            }
+        }
+    }
+}
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "messageSn": "XEBQM043A1X215CM",
+            "timeStamp": "2013-09-28 21:03:09.882",
+            "messageType": 4,
+            "messageId": 401,
+            "deviceSn": null,
+            "deviceId": null
+        },
+        "body": {
+            "errorDescription": "labelOrder must be provided for device.",
+            "receivedMessage": "AppDataSyncRequest",
+            "errorCode": "1103"
+        }
+    }
+}
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<p>不正确，App和Server需要讨论</p>
+
+<h2>3. ServerDataSyncRequest</h2>
+
+<h3>1. TotalSync</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": "794AF3A8-FFB0-4997-B9DE-CD4CFB68252A",
+            "timeStamp": "2013-09-28 21:14:06.045",
+            "messageType": 1,
+            "messageId": 102,
+            "messageSn": "6DK5N865IVMXI665",
+            "deviceId": 0
+        },
+        "body": {
+            "deviceCapacity": {
+                "online": null,
+                "interest": null,
+                "random": null
+            },
+            "deviceCount": {
+                "chat": null,
+                "interest": null,
+                "randomChat": null,
+                "online": null,
+                "interestChat": null,
+                "random": null
+            },
+            "interestLabelList": {
+                "history": {
+                    "startTime": null,
+                    "endTime": null
+                },
+                "current": null
+            }
+        }
+    }
+}
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": null,
+            "timeStamp": "2013-09-28 21:16:01.852",
+            "messageType": 4,
+            "messageId": 400,
+            "messageSn": "6DK5N865IVMXI665",
+            "deviceId": 0
+        },
+        "body": {}
+    }
+}
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<p>无法收到响应消息，通信超时，Server需要检查</p>
+
+<h3>2. DeviceCountSync</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": "794AF3A8-FFB0-4997-B9DE-CD4CFB68252A",
+            "timeStamp": "2013-09-28 21:17:23.750",
+            "messageType": 1,
+            "messageId": 102,
+            "messageSn": "Q3J5J4JQCPS4DM8O",
+            "deviceId": 0
+        },
+        "body": {
+            "deviceCount": {
+                "chat": null,
+                "interest": null,
+                "randomChat": null,
+                "online": null,
+                "interestChat": null,
+                "random": null
+            }
+        }
+    }
+}
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": null,
+            "timeStamp": "2013-09-28 21:17:32.751",
+            "messageType": 4,
+            "messageId": 400,
+            "messageSn": "Q3J5J4JQCPS4DM8O",
+            "deviceId": 0
+        },
+        "body": {}
+    }
+}
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<p>无法收到响应消息，通信超时，Server需要检查</p>
+
+<h3>3. DeviceCapacitySync</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": "794AF3A8-FFB0-4997-B9DE-CD4CFB68252A",
+            "timeStamp": "2013-09-28 21:18:47.236",
+            "messageType": 1,
+            "messageId": 102,
+            "messageSn": "D3KXIE0591M85VE8",
+            "deviceId": 0
+        },
+        "body": {
+            "deviceCapacity": {
+                "online": null,
+                "interest": null,
+                "random": null
+            }
+        }
+    }
+}
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": null,
+            "timeStamp": "2013-09-28 21:18:56.236",
+            "messageType": 4,
+            "messageId": 400,
+            "messageSn": "D3KXIE0591M85VE8",
+            "deviceId": 0
+        },
+        "body": {}
+    }
+}
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<p>无法收到响应消息，通信超时，Server需要检查</p>
+
+<h3>4. InterestLabelListSync</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": "794AF3A8-FFB0-4997-B9DE-CD4CFB68252A",
+            "timeStamp": "2013-09-28 21:20:05.715",
+            "messageType": 1,
+            "messageId": 102,
+            "messageSn": "7MB269WE70026R7Q",
+            "deviceId": 0
+        },
+        "body": {
+            "interestLabelList": {
+                "history": {
+                    "startTime": "2013-09-28",
+                    "endTime": "2013-10-05"
+                },
+                "current": 10
+            }
+        }
+    }
+}
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+{
+    "jsonEnvelope": {
+        "header": {
+            "deviceSn": null,
+            "timeStamp": "2013-09-28 21:20:14.715",
+            "messageType": 4,
+            "messageId": 400,
+            "messageSn": "7MB269WE70026R7Q",
+            "deviceId": 0
+        },
+        "body": {}
+    }
+}
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<p>无法收到响应消息，通信超时，Server需要检查</p>
+
+<h2>4. BusinessSessionRequest</h2>
+
+<h3>1.</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<h3>2.</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<h3>3.</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<h3>4.</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<h3>5.</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<h3>6.</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>测试结果：</h4>
+
+<h3>7.</h3>
+
+<h4>发出消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>收到消息：</h4>
+
+<pre><code>
+</code></pre>
+
+
+<h4>测试结果：</h4>
+</body>
+</html>
