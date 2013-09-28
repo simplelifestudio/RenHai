@@ -6,9 +6,9 @@
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
-#import "GHTestCase.h"
+#import "GHAsyncTestCase.h"
 
 
-@interface CommunicationModuleTest : GHTestCase
+@interface CommunicationModuleTest : GHAsyncTestCase
 
 @end

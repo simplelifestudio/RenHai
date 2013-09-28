@@ -168,7 +168,7 @@ static BOOL s_messageEncrypted;
     NSDictionary* messageHeader = [RHMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AlohaRequest messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
     
     NSMutableDictionary* messageBody = [NSMutableDictionary dictionary];
-    [messageBody setObject:@"Aloha RenHai Server" forKey:MESSAGE_KEY_CONTENT];
+    [messageBody setObject:@"Hello Server!" forKey:MESSAGE_KEY_CONTENT];
     
     RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
     

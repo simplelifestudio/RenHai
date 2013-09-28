@@ -19,7 +19,7 @@
 
 @interface WebSocketAgent : NSObject <SRWebSocketDelegate, CBJSONMessageComm>
 
--(void) connectWebSocket;
+-(BOOL) openWebSocket;
 -(void) closeWebSocket;
 -(RHMessage*) syncMessage:(RHMessage*) requestMessage;
 -(RHMessage*) syncMessage:(RHMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread;

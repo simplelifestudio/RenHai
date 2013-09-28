@@ -19,7 +19,7 @@
 #define BASEURL_WEBSOCKET_SERVER @"ws://192.81.135.31/renhai/"
 #define REMOTEPATH_SERVICE_WEBSOCKET @"websocket"
 
-#define WEBSOCKET_COMM_TIMEOUT 5
+#define WEBSOCKET_COMM_TIMEOUT 9
 #define HTTP_COMM_TIMEOUT 7.0
 
 @interface CommunicationModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>

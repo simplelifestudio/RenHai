@@ -10,6 +10,7 @@
 
 #import "SRWebSocket.h"
 
+#import "CBAppUtils.h"
 #import "CBDateUtils.h"
 #import "CBStringUtils.h"
 
@@ -18,14 +19,29 @@
 #import "RHDevice.h"
 #import "UserDataModule.h"
 
+#define TIMEOUT_ASYNCOPERATION_WAIT 10
+
 @interface CommunicationModuleTest()
 {
     RHDevice* _device;
+    WebSocketAgent* _agent;
 }
 
 @end
 
 @implementation CommunicationModuleTest
+
+#pragma mark - Framework Methods
+
+-(BOOL) shouldRunOnMainThread
+{
+    return YES;
+}
+
+-(void) prepare
+{
+    [super prepare];
+}
 
 -(void) setUp
 {
@@ -34,83 +50,70 @@
 
 -(void) tearDown
 {
-    
+
 }
 
+-(void) failWithException:(NSException *)exception
+{
+    GHTestLog(@"Caught Exception: %@", exception.debugDescription);
+}
+
+#pragma mark - Test Methods
+
 -(void) testAlohaRequest
-{    
-    WebSocketAgent* agent = [self _connectWebSocket];
+{
+    RHMessage* alohaReuqestMessage = [RHMessage newAlohaRequestMessage:_device];
     
-    dispatch_async(dispatch_queue_create("testQueue", DISPATCH_QUEUE_SERIAL), ^(){
-        @try
-        {
-            RHMessage* alohaReuqestMessage = [RHMessage newAlohaRequestMessage:_device];
-            
-            RHMessage* responseMessage = [agent syncMessage:alohaReuqestMessage syncInMainThread:NO];
-            
-            GHTestLog(@"Sent Message: %@", alohaReuqestMessage.toJSONString);            
-            
-            GHTestLog(@"Received Message: %@", responseMessage.toJSONString);
-        }
-        @catch (NSException *exception)
-        {
-            GHTestLog(@"Caught Exception: %@", exception.debugDescription);
-        }
-        @finally
-        {
-            sleep(16);
-            [self _disconnectWebSocket:agent];
-        }
-    });
+    [self _sendMessageThroughWebSocket:alohaReuqestMessage selector:@selector(testAlohaRequest)];
 }
 
 -(void) testAppDataSyncRequest_TotalSync
 {
     RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:_device];
     
-    GHTestLog(@"AppDataSyncRequestType_TotalSync: %@", appDataSyncRequestMessage.toJSONString);
+    [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSyncRequest_TotalSync)];
 }
 
 -(void) testAppDataSyncRequest_DeviceCardSync
 {
     RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_DeviceCardSync device:_device];
     
-    GHTestLog(@"AppDataSyncRequest_DeviceCardSync: %@", appDataSyncRequestMessage.toJSONString);
+    [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSyncRequest_DeviceCardSync)];
 }
 
 -(void) testAppDataSyncRequest_ImpressCardSync
 {
     RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_ImpressCardSync device:_device];
     
-    GHTestLog(@"AppDataSyncRequest_ImpressCardSync: %@", appDataSyncRequestMessage.toJSONString);
+    [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSyncRequest_ImpressCardSync)];
 }
 
 -(void) testAppDataSyncRequest_InterestCardSync
 {
     RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:_device];
     
-    GHTestLog(@"AppDataSyncRequest_InterestCardSync: %@", appDataSyncRequestMessage.toJSONString);
+    [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSyncRequest_InterestCardSync)];
 }
 
 -(void) testServerDataSyncRequest_TotalSync
 {
     RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:_device info:nil];
     
-    GHTestLog(@"ServerDataSyncRequest_TotalSync: %@", serverDataSyncRequestMessage.toJSONString);
+    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testServerDataSyncRequest_TotalSync)];
 }
 
 -(void) testServerDataSyncRequest_DeviceCountSync
 {
     RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_DeviceCountSync device:_device info:nil];
     
-    GHTestLog(@"ServerDataSyncRequest_DeviceCountSync: %@", serverDataSyncRequestMessage.toJSONString);
+    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testServerDataSyncRequest_DeviceCountSync)];
 }
 
 -(void) testServerDataSyncRequest_DeviceCapacitySync
 {
     RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_DeviceCapacitySync device:_device info:nil];
     
-    GHTestLog(@"ServerDataSyncRequest_DeviceCapacitySync: %@", serverDataSyncRequestMessage.toJSONString);
+    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testServerDataSyncRequest_DeviceCapacitySync)];
 }
 
 -(void) testServerDataSyncRequest_InterestLabelListSync
@@ -124,41 +127,14 @@
     
     RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_InterestLabelListSync device:_device info:info];
     
-    GHTestLog(@"ServerDataSyncRequest_InterestLabelListSync: %@", serverDataSyncRequestMessage.toJSONString);
-}
-
--(void) testAppDataSyncRequest
-{
-    WebSocketAgent* agent = [self _connectWebSocket];
-    
-    dispatch_async(dispatch_queue_create("testQueue", DISPATCH_QUEUE_SERIAL), ^(){
-        @try
-        {
-            RHMessage* deviceCardUpdateMessage = [self _createDeviceCardUpdateMessage];
-            
-            RHMessage* responseMessage = [agent syncMessage:deviceCardUpdateMessage syncInMainThread:NO];
-            
-            GHTestLog(@"Sent Message: %@", deviceCardUpdateMessage.toJSONString);
-            
-            GHTestLog(@"Received Message: %@", responseMessage.toJSONString);
-        }
-        @catch (NSException *exception)
-        {
-            GHTestLog(@"Caught Exception: %@", exception.debugDescription);
-        }
-        @finally
-        {
-            sleep(16);
-            [self _disconnectWebSocket:agent];
-        }
-    });
+    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testAlohaRequest)];
 }
 
 -(void) testBusinessSessionRequest
 {
     RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Interest operationType:BusinessSessionRequestType_EnterPool device:_device info:nil];
     
-    GHTestLog(@"BusinessSessionRequest: %@", businessSessionRequestMessage.toJSONString);
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testAlohaRequest)];
 }
 
 -(void) testBusinessSessionNotificationResponse
@@ -167,50 +143,66 @@
     
     RHMessage* businessSessionNotificationResponseMessage = [RHMessage newBusinessSessionNotificationResponseMessage:businessSessionId businessType:BusinessType_Interest operationType:BusinessSessionNotificationType_OthersideAgreed operationValue:BusinessSessionOperationValue_Success device:_device info:nil];
     
-    GHTestLog(@"BusinessSessionNotificationResponse: %@", businessSessionNotificationResponseMessage.toJSONString);
-}
-
--(void) testRootDataTree
-{
-    RHDevice* device = [[RHDevice alloc] init];
-    GHTestLog(@"device json string: %@", device.toJSONString);
+    [self _sendMessageThroughWebSocket:businessSessionNotificationResponseMessage selector:@selector(testAlohaRequest)];
 }
 
 #pragma mark - Private Methods
 
--(WebSocketAgent*) _connectWebSocket
+-(BOOL) _connectWebSocket
 {
-    WebSocketAgent* webSocketAgent = [[WebSocketAgent alloc] init];
-    [webSocketAgent connectWebSocket];
-    GHTestLog(@"WebSocket opened.");
+    if (nil != _agent)
+    {
+        [_agent closeWebSocket];
+        _agent = nil;
+    }
     
-    sleep(1);
-    
-    return webSocketAgent;
+    _agent = [[WebSocketAgent alloc] init];
+    BOOL flag = [_agent openWebSocket];
+
+    return flag;
 }
 
--(void) _disconnectWebSocket:(WebSocketAgent*) webSocketAgent
+-(void) _disconnectWebSocket
 {
-    [webSocketAgent closeWebSocket];
-    GHTestLog(@"WebSocket closed.");
+    if (nil != _agent)
+    {
+        [_agent closeWebSocket];
+        
+        GHTestLog(@"WebSocket Closed!");
+    }
 }
 
--(RHMessage*) _createDeviceCardUpdateMessage
+-(void) _sendMessageThroughWebSocket:(RHMessage*) requestMessage selector:(SEL) selector
 {
-    RHDevice* device = [[RHDevice alloc] init];
-//    RHDeviceCard* deviceCard = device.deviceCard;
-//    NSDictionary* deviceCardDic = deviceCard.toJSONObject;
+    GHAssertNotNil(requestMessage, @"Request Message can not be null!");
     
-    NSDictionary* body = [NSDictionary dictionaryWithObject:device.toJSONObject forKey:MESSAGE_KEY_DATAQUERY];
+    [self prepare];
     
-    NSString* messageSn = [RHMessage generateMessageSn];
-    NSDictionary* header = [RHMessage constructMessageHeader:MessageType_AppRequest messageId:MessageId_AppDataSyncRequest messageSn:messageSn deviceId:device.deviceId deviceSn:device.deviceSn];
-    RHMessage* requestMessage = [RHMessage constructWithMessageHeader:header messageBody:body enveloped:YES];
-    
-//    NSLog(@"device's json: %@", device.toJSONString);
-    
-    return requestMessage;
-}
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
+        BOOL flag = [self _connectWebSocket];
+        if (flag)
+        {
+            GHTestLog(@"WebSocket Opened Successfully!");
 
+            [requestMessage setTimeStamp:[NSDate date]];
+            GHTestLog(@"Sent Message: %@", requestMessage.toJSONString);
+            
+            RHMessage* responseMessage = [_agent syncMessage:requestMessage syncInMainThread:NO];
+            
+            GHTestLog(@"###################################################");
+            GHTestLog(@"Received Message: %@", responseMessage.toJSONString);
+            
+            [self _disconnectWebSocket];
+        }
+        else
+        {
+            GHTestLog(@"WebSocket Opened Fail!");
+        }
+        
+        [self notify:kGHUnitWaitStatusSuccess forSelector:selector];
+    });
+    
+    [self waitForStatus:kGHUnitWaitStatusSuccess timeout:TIMEOUT_ASYNCOPERATION_WAIT];
+}
 
 @end

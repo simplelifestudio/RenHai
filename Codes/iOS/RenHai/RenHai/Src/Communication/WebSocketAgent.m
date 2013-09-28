@@ -24,6 +24,8 @@
     NSTimer* _pingTimer;
     NSMutableDictionary* _messageLockSet;
     NSMutableDictionary* _responseMessageSet;
+    
+    NSCondition* _openLock;
 }
 
 @end
@@ -42,7 +44,7 @@
     return self;
 }
 
--(void) connectWebSocket
+-(BOOL) openWebSocket
 {
     [self closeWebSocket];
     
@@ -50,12 +52,26 @@
     
     _webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:remotePath]]];
     _webSocket.delegate = self;
+
+    NSTimeInterval timeout = WEBSOCKET_COMM_TIMEOUT;
+    NSDate* startTimeStamp = [NSDate date];
+    NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
     
-    NSLog(@"BEGIN OPEN - %@", [NSDate date]);
     [_webSocket open];
     
-    [_pingTimer invalidate];
-    _pingTimer = [NSTimer scheduledTimerWithTimeInterval:HEARTBEATPING_PERIOD target:self selector:@selector(_heartBeatPing) userInfo:nil repeats:YES];
+    [_openLock lock];
+    BOOL flag = [_openLock waitUntilDate:endTimeStamp];
+    [_openLock unlock];
+    
+//    while (_webSocket.readyState != SR_OPEN)
+//    {
+//        NSLog(@"Wait for SR_OPEN...");
+//        sleep(1);
+//    }
+//    NSLog(@"WebSocket Status is OPEN");
+//    BOOL flag = YES;
+    
+    return flag;
 }
 
 -(void) closeWebSocket
@@ -136,13 +152,19 @@
 
 - (void)webSocketDidOpen:(SRWebSocket *)webSocket;
 {
-    NSLog(@"FINISH OPEN - %@", [NSDate date]);    
-    
     DDLogInfo(@"Websocket Connected");
+    
+    [_openLock lock];
+    [_openLock signal];
+    [_openLock unlock];
+    
+    [_pingTimer invalidate];
+    _pingTimer = [NSTimer scheduledTimerWithTimeInterval:HEARTBEATPING_PERIOD target:self selector:@selector(_heartBeatPing) userInfo:nil repeats:YES];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
 {
+    NSLog(@"XXXXXXX: %@", error.debugDescription);
     DDLogWarn(@"Websocket Failed With Error: %@", error);
     
     [self closeWebSocket];
@@ -215,15 +237,15 @@
 
 -(void) _initInstance
 {
+    _openLock = [[NSCondition alloc] init];
+    
     _messageLockSet = [NSMutableDictionary dictionary];
     _responseMessageSet = [NSMutableDictionary dictionary];
-    
-//    [self connectWebSocket];
 }
 
 - (void) _heartBeatPing
 {
-    if (nil != _webSocket)
+    if (nil != _webSocket && _webSocket.readyState == SR_OPEN)
     {
         NSData* data = [PING_TEXT dataUsingEncoding:NSASCIIStringEncoding];
         [_webSocket sendPing:data];
