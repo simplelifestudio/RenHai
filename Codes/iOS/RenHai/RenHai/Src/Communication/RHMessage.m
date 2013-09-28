@@ -357,9 +357,9 @@ static BOOL s_messageEncrypted;
             [deviceCapacity setObject:oNull forKey:MESSAGE_KEY_INTEREST];
             [messageBody setObject:deviceCapacity forKey:MESSAGE_KEY_DEVICECAPACITY];
             
-            id oCurrent = nil;
-            id oStartTime = nil;
-            id oEndTime = nil;
+            id oCurrent = oNull;
+            id oStartTime = oNull;
+            id oEndTime = oNull;
             if (nil != info)
             {
                 NSNumber* obj = [info objectForKey:MESSAGE_KEY_CURRENT];
@@ -407,9 +407,9 @@ static BOOL s_messageEncrypted;
         }
         case ServerDataSyncRequestType_InterestLabelListSync:
         {
-            id oCurrent = nil;
-            id oStartTime = nil;
-            id oEndTime = nil;
+            id oCurrent = oNull;
+            id oStartTime = oNull;
+            id oEndTime = oNull;
             if (nil != info)
             {
                 NSNumber* obj = [info objectForKey:MESSAGE_KEY_CURRENT];
