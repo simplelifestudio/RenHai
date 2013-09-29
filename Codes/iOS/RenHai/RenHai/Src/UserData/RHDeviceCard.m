@@ -78,6 +78,11 @@
     return oRegisterTime;
 }
 
+-(NSNumber*) _getOJailStatus
+{
+    return [NSNumber numberWithInt:_isJailed];
+}
+
 #pragma mark - CBJSONable
 
 -(NSDictionary*) toJSONObject
@@ -96,8 +101,8 @@
     
     [dic setObject:_appVersion forKey:MESSAGE_KEY_APPVERSION];
     
-    NSNumber* oIsJailed = [NSNumber numberWithBool:_isJailed];
-    [dic setObject:oIsJailed forKey:MESSAGE_KEY_ISJAILED];
+    NSNumber* oJailStatus = [self _getOJailStatus];
+    [dic setObject:oJailStatus forKey:MESSAGE_KEY_ISJAILED];
     
     return dic;
 }
@@ -126,7 +131,7 @@
         
         _appVersion = [aDecoder decodeObjectForKey:SERIALIZE_KEY_APPVERSION];
         
-        _isJailed = [aDecoder decodeBoolForKey:SERIALIZE_KEY_ISJAILED];
+        _isJailed = [aDecoder decodeIntForKey:SERIALIZE_KEY_ISJAILED];
     }
     
     return self;
@@ -144,7 +149,7 @@
     
     [aCoder encodeObject:_appVersion forKey:SERIALIZE_KEY_APPVERSION];
     
-    [aCoder encodeBool:_isJailed forKey:SERIALIZE_KEY_ISJAILED];
+    [aCoder encodeInt:_isJailed forKey:SERIALIZE_KEY_ISJAILED];
 }
 
 @end
