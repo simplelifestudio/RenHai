@@ -21,6 +21,12 @@
 
 -(BOOL) openWebSocket;
 -(void) closeWebSocket;
+
+-(void) startPing;
+-(void) stopPing;
+
+-(SRReadyState) webSocketState;
+
 -(RHMessage*) syncMessage:(RHMessage*) requestMessage;
 -(RHMessage*) syncMessage:(RHMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread;
 -(void) asyncMessage:(RHMessage*) requestMessage;

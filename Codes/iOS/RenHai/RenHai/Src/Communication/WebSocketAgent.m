@@ -63,22 +63,32 @@
     BOOL flag = [_openLock waitUntilDate:endTimeStamp];
     [_openLock unlock];
     
-//    while (_webSocket.readyState != SR_OPEN)
-//    {
-//        NSLog(@"Wait for SR_OPEN...");
-//        sleep(1);
-//    }
-//    NSLog(@"WebSocket Status is OPEN");
-//    BOOL flag = YES;
-    
     return flag;
 }
 
 -(void) closeWebSocket
 {
+    [self stopPing];
+    
     _webSocket.delegate = nil;
     [_webSocket close];
     _webSocket = nil;
+}
+
+-(void) startPing
+{
+    [_pingTimer invalidate];
+    _pingTimer = [NSTimer scheduledTimerWithTimeInterval:HEARTBEATPING_PERIOD target:self selector:@selector(_heartBeatPing) userInfo:nil repeats:YES];
+}
+
+-(void) stopPing
+{
+    [_pingTimer invalidate];
+}
+
+-(SRReadyState) webSocketState
+{
+    return _webSocket.readyState;
 }
 
 -(RHMessage*) syncMessage:(RHMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread
@@ -159,8 +169,7 @@
     [_openLock signal];
     [_openLock unlock];
     
-    [_pingTimer invalidate];
-    _pingTimer = [NSTimer scheduledTimerWithTimeInterval:HEARTBEATPING_PERIOD target:self selector:@selector(_heartBeatPing) userInfo:nil repeats:YES];
+    [self startPing];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;

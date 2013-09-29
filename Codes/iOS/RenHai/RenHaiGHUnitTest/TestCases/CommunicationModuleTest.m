@@ -144,6 +144,69 @@
     [self _sendMessageThroughWebSocket:businessSessionNotificationResponseMessage selector:@selector(testAlohaRequest)];
 }
 
+-(void) testWebSocketOpen
+{
+    [self prepare];
+    
+    __block BOOL flag = NO;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
+        flag = [self _connectWebSocket];
+        
+        [self notify:kGHUnitWaitStatusSuccess forSelector:@selector(testWebSocketOpen)];
+        
+        if (flag)
+        {
+            GHTestLog(@"WebSocket Open Successfully!");
+        }
+    });
+    
+    [self waitForStatus:kGHUnitWaitStatusSuccess timeout:ASYNCOPERATION_WAIT_TIMEOUT];
+    
+    GHAssertTrue(flag, @"WebSocket Open Failed!");
+}
+
+-(void) testWebSocketClose
+{
+    [self prepare];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
+        [self _disconnectWebSocket];
+        
+        [self notify:kGHUnitWaitStatusSuccess forSelector:@selector(testWebSocketClose)];
+        
+        GHTestLog(@"WebSocket Close Successfully!");
+    });
+    
+    [self waitForStatus:kGHUnitWaitStatusSuccess timeout:ASYNCOPERATION_WAIT_TIMEOUT];
+}
+
+-(void) testStopPing
+{
+    if (_agent.webSocketState == SR_OPEN)
+    {
+        GHTestLog(@"WebSocket stops Ping!");
+        [_agent stopPing];
+    }
+    else
+    {
+        GHAssertTrue(NO, @"WebSocket does not open!");
+    }
+}
+
+-(void) testStartPing
+{
+    if (_agent.webSocketState == SR_OPEN)
+    {
+        GHTestLog(@"WebSocket starts Ping!");
+        [_agent startPing];
+    }
+    else
+    {
+        GHAssertTrue(NO, @"WebSocket does not open!");
+    }
+}
+
 #pragma mark - Private Methods
 
 -(BOOL) _connectWebSocket
@@ -172,16 +235,13 @@
 
 -(void) _sendMessageThroughWebSocket:(RHMessage*) requestMessage selector:(SEL) selector
 {
-    GHAssertNotNil(requestMessage, @"Request Message can not be null!");
+    GHAssertNotNil(requestMessage, @"Request message can not be null!");
     
     [self prepare];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
-        BOOL flag = [self _connectWebSocket];
-        if (flag)
+        if (_agent.webSocketState == SR_OPEN)
         {
-            GHTestLog(@"WebSocket Opened Successfully!");
-            GHTestLog(@"############################################");
             
             [requestMessage setTimeStamp:[NSDate date]];
             GHTestLog(@"Sent Message: %@", requestMessage.toJSONString);
@@ -190,13 +250,10 @@
             
             GHTestLog(@"############################################");
             GHTestLog(@"Received Message: %@", responseMessage.toJSONString);
-            
-            [self _disconnectWebSocket];
         }
         else
         {
-            GHTestLog(@"############################################");
-            GHTestLog(@"WebSocket Opened Fail!");
+            GHAssertTrue(NO, @"WebSocket does not open!");
         }
         
         [self notify:kGHUnitWaitStatusSuccess forSelector:selector];
