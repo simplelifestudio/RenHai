@@ -14,12 +14,10 @@
 #import "CBDateUtils.h"
 #import "CBStringUtils.h"
 
-#import "WebSocketAgent.h"
-#import "RHMessage.h"
-#import "RHDevice.h"
+#import "CommunicationModule.h"
 #import "UserDataModule.h"
 
-#define TIMEOUT_ASYNCOPERATION_WAIT 10
+#define ASYNCOPERATION_WAIT_TIMEOUT WEBSOCKET_COMM_TIMEOUT*2
 
 @interface CommunicationModuleTest()
 {
@@ -183,26 +181,28 @@
         if (flag)
         {
             GHTestLog(@"WebSocket Opened Successfully!");
-
+            GHTestLog(@"############################################");
+            
             [requestMessage setTimeStamp:[NSDate date]];
             GHTestLog(@"Sent Message: %@", requestMessage.toJSONString);
             
             RHMessage* responseMessage = [_agent syncMessage:requestMessage syncInMainThread:NO];
             
-            GHTestLog(@"###################################################");
+            GHTestLog(@"############################################");
             GHTestLog(@"Received Message: %@", responseMessage.toJSONString);
             
             [self _disconnectWebSocket];
         }
         else
         {
+            GHTestLog(@"############################################");
             GHTestLog(@"WebSocket Opened Fail!");
         }
         
         [self notify:kGHUnitWaitStatusSuccess forSelector:selector];
     });
     
-    [self waitForStatus:kGHUnitWaitStatusSuccess timeout:TIMEOUT_ASYNCOPERATION_WAIT];
+    [self waitForStatus:kGHUnitWaitStatusSuccess timeout:ASYNCOPERATION_WAIT_TIMEOUT];
 }
 
 @end

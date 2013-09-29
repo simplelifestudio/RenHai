@@ -223,10 +223,12 @@ static BOOL s_messageEncrypted;
             dataUpdate = dataUpdateSource;
             
             // dataQuery
-            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICEID];
-            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICESN];
-            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICECARD];
-            [dataQuery setObject:oNull forKey:MESSAGE_KEY_PROFILE];
+            deviceSource = [NSMutableDictionary dictionary];
+            [deviceSource setObject:oNull forKey:MESSAGE_KEY_DEVICEID];
+            [deviceSource setObject:oNull forKey:MESSAGE_KEY_DEVICESN];
+            [deviceSource setObject:oNull forKey:MESSAGE_KEY_DEVICECARD];
+            [deviceSource setObject:oNull forKey:MESSAGE_KEY_PROFILE];
+            [dataQuery setObject:deviceSource forKey:MESSAGE_KEY_DEVICE];
             
             break;
         }
@@ -244,9 +246,12 @@ static BOOL s_messageEncrypted;
             dataUpdate = dataUpdateSource;
             
             // dataQuery
-            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICEID];
-            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICESN];
-            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICECARD];
+            deviceSource = [NSMutableDictionary dictionary];
+            [deviceSource setObject:oNull forKey:MESSAGE_KEY_DEVICEID];
+            [deviceSource setObject:oNull forKey:MESSAGE_KEY_DEVICESN];
+            [deviceSource setObject:oNull forKey:MESSAGE_KEY_DEVICECARD];
+            [dataQuery setObject:deviceSource forKey:MESSAGE_KEY_DEVICE];
+            
             break;
         }
         case AppDataSyncRequestType_ImpressCardSync:
