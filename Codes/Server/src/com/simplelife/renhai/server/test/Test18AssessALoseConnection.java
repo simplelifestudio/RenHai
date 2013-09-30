@@ -14,7 +14,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.session.BusinessSessionPool;
@@ -89,6 +88,7 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		assertTrue(!mockApp1.lastReceivedCommandIsError());
 		
 		// Step_07 Mock请求：B进入随机聊天
+		businessPool.getBusinessScheduler().stopScheduler();
 		mockApp2.enterPool(Consts.BusinessType.Random);
 		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		
@@ -103,7 +103,9 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		randomDeviceCount = businessPool.getElementCount();
 		
 		// Step_11 调用：RandomBusinessScheduler::schedule
+		mockApp1.clearLastReceivedCommand();
 		businessPool.getBusinessScheduler().schedule();
+		mockApp1.waitMessage();
 		
 		// Step_12 调用：BusinessSession::getStatus
 		//assertEquals(deviceWrapper1.getBusinessStatus(), Consts.BusinessStatus.SessionBound);
@@ -140,13 +142,18 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		mockApp2.clearLastReceivedCommand();
 		mockApp1.chatConfirm(true);
 		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		
+		mockApp2.waitMessage();
 		assertTrue(mockApp2.getLastReceivedCommand() != null);
 		
 		// Step_23 Mock事件：B同意聊天
 		mockApp1.clearLastReceivedCommand();
 		mockApp2.chatConfirm(true);
 		assertTrue(!mockApp2.lastReceivedCommandIsError());
-		assertTrue(mockApp1.getLastReceivedCommand() != null);
+		
+		// B确认后，所有的设备都确认了， 此时业务会话切换状态，不再通知大家B确认了
+		//mockApp1.waitMessage();
+		//assertTrue(mockApp1.getLastReceivedCommand() != null);
 		
 		// Step_24 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.VideoChat);
@@ -160,8 +167,12 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		{
 			e.printStackTrace();
 		}
+		mockApp2.clearLastReceivedCommand();
 		mockApp1.endChat();
 		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		
+		mockApp2.waitMessage();
+		assertTrue(mockApp2.getLastReceivedCommand() != null);
 		
 		// Step_26 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Assess);
@@ -199,8 +210,8 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_33 Mock事件：B对A评价，且之后退出业务
-		JSONObject obj = mockApp1.getDeviceWrapper().toJSONObject();
-		mockApp2.assessAndQuit(mockApp1.getDeviceWrapper(), obj.toJSONString());
+		mockApp2.assessAndQuit(mockApp1.getDeviceWrapper(), "喜欢,帅哥");
+		assertTrue(mockApp2.getLastReceivedCommand() != null);
 		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		
 		// Step_34 数据库检查：A 印象卡片信息

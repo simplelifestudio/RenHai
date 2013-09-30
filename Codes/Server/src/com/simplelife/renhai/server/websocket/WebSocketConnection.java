@@ -136,6 +136,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		{
 			AppJSONMessage appMessage;
 			logger.error("Exception caught in WebSocketConnection.onTextMessage!");
+			e.printStackTrace();
 			appMessage = new InvalidRequest(null);
 			appMessage.setErrorCode(Consts.GlobalErrorCode.DBException_1001);
 			appMessage.setErrorDescription("Server internal error.");
@@ -145,7 +146,15 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onTextMessage(String message)
     {
-    	logger.debug("Received message from Device <{}> : " + message, this.connectionOwner.getDeviceSn());
+//    	if (connectionOwner != null)
+//    	{
+//    		logger.debug("Received message from device <{}>: " + message, connectionOwner.getDeviceSn());
+//    	}
+//    	else
+//    	{
+//    		logger.debug("Received message : ", message);
+//    	}
+    	logger.debug("Received message: \n{}", message);
     	
     	JSONObject obj = null;
     	try
@@ -238,6 +247,10 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onPing(ByteBuffer payload)
     {
+    	if (connectionOwner == null)
+    	{
+    		logger.error("Fatal error in onPing as its connectionOwner is null");
+    	}
     	//WebSocketModule.instance.getLogger().debug("onPing triggered");
     	connectionOwner.onPing(this, payload);
     	//super.onPing(payload);
@@ -282,7 +295,15 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	obj.put(JSONKey.JsonEnvelope, message.toJSONObject());
     	
     	String strMessage = JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue);
-    	logger.debug("Send message to Device <{}> : " + message, this.connectionOwner.getDeviceSn());
+    	
+//    	if (connectionOwner != null)
+//    	{
+//    		logger.debug("Send message to Device <{}> : " + message, this.connectionOwner.getDeviceSn());
+//    	}
+//    	else
+//    	{
+    		logger.debug("Send message: \n{}", message);
+    	//}
     	
     	CharBuffer buffer = CharBuffer.allocate(strMessage.length());
         buffer.put(strMessage);
@@ -346,7 +367,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	
     	if (controller.message == null)
     	{
-    		logger.debug("Timeout when waiting for synchronized response");
+    		logger.debug("Timeout when waiting for synchronized response of device <{}>", connectionOwner.getDeviceSn());
     		controller.message = new TimeoutRequest(null);
     	}
     	

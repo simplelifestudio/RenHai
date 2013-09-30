@@ -101,11 +101,15 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		randomDeviceCount = businessPool.getElementCount();
 
 		// Step_11 调用：RandomBusinessScheduler::schedule
-		assertEquals(sessionCount, sessionPool.getElementCount());
+		mockApp2.clearLastReceivedCommand();
 		businessPool.getBusinessScheduler().schedule();
+		mockApp2.waitMessage();
 		
 		// Step_12 调用：BusinessSessionPool::getCount
-		assertEquals(sessionCount - 1, sessionPool.getElementCount());
+		//由于A没有回应session会话绑定，随后会被释放，调度没有成功
+		assertTrue(mockApp2.getLastReceivedCommand() == null);
+		
+		//assertEquals(sessionCount - 1, sessionPool.getElementCount());
 		sessionCount = sessionPool.getElementCount();
 		
 		// Step_13 调用：A DeviceWrapper::getBusinessStatus

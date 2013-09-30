@@ -23,7 +23,7 @@ public class InterestlabelmapDAO extends AbstractHibernateDAO {
 	private static final Logger log = LoggerFactory
 			.getLogger(InterestlabelmapDAO.class);
 	// property constants
-	public static final String ORDER = "order";
+	public static final String LABEL_ORDER = "labelOrder";
 	public static final String MATCH_COUNT = "matchCount";
 	public static final String VALID_FLAG = "validFlag";
 
@@ -92,8 +92,8 @@ public class InterestlabelmapDAO extends AbstractHibernateDAO {
 		}
 	}
 
-	public List<Interestlabelmap> findByOrder(Object order) {
-		return findByProperty(ORDER, order);
+	public List<Interestlabelmap> findByLabelOrder(Object labelOrder) {
+		return findByProperty(LABEL_ORDER, labelOrder);
 	}
 
 	public List<Interestlabelmap> findByMatchCount(Object matchCount) {

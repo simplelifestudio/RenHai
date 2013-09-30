@@ -21,7 +21,7 @@ public class Globalinterestlabel implements java.io.Serializable {
 	// Fields
 
 	private Integer globalInterestLabelId;
-	private String interestLabel;
+	private String interestLabelName;
 	private Integer globalMatchCount;
 	private Set<Hotinterestlabelstatistics> hotinterestlabelstatisticses = new HashSet<Hotinterestlabelstatistics>(
 			0);
@@ -35,16 +35,18 @@ public class Globalinterestlabel implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Globalinterestlabel(String interestLabel, Integer globalMatchCount) {
-		this.interestLabel = interestLabel;
+	public Globalinterestlabel(String interestLabelName,
+			Integer globalMatchCount) {
+		this.interestLabelName = interestLabelName;
 		this.globalMatchCount = globalMatchCount;
 	}
 
 	/** full constructor */
-	public Globalinterestlabel(String interestLabel, Integer globalMatchCount,
+	public Globalinterestlabel(String interestLabelName,
+			Integer globalMatchCount,
 			Set<Hotinterestlabelstatistics> hotinterestlabelstatisticses,
 			Set<Interestlabelmap> interestlabelmaps) {
-		this.interestLabel = interestLabel;
+		this.interestLabelName = interestLabelName;
 		this.globalMatchCount = globalMatchCount;
 		this.hotinterestlabelstatisticses = hotinterestlabelstatisticses;
 		this.interestlabelmaps = interestlabelmaps;
@@ -62,13 +64,13 @@ public class Globalinterestlabel implements java.io.Serializable {
 		this.globalInterestLabelId = globalInterestLabelId;
 	}
 
-	@Column(name = "interestLabel", nullable = false, length = 256)
-	public String getInterestLabel() {
-		return this.interestLabel;
+	@Column(name = "interestLabelName", nullable = false, length = 256)
+	public String getInterestLabelName() {
+		return this.interestLabelName;
 	}
 
-	public void setInterestLabel(String interestLabel) {
-		this.interestLabel = interestLabel;
+	public void setInterestLabelName(String interestLabelName) {
+		this.interestLabelName = interestLabelName;
 	}
 
 	@Column(name = "globalMatchCount", nullable = false)
@@ -80,7 +82,7 @@ public class Globalinterestlabel implements java.io.Serializable {
 		this.globalMatchCount = globalMatchCount;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "globalinterestlabel")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "globalinterestlabel")
 	public Set<Hotinterestlabelstatistics> getHotinterestlabelstatisticses() {
 		return this.hotinterestlabelstatisticses;
 	}

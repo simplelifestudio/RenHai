@@ -77,8 +77,16 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
         	if (device == null)
         	{
         		//addToHeader(JSONKey.MessageType, 2);
-        		addToHeader(JSONKey.DeviceId, null);
-        		addToHeader(JSONKey.DeviceSn, null);
+        		if (request.getHeader() != null)
+        		{
+	        		addToHeader(JSONKey.DeviceId, request.getHeader().getString(JSONKey.DeviceId));
+	        		addToHeader(JSONKey.DeviceSn, request.getHeader().getString(JSONKey.DeviceSn));
+        		}
+        		else
+        		{
+        			addToHeader(JSONKey.DeviceId, null);
+	        		addToHeader(JSONKey.DeviceSn, null);
+        		}
         	}
         	else
         	{
@@ -96,12 +104,12 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     	return jsonObject; 
     }
     
-    protected void addToHeader(String key, Object object)
+    public void addToHeader(String key, Object object)
     {
     	header.put(key, object);
     }
     
-    protected void addToBody(String key, Object object)
+    public void addToBody(String key, Object object)
     {
     	body.put(key, object);
     }

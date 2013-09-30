@@ -24,6 +24,7 @@ import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
+import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.db.Interestcard;
@@ -32,6 +33,7 @@ import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.InvalidRequest;
 import com.simplelife.renhai.server.json.JSONFactory;
+import com.simplelife.renhai.server.json.ServerErrorResponse;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
@@ -130,6 +132,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     /** */
     public void changeBusinessStatus(Consts.BusinessStatus targetStatus)
     {
+    	logger.debug("Device <{}> changed status from " + this.businessStatus.name() + " to " + targetStatus.name(), this.getDeviceSn());
     	Logger logger = BusinessModule.instance.getLogger();
     	switch(targetStatus)
     	{
@@ -154,6 +157,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     			}
     			break;
     		case SessionBound:
+    			if (this.ownerBusinessSession == null)
+    			{
+    				logger.error("Fatal error when trying to change status of device <{}> to SessionBound but its session is still null.", device.getDeviceSn());
+    			}
     			break;
     		case WaitMatch:
     			switch(businessStatus)
@@ -270,7 +277,8 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     		if (messageId != Consts.MessageId.AlohaRequest 
     				&& messageId != Consts.MessageId.AppDataSyncRequest
     				&& messageId != Consts.MessageId.TimeoutRequest
-    				&& messageId != Consts.MessageId.Invalid)
+    				&& messageId != Consts.MessageId.Invalid
+    				&& messageId != Consts.MessageId.UnkownRequest)
     		{
     			command = new InvalidRequest(command.getJSONObject());
     			command.setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
@@ -286,8 +294,22 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     		}
     	}
 
-    	command.bindDeviceWrapper(this);
-        (new Thread(command)).run();
+    	try
+    	{
+    		command.bindDeviceWrapper(this);
+    		(new Thread(command)).run();
+    	}
+    	catch(Exception e)
+    	{
+    		ServerErrorResponse response = new ServerErrorResponse(command);
+        	response.addToBody(JSONKey.ReceivedMessage, command.getJSONObject());
+        	response.addToBody(JSONKey.ErrorCode, Consts.GlobalErrorCode.UnknownException_1104.getValue());
+        	response.addToBody(JSONKey.ErrorDescription, "Server internal error");
+        	response.addToHeader(JSONKey.MessageSn, command.getMessageSn());
+        	
+        	response.asyncResponse();
+    		e.printStackTrace();
+    	}
     }
 
     @Override
@@ -427,24 +449,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		return ownerOnlinePool;
 	}
 
-	@Override
-	public JSONObject toJSONObject()
+	public JSONObject toJSONObject_DeviceCard()
 	{
-		JSONObject wholeObj = new JSONObject();
-		JSONObject deviceObj = new JSONObject();
 		JSONObject deviceCardObj = new JSONObject();
-		JSONObject profileObj = new JSONObject();
-		JSONObject interestCardObj = new JSONObject();
-		JSONObject impressCardObj = new JSONObject();
-		
-		wholeObj.put(JSONKey.Device, deviceObj);
-		deviceObj.put(JSONKey.DeviceId, device.getDeviceId().toString());
-		deviceObj.put(JSONKey.DeviceSn, device.getDeviceSn());
-		deviceObj.put(JSONKey.DeviceCard, deviceCardObj);
-		deviceObj.put(JSONKey.Profile, profileObj);
-		profileObj.put(JSONKey.InterestCard, interestCardObj);
-		profileObj.put(JSONKey.ImpressCard, impressCardObj);
-		
 		Devicecard deviceCard = device.getDevicecard();
 		deviceCardObj.put(JSONKey.DeviceCardId, deviceCard.getDeviceCardId().toString());
 		deviceCardObj.put(JSONKey.RegisterTime, DateUtil.getDateStringByLongValue(deviceCard.getRegisterTime()));
@@ -454,9 +461,28 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		deviceCardObj.put(JSONKey.Location, deviceCard.getLocation());
 		deviceCardObj.put(JSONKey.IsJailed, deviceCard.getIsJailed());
 		
+		return deviceCardObj;
+	}
+	
+	public JSONObject toJSONObject_Device()
+	{
+		JSONObject deviceObj = new JSONObject();
+		deviceObj.put(JSONKey.DeviceId, device.getDeviceId().toString());
+		deviceObj.put(JSONKey.DeviceSn, device.getDeviceSn());
+		deviceObj.put(JSONKey.DeviceCard, toJSONObject_DeviceCard());
+		deviceObj.put(JSONKey.Profile, toJSONObject_Profile());
+		return deviceObj;
+	}
+	
+	public JSONObject toJSONObject_Profile()
+	{
+		JSONObject profileObj = new JSONObject();
 		Profile profile = device.getProfile();
 		profileObj.put(JSONKey.ProfileId, profile.getProfileId());
 		profileObj.put(JSONKey.ServiceStatus, Consts.ServiceStatus.parseFromStringValue(profile.getServiceStatus()).toString());
+		
+		profileObj.put(JSONKey.InterestCard, toJSONObject_InterestCard(profile));
+		profileObj.put(JSONKey.ImpressCard, toJSONObject_ImpressCard(profile));
 		
 		if (profile.getUnbanDate() != null)
 		{
@@ -470,6 +496,12 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		profileObj.put(JSONKey.CreateTime, DateUtil.getDateStringByLongValue(profile.getCreateTime()));
 		profileObj.put(JSONKey.Active, Consts.YesNo.parseValue(profile.getActive()).toString());
 
+		return profileObj;
+	}
+	
+	public JSONObject toJSONObject_InterestCard(Profile profile)
+	{
+		JSONObject interestCardObj = new JSONObject();
 		Interestcard interestCard = profile.getInterestcard();
 		interestCardObj.put(JSONKey.InterestCardId, interestCard.getInterestCardId().toString());
 		
@@ -481,7 +513,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		{
 			JSONObject mapObj = new JSONObject();
 			mapObj.put(JSONKey.GlobalInterestLabelId, map.getGlobalinterestlabel().getGlobalInterestLabelId().toString());
-			mapObj.put(JSONKey.InterestLabelName, map.getGlobalinterestlabel().getInterestLabel());
+			mapObj.put(JSONKey.InterestLabelName, map.getGlobalinterestlabel().getInterestLabelName());
 			mapObj.put(JSONKey.GlobalMatchCount, map.getGlobalinterestlabel().getGlobalMatchCount().toString());
 			mapObj.put(JSONKey.LabelOrder, map.getGlobalinterestlabel().getGlobalMatchCount().toString());
 			mapObj.put(JSONKey.MatchCount, map.getMatchCount().toString());
@@ -489,7 +521,13 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 			
 			interestLabelListObj.add(mapObj);
 		}
-		
+
+		return interestCardObj;
+	}
+	
+	public JSONObject toJSONObject_ImpressCard(Profile profile)
+	{
+		JSONObject impressCardObj = new JSONObject();
 		Impresscard impressCard = profile.getImpresscard();
 		impressCardObj.put(JSONKey.ImpressCardId, impressCard.getImpressCardId().toString());
 		impressCardObj.put(JSONKey.ChatTotalCount, impressCard.getChatTotalCount().toString());
@@ -507,7 +545,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		for (Impresslabelmap map : impressLabelList)
 		{
 			JSONObject mapObj = new JSONObject();
-			label = map.getGlobalimpresslabel().getImpressLabel();
+			label = map.getGlobalimpresslabel().getImpressLabelName();
 			mapObj.put(JSONKey.ImpressLabelName, label);
 			mapObj.put(JSONKey.GlobalImpressLabelId, map.getGlobalimpresslabel().getGlobalImpressLabelId().toString());
 			mapObj.put(JSONKey.AssessedCount, map.getAssessedCount().toString());
@@ -523,6 +561,15 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 				impressLabelListObj.add(mapObj);
 			}
 		}
+
+		return impressCardObj;
+	}
+	
+	@Override
+	public JSONObject toJSONObject()
+	{
+		JSONObject wholeObj = new JSONObject();
+		wholeObj.put(JSONKey.Device, toJSONObject_Device());
 		return wholeObj;
 	}
 

@@ -127,7 +127,7 @@ public class Consts
 					return item;
 				}
 			}
-			return null;
+			return Invalid;
 		}
 		
 		@Override
@@ -240,7 +240,7 @@ public class Consts
 		{
 			for (YesNo item : values())
 			{
-				if (item.name() == value)
+				if (item.name().equals(value))
 				{
 					return item;
 				}

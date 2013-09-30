@@ -40,6 +40,11 @@ import com.simplelife.renhai.server.util.JSONKey;
 /** */
 public abstract class AbstractMockApp implements IMockApp
 {
+	public final static String OSVersion = "iOS 6.1.2";
+	public final static String AppVersion = "0.1";
+	public final static String Location = "22.511962,113.380301";
+	public final static String DeviceModel = "iPhone6";
+	
 	Logger logger = LoggerFactory.getLogger(AbstractMockApp.class);
 	
 	private class PingTask extends TimerTask
@@ -96,62 +101,21 @@ public abstract class AbstractMockApp implements IMockApp
 	protected Lock lock = new ReentrantLock();
 	protected Condition condition = lock.newCondition();
 	
-	protected String OSVersion = "iOS 6.1.2";
-	protected String AppVersion = "0.1";
-	protected String Location = "22.511962,113.380301";
-	protected String DeviceModel = "iPhone6";
+	protected String osVersion = AbstractMockApp.OSVersion;
+	protected String appVersion = AbstractMockApp.AppVersion;
+	protected String location = AbstractMockApp.Location;
+	protected String deviceModel = AbstractMockApp.DeviceModel;
 	
 	protected boolean autoReply = true;
 	
-	public Device createNewDevice(String deviceSn)
-	{
-		// Create new impress card
-		Impresscard impressCard = new Impresscard();
-		impressCard.setChatLossCount(0);
-		impressCard.setChatTotalCount(0);
-		impressCard.setChatTotalDuration(0);
-		
-		// Create new interest card
-		Interestcard interestCard = new Interestcard();
-		
-		// Create new profile
-		Profile profile = new Profile();
-		long now = System.currentTimeMillis();
-		profile.setLastActivityTime(now);
-		profile.setCreateTime(now);
-		profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
-		
-		// Bind profile with cards
-		interestCard.setProfile(profile);
-		impressCard.setProfile(profile);
-		
-		// Create new deviceCard
-		Devicecard deviceCard = new Devicecard();
-		deviceCard.setRegisterTime(now);
-		deviceCard.setOsVersion(OSVersion);
-		deviceCard.setAppVersion(AppVersion);
-		deviceCard.setIsJailed(Consts.YesNo.No.toString());
-		deviceCard.setLocation(Location);
-		deviceCard.setDeviceModel(DeviceModel);
-		
-		// Create Device object and bind with cards
-		Device device = new Device();
-		device.setDevicecard(deviceCard);
-		device.setProfile(profile);
-		device.setDeviceSn(deviceSn);
-		
-		DBModule.instance.cache(device);
-		return device;
-	}
-	
 	public String getOSVersion()
 	{
-		return OSVersion;
+		return osVersion;
 	}
 
 	public void setOSVersion(String oSVersion)
 	{
-		OSVersion = oSVersion;
+		osVersion = oSVersion;
 	}
 
 	public String getAppVersion()
@@ -161,7 +125,7 @@ public abstract class AbstractMockApp implements IMockApp
 
 	public void setAppVersion(String appVersion)
 	{
-		AppVersion = appVersion;
+		appVersion = appVersion;
 	}
 
 	public String getLocation()
@@ -171,7 +135,7 @@ public abstract class AbstractMockApp implements IMockApp
 
 	public void setLocation(String location)
 	{
-		Location = location;
+		location = location;
 	}
 
 	public String getDeviceModel()
@@ -181,11 +145,9 @@ public abstract class AbstractMockApp implements IMockApp
 
 	public void setDeviceModel(String deviceModel)
 	{
-		DeviceModel = deviceModel;
+		deviceModel = deviceModel;
 	}
 
-
-    
     public void clearLastReceivedCommand()
 	{
 		lastReceivedCommand = null;
@@ -226,6 +188,8 @@ public abstract class AbstractMockApp implements IMockApp
     protected void init()
     {
     	jsonObject.clear();
+    	header.clear();
+    	body.clear();
     	jsonObject.put(JSONKey.Header, header);
     	jsonObject.put(JSONKey.Body, body);
     	

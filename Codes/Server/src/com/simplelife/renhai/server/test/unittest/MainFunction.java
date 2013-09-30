@@ -30,15 +30,31 @@ import com.simplelife.renhai.server.db.SystemoperationlogDAO;
 import com.simplelife.renhai.server.json.AlohaRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.JSONFactory;
+import com.simplelife.renhai.server.test.AbstractTestCase;
+import com.simplelife.renhai.server.test.LocalMockApp;
 import com.simplelife.renhai.server.util.DateUtil;
+import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
 
 
 /**
  * 
  */
-public class MainFunction extends TestCase
+public class MainFunction extends AbstractTestCase
 {
+	@Test
+	public void testRawCommand()
+	{
+		String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"demoDeviceSn\",\"timeStamp\":\"2013-09-29 11:16:24.676\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"65133CHCP39K54HM\",\"deviceId\":0},\"body\":{\"dataQuery\":{\"device\":{\"profile\":{\"impressCard\":null}}}}}}";
+		
+		JSONObject wholeObj = JSONObject.parseObject(jsonString);
+		JSONObject obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope); 
+		
+		LocalMockApp app = createNewMockApp(this.demoDeviceSn);
+		//app.syncDevice();
+		app.sendRawJSONMessage(obj, true);
+	}
+	
 	@Test
 	public void testJSONFactory()
 	{

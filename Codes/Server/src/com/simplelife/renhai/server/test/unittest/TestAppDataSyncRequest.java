@@ -16,20 +16,21 @@ import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
+import com.simplelife.renhai.server.test.AbstractTestCase;
+import com.simplelife.renhai.server.test.LocalMockApp;
 import com.simplelife.renhai.server.test.MockWebSocketConnection;
+import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 
-import junit.framework.TestCase;
-
 /**
  * 
  */
-public class TestAppDataSyncRequest extends TestCase
+public class TestAppDataSyncRequest extends AbstractTestCase
 {
-	private JSONObject wholeObj = new JSONObject();
+	//private JSONObject wholeObj = new JSONObject();
 	private JSONObject envelope = new JSONObject();
 	private JSONObject header = new JSONObject();
 	private JSONObject body = new JSONObject();
@@ -41,90 +42,74 @@ public class TestAppDataSyncRequest extends TestCase
 	private String location = "x, y";
 	private String isJailed = "0";
 	
-	MockWebSocketConnection conn = new MockWebSocketConnection();
 	
 	private void clear()
 	{
-		wholeObj.clear();
 		envelope.clear();
 		header.clear();
 		body.clear();
-		conn.clear();
 		
-		wholeObj.put(JSONKey.JsonEnvelope, envelope);
+		//wholeObj.put(JSONKey.JsonEnvelope, envelope);
 		envelope.put(JSONKey.Header, header);
 		envelope.put(JSONKey.Body, body);
 		
-		deviceSn = "demoDeviceSn";
-	}
-	
-	@Test
-	public void testInvalidJSON_InvalidString()
-	{
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage("fjdskajsdklaj{");
-		
-		JSONObject obj = conn.getLastSentMessage();
-		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.InvalidJSONRequest_1100.toString()));
+		deviceSn = deviceSn;
 	}
 	
 	@Test
 	public void testInvalidJSON_Empty()
 	{
-		wholeObj.clear();
+		//wholeObj.clear();
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		JSONObject obj = conn.getLastSentMessage();
+		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.InvalidJSONRequest_1100.toString()));
+		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
 	}
 	
 	@Test
 	public void testInvalidJSON_NoEnvelope()
 	{
-		wholeObj.clear();
+		envelope.clear();
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		JSONObject obj = conn.getLastSentMessage();
+		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.InvalidJSONRequest_1100.toString()));
+		assertTrue(errorCode.equals(Consts.GlobalErrorCode.InvalidJSONRequest_1100.getValue()));
 	}
 	
 	@Test
 	public void testInvalidJSON_NoHeader()
 	{
-		wholeObj.clear();
-		wholeObj.put(JSONKey.JsonEnvelope, envelope);
+		envelope.clear();
 		//envelope.put(JSONKey.Header, header);
 		envelope.put(JSONKey.Body, body);
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		JSONObject obj = conn.getLastSentMessage();
+		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.toString()));
+		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
 	}
 	
 	@Test
 	public void testInvalidJSON_NoBody()
 	{
-		wholeObj.clear();
-		wholeObj.put(JSONKey.JsonEnvelope, envelope);
+		envelope.clear();
 		envelope.put(JSONKey.Header, header);
 		//envelope.put(JSONKey.Body, body);
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		JSONObject obj = conn.getLastSentMessage();
+		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.toString()));
+		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
 	}
 	
 	@Test
@@ -132,19 +117,19 @@ public class TestAppDataSyncRequest extends TestCase
 	{
 		clear();
 		
-		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
+		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
 		//header.put(JSONKey.MessageSn, "MessageSnfjdskajfdsklaj;");
-		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
-		header.put(JSONKey.DeviceId, "");
+		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		header.put(JSONKey.DeviceId, null);
 		header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		JSONObject obj = conn.getLastSentMessage();
+		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.toString()));
+		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
 	}
 	
 	@Test
@@ -152,19 +137,19 @@ public class TestAppDataSyncRequest extends TestCase
 	{
 		clear();
 		
-		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
+		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
 		header.put(JSONKey.MessageSn, "MessageSnfjdskajfdsklaj;");
-		//header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
-		header.put(JSONKey.DeviceId, "");
+		//header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		header.put(JSONKey.DeviceId, null);
 		header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		JSONObject obj = conn.getLastSentMessage();
+		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.toString()));
+		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
 	}
 	
 	@Test
@@ -172,19 +157,19 @@ public class TestAppDataSyncRequest extends TestCase
 	{
 		clear();
 		
-		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
+		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
 		header.put(JSONKey.MessageSn, "MessageSnfjdskajfdsklaj;");
-		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
-		header.put(JSONKey.DeviceId, "");
+		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		header.put(JSONKey.DeviceId, null);
 		//header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		JSONObject obj = conn.getLastSentMessage();
+		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.toString()));
+		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
 	}
 	
 	@Test
@@ -192,19 +177,19 @@ public class TestAppDataSyncRequest extends TestCase
 	{
 		clear();
 		
-		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
-		header.put(JSONKey.MessageSn, "");
-		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
-		header.put(JSONKey.DeviceId, "");
+		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
+		header.put(JSONKey.MessageSn, null);
+		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		header.put(JSONKey.DeviceId, null);
 		header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		JSONObject obj = conn.getLastSentMessage();
+		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.toString()));
+		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
 	}
 
 	@Test
@@ -212,19 +197,19 @@ public class TestAppDataSyncRequest extends TestCase
 	{
 		clear();
 		
-		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
+		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
 		header.put(JSONKey.MessageSn, "fdsafdsareafds");
-		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
-		header.put(JSONKey.DeviceId, "");
+		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		header.put(JSONKey.DeviceId, null);
 		header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		JSONObject obj = conn.getLastSentMessage();
+		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.toString()));
+		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
 	}
 	
 	@Test
@@ -232,10 +217,10 @@ public class TestAppDataSyncRequest extends TestCase
 	{
 		clear();
 		
-		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
+		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
 		header.put(JSONKey.MessageSn, "fdsafdsareafds");
-		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
-		header.put(JSONKey.DeviceId, "");
+		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		header.put(JSONKey.DeviceId, null);
 		header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
@@ -245,14 +230,14 @@ public class TestAppDataSyncRequest extends TestCase
 		JSONObject updateObj = new JSONObject();
 		body.put(JSONKey.DataUpdate, updateObj);
 		
-		queryObj.put(JSONKey.Device, "");
+		queryObj.put(JSONKey.Device, null);
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		JSONObject obj = conn.getLastSentMessage();
+		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.toString()));
+		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
 
 	}
 	
@@ -263,22 +248,22 @@ public class TestAppDataSyncRequest extends TestCase
 		
 		deviceSn = DateUtil.getNow();
 		
-		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
+		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
 		header.put(JSONKey.MessageSn, "fdsafdsareafds");
-		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
-		header.put(JSONKey.DeviceId, "");
+		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		header.put(JSONKey.DeviceId, null);
 		header.put(JSONKey.DeviceSn, deviceSn);
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
 		
 		body.put(JSONKey.DataQuery, newQueryObject());
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		JSONObject obj = conn.getLastSentMessage();
+		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.toString()));
+		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
 
 	}
 	
@@ -293,35 +278,35 @@ public class TestAppDataSyncRequest extends TestCase
 		
 		queryObj.put(JSONKey.Device, deviceObj);
 		
-		deviceObj.put(JSONKey.DeviceId, "");
-		deviceObj.put(JSONKey.DeviceSn, "");
+		deviceObj.put(JSONKey.DeviceId, null);
+		deviceObj.put(JSONKey.DeviceSn, null);
 		deviceObj.put(JSONKey.DeviceCard, deviceCardObj);
 		
-		deviceCardObj.put(JSONKey.DeviceCardId, "");
-		deviceCardObj.put(JSONKey.DeviceId, "");
-		deviceCardObj.put(JSONKey.RegisterTime, "");
-		deviceCardObj.put(JSONKey.DeviceModel, "");
-		deviceCardObj.put(JSONKey.OsVersion, "");
-		deviceCardObj.put(JSONKey.AppVersion, "");
-		deviceCardObj.put(JSONKey.Location, "");
-		deviceCardObj.put(JSONKey.IsJailed, "");
+		deviceCardObj.put(JSONKey.DeviceCardId, null);
+		deviceCardObj.put(JSONKey.DeviceId, null);
+		deviceCardObj.put(JSONKey.RegisterTime, null);
+		deviceCardObj.put(JSONKey.DeviceModel, null);
+		deviceCardObj.put(JSONKey.OsVersion, null);
+		deviceCardObj.put(JSONKey.AppVersion, null);
+		deviceCardObj.put(JSONKey.Location, null);
+		deviceCardObj.put(JSONKey.IsJailed, null);
 		
 		queryObj.put(JSONKey.Profile, profileObj);
-		profileObj.put(JSONKey.ProfileId, "");
-		profileObj.put(JSONKey.ServiceStatus, "");
-		profileObj.put(JSONKey.UnbanDate, "");
-		profileObj.put(JSONKey.LastActivityTime, "");
-		profileObj.put(JSONKey.CreateTime, "");
-		profileObj.put(JSONKey.Active, "");
+		profileObj.put(JSONKey.ProfileId, null);
+		profileObj.put(JSONKey.ServiceStatus, null);
+		profileObj.put(JSONKey.UnbanDate, null);
+		profileObj.put(JSONKey.LastActivityTime, null);
+		profileObj.put(JSONKey.CreateTime, null);
+		profileObj.put(JSONKey.Active, null);
 		
 		profileObj.put(JSONKey.InterestCard, interestCardObj);
-		interestCardObj.put(JSONKey.InterestCardId, "");
+		interestCardObj.put(JSONKey.InterestCardId, null);
 		
 		profileObj.put(JSONKey.InterestCard, impressCardObj);
-		impressCardObj.put(JSONKey.ImpressCardId, "");
-		impressCardObj.put(JSONKey.ChatTotalCount, "");
-		impressCardObj.put(JSONKey.ChatTotalDuration, "");
-		impressCardObj.put(JSONKey.ChatLossCount, "");
+		impressCardObj.put(JSONKey.ImpressCardId, null);
+		impressCardObj.put(JSONKey.ChatTotalCount, null);
+		impressCardObj.put(JSONKey.ChatTotalDuration, null);
+		impressCardObj.put(JSONKey.ChatLossCount, null);
 		impressCardObj.put(JSONKey.ImpressLabelList, "5");
 		
 		return queryObj;
@@ -332,19 +317,19 @@ public class TestAppDataSyncRequest extends TestCase
 	{
 		clear();
 		
-		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
+		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
 		header.put(JSONKey.MessageSn, "fdsafdsareafds");
-		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
-		header.put(JSONKey.DeviceId, "");
+		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		header.put(JSONKey.DeviceId, null);
 		header.put(JSONKey.DeviceSn, deviceSn);
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
 		body.put(JSONKey.DataUpdate, newUpdateObject());
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		deviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
 		Device device = deviceWrapper.getDevice();
 		Devicecard deviceCard = device.getDevicecard();
 		
@@ -354,6 +339,35 @@ public class TestAppDataSyncRequest extends TestCase
 		//assertTrue(deviceCard.getIsJailed().equals(this.isJailed));
 		assertTrue(deviceCard.getLocation().equals(this.location));
 		assertTrue(deviceCard.getDeviceModel().equals(this.deviceModel));
+	}
+	
+	
+	@Test
+	public void test_FullQuery()
+	{
+		clear();
+		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
+		header.put(JSONKey.MessageSn, CommonFunctions.getRandomString(16));
+		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		header.put(JSONKey.DeviceId, null);
+		header.put(JSONKey.DeviceSn, deviceSn);
+		header.put(JSONKey.TimeStamp, DateUtil.getNow());
+		
+		JSONObject queryObj = new JSONObject();
+		body.put(JSONKey.DataQuery, queryObj);
+		
+		JSONObject deviceObj = new JSONObject();
+		queryObj.put(JSONKey.Device, deviceObj);
+		
+		deviceObj.put(JSONKey.DeviceCard, null);
+		deviceObj.put(JSONKey.Profile, null);
+		deviceObj.put(JSONKey.DeviceSn, null);
+		deviceObj.put(JSONKey.DeviceId, null);
+		
+		
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
+		assertTrue(!app.lastReceivedCommandIsError());
 	}
 	
 	private JSONObject newUpdateObject()
@@ -367,13 +381,13 @@ public class TestAppDataSyncRequest extends TestCase
 		
 		updateObj.put(JSONKey.Device, deviceObj);
 		
-		//deviceObj.put(JSONKey.DeviceId, "");
+		//deviceObj.put(JSONKey.DeviceId, null);
 		deviceObj.put(JSONKey.DeviceSn, deviceSn);
 		deviceObj.put(JSONKey.DeviceCard, deviceCardObj);
 		
-		//deviceCardObj.put(JSONKey.DeviceCardId, "");
-		//deviceCardObj.put(JSONKey.DeviceId, "");
-		//deviceCardObj.put(JSONKey.RegisterTime, "");
+		//deviceCardObj.put(JSONKey.DeviceCardId, null);
+		//deviceCardObj.put(JSONKey.DeviceId, null);
+		//deviceCardObj.put(JSONKey.RegisterTime, null);
 		deviceCardObj.put(JSONKey.DeviceModel, deviceModel);
 		deviceCardObj.put(JSONKey.OsVersion, osVersion);
 		deviceCardObj.put(JSONKey.AppVersion, appVersion);
@@ -381,15 +395,15 @@ public class TestAppDataSyncRequest extends TestCase
 		deviceCardObj.put(JSONKey.IsJailed, isJailed);
 		
 		deviceObj.put(JSONKey.Profile, profileObj);
-		//profileObj.put(JSONKey.ProfileId, "");
-		//profileObj.put(JSONKey.ServiceStatus, "");
-		//profileObj.put(JSONKey.UnbanDate, "");
-		//profileObj.put(JSONKey.LastActivityTime, "");
-		//profileObj.put(JSONKey.CreateTime, "");
-		//profileObj.put(JSONKey.Active, "");
+		//profileObj.put(JSONKey.ProfileId, null);
+		//profileObj.put(JSONKey.ServiceStatus, null);
+		//profileObj.put(JSONKey.UnbanDate, null);
+		//profileObj.put(JSONKey.LastActivityTime, null);
+		//profileObj.put(JSONKey.CreateTime, null);
+		//profileObj.put(JSONKey.Active, null);
 		
 		profileObj.put(JSONKey.InterestCard, interestCardObj);
-		//interestCardObj.put(JSONKey.InterestCardId, "");
+		//interestCardObj.put(JSONKey.InterestCardId, null);
 		JSONArray labelArray = new JSONArray();
 		for (int i = 0; i < 5; i++)
 		{
@@ -401,10 +415,10 @@ public class TestAppDataSyncRequest extends TestCase
 		interestCardObj.put(JSONKey.InterestLabelList, labelArray);
 		
 		profileObj.put(JSONKey.ImpressCard, impressCardObj);
-		//impressCardObj.put(JSONKey.ImpressCardId, "");
-		//impressCardObj.put(JSONKey.ChatTotalCount, "");
-		//impressCardObj.put(JSONKey.ChatTotalDuration, "");
-		//impressCardObj.put(JSONKey.ChatLossCount, "");
+		//impressCardObj.put(JSONKey.ImpressCardId, null);
+		//impressCardObj.put(JSONKey.ChatTotalCount, null);
+		//impressCardObj.put(JSONKey.ChatTotalDuration, null);
+		//impressCardObj.put(JSONKey.ChatLossCount, null);
 		//impressCardObj.put(JSONKey.ImpressLabelList, "5");
 		
 		return updateObj;
@@ -416,20 +430,20 @@ public class TestAppDataSyncRequest extends TestCase
 		clear();
 		
 		deviceSn = "demoDeviceSn2";
-		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
+		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
 		header.put(JSONKey.MessageSn, "fdsafdsareafds");
-		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
-		header.put(JSONKey.DeviceId, "");
+		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		header.put(JSONKey.DeviceId, null);
 		header.put(JSONKey.DeviceSn, deviceSn);
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
 		body.put(JSONKey.DataQuery, newQueryObject());
 		body.put(JSONKey.DataUpdate, newUpdateObject());
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		deviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
 		Device device = deviceWrapper.getDevice();
 		Devicecard deviceCard = device.getDevicecard();
 		
@@ -445,19 +459,19 @@ public class TestAppDataSyncRequest extends TestCase
 	public void testInvalidJSON_FullQueryExistentDevice()
 	{
 		clear();
-		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
+		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
 		header.put(JSONKey.MessageSn, "fdsafdsareafds");
-		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
-		header.put(JSONKey.DeviceId, "");
+		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		header.put(JSONKey.DeviceId, null);
 		header.put(JSONKey.DeviceSn, deviceSn);
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
 		body.put(JSONKey.DataQuery, newQueryObject());
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		JSONObject obj = conn.getLastSentMessage();
+		JSONObject obj = app.getLastReceivedCommand();
 		System.out.print(obj.toJSONString());
 	}
 	
@@ -465,10 +479,10 @@ public class TestAppDataSyncRequest extends TestCase
 	public void testInvalidJSON_PartialUpdate()
 	{
 		clear();
-		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
+		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
 		header.put(JSONKey.MessageSn, "fdsafdsareafds");
-		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.toString());
-		header.put(JSONKey.DeviceId, "");
+		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		header.put(JSONKey.DeviceId, null);
 		header.put(JSONKey.DeviceSn, deviceSn);
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
@@ -476,15 +490,43 @@ public class TestAppDataSyncRequest extends TestCase
 		appVersion = DateUtil.getNow();
 		body.put(JSONKey.DataUpdate, newUpdateObject_Partial());
 		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.newDevice(conn);
-		conn.onTextMessage(wholeObj.toJSONString());
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
 		
-		deviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
 		Device device = deviceWrapper.getDevice();
 		Devicecard deviceCard = device.getDevicecard();
 		
 		assertTrue(deviceCard.getAppVersion().equals(appVersion));
 		assertTrue(deviceCard.getOsVersion().equals(osVersion));
+	}
+	
+	@Test
+	public void testImpressCardSync()
+	{
+		clear();
+		header.put(JSONKey.DeviceSn, deviceSn);
+		header.put(JSONKey.TimeStamp, DateUtil.getNow());
+		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
+		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		header.put(JSONKey.MessageSn, "HS2OJYQ2QI8300YN");
+		header.put(JSONKey.DeviceId, "0");
+		
+		JSONObject queryObj = new JSONObject();
+		body.put(JSONKey.DataQuery, queryObj);
+		
+		JSONObject deviceObj = new JSONObject();
+		queryObj.put(JSONKey.Device, deviceObj);
+		
+		JSONObject profileObj = new JSONObject();
+		deviceObj.put(JSONKey.Device, profileObj);
+		
+		profileObj.put(JSONKey.ImpressCard, null);
+		
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.sendRawJSONMessage(envelope, true);
+		
+		assertTrue(!app.lastReceivedCommandIsError());
 	}
 	
 	private JSONObject newUpdateObject_Partial()

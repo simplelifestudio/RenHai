@@ -23,7 +23,7 @@ public class ImpresslabelmapDAO extends AbstractHibernateDAO {
 	private static final Logger log = LoggerFactory
 			.getLogger(ImpresslabelmapDAO.class);
 	// property constants
-	public static final String COUNT = "count";
+	public static final String ASSESSED_COUNT = "assessedCount";
 	public static final String UPDATE_TIME = "updateTime";
 	public static final String ASSESS_COUNT = "assessCount";
 
@@ -92,8 +92,8 @@ public class ImpresslabelmapDAO extends AbstractHibernateDAO {
 		}
 	}
 
-	public List<Impresslabelmap> findByCount(Object count) {
-		return findByProperty(COUNT, count);
+	public List<Impresslabelmap> findByAssessedCount(Object assessedCount) {
+		return findByProperty(ASSESSED_COUNT, assessedCount);
 	}
 
 	public List<Impresslabelmap> findByUpdateTime(Object updateTime) {

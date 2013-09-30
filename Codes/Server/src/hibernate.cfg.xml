@@ -23,25 +23,33 @@
 		<property name="hibernate.c3p0.timeout">1800</property>
 		<property name="hibernate.c3p0.idle_test_period">120</property>
 		<property name="hibernate.c3p0.acquire_increment">2</property>
-		<mapping class="com.simplelife.renhai.server.db.Device" /> 
-		<mapping class="com.simplelife.renhai.server.db.Devicecard" /> 
-		<mapping class="com.simplelife.renhai.server.db.Globalimpresslabel" /> 
-		<mapping class="com.simplelife.renhai.server.db.Globalinterestlabel" /> 
-		<mapping class="com.simplelife.renhai.server.db.Hotinterestlabelstatistics" /> 
-		<mapping class="com.simplelife.renhai.server.db.Impresscard" /> 
-		<mapping class="com.simplelife.renhai.server.db.Impresslabelmap" /> 
-		<mapping class="com.simplelife.renhai.server.db.Interestcard" /> 
-		<mapping class="com.simplelife.renhai.server.db.Interestlabelmap" /> 
-		<mapping class="com.simplelife.renhai.server.db.Operationcode" /> 
-		<mapping class="com.simplelife.renhai.server.db.Profile" /> 
-		<mapping class="com.simplelife.renhai.server.db.Profileoperationlog" /> 
-		<mapping class="com.simplelife.renhai.server.db.Sessionprofilemap" /> 
-		<mapping class="com.simplelife.renhai.server.db.Sessionrecord" /> 
-		<mapping class="com.simplelife.renhai.server.db.Statisticsitem" /> 
-		<mapping class="com.simplelife.renhai.server.db.Systemmodule" /> 
-		<mapping class="com.simplelife.renhai.server.db.Systemoperationlog" /> 
-		<mapping class="com.simplelife.renhai.server.db.Systemstatistics" /> 
-		<mapping class="com.simplelife.renhai.server.db.Webrtcsession" /> 
-		
+		<mapping class="com.simplelife.renhai.server.db.Device" />
+		<mapping class="com.simplelife.renhai.server.db.Devicecard" />
+		<mapping
+			class="com.simplelife.renhai.server.db.Globalimpresslabel" />
+		<mapping
+			class="com.simplelife.renhai.server.db.Globalinterestlabel" />
+		<mapping
+			class="com.simplelife.renhai.server.db.Hotinterestlabelstatistics" />
+		<mapping class="com.simplelife.renhai.server.db.Impresscard" />
+		<mapping
+			class="com.simplelife.renhai.server.db.Impresslabelmap" />
+		<mapping class="com.simplelife.renhai.server.db.Interestcard" />
+		<mapping
+			class="com.simplelife.renhai.server.db.Interestlabelmap" />
+		<mapping class="com.simplelife.renhai.server.db.Operationcode" />
+		<mapping class="com.simplelife.renhai.server.db.Profile" />
+		<mapping
+			class="com.simplelife.renhai.server.db.Profileoperationlog" />
+		<mapping
+			class="com.simplelife.renhai.server.db.Sessionprofilemap" />
+		<mapping class="com.simplelife.renhai.server.db.Sessionrecord" />
+		<mapping class="com.simplelife.renhai.server.db.Statisticsitem" />
+		<mapping class="com.simplelife.renhai.server.db.Systemmodule" />
+		<mapping
+			class="com.simplelife.renhai.server.db.Systemoperationlog" />
+		<mapping
+			class="com.simplelife.renhai.server.db.Systemstatistics" />
+		<mapping class="com.simplelife.renhai.server.db.Webrtcsession" />
 	</session-factory>
 </hibernate-configuration>

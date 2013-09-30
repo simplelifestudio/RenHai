@@ -81,6 +81,7 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		mockApp1.enterPool(Consts.BusinessType.Random);
 		
 		// Step_07 Mock请求：B进入随机聊天
+		businessPool.getBusinessScheduler().stopScheduler();
 		mockApp2.enterPool(Consts.BusinessType.Random);
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
@@ -97,7 +98,9 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		randomDeviceCount = businessPool.getElementCount();
 		
 		// Step_12 调用：RandomBusinessScheduler::schedule
-		//businessPool.getBusinessScheduler().schedule();
+		mockApp1.clearLastReceivedCommand();
+		businessPool.getBusinessScheduler().schedule();
+		mockApp1.waitMessage();
 		
 		// Step_13 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
@@ -113,12 +116,6 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
-		// Step_17 Mock事件：A确认绑定
-		mockApp1.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
-		
-		// Step_18 Mock事件：B确认绑定
-		mockApp2.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
-		
 		// Step_19 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);
 		
@@ -127,17 +124,19 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		
 		// Step_21 调用：B DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
+
 		
-		// Step_22 Mock事件：A同意聊天
+		// Step_17 Mock事件：A确认绑定
+		mockApp2.clearLastReceivedCommand();
 		mockApp1.chatConfirm(true);
+		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		mockApp2.waitMessage();
+		assertTrue(mockApp2.getLastReceivedCommand() != null);
 		
-		// Step_23 Mock事件：B同意聊天
+		// Step_18 Mock事件：B确认绑定
+		mockApp1.clearLastReceivedCommand();
 		mockApp2.chatConfirm(true);
-		
-		// Step_24 调用：BusinessSession::getStatus
-		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);
-		mockApp1.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
-		
+		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.VideoChat);
 		
 		// Step_25 Mock事件：A onClose

@@ -92,7 +92,7 @@ public class Profile implements java.io.Serializable {
 		this.device = device;
 	}
 
-	@Column(name = "serviceStatus", nullable = false, length = 6)
+	@Column(name = "serviceStatus", nullable = false, length = 7)
 	public String getServiceStatus() {
 		return this.serviceStatus;
 	}

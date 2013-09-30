@@ -63,7 +63,10 @@ public class RemoteMockApp extends AbstractMockApp
     
     /** */
     @Override
-    public void sendBusinessSessionRequest(Consts.OperationType operationType, String operationInfo, String operationValue)
+    public void sendBusinessSessionRequest(
+    		Consts.OperationType operationType, 
+    		JSONObject operationInfoObj,
+			String operationValue)
     {
     }
     

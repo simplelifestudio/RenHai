@@ -76,7 +76,7 @@ public class BusinessSession implements IBusinessSession
     {
     	if (!tmpConfirmDeviceList.contains(device))
     	{
-    		logger.error("Received confirmation from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
+    		logger.error("Received confirmation in onBindConfirm from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
     		return;
     	}
     	
@@ -214,8 +214,14 @@ public class BusinessSession implements IBusinessSession
     	for (String deviceSn : deviceList)
     	{
     		device = OnlineDevicePool.instance.getDevice(deviceSn);
-    		pool.startChat(device);
+    		if (device == null)
+    		{
+    			logger.error("Device <{}> is not in online device pool anymore, to be end business session", deviceSn);
+    			this.endSession();
+    			return;
+    		}
     		device.bindBusinessSession(this);
+    		pool.startChat(device);
     		
     		synchronized(tmpConfirmDeviceList)
 			{
@@ -228,41 +234,18 @@ public class BusinessSession implements IBusinessSession
     	notifyDevices(null, Consts.NotificationType.SessionBinded);
     }
     
-    private void notifyDevices(IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
+    public void notifyDevices(IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
     {
     	if (tmpConfirmDeviceList.size() == 0)
     	{
     		return;
     	}
     	
-    	ServerJSONMessage notify = null;
-    	switch(this.status)
-    	{
-    		case Assess:
-    			break;
-    			
-    		case ChatConfirm:
-    			notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
-    			notify.getBody().put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(sessionId));
-    			notify.getBody().put(JSONKey.BusinessType, pool.getBusinessType().getValue());
-    			notify.getBody().put(JSONKey.OperationType, notificationType.getValue());
-    			notify.getBody().put(JSONKey.OperationValue, null);
-    			break;
-    			
-    		case Idle:
-    			notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
-    			notify.getBody().put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(sessionId));
-    			notify.getBody().put(JSONKey.BusinessType, pool.getBusinessType().getValue());
-    			notify.getBody().put(JSONKey.OperationType, Consts.NotificationType.SessionBinded.getValue());
-    			notify.getBody().put(JSONKey.OperationValue, null);
-    			break;
-    			
-    		case VideoChat:
-    			break;
-			default:
-				break;
-    	}
-    	
+    	ServerJSONMessage notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
+		notify.getBody().put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(sessionId));
+		notify.getBody().put(JSONKey.BusinessType, pool.getBusinessType().getValue());
+		notify.getBody().put(JSONKey.OperationType, notificationType.getValue());
+		notify.getBody().put(JSONKey.OperationValue, null);
     	
     	List<IDeviceWrapper> tmpList;
     	synchronized(tmpConfirmDeviceList)
@@ -402,7 +385,7 @@ public class BusinessSession implements IBusinessSession
     	
     	if (!tmpConfirmDeviceList.contains(device))
     	{
-    		logger.error("Received confirmation from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
+    		logger.error("Received confirmation in onEndChat from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
     		return;
     	}
     	
@@ -421,6 +404,9 @@ public class BusinessSession implements IBusinessSession
     	// If not all devices assess
 		if (tmpConfirmDeviceList.size() > 0)
 		{
+			// TODO: 正式版中需要删除通知
+			logger.debug("Notify other devices that device <{}> ended chat", device.getDeviceSn());
+			notifyDevices(device, Consts.NotificationType.OthersideEndChat);
 			return;
 		}
     	
@@ -442,10 +428,9 @@ public class BusinessSession implements IBusinessSession
     @Override
     public void onAgreeChat(IDeviceWrapper device)
     {
-    	logger.debug("onAgreeChat of device <{}>", device.getDeviceSn());
     	if (!tmpConfirmDeviceList.contains(device))
     	{
-    		logger.error("Received confirmation from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
+    		logger.error("Received confirmation in onAgreeChat from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
     		return;
     	}
     	
@@ -464,21 +449,21 @@ public class BusinessSession implements IBusinessSession
     	// If not all devices confirmed
 		if (tmpConfirmDeviceList.size() > 0)
 		{
-			logger.debug("Not all devices confirmed, keep waiting.");
+			logger.debug("Notify other devices that device <{}> agreed chat", device.getDeviceSn());
+			notifyDevices(device, Consts.NotificationType.OthersideAgreed);
 			return;
 		}
-		
-		notifyDevices(device, Consts.NotificationType.OthersideAgreed);
-    	changeStatus(Consts.BusinessSessionStatus.VideoChat);
+
+		changeStatus(Consts.BusinessSessionStatus.VideoChat);
     }
     
     @Override
     public void onRejectChat(IDeviceWrapper device)
     {
-    	logger.debug("onRejectChat of device <{}>", device.getDeviceSn());
+    	//logger.debug("onRejectChat of device <{}>", device.getDeviceSn());
     	if (!tmpConfirmDeviceList.contains(device))
     	{
-    		logger.error("Received confirmation from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
+    		logger.error("Received confirmation in onRejectChat from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
     		return;
     	}
     	
@@ -497,10 +482,11 @@ public class BusinessSession implements IBusinessSession
     	// If not all devices confirmed
 		if (tmpConfirmDeviceList.size() > 0)
 		{
+			logger.debug("Notify other devices that device <{}> rejected chat", device.getDeviceSn());
+			notifyDevices(device, Consts.NotificationType.OthersideRejected);
 			return;
 		}
 		
-		notifyDevices(device, Consts.NotificationType.OthersideRejected);
 		endReason = Consts.SessionEndReason.Reject;
     	changeStatus(Consts.BusinessSessionStatus.Idle);
     }
@@ -513,8 +499,8 @@ public class BusinessSession implements IBusinessSession
     		logger.debug("lock tmpConfirmDeviceList in onDeviceLeave");
     		tmpConfirmDeviceList.remove(device);
     	}
+    	
     	logger.debug("unlock tmpConfirmDeviceList in onDeviceLeave");
-
     	synchronized(deviceList)
     	{
     		deviceList.remove(device);
@@ -546,8 +532,8 @@ public class BusinessSession implements IBusinessSession
 					return;
 				}
     			
+				endReason = Consts.SessionEndReason.NormalEnd;
     			changeStatus(Consts.BusinessSessionStatus.Idle);
-    			endReason = Consts.SessionEndReason.NormalEnd;
     			break;
     			
     		default:
@@ -557,29 +543,23 @@ public class BusinessSession implements IBusinessSession
     }
 
     @Override
-    public void onAssessAndContinue(IDeviceWrapper sourceDevice, IDeviceWrapper targetDevice)
+    public void onAssessAndContinue(IDeviceWrapper sourceDevice)
     {
-    	if (targetDevice.getDeviceSn().equals(sourceDevice.getDeviceSn()))
-    	{
-    		return;
-    	}
-    	
     	BusinessType type = sourceDevice.getBusinessType();
     	AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
     	pool.endChat(sourceDevice);
+    	
+    	sourceDevice.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
     }
     
 	@Override
-	public void onAssessAndQuit(IDeviceWrapper sourceDevice, IDeviceWrapper targetDevice)
+	public void onAssessAndQuit(IDeviceWrapper sourceDevice)
 	{
-    	if (targetDevice.getDeviceSn().equals(sourceDevice.getDeviceSn()))
-    	{
-    		return;
-    	}
-    	
-    	BusinessType type = sourceDevice.getBusinessType();
+		BusinessType type = sourceDevice.getBusinessType();
     	AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
     	pool.onDeviceLeave(sourceDevice);
+    	
+    	sourceDevice.changeBusinessStatus(Consts.BusinessStatus.Idle);
 	}
 
 	@Override

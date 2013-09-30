@@ -42,7 +42,7 @@ public class DAOWrapper
 	}
 	private static Logger logger = BusinessModule.instance.getLogger();
     /** */
-    protected static LinkedList<Object> linkToBeSaved;
+    protected static LinkedList<Object> linkToBeSaved = new LinkedList<Object>();
     
     /** */
     protected static Timer timer;
@@ -83,13 +83,17 @@ public class DAOWrapper
     		try
     		{
 	    		Session session = HibernateSessionFactory.getSession();
-	        	session.beginTransaction();
-	        	session.saveOrUpdate(obj);
-	        	session.getTransaction().commit();
+	        	//session.beginTransaction();
+	    		session.saveOrUpdate(obj);
+	        	//session.flush();
+	        	//session.clear();
+	        	//session.getTransaction().commit();
+	    		session.beginTransaction().commit();
     		}
     		catch(Exception e)
     		{
     			DBModule.instance.getLogger().error(e.getMessage());
+    			e.printStackTrace();
     		}
     	}
     }
@@ -136,7 +140,7 @@ public class DAOWrapper
 		}
 		finally
 		{
-			HibernateSessionFactory.closeSession();
+			//HibernateSessionFactory.closeSession();
 		}
 	}
     
@@ -180,7 +184,7 @@ public class DAOWrapper
 		}
 		finally
 		{
-			HibernateSessionFactory.closeSession();
+			//HibernateSessionFactory.closeSession();
 		}
 	}
     
@@ -218,7 +222,7 @@ public class DAOWrapper
 		}
 	    finally
 		{
-			HibernateSessionFactory.closeSession();
+			//HibernateSessionFactory.closeSession();
 		}
 	}
     
@@ -251,7 +255,7 @@ public class DAOWrapper
 		}
 		finally
 		{
-			HibernateSessionFactory.closeSession();
+			//HibernateSessionFactory.closeSession();
 		}
 	}
     
@@ -286,7 +290,7 @@ public class DAOWrapper
 		}
 		finally
 		{
-			HibernateSessionFactory.closeSession();
+			//HibernateSessionFactory.closeSession();
 		}
 	}
 
@@ -330,5 +334,6 @@ public class DAOWrapper
         	session.save(obj);
         	session.getTransaction().commit();
     	}
+    	session.close();
     }
 }

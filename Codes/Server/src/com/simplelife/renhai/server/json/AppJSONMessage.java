@@ -213,9 +213,11 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     protected void responseError(String messageId)
     {
     	ServerErrorResponse response = createErrorResponse();
-    	response.addToBody(JSONKey.ReceivedMessage, messageId);
-    	response.addToBody(JSONKey.ErrorCode, this.errorCode.toString());
+    	response.addToBody(JSONKey.ReceivedMessage, this.jsonObject);
+    	response.addToBody(JSONKey.ErrorCode, this.errorCode.getValue());
     	response.addToBody(JSONKey.ErrorDescription, this.errorDescription);
+    	response.addToHeader(JSONKey.MessageSn, this.getMessageSn());
+    	
     	response.asyncResponse();
     }
 
@@ -265,12 +267,12 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     {
     	if (getHeader() == null)
     	{
-    		return "";
+    		return null;
     	}
     	
-    	if (!header.containsKey(JSONKey.MessageType))
+    	if (!header.containsKey(JSONKey.MessageSn))
     	{
-    		return "";
+    		return null;
     	}
     	
     	return header.getString(JSONKey.MessageSn); 

@@ -124,7 +124,7 @@ public class Devicecard implements java.io.Serializable {
 		this.location = location;
 	}
 
-	@Column(name = "isJailed", nullable = false, length = 5)
+	@Column(name = "isJailed", nullable = false, length = 4)
 	public String getIsJailed() {
 		return this.isJailed;
 	}
