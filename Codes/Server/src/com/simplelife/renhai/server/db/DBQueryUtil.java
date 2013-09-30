@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
+import com.simplelife.renhai.server.util.Consts.DBExistResult;
+
 /**
  * 
  */
@@ -20,12 +22,40 @@ public class DBQueryUtil
 {
 	public static boolean isNewDevice(String deviceSn)
 	{
-		DeviceDAO deviceDAO = new DeviceDAO();
-		if(deviceDAO.findByDeviceSn(deviceSn).size() == 0)
+		String sql = "select * from " + TableName.Device 
+				+ " where " + TableColumnName.DeviceSn + " = '" + deviceSn + "'";
+		
+		if (DAOWrapper.exists(sql) == DBExistResult.Existent)
 		{
-			return true;
+			return false;
 		}
-		return false;
+		return true;
+	}
+	
+	public static Globalimpresslabel getGlobalimpresslabel(String label)
+	{
+		String sql = "select * from " + TableName.GlobalImpressLabel
+				+ " where " + TableColumnName.ImpressLabelName + " = '" + label + "'";
+		
+		List<Globalimpresslabel> list = DAOWrapper.query(sql, Globalimpresslabel.class);
+		if (list == null || list.size() == 0)
+		{
+			return null;
+		}
+		return list.get(0);
+	}
+	
+	public static Globalinterestlabel getGlobalinterestlabel(String label)
+	{
+		String sql = "select * from " + TableName.GlobalInterestLabel
+				+ " where " + TableColumnName.InterestLabelName + " = '" + label + "'";
+		
+		List<Globalinterestlabel> list = DAOWrapper.query(sql, Globalinterestlabel.class);
+		if (list.size() == 0)
+		{
+			return null;
+		}
+		return list.get(0);
 	}
 	
 	public static String getIDByDeviceSn(String idColumnName, String deviceSn)

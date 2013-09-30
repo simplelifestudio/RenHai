@@ -23,7 +23,7 @@ public class GlobalimpresslabelDAO extends AbstractHibernateDAO {
 	private static final Logger log = LoggerFactory
 			.getLogger(GlobalimpresslabelDAO.class);
 	// property constants
-	public static final String IMPRESS_LABEL = "impressLabel";
+	public static final String IMPRESS_LABEL_NAME = "impressLabelName";
 	public static final String GLOBAL_ASSESS_COUNT = "globalAssessCount";
 
 	public void save(Globalimpresslabel transientInstance) {
@@ -92,8 +92,9 @@ public class GlobalimpresslabelDAO extends AbstractHibernateDAO {
 		}
 	}
 
-	public List<Globalimpresslabel> findByImpressLabel(Object impressLabel) {
-		return findByProperty(IMPRESS_LABEL, impressLabel);
+	public List<Globalimpresslabel> findByImpressLabelName(
+			Object impressLabelName) {
+		return findByProperty(IMPRESS_LABEL_NAME, impressLabelName);
 	}
 
 	public List<Globalimpresslabel> findByGlobalAssessCount(

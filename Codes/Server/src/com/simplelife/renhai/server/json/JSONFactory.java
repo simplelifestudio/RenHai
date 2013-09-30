@@ -52,7 +52,7 @@ public class JSONFactory
 		AppJSONMessage message = new UnkownRequest(messageObject); 
 		if (!message.checkJSONRequest())
 		{
-			logger.debug("Failed to parse request: " + messageObject.toJSONString());
+			logger.debug("Failed to validate request: " + messageObject.toJSONString());
 			return message;
 		}
 		

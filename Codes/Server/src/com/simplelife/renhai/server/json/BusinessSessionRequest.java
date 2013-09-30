@@ -16,12 +16,16 @@ import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.db.DBModule;
+import com.simplelife.renhai.server.db.DBQueryUtil;
+import com.simplelife.renhai.server.db.Device;
+import com.simplelife.renhai.server.db.DeviceDAO;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.util.Consts.MessageId;
-import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts;
@@ -108,7 +112,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			return false;
 		}
 		
-		JSONObject deviceObj = getJSONObject(body, JSONKey.Device);
+		JSONObject deviceObj = getJSONObject(infoObj, JSONKey.Device);
 		if (deviceObj == null)
 		{
 			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
@@ -116,7 +120,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			return false;
 		}
 		
-		JSONObject profileObj = getJSONObject(body, JSONKey.Profile);
+		JSONObject profileObj = getJSONObject(deviceObj, JSONKey.Profile);
 		if (profileObj == null)
 		{
 			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
@@ -125,7 +129,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		
 		
-		JSONObject impressObj = getJSONObject(body, JSONKey.ImpressCard);
+		JSONObject impressObj = getJSONObject(profileObj, JSONKey.ImpressCard);
 		if (impressObj == null)
 		{
 			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
@@ -133,7 +137,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			return false;
 		}
 		
-		JSONObject assessLabelList = getJSONObject(body, JSONKey.AssessLabelList);
+		JSONArray assessLabelList = getJSONArray(impressObj, JSONKey.AssessLabelList);
 		if (assessLabelList == null)
 		{
 			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
@@ -247,6 +251,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void agreeChat()
 	{
+		logger.debug("Device <{}> agreed chat.", deviceWrapper.getDeviceSn());
 		deviceWrapper.getOwnerBusinessSession().onAgreeChat(deviceWrapper);
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
@@ -265,12 +270,11 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.BusinessType, Consts.OperationType.AgreeChat.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.asyncResponse();
-		
-		
 	}
 	
 	private void rejectChat()
 	{
+		logger.debug("Device <{}> rejected chat.", deviceWrapper.getDeviceSn());
 		deviceWrapper.getOwnerBusinessSession().onRejectChat(deviceWrapper);
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
@@ -290,12 +294,11 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.BusinessType, Consts.OperationType.RejectChat.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.asyncResponse();
-		
-		aa: 通知其他设备
 	}
 	
 	private void endChat()
 	{
+		logger.debug("Device <{}> ended chat.", deviceWrapper.getDeviceSn());
 		deviceWrapper.getOwnerBusinessSession().onEndChat(deviceWrapper);
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
@@ -315,8 +318,6 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.BusinessType, Consts.OperationType.EndChat.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.asyncResponse();
-		
-		aa: 通知其他设备
 	}
 	
 	private void assessAndContinue()
@@ -326,54 +327,77 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void assess(boolean quitAfterAssess)
 	{
-		String deviceSn = body.getJSONObject(JSONKey.Device).getString(JSONKey.DeviceSn);
-		IDeviceWrapper target = OnlineDevicePool.instance.getDevice(deviceSn);
+		logger.debug("Device <{}> provided assess.", deviceWrapper.getDeviceSn());
+		String deviceSn = body.getJSONObject(JSONKey.OperationInfo)
+				.getJSONObject(JSONKey.Device)
+				.getString(JSONKey.DeviceSn);
 		
-		if (target == null)
+		if (deviceSn.equals(deviceWrapper.getDeviceSn()))
+    	{
+    		logger.warn("Device <{}> is assessing itself", deviceSn);
+    		return;
+    	}
+		
+		if (DBQueryUtil.isNewDevice(deviceSn))
 		{
 			String temp = "Failed to assess Device <" + deviceSn + "> due to it's not in online pool";
 			logger.error(temp);
 			ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 					Consts.MessageId.BusinessSessionResponse);
-			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession().getStatus());
+			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession().getSessionId());
+			response.addToBody(JSONKey.BusinessType, deviceWrapper.getBusinessType().getValue());
 			response.addToBody(JSONKey.OperationInfo, temp);
 			response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Fail.getValue());
 			response.asyncResponse();
 			return;
 		}
 		
-		Impresscard card = target.getDevice().getProfile().getImpresscard();
+		DeviceDAO dao = new DeviceDAO();
+		Device target = dao.findByDeviceSn(deviceSn).get(0);;
+		Impresscard card = target.getProfile().getImpresscard();
 		Set<Impresslabelmap> impressLabelMap = card.getImpresslabelmaps();
 		
-		JSONObject impressObj = body.getJSONObject(JSONKey.Device).getJSONObject(JSONKey.Profile)
+		JSONObject impressObj = body.getJSONObject(JSONKey.OperationInfo)
+				.getJSONObject(JSONKey.Device)
+				.getJSONObject(JSONKey.Profile)
 				.getJSONObject(JSONKey.ImpressCard);
 		
 		JSONArray assessLabels = impressObj.getJSONArray(JSONKey.AssessLabelList);
-		updateOrAppendImpressLabel(impressLabelMap, target, assessLabels.getJSONObject(0));
+		updateOrAppendImpressLabel(impressLabelMap, assessLabels.getString(0));
 		
 		JSONArray impressLabels = impressObj.getJSONArray(JSONKey.ImpressLabelList);
 		for (int i = 0; i < impressLabels.size(); i++)
 		{
-			updateOrAppendImpressLabel(impressLabelMap, target, impressLabels.getJSONObject(i));
+			updateOrAppendImpressLabel(impressLabelMap, impressLabels.getString(i));
 		}
+		
+		// Save to DB
+		DBModule.instance.cache(target);
+		
+		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
+				Consts.MessageId.BusinessSessionResponse);
+		response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession().getSessionId());
+		response.addToBody(JSONKey.BusinessType, deviceWrapper.getBusinessType().getValue());
+		response.addToBody(JSONKey.OperationInfo, null);
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		
 		if (quitAfterAssess)
 		{
-			deviceWrapper.getOwnerBusinessSession().onAssessAndQuit(this.deviceWrapper, target);
+			deviceWrapper.getOwnerBusinessSession().onAssessAndQuit(this.deviceWrapper);
 		}
 		else
 		{
-			deviceWrapper.getOwnerBusinessSession().onAssessAndContinue(this.deviceWrapper, target);
+			deviceWrapper.getOwnerBusinessSession().onAssessAndContinue(this.deviceWrapper);
 		}
+		response.asyncResponse();
 	}
 	
-	private void updateOrAppendImpressLabel(Set<Impresslabelmap> impressLabels, IDeviceWrapper targetDevice,
-			JSONObject impressLabel)
+	private void updateOrAppendImpressLabel(Set<Impresslabelmap> impressLabels, String labelName)
 	{
-		String labelName = impressLabel.getString(JSONKey.ImpressLabelName);
+		//String labelName = impressLabel.getString(JSONKey.ImpressLabelName);
 		for (Impresslabelmap label : impressLabels)
 		{
-			if (label.getGlobalimpresslabel().getImpressLabel().equals(labelName))
+			if (label.getGlobalimpresslabel().getImpressLabelName().equals(labelName))
 			{
 				label.setAssessedCount(label.getAssessedCount() + 1);
 				label.setUpdateTime(System.currentTimeMillis());
@@ -383,7 +407,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		Globalimpresslabel globalimpresslabel = new Globalimpresslabel();
 		globalimpresslabel.setGlobalAssessCount(1);
-		globalimpresslabel.setImpressLabel(labelName);
+		globalimpresslabel.setImpressLabelName(labelName);
 		globalimpresslabel.setImpresslabelmaps(impressLabels);
 		
 		Impresslabelmap labelMap = new Impresslabelmap();

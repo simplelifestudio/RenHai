@@ -21,7 +21,7 @@ public class Globalimpresslabel implements java.io.Serializable {
 	// Fields
 
 	private Integer globalImpressLabelId;
-	private String impressLabel;
+	private String impressLabelName;
 	private Integer globalAssessCount;
 	private Set<Impresslabelmap> impresslabelmaps = new HashSet<Impresslabelmap>(
 			0);
@@ -33,15 +33,15 @@ public class Globalimpresslabel implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Globalimpresslabel(String impressLabel, Integer globalAssessCount) {
-		this.impressLabel = impressLabel;
+	public Globalimpresslabel(String impressLabelName, Integer globalAssessCount) {
+		this.impressLabelName = impressLabelName;
 		this.globalAssessCount = globalAssessCount;
 	}
 
 	/** full constructor */
-	public Globalimpresslabel(String impressLabel, Integer globalAssessCount,
-			Set<Impresslabelmap> impresslabelmaps) {
-		this.impressLabel = impressLabel;
+	public Globalimpresslabel(String impressLabelName,
+			Integer globalAssessCount, Set<Impresslabelmap> impresslabelmaps) {
+		this.impressLabelName = impressLabelName;
 		this.globalAssessCount = globalAssessCount;
 		this.impresslabelmaps = impresslabelmaps;
 	}
@@ -58,13 +58,13 @@ public class Globalimpresslabel implements java.io.Serializable {
 		this.globalImpressLabelId = globalImpressLabelId;
 	}
 
-	@Column(name = "impressLabel", nullable = false, length = 256)
-	public String getImpressLabel() {
-		return this.impressLabel;
+	@Column(name = "impressLabelName", nullable = false, length = 256)
+	public String getImpressLabelName() {
+		return this.impressLabelName;
 	}
 
-	public void setImpressLabel(String impressLabel) {
-		this.impressLabel = impressLabel;
+	public void setImpressLabelName(String impressLabelName) {
+		this.impressLabelName = impressLabelName;
 	}
 
 	@Column(name = "globalAssessCount", nullable = false)
@@ -76,7 +76,7 @@ public class Globalimpresslabel implements java.io.Serializable {
 		this.globalAssessCount = globalAssessCount;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "globalimpresslabel")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "globalimpresslabel")
 	public Set<Impresslabelmap> getImpresslabelmaps() {
 		return this.impresslabelmaps;
 	}

@@ -16,7 +16,6 @@ import org.junit.Test;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.DeviceDAO;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.TableColumnName;
 import com.simplelife.renhai.server.db.TableName;

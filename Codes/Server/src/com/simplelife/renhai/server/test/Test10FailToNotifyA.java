@@ -35,7 +35,7 @@ public class Test10FailToNotifyA extends AbstractTestCase
 	{
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp1 = createNewMockApp(demoDeviceSn);
-		mockApp2.getDeviceWrapper().getDevice().setDeviceSn("SNOfDeviceB");
+		mockApp2 = createNewMockApp(demoDeviceSn2);
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class Test10FailToNotifyA extends AbstractTestCase
 	public void test()
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool randomPool = onlinePool.getBusinessPool(Consts.BusinessType.Random); 
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random); 
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;  
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
@@ -73,8 +73,8 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		int deviceCount = onlinePool.getElementCount();
 		
 		// Step_02 调用：RandomBusinessDevicePool::getCount
-		int randomDeviceCount = randomPool.getElementCount();
-		logger.debug("Original device count of random pool: {}", randomPool.getElementCount());
+		int randomDeviceCount = businessPool.getElementCount();
+		logger.debug("Original device count of random pool: {}", businessPool.getElementCount());
 		
 		// Step_03 调用：BusinessSessionPool::getCount
 		int sessionCount = sessionPool.getElementCount();
@@ -86,11 +86,11 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
-		assertTrue(randomPool.getDevice(deviceSn1) == null);
+		assertTrue(businessPool.getDevice(deviceSn1) == null);
 		
 		mockApp1.enterPool(Consts.BusinessType.Random);
 		assertTrue(!mockApp1.lastReceivedCommandIsError());
-		assertTrue(randomPool.getDevice(deviceSn1) != null);
+		assertTrue(businessPool.getDevice(deviceSn1) != null);
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
@@ -99,22 +99,23 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		connection1.disableConnection();
 		
 		// Step_07 Mock请求：B进入随机聊天
-		assertTrue(randomPool.getDevice(deviceSn2) == null);
+		assertTrue(businessPool.getDevice(deviceSn2) == null);
+		businessPool.getBusinessScheduler().stopScheduler();
 		mockApp2.enterPool(Consts.BusinessType.Random);
-		assertTrue(randomPool.getDevice(deviceSn2) != null);
+		assertTrue(businessPool.getDevice(deviceSn2) != null);
 		
 		// Step_09 调用：B DeviceWrapper::getBusinessStatus
 		//assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper2.getBusinessStatus());
 		
 		// Step_10 调用：RandomBusinessDevicePool::getCount
-		assertEquals(randomDeviceCount + 2, randomPool.getElementCount());
-		randomDeviceCount = randomPool.getElementCount();
+		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
+		randomDeviceCount = businessPool.getElementCount();
 		
 		// Step_12 调用：RandomBusinessScheduler::schedule
-		randomPool.getBusinessScheduler().schedule();
+		businessPool.getBusinessScheduler().schedule();
 		
 		// Step_13 调用：BusinessSessionPool::getCount
-		if (randomPool.getDeviceCountInChat() > 0)
+		if (businessPool.getDeviceCountInChat() > 0)
 		{
 			// Maybe devices have not been scheduled yet
 			assertEquals(sessionCount-1, sessionPool.getElementCount());

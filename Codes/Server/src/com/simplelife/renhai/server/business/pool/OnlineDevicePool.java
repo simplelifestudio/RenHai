@@ -23,10 +23,12 @@ import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
+import com.simplelife.renhai.server.business.session.BusinessSession;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
+import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
@@ -190,6 +192,8 @@ public class OnlineDevicePool extends AbstractDevicePool
     	deviceWrapper.unbindOnlineDevicePool();
     	
     	Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
+    	IBusinessSession session = deviceWrapper.getOwnerBusinessSession();
+    	
     	deviceWrapper.unbindOnlineDevicePool();
     	if (status == Consts.BusinessStatus.Init)
     	{
@@ -200,7 +204,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 	    		{
 	    			queueDeviceMap.remove(id);
 	    		}
-	    		logger.debug("Device <id> was removed from queueDeviceMap of online device pool.", id);
+	    		logger.debug("Device <{}> was removed from queueDeviceMap of online device pool.", id);
     		}
     	}
     	else
@@ -218,7 +222,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		if ((status == Consts.BusinessStatus.WaitMatch)
         			|| (status == Consts.BusinessStatus.SessionBound))
         	{
-        		for (Consts.BusinessType type: Consts.BusinessType.values())
+    			for (Consts.BusinessType type: Consts.BusinessType.values())
         		{
         			AbstractBusinessDevicePool pool = this.getBusinessPool(type);
         			if (pool != null)
@@ -226,6 +230,11 @@ public class OnlineDevicePool extends AbstractDevicePool
         				pool.onDeviceLeave(deviceWrapper);
         			}
         		}
+    			
+    			if (session != null)
+    			{
+    				session.notifyDevices(deviceWrapper, Consts.NotificationType.OthersideLost);
+    			}
         	}
     	}
     }

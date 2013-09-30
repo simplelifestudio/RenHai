@@ -34,11 +34,11 @@ public class Interestlabelmap implements java.io.Serializable {
 
 	/** full constructor */
 	public Interestlabelmap(Interestcard interestcard,
-			Globalinterestlabel globalinterestlabel, Integer order,
+			Globalinterestlabel globalinterestlabel, Integer labelOrder,
 			Integer matchCount, String validFlag) {
 		this.interestcard = interestcard;
 		this.globalinterestlabel = globalinterestlabel;
-		this.labelOrder = order;
+		this.labelOrder = labelOrder;
 		this.matchCount = matchCount;
 		this.validFlag = validFlag;
 	}
@@ -76,7 +76,7 @@ public class Interestlabelmap implements java.io.Serializable {
 	}
 
 	@Column(name = "labelOrder", nullable = false)
-	public Integer getlabelOrder() {
+	public Integer getLabelOrder() {
 		return this.labelOrder;
 	}
 

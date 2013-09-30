@@ -10,7 +10,6 @@
 package com.simplelife.renhai.server.json;
 
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.util.Consts;

@@ -13,13 +13,11 @@ package com.simplelife.renhai.server.test;
 import java.nio.ByteBuffer;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializeFilter;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
@@ -208,7 +206,8 @@ public class LocalMockApp extends AbstractMockApp
 	
 	/** */
 	@Override
-	public void sendBusinessSessionRequest(Consts.OperationType operationType, String operationInfo,
+	public void sendBusinessSessionRequest(Consts.OperationType operationType, 
+			JSONObject operationInfoObj,
 			String operationValue)
 	{
 		init();
@@ -221,8 +220,8 @@ public class LocalMockApp extends AbstractMockApp
 		body.put(JSONKey.BusinessType, businessType.getValue());
 		body.put(JSONKey.OperationType, operationType.getValue());
 		
-		body.put(JSONKey.OperationInfo, CommonFunctions.getJSONValue(operationInfo));
-		body.put(JSONKey.OperationValue, CommonFunctions.getJSONValue(operationValue));
+		body.put(JSONKey.OperationInfo, operationInfoObj);
+		body.put(JSONKey.OperationValue, operationValue);
 		
 		sendRawJSONMessage(jsonObject, true);
 	}
@@ -239,14 +238,14 @@ public class LocalMockApp extends AbstractMockApp
 	public void enterPool(Consts.BusinessType businessType)
 	{
 		this.businessType = businessType;
-		sendBusinessSessionRequest(Consts.OperationType.EnterPool, "", businessType.toString());
+		sendBusinessSessionRequest(Consts.OperationType.EnterPool, null, businessType.toString());
 	}
 	
 	/** */
 	@Override
 	public void endChat()
 	{
-		sendBusinessSessionRequest(Consts.OperationType.EndChat, "", "");
+		sendBusinessSessionRequest(Consts.OperationType.EndChat, null, "");
 	}
 	
 	/** */
@@ -255,11 +254,11 @@ public class LocalMockApp extends AbstractMockApp
 	{
 		if (agree)
 		{
-			sendBusinessSessionRequest(Consts.OperationType.AgreeChat, "", "");
+			sendBusinessSessionRequest(Consts.OperationType.AgreeChat, null, "");
 		}
 		else
 		{
-			sendBusinessSessionRequest(Consts.OperationType.RejectChat, "", "");
+			sendBusinessSessionRequest(Consts.OperationType.RejectChat, null, "");
 		}
 	}
 	
@@ -312,11 +311,11 @@ public class LocalMockApp extends AbstractMockApp
 		
 		if (continueFlag)
 		{
-			sendBusinessSessionRequest(Consts.OperationType.AssessAndContinue, "", JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue));
+			sendBusinessSessionRequest(Consts.OperationType.AssessAndContinue, obj, "");
 		}
 		else
 		{
-			sendBusinessSessionRequest(Consts.OperationType.AssessAndQuit, "", JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue));
+			sendBusinessSessionRequest(Consts.OperationType.AssessAndQuit, obj, "");
 		}
 	}
 	
@@ -341,6 +340,7 @@ public class LocalMockApp extends AbstractMockApp
 			int messageId = header.getIntValue(JSONKey.MessageId);
 			if (messageId == Consts.MessageId.BusinessSessionNotification.getValue())
 			{
+				logger.debug("Device <{}> replies BusinessSessionNotification automatically.");
 				AutoReplyTask task = new AutoReplyTask(obj, this);
 				task.start();
 			}
@@ -350,7 +350,7 @@ public class LocalMockApp extends AbstractMockApp
 	/**
 	 * Mock request of AppDataSyncRequest
 	 */
-	protected void syncDevice()
+	public void syncDevice()
 	{
 		JSONObject updateObj = new JSONObject();
 		JSONObject deviceObj = new JSONObject();

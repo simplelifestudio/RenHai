@@ -84,6 +84,7 @@ public class Test16TimeoutNotifyAAfterBAgree extends AbstractTestCase
 		mockApp1.enterPool(Consts.BusinessType.Random);
 		
 		// Step_07 Mock请求：B进入随机聊天
+		businessPool.getBusinessScheduler().stopScheduler();
 		mockApp2.enterPool(Consts.BusinessType.Random);
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
@@ -97,7 +98,9 @@ public class Test16TimeoutNotifyAAfterBAgree extends AbstractTestCase
 		randomDeviceCount = businessPool.getElementCount();
 		
 		// Step_11 调用：RandomBusinessScheduler::schedule
-		//businessPool.getBusinessScheduler().schedule();
+		mockApp1.clearLastReceivedCommand();
+		businessPool.getBusinessScheduler().schedule();
+		mockApp1.waitMessage();
 		
 		// Step_12 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());

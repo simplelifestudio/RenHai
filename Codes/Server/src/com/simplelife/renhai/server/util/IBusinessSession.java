@@ -52,9 +52,9 @@ public interface IBusinessSession
     public String getSessionId();
     
     /** */
-    public void onAssessAndContinue(IDeviceWrapper sourceDevice, IDeviceWrapper targetDevice);
+    public void onAssessAndContinue(IDeviceWrapper sourceDevice);
     
-    public void onAssessAndQuit(IDeviceWrapper sourceDevice, IDeviceWrapper targetDevice);
+    public void onAssessAndQuit(IDeviceWrapper sourceDevice);
     
     public void onBindConfirm(IDeviceWrapper device);
     
@@ -66,4 +66,5 @@ public interface IBusinessSession
     
     public void unbindBusinessDevicePool();
     
+    public void notifyDevices(IDeviceWrapper triggerDevice, Consts.NotificationType notificationType);
 }

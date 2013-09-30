@@ -63,10 +63,4 @@ public class InvalidRequest extends AppJSONMessage
     {
     	return Consts.MessageId.Invalid;
     }
-	
-	@Override
-    public String getMessageSn()
-    {
-    	return "InvalidMessageSn";
-    }
 }

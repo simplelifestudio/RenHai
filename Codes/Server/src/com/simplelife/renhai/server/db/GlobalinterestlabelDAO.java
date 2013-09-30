@@ -23,7 +23,7 @@ public class GlobalinterestlabelDAO extends AbstractHibernateDAO {
 	private static final Logger log = LoggerFactory
 			.getLogger(GlobalinterestlabelDAO.class);
 	// property constants
-	public static final String INTEREST_LABEL = "interestLabel";
+	public static final String INTEREST_LABEL_NAME = "interestLabelName";
 	public static final String GLOBAL_MATCH_COUNT = "globalMatchCount";
 
 	public void save(Globalinterestlabel transientInstance) {
@@ -92,8 +92,9 @@ public class GlobalinterestlabelDAO extends AbstractHibernateDAO {
 		}
 	}
 
-	public List<Globalinterestlabel> findByInterestLabel(Object interestLabel) {
-		return findByProperty(INTEREST_LABEL, interestLabel);
+	public List<Globalinterestlabel> findByInterestLabelName(
+			Object interestLabelName) {
+		return findByProperty(INTEREST_LABEL_NAME, interestLabelName);
 	}
 
 	public List<Globalinterestlabel> findByGlobalMatchCount(

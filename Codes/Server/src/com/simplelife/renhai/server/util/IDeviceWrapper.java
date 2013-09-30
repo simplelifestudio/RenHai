@@ -17,6 +17,7 @@ import java.util.Date;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
+import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 
@@ -92,4 +93,9 @@ public interface IDeviceWrapper
     public IBaseConnection getConnection();
     
     public JSONObject toJSONObject();
+    public JSONObject toJSONObject_DeviceCard();
+    public JSONObject toJSONObject_Device();
+    public JSONObject toJSONObject_Profile();
+    public JSONObject toJSONObject_InterestCard(Profile profile);
+    public JSONObject toJSONObject_ImpressCard(Profile profile);
 }
