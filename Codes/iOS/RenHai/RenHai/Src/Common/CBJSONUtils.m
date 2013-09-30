@@ -35,14 +35,25 @@
 {
     NSDictionary* dic = nil;
     
-    NSData* jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-    
-    NSError* error = nil;
-    dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-    
-    if(!dic)
+    @try
     {
-        DDLogWarn(@"JSON error: %@", error.localizedDescription);        
+        NSData* jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+        
+        NSError* error = nil;
+        dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+        
+        if(nil == dic)
+        {
+            DDLogWarn(@"JSON error: %@", error.localizedDescription);
+        }
+    }
+    @catch (NSException *exception)
+    {
+        DDLogWarn(@"Caught Exception: %@", exception.debugDescription);
+    }
+    @finally
+    {
+        
     }
 
     return dic;

@@ -77,7 +77,7 @@
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
     id oLabelId = [self _getOLabelId];
-    [dic setObject:oLabelId forKey:MESSAGE_KEY_IMPRESSLABELID];
+    [dic setObject:oLabelId forKey:MESSAGE_KEY_INTERESTLABELNAME];
     
     NSNumber* oAssessedCount = [NSNumber numberWithInteger:_assessedCount];
     [dic setObject:oAssessedCount forKey:MESSAGE_KEY_ASSESSEDCOUNT];
@@ -131,6 +131,41 @@
     [aCoder encodeInteger:_assessCount forKey:SERIALIZE_KEY_ASSESSCOUNT];
     
     [aCoder encodeObject:_labelName forKey:SERIALIZE_KEY_NAME];
+}
+
+#pragma mark - NSCopying
+
+-(id) copyWithZone:(struct _NSZone *)zone
+{
+//    RHImpressLabel* copy = [[RHImpressLabel alloc] init];
+//    
+//    copy.labelId = _labelId;
+//    copy.assessedCount = _assessedCount;
+//    copy.updateTime = [_updateTime copy];
+//    copy.assessCount = _assessCount;
+//    copy.labelName = [_labelName copy];
+//    
+//    return copy;
+
+    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
+    return (RHImpressLabel*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
+#pragma mark - NSMutableCopying
+
+-(id) mutableCopyWithZone:(struct _NSZone *)zone
+{
+//    RHImpressLabel* mutableCopy = [[RHImpressLabel alloc] init];
+//    
+//    mutableCopy.labelId = _labelId;
+//    mutableCopy.assessedCount = _assessedCount;
+//    mutableCopy.updateTime = [_updateTime mutableCopy];
+//    mutableCopy.assessCount = _assessCount;
+//    mutableCopy.labelName = [_labelName mutableCopy];
+//    
+//    return mutableCopy;
+
+    return [self copyWithZone:zone];
 }
 
 @end

@@ -125,4 +125,35 @@
     [aCoder encodeObject:_profile forKey:SERIALIZE_KEY_PROFILE];
 }
 
+#pragma mark - NSCopying
+
+-(id) copyWithZone:(struct _NSZone *)zone
+{
+//    RHDevice* copy = [[RHDevice alloc] init];
+//    
+//    copy.deviceId = _deviceId;
+//    copy.deviceSn = [_deviceSn copy];
+//    copy.profile = [_profile copy];
+//    
+//    return copy;
+
+    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
+    return (RHDevice*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
+#pragma mark - NSMutableCopying
+
+-(id) mutableCopyWithZone:(struct _NSZone *)zone
+{
+//    RHDevice* mutableCopy = [[RHDevice alloc] init];
+//    
+//    mutableCopy.deviceId = _deviceId;
+//    mutableCopy.deviceSn = [_deviceSn mutableCopy];    
+//    mutableCopy.profile = [_profile mutableCopy];
+//    
+//    return mutableCopy;
+
+    return [self copyWithZone:zone];
+}
+
 @end

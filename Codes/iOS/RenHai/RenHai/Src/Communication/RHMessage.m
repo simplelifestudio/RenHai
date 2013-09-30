@@ -13,6 +13,8 @@
 #import "CBDateUtils.h"
 #import "CBSecurityUtils.h"
 
+#import "NSDictionary+MutableDeepCopy.h"
+
 static BOOL s_messageEncrypted;
 
 @interface RHMessage()
@@ -56,15 +58,20 @@ static BOOL s_messageEncrypted;
 
 +(RHMessage*) constructWithContent:(NSDictionary*) content enveloped:(BOOL) enveloped;
 {
-    if (enveloped)
-    {
-        content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
-    }
-
-    NSDictionary* header = [content objectForKey:MESSAGE_KEY_HEADER];
-    NSDictionary* body = [content objectForKey:MESSAGE_KEY_BODY];
+    RHMessage* message = nil;
     
-    RHMessage* message = [RHMessage constructWithMessageHeader:header messageBody:body enveloped:enveloped];
+    if (nil != content)
+    {
+        if (enveloped)
+        {
+            content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
+        }
+        
+        NSDictionary* header = [content objectForKey:MESSAGE_KEY_HEADER];
+        NSDictionary* body = [content objectForKey:MESSAGE_KEY_BODY];
+        
+        message = [RHMessage constructWithMessageHeader:header messageBody:body enveloped:enveloped];
+    }
     
     return message;
 }
@@ -94,32 +101,82 @@ static BOOL s_messageEncrypted;
     return message;
 }
 
-+(RHMessageErrorCode) verify:(RHMessage*) message
+//+(RHMessageErrorCode) verify:(RHMessage*) message
+//{
+//    RHMessageErrorCode error = ErrorCode_ServerLegalResponse;
+//    
+//    if (nil != message)
+//    {
+//        RHMessageId messageId = message.messageId;
+//        if (messageId == MessageId_ServerErrorResponse)
+//        {
+//            error = ErrorCode_ServerErrorMessage;
+//        }
+//        else if (messageId == MessageId_ServerTimeoutResponse)
+//        {
+//            error = ErrorCode_ServerTimeoutMessage;
+//        }
+//        else if (messageId == MessageId_Unknown)
+//        {
+//            error = ErrorCode_ServerIllegalMessage;
+//        }
+//    }
+//    else
+//    {
+//        error = ErrorCode_ServerNullMessage;
+//    }
+//    
+//    return error;
+//}
+
++(BOOL) isLegalMessage:(RHMessage *)message
 {
-    RHMessageErrorCode error = ErrorCode_ServerLegalResponse;
+    BOOL flag = NO;
     
     if (nil != message)
     {
-        RHMessageId messageId = message.messageId;
-        if (messageId == MessageId_ServerErrorResponse)
+        NSDictionary* header = message.header;
+        if (nil != header)
         {
-            error = ErrorCode_ServerErrorResponse;
+            __block BOOL hasMessageTye = NO;
+            __block BOOL hasMessageId = NO;
+            __block BOOL hasMessageSn = NO;
+            __block BOOL hasTimeStamp = NO;
+            __block BOOL hasDevieSn = NO;
+            __block BOOL hasDeviceId = NO;
+            
+            [header enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
+                if ([key isEqualToString:MESSAGE_KEY_MESSAGETYPE])
+                {
+                    hasMessageTye = YES;
+                }
+                else if ([key isEqualToString:MESSAGE_KEY_MESSAGEID])
+                {
+                    hasMessageId = YES;
+                }
+                else if ([key isEqualToString:MESSAGE_KEY_MESSAGESN])
+                {
+                    hasMessageSn = YES;
+                }
+                else if ([key isEqualToString:MESSAGE_KEY_TIMESTAMP])
+                {
+                    hasTimeStamp = YES;
+                }
+                else if ([key isEqualToString:MESSAGE_KEY_DEVICESN])
+                {
+                    hasDevieSn = YES;
+                }
+                else if ([key isEqualToString:MESSAGE_KEY_DEVICEID])
+                {
+                    hasDeviceId = YES;
+                }
+            }];
+            
+            flag = (hasMessageTye & hasMessageId & hasMessageSn & hasTimeStamp & hasDevieSn & hasDeviceId) ? YES : NO;
         }
-        else if (messageId == MessageId_ServerTimeoutResponse)
-        {
-            error = ErrorCode_ServerTimeout;
-        }
-        else if (messageId == MessageId_Unknown)
-        {
-            error = ErrorCode_ServerIllegalResponse;
-        }
-    }
-    else
-    {
-        error = ErrorCode_ServerNullResponse;
     }
     
-    return error;
+    return flag;
 }
 
 +(NSDictionary*) constructMessageHeader:(RHMessageType) messageType messageId:(RHMessageId) messageId messageSn:(NSString*) messageSn deviceId:(NSInteger) deviceId deviceSn:(NSString*) deviceSn
@@ -190,7 +247,7 @@ static BOOL s_messageEncrypted;
     return message;
 }
 
-+(RHMessage*) newAppDataSyncRequestMessage:(AppDataSyncRequestType) type device:(RHDevice*) device;
++(RHMessage*) newAppDataSyncRequestMessage:(AppDataSyncRequestType) type device:(RHDevice*) device info:(NSDictionary*) info;
 {
     NSAssert(nil != device, @"Device can not be null!");
     
@@ -207,13 +264,13 @@ static BOOL s_messageEncrypted;
     NSMutableDictionary* dataUpdate = [NSMutableDictionary dictionary];
     
     id oNull = [NSNull null];
-    NSMutableDictionary* dataSource = [NSMutableDictionary dictionaryWithDictionary:device.toJSONObject];
     switch (type)
     {
         case AppDataSyncRequestType_TotalSync:
         {
+            NSMutableDictionary* dataSource = [NSMutableDictionary dictionaryWithDictionary:device.toJSONObject];
             // dataUpdate
-            NSMutableDictionary* dataUpdateSource = [dataSource copy];
+            NSMutableDictionary* dataUpdateSource = [dataSource mutableDeepCopy];
             NSMutableDictionary* deviceSource = [dataUpdateSource objectForKey:MESSAGE_KEY_DEVICE];
             [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICEID];
             [deviceSource removeObjectForKey:MESSAGE_KEY_PROFILE];
@@ -224,18 +281,15 @@ static BOOL s_messageEncrypted;
             
             // dataQuery
             deviceSource = [NSMutableDictionary dictionary];
-            [deviceSource setObject:oNull forKey:MESSAGE_KEY_DEVICEID];
-            [deviceSource setObject:oNull forKey:MESSAGE_KEY_DEVICESN];
-            [deviceSource setObject:oNull forKey:MESSAGE_KEY_DEVICECARD];
-            [deviceSource setObject:oNull forKey:MESSAGE_KEY_PROFILE];
-            [dataQuery setObject:deviceSource forKey:MESSAGE_KEY_DEVICE];
+            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICE];
             
             break;
         }
         case AppDataSyncRequestType_DeviceCardSync:
         {
+            NSMutableDictionary* dataSource = [NSMutableDictionary dictionaryWithDictionary:device.toJSONObject];
             // dataUpdate
-            NSMutableDictionary* dataUpdateSource = [dataSource copy];
+            NSMutableDictionary* dataUpdateSource = [dataSource mutableDeepCopy];
             NSMutableDictionary* deviceSource = [dataUpdateSource objectForKey:MESSAGE_KEY_DEVICE];
             [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICEID];
             [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICESN];
@@ -256,11 +310,13 @@ static BOOL s_messageEncrypted;
         }
         case AppDataSyncRequestType_ImpressCardSync:
         {
+            NSMutableDictionary* dataSource = [NSMutableDictionary dictionaryWithDictionary:device.toJSONObject];
+            
             // dataUpdate
             dataUpdate = nil;
             
             // dataQuery
-            NSMutableDictionary* dataQuerySource = [dataSource copy];
+            NSMutableDictionary* dataQuerySource = [dataSource mutableDeepCopy];
             NSMutableDictionary* deviceSource = [dataQuerySource objectForKey:MESSAGE_KEY_DEVICE];
             [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICEID];
             [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICESN];
@@ -279,11 +335,22 @@ static BOOL s_messageEncrypted;
         }
         case AppDataSyncRequestType_InterestCardSync:
         {
+            if (nil != info)
+            {
+                [info enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
+                    NSString* labelName = (NSString*)key;
+                    [device.profile.interestCard addLabel:labelName];
+                }];
+            }
+            
+            NSDictionary* dataSource = [NSDictionary dictionaryWithDictionary:device.toJSONObject];
+
             // dataUpdate
-            NSMutableDictionary* dataUpdateSource = [dataSource copy];
+            NSMutableDictionary* dataUpdateSource = [dataSource mutableDeepCopy];
             NSMutableDictionary* deviceSource = [dataUpdateSource objectForKey:MESSAGE_KEY_DEVICE];
             [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICEID];
             [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICESN];
+            [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICECARD];
             NSMutableDictionary* profileSource = [deviceSource objectForKey:MESSAGE_KEY_PROFILE];
             [profileSource removeObjectForKey:MESSAGE_KEY_PROFILEID];
             [profileSource removeObjectForKey:MESSAGE_KEY_SERVICESTATUS];
@@ -294,7 +361,7 @@ static BOOL s_messageEncrypted;
             dataUpdate = dataUpdateSource;
             
             // dataQuery
-            NSMutableDictionary* dataQuerySource = [dataSource copy];
+            NSMutableDictionary* dataQuerySource = [dataSource mutableDeepCopy];
             deviceSource = [dataQuerySource objectForKey:MESSAGE_KEY_DEVICE];
             [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICEID];
             [deviceSource removeObjectForKey:MESSAGE_KEY_DEVICESN];
@@ -307,6 +374,7 @@ static BOOL s_messageEncrypted;
             [profileSource removeObjectForKey:MESSAGE_KEY_CREATETIME];
             [profileSource removeObjectForKey:MESSAGE_KEY_IMPRESSCARD];
             [profileSource setObject:oNull forKey:MESSAGE_KEY_INTERESTCARD];
+            
             dataQuery = dataQuerySource;
             
             break;

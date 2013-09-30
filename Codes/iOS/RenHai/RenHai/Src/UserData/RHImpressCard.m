@@ -245,4 +245,41 @@
     [aCoder encodeInteger:_chatLossCount forKey:SERIALIZE_KEY_CHATLOSSCOUNT];
 }
 
+#pragma mark - NSCopying
+
+-(id) copyWithZone:(struct _NSZone *)zone
+{
+//    RHImpressCard* copy = [[RHImpressCard alloc] init];
+//    
+//    copy.impressCardId = _impressCardId;
+//    copy.assessLabelList = [_assessLabelList copy];
+//    copy.impressLabelList = [_impressLabelList copy];
+//    copy.chatTotalCount = _chatTotalCount;
+//    copy.chatTotalDuration = _chatTotalDuration;
+//    copy.chatLossCount = _chatLossCount;
+//    
+//    return copy;
+
+    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
+    return (RHImpressCard*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
+#pragma mark - NSMutableCopying
+
+-(id) mutableCopyWithZone:(struct _NSZone *)zone
+{
+//    RHImpressCard* mutableCopy = [[RHImpressCard alloc] init];
+//
+//    mutableCopy.impressCardId = _impressCardId;
+//    mutableCopy.assessLabelList = [_assessLabelList mutableCopy];
+//    mutableCopy.impressLabelList = [_impressLabelList mutableCopy];
+//    mutableCopy.chatTotalCount = _chatTotalCount;
+//    mutableCopy.chatTotalDuration = _chatTotalDuration;
+//    mutableCopy.chatLossCount = _chatLossCount;
+//    
+//    return mutableCopy;
+
+    return [self copyWithZone:zone];
+}
+
 @end

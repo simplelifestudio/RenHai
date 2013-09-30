@@ -181,4 +181,43 @@
     [aCoder encodeObject:_impressCard forKey:SERIALIZE_KEY_IMPRESSCARD];
 }
 
+#pragma mark - NSCopying
+
+-(id) copyWithZone:(struct _NSZone *)zone
+{
+//    RHProfile* copy = [[RHProfile alloc] init];
+//    
+//    copy.profileId = _profileId;
+//    copy.serviceStatus = _serviceStatus;
+//    copy.unbanDate = [_unbanDate copy];
+//    copy.active = _active;
+//    copy.createTime = [_createTime copy];
+//    copy.interestCard = [_interestCard copy];
+//    copy.impressCard = [_impressCard copy];
+//    
+//    return copy;
+
+    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
+    return (RHProfile*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
+#pragma mark - NSMutableCopying
+
+-(id) mutableCopyWithZone:(struct _NSZone *)zone
+{
+//    RHProfile* mutableCopy = [[RHProfile alloc] init];
+//    
+//    mutableCopy.profileId = _profileId;
+//    mutableCopy.serviceStatus = _serviceStatus;
+//    mutableCopy.unbanDate = [_unbanDate mutableCopy];
+//    mutableCopy.active = _active;
+//    mutableCopy.createTime = [_createTime mutableCopy];
+//    mutableCopy.interestCard = [_interestCard mutableCopy];
+//    mutableCopy.impressCard = [_impressCard mutableCopy];
+//    
+//    return mutableCopy;
+
+    return [self copyWithZone:zone];
+}
+
 @end

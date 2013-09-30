@@ -13,7 +13,7 @@
 #import "RHDeviceCard.h"
 #import "RHProfile.h"
 
-@interface RHDevice : NSObject <CBJSONable>
+@interface RHDevice : NSObject <CBJSONable, NSCopying, NSMutableCopying>
 
 @property (nonatomic) NSInteger deviceId;
 @property (nonatomic, strong) NSString* deviceSn;

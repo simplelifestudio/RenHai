@@ -20,7 +20,7 @@ typedef enum
 }
 RHProfileServieStatus;
 
-@interface RHProfile : NSObject <CBJSONable>
+@interface RHProfile : NSObject <CBJSONable, NSCopying, NSMutableCopying>
 
 @property (nonatomic) NSInteger profileId;
 @property (nonatomic) RHProfileServieStatus serviceStatus;

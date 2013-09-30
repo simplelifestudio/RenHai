@@ -12,11 +12,11 @@
 
 #import "RHImpressLabel.h"
 
-@interface RHImpressCard : NSObject <CBJSONable>
+@interface RHImpressCard : NSObject <CBJSONable, NSCopying, NSMutableCopying>
 
 @property (nonatomic) NSUInteger impressCardId;
 
-@property (nonatomic, strong, readonly) NSArray* assessLabelList;
+@property (nonatomic, strong) NSArray* assessLabelList;
 @property (nonatomic, strong) NSMutableArray* impressLabelList;
 
 @property (nonatomic) NSUInteger chatTotalCount;

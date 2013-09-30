@@ -152,4 +152,41 @@
     [aCoder encodeInt:_isJailed forKey:SERIALIZE_KEY_ISJAILED];
 }
 
+#pragma mark - NSCopying
+
+-(id) copyWithZone:(struct _NSZone *)zone
+{
+//    RHDeviceCard* copy = [[RHDeviceCard alloc] init];
+//    
+//    copy.deviceCardId = _deviceCardId;
+//    copy.registerTime = [_registerTime copy];
+//    copy.deviceModel = [_deviceModel copy];
+//    copy.osVersion = [_osVersion copy];
+//    copy.appVersion = [_appVersion copy];
+//    copy.isJailed = _isJailed;
+//    
+//    return copy;
+
+    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
+    return (RHDeviceCard*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
+#pragma mark - NSMutableCopying
+
+-(id) mutableCopyWithZone:(struct _NSZone *)zone
+{
+//    RHDeviceCard* mutableCopy = [[RHDeviceCard alloc] init];
+//    
+//    mutableCopy.deviceCardId = _deviceCardId;
+//    mutableCopy.registerTime = [_registerTime mutableCopy];
+//    mutableCopy.deviceModel = [_deviceModel mutableCopy];
+//    mutableCopy.osVersion = [_osVersion mutableCopy];
+//    mutableCopy.appVersion = [_appVersion mutableCopy];
+//    mutableCopy.isJailed = _isJailed;
+//    
+//    return mutableCopy;
+
+    return [self copyWithZone:zone];
+}
+
 @end

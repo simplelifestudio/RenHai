@@ -10,13 +10,20 @@
 
 #import "CBJSONable.h"
 
-@interface RHInterestLabel : NSObject <CBJSONable>
+typedef enum
+{
+    ValidFlag = 0,
+    InvalidFlag = 1
+}
+RHInterestLabelValidFlag;
+
+@interface RHInterestLabel : NSObject <CBJSONable, NSCopying, NSMutableCopying>
 
 @property (nonatomic) NSUInteger labelId;
 @property (nonatomic, strong) NSString* labelName;
 @property (nonatomic) NSUInteger globalMatchCount;
 @property (nonatomic) NSUInteger labelOrder;
 @property (nonatomic) NSUInteger matchCount;
-@property (nonatomic) BOOL validFlag;
+@property (nonatomic) RHInterestLabelValidFlag validFlag;
 
 @end

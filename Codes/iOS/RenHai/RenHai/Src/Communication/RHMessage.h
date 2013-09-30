@@ -81,7 +81,7 @@
 
 // InterestLabel
 #define MESSAGE_KEY_INTERESTLABELID @"globalInterestLabelId"
-#define MESSAGE_KEY_INTERESTLABELNAME @"impressLabelName"
+#define MESSAGE_KEY_INTERESTLABELNAME @"interestLabelName"
 #define MESSAGE_KEY_GLOBALMATCHCOUNT @"globalMatchCount"
 #define MESSAGE_KEY_INTERESTLABELORDER @"labelOrder"
 #define MESSAGE_KEY_MATCHCOUNT @"matchCount"
@@ -156,11 +156,11 @@ RHMessageId;
 
 typedef enum
 {
-    ErrorCode_ServerLegalResponse,
-    ErrorCode_ServerNullResponse,
-    ErrorCode_ServerIllegalResponse, // 消息的语法（基本格式）错误
-    ErrorCode_ServerErrorResponse, // 消息的语意（业务逻辑）错误
-    ErrorCode_ServerTimeout
+    ErrorCode_ServerLegalMessage, // 头部合法的消息
+    ErrorCode_ServerNullMessage,  // 空消息
+    ErrorCode_ServerIllegalMessage, // 消息的语法（基本格式）错误
+    ErrorCode_ServerErrorMessage, // 消息的语意（业务逻辑）错误
+    ErrorCode_ServerTimeoutMessage, // 超时消息，App端模拟产生
 }
 RHMessageErrorCode;
 
@@ -229,14 +229,16 @@ ServerDataSyncRequestType;
 +(RHMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body enveloped:(BOOL) enveloped;
 +(RHMessage*) constructWithContent:(NSDictionary*) content enveloped:(BOOL) enveloped;
 +(RHMessage*) constructWithString:(NSString*) jsonString enveloped:(BOOL) enveloped;;
-+(RHMessageErrorCode) verify:(RHMessage*) message;
+
+//+(RHMessageErrorCode) verify:(RHMessage*) message;
++(BOOL) isLegalMessage:(RHMessage*) message;
 
 +(NSDictionary*) constructMessageHeader:(RHMessageType) messageType messageId:(RHMessageId) messageId messageSn:(NSString*) messageSn deviceId:(NSInteger) deviceId deviceSn:(NSString*) deviceSn;
 
 +(RHMessage*) newAlohaRequestMessage:(RHDevice*) device;
 +(RHMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn;
 
-+(RHMessage*) newAppDataSyncRequestMessage:(AppDataSyncRequestType) type device:(RHDevice*) device;
++(RHMessage*) newAppDataSyncRequestMessage:(AppDataSyncRequestType) type device:(RHDevice*) device info:(NSDictionary*) info;
 
 +(RHMessage*) newServerDataSyncRequestMessage:(ServerDataSyncRequestType) type device:(RHDevice*) device info:(NSDictionary*) info;
 
