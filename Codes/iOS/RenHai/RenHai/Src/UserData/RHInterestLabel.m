@@ -34,7 +34,7 @@
 {
     if (self = [super init])
     {
-        _validFlag = YES;
+        _validFlag = ValidFlag;
     }
     
     return self;
