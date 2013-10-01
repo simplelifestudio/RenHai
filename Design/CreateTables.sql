@@ -57,18 +57,18 @@ CREATE TABLE `devicecard` (
 DROP TABLE IF EXISTS `globalimpresslabel`;
 CREATE TABLE `globalimpresslabel` (
   `globalImpressLabelId` int(11) NOT NULL AUTO_INCREMENT,
-  `impressLabel` varchar(256) NOT NULL,
+  `impressLabelName` varchar(256) NOT NULL,
   `globalAssessCount` int(11) NOT NULL,
   PRIMARY KEY (`globalImpressLabelId`),
-  KEY `index_impressLabel` (`impressLabel`(255))
+  KEY `index_impressLabel` (`impressLabelName`(255))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of globalimpresslabel
 -- ----------------------------
-INSERT INTO `globalimpresslabel` VALUES ('1', '喜欢', '0');
-INSERT INTO `globalimpresslabel` VALUES ('2', '一般', '0');
-INSERT INTO `globalimpresslabel` VALUES ('3', '反感', '0');
+INSERT INTO `globalimpresslabel` VALUES ('1', '^#Happy#^', '0');
+INSERT INTO `globalimpresslabel` VALUES ('2', '^#SoSo#^', '0');
+INSERT INTO `globalimpresslabel` VALUES ('3', '^#Disgusting#^', '0');
 
 -- ----------------------------
 -- Table structure for `globalinterestlabel`
@@ -76,10 +76,10 @@ INSERT INTO `globalimpresslabel` VALUES ('3', '反感', '0');
 DROP TABLE IF EXISTS `globalinterestlabel`;
 CREATE TABLE `globalinterestlabel` (
   `globalInterestLabelId` int(11) NOT NULL AUTO_INCREMENT,
-  `interestLabel` varchar(256) NOT NULL,
+  `interestLabelName` varchar(256) NOT NULL,
   `globalMatchCount` int(11) NOT NULL,
   PRIMARY KEY (`globalInterestLabelId`),
-  KEY `index_interestLabel` (`interestLabel`(255))
+  KEY `index_interestLabel` (`interestLabelName`(255))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -137,7 +137,7 @@ CREATE TABLE `impresslabelmap` (
   PRIMARY KEY (`impressLabelMaplId`),
   KEY `fk_impressCardId_idx` (`impressCardId`),
   KEY `fk_globalImpressLabelId_idx` (`globalImpressLabelId`),
-  CONSTRAINT `fk_globalImpressLabelId` FOREIGN KEY (`globalImpressLabelId`) REFERENCES `globalimpresslabel` (`globalImpressLabelId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_globalImpressLabelId` FOREIGN KEY (`globalImpressLabelId`) REFERENCES `globalimpresslabel` (`globalImpressLabelId`) ON DELETE NO ACTION ON UPDATE CASCADE,
   CONSTRAINT `fk_impressCardId` FOREIGN KEY (`impressCardId`) REFERENCES `impresscard` (`impressCardId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -280,8 +280,8 @@ CREATE TABLE `sessionprofilemap` (
   PRIMARY KEY (`sessionImpressMapId`),
   KEY `fk_sessionRecordId_idx` (`sessionRecordId`),
   KEY `fk_profileId_idx` (`profileId`),
-  CONSTRAINT `fk_profileId` FOREIGN KEY (`profileId`) REFERENCES `profile` (`profileId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_sessionRecordId` FOREIGN KEY (`sessionRecordId`) REFERENCES `sessionrecord` (`sessionRecordId`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `sessionprofilemap_ibfk_1` FOREIGN KEY (`sessionRecordId`) REFERENCES `sessionrecord` (`sessionRecordId`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_profileId` FOREIGN KEY (`profileId`) REFERENCES `profile` (`profileId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -293,11 +293,11 @@ CREATE TABLE `sessionprofilemap` (
 -- ----------------------------
 DROP TABLE IF EXISTS `sessionrecord`;
 CREATE TABLE `sessionrecord` (
-  `sessionRecordId` int(11) NOT NULL,
+  `sessionRecordId` int(11) NOT NULL AUTO_INCREMENT,
   `businessType` enum('Random','Interest') NOT NULL,
   `startTime` bigint(20) NOT NULL,
   `duration` int(11) NOT NULL,
-  `endStatus` enum('ChatConfirm','VedioChat','Assess') NOT NULL,
+  `endStatus` enum('ChatConfirm','VedioChat','Idle','Assess') NOT NULL,
   `endReason` enum('Reject','ConnectionLoss','NormalEnd') NOT NULL,
   PRIMARY KEY (`sessionRecordId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
