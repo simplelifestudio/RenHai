@@ -15,10 +15,7 @@
     NSString* jsonString = nil;
     
     NSError *error;
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic
-                                                       options:0
-                                                         error:&error];
-    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&error];
     if (!jsonData)
     {
         DDLogWarn(@"JSON error: %@", error.localizedDescription);
