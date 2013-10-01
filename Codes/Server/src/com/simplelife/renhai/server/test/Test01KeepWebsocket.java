@@ -64,7 +64,6 @@ public class Test01KeepWebsocket extends AbstractTestCase
 		}
 		catch (InterruptedException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

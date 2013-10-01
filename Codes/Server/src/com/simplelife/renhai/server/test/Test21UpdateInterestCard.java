@@ -132,13 +132,11 @@ public class Test21UpdateInterestcard extends AbstractTestCase
 		labelAttr.put("order", "5");
 		labelAttr.put("matchCount", "40");
 		labels.put("av", labelAttr);
-		// TODO
 		//mockApp1.updateInterestcard(labels);
 		
 		// Step_07 调用：DeviceWrapper::getInterestcard
 		checkLabel(card);
 		
-		// TODO:
 		//InterestLabel label = (InterestLabel)card.getLabelList().get(5); 
 		//assertEquals(label.getOrder(), 5);
 		//assertEquals(label.getName(), "av");
@@ -153,7 +151,6 @@ public class Test21UpdateInterestcard extends AbstractTestCase
 		labels.remove("music");
 		
 		// Step_11 调用：DeviceWrapper::getInterestcard
-		// TODO:
 		//label = (InterestLabel)card.getLabelList().get(1); 
 		//assertEquals(label.getOrder(), 1);
 		//assertEquals(label.getName(), "game");
@@ -165,7 +162,6 @@ public class Test21UpdateInterestcard extends AbstractTestCase
 		fail("需要检查数据库中的兴趣标签");
 		
 		// Step_14 Mock请求：A更新兴趣卡片，改变标签顺序
-		// TODO:
 		//label = (InterestLabel)card.getLabelList().get(1);
 		//label.setOrder(3);
 		//label = (InterestLabel)card.getLabelList().get(3);

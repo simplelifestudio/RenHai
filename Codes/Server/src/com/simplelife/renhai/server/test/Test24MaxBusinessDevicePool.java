@@ -67,7 +67,8 @@ public class Test24MaxBusinessDevicePool extends AbstractTestCase
 		mockApp1.enterPool(BusinessType.Random);
 		
 		// Step_07 Mock请求：B进入随机聊天
+		mockApp2.clearLastReceivedCommand();
 		mockApp2.enterPool(BusinessType.Random);
-		fail("检查Server的响应包含业务设备池达到上限");
+		assertTrue(mockApp2.lastReceivedCommandIsError());
 	}
 }

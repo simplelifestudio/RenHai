@@ -17,35 +17,16 @@ import com.simplelife.renhai.server.util.Consts;
  */
 public class InvalidRequest extends AppJSONMessage
 {
-	
-	/**
-	 * @param jsonObject
-	 */
 	public InvalidRequest(JSONObject jsonObject)
 	{
 		super(jsonObject);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.json.AppJSONMessage#run()
-	 */
 	@Override
 	public void run()
 	{
 		responseError(Consts.MessageId.Invalid.name());
 	}
-	
-	@Override
-    public JSONObject getHeader()
-    {
-    	return null;
-    }
-    
-	@Override
-    public JSONObject getBody()
-    {
-    	return null;
-    }
 	
 	/**
 	 * Check if JSON request is valid

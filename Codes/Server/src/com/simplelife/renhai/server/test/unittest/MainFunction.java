@@ -14,19 +14,24 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
+import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Operationcode;
 import com.simplelife.renhai.server.db.OperationcodeDAO;
+import com.simplelife.renhai.server.db.Statisticsitem;
+import com.simplelife.renhai.server.db.StatisticsitemDAO;
 import com.simplelife.renhai.server.db.Systemmodule;
 import com.simplelife.renhai.server.db.SystemmoduleDAO;
 import com.simplelife.renhai.server.db.Systemoperationlog;
 import com.simplelife.renhai.server.db.SystemoperationlogDAO;
+import com.simplelife.renhai.server.db.Systemstatistics;
 import com.simplelife.renhai.server.json.AlohaRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.JSONFactory;
@@ -42,10 +47,78 @@ import com.simplelife.renhai.server.websocket.WebSocketConnection;
  */
 public class MainFunction extends AbstractTestCase
 {
+	private class SaveTask extends Thread
+	{
+		private Statisticsitem item;
+		private int count = 0;
+		private String name;
+		
+		public SaveTask(Statisticsitem item, String name)
+		{
+			this.item = item;
+			this.name = name;
+		}
+		
+		@Override
+		public void run()
+		{
+			while (count < 1000)
+			{
+				String now = DateUtil.getNow();
+				item.setDescription(name + ", " + now);
+				try
+				{
+					Session session = HibernateSessionFactory.getSession();
+					
+					//Transaction ts = session.beginTransaction();
+					//ts.begin();
+		    		session.saveOrUpdate(session.merge(item));
+		    		//session.saveOrUpdate(item);
+		    		session.flush();
+		    		//session.clear();
+		    		
+		    		String temp = session.toString();
+		    		System.out.print(name + " update value to " + now + " in session: " + temp + "\n");
+		    		session.beginTransaction().commit();
+		    		Thread.sleep(1);
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				count++;
+			}
+		}
+	}
+	
+	@Test
+	public void testTwoSession()
+	{
+		StatisticsitemDAO dao = new StatisticsitemDAO();
+		Statisticsitem item = dao.findById(41);
+		item.setDescription("demo");
+		
+		SaveTask task1 = new SaveTask(item, "1");
+		SaveTask task2 = new SaveTask(item, "2");
+		task1.start();
+		task2.start();
+		
+		try
+		{
+			Thread.sleep(8000);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	@Test
 	public void testRawCommand()
 	{
-		String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"demoDeviceSn\",\"timeStamp\":\"2013-09-29 11:16:24.676\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"65133CHCP39K54HM\",\"deviceId\":0},\"body\":{\"dataQuery\":{\"device\":{\"profile\":{\"impressCard\":null}}}}}}";
+		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"194AF3A8-FFB0-4997-B9DE-CD4CFB68252B\",\"timeStamp\":\"2013-09-30 12:54:30.809\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"B569O1MTRE5A0UA6\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":0,\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"osVersion\":\"6.1\"},\"deviceSn\":\"794AF3A8-FFB0-4997-B9DE-CD4CFB68252B\"}},\"dataQuery\":{\"device\":null}}}}";
+		String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"794AF3A8-FFB0-4997-B9DE-CD4CFB68252A\",\"timeStamp\":\"2013-09-30 14:26:26.344\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"0871CLZJY289O310\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":0,\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"osVersion\":\"6.1\"}}},\"dataQuery\":{\"device\":{\"deviceId\":null,\"deviceSn\":null,\"deviceCard\":null,\"profile\":null}}}}}";
+		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"194AF3A8-FFB0-4997-B9DE-CD4CFB68252B\",\"timeStamp\":\"2013-09-30 15:28:31.408\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"5I4Z5A61I1250505\",\"deviceId\":0},\"body\":{\"dataQuery\":{\"device\":{\"profile\":{\"impressCard\":null}}}}}}";
 		
 		JSONObject wholeObj = JSONObject.parseObject(jsonString);
 		JSONObject obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope); 
@@ -53,6 +126,7 @@ public class MainFunction extends AbstractTestCase
 		LocalMockApp app = createNewMockApp(this.demoDeviceSn);
 		//app.syncDevice();
 		app.sendRawJSONMessage(obj, true);
+		//app.sendServerDataSyncRequest();
 	}
 	
 	@Test

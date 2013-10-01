@@ -13,8 +13,11 @@ package com.simplelife.renhai.server.business.device;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.slf4j.Logger;
 
@@ -24,20 +27,20 @@ import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
-import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
+import com.simplelife.renhai.server.db.ImpresslabelmapSortable;
 import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.InvalidRequest;
-import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerErrorResponse;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.DateUtil;
+import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -453,13 +456,13 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 	{
 		JSONObject deviceCardObj = new JSONObject();
 		Devicecard deviceCard = device.getDevicecard();
-		deviceCardObj.put(JSONKey.DeviceCardId, deviceCard.getDeviceCardId().toString());
+		deviceCardObj.put(JSONKey.DeviceCardId, deviceCard.getDeviceCardId());
 		deviceCardObj.put(JSONKey.RegisterTime, DateUtil.getDateStringByLongValue(deviceCard.getRegisterTime()));
 		deviceCardObj.put(JSONKey.DeviceModel, deviceCard.getDeviceModel());
 		deviceCardObj.put(JSONKey.OsVersion, deviceCard.getOsVersion());
 		deviceCardObj.put(JSONKey.AppVersion, deviceCard.getAppVersion());
 		deviceCardObj.put(JSONKey.Location, deviceCard.getLocation());
-		deviceCardObj.put(JSONKey.IsJailed, deviceCard.getIsJailed());
+		deviceCardObj.put(JSONKey.IsJailed, Consts.YesNo.parseValue(deviceCard.getIsJailed()).getValue());
 		
 		return deviceCardObj;
 	}
@@ -467,7 +470,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 	public JSONObject toJSONObject_Device()
 	{
 		JSONObject deviceObj = new JSONObject();
-		deviceObj.put(JSONKey.DeviceId, device.getDeviceId().toString());
+		deviceObj.put(JSONKey.DeviceId, device.getDeviceId());
 		deviceObj.put(JSONKey.DeviceSn, device.getDeviceSn());
 		deviceObj.put(JSONKey.DeviceCard, toJSONObject_DeviceCard());
 		deviceObj.put(JSONKey.Profile, toJSONObject_Profile());
@@ -479,7 +482,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		JSONObject profileObj = new JSONObject();
 		Profile profile = device.getProfile();
 		profileObj.put(JSONKey.ProfileId, profile.getProfileId());
-		profileObj.put(JSONKey.ServiceStatus, Consts.ServiceStatus.parseFromStringValue(profile.getServiceStatus()).toString());
+		profileObj.put(JSONKey.ServiceStatus, Consts.ServiceStatus.parseFromStringValue(profile.getServiceStatus()).getValue());
 		
 		profileObj.put(JSONKey.InterestCard, toJSONObject_InterestCard(profile));
 		profileObj.put(JSONKey.ImpressCard, toJSONObject_ImpressCard(profile));
@@ -490,20 +493,22 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		}
 		else
 		{
-			profileObj.put(JSONKey.UnbanDate, "");
+			profileObj.put(JSONKey.UnbanDate, null);
 		}
 		profileObj.put(JSONKey.LastActivityTime, DateUtil.getDateStringByLongValue(profile.getLastActivityTime()));
 		profileObj.put(JSONKey.CreateTime, DateUtil.getDateStringByLongValue(profile.getCreateTime()));
-		profileObj.put(JSONKey.Active, Consts.YesNo.parseValue(profile.getActive()).toString());
+		profileObj.put(JSONKey.Active, Consts.YesNo.parseValue(profile.getActive()).getValue());
 
 		return profileObj;
 	}
 	
 	public JSONObject toJSONObject_InterestCard(Profile profile)
 	{
-		JSONObject interestCardObj = new JSONObject();
 		Interestcard interestCard = profile.getInterestcard();
-		interestCardObj.put(JSONKey.InterestCardId, interestCard.getInterestCardId().toString());
+		//JSONObject interestCardObj = JSONObject.(interestCard);
+		
+		JSONObject interestCardObj = new JSONObject();
+		interestCardObj.put(JSONKey.InterestCardId, interestCard.getInterestCardId());
 		
 		JSONArray interestLabelListObj = new JSONArray();
 		interestCardObj.put(JSONKey.InterestLabelList, interestLabelListObj);
@@ -512,12 +517,12 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		for (Interestlabelmap map : interestLabelList)
 		{
 			JSONObject mapObj = new JSONObject();
-			mapObj.put(JSONKey.GlobalInterestLabelId, map.getGlobalinterestlabel().getGlobalInterestLabelId().toString());
+			mapObj.put(JSONKey.GlobalInterestLabelId, map.getGlobalinterestlabel().getGlobalInterestLabelId());
 			mapObj.put(JSONKey.InterestLabelName, map.getGlobalinterestlabel().getInterestLabelName());
-			mapObj.put(JSONKey.GlobalMatchCount, map.getGlobalinterestlabel().getGlobalMatchCount().toString());
-			mapObj.put(JSONKey.LabelOrder, map.getGlobalinterestlabel().getGlobalMatchCount().toString());
-			mapObj.put(JSONKey.MatchCount, map.getMatchCount().toString());
-			mapObj.put(JSONKey.ValidFlag, map.getValidFlag());
+			mapObj.put(JSONKey.GlobalMatchCount, map.getGlobalinterestlabel().getGlobalMatchCount());
+			mapObj.put(JSONKey.LabelOrder, map.getGlobalinterestlabel().getGlobalMatchCount());
+			mapObj.put(JSONKey.MatchCount, map.getMatchCount());
+			mapObj.put(JSONKey.ValidFlag, Consts.ValidInvalid.Valid.getValue());
 			
 			interestLabelListObj.add(mapObj);
 		}
@@ -525,43 +530,79 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		return interestCardObj;
 	}
 	
-	public JSONObject toJSONObject_ImpressCard(Profile profile)
+	@Override
+	public void toJSONObject_ImpressLabels(Impresscard impressCard, JSONObject impressCardObj, int labelCount)
 	{
-		JSONObject impressCardObj = new JSONObject();
-		Impresscard impressCard = profile.getImpresscard();
-		impressCardObj.put(JSONKey.ImpressCardId, impressCard.getImpressCardId().toString());
-		impressCardObj.put(JSONKey.ChatTotalCount, impressCard.getChatTotalCount().toString());
-		impressCardObj.put(JSONKey.ChatTotalDuration, impressCard.getChatTotalDuration().toString());
-		impressCardObj.put(JSONKey.ChatLossCount, impressCard.getChatLossCount().toString());
-		
 		JSONArray assessLabelListObj = new JSONArray();
 		JSONArray impressLabelListObj = new JSONArray();
 		
 		impressCardObj.put(JSONKey.AssessLabelList, assessLabelListObj);
 		impressCardObj.put(JSONKey.ImpressLabelList, impressLabelListObj);
 		
-		Set<Impresslabelmap> impressLabelList = impressCard.getImpresslabelmaps();
-		String label;
-		for (Impresslabelmap map : impressLabelList)
+		Set<Impresslabelmap> labelSet = impressCard.getImpresslabelmaps();
+		//TreeSet<ImpresslabelmapSortable> labelList = new TreeSet<ImpresslabelmapSortable>();
+		//TreeSet<ImpresslabelmapSortable> solidList = new TreeSet<ImpresslabelmapSortable>();
+		
+		List<Impresslabelmap> labelList = new ArrayList<Impresslabelmap>();
+		List<Impresslabelmap> solidList = new ArrayList<Impresslabelmap>();
+		
+		for (Impresslabelmap labelMap : labelSet)
 		{
-			JSONObject mapObj = new JSONObject();
-			label = map.getGlobalimpresslabel().getImpressLabelName();
-			mapObj.put(JSONKey.ImpressLabelName, label);
-			mapObj.put(JSONKey.GlobalImpressLabelId, map.getGlobalimpresslabel().getGlobalImpressLabelId().toString());
-			mapObj.put(JSONKey.AssessedCount, map.getAssessedCount().toString());
-			mapObj.put(JSONKey.UpdateTime, DateUtil.getDateStringByLongValue(map.getUpdateTime()));
-			mapObj.put(JSONKey.AssessCount, map.getAssessCount().toString());
-			
-			if (Consts.SolidAssessLabel.isSolidAssessLabel(label))
+			if (Consts.SolidAssessLabel.isSolidAssessLabel(labelMap.getGlobalimpresslabel().getImpressLabelName()))
 			{
-				assessLabelListObj.add(mapObj);
+				//solidList.add((ImpresslabelmapSortable)labelMap);
+				solidList.add(labelMap);
 			}
 			else
 			{
-				impressLabelListObj.add(mapObj);
+				//labelList.add((ImpresslabelmapSortable)labelMap);
+				labelList.add(labelMap);
+			}
+			labelMap.getAssessedCount();
+		}
+		
+		for (Impresslabelmap label : solidList)
+		{
+			JSONObject labelObj = new JSONObject();
+			labelObj.put(JSONKey.ImpressLabelName, label.getGlobalimpresslabel().getImpressLabelName());
+			labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalimpresslabel().getGlobalImpressLabelId());
+			labelObj.put(JSONKey.AssessedCount, label.getAssessedCount());
+			labelObj.put(JSONKey.UpdateTime, DateUtil.getDateStringByLongValue(label.getUpdateTime()));
+			labelObj.put(JSONKey.AssessCount, label.getAssessCount());
+
+			assessLabelListObj.add(labelObj);
+		}
+		
+		int tmpCount = 0;
+		for (Impresslabelmap label : labelList)
+		{
+			JSONObject labelObj = new JSONObject();
+			labelObj.put(JSONKey.ImpressLabelName, label.getGlobalimpresslabel().getImpressLabelName());
+			labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalimpresslabel().getGlobalImpressLabelId());
+			labelObj.put(JSONKey.AssessedCount, label.getAssessedCount());
+			labelObj.put(JSONKey.UpdateTime, DateUtil.getDateStringByLongValue(label.getUpdateTime()));
+			labelObj.put(JSONKey.AssessCount, label.getAssessCount());
+
+			impressLabelListObj.add(labelObj);
+			tmpCount ++;
+			if (tmpCount >= labelCount)
+			{
+				break;
 			}
 		}
 
+	}
+	
+	public JSONObject toJSONObject_ImpressCard(Profile profile)
+	{
+		JSONObject impressCardObj = new JSONObject();
+		Impresscard impressCard = profile.getImpresscard();
+		impressCardObj.put(JSONKey.ImpressCardId, impressCard.getImpressCardId());
+		impressCardObj.put(JSONKey.ChatTotalCount, impressCard.getChatTotalCount());
+		impressCardObj.put(JSONKey.ChatTotalDuration, impressCard.getChatTotalDuration());
+		impressCardObj.put(JSONKey.ChatLossCount, impressCard.getChatLossCount());
+		
+		toJSONObject_ImpressLabels(impressCard, impressCardObj, GlobalSetting.BusinessSetting.MaxImpressLabelCount);
 		return impressCardObj;
 	}
 	

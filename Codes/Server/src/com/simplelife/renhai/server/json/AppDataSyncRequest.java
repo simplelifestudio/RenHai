@@ -9,7 +9,7 @@
 
 package com.simplelife.renhai.server.json;
 
-import java.util.Date;
+
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -42,6 +42,7 @@ import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.JSONKey;
 
+
 /**
  * 
  */
@@ -61,8 +62,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 	{
 		super(jsonObject);
 	}
-
-	
 	
 	protected boolean checkUpdate(JSONObject dataUpdateObj)
 	{
@@ -73,7 +72,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			return false;
 		}
 		
-		JSONObject deviceObj = getJSONObject(dataUpdateObj, JSONKey.Device); 
+		JSONObject deviceObj = getJSONObject(dataUpdateObj, JSONKey.Device);
 		if (deviceObj == null)
 		{
 			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
@@ -90,14 +89,13 @@ public class AppDataSyncRequest extends AppJSONMessage
 	
 	protected boolean checkUpdateDevice(JSONObject deviceObj)
 	{
-		if (!deviceObj.containsKey(JSONKey.DeviceSn))
-		{
-			String temp = JSONKey.DeviceSn + " must be provided for device.";
-			logger.error(temp);
-			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-			this.setErrorDescription(temp);
-			return false;
-		}
+		/*
+		 * if (!deviceObj.containsKey(JSONKey.DeviceSn)) { String temp =
+		 * JSONKey.DeviceSn + " must be provided for device.";
+		 * logger.error(temp);
+		 * this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+		 * this.setErrorDescription(temp); return false; }
+		 */
 		
 		if (deviceObj.containsKey(JSONKey.DeviceCard))
 		{
@@ -108,7 +106,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 				this.setErrorDescription(JSONKey.DeviceCard + " must be provided correctly.");
 				return false;
 			}
-				
+			
 			if (!checkUpdateDeviceCard(deviceCardObj))
 			{
 				return false;
@@ -124,7 +122,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 				this.setErrorDescription(JSONKey.Profile + " must be provided correctly.");
 				return false;
 			}
-			
 			
 			if (!checkUpdateProfile(profileObj))
 			{
@@ -182,23 +179,25 @@ public class AppDataSyncRequest extends AppJSONMessage
 		for (int i = 0; i < interestLabelList.size(); i++)
 		{
 			tmpObj = interestLabelList.getJSONObject(i);
-			if (!tmpObj.containsKey(JSONKey.InterestLabel))
+			if (!tmpObj.containsKey(JSONKey.InterestLabelName))
 			{
-				String temp = JSONKey.InterestLabel + " must be provided in " + i + " label in " + JSONKey.InterestLabelList;
+				String temp = JSONKey.InterestLabelName + " must be provided in " + i + " label in "
+						+ JSONKey.InterestLabelList;
 				logger.error(temp);
 				setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
 				setErrorDescription(temp);
 				return false;
 			}
 			
-			if (!checkNoEmptyAllowed(tmpObj, JSONKey.InterestLabel))
+			if (!checkNoEmptyAllowed(tmpObj, JSONKey.InterestLabelName))
 			{
 				return false;
 			}
 			
 			if (!tmpObj.containsKey(JSONKey.LabelOrder))
 			{
-				String temp = JSONKey.LabelOrder + " must be provided in " + i + " label in " + JSONKey.InterestLabelList;
+				String temp = JSONKey.LabelOrder + " must be provided in " + i + " label in "
+						+ JSONKey.InterestLabelList;
 				logger.error(temp);
 				setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
 				setErrorDescription(temp);
@@ -208,7 +207,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 			tmpStr = tmpObj.getString(JSONKey.LabelOrder);
 			if (!CommonFunctions.IsNumric(tmpStr))
 			{
-				String temp = JSONKey.LabelOrder + " must be numric in " +  i + " label in " + JSONKey.InterestLabelList;
+				String temp = JSONKey.LabelOrder + " must be numric in " + i + " label in "
+						+ JSONKey.InterestLabelList;
 				logger.error(temp);
 				setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
 				setErrorDescription(temp);
@@ -251,7 +251,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 		}
 		else
 		{
-			String temp = "Neither " + JSONKey.InterestCard + " nor " + JSONKey.ImpressCard + " is included in " + JSONKey.Profile;
+			String temp = "Neither " + JSONKey.InterestCard + " nor " + JSONKey.ImpressCard
+					+ " is included in " + JSONKey.Profile;
 			logger.error(temp);
 			setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
 			setErrorDescription(temp);
@@ -275,9 +276,9 @@ public class AppDataSyncRequest extends AppJSONMessage
 		DeviceDAO deviceDAO = new DeviceDAO();
 		String deviceSn = header.getString(JSONKey.DeviceSn);
 		
-		String sql = "select * from " + TableName.Device 
-				+ " where " + TableColumnName.DeviceSn + " = '" + deviceSn + "' ";
-		if(DAOWrapper.exists(sql) == DBExistResult.NonExistent)
+		String sql = "select * from " + TableName.Device + " where " + TableColumnName.DeviceSn + " = '"
+				+ deviceSn + "' ";
+		if (DAOWrapper.exists(sql) == DBExistResult.NonExistent)
 		{
 			if (!deviceCardObj.containsKey(JSONKey.DeviceModel))
 			{
@@ -349,13 +350,12 @@ public class AppDataSyncRequest extends AppJSONMessage
 		return true;
 	}
 	
-	
 	/**
 	 * Check if JSON request is valid
 	 */
 	@Override
 	protected boolean checkJSONRequest()
-    {
+	{
 		String deviceSn = header.getString(JSONKey.DeviceSn);
 		if (DBQueryUtil.isNewDevice(deviceSn))
 		{
@@ -370,7 +370,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 			if (!updateObj.containsKey(JSONKey.Device))
 			{
 				this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-				this.setErrorDescription(JSONKey.Device + " under " + JSONKey.DataUpdate +  " must be provided for new device.");
+				this.setErrorDescription(JSONKey.Device + " under " + JSONKey.DataUpdate
+						+ " must be provided for new device.");
 				return false;
 			}
 			
@@ -378,16 +379,18 @@ public class AppDataSyncRequest extends AppJSONMessage
 			if (!deviceObj.containsKey(JSONKey.DeviceCard))
 			{
 				this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-				this.setErrorDescription(JSONKey.DeviceCard + " under " + JSONKey.Device + " must be provided for new device.");
+				this.setErrorDescription(JSONKey.DeviceCard + " under " + JSONKey.Device
+						+ " must be provided for new device.");
 				return false;
 			}
 			
-			if (!deviceObj.containsKey(JSONKey.DeviceSn))
-			{
-				this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-				this.setErrorDescription(JSONKey.DeviceSn + " under " + JSONKey.Device + " must be provided for new device.");
-				return false;
-			}
+			/*
+			 * if (!deviceObj.containsKey(JSONKey.DeviceSn)) {
+			 * this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+			 * this.setErrorDescription(JSONKey.DeviceSn + " under " +
+			 * JSONKey.Device + " must be provided for new device."); return
+			 * false; }
+			 */
 			// 检查到这里就可以了，只要提供了DeviceCard，接下来具体字段的检查放到checkUpdateDeviceCard中
 		}
 		
@@ -429,19 +432,21 @@ public class AppDataSyncRequest extends AppJSONMessage
 		else
 		{
 			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-			this.setErrorDescription("Neither " + JSONKey.DataQuery + " nor " + JSONKey.DataUpdate + " is included in request");
+			this.setErrorDescription("Neither " + JSONKey.DataQuery + " nor " + JSONKey.DataUpdate
+					+ " is included in request");
 			return false;
 		}
 		
 		return true;
-    }
+	}
 	
 	@Override
 	public void run()
 	{
 		if (deviceWrapper.getOwnerOnlineDevicePool() == null)
 		{
-			logger.debug("Device <{}> synchronizing after connnection was released", deviceWrapper.getDeviceSn());
+			logger.debug("Device <{}> synchronizing after connnection was released",
+					deviceWrapper.getDeviceSn());
 			deviceWrapper.bindOnlineDevicePool(OnlineDevicePool.instance);
 		}
 		
@@ -456,15 +461,15 @@ public class AppDataSyncRequest extends AppJSONMessage
 		{
 			syncType = SyncType.ExistentLoaded;
 		}
-		else 
+		else
 		{
-			boolean newDevice = false; 
+			boolean newDevice = false;
 			
 			try
 			{
 				newDevice = DBQueryUtil.isNewDevice(deviceSn);
 			}
-			catch(Exception e)
+			catch (Exception e)
 			{
 				this.setErrorCode(Consts.GlobalErrorCode.DBException_1001);
 				this.setErrorDescription("Server internal error.");
@@ -506,25 +511,28 @@ public class AppDataSyncRequest extends AppJSONMessage
 		// Check if profile is banned
 		Profile profile = deviceWrapper.getDevice().getProfile();
 		String strServiceStatus = profile.getServiceStatus();
-		Consts.ServiceStatus status = Consts.ServiceStatus.parseFromStringValue(strServiceStatus);  
+		Consts.ServiceStatus status = Consts.ServiceStatus.parseFromStringValue(strServiceStatus);
 		if (status == Consts.ServiceStatus.Banned)
 		{
 			long unbanDate = profile.getUnbanDate();
 			if (unbanDate <= System.currentTimeMillis())
-			{	
+			{
 				// Recover to normal
 				profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
 				profile.setUnbanDate(null);
 				
 				DBModule.instance.cache(profile);
-				//ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.AppDataSyncResponse);
+				// ServerJSONMessage response =
+				// JSONFactory.createServerJSONMessage(this,
+				// Consts.MessageId.AppDataSyncResponse);
 				deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
 			}
 			else
 			{
 				OnlineDevicePool.instance.IdentifyBannedDevice(deviceWrapper);
 				this.setErrorCode(Consts.GlobalErrorCode.NoPermission_1102);
-				this.setErrorDescription("Device was banned till " + DateUtil.getDateStringByLongValue(unbanDate));
+				this.setErrorDescription("Device was banned till "
+						+ DateUtil.getDateStringByLongValue(unbanDate));
 				responseError(Consts.MessageId.AppDataSyncRequest.name());
 				return;
 			}
@@ -534,7 +542,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 			deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
 		}
 		
-		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.AppDataSyncResponse);
+		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
+				Consts.MessageId.AppDataSyncResponse);
 		if (profile.getServiceStatus().equals(Consts.ServiceStatus.Normal.name()))
 		{
 			// Only allow normal device to update profile
@@ -542,12 +551,15 @@ public class AppDataSyncRequest extends AppJSONMessage
 			{
 				update(body.getJSONObject(JSONKey.DataUpdate), response.getBody());
 				DBModule.instance.cache(this.deviceWrapper.getDevice());
+				
+				// Set deviceId again to fill actual id in DB
+				response.addToHeader(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
 			}
 		}
 		
 		if (profile.getServiceStatus().equals(Consts.ServiceStatus.Banned.name()))
 		{
-			// Append query of profile status  
+			// Append query of profile status
 			appendQueryServiceStatus();
 		}
 		
@@ -557,7 +569,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		}
 		response.asyncResponse();
 	}
-
+	
 	private void appendQueryServiceStatus()
 	{
 		if (!body.containsKey(JSONKey.DataQuery))
@@ -588,6 +600,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			profileObj.put(JSONKey.UnbanDate, "");
 		}
 	}
+	
 	private void loadDevice(String deviceSn)
 	{
 		if (DBQueryUtil.isNewDevice(deviceSn))
@@ -595,7 +608,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			logger.error("DeviceCard can't be found in DB with SN: " + deviceSn);
 			return;
 		}
-
+		
 		DeviceDAO dao = new DeviceDAO();
 		Device device = dao.findByDeviceSn(deviceSn).get(0);
 		deviceWrapper.setDevice(device);
@@ -664,7 +677,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 	
 	private void queryProfile(JSONObject profileObj, JSONObject deviceResponse)
 	{
-		//boolean queryAll = false;
+		// boolean queryAll = false;
 		if (profileObj == null)
 		{
 			deviceResponse.put(JSONKey.Profile, deviceWrapper.toJSONObject_Profile());
@@ -690,22 +703,33 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		if (profileObj.containsKey(JSONKey.ServiceStatus))
 		{
-			profileResponse.put(JSONKey.ServiceStatus, profile.getServiceStatus());
+			profileResponse.put(JSONKey.ServiceStatus,
+					Consts.ServiceStatus.parseFromStringValue(profile.getServiceStatus()).getValue());
 		}
 		
 		if (profileObj.containsKey(JSONKey.UnbanDate))
 		{
-			profileResponse.put(JSONKey.UnbanDate, profile.getUnbanDate());
+			if (profile.getUnbanDate() == null)
+			{
+				profileResponse.put(JSONKey.UnbanDate, null);
+			}
+			else
+			{
+				profileResponse.put(JSONKey.UnbanDate,
+						DateUtil.getDateStringByLongValue(profile.getUnbanDate()));
+			}
 		}
 		
 		if (profileObj.containsKey(JSONKey.LastActivityTime))
 		{
-			profileResponse.put(JSONKey.LastActivityTime, DateUtil.getDateStringByLongValue(profile.getLastActivityTime()));
+			profileResponse.put(JSONKey.LastActivityTime,
+					DateUtil.getDateStringByLongValue(profile.getLastActivityTime()));
 		}
 		
 		if (profileObj.containsKey(JSONKey.CreateTime))
 		{
-			profileResponse.put(JSONKey.CreateTime, DateUtil.getDateStringByLongValue(profile.getCreateTime()));
+			profileResponse.put(JSONKey.CreateTime,
+					DateUtil.getDateStringByLongValue(profile.getCreateTime()));
 		}
 		
 		if (profileObj.containsKey(JSONKey.Active))
@@ -768,9 +792,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		if (impressCardObj.containsKey(JSONKey.ImpressCard))
 		{
-			JSONArray labels = new JSONArray();
-			impressCardResponse.put(JSONKey.ImpressCard, labels);
-			
 			int impressLabelCount;
 			if (impressCardObj != null && impressCardObj.containsKey(JSONKey.ImpressLabelList))
 			{
@@ -780,22 +801,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			{
 				impressLabelCount = card.getImpresslabelmaps().size();
 			}
-			
-			// TODO: 需要考虑印象标签的排序
-			Object[] labelArray = card.getImpresslabelmaps().toArray();
-			
-			for (int i = 0; i < impressLabelCount; i++)
-			{
-				Impresslabelmap label = (Impresslabelmap) labelArray[i];
-				JSONObject labelObj = new JSONObject();
-				labelObj.put(JSONKey.ImpressLabel, label.getGlobalimpresslabel().getImpressLabelName());
-				labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalimpresslabel().getGlobalImpressLabelId());
-				labelObj.put(JSONKey.AssessedCount, label.getAssessedCount());
-				labelObj.put(JSONKey.UpdateTime, DateUtil.getDateStringByLongValue(label.getUpdateTime()));
-				labelObj.put(JSONKey.AssessCount, label.getAssessCount());
-
-				labels.add(labelObj);
-			}
+			deviceWrapper.toJSONObject_ImpressLabels(card, impressCardResponse, impressLabelCount);
 		}
 	}
 	
@@ -832,12 +838,13 @@ public class AppDataSyncRequest extends AppJSONMessage
 			for (Interestlabelmap label : card.getInterestlabelmaps())
 			{
 				JSONObject labelObj = new JSONObject();
-				labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalinterestlabel().getGlobalInterestLabelId());
-				labelObj.put(JSONKey.InterestLabel, label.getGlobalinterestlabel().getInterestLabelName());
+				labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalinterestlabel()
+						.getGlobalInterestLabelId());
+				labelObj.put(JSONKey.InterestLabelName, label.getGlobalinterestlabel().getInterestLabelName());
 				labelObj.put(JSONKey.GlobalMatchCount, label.getGlobalinterestlabel().getGlobalMatchCount());
 				labelObj.put(JSONKey.LabelOrder, label.getLabelOrder());
 				labelObj.put(JSONKey.MatchCount, label.getMatchCount());
-				
+				labelObj.put(JSONKey.ValidFlag, Consts.ValidInvalid.Valid.getValue());
 				labels.add(labelObj);
 			}
 		}
@@ -875,7 +882,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		if (deviceCardObj.containsKey(JSONKey.RegisterTime))
 		{
-			deviceCardResponse.put(JSONKey.RegisterTime, DateUtil.getDateStringByLongValue(card.getRegisterTime()));
+			deviceCardResponse.put(JSONKey.RegisterTime,
+					DateUtil.getDateStringByLongValue(card.getRegisterTime()));
 		}
 		
 		if (deviceCardObj.containsKey(JSONKey.DeviceModel))
@@ -900,7 +908,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		if (deviceCardObj.containsKey(JSONKey.IsJailed))
 		{
-			deviceCardResponse.put(JSONKey.IsJailed, card.getIsJailed());
+			deviceCardResponse.put(JSONKey.IsJailed, Consts.YesNo.parseValue(card.getIsJailed()).getValue());
 		}
 	}
 	
@@ -915,6 +923,9 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		JSONObject deviceObj = updateObj.getJSONObject(JSONKey.Device);
 		updateDevice(deviceObj, dataUpdateResponse);
+		
+		Profile profile = deviceWrapper.getDevice().getProfile();
+		profile.setActive(Consts.YesNo.Yes.name());
 	}
 	
 	private void updateDevice(JSONObject deviceObj, JSONObject dataUpdateResponse)
@@ -924,12 +935,18 @@ public class AppDataSyncRequest extends AppJSONMessage
 		Device device = deviceWrapper.getDevice();
 		device.setDeviceSn(header.getString(JSONKey.DeviceSn));
 		
+		if (deviceObj.containsKey(JSONKey.DeviceSn))
+		{
+			// All command use deviceSn in header
+			// Report error to App if there is update of DeviceSn here
+			dataUpdateResponse.put(JSONKey.DeviceSn, 0);
+		}
+		
 		// Update device card if needed
 		if (deviceObj.containsKey(JSONKey.DeviceCard))
 		{
 			updateDeviceCard(deviceObj, deviceResponse);
 		}
-		
 		
 		if (deviceObj.containsKey(JSONKey.Profile))
 		{
@@ -949,13 +966,11 @@ public class AppDataSyncRequest extends AppJSONMessage
 		{
 			updateInterestCard(profileObj, profileResponse);
 		}
-
+		
 		/*
-		if (profileObj.containsKey(JSONKey.InterestCard))
-		{
-			// currently there is no update of impresscard from APP
-		}
-		*/
+		 * if (profileObj.containsKey(JSONKey.InterestCard)) { // currently
+		 * there is no update of impresscard from APP }
+		 */
 	}
 	
 	private void updateInterestCard(JSONObject profileObj, JSONObject profileResponse)
@@ -973,6 +988,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		parseDevicecard(deviceCardObj, deviceCardResponse);
 		deviceResponse.put(JSONKey.DeviceCard, deviceCardResponse);
 	}
+	
 	private void newDevice(String deviceSn)
 	{
 		GlobalimpresslabelDAO dao = new GlobalimpresslabelDAO();
@@ -981,7 +997,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		// Create new impress card
 		Impresscard impressCard = new Impresscard();
 		Interestcard interestCard = new Interestcard();
-				
+		
 		Set<Impresslabelmap> impressLabelMaps = new HashSet<Impresslabelmap>();
 		for (Consts.SolidAssessLabel label : Consts.SolidAssessLabel.values())
 		{
@@ -1013,7 +1029,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 			
 			impressLabelMaps.add(labelMap);
 		}
-		
 		
 		Profile profile = new Profile();
 		Devicecard deviceCard = new Devicecard();
@@ -1088,7 +1103,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			interestLabelMapObj = new Interestlabelmap();
 			
 			// Check if it's new interest label
-			tmpStr = tmpJSONObj.getString(JSONKey.InterestLabel);
+			tmpStr = tmpJSONObj.getString(JSONKey.InterestLabelName);
 			tmpInterestLabelList = globalInterestDAO.findByInterestLabelName(tmpStr);
 			if (tmpInterestLabelList.size() == 0)
 			{
@@ -1097,7 +1112,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 				globalInterestObj.setGlobalMatchCount(0);
 				
 				interestLabelMapObj.setMatchCount(0);
-				interestLabelMapObj.setValidFlag("Valid");
+				interestLabelMapObj.setValidFlag(Consts.ValidInvalid.Valid.name());
 			}
 			else
 			{
@@ -1111,12 +1126,12 @@ public class AppDataSyncRequest extends AppJSONMessage
 				{
 					interestLabelMapObj.setMatchCount(0);
 				}
-				interestLabelMapObj.setValidFlag("Valid");
+				interestLabelMapObj.setValidFlag(Consts.ValidInvalid.Valid.name());
 			}
-			responseObj.put(JSONKey.InterestLabel, Consts.SuccessOrFail.Success.getValue());
+			responseObj.put(JSONKey.InterestLabelName, Consts.SuccessOrFail.Success.getValue());
 			interestLabelMapObj.setGlobalinterestlabel(globalInterestObj);
 			
-			interestLabelMapObj.setLabelOrder(Integer.parseInt(tmpJSONObj.getString(JSONKey.LabelOrder)));
+			interestLabelMapObj.setLabelOrder(tmpJSONObj.getInteger(JSONKey.LabelOrder));
 			responseObj.put(JSONKey.LabelOrder, Consts.SuccessOrFail.Success.getValue());
 			labelMapList.add(interestLabelMapObj);
 			
@@ -1127,12 +1142,13 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		if (labelMapList.size() > 0)
 		{
-			String interestCardId = DBQueryUtil.getIDByDeviceSn(TableColumnName.InterestCardId, deviceWrapper.getDeviceSn());
+			String interestCardId = DBQueryUtil.getIDByDeviceSn(TableColumnName.InterestCardId,
+					deviceWrapper.getDeviceSn());
 			
 			if (interestCardId != null)
 			{
-				String sql = "delete from " + TableName.InterestLabelMap 
-						+ " where " + TableColumnName.InterestCardId + " = " + interestCardId;
+				String sql = "delete from " + TableName.InterestLabelMap + " where "
+						+ TableColumnName.InterestCardId + " = " + interestCardId;
 				DAOWrapper.executeSql(sql);
 			}
 		}
@@ -1140,7 +1156,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 	
 	private void parseProfile(JSONObject profileObj, JSONObject profileResponse)
 	{
-		// currently there is no update of profile from APP 
+		// currently there is no update of profile from APP
 		Profile profile = deviceWrapper.getDevice().getProfile();
 		profile.setActive(Consts.YesNo.Yes.name());
 	}
@@ -1175,7 +1191,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		if (temp != null)
 		{
 			response.put(JSONKey.IsJailed, Consts.SuccessOrFail.Success.getValue());
-			Consts.YesNo isJailed = Consts.YesNo.parseValue(jsonObj.getIntValue(JSONKey.IsJailed)); 
+			Consts.YesNo isJailed = Consts.YesNo.parseValue(jsonObj.getIntValue(JSONKey.IsJailed));
 			deviceCard.setIsJailed(isJailed.name());
 		}
 		
@@ -1186,7 +1202,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			deviceCard.setLocation(temp);
 		}
 	}
-
+	
 	@Override
 	public MessageId getMessageId()
 	{

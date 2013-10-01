@@ -82,13 +82,13 @@ public class DAOWrapper
     	{
     		try
     		{
-	    		Session session = HibernateSessionFactory.getSession();
-	        	//session.beginTransaction();
-	    		session.saveOrUpdate(obj);
-	        	//session.flush();
+	    		//Session session = HibernateSessionFactory.getSessionFactory().openSession();
+    			Session session = HibernateSessionFactory.getSession();
+	    		session.saveOrUpdate(session.merge(obj));
+	        	session.flush();
 	        	//session.clear();
-	        	//session.getTransaction().commit();
 	    		session.beginTransaction().commit();
+	    		//session.close();
     		}
     		catch(Exception e)
     		{

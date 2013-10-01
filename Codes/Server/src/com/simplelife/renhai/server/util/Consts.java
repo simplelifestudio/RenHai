@@ -17,7 +17,7 @@ public class Consts
 {
 	public enum SolidAssessLabel
 	{
-		Invalid(""), Good("Ï²»¶"), Normal("Ò»°ã"), Bad("·´¸Ð");
+		Invalid(""), Good("^#Happy#^"), Normal("^#SoSo#^"), Bad("^#Disgusting#^");
 		private String value;
 		private SolidAssessLabel(String value)
 		{
@@ -40,6 +40,39 @@ public class Consts
 			for (SolidAssessLabel tmpValue : values())
 			{
 				if (tmpValue.value.equals(label))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	
+	public enum ValidInvalid
+	{
+		Valid(1), Invalid(0);
+		private int value;
+		private ValidInvalid(int value)
+		{
+			this.value = value;
+		}
+		
+		public int getValue()
+		{
+			return value;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return String.valueOf(value);
+		}
+		
+		public static boolean isValidFlag(String label)
+		{
+			for (ValidInvalid tmpValue : values())
+			{
+				if (tmpValue.name().equals(label))
 				{
 					return true;
 				}

@@ -8,7 +8,7 @@
 			org.hibernate.dialect.MySQLDialect
 		</property>
 		<property name="connection.url">
-			jdbc:mysql://127.0.0.1:3306/renhai
+			jdbc:mysql://127.0.0.1:3306/renhai?useUnicode=true&amp;characterEncoding=UTF-8 
 		</property>
 		<property name="connection.username">root</property>
 		<property name="connection.password">1qazZSE$4rfv</property>

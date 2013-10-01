@@ -408,7 +408,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		for (int i = 0; i < 5; i++)
 		{
 			JSONObject label = new JSONObject();
-			label.put(JSONKey.InterestLabel, "InterestLabel" + i);
+			label.put(JSONKey.InterestLabelName, "InterestLabel" + i);
 			label.put(JSONKey.LabelOrder, i);
 			labelArray.add(label);
 		}

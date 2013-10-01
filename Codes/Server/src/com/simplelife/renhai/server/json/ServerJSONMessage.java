@@ -151,6 +151,8 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     		return;
     	}
     	
+    	// Update current time again before sending
+    	addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
     	deviceWrapper.asyncSendMessage(this);
     }
     
@@ -162,6 +164,8 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     		return;
     	}
     	
+    	// Update current time again before sending
+    	addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
     	deviceWrapper.syncSendMessage(this);
     }
 

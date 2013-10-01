@@ -51,10 +51,10 @@ public class GlobalSetting
 		public static int CheckExpiredToken = 3600;
 		
 		public static int FlushCacheToDB = 30 * 1000;
-		public static int DeviceInIdle = 180*1000;
+		public static int DeviceInIdle = 300 * 1000;
 		
-		public static int OnlineDeviceConnection = 5 * 1000;
-		public static int PingInterval = 2 * 1000;
+		public static int OnlineDeviceConnection = 30 * 1000;
+		public static int PingInterval = 5 * 1000;
 	}
 	
 	public static class DBSetting
@@ -76,5 +76,7 @@ public class GlobalSetting
 		public static String EncryptKey = "20120801";
 		public static int LengthOfSessionId = 16;
 		public static int LengthOfMessageSn = 16;
+		
+		public static int MaxImpressLabelCount = 32;
 	} 
 }
