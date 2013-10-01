@@ -201,6 +201,8 @@
 		CD32013B17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
 		CD32013C17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */; };
 		CD32013D17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */; };
+		CD43667417F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */; };
+		CD43667517F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */; };
 		CD5F065117E8810900D08426 /* ImpressSectionHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5F065017E8810900D08426 /* ImpressSectionHeaderView_iPhone.m */; };
 		CD5F065217E8810900D08426 /* ImpressSectionHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5F065017E8810900D08426 /* ImpressSectionHeaderView_iPhone.m */; };
 		CD5F065417E8813300D08426 /* ImpressSectionHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD5F065317E8813200D08426 /* ImpressSectionHeaderView_iPhone.xib */; };
@@ -407,6 +409,8 @@
 		CD32013717E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTableViewSwitcherCell_iPhone.h; sourceTree = "<group>"; };
 		CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHTableViewSwitcherCell_iPhone.m; sourceTree = "<group>"; };
 		CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHTableViewSwitcherCell_iPhone.xib; sourceTree = "<group>"; };
+		CD43667217F97C2E00586443 /* NSDictionary+MutableDeepCopy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+MutableDeepCopy.h"; sourceTree = "<group>"; };
+		CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MutableDeepCopy.m"; sourceTree = "<group>"; };
 		CD5F064F17E8810900D08426 /* ImpressSectionHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpressSectionHeaderView_iPhone.h; sourceTree = "<group>"; };
 		CD5F065017E8810900D08426 /* ImpressSectionHeaderView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImpressSectionHeaderView_iPhone.m; sourceTree = "<group>"; };
 		CD5F065317E8813200D08426 /* ImpressSectionHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImpressSectionHeaderView_iPhone.xib; sourceTree = "<group>"; };
@@ -702,6 +706,8 @@
 				C50505BD17D2BD4800DB6589 /* UIColor+CBColors.m */,
 				C54DC8E817DC926900BBD498 /* UIDevice+CBDeviceExtends.h */,
 				C54DC8E917DC926900BBD498 /* UIDevice+CBDeviceExtends.m */,
+				CD43667217F97C2E00586443 /* NSDictionary+MutableDeepCopy.h */,
+				CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1141,6 +1147,7 @@
 				C580526D17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m in Sources */,
 				C580527117E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m in Sources */,
 				CD32013A17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */,
+				CD43667417F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */,
 				CD5F065117E8810900D08426 /* ImpressSectionHeaderView_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1203,6 +1210,7 @@
 				C594603217D6CEA60084BB10 /* WebSocketAgent.m in Sources */,
 				C594603617D7352F0084BB10 /* RHMessage.m in Sources */,
 				C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */,
+				CD43667517F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */,
 				C596284417DA1C8B009127E6 /* RHNavigationController.m in Sources */,
 				C54DC8D617DC11A000BBD498 /* CEPlayer.m in Sources */,
 				C54DC8D817DC11A000BBD498 /* CBRoundProgressLayer.m in Sources */,

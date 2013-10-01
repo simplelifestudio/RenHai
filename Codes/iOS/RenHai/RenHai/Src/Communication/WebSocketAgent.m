@@ -174,7 +174,6 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
 {
-    NSLog(@"XXXXXXX: %@", error.debugDescription);
     DDLogWarn(@"Websocket Failed With Error: %@", error);
     
     [self closeWebSocket];
@@ -189,41 +188,50 @@
     
     DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", jsonMessage.toJSONString);
     
-    NSString* messageSn = jsonMessage.messageSn;
-    
-    switch (jsonMessage.messageType)
+    BOOL isLegalMessage = [RHMessage isLegalMessage:jsonMessage];
+    if (isLegalMessage)
     {
-        case MessageType_ServerResponse:
+        NSString* messageSn = jsonMessage.messageSn;
+        
+        switch (jsonMessage.messageType)
         {
-            [self _saveResponseMessage:jsonMessage];
-            
-            NSCondition* _messageLock = [self _getMessageLock:messageSn];
-            [_messageLock lock];
-            [_messageLock signal];
-            [_messageLock unlock];
-            
-            break;
+            case MessageType_ServerResponse:
+            {
+                [self _saveResponseMessage:jsonMessage];
+                
+                NSCondition* _messageLock = [self _getMessageLock:messageSn];
+                [_messageLock lock];
+                [_messageLock signal];
+                [_messageLock unlock];
+                
+                break;
+            }
+            case MessageType_ServerNotification:
+            {
+                NSMutableString* messageIdStr = [NSMutableString stringWithString:NOTIFICATION_PREFIX_MESSAGEID];
+                [messageIdStr appendString:[NSMutableString stringWithFormat:@"%d", jsonMessage.messageId]];
+                NSNotification* notification = [NSNotification notificationWithName:messageIdStr object:jsonMessage userInfo:nil];
+                [[NSNotificationCenter defaultCenter] postNotification:notification];
+                
+                break;
+            }
+            default:
+            {
+                NSAssert(NO, @"Received an unexpected message!");
+                break;
+            }
         }
-        case MessageType_ServerNotification:
-        {
-            NSString* messageIdStr = [NSString stringWithFormat:@"%d", jsonMessage.messageId];
-            NSNotification* notification = [NSNotification notificationWithName:messageIdStr object:jsonMessage userInfo:nil];
-            [[NSNotificationCenter defaultCenter] postNotification:notification];
-            
-            break;
-        }
-        default:
-        {
-            NSAssert(NO, @"Received an unexpected message!");
-            break;
-        }
+    }
+    else
+    {
+        DDLogError(@"Received an illegal message from server: %@", jsonMessage.toJSONString);
     }
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)data
 {
-    NSString* str = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-    DDLogInfo(@"WebSocket Received Pong \"%@\"", str);
+//    NSString* str = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+//    DDLogInfo(@"WebSocket Received Pong \"%@\"", str);
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;

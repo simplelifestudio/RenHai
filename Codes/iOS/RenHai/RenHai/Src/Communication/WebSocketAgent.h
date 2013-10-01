@@ -17,6 +17,8 @@
 
 #define HEARTBEATPING_PERIOD 5.0
 
+#define NOTIFICATION_PREFIX_MESSAGEID @"MessageId_"
+
 @interface WebSocketAgent : NSObject <SRWebSocketDelegate, CBJSONMessageComm>
 
 -(BOOL) openWebSocket;

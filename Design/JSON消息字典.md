@@ -164,7 +164,7 @@ Server接收到App消息后，向App回应的消息
 						"updateTime":null,
 						"assessCount":null
 					}					
-				}
+				},
 				"impressLabelList":
 				[
 					{
@@ -366,6 +366,30 @@ App与Server通过消息交互完成的数据操作
 						"chatTotalDuration":null,
 						"chatLossCount":null,
 						"assessLabelList":null,
+						"assessLabelList":
+						[
+							{
+								"impressLabelName":null,
+								"globalImpressLabelId":null,
+								"assessedCount":null,
+								"updateTime":null,
+								"assessCount":null
+							},
+							{
+								"impressLabelName":null,
+								"globalImpressLabelId":null,
+								"assessedCount":null,
+								"updateTime":null,
+								"assessCount":null
+							},
+							{
+								"impressLabelName":null,
+								"globalImpressLabelId":null,
+								"assessedCount":null,
+								"updateTime":null,
+								"assessCount":null
+							}
+						],						
 						"impressLabelList":
 						[
 							{

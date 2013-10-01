@@ -10,7 +10,7 @@
 
 #import "CBJSONable.h"
 
-@interface RHImpressLabel : NSObject <CBJSONable>
+@interface RHImpressLabel : NSObject <CBJSONable, NSCopying, NSMutableCopying>
 
 @property (nonatomic) NSUInteger labelId;
 @property (nonatomic, strong) NSString* labelName;

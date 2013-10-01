@@ -20,7 +20,7 @@ typedef enum
 }
 RHDeviceJailStatus;
 
-@interface RHDeviceCard : NSObject <CBJSONable>
+@interface RHDeviceCard : NSObject <CBJSONable, NSCopying, NSMutableCopying>
 
 @property (nonatomic) NSInteger deviceCardId;
 @property (nonatomic, strong) NSDate* registerTime;

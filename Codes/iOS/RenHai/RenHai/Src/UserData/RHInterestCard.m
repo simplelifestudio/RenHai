@@ -19,14 +19,18 @@
 
 @interface RHInterestCard()
 {
-    NSMutableDictionary* _labelList;
+    
 }
+
+@property (nonatomic, strong) NSMutableDictionary* labelMap;
 
 @end
 
 @implementation RHInterestCard
 
 @synthesize interestCardId = _interestCardId;
+
+@synthesize labelMap = _labelMap;
 
 #pragma mark - Public Methods
 
@@ -40,13 +44,13 @@
     return self;
 }
 
--(NSArray*) getLabelList
+-(NSArray*) labelList
 {
     NSMutableArray* list = [NSMutableArray array];
     
-    if (nil != _labelList)
+    if (nil != _labelMap)
     {
-        [_labelList enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
+        [_labelMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
             [list addObject:obj];
         }];
     }
@@ -63,7 +67,11 @@
         RHInterestLabel* label = [[RHInterestLabel alloc] init];
         label.labelName = labelName;
         
-        [_labelList setObject:label forKey:labelName];
+        if (nil == _labelMap)
+        {
+            _labelMap = [NSMutableDictionary dictionary];
+        }
+        [_labelMap setObject:label forKey:labelName];
         
         flag = YES;
     }
@@ -77,7 +85,10 @@
     
     if ([self isLabelExists:labelName])
     {
-        [_labelList removeObjectForKey:labelName];
+        if (nil != _labelMap)
+        {
+            [_labelMap removeObjectForKey:labelName];
+        }
 
         flag = YES;
     }
@@ -87,16 +98,16 @@
 
 -(BOOL) isLabelExists:(NSString*) labelName
 {
-    if (nil == _labelList)
+    if (nil == _labelMap)
     {
-        _labelList = [NSMutableDictionary dictionary];
+        _labelMap = [NSMutableDictionary dictionary];
     }
     
     __block BOOL flag = NO;
     
     if (nil != labelName && 0 < labelName.length)
     {
-        [_labelList enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
+        [_labelMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
             RHInterestLabel* label = (RHInterestLabel*)obj;
             if ([label.labelName isEqualToString:labelName])
             {
@@ -125,42 +136,37 @@
     return oCardId;
 }
 
--(id) _getOLabelList
+-(id) _getOLabelListDic
 {
-    id oLabelList = nil;
-    
-    if (nil == _labelList)
+    id oLabelListDic = nil;
+    id oLabelList = [self _getOLabelList];
+    if (nil == oLabelList)
     {
-        oLabelList = [NSNull null];
+        oLabelListDic = [NSNull null];
     }
     else
     {
-        oLabelList = _labelList;
+        oLabelListDic = oLabelList;
+    }
+    
+    return oLabelListDic;
+}
+
+-(id) _getOLabelList
+{
+    id oLabelList = _labelMap;
+    if (nil != oLabelList)
+    {
+        oLabelList = [NSMutableArray arrayWithCapacity:_labelMap.count];
+        
+        [_labelMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
+            RHInterestLabel* label = (RHInterestLabel*)obj;            
+            NSDictionary* labelDic = label.toJSONObject;
+            [oLabelList addObject:labelDic];
+        }];
     }
     
     return oLabelList;
-}
-
--(id) _getOLabelListDic
-{
-    id labelListDic = nil;
-    
-    id oLabelList = [self _getOLabelList];
-    if (oLabelList == [NSNull null])
-    {
-        labelListDic = oLabelList;
-    }
-    else
-    {
-        labelListDic = [NSMutableArray arrayWithCapacity:_labelList.count];
-        for (RHInterestLabel* label in _labelList)
-        {
-            NSDictionary* labelDic = label.toJSONObject;
-            [labelListDic addObject:labelDic];
-        }
-    }
-    
-    return labelListDic;
 }
 
 #pragma mark - CBJSONable
@@ -194,7 +200,7 @@
     {
         _interestCardId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CARDID];
         
-        _labelList = [aDecoder decodeObjectForKey:SERIALIZE_KEY_LABELLIST];
+        _labelMap = [aDecoder decodeObjectForKey:SERIALIZE_KEY_LABELLIST];
     }
     
     return self;
@@ -204,7 +210,36 @@
 {
     [aCoder encodeInteger:_interestCardId forKey:SERIALIZE_KEY_CARDID];
     
-    [aCoder encodeObject:_labelList forKey:SERIALIZE_KEY_LABELLIST];
+    [aCoder encodeObject:_labelMap forKey:SERIALIZE_KEY_LABELLIST];
+}
+
+#pragma mark - NSCopying
+
+-(id) copyWithZone:(struct _NSZone *)zone
+{
+//    RHInterestCard* copy = [[RHInterestCard alloc] init];
+//    
+//    copy.interestCardId = _interestCardId;
+//    copy.labelMap = [_labelMap copy];
+//    
+//    return copy;
+
+    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
+    return (RHInterestCard*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
+#pragma mark - NSMutableCopying
+
+-(id) mutableCopyWithZone:(struct _NSZone *)zone
+{
+//    RHInterestCard* mutableCopy = [[RHInterestCard alloc] init];
+//
+//    mutableCopy.interestCardId = _interestCardId;
+//    mutableCopy.labelMap = [_labelMap mutableCopy];
+//    
+//    return mutableCopy;
+
+    return [self copyWithZone:zone];
 }
 
 @end

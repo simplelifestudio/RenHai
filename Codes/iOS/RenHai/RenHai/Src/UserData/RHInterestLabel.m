@@ -10,6 +10,8 @@
 
 #import "CBJSONUtils.h"
 
+#import "RHMessage.h"
+
 #define SERIALIZE_KEY_LABELID @"interestLabel.labelId"
 #define SERIALIZE_KEY_NAME @"interestLabel.interestLabelName"
 #define SERIALIZE_KEY_GLOBALMATCHCOUNT @"interestLabel.globalMatchCount"
@@ -32,7 +34,7 @@
 {
     if (self = [super init])
     {
-        
+        _validFlag = ValidFlag;
     }
     
     return self;
@@ -54,6 +56,11 @@
     return oLabelId;
 }
 
+-(NSNumber*) _getOValidFlag
+{
+    return [NSNumber numberWithInt:_validFlag];
+}
+
 #pragma mark - CBJSONable
 
 -(NSDictionary*) toJSONObject
@@ -61,21 +68,21 @@
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
 
     id oLabelId = [self _getOLabelId];
-    [dic setObject:oLabelId forKey:SERIALIZE_KEY_LABELID];
+    [dic setObject:oLabelId forKey:MESSAGE_KEY_INTERESTLABELID];
 
-    [dic setObject:_labelName forKey:SERIALIZE_KEY_NAME];
+    [dic setObject:_labelName forKey:MESSAGE_KEY_INTERESTLABELNAME];
 
     NSNumber* oGlobalMatchCount = [NSNumber numberWithInteger:_globalMatchCount];
-    [dic setObject:oGlobalMatchCount forKey:SERIALIZE_KEY_GLOBALMATCHCOUNT];
+    [dic setObject:oGlobalMatchCount forKey:MESSAGE_KEY_GLOBALMATCHCOUNT];
     
     NSNumber* oOrder = [NSNumber numberWithInteger:_labelOrder];
-    [dic setObject:oOrder forKey:SERIALIZE_KEY_ORDER];
+    [dic setObject:oOrder forKey:MESSAGE_KEY_INTERESTLABELORDER];
     
     NSNumber* oMatchCount = [NSNumber numberWithInteger:_matchCount];
-    [dic setObject:oMatchCount forKey:SERIALIZE_KEY_MATCHCOUNT];
+    [dic setObject:oMatchCount forKey:MESSAGE_KEY_MATCHCOUNT];
     
-    NSNumber* oValidFlag = [NSNumber numberWithBool:_validFlag];
-    [dic setObject:oValidFlag forKey:SERIALIZE_KEY_VALIDFLAG];
+    NSNumber* oValidFlag = [self _getOValidFlag];
+    [dic setObject:oValidFlag forKey:MESSAGE_KEY_VALIDFLAG];
     
     return dic;
 }
@@ -104,7 +111,7 @@
         
         _matchCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_MATCHCOUNT];
         
-        _validFlag = [aDecoder decodeBoolForKey:SERIALIZE_KEY_VALIDFLAG];
+        _validFlag = [aDecoder decodeIntForKey:SERIALIZE_KEY_VALIDFLAG];
     }
     
     return self;
@@ -122,7 +129,44 @@
     
     [aCoder encodeInteger:_matchCount forKey:SERIALIZE_KEY_MATCHCOUNT];
     
-    [aCoder encodeBool:_validFlag forKey:SERIALIZE_KEY_VALIDFLAG];
+    [aCoder encodeInt:_validFlag forKey:SERIALIZE_KEY_VALIDFLAG];
+}
+
+#pragma mark - NSCopying
+
+-(id) copyWithZone:(struct _NSZone *)zone
+{
+//    RHInterestLabel* copy = [[RHInterestLabel alloc] init];
+//
+//    copy.labelId = _labelId;
+//    copy.labelName = [_labelName copy];
+//    copy.globalMatchCount = _globalMatchCount;
+//    copy.labelOrder = _labelOrder;
+//    copy.matchCount = _matchCount;
+//    copy.validFlag = _validFlag;
+//    
+//    return copy;
+
+    NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
+    return (RHInterestLabel*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
+#pragma mark - NSMutableCopying
+
+-(id) mutableCopyWithZone:(struct _NSZone *)zone
+{
+//    RHInterestLabel* mutableCopy = [[RHInterestLabel alloc] init];
+//    
+//    mutableCopy.labelId = _labelId;
+//    mutableCopy.labelName = [_labelName mutableCopy];
+//    mutableCopy.globalMatchCount = _globalMatchCount;
+//    mutableCopy.labelOrder = _labelOrder;
+//    mutableCopy.matchCount = _matchCount;
+//    mutableCopy.validFlag = _validFlag;
+//    
+//    return mutableCopy;
+
+    return [self copyWithZone:zone];
 }
 
 @end

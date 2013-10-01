@@ -16,6 +16,7 @@
 
 #import "CommunicationModule.h"
 #import "UserDataModule.h"
+#import "LoggerModule.h"
 
 #define ASYNCOPERATION_WAIT_TIMEOUT WEBSOCKET_COMM_TIMEOUT*2
 
@@ -33,7 +34,7 @@
 
 -(BOOL) shouldRunOnMainThread
 {
-    return YES;
+    return NO;
 }
 
 -(void) prepare
@@ -43,6 +44,9 @@
 
 -(void) setUp
 {
+    LoggerModule* loggerModule = [LoggerModule sharedInstance];
+    [loggerModule initModule];
+    
     _device = [[RHDevice alloc] init];
 }
 
@@ -67,28 +71,29 @@
 
 -(void) testAppDataSyncRequest_TotalSync
 {
-    RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:_device];
+    RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:_device info:nil];
     
     [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSyncRequest_TotalSync)];
 }
 
 -(void) testAppDataSyncRequest_DeviceCardSync
 {
-    RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_DeviceCardSync device:_device];
+    RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_DeviceCardSync device:_device info:nil];
     
     [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSyncRequest_DeviceCardSync)];
 }
 
 -(void) testAppDataSyncRequest_ImpressCardSync
 {
-    RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_ImpressCardSync device:_device];
+    RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_ImpressCardSync device:_device info:nil];
     
     [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSyncRequest_ImpressCardSync)];
 }
 
 -(void) testAppDataSyncRequest_InterestCardSync
 {
-    RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:_device];
+    NSDictionary* info = [NSDictionary dictionaryWithObjects:@[@"Topic6", @"Topic7", @"Topic8"] forKeys:@[@"Topic6", @"Topic7", @"Topic8"]];
+    RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:_device info:info];
     
     [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSyncRequest_InterestCardSync)];
 }
@@ -125,14 +130,14 @@
     
     RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_InterestLabelListSync device:_device info:info];
     
-    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testAlohaRequest)];
+    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testServerDataSyncRequest_InterestLabelListSync)];
 }
 
 -(void) testBusinessSessionRequest
 {
     RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Interest operationType:BusinessSessionRequestType_EnterPool device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testAlohaRequest)];
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSessionRequest)];
 }
 
 -(void) testBusinessSessionNotificationResponse
@@ -141,7 +146,7 @@
     
     RHMessage* businessSessionNotificationResponseMessage = [RHMessage newBusinessSessionNotificationResponseMessage:businessSessionId businessType:BusinessType_Interest operationType:BusinessSessionNotificationType_OthersideAgreed operationValue:BusinessSessionOperationValue_Success device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:businessSessionNotificationResponseMessage selector:@selector(testAlohaRequest)];
+    [self _sendMessageThroughWebSocket:businessSessionNotificationResponseMessage selector:@selector(testBusinessSessionNotificationResponse)];
 }
 
 -(void) testWebSocketOpen
