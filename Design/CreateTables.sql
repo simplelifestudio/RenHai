@@ -297,7 +297,7 @@ CREATE TABLE `sessionrecord` (
   `businessType` enum('Random','Interest') NOT NULL,
   `startTime` bigint(20) NOT NULL,
   `duration` int(11) NOT NULL,
-  `endStatus` enum('ChatConfirm','VedioChat','Idle','Assess') NOT NULL,
+  `endStatus` enum('ChatConfirm','VideoChat','Idle','Assess') NOT NULL,
   `endReason` enum('Reject','ConnectionLoss','NormalEnd') NOT NULL,
   PRIMARY KEY (`sessionRecordId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
