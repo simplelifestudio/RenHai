@@ -154,6 +154,7 @@ public class BusinessSession implements IBusinessSession
     	{
 	    	for (IDeviceWrapper device : deviceList)
 	    	{
+	    		logger.debug("Notify devices <{}> that session has ended.", device.getDeviceSn());
 	    		device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
 	    		pool.endChat(device);
 	    	}
@@ -165,6 +166,7 @@ public class BusinessSession implements IBusinessSession
     		logger.debug("lock tmpConfirmDeviceList in endSession");
     		for (IDeviceWrapper device : tmpConfirmDeviceList)
 	    	{
+    			logger.debug("Notify devices <{}> that session has ended.", device.getDeviceSn());
     			device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
 	    		pool.endChat(device);
 	    	}
@@ -175,7 +177,6 @@ public class BusinessSession implements IBusinessSession
     	saveSessionRecord();
     	unbindBusinessDevicePool();
     	BusinessSessionPool.instance.recycleBusinessSession(this);
-    	
     }
     
     private void saveSessionRecord()
@@ -236,11 +237,6 @@ public class BusinessSession implements IBusinessSession
     
     public void notifyDevices(IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
     {
-    	if (tmpConfirmDeviceList.size() == 0)
-    	{
-    		return;
-    	}
-    	
     	ServerJSONMessage notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
 		notify.getBody().put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(sessionId));
 		notify.getBody().put(JSONKey.BusinessType, pool.getBusinessType().getValue());
@@ -253,14 +249,28 @@ public class BusinessSession implements IBusinessSession
     		logger.debug("lock tmpConfirmDeviceList in notifyDevices");
     		tmpList = new ArrayList<IDeviceWrapper>(tmpConfirmDeviceList);
     	}
+    	
+    	synchronized(deviceList)
+    	{
+    		tmpList.addAll(deviceList);
+    	}
+    	
     	logger.debug("unlock tmpConfirmDeviceList in notifyDevices");
     	
+    	String temp;
 		for (IDeviceWrapper device : tmpList)
     	{
 			if (device == triggerDevice)
 			{
 				continue;
 			}
+		
+			temp = "Notify device <"+ device.getDeviceSn() +"> about " + notificationType.name();
+			if (triggerDevice != null)
+			{
+				temp += " from device " + triggerDevice.getDeviceSn();
+			}
+			logger.debug(temp);
 			
 			notify.getHeader().put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
 			if (triggerDevice == null)
@@ -430,7 +440,7 @@ public class BusinessSession implements IBusinessSession
     {
     	if (!tmpConfirmDeviceList.contains(device))
     	{
-    		logger.error("Received confirmation in onAgreeChat from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
+    		logger.error("Received onAgreeChat from device <{}> but it's not in status of waiting for it", device.getDeviceSn());
     		return;
     	}
     	
@@ -455,6 +465,7 @@ public class BusinessSession implements IBusinessSession
 		}
 
 		changeStatus(Consts.BusinessSessionStatus.VideoChat);
+		return;
     }
     
     @Override
@@ -507,6 +518,7 @@ public class BusinessSession implements IBusinessSession
     	}
     	
     	device.unbindBusinessSession();
+    	notifyDevices(device, Consts.NotificationType.OthersideLost);
     	switch(status)
     	{
     		case Idle:
@@ -572,5 +584,15 @@ public class BusinessSession implements IBusinessSession
 	public void unbindBusinessDevicePool()
 	{
 		this.pool = null;
+	}
+
+	@Override
+	public boolean isRightTimeForRequest(IDeviceWrapper device)
+	{
+		if (tmpConfirmDeviceList.contains(device))
+		{
+			return true;
+		}
+		return false;
 	}
 }

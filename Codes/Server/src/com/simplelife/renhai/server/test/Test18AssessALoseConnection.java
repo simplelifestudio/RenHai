@@ -84,12 +84,12 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		businessPool.getBusinessScheduler().stopScheduler();
 		
 		// Step_06 Mock请求：A进入随机聊天
-		mockApp1.enterPool(Consts.BusinessType.Random);
+		mockApp1.enterPool(businessType);
 		assertTrue(!mockApp1.lastReceivedCommandIsError());
 		
 		// Step_07 Mock请求：B进入随机聊天
 		businessPool.getBusinessScheduler().stopScheduler();
-		mockApp2.enterPool(Consts.BusinessType.Random);
+		mockApp2.enterPool(businessType);
 		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
@@ -210,7 +210,7 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_33 Mock事件：B对A评价，且之后退出业务
-		mockApp2.assessAndQuit(mockApp1.getDeviceWrapper(), "喜欢,帅哥");
+		mockApp2.assessAndQuit(mockApp1.getDeviceWrapper(), "^#Happy#^,帅哥");
 		assertTrue(mockApp2.getLastReceivedCommand() != null);
 		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		

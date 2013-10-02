@@ -224,7 +224,7 @@ public class ServerDataSyncRequest extends AppJSONMessage
 	{
 		if (!checkJSONRequest())
 		{
-			responseError(Consts.MessageId.ServerDataSyncRequest.name());
+			responseError(Consts.MessageId.ServerDataSyncRequest);
 			return;
 		}
 		

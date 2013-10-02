@@ -114,17 +114,81 @@ public class MainFunction extends AbstractTestCase
 	}
 	
 	@Test
+	public void testLeaveRandomPool()
+	{
+		LocalMockApp app = createNewMockApp(this.demoDeviceSn);
+		
+		String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:29.845\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"58G334J6A89MBA7L\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":1,\"appVersion\":\"0.1\",\"deviceModel\":\"iPhone 5\",\"osVersion\":\"6.1.2\"},\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\"}},\"dataQuery\":{\"device\":null}}}}";
+		sendRawCommand(app, jsonString);
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		
+		jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:38.346\",\"messageType\":1,\"messageId\":103,\"messageSn\":\"QR543EPJ1OJ82FEJ\",\"deviceId\":0},\"body\":{\"operationValue\":null,\"businessSessionId\":null,\"operationInfo\":null,\"operationType\":1,\"businessType\":1}}}";
+		sendRawCommand(app, jsonString);
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		
+		jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:43.060\",\"messageType\":1,\"messageId\":102,\"messageSn\":\"7J0I40HDF1AQ0VHM\",\"deviceId\":0},\"body\":{\"deviceCount\":{\"chat\":null,\"interest\":null,\"randomChat\":null,\"online\":null,\"interestChat\":null,\"random\":null}}}}";
+		sendRawCommand(app, jsonString);
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		
+		jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:50.593\",\"messageType\":1,\"messageId\":103,\"messageSn\":\"4Q59EA4B0J7TQR82\",\"deviceId\":0},\"body\":{\"operationValue\":null,\"businessSessionId\":null,\"operationInfo\":null,\"operationType\":2,\"businessType\":1}}}";
+		sendRawCommand(app, jsonString);
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		
+		jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:56.894\",\"messageType\":1,\"messageId\":102,\"messageSn\":\"X7H2Z3ZPR0Q6WH8L\",\"deviceId\":0},\"body\":{\"deviceCount\":{\"chat\":null,\"interest\":null,\"randomChat\":null,\"online\":null,\"interestChat\":null,\"random\":null}}}}";
+		sendRawCommand(app, jsonString);
+	}
+	
+	private void sendRawCommand(LocalMockApp app, String jsonString)
+	{
+		JSONObject wholeObj = JSONObject.parseObject(jsonString);
+		JSONObject obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope); 
+		
+		app.sendRawJSONMessage(obj, true);
+	}
+	
+	@Test
 	public void testRawCommand()
 	{
 		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"194AF3A8-FFB0-4997-B9DE-CD4CFB68252B\",\"timeStamp\":\"2013-09-30 12:54:30.809\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"B569O1MTRE5A0UA6\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":0,\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"osVersion\":\"6.1\"},\"deviceSn\":\"794AF3A8-FFB0-4997-B9DE-CD4CFB68252B\"}},\"dataQuery\":{\"device\":null}}}}";
-		String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"794AF3A8-FFB0-4997-B9DE-CD4CFB68252A\",\"timeStamp\":\"2013-09-30 14:26:26.344\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"0871CLZJY289O310\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":0,\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"osVersion\":\"6.1\"}}},\"dataQuery\":{\"device\":{\"deviceId\":null,\"deviceSn\":null,\"deviceCard\":null,\"profile\":null}}}}}";
+		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"794AF3A8-FFB0-4997-B9DE-CD4CFB68252A\",\"timeStamp\":\"2013-09-30 14:26:26.344\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"0871CLZJY289O310\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":0,\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"osVersion\":\"6.1\"}}},\"dataQuery\":{\"device\":{\"deviceId\":null,\"deviceSn\":null,\"deviceCard\":null,\"profile\":null}}}}}";
 		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"194AF3A8-FFB0-4997-B9DE-CD4CFB68252B\",\"timeStamp\":\"2013-09-30 15:28:31.408\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"5I4Z5A61I1250505\",\"deviceId\":0},\"body\":{\"dataQuery\":{\"device\":{\"profile\":{\"impressCard\":null}}}}}}";
+		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"794AF3A8-FFB0-4997-B9DE-CD4CFB68252A\",\"timeStamp\":\"2013-10-01 15:14:30.322\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"E936R0GBTJAAEB0Q\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":0,\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"osVersion\":\"6.1\"},\"deviceSn\":\"794AF3A8-FFB0-4997-B9DE-CD4CFB68252A\"}},\"dataQuery\":{\"device\":null}}}}";
+		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"EFAD498F-9A95-4B90-A59E-FC599AC21FA3\",\"timeStamp\":\"2013-10-01 16:02:44.578\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"816SY86DJ6C88RC7\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":0,\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"osVersion\":\"6.1\"},\"deviceSn\":\"EFAD498F-9A95-4B90-A59E-FC599AC21FA3\"}},\"dataQuery\":{\"device\":null}}}}";
+		String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 12:54:46.097\",\"messageType\":1,\"messageId\":103,\"messageSn\":\"SAUB9WO215092BO9\",\"deviceId\":0},\"body\":{\"operationValue\":null,\"businessSessionId\":null,\"operationInfo\":null,\"operationType\":4,\"businessType\":1}}}";
 		
 		JSONObject wholeObj = JSONObject.parseObject(jsonString);
 		JSONObject obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope); 
 		
 		LocalMockApp app = createNewMockApp(this.demoDeviceSn);
-		//app.syncDevice();
+		app.syncDevice();
 		app.sendRawJSONMessage(obj, true);
 		//app.sendServerDataSyncRequest();
 	}

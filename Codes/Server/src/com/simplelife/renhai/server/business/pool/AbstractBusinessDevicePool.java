@@ -70,31 +70,34 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     /**
      * Device enters BusinessDevicePool, it's triggered by entering business 
      */
-    public boolean onDeviceEnter(IDeviceWrapper device)
+    public String onDeviceEnter(IDeviceWrapper device)
     {
     	if (device == null)
     	{
-    		return false;
+    		return "Device is null";
     	}
     	
     	Logger logger = BusinessModule.instance.getLogger();
     	if (isPoolFull())
     	{
-    		logger.warn("Pool is full and request of entering pool is rejected");
-    		return false;
+    		String temp = "Pool is full and request of entering pool is rejected"; 
+    		logger.warn(temp);
+    		return temp;
     	}
     	
     	String sn = device.getDeviceSn();
     	if (deviceMap.containsKey(sn))
     	{
-    		logger.warn("Device ({}) has been in BusinessDevicePool", sn);
-    		return true;
+    		String temp = "Device ("+ sn +") has been in BusinessDevicePool";
+    		logger.warn(temp);
+    		return null;
     	}
     	
     	if (chatDeviceMap.containsKey(sn))
     	{
-    		logger.error("Device ({}) has been in BusinessDevicePool and is in chat", sn);
-    		return false;
+    		String temp = "Device ("+ sn +") has been in BusinessDevicePool and is in chat";
+    		logger.error(temp);
+    		return temp;
     	}
     	
     	deviceMap.put(sn, device);
@@ -103,7 +106,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	businessScheduler.getLock().lock();
     	businessScheduler.signal();
     	businessScheduler.getLock().unlock();
-    	return true;
+    	return null;
     }
 
     /**
@@ -142,11 +145,15 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	    	logger.debug("Device <{}> was removed from chatDeviceMap of BusinessDevicePool", sn);
     	}
     	
+    	/*
+    	// 由于存在多个业务设备池，所以
+    	// 这里改成由OnlineDevicePool判断设备是否绑定BusinessSession并通知session释放设备
     	if (device.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
     	{
     		IBusinessSession session = device.getOwnerBusinessSession();
     		session.onDeviceLeave(device);
     	}
+    	*/
     }
     
     

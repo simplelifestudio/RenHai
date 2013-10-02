@@ -118,7 +118,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		deviceWrapper = mockApp.getDeviceWrapper();
 		
 		// Step_13 Mock请求：设备同步
-		mockApp.enterPool(Consts.BusinessType.Random);
+		mockApp.enterPool(businessType);
 		assertTrue(mockApp.lastReceivedCommandIsError());		//设备同步之前不能使用其他命令
 		
 		mockApp.syncDevice();
@@ -128,7 +128,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertTrue(deviceWrapper.getLastActivityTime().getTime() > lastActivityTime);
 		
 		// Step_15 Mock请求：进入随机聊天
-		mockApp.enterPool(Consts.BusinessType.Random);
+		mockApp.enterPool(businessType);
 		assertTrue(!mockApp.lastReceivedCommandIsError());
 		
 		// Step_16 Mock请求：设备同步

@@ -76,7 +76,7 @@ public abstract class AbstractMockApp implements IMockApp
 		@Override
 		public void run()
 		{
-			logger.debug("Mock app trying to response BusinessSessionNotification");
+			logger.debug("Device <{}> trying to response BusinessSessionNotification", deviceWrapper.getDeviceSn());
 			JSONObject body = message.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
 			Consts.NotificationType operationType = Consts.NotificationType.parseValue(body.getIntValue(JSONKey.OperationType)); 
 			app.sendNotificationResponse(operationType, "", "1");

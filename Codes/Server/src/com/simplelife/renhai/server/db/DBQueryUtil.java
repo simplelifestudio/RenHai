@@ -16,10 +16,15 @@ import org.slf4j.Logger;
 import com.simplelife.renhai.server.util.Consts.DBExistResult;
 
 /**
- * 
+ * Utility class for DB query
  */
 public class DBQueryUtil
 {
+	/**
+	 * Check if given deviceSn is new device in DB
+	 * @param deviceSn: SN of device
+	 * @return: return true if it's new device, else return false 
+	 */
 	public static boolean isNewDevice(String deviceSn)
 	{
 		String sql = "select * from " + TableName.Device 
@@ -32,6 +37,11 @@ public class DBQueryUtil
 		return true;
 	}
 	
+	/**
+	 * Get object of globalimpresslabel by given impress label
+	 * @param label: impress label, such as ¡°Ë§¸ç¡±
+	 * @return Return Object of globalimpresslabel if label existed, else return null 
+	 */
 	public static Globalimpresslabel getGlobalimpresslabel(String label)
 	{
 		String sql = "select * from " + TableName.GlobalImpressLabel
@@ -45,6 +55,11 @@ public class DBQueryUtil
 		return list.get(0);
 	}
 	
+	/**
+	 * Get object of globainterestlabel by given interest label
+	 * @param label: interest label, such as "×ãÇò"
+	 * @return Return Object of globainterestlabel if label existed, else return null
+	 */
 	public static Globalinterestlabel getGlobalinterestlabel(String label)
 	{
 		String sql = "select * from " + TableName.GlobalInterestLabel
@@ -58,6 +73,12 @@ public class DBQueryUtil
 		return list.get(0);
 	}
 	
+	/**
+	 * Return different ID by given deviceSn
+	 * @param idColumnName: name of ID column, such as deviceId 
+	 * @param deviceSn: SN of device, it's unique for each device
+	 * @return value of ID column
+	 */
 	public static String getIDByDeviceSn(String idColumnName, String deviceSn)
 	{
 		Logger logger = DBModule.instance.getLogger();

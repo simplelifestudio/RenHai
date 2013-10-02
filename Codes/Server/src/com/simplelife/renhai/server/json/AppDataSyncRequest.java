@@ -452,7 +452,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		if (!checkJSONRequest())
 		{
-			responseError(Consts.MessageId.AppDataSyncRequest.name());
+			responseError(Consts.MessageId.AppDataSyncRequest);
 			return;
 		}
 		
@@ -473,7 +473,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			{
 				this.setErrorCode(Consts.GlobalErrorCode.DBException_1001);
 				this.setErrorDescription("Server internal error.");
-				responseError(Consts.MessageId.AppDataSyncRequest.name());
+				responseError(Consts.MessageId.AppDataSyncRequest);
 				e.printStackTrace();
 				return;
 			}
@@ -503,7 +503,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			{
 				this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
 				this.setErrorDescription("It's not allowed to query a new device without update.");
-				responseError(Consts.MessageId.AppDataSyncRequest.name());
+				responseError(Consts.MessageId.AppDataSyncRequest);
 				return;
 			}
 		}
@@ -533,7 +533,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 				this.setErrorCode(Consts.GlobalErrorCode.NoPermission_1102);
 				this.setErrorDescription("Device was banned till "
 						+ DateUtil.getDateStringByLongValue(unbanDate));
-				responseError(Consts.MessageId.AppDataSyncRequest.name());
+				responseError(Consts.MessageId.AppDataSyncRequest);
 				return;
 			}
 		}

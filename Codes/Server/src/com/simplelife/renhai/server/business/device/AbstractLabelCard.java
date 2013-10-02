@@ -26,9 +26,6 @@ public abstract class AbstractLabelCard implements IAbstractLabelCard, IJSONObje
     public LinkedList<AbstractLabel> labelList;
     
     /** */
-    public AbstractLabel Unnamed1;
-    
-    /** */
     public void updateLabels(JSONArray labels)
     {
     }

@@ -136,7 +136,7 @@ public class LocalMockApp extends AbstractMockApp
 		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
 		
 		String message = JSON.toJSONString(envelopeObj, SerializerFeature.WriteMapNullValue);
-		logger.debug("Device <{}> send message: \n" + message, getDeviceWrapper().getDeviceSn());
+		logger.debug("MockApp <{}> send message: \n" + message, getDeviceWrapper().getDeviceSn());
 		if (!syncSend)
 		{
 			connection.onTextMessage(message);
@@ -150,9 +150,9 @@ public class LocalMockApp extends AbstractMockApp
 		{
 			if (lastReceivedCommand == null)
 			{
-				logger.debug("Device <{}> sent message and await for response.", getDeviceWrapper().getDeviceSn());
+				logger.debug("MockApp <{}> sent message and await for response.", getDeviceWrapper().getDeviceSn());
 				condition.await(10, TimeUnit.SECONDS);
-				logger.debug("Device <{}> recovers from await.", getDeviceWrapper().getDeviceSn());
+				logger.debug("MockApp <{}> recovers from await.", getDeviceWrapper().getDeviceSn());
 			}
 		}
 		catch (InterruptedException e)
@@ -326,7 +326,7 @@ public class LocalMockApp extends AbstractMockApp
 		lock.lock();
 		condition.signal();
 		lock.unlock();
-		logger.debug("Device<{}> received command: \n" + obj.toJSONString(), getDeviceWrapper().getDeviceSn());
+		logger.debug("MockApp <{}> received command: \n" + JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue), getDeviceWrapper().getDeviceSn());
 		
 		// Check if it's notification, and respose if it is
 		if (!autoReply)
@@ -340,7 +340,7 @@ public class LocalMockApp extends AbstractMockApp
 			int messageId = header.getIntValue(JSONKey.MessageId);
 			if (messageId == Consts.MessageId.BusinessSessionNotification.getValue())
 			{
-				logger.debug("Device <{}> replies BusinessSessionNotification automatically.");
+				logger.debug("MockApp <{}> replies BusinessSessionNotification automatically.", deviceWrapper.getDeviceSn());
 				AutoReplyTask task = new AutoReplyTask(obj, this);
 				task.start();
 			}

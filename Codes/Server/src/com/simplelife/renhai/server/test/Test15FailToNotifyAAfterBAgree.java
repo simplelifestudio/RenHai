@@ -79,11 +79,11 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
-		mockApp1.enterPool(Consts.BusinessType.Random);
+		mockApp1.enterPool(businessType);
 		
 		// Step_07 Mock请求：B进入随机聊天
 		businessPool.getBusinessScheduler().stopScheduler();
-		mockApp2.enterPool(Consts.BusinessType.Random);
+		mockApp2.enterPool(businessType);
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
@@ -96,9 +96,12 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 		randomDeviceCount = businessPool.getElementCount();
 		
 		// Step_11 调用：RandomBusinessScheduler::schedule
+		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
+		
 		mockApp1.clearLastReceivedCommand();
 		businessPool.getBusinessScheduler().schedule();
 		mockApp1.waitMessage();
+		mockApp2.waitMessage();
 		
 		// Step_12 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
@@ -111,14 +114,14 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
 		
 		// Step_15 调用：BusinessSession::getStatus
-		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
-		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
+		
+		
 		
 		// Step_16 Mock事件：A确认绑定
-		mockApp1.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
+		//mockApp1.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
 		
 		// Step_17 Mock事件：B确认绑定
-		mockApp2.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
+		//mockApp2.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
 		
 		// Step_18 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);
@@ -130,14 +133,23 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
 		
 		// Step_21 Mock事件：A同意聊天
+		mockApp1.clearLastReceivedCommand();
 		mockApp1.chatConfirm(true);
+		assertTrue(!mockApp1.lastReceivedCommandIsError());
 		
 		// Step_23 调用：MockWebSocketConnection::disableConnection，禁用A的通信功能
 		MockWebSocketConnection socket1 = getMockWebSocket(deviceWrapper1);
 		socket1.disableConnection();
 		
+		mockApp2.clearLastReceivedCommand();
+		mockApp2.waitMessage();
+		assertTrue(!mockApp2.lastReceivedCommandIsError());
+		
 		// Step_22 Mock事件：B同意聊天
+		mockApp2.clearLastReceivedCommand();
 		mockApp2.chatConfirm(true);
+		assertTrue(mockApp2.lastReceivedCommandIsError());
+		
 		
 		// Step_24 Mock事件：A onPing
 		//mockApp1.ping();

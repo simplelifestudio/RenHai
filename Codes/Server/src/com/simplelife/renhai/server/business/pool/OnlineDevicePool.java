@@ -189,6 +189,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		return;
     	}
     	
+    	logger.debug("Start to delete device <{}>", deviceWrapper.getDeviceSn());
     	deviceWrapper.unbindOnlineDevicePool();
     	
     	Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
@@ -222,6 +223,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		if ((status == Consts.BusinessStatus.WaitMatch)
         			|| (status == Consts.BusinessStatus.SessionBound))
         	{
+    			logger.debug("Notify business device pools as device <{}> has selected business", sn);
     			for (Consts.BusinessType type: Consts.BusinessType.values())
         		{
         			AbstractBusinessDevicePool pool = this.getBusinessPool(type);
@@ -231,10 +233,15 @@ public class OnlineDevicePool extends AbstractDevicePool
         			}
         		}
     			
-    			if (session != null)
-    			{
-    				session.notifyDevices(deviceWrapper, Consts.NotificationType.OthersideLost);
-    			}
+    			// To avoid duplicate recycle of session if more than one device timeout 
+				if (session != null)
+				{
+					synchronized (session)
+					{
+						logger.debug("Device <{}> has bound session, notify session to notify other devices.", sn);
+						session.onDeviceLeave(deviceWrapper);
+					}
+				}
         	}
     	}
     }

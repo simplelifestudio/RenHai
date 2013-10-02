@@ -32,6 +32,7 @@ public class TimeoutRequest extends AppJSONMessage
 	@Override
 	public void run()
 	{
+		logger.debug("Start to handle timeout of device <{}>", deviceWrapper.getDeviceSn());
 		Impresscard card =  deviceWrapper.getDevice().getProfile().getImpresscard();
 		card.setChatLossCount(card.getChatLossCount() + 1);
 		DBModule.instance.cache(card);

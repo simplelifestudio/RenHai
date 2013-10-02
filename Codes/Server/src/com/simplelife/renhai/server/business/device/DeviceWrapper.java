@@ -33,6 +33,7 @@ import com.simplelife.renhai.server.db.ImpresslabelmapSortable;
 import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.db.Profile;
+import com.simplelife.renhai.server.json.AppDataSyncRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.InvalidRequest;
 import com.simplelife.renhai.server.json.ServerErrorResponse;
@@ -51,6 +52,9 @@ import com.simplelife.renhai.server.util.JSONKey;
 /** */
 public class DeviceWrapper implements IDeviceWrapper, INode
 {
+	/**
+	 * Task for sending message to app by synchronized mode 
+	 */
 	private class SyncSendMessageTask extends Thread
 	{
 		private DeviceWrapper device;
@@ -69,7 +73,8 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		}
 		
 	}
-	/** */
+	
+	// WebScoket connection enclosed in DeviceWrapper, all JSON messages are sent/received by this connection 
     protected IBaseConnection webSocketConnection;
     
     // Time of last ping from APP
@@ -90,10 +95,13 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     // Business session
     protected Consts.BusinessStatus businessStatus;
     
+    // Business type of device, Random or Interest, effective after app selects business device pool 
     protected Consts.BusinessType businessType;
-    
+
+    // Online device pool, which is singleton instance in whole server
     protected OnlineDevicePool ownerOnlinePool;
     
+    // Instance of slf Logger
     private Logger logger = BusinessModule.instance.getLogger();
     
     public void setServiceStatus(Consts.ServiceStatus serviceStatus)
@@ -101,7 +109,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     	this.serviceStatus = serviceStatus;
     }
     
-    /** */
+    /**
+     * Save current time as lastPingTime 
+     */
     @Override
     public void updatePingTime()
     {
@@ -118,21 +128,21 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     	lastPingTime = now;
     }
             
-    /** */
-    public void onChatConfirm()
-    {
-    
-    }
-    
-    /** */
+    /**
+     * Constructor of DeviceWrapper 
+     * @param connection: connection for sending/receiving JSON messages
+     */
     public DeviceWrapper(IBaseConnection connection)
     {
     	this.webSocketConnection = connection;
     	this.businessStatus = Consts.BusinessStatus.Init;
     	connection.bind(this);
     }
-    
-    /** */
+
+    /**
+     * Change business status of DeviceWrapper, and release/update relevant information if necessary 
+     * @param targetStatus: target business status
+     */
     public void changeBusinessStatus(Consts.BusinessStatus targetStatus)
     {
     	logger.debug("Device <{}> changed status from " + this.businessStatus.name() + " to " + targetStatus.name(), this.getDeviceSn());
@@ -147,11 +157,14 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     				case Idle:
     					break;
     				case Init:
+    					// Init -> Idle, typical process of AppDataSyncRequest 
     					ownerOnlinePool.synchronizeDevice(this);
     					break;
     				case WaitMatch:
+    					// Leave business device pool
     					break;
     				case SessionBound:
+    					// Leave business device pool
     					this.unbindBusinessSession();
     					break;
     				default:
@@ -281,7 +294,8 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     				&& messageId != Consts.MessageId.AppDataSyncRequest
     				&& messageId != Consts.MessageId.TimeoutRequest
     				&& messageId != Consts.MessageId.Invalid
-    				&& messageId != Consts.MessageId.UnkownRequest)
+    				&& messageId != Consts.MessageId.UnkownRequest
+    				&& messageId != Consts.MessageId.BusinessSessionNotificationResponse)
     		{
     			command = new InvalidRequest(command.getJSONObject());
     			command.setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
@@ -342,6 +356,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     {
     	if (ownerOnlinePool != null)
     	{
+    		logger.debug("Notify online device pool about timeout of device <{}>", getDeviceSn());
     		ownerOnlinePool.deleteDevice(this);
     	}
     }
@@ -355,7 +370,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
         		logger.error("webSocketConnection == null");
         		return;
         	}
-			AppJSONMessage appResponse = webSocketConnection.syncSendMessage(message);
+        	AppJSONMessage appResponse = webSocketConnection.syncSendMessage(message);
 			this.onJSONCommand(appResponse);
 		}
 		catch (IOException e)
@@ -402,6 +417,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 	
 	public String getDeviceSn()
 	{
+		if (this.device == null)
+		{
+			return "";
+		}
 		return this.device.getDeviceSn();
 	}
 
@@ -412,20 +431,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		this.lastActivityTime = DateUtil.getNowDate();
 	}
 	
-	@Override
-	public void enterPool(BusinessType businessType)
-	{
-		if (ownerOnlinePool.getBusinessPool(businessType).onDeviceEnter(this))
-		{
-			changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
-			this.businessType = businessType;
-		}
-		else
-		{
-			logger.warn("Device <{}> failed to enter business pool", getDeviceSn());
-		}
-	}
-
 	@Override
 	public BusinessType getBusinessType()
 	{
@@ -612,6 +617,12 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		JSONObject wholeObj = new JSONObject();
 		wholeObj.put(JSONKey.Device, toJSONObject_Device());
 		return wholeObj;
+	}
+
+	@Override
+	public void setBusinessType(BusinessType businessType)
+	{
+		this.businessType = businessType;
 	}
 
 }

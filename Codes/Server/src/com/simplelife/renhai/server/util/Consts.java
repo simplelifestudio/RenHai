@@ -81,6 +81,37 @@ public class Consts
 		}
 	}
 	
+	public enum DeviceReleaseReason
+	{
+		Invalid(0), 
+		CloseConnectionByServer(100), 
+		CloseConnectionByApp(101);
+		
+		private int value;
+		private DeviceReleaseReason(int value)
+		{
+			this.value = value;
+		}
+	
+		public int getValue()
+		{
+			return value;
+		}
+		
+		public static DeviceReleaseReason parseValue(int value)
+		{
+			int intValue = Integer.valueOf(value);
+			for (DeviceReleaseReason item : values())
+			{
+				if (item.value == intValue)
+				{
+					return item;
+				}
+			}
+			return null;
+		}
+	}
+	
 	public enum ServiceStatus
 	{
 		Invalid(0), Normal(1), Banned(2);

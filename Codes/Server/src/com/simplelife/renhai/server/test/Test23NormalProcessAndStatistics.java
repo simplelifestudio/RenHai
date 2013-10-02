@@ -90,11 +90,11 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		
 		// Step_02 Mock请求：A进入随机聊天
 		mockApp1.syncDevice();
-		mockApp1.enterPool(Consts.BusinessType.Random);
+		mockApp1.enterPool(businessType);
 		
 		// Step_03 Mock请求：B进入随机聊天
 		mockApp2.syncDevice();
-		mockApp2.enterPool(Consts.BusinessType.Random);
+		mockApp2.enterPool(businessType);
 		
 		// Step_04 Mock请求：查询所有统计项
 		mockApp1.clearLastReceivedCommand();

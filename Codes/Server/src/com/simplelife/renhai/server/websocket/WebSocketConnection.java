@@ -84,7 +84,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     {
         try
 		{
-			getWsOutbound().close(0, null);
+			getWsOutbound().close(Consts.DeviceReleaseReason.CloseConnectionByServer.getValue(), null);
 		}
 		catch (IOException e)
 		{
@@ -213,15 +213,19 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	String messageSn = appMessage.getMessageSn();
     	if (!syncMap.containsKey(messageSn))
     	{
-    		logger.debug("New request message from App.");
     		if (connectionOwner != null)
     		{
+    			logger.debug("New request message from device <{}>", connectionOwner.getDeviceSn());
     			connectionOwner.onJSONCommand(appMessage);
+    		}
+    		else
+    		{
+    			logger.error("New message received on connection {} but its connectionOwner is null!", this.getConnectionId());
     		}
     	}
     	else
     	{
-    		logger.debug("Response of synchronizd notification.");
+    		logger.debug("Response of synchronizd notification from device <{}>", connectionOwner.getDeviceSn());
     		SyncController controller = syncMap.get(messageSn);
     		controller.lock.lock();
     		controller.message = appMessage;
@@ -282,6 +286,11 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onClose(int status)
     {
+    	if (Consts.DeviceReleaseReason.parseValue(status) == Consts.DeviceReleaseReason.CloseConnectionByServer)
+    	{
+    		return;
+    	}
+    	
     	WebSocketModule.instance.getLogger().debug("WebSocketConnection onClose triggered");
     	connectionOwner.onClose(this);
     	super.onClose(status);
@@ -348,6 +357,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	
     	try
     	{
+    		logger.debug("Send synchronized message to device <{}>", this.connectionOwner.getDeviceSn());
     		sendMessage(message);
     		controller.condition.await(GlobalSetting.TimeOut.JSONMessageEcho, TimeUnit.SECONDS);
     	}
@@ -369,6 +379,10 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	{
     		logger.debug("Timeout when waiting for synchronized response of device <{}>", connectionOwner.getDeviceSn());
     		controller.message = new TimeoutRequest(null);
+    	}
+    	else
+    	{
+    		logger.debug("Device <{}> replied synchronized message in time.", this.connectionOwner.getDeviceSn());
     	}
     	
     	return controller.message;

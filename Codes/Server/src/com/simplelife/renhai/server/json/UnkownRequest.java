@@ -42,7 +42,7 @@ public class UnkownRequest extends AppJSONMessage
 				messageId = header.getString(JSONKey.MessageId);
 			}
 		}
-		responseError(messageId);
+		responseError(Consts.MessageId.UnkownRequest);
 	}
 
 	/* (non-Javadoc)

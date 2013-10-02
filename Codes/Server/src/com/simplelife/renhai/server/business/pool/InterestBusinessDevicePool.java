@@ -59,9 +59,9 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     }
     
     /** */
-    public boolean onDeviceEnter(IDeviceWrapper device)
+    public String onDeviceEnter(IDeviceWrapper device)
     {
-        return false;
+        return null;
     }
     
     /** */

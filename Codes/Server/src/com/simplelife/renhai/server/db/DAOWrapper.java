@@ -43,6 +43,7 @@ public class DAOWrapper
 	private static Logger logger = BusinessModule.instance.getLogger();
     /** */
     protected static LinkedList<Object> linkToBeSaved = new LinkedList<Object>();
+    protected static int objectCountInCache = 0;
     
     /** */
     protected static Timer timer;
@@ -58,10 +59,15 @@ public class DAOWrapper
     	timer.cancel();
     }
     
+    /**
+     * Save object in cache or to DB 
+     * @param obj: object to be saved
+     */
     public static void cache(Object obj)
     {
     	if (GlobalSetting.DBSetting.CacheEnabled)
     	{
+    		/*
     		synchronized(linkToBeSaved)
         	{
 	    		if (linkToBeSaved.size() >= GlobalSetting.DBSetting.MaxRecordCountForDiscard)
@@ -72,8 +78,21 @@ public class DAOWrapper
     		
         		linkToBeSaved.add(obj);
         	}
+        	*/
+        	
+    		try
+    		{
+	    		Session session = HibernateSessionFactory.getSession();
+	    		session.saveOrUpdate(session.merge(obj));
+	    		objectCountInCache++;
+    		}
+    		catch(Exception e)
+    		{
+    			DBModule.instance.getLogger().error(e.getMessage());
+    			e.printStackTrace();
+    		}
     		
-    		if (linkToBeSaved.size() >= GlobalSetting.DBSetting.MaxRecordCountForFlush)
+    		if (objectCountInCache >= GlobalSetting.DBSetting.MaxRecordCountForFlush)
     		{
     			flushToDB();
     		}
@@ -294,21 +313,12 @@ public class DAOWrapper
 		}
 	}
 
-	/** */
-    public static void toBeSaved(IDbCache object)
-    {
-    	linkToBeSaved.addLast(object);
-    	
-    	if (linkToBeSaved.size() >= GlobalSetting.DBSetting.MaxRecordCountForFlush)
-    	{
-    		flushToDB();
-    	}
-    }
-    
-    /** */
+	/**
+	 * Flush session to db, or stop flush timer if necessary
+	 * */
     public static void flushToDB()
     {
-    	if (linkToBeSaved.size() == 0)
+    	if (objectCountInCache == 0)
     	{
     		if (!GlobalSetting.DBSetting.CacheEnabled)
         	{
@@ -322,18 +332,17 @@ public class DAOWrapper
     		return;
     	}
     	
-    	Object obj;
-    	Session session = HibernateSessionFactory.getSession();
-    	while (linkToBeSaved.size() > 0)
+    	try
     	{
-    		synchronized (linkToBeSaved)
-			{
-    			obj = linkToBeSaved.removeFirst();
-			}
-    		session.beginTransaction();
-        	session.save(obj);
-        	session.getTransaction().commit();
+    		Session session = HibernateSessionFactory.getSession();
+    		//TODO 这个时候如果曾经获取过多个session，怎么办？考虑保存所有获取过的session？
+    		session.beginTransaction().commit();		// Commit会隐含调用flush
+    		session.clear();
+        }
+    	catch(Exception e)
+    	{
+    		logger.error("Error occurred when trying to flush: " + e.getMessage());
+    		e.printStackTrace();
     	}
-    	session.close();
     }
 }

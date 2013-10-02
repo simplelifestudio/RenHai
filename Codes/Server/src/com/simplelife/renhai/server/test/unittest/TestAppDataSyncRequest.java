@@ -169,7 +169,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
+		assertTrue(app.lastReceivedCommandIsError());
 	}
 	
 	@Test
@@ -189,7 +189,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
+		assertTrue(app.lastReceivedCommandIsError());
 	}
 
 	@Test
@@ -209,7 +209,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
+		assertTrue(app.lastReceivedCommandIsError());
 	}
 	
 	@Test
@@ -237,7 +237,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
+		assertTrue(app.lastReceivedCommandIsError());
 
 	}
 	
@@ -263,8 +263,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		JSONObject obj = app.getLastReceivedCommand();
 		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
-
+		assertTrue(app.lastReceivedCommandIsError());
 	}
 	
 	private JSONObject newQueryObject()

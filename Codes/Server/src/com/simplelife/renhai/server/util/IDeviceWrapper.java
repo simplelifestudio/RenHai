@@ -57,6 +57,8 @@ public interface IDeviceWrapper
     
     public void setDevice(Device device);
     
+    public void setBusinessType(Consts.BusinessType businessType);
+    
     public IBusinessSession getOwnerBusinessSession();
     
     public String getDeviceSn();
@@ -69,9 +71,7 @@ public interface IDeviceWrapper
     
     public void changeBusinessStatus(Consts.BusinessStatus targetStatus);
     
-	public void enterPool(Consts.BusinessType businessType);
-    
-    public Consts.BusinessType getBusinessType();
+	public Consts.BusinessType getBusinessType();
     
     public void bindOnlineDevicePool(OnlineDevicePool pool);
     

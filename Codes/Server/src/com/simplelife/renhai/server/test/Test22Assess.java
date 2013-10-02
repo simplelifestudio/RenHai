@@ -53,10 +53,10 @@ public class Test22Assess extends AbstractTestCase
 		mockApp2.syncDevice();
 		
 		// Step_01 Mock请求：A进入随机聊天
-		mockApp1.enterPool(Consts.BusinessType.Random);
+		mockApp1.enterPool(businessType);
 		
 		// Step_02 Mock请求：B进入随机聊天
-		mockApp2.enterPool(Consts.BusinessType.Random);
+		mockApp2.enterPool(businessType);
 		
 		// Step_03 Mock请求：A更新B的印象卡片
 		mockApp1.assessAndContinue(mockApp2.getDeviceWrapper(), "帅哥");

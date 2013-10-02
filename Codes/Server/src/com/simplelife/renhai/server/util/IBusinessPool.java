@@ -16,7 +16,7 @@ package com.simplelife.renhai.server.util;
 public interface IBusinessPool
 {
     /** */
-    public boolean onDeviceEnter(IDeviceWrapper device);
+    public String onDeviceEnter(IDeviceWrapper device);
     
     /** */
     public void onDeviceLeave(IDeviceWrapper device);

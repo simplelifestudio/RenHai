@@ -210,7 +210,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     	return reponse;
     }
 
-    protected void responseError(String messageId)
+    protected void responseError(Consts.MessageId messageId)
     {
     	ServerErrorResponse response = createErrorResponse();
     	response.addToBody(JSONKey.ReceivedMessage, this.jsonObject);

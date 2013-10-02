@@ -65,6 +65,8 @@ public interface IBusinessSession
     public void bindBusinessDevicePool(AbstractBusinessDevicePool pool);
     
     public void unbindBusinessDevicePool();
-    
     public void notifyDevices(IDeviceWrapper triggerDevice, Consts.NotificationType notificationType);
+    
+    
+    public boolean isRightTimeForRequest(IDeviceWrapper device);
 }

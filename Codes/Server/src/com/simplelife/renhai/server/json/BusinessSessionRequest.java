@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
+import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.DBQueryUtil;
@@ -26,6 +27,7 @@ import com.simplelife.renhai.server.db.Globalimpresslabel;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.util.Consts.MessageId;
+import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts;
@@ -83,6 +85,17 @@ public class BusinessSessionRequest extends AppJSONMessage
 			return false;
 		}
 		
+		if (operationType != Consts.OperationType.EnterPool
+				&& operationType != Consts.OperationType.LeavePool)
+		{
+			if (deviceWrapper.getOwnerBusinessSession() == null)
+			{
+				setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
+				setErrorDescription("Device <" + deviceWrapper.getDeviceSn() +"> can't deliver business request before bound with session.");
+				return false;
+			}
+		}
+		
 		if (operationType == Consts.OperationType.AssessAndContinue
 				|| operationType == Consts.OperationType.AssessAndQuit)
 		{
@@ -91,6 +104,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 				return false;
 			}
 		}
+		
 		return true;
 	}
 	
@@ -161,7 +175,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 	{
 		if (!checkJSONRequest())
 		{
-			responseError(Consts.MessageId.BusinessSessionRequest.name());
+			responseError(Consts.MessageId.BusinessSessionRequest);
 			return;
 		}
 		
@@ -197,20 +211,29 @@ public class BusinessSessionRequest extends AppJSONMessage
 	private void enterPool()
 	{
 		int intType = body.getIntValue(JSONKey.BusinessType);
-		Consts.BusinessType type = Consts.BusinessType.parseValue(intType);
+		Consts.BusinessType businessType = Consts.BusinessType.parseValue(intType);
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
+		
+		Consts.SuccessOrFail result = Consts.SuccessOrFail.Fail;
+		String operationInfo = null;
 		
 		synchronized (deviceWrapper)
 		{
-			deviceWrapper.enterPool(type);
+			AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(businessType);
+			operationInfo = pool.onDeviceEnter(deviceWrapper); 
+			if (operationInfo == null);
+			{
+				result = Consts.SuccessOrFail.Success;
+				deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
+				deviceWrapper.setBusinessType(businessType);
+			}
 		}
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
 		if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
 		{
-			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession()
-					.getSessionId());
+			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession().getSessionId());
 		}
 		else
 		{
@@ -218,8 +241,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
 		response.addToBody(JSONKey.OperationType, Consts.OperationType.EnterPool.getValue());
-		response.addToBody(JSONKey.OperationInfo, null);
-		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
+		response.addToBody(JSONKey.OperationInfo, operationInfo);
+		response.addToBody(JSONKey.OperationValue, result.getValue());
 		response.asyncResponse();
 	}
 	
@@ -228,7 +251,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType type = Consts.BusinessType.parseValue(intType);
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		onlinePool.getBusinessPool(type).onDeviceEnter(deviceWrapper);
+		onlinePool.getBusinessPool(type).onDeviceLeave(deviceWrapper);
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
@@ -246,14 +269,34 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
 		response.addToBody(JSONKey.BusinessType, Consts.OperationType.LeavePool.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		response.asyncResponse();
 	}
 	
 	private void agreeChat()
 	{
 		logger.debug("Device <{}> agreed chat.", deviceWrapper.getDeviceSn());
-		deviceWrapper.getOwnerBusinessSession().onAgreeChat(deviceWrapper);
 		
+		IBusinessSession session = deviceWrapper.getOwnerBusinessSession(); 
+		
+		if (session.getStatus() != Consts.BusinessSessionStatus.Idle)
+		{
+			this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
+			this.setErrorDescription("It's not the right time to send BusinessSessionRequest of AgreeChat");
+			this.responseError(Consts.MessageId.BusinessSessionRequest);
+			return;
+		}
+
+		// Maybe session is still waiting for confirmation from other devices
+		if (!session.isRightTimeForRequest(deviceWrapper))
+		{
+			this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
+			this.setErrorDescription("Business session is still waiting for confirmation from other sides, please try again later");
+			this.responseError(Consts.MessageId.BusinessSessionRequest);
+			return;
+		}
+		
+		session.onAgreeChat(deviceWrapper);
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
 		if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)

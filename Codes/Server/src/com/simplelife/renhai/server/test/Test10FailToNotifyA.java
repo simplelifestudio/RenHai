@@ -88,7 +88,7 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		// Step_06 Mock请求：A进入随机聊天
 		assertTrue(businessPool.getDevice(deviceSn1) == null);
 		
-		mockApp1.enterPool(Consts.BusinessType.Random);
+		mockApp1.enterPool(businessType);
 		assertTrue(!mockApp1.lastReceivedCommandIsError());
 		assertTrue(businessPool.getDevice(deviceSn1) != null);
 		
@@ -101,7 +101,7 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		// Step_07 Mock请求：B进入随机聊天
 		assertTrue(businessPool.getDevice(deviceSn2) == null);
 		businessPool.getBusinessScheduler().stopScheduler();
-		mockApp2.enterPool(Consts.BusinessType.Random);
+		mockApp2.enterPool(businessType);
 		assertTrue(businessPool.getDevice(deviceSn2) != null);
 		
 		// Step_09 调用：B DeviceWrapper::getBusinessStatus

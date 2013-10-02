@@ -83,13 +83,13 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
-		mockApp1.enterPool(Consts.BusinessType.Random);
+		mockApp1.enterPool(businessType);
 		assertTrue(!mockApp1.lastReceivedCommandIsError());
 		
 		businessPool.getBusinessScheduler().stopScheduler();
 		
 		// Step_07 Mock请求：B进入随机聊天
-		mockApp2.enterPool(Consts.BusinessType.Random);
+		mockApp2.enterPool(businessType);
 		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus

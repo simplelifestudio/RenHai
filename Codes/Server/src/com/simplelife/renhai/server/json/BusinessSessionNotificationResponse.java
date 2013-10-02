@@ -52,7 +52,7 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 	{
 		if (!checkJSONRequest())
 		{
-			responseError(Consts.MessageId.BusinessSessionNotificationResponse.name());
+			responseError(Consts.MessageId.BusinessSessionNotificationResponse);
 			return;
 		}
 		
