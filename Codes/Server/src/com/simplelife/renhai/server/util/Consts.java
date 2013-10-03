@@ -236,6 +236,46 @@ public class Consts
 		}
 	}
 	
+	public enum BusinessProgress
+	{
+		Invalid(0), 
+		Init(1), 
+		SessionBoundConfirmed(2), 
+		ChatConfirmed(3), 
+		ChatEnded(4), 
+		AssessFinished(5);
+		
+		private int value;
+		private BusinessProgress(int value)
+		{
+			this.value = value;
+		}
+	
+		public int getValue()
+		{
+			return value;
+		}
+		
+		public static BusinessProgress parseValue(int value)
+		{
+			int intValue = Integer.valueOf(value);
+			for (BusinessProgress item : values())
+			{
+				if (item.value == intValue)
+				{
+					return item;
+				}
+			}
+			return null;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return String.valueOf(value);
+		}
+	}
+	
 	public enum SessionEndReason
 	{
 		Invalid(0), Reject(1), ConnectionLoss(2), NormalEnd(3), CheckFailed(4);

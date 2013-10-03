@@ -12,6 +12,7 @@
 package com.simplelife.renhai.server.business.session;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.slf4j.Logger;
 
@@ -25,6 +26,7 @@ import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.BusinessProgress;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
@@ -50,6 +52,7 @@ public class BusinessSession implements IBusinessSession
 	
 	// Temp list for saving devices waiting for confirmation
 	private List<IDeviceWrapper> tmpConfirmDeviceList = new ArrayList<IDeviceWrapper>();
+	private HashMap<String, Consts.BusinessProgress> progressMap = new HashMap<String, Consts.BusinessProgress>();
 	
 	private Consts.BusinessSessionStatus status = Consts.BusinessSessionStatus.Idle;
 	private Consts.BusinessSessionStatus previousStatus = Consts.BusinessSessionStatus.Idle;
@@ -74,9 +77,16 @@ public class BusinessSession implements IBusinessSession
     /** */
     public void onBindConfirm(IDeviceWrapper device)
     {
+    	Consts.BusinessProgress progress = progressMap.get(device.getDeviceSn());
+    	if (progress == null)
+    	{
+    		logger.error("Fatal error that received confirmation SessionBounded from device <{}> but there is no progress record for it!");
+    		return;
+    	}
+    	
     	if (!tmpConfirmDeviceList.contains(device))
     	{
-    		logger.error("Received confirmation in onBindConfirm from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
+    		logger.error("Received confirmation SessionBounded from device <{}> but it's not in status of waiting confirmation", device.getDeviceSn());
     		return;
     	}
     	
@@ -86,27 +96,25 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-    	synchronized(tmpConfirmDeviceList)
-		{
-    		logger.debug("lock tmpConfirmDeviceList in onBindConfirm");
-    		tmpConfirmDeviceList.remove(device);
-		}
-    	logger.debug("unlock tmpConfirmDeviceList in onBindConfirm");
-    	
-
     	synchronized(deviceList)
     	{
     		deviceList.add(device);
     	}
     	
-    	// If not all devices confirmed
-		if (tmpConfirmDeviceList.size() > 0)
+    	synchronized(tmpConfirmDeviceList)
 		{
-			logger.debug("Device <{}> responsed but not all devices responsed.", device.getDeviceSn());
-			return;
+    		logger.debug("lock tmpConfirmDeviceList in onBindConfirm");
+    		tmpConfirmDeviceList.remove(device);
+    		
+    		// If not all devices confirmed
+			if (tmpConfirmDeviceList.size() > 0)
+			{
+				logger.debug("Device <{}> responsed but not all devices responsed.", device.getDeviceSn());
+				return;
+			}
+			changeStatus(Consts.BusinessSessionStatus.ChatConfirm);
 		}
-    	
-    	changeStatus(Consts.BusinessSessionStatus.ChatConfirm);
+    	logger.debug("unlock tmpConfirmDeviceList in onBindConfirm");
     }
    
     private boolean checkBind(List<String> deviceList)
@@ -214,6 +222,7 @@ public class BusinessSession implements IBusinessSession
     	IDeviceWrapper device;
     	for (String deviceSn : deviceList)
     	{
+    		progressMap.put(deviceSn, Consts.BusinessProgress.Init);
     		device = OnlineDevicePool.instance.getDevice(deviceSn);
     		if (device == null)
     		{
@@ -325,7 +334,7 @@ public class BusinessSession implements IBusinessSession
     **/
     public void changeStatus(Consts.BusinessSessionStatus targetStatus)
     {
-    	logger.debug("Business session change status from {} to " + targetStatus.name(), status.name());
+    	logger.debug("Business session changes status from {} to " + targetStatus.name(), status.name());
     	switch(targetStatus)
     	{
     		case Idle:
@@ -444,28 +453,33 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-    	synchronized(tmpConfirmDeviceList)
-		{
-    		logger.debug("lock tmpConfirmDeviceList in onAgreeChat");
-    		tmpConfirmDeviceList.remove(device);
-		}
-    	logger.debug("unlock tmpConfirmDeviceList in onAgreeChat");
-    	
     	synchronized(deviceList)
     	{
     		deviceList.add(device);
     	}
     	
-    	// If not all devices confirmed
-		if (tmpConfirmDeviceList.size() > 0)
+    	synchronized(tmpConfirmDeviceList)
 		{
-			logger.debug("Notify other devices that device <{}> agreed chat", device.getDeviceSn());
-			notifyDevices(device, Consts.NotificationType.OthersideAgreed);
-			return;
-		}
+    		logger.debug("lock tmpConfirmDeviceList in onAgreeChat");
+    		tmpConfirmDeviceList.remove(device);
 
-		changeStatus(Consts.BusinessSessionStatus.VideoChat);
-		return;
+    		notifyDevices(device, Consts.NotificationType.OthersideAgreed);
+    		// If not all devices confirmed
+    		if (tmpConfirmDeviceList.isEmpty())
+    		{
+    			logger.debug("All devices agreed chat", device.getDeviceSn());
+    			changeStatus(Consts.BusinessSessionStatus.VideoChat);
+    		}
+    		else
+    		{
+    			logger.debug("Notify other devices that device <{}> agreed chat", device.getDeviceSn());
+    		}
+
+    		
+		}
+    	logger.debug("unlock tmpConfirmDeviceList in onAgreeChat");
+    	
+    	return;
     }
     
     @Override

@@ -65,8 +65,8 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
-		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
+		int errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getIntValue(JSONKey.ErrorCode);
+		assertTrue(errorCode == Consts.GlobalErrorCode.ParameterError_1103.getValue());
 	}
 	
 	@Test
@@ -78,8 +78,8 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
-		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.InvalidJSONRequest_1100.getValue()));
+		int errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getIntValue(JSONKey.ErrorCode);
+		assertTrue(errorCode == Consts.GlobalErrorCode.ParameterError_1103.getValue());
 	}
 	
 	@Test
@@ -93,8 +93,8 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
-		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
+		int errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getIntValue(JSONKey.ErrorCode);
+		assertTrue(errorCode == Consts.GlobalErrorCode.ParameterError_1103.getValue());
 	}
 	
 	@Test
@@ -108,8 +108,8 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
-		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
+		int errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getIntValue(JSONKey.ErrorCode);
+		assertTrue(errorCode == Consts.GlobalErrorCode.ParameterError_1103.getValue());
 	}
 	
 	@Test
@@ -128,8 +128,8 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
-		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
+		int errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getIntValue(JSONKey.ErrorCode);
+		assertTrue(errorCode == Consts.GlobalErrorCode.ParameterError_1103.getValue());
 	}
 	
 	@Test
@@ -148,8 +148,8 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
-		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(errorCode.equals(Consts.GlobalErrorCode.ParameterError_1103.getValue()));
+		int errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getIntValue(JSONKey.ErrorCode);
+		assertTrue(errorCode == Consts.GlobalErrorCode.ParameterError_1103.getValue());
 	}
 	
 	@Test
@@ -168,8 +168,8 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
-		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(app.lastReceivedCommandIsError());
+		int errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getIntValue(JSONKey.ErrorCode);
+		assertTrue(errorCode == Consts.GlobalErrorCode.ParameterError_1103.getValue());
 	}
 	
 	@Test
@@ -188,8 +188,8 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
-		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(app.lastReceivedCommandIsError());
+		int errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getIntValue(JSONKey.ErrorCode);
+		assertTrue(errorCode == Consts.GlobalErrorCode.ParameterError_1103.getValue());
 	}
 
 	@Test
@@ -208,8 +208,8 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
-		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(app.lastReceivedCommandIsError());
+		int errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getIntValue(JSONKey.ErrorCode);
+		assertTrue(errorCode == Consts.GlobalErrorCode.ParameterError_1103.getValue());
 	}
 	
 	@Test
@@ -236,8 +236,8 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
-		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(app.lastReceivedCommandIsError());
+		int errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getIntValue(JSONKey.ErrorCode);
+		assertTrue(errorCode == Consts.GlobalErrorCode.ParameterError_1103.getValue());
 
 	}
 	
@@ -262,8 +262,8 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
-		String errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getString(JSONKey.ErrorCode);
-		assertTrue(app.lastReceivedCommandIsError());
+		int errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getIntValue(JSONKey.ErrorCode);
+		assertTrue(errorCode == Consts.GlobalErrorCode.ParameterError_1103.getValue());
 	}
 	
 	private JSONObject newQueryObject()
@@ -478,8 +478,9 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 	public void testInvalidJSON_PartialUpdate()
 	{
 		clear();
+		String messageSn = CommonFunctions.getRandomString(16);
 		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
-		header.put(JSONKey.MessageSn, "fdsafdsareafds");
+		header.put(JSONKey.MessageSn, messageSn);
 		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
 		header.put(JSONKey.DeviceId, null);
 		header.put(JSONKey.DeviceSn, deviceSn);
@@ -490,7 +491,13 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		body.put(JSONKey.DataUpdate, newUpdateObject_Partial());
 		
 		LocalMockApp app = this.createNewMockApp(deviceSn);
+		app.clearLastReceivedCommand();
 		app.sendRawJSONMessage(envelope, true);
+		app.waitMessage();
+		
+		JSONObject obj = app.getLastReceivedCommand(); 
+		assertTrue(obj != null);
+		assertTrue(messageSn.equals(obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header).getString(JSONKey.MessageSn)));
 		
 		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
 		Device device = deviceWrapper.getDevice();
@@ -498,6 +505,8 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		assertTrue(deviceCard.getAppVersion().equals(appVersion));
 		assertTrue(deviceCard.getOsVersion().equals(osVersion));
+		
+		
 	}
 	
 	@Test

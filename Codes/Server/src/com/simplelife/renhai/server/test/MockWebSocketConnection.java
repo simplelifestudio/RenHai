@@ -45,11 +45,13 @@ public class MockWebSocketConnection extends WebSocketConnection
     /** */
     public void disableConnection()
     {
+    	logger.debug("Connection of {} is disabled", getConnectionId());
     	disabled = true;
     }
     
     public void enableConnection()
     {
+    	logger.debug("Connection of {} is enabled", getConnectionId());
     	disabled = false;
     }
     

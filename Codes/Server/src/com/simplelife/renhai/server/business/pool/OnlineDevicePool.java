@@ -223,7 +223,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		if ((status == Consts.BusinessStatus.WaitMatch)
         			|| (status == Consts.BusinessStatus.SessionBound))
         	{
-    			logger.debug("Notify business device pools as device <{}> has selected business", sn);
+    			logger.debug("Notify business device pools to delete device <{}> as it has entered business pool", sn);
     			for (Consts.BusinessType type: Consts.BusinessType.values())
         		{
         			AbstractBusinessDevicePool pool = this.getBusinessPool(type);

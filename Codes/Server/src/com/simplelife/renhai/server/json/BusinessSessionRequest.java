@@ -279,7 +279,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		IBusinessSession session = deviceWrapper.getOwnerBusinessSession(); 
 		
-		if (session.getStatus() != Consts.BusinessSessionStatus.Idle)
+		if (session.getStatus() != Consts.BusinessSessionStatus.ChatConfirm)
 		{
 			this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
 			this.setErrorDescription("It's not the right time to send BusinessSessionRequest of AgreeChat");
