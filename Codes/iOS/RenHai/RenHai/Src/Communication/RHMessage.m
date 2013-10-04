@@ -228,19 +228,35 @@ static BOOL s_messageEncrypted;
     [messageBody setObject:@"Hello Server!" forKey:MESSAGE_KEY_CONTENT];
     
     RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+
+    return message;
+}
+
++(RHMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn device:(RHDevice*) device
+{
+    NSAssert(nil != device, @"Device can not be null!");
     
-    message.enveloped = YES;
+    NSInteger deviceId = device.deviceId;
+    NSString* deviceSn = device.deviceSn;
+    NSDictionary* messageHeader = [RHMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
+    
+    NSDictionary* messageBody = [NSDictionary dictionary];
+    
+    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
     
     return message;
 }
 
-+(RHMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn
++(RHMessage*) newAppErrorResponseMessage:(RHMessage*) receivedMessage
 {
-    NSInteger deviceId = 0;
-    NSString* deviceSn = nil;
-    NSDictionary* messageHeader = [RHMessage constructMessageHeader:MessageType_ServerResponse messageId:MessageId_ServerTimeoutResponse    messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
+    NSInteger deviceId = receivedMessage.deviceId;
+    NSString* deviceSn = receivedMessage.deviceSn;
+    NSString* messageSn = receivedMessage.messageSn;
+    NSDictionary* messageHeader = [RHMessage constructMessageHeader:MessageType_AppResponse messageId:MessageId_AppErrorResponse messageSn:messageSn deviceId:deviceId deviceSn:deviceSn];
     
-    NSDictionary* messageBody = [NSDictionary dictionary];
+    NSNumber* oErrorCode = [NSNumber numberWithInt:-1];
+    NSString* errorDescription = @"Illegal message which can not be recoganized by app.";
+    NSDictionary* messageBody = [NSDictionary dictionaryWithObjects:@[oErrorCode, receivedMessage.toJSONString, errorDescription] forKeys:@[MESSAGE_KEY_ERRORCODE, MESSAGE_KEY_RECEIVEDMESSAGE, MESSAGE_KEY_ERRORDESCRIPTION]];
     
     RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
     

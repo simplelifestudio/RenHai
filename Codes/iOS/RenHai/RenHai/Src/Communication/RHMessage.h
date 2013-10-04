@@ -118,6 +118,13 @@
 #define MESSAGE_KEY_OPERATIONINFO @"operationInfo"
 #define MESSAGE_KEY_OPERATIONVALUE @"operationValue"
 
+/*
+ Others
+ */
+#define MESSAGE_KEY_RECEIVEDMESSAGE @"receivedMessage"
+#define MESSAGE_KEY_ERRORCODE @"errorCode"
+#define MESSAGE_KEY_ERRORDESCRIPTION @"errorDescription"
+
 typedef enum
 {
     MessageType_Unkown = 0,
@@ -174,8 +181,8 @@ RHBusinessType;
 typedef enum
 {
     BusinessSessionRequestType_EnterPool = 1,
-    BusinessSessionRequestType__LeavePool,
-    BusinessSessionRequestType__AgreeChat,
+    BusinessSessionRequestType_LeavePool,
+    BusinessSessionRequestType_AgreeChat,
     BusinessSessionRequestType_RejectChat,
     BusinessSessionRequestType_EndChat,
     BusinessSessionRequestType_AssessAndContinue,
@@ -236,7 +243,9 @@ ServerDataSyncRequestType;
 +(NSDictionary*) constructMessageHeader:(RHMessageType) messageType messageId:(RHMessageId) messageId messageSn:(NSString*) messageSn deviceId:(NSInteger) deviceId deviceSn:(NSString*) deviceSn;
 
 +(RHMessage*) newAlohaRequestMessage:(RHDevice*) device;
-+(RHMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn;
+
++(RHMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn device:(RHDevice*) device;
++(RHMessage*) newAppErrorResponseMessage:(NSString*) messageSn;
 
 +(RHMessage*) newAppDataSyncRequestMessage:(AppDataSyncRequestType) type device:(RHDevice*) device info:(NSDictionary*) info;
 

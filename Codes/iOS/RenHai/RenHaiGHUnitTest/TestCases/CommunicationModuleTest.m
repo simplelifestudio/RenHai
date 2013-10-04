@@ -21,7 +21,7 @@
 #define ASYNCOPERATION_WAIT_TIMEOUT WEBSOCKET_COMM_TIMEOUT*2
 
 @interface CommunicationModuleTest()
-{
+{    
     RHDevice* _device;
     WebSocketAgent* _agent;
 }
@@ -37,17 +37,21 @@
     return NO;
 }
 
--(void) prepare
+-(void) setUpClass
 {
-    [super prepare];
+    _device = [[RHDevice alloc] init];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onMessage:) name:NOTIFICATION_ID_RHSERVER object:nil];
+}
+
+-(void) tearDownClass
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void) setUp
 {
-    LoggerModule* loggerModule = [LoggerModule sharedInstance];
-    [loggerModule initModule];
-    
-    _device = [[RHDevice alloc] init];
+
 }
 
 -(void) tearDown
@@ -62,64 +66,64 @@
 
 #pragma mark - Test Methods
 
--(void) testAlohaRequest
+-(void) testAloha
 {
     RHMessage* alohaReuqestMessage = [RHMessage newAlohaRequestMessage:_device];
     
-    [self _sendMessageThroughWebSocket:alohaReuqestMessage selector:@selector(testAlohaRequest)];
+    [self _sendMessageThroughWebSocket:alohaReuqestMessage selector:@selector(testAloha)];
 }
 
--(void) testAppDataSyncRequest_TotalSync
+-(void) testAppDataSync_Total
 {
     RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSyncRequest_TotalSync)];
+    [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSync_Total)];
 }
 
--(void) testAppDataSyncRequest_DeviceCardSync
+-(void) testAppDataSync_DeviceCard
 {
     RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_DeviceCardSync device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSyncRequest_DeviceCardSync)];
+    [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSync_DeviceCard)];
 }
 
--(void) testAppDataSyncRequest_ImpressCardSync
+-(void) testAppDataSync_ImpressCard
 {
     RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_ImpressCardSync device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSyncRequest_ImpressCardSync)];
+    [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSync_ImpressCard)];
 }
 
--(void) testAppDataSyncRequest_InterestCardSync
+-(void) testAppDataSync_InterestCard
 {
     NSDictionary* info = [NSDictionary dictionaryWithObjects:@[@"Topic6", @"Topic7", @"Topic8"] forKeys:@[@"Topic6", @"Topic7", @"Topic8"]];
     RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:_device info:info];
     
-    [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSyncRequest_InterestCardSync)];
+    [self _sendMessageThroughWebSocket:appDataSyncRequestMessage selector:@selector(testAppDataSync_InterestCard)];
 }
 
--(void) testServerDataSyncRequest_TotalSync
+-(void) testServerDataSync_Total
 {
     RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testServerDataSyncRequest_TotalSync)];
+    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testServerDataSync_Total)];
 }
 
--(void) testServerDataSyncRequest_DeviceCountSync
+-(void) testServerDataSync_DeviceCount
 {
     RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_DeviceCountSync device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testServerDataSyncRequest_DeviceCountSync)];
+    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testServerDataSync_DeviceCount)];
 }
 
--(void) testServerDataSyncRequest_DeviceCapacitySync
+-(void) testServerDataSync_DeviceCapacity
 {
     RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_DeviceCapacitySync device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testServerDataSyncRequest_DeviceCapacitySync)];
+    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testServerDataSync_DeviceCapacity)];
 }
 
--(void) testServerDataSyncRequest_InterestLabelListSync
+-(void) testServerDataSync_InterestLabelList
 {
     NSNumber* oCurrent = [NSNumber numberWithInt:10];
     NSDate* startTime = [NSDate date];
@@ -130,26 +134,81 @@
     
     RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_InterestLabelListSync device:_device info:info];
     
-    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testServerDataSyncRequest_InterestLabelListSync)];
+    [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testServerDataSync_InterestLabelList)];
 }
 
--(void) testBusinessSessionRequest
+-(void) testBusinessSession_EnterPool
 {
-    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Interest operationType:BusinessSessionRequestType_EnterPool device:_device info:nil];
+    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_EnterPool device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSessionRequest)];
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_EnterPool)];
 }
 
--(void) testBusinessSessionNotificationResponse
+-(void) testBusinessSession_LeavePool
 {
-    NSString* businessSessionId = @"ASDFJL12DD";
+    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_LeavePool device:_device info:nil];
     
-    RHMessage* businessSessionNotificationResponseMessage = [RHMessage newBusinessSessionNotificationResponseMessage:businessSessionId businessType:BusinessType_Interest operationType:BusinessSessionNotificationType_OthersideAgreed operationValue:BusinessSessionOperationValue_Success device:_device info:nil];
-    
-    [self _sendMessageThroughWebSocket:businessSessionNotificationResponseMessage selector:@selector(testBusinessSessionNotificationResponse)];
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_LeavePool)];
 }
 
--(void) testWebSocketOpen
+-(void) testBusinessSession_AgreeChat
+{
+    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_AgreeChat device:_device info:nil];
+    
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_AgreeChat)];
+}
+
+-(void) testBusinessSession_EndChat
+{
+    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_EndChat device:_device info:nil];
+    
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_EndChat)];
+}
+
+-(void) testBusinessSession_AssessAndContinue
+{
+    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_AssessAndContinue device:_device info:nil];
+    
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_AssessAndContinue)];
+}
+
+-(void) testBusinessSession_AssessAndQuit
+{
+    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_AssessAndQuit device:_device info:nil];
+    
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_AssessAndQuit)];
+}
+
+-(void) testBusinessSession_RejectChat
+{
+    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_RejectChat device:_device info:nil];
+    
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_RejectChat)];
+}
+
+-(void) _responseBusinessSessionNotification:(RHMessage*) businessSessionNotification
+{
+    NSDictionary* body = businessSessionNotification.body;
+    
+    NSString* businessSessionId = [body objectForKey:MESSAGE_KEY_BUSINESSSESSIONID];
+    RHBusinessType businessType = [((NSNumber*)[body objectForKey:MESSAGE_KEY_BUSINESSTYPE]) intValue];
+    BusinessSessionNotificationType operationType = [((NSNumber*)[body objectForKey:MESSAGE_KEY_OPERATIONTYPE]) intValue];
+    NSDictionary* operationInfo = [body objectForKey:MESSAGE_KEY_OPERATIONINFO];
+    
+    RHMessage* businessSessionNotificationResponseMessage = [RHMessage newBusinessSessionNotificationResponseMessage:businessSessionId businessType:businessType operationType:operationType operationValue:BusinessSessionOperationValue_Success device:_device info:operationInfo];
+    
+    [self _sendMessageThroughWebSocket:businessSessionNotificationResponseMessage selector:nil];
+}
+
+-(void) _responseBroadcastNotification:(RHMessage*) broadcastNotification
+{
+    NSDictionary* body = broadcastNotification.body;
+    NSString* content = [body objectForKey:MESSAGE_KEY_CONTENT];
+    
+    DDLogWarn(@"Received server broadcast: %@", content);
+}
+
+-(void) testConnect
 {
     [self prepare];
     
@@ -158,7 +217,7 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
         flag = [self _connectWebSocket];
         
-        [self notify:kGHUnitWaitStatusSuccess forSelector:@selector(testWebSocketOpen)];
+        [self notify:kGHUnitWaitStatusSuccess forSelector:@selector(testConnect)];
         
         if (flag)
         {
@@ -171,14 +230,14 @@
     GHAssertTrue(flag, @"WebSocket Open Failed!");
 }
 
--(void) testWebSocketClose
+-(void) testDisconnect
 {
     [self prepare];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
         [self _disconnectWebSocket];
         
-        [self notify:kGHUnitWaitStatusSuccess forSelector:@selector(testWebSocketClose)];
+        [self notify:kGHUnitWaitStatusSuccess forSelector:@selector(testDisconnect)];
         
         GHTestLog(@"WebSocket Close Successfully!");
     });
@@ -214,6 +273,39 @@
 
 #pragma mark - Private Methods
 
+-(void) _onMessage:(NSNotification*) notification
+{
+    if (nil != notification)
+    {
+        if ([notification.name isEqualToString:NOTIFICATION_ID_RHSERVER])
+        {
+            GHTestLog(@"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+            RHMessage* message = (RHMessage*)notification.object;
+            GHTestLog(@"Received Notification: %@", message.toJSONString);
+            
+            switch (message.messageId)
+            {
+                case MessageId_BusinessSessionNotification:
+                {
+                    [self _responseBusinessSessionNotification:message];
+                    
+                    break;
+                }
+                case MessageId_BroadcastNotification:
+                {
+                    [self _responseBroadcastNotification:message];
+                    
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+        }
+    }
+}
+
 -(BOOL) _connectWebSocket
 {
     if (nil != _agent)
@@ -233,8 +325,6 @@
     if (nil != _agent)
     {
         [_agent closeWebSocket];
-        
-        GHTestLog(@"WebSocket Closed!");
     }
 }
 
@@ -242,7 +332,10 @@
 {
     GHAssertNotNil(requestMessage, @"Request message can not be null!");
     
-    [self prepare];
+    if (nil != selector)
+    {
+        [self prepare];
+    }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
         if (_agent.webSocketState == SR_OPEN)
@@ -261,10 +354,16 @@
             GHAssertTrue(NO, @"WebSocket does not open!");
         }
         
-        [self notify:kGHUnitWaitStatusSuccess forSelector:selector];
+        if (nil != selector)
+        {
+            [self notify:kGHUnitWaitStatusSuccess forSelector:selector];
+        }
     });
     
-    [self waitForStatus:kGHUnitWaitStatusSuccess timeout:ASYNCOPERATION_WAIT_TIMEOUT];
+    if (nil != selector)
+    {
+        [self waitForStatus:kGHUnitWaitStatusSuccess timeout:ASYNCOPERATION_WAIT_TIMEOUT];
+    }
 }
 
 @end

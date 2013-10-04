@@ -8,7 +8,16 @@
 
 #import "ViewController.h"
 
+#import "LoggerModule.h"
+#import "UserDataModule.h"
+#import "CommunicationModule.h"
+
 @interface ViewController ()
+{
+    LoggerModule* _loggerModule;
+    UserDataModule* _userDataModule;
+    CommunicationModule* _commModule;
+}
 
 @end
 
@@ -17,13 +26,37 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+//    _loggerModule = [LoggerModule sharedInstance];
+//    [_loggerModule initModule];
+//    
+//    _userDataModule = [UserDataModule sharedInstance];
+//    [_userDataModule initModule];
+//    [_userDataModule initUserData];
+//    
+//    _commModule = [CommunicationModule sharedInstance];
+//    [_commModule initModule];
+    
+    [super viewWillAppear:animated];
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+//    [_commModule releaseModule];
+//    
+//    [_userDataModule releaseModule];
+//    
+//    [_loggerModule releaseModule];
+    
+    [super viewWillDisappear:animated];
 }
 
 @end
