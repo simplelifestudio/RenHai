@@ -80,6 +80,7 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
 
 		// Step_06 Mock请求：A进入随机聊天
+		mockApp1.clearLastReceivedCommand();
 		mockApp1.enterPool(businessType);
 		assertTrue(!mockApp1.lastReceivedCommandIsError());
 		
@@ -87,6 +88,7 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		mockApp1.stopAutoReply();
 		
 		// Step_07 Mock请求：B进入随机聊天
+		mockApp2.clearLastReceivedCommand();
 		mockApp2.enterPool(businessType);
 		assertTrue(!mockApp2.lastReceivedCommandIsError());
 
@@ -101,15 +103,18 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		randomDeviceCount = businessPool.getElementCount();
 
 		// Step_11 调用：RandomBusinessScheduler::schedule
+		mockApp1.clearLastReceivedCommand();
 		mockApp2.clearLastReceivedCommand();
 		businessPool.getBusinessScheduler().schedule();
+		mockApp1.waitMessage();
 		mockApp2.waitMessage();
 		
 		// Step_12 调用：BusinessSessionPool::getCount
-		//由于A没有回应session会话绑定，随后会被释放，调度没有成功
-		assertTrue(mockApp2.getLastReceivedCommand() == null);
+		//由于A没有回应session会话绑定，等待超时后session会被释放，调度没有成功
+		assertTrue(mockApp1.getLastReceivedCommand() != null);
+		assertTrue(mockApp2.getLastReceivedCommand() != null);
 		
-		//assertEquals(sessionCount - 1, sessionPool.getElementCount());
+		assertEquals(sessionCount - 1, sessionPool.getElementCount());
 		sessionCount = sessionPool.getElementCount();
 		
 		// Step_13 调用：A DeviceWrapper::getBusinessStatus
@@ -119,14 +124,12 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
 		
 		// Step_15 Mock事件：A timeOut
-		try
-		{
-			Thread.sleep(GlobalSetting.TimeOut.ChatConfirm + 1000);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
+		
+		// Server等待A的响应超时，此时B应该收到A ConnectionLost的通知
+		mockApp2.clearLastReceivedCommand();
+		mockApp2.waitMessage();
+		assertTrue(mockApp2.getLastReceivedCommand() != null);
+		assertFalse(mockApp2.lastReceivedCommandIsError());
 		
 		// Step_16 Mock事件：A onPing
 		//mockApp1.ping();

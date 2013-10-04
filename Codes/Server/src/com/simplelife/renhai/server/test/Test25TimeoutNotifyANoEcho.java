@@ -115,7 +115,7 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
 		// Step_17 Mock事件：B 确认绑定
-		mockApp2.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
+		mockApp2.sendNotificationResponse(null, Consts.NotificationType.SessionBinded, "", "1");
 		
 		// Step_18 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());

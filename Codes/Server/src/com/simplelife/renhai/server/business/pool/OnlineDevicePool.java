@@ -189,11 +189,10 @@ public class OnlineDevicePool extends AbstractDevicePool
     		return;
     	}
     	
-    	logger.debug("Start to delete device <{}>", deviceWrapper.getDeviceSn());
+    	logger.debug("Start to remove device <{}> from OnlineDevicePool", deviceWrapper.getDeviceSn());
     	deviceWrapper.unbindOnlineDevicePool();
     	
     	Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
-    	IBusinessSession session = deviceWrapper.getOwnerBusinessSession();
     	
     	deviceWrapper.unbindOnlineDevicePool();
     	if (status == Consts.BusinessStatus.Init)
@@ -205,7 +204,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 	    		{
 	    			queueDeviceMap.remove(id);
 	    		}
-	    		logger.debug("Device <{}> was removed from queueDeviceMap of online device pool.", id);
+	    		logger.debug("Device <{}> was removed from queueDeviceMap of online device pool, device count after remove: " + getElementCount(), id);
     		}
     	}
     	else
@@ -217,7 +216,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 				{
 					deviceMap.remove(sn);
 				}
-	    		logger.debug("Device <{}> was removed from deviceMap of online device pool.", sn);
+	    		logger.debug("Device <{}> was removed from deviceMap of online device pool, device count after remove: " + getElementCount(), sn);
     		}
     		
     		if ((status == Consts.BusinessStatus.WaitMatch)
@@ -233,7 +232,8 @@ public class OnlineDevicePool extends AbstractDevicePool
         			}
         		}
     			
-    			// To avoid duplicate recycle of session if more than one device timeout 
+    			// To avoid duplicate recycle of session if more than one device timeout
+    			IBusinessSession session = deviceWrapper.getOwnerBusinessSession();
 				if (session != null)
 				{
 					synchronized (session)

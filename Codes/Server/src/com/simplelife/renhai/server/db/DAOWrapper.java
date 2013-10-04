@@ -46,7 +46,7 @@ public class DAOWrapper
     protected static int objectCountInCache = 0;
     
     /** */
-    protected static Timer timer;
+    protected static Timer timer = new Timer();
     
     
     public static void startTimers()

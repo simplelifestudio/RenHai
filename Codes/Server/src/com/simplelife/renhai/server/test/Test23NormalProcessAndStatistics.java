@@ -13,7 +13,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.Consts;
@@ -94,6 +96,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		
 		// Step_03 Mock请求：B进入随机聊天
 		mockApp2.syncDevice();
+		businessPool.getBusinessScheduler().stopScheduler();
 		mockApp2.enterPool(businessType);
 		
 		// Step_04 Mock请求：查询所有统计项
@@ -228,12 +231,32 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_19 Mock事件：A对B评价
-		mockApp1.assessAndContinue(mockApp2.getDeviceWrapper(), "TC23_评价,喜欢,帅哥");
+		logger.debug("=============mockApp2 before assess:\n");
+		System.out.print(JSON.toJSONString(mockApp2.getDeviceWrapper().toJSONObject(), SerializerFeature.WriteMapNullValue));
+		mockApp1.assessAndContinue(mockApp2.getDeviceWrapper(), "TC23_评价,^#Happy#^,帅哥");
+		logger.debug("=============mockApp2 after assess:\n");
+		System.out.print(JSON.toJSONString(mockApp2.getDeviceWrapper().toJSONObject(), SerializerFeature.WriteMapNullValue));
+		
 		
 		// Step_20 Mock事件：B对A评价
-		mockApp2.assessAndQuit(mockApp1.getDeviceWrapper(), "TC24_评价,反感,变态");
+		logger.debug("=============mockApp1 before assess:\n");
+		System.out.print(JSON.toJSONString(mockApp1.getDeviceWrapper().toJSONObject(), SerializerFeature.WriteMapNullValue));
+		mockApp2.assessAndQuit(mockApp1.getDeviceWrapper(), "TC24_评价,^#Disgusting#^,变态");
+		logger.debug("=============mockApp1 after assess:\n");
+		System.out.print(JSON.toJSONString(mockApp1.getDeviceWrapper().toJSONObject(), SerializerFeature.WriteMapNullValue));
+		
 		
 		// Step_21 调用：BusinessSession::getStatus
+		try
+		{
+			// 等待Server处理完评论并结束业务会话
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
 		// Step_22 Mock请求：查询所有统计项

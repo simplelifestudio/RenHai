@@ -65,8 +65,10 @@ public interface IBusinessSession
     public void bindBusinessDevicePool(AbstractBusinessDevicePool pool);
     
     public void unbindBusinessDevicePool();
+    
     public void notifyDevices(IDeviceWrapper triggerDevice, Consts.NotificationType notificationType);
     
+    public boolean checkProgressForRequest(IDeviceWrapper device, Consts.OperationType operationType);
     
-    public boolean isRightTimeForRequest(IDeviceWrapper device);
+    public Consts.BusinessProgress getProgressOfDevice(IDeviceWrapper device);
 }

@@ -32,6 +32,7 @@ public interface IMockApp
 	
 	/** */
 	public void sendNotificationResponse(
+			String messageSn,
 			Consts.NotificationType notificationType, 
 			String operationInfo, 
 			String operationValue);

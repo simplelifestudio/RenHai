@@ -78,8 +78,10 @@ public abstract class AbstractMockApp implements IMockApp
 		{
 			logger.debug("Device <{}> trying to response BusinessSessionNotification", deviceWrapper.getDeviceSn());
 			JSONObject body = message.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
-			Consts.NotificationType operationType = Consts.NotificationType.parseValue(body.getIntValue(JSONKey.OperationType)); 
-			app.sendNotificationResponse(operationType, "", "1");
+			JSONObject header = message.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
+			Consts.NotificationType operationType = Consts.NotificationType.parseValue(body.getIntValue(JSONKey.OperationType));
+			String messageSn = header.getString(JSONKey.MessageSn);
+			app.sendNotificationResponse(messageSn, operationType, "", "1");
 		}
 	}
 	
@@ -220,7 +222,7 @@ public abstract class AbstractMockApp implements IMockApp
     	lock.lock();
     	try
 		{
-			condition.await(10, TimeUnit.SECONDS);
+			condition.await(15, TimeUnit.SECONDS);
 		}
 		catch (InterruptedException e)
 		{

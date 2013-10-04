@@ -57,7 +57,7 @@ public class RemoteMockApp extends AbstractMockApp
     
     /** */
     @Override
-    public void sendNotificationResponse(Consts.NotificationType notificationType, String operationInfo, String operationValue)
+    public void sendNotificationResponse(String messageSn, Consts.NotificationType notificationType, String operationInfo, String operationValue)
     {
     }
     

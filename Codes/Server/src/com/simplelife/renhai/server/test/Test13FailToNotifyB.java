@@ -84,11 +84,15 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
+		mockApp1.clearLastReceivedCommand();
 		mockApp1.enterPool(businessType);
+		assertTrue(!mockApp1.lastReceivedCommandIsError());
 		
 		businessPool.getBusinessScheduler().stopScheduler();
 		// Step_07 Mock请求：B进入随机聊天
+		mockApp2.clearLastReceivedCommand();
 		mockApp2.enterPool(businessType);
+		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
@@ -107,19 +111,30 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		
 		// Step_13 Mock事件：B的通信被禁用掉后，抛出IOException
 		// Step_14 调用：BusinessSessionPool::getCount
+		
+		// 接收SessionBounded
 		mockApp1.waitMessage();
-		assertEquals(sessionCount, sessionPool.getElementCount());
+		assertEquals(sessionCount-1, sessionPool.getElementCount());
+		
+		// 接收OthersideLost
+		mockApp1.clearLastReceivedCommand();
+		mockApp1.waitMessage();
+		
+		//assertEquals(sessionCount, sessionPool.getElementCount());
 		//sessionCount = sessionPool.getElementCount();
 		
 		// Step_15 调用：A DeviceWrapper::getBusinessStatus
+		assertTrue(OnlineDevicePool.instance.getDevice(demoDeviceSn) != null);
+		assertTrue(businessPool.getDevice(demoDeviceSn) != null);
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
+		assertTrue(deviceWrapper1.getOwnerBusinessSession() == null);
 		
 		// Step_16 调用：B DeviceWrapper::getBusinessStatus
 		assertTrue(OnlineDevicePool.instance.getDevice(demoDeviceSn2) == null);
 		assertTrue(businessPool.getDevice(demoDeviceSn2) == null);
 		
 		// Step_17 调用：BusinessSession::getStatus
-		assertTrue(deviceWrapper1.getOwnerBusinessSession() == null);
+		
 				
 		// Step_20 调用：A DeviceWrapper::getBusinessStatus
 		//assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());

@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.business.session.BusinessSession;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Device;
@@ -179,6 +180,21 @@ public class BusinessSessionRequest extends AppJSONMessage
 			return;
 		}
 		
+		IBusinessSession session = deviceWrapper.getOwnerBusinessSession();
+		if (session != null)
+		{
+			if (!session.checkProgressForRequest(deviceWrapper, operationType))
+			{
+				Consts.BusinessProgress progress = session.getProgressOfDevice(deviceWrapper);
+				logger.error("Received " + operationType.name() + " from Device <{}> but its business progress is " + progress.name());
+				this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
+				this.setErrorDescription("It's not allowed to send " + operationType.name() + " if business progress is " + progress.name());
+				responseError(Consts.MessageId.BusinessSessionRequest);
+				return;
+			}
+		}
+		
+		logger.debug("Received " + operationType.name() + " from device <{}>", deviceWrapper.getDeviceSn());
 		switch (operationType)
 		{
 			case EnterPool:
@@ -278,24 +294,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		logger.debug("Device <{}> agreed chat.", deviceWrapper.getDeviceSn());
 		
 		IBusinessSession session = deviceWrapper.getOwnerBusinessSession(); 
-		
-		if (session.getStatus() != Consts.BusinessSessionStatus.ChatConfirm)
-		{
-			this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
-			this.setErrorDescription("It's not the right time to send BusinessSessionRequest of AgreeChat");
-			this.responseError(Consts.MessageId.BusinessSessionRequest);
-			return;
-		}
 
-		// Maybe session is still waiting for confirmation from other devices
-		if (!session.isRightTimeForRequest(deviceWrapper))
-		{
-			this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
-			this.setErrorDescription("Business session is still waiting for confirmation from other sides, please try again later");
-			this.responseError(Consts.MessageId.BusinessSessionRequest);
-			return;
-		}
-		
 		session.onAgreeChat(deviceWrapper);
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
@@ -406,12 +405,12 @@ public class BusinessSessionRequest extends AppJSONMessage
 				.getJSONObject(JSONKey.ImpressCard);
 		
 		JSONArray assessLabels = impressObj.getJSONArray(JSONKey.AssessLabelList);
-		updateOrAppendImpressLabel(impressLabelMap, assessLabels.getString(0));
+		updateOrAppendImpressLabel(card, impressLabelMap, assessLabels.getString(0));
 		
 		JSONArray impressLabels = impressObj.getJSONArray(JSONKey.ImpressLabelList);
 		for (int i = 0; i < impressLabels.size(); i++)
 		{
-			updateOrAppendImpressLabel(impressLabelMap, impressLabels.getString(i));
+			updateOrAppendImpressLabel(card, impressLabelMap, impressLabels.getString(i));
 		}
 		
 		// Save to DB
@@ -435,7 +434,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.asyncResponse();
 	}
 	
-	private void updateOrAppendImpressLabel(Set<Impresslabelmap> impressLabels, String labelName)
+	private void updateOrAppendImpressLabel(Impresscard card, Set<Impresslabelmap> impressLabels, String labelName)
 	{
 		//String labelName = impressLabel.getString(JSONKey.ImpressLabelName);
 		for (Impresslabelmap label : impressLabels)
@@ -458,6 +457,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		labelMap.setAssessedCount(1);
 		labelMap.setGlobalimpresslabel(globalimpresslabel);
 		labelMap.setUpdateTime(System.currentTimeMillis());
+		labelMap.setImpresscard(card);
 		
 		impressLabels.add(labelMap);
 	}

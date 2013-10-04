@@ -26,6 +26,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.simplelife.renhai.server.json.AppJSONMessage;
+import com.simplelife.renhai.server.json.ConnectionErrorEvent;
 import com.simplelife.renhai.server.json.InvalidRequest;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
@@ -292,7 +293,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	}
     	
     	WebSocketModule.instance.getLogger().debug("WebSocketConnection onClose triggered");
-    	connectionOwner.onClose(this);
+    	connectionOwner.onConnectionClose();
     	super.onClose(status);
     }
 
@@ -340,7 +341,8 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		{
 			e.printStackTrace();
 			logger.error("Connection of device <{}> was broken and will be released.", connectionOwner.getDeviceSn());
-			connectionOwner.onClose(this);
+			AppJSONMessage connectionError = new ConnectionErrorEvent(null);
+			connectionOwner.onJSONCommand(connectionError);
 		}
     }
     
@@ -355,6 +357,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	SyncController controller = syncMap.get(messageSn); 
     	controller.lock.lock(); 
     	
+    	boolean exceptionOcurred = false;
     	try
     	{
     		logger.debug("Send synchronized message to device <{}>", this.connectionOwner.getDeviceSn());
@@ -364,25 +367,32 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		catch (InterruptedException e)
 		{
 			logger.error(e.getMessage());
+			exceptionOcurred = true;
 		}
 		catch (IOException e)
 		{
-			logger.error("Connection of device <{}> was broken and will be released.", connectionOwner.getDeviceSn());
-			connectionOwner.onClose(this);
+			exceptionOcurred = true;
 		}
     	finally
     	{
     		controller.lock.unlock();
     	}
     	
-    	if (controller.message == null)
+    	if (exceptionOcurred)
     	{
-    		logger.debug("Timeout when waiting for synchronized response of device <{}>", connectionOwner.getDeviceSn());
-    		controller.message = new TimeoutRequest(null);
+    		controller.message = new ConnectionErrorEvent(null);
     	}
     	else
     	{
-    		logger.debug("Device <{}> replied synchronized message in time.", this.connectionOwner.getDeviceSn());
+	    	if (controller.message == null)
+	    	{
+	    		logger.debug("Timeout when waiting for synchronized response of device <{}>", connectionOwner.getDeviceSn());
+	    		controller.message = new TimeoutRequest(null);
+	    	}
+	    	else
+	    	{
+	    		logger.debug("Device <{}> replied synchronized message in time.", this.connectionOwner.getDeviceSn());
+	    	}
     	}
     	
     	return controller.message;

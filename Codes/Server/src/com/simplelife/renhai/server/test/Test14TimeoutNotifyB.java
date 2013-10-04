@@ -79,11 +79,15 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
+		mockApp1.clearLastReceivedCommand();
 		mockApp1.enterPool(businessType);
+		assertTrue(!mockApp1.lastReceivedCommandIsError());
 		
 		// Step_07 Mock请求：B进入随机聊天
 		businessPool.getBusinessScheduler().stopScheduler();
+		mockApp2.clearLastReceivedCommand();
 		mockApp2.enterPool(businessType);
+		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
@@ -99,6 +103,8 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		mockApp1.clearLastReceivedCommand();
 		mockApp2.stopAutoReply();
 		businessPool.getBusinessScheduler().schedule();
+		
+		// wait for SessionBounded
 		mockApp1.waitMessage();
 		
 		// Step_12 调用：BusinessSessionPool::getCount
@@ -115,20 +121,10 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
-		try
-		{
-			// To let BusinessSessionNotificationResponse sent firstly
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
-		
 		mockApp1.chatConfirm(true);
-		assertTrue(mockApp1.lastReceivedCommandIsError());
+		assertTrue(!mockApp1.lastReceivedCommandIsError());
 		
-		// 等待B的超时通知
+		// wait for OthersideLost
 		mockApp1.clearLastReceivedCommand();
 		mockApp1.waitMessage();
 		

@@ -70,6 +70,11 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     
     public JSONObject getHeader()
     {
+    	if (jsonObject == null)
+    	{
+    		return null;
+    	}
+    	
     	if (header == null)
     	{
     		header = jsonObject.getJSONObject(JSONKey.Header);

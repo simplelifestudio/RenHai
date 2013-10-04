@@ -56,6 +56,7 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
 					selectedDevice.add(key);
 				}
 			}
+			
 		}
 		
 		IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();

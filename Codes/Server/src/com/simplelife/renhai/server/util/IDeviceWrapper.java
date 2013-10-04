@@ -80,7 +80,7 @@ public interface IDeviceWrapper
     public OnlineDevicePool getOwnerOnlineDevicePool();
     
     /** */
-    public void onClose(IBaseConnection connection);
+    public void onConnectionClose();
     
     /** */
     public void onPing(IBaseConnection conection, ByteBuffer payload);

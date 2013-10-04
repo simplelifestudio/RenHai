@@ -17,6 +17,8 @@ import java.util.Set;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
@@ -508,6 +510,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			}
 		}
 		
+		
 		// Check if profile is banned
 		Profile profile = deviceWrapper.getDevice().getProfile();
 		String strServiceStatus = profile.getServiceStatus();
@@ -609,9 +612,17 @@ public class AppDataSyncRequest extends AppJSONMessage
 			return;
 		}
 		
-		DeviceDAO dao = new DeviceDAO();
-		Device device = dao.findByDeviceSn(deviceSn).get(0);
-		deviceWrapper.setDevice(device);
+		try
+		{
+			DeviceDAO dao = new DeviceDAO();
+			Device device = dao.findByDeviceSn(deviceSn).get(0);
+			deviceWrapper.setDevice(device);
+		}
+		catch(Exception e)
+		{
+			logger.error("Fatal error when trying to load device <{}> from DB", deviceSn);
+			e.printStackTrace();
+		}
 	}
 	
 	private void query(JSONObject queryObj, JSONObject response)

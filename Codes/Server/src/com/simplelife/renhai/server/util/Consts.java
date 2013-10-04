@@ -254,6 +254,7 @@ public class Consts
 		public int getValue()
 		{
 			return value;
+			
 		}
 		
 		public static BusinessProgress parseValue(int value)
@@ -499,6 +500,7 @@ public class Consts
 		Invalid(0),
 		UnkownRequest(1),
 		TimeoutRequest(2),
+		ConnectionErrorEvent(3),
 		
 		AlohaRequest(100),
 		AppDataSyncRequest(101),

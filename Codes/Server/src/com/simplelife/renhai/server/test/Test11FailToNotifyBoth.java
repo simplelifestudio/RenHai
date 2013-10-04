@@ -44,6 +44,7 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 	@After
 	public void tearDown() throws Exception
 	{
+		logger.debug("Enter tearDown()");
 		deleteDevice(mockApp1);
 		deleteDevice(mockApp2);
 	}
@@ -119,8 +120,18 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		{
 			e.printStackTrace();
 		}
+		logger.debug("Recover from sleep");
 		
 		// Step_14 调用：BusinessSessionPool::getCount
+		assertTrue(onlinePool.getDevice(demoDeviceSn) == null);
+		assertTrue(onlinePool.getDevice(demoDeviceSn2) == null);
+		
+		assertTrue(businessPool.getDevice(demoDeviceSn) == null);
+		assertTrue(businessPool.getDevice(demoDeviceSn2) == null);
+		
+		assertTrue(deviceWrapper1.getOwnerBusinessSession() == null);
+		assertTrue(deviceWrapper1.getOwnerBusinessSession() == null);
+		
 		assertEquals(sessionCount, sessionPool.getElementCount());
 		
 		// Step_15 Mock事件：A的通信被禁用掉后，抛出IOException

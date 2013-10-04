@@ -37,6 +37,7 @@ import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.test.AbstractTestCase;
 import com.simplelife.renhai.server.test.LocalMockApp;
+import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
@@ -280,5 +281,17 @@ public class MainFunction extends AbstractTestCase
 		DeviceWrapper deviceWrapper = new DeviceWrapper(null);
 		appRequest.bindDeviceWrapper(deviceWrapper);
 		appRequest.run();
+	}
+	
+	@Test
+	public void testEnum()
+	{
+		Consts.BusinessProgress progress1 = Consts.BusinessProgress.Init; 
+		Consts.BusinessProgress progress2 = Consts.BusinessProgress.SessionBoundConfirmed;
+		
+		System.out.print("\nSessionBoundConfirmed compareTo Init: " + progress2.compareTo(progress1));
+		System.out.print("\nChatConfirmed compareTo Init: " + Consts.BusinessProgress.ChatConfirmed.compareTo(progress1));
+		System.out.print("\nSessionBoundConfirmed compareTo progress2: " + Consts.BusinessProgress.SessionBoundConfirmed.compareTo(progress2));
+		System.out.print("\nprogress1 compareTo SessionBoundConfirmed: " + progress1.compareTo(Consts.BusinessProgress.SessionBoundConfirmed));
 	}
 }

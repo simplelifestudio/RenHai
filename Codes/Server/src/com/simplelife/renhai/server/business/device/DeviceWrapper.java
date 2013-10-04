@@ -165,6 +165,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     					break;
     				case SessionBound:
     					// Leave business device pool
+    					businessStatus = targetStatus;
     					this.unbindBusinessSession();
     					break;
     				default:
@@ -184,6 +185,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     				case Idle:
     					break;
     				case SessionBound:
+    					businessStatus = targetStatus;
     					this.unbindBusinessSession();
     					break;
     				default:
@@ -240,6 +242,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     /** */
     public void unbindBusinessSession()
     {
+    	logger.debug("Unbind device <{}> from business session", getDeviceSn());
     	ownerBusinessSession = null;
     }
     
@@ -273,7 +276,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     
     
     @Override
-    public void onClose(IBaseConnection connection)
+    public void onConnectionClose()
     {
     	if (ownerOnlinePool != null)
     	{

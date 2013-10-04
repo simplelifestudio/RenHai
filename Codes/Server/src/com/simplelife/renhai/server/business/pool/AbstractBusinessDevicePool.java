@@ -163,28 +163,33 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	@Override
 	public void startChat(IDeviceWrapper device)
 	{
-		String sn = device.getDeviceSn();
-		
+		String deviceSn = device.getDeviceSn();
 		synchronized(deviceMap)
 		{
-			deviceMap.remove(sn);
+			deviceMap.remove(deviceSn);
 		}
 		synchronized(chatDeviceMap)
 		{
-			chatDeviceMap.put(sn, device);
+			chatDeviceMap.put(deviceSn, device);
 		}
 	}
 	
 	@Override
 	public IDeviceWrapper getDevice(String deviceSn)
     {
-		if (deviceMap.containsKey(deviceSn))
+		synchronized(deviceMap)
 		{
-			return deviceMap.get(deviceSn);
+			if (deviceMap.containsKey(deviceSn))
+			{
+				return deviceMap.get(deviceSn);
+			}
 		}
-		else if (chatDeviceMap.containsKey(deviceSn))
+		synchronized(chatDeviceMap)
 		{
-			return chatDeviceMap.get(deviceSn);
+			if (chatDeviceMap.containsKey(deviceSn))
+			{
+				return chatDeviceMap.get(deviceSn);
+			}
 		}
    		return null;
     }
@@ -196,14 +201,23 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	public void endChat(IDeviceWrapper device)
 	{
 		String sn = device.getDeviceSn();
-		
+		boolean existFlag = false;
 		synchronized(chatDeviceMap)
 		{
-			chatDeviceMap.remove(sn);
+			if (chatDeviceMap.containsKey(sn))
+			{
+				existFlag = true;
+				chatDeviceMap.remove(sn);
+			}
 		}
-		synchronized(deviceMap)
+		
+		if (existFlag)
 		{
-			deviceMap.put(sn, device);
+			// Maybe device has been removed from business device pool by another thread
+			synchronized(deviceMap)
+			{
+				deviceMap.put(sn, device);
+			}
 		}
 	}
 	
