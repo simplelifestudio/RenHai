@@ -14,6 +14,14 @@
 #import "CBSecurityUtils.h"
 
 #import "CommunicationModule.h"
+#import "UserDataModule.h"
+
+@interface HTTPAgent()
+{
+    UserDataModule* _userDataModule;
+}
+
+@end
 
 @implementation HTTPAgent
 
@@ -46,6 +54,16 @@
 }
 
 #pragma mark - Public Methods
+
+-(id) init
+{
+    if (self = [super init])
+    {
+        [self _initInstance];
+    }
+    
+    return self;
+}
 
 -(RHMessage*) syncMessage:(RHMessage*) requestMessage
 {
@@ -130,11 +148,16 @@
     if (!flag)
     {
         [operation cancel];
-        responseMessage = [RHMessage newServerTimeoutResponseMessage:requestMessage.messageSn];
+        responseMessage = [RHMessage newServerTimeoutResponseMessage:requestMessage.messageSn device:_userDataModule.device];
         [responseMessage setTimeStamp:endTimeStamp];
     }
     
     return responseMessage;
+}
+
+-(void) _initInstance
+{
+    _userDataModule = [UserDataModule sharedInstance];
 }
 
 @end

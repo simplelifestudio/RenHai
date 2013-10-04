@@ -15,6 +15,7 @@
 #import "CBSecurityUtils.h"
 
 #import "CommunicationModule.h"
+#import "UserDataModule.h"
 
 #define PING_TEXT @"#####RenHai-App-Ping#####"
 
@@ -26,6 +27,8 @@
     NSMutableDictionary* _responseMessageSet;
     
     NSCondition* _openLock;
+    
+    UserDataModule* _userDataModule;
 }
 
 @end
@@ -148,7 +151,7 @@
     
     if (!flag)
     {
-        responseMessage = [RHMessage newServerTimeoutResponseMessage:messageSn];
+        responseMessage = [RHMessage newServerTimeoutResponseMessage:messageSn device:_userDataModule.device];
         [responseMessage setTimeStamp:endTimeStamp];
     }
     else
@@ -208,9 +211,7 @@
             }
             case MessageType_ServerNotification:
             {
-                NSMutableString* messageIdStr = [NSMutableString stringWithString:NOTIFICATION_PREFIX_MESSAGEID];
-                [messageIdStr appendString:[NSMutableString stringWithFormat:@"%d", jsonMessage.messageId]];
-                NSNotification* notification = [NSNotification notificationWithName:messageIdStr object:jsonMessage userInfo:nil];
+                NSNotification* notification = [NSNotification notificationWithName:NOTIFICATION_ID_RHSERVER object:jsonMessage userInfo:nil];
                 [[NSNotificationCenter defaultCenter] postNotification:notification];
                 
                 break;
@@ -225,6 +226,10 @@
     else
     {
         DDLogError(@"Received an illegal message from server: %@", jsonMessage.toJSONString);
+        
+        RHMessage* message = [RHMessage newAppErrorResponseMessage:jsonMessage.messageSn];
+        
+        [self performSelectorInBackground:@selector(_sendJSONStringToWebSocket:) withObject:message.toJSONString];
     }
 }
 
@@ -236,7 +241,7 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 {
-    DDLogInfo(@"WebSocket Closed");
+    DDLogInfo(@"WebSocket closed with code: %d, reason: %@, wasClean: %@", code, reason, (wasClean) ? @"YES" : @"NO");
  
     [self closeWebSocket];
 }
@@ -259,6 +264,8 @@
     
     _messageLockSet = [NSMutableDictionary dictionary];
     _responseMessageSet = [NSMutableDictionary dictionary];
+    
+    _userDataModule = [UserDataModule sharedInstance];
 }
 
 - (void) _heartBeatPing

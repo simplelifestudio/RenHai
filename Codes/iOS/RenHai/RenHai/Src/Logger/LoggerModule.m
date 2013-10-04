@@ -42,6 +42,8 @@ SINGLETON(LoggerModule)
 
 -(void) releaseModule
 {
+    [DDLog removeAllLoggers];
+    
     [super releaseModule];
 }
 

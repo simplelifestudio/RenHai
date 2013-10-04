@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>RenHaiGHUnitTest copy.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>27</integer>
+		</dict>
 		<key>RenHaiGHUnitTest.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
@@ -23,6 +28,11 @@
 			<true/>
 		</dict>
 		<key>C55B442017CF5992009BB21B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>CDF2B2B517FC1A0500F6B6F3</key>
 		<dict>
 			<key>primary</key>
 			<true/>

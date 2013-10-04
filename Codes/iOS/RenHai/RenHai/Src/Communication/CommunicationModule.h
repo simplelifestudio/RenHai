@@ -22,6 +22,8 @@
 #define WEBSOCKET_COMM_TIMEOUT 9
 #define HTTP_COMM_TIMEOUT 7.0
 
+#define NOTIFICATION_ID_RHSERVER @"RHServerNotification"
+
 @interface CommunicationModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 
 @property (nonatomic, strong) HTTPAgent* httpCommAgent;

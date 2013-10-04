@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7A78CC9AE7E143978B28D429 /* libPods-RenHaiGHUnitTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */; };
 		C15369EAD9D54E87A40074DC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B66314B17C746578ACF6BD6 /* libPods.a */; };
 		C50505C017D2BD4800DB6589 /* CBAppUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C505059D17D2BD4800DB6589 /* CBAppUtils.m */; };
 		C50505C117D2BD4800DB6589 /* CBAppUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C505059D17D2BD4800DB6589 /* CBAppUtils.m */; };
@@ -196,6 +195,7 @@
 		C59E2C1817D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
+		CD1C4A9A17FAB763009642D3 /* libPods-RenHaiGHUnitTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD1C4A9917FAB763009642D3 /* libPods-RenHaiGHUnitTest.a */; };
 		CD26650D17F41DD20070934F /* UserDataModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = CD26650C17F41DD20070934F /* UserDataModuleTest.m */; };
 		CD32013A17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
 		CD32013B17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
@@ -298,7 +298,7 @@
 		C55B43FD17CF580A009BB21B /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		C55B43FF17CF580A009BB21B /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		C55B440117CF580A009BB21B /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHaiGHUnitTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C55B442117CF5992009BB21B /* RenHaiTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHaiTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C55B442717CF5992009BB21B /* RenHaiGHUnitTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "RenHaiGHUnitTest-Info.plist"; sourceTree = "<group>"; };
 		C55B442917CF5992009BB21B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C55B442B17CF5992009BB21B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -404,6 +404,7 @@
 		C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController_iPhone.m; sourceTree = "<group>"; };
 		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; };
+		CD1C4A9917FAB763009642D3 /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-RenHaiGHUnitTest.a"; path = "Pods/build/Debug-iphoneos/libPods-RenHaiGHUnitTest.a"; sourceTree = "<group>"; };
 		CD26650B17F41DD20070934F /* UserDataModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataModuleTest.h; sourceTree = "<group>"; };
 		CD26650C17F41DD20070934F /* UserDataModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataModuleTest.m; sourceTree = "<group>"; };
 		CD32013717E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTableViewSwitcherCell_iPhone.h; sourceTree = "<group>"; };
@@ -443,12 +444,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD1C4A9A17FAB763009642D3 /* libPods-RenHaiGHUnitTest.a in Frameworks */,
 				C593C4A217D4831200C26367 /* CoreLocation.framework in Frameworks */,
 				C593C4A117D4830B00C26367 /* MapKit.framework in Frameworks */,
 				C55B442217CF5992009BB21B /* UIKit.framework in Frameworks */,
 				C55B442317CF5992009BB21B /* Foundation.framework in Frameworks */,
 				C55B442417CF5992009BB21B /* CoreGraphics.framework in Frameworks */,
-				7A78CC9AE7E143978B28D429 /* libPods-RenHaiGHUnitTest.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,7 +472,7 @@
 			isa = PBXGroup;
 			children = (
 				C55B43E817CF580A009BB21B /* RenHai.app */,
-				C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */,
+				C55B442117CF5992009BB21B /* RenHaiTest.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -479,6 +480,7 @@
 		C55B43EA17CF580A009BB21B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CD1C4A9917FAB763009642D3 /* libPods-RenHaiGHUnitTest.a */,
 				C593C49D17D482C400C26367 /* CoreLocation.framework */,
 				C593C49B17D482B300C26367 /* MapKit.framework */,
 				C55B445417CF5DFA009BB21B /* Crashlytics.framework */,
@@ -872,7 +874,7 @@
 			);
 			name = RenHaiGHUnitTest;
 			productName = RenHaiGHUnitTest;
-			productReference = C55B442117CF5992009BB21B /* RenHaiGHUnitTest.app */;
+			productReference = C55B442117CF5992009BB21B /* RenHaiTest.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1387,7 +1389,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHaiGHUnitTest/RenHaiGHUnitTest-Prefix.pch";
 				INFOPLIST_FILE = "RenHaiGHUnitTest/RenHaiGHUnitTest-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = RenHaiTest;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1400,7 +1402,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHaiGHUnitTest/RenHaiGHUnitTest-Prefix.pch";
 				INFOPLIST_FILE = "RenHaiGHUnitTest/RenHaiGHUnitTest-Info.plist";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = RenHaiTest;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
