@@ -103,7 +103,9 @@ public class DAOWrapper
     		{
 	    		//Session session = HibernateSessionFactory.getSessionFactory().openSession();
     			Session session = HibernateSessionFactory.getSession();
-	    		session.saveOrUpdate(session.merge(obj));
+    			Object mergedObj = session.merge(obj);
+	    		session.saveOrUpdate(mergedObj);
+    			//session.saveOrUpdate(obj);
 	        	session.flush();
 	        	//session.clear();
 	    		session.beginTransaction().commit();

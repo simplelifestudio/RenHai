@@ -10,6 +10,7 @@
 package com.simplelife.renhai.server.test.unittest;
 
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -19,10 +20,17 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.DBModule;
+import com.simplelife.renhai.server.db.Device;
+import com.simplelife.renhai.server.db.DeviceDAO;
+import com.simplelife.renhai.server.db.Globalimpresslabel;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
+import com.simplelife.renhai.server.db.Impresscard;
+import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.db.Operationcode;
 import com.simplelife.renhai.server.db.OperationcodeDAO;
 import com.simplelife.renhai.server.db.Statisticsitem;
@@ -217,6 +225,63 @@ public class MainFunction extends AbstractTestCase
 		log.error("This is error log: {}", DateUtil.getNow());
 	}
 
+	@Test
+	public void testAssess()
+	{
+		String deviceSn = "demoDeviceSn";
+		DeviceDAO dao = new DeviceDAO();
+		Device target = dao.findByDeviceSn(deviceSn).get(0);
+		Impresscard card = target.getProfile().getImpresscard();
+		Set<Impresslabelmap> impressLabelMap = card.getImpresslabelmaps();
+		
+		JSONArray assessLabels = new JSONArray();
+		assessLabels.add("^#Happy#^");
+		updateOrAppendImpressLabel(card, impressLabelMap, assessLabels.getString(0));
+		
+		JSONArray impressLabels = new JSONArray();
+		impressLabels.add("TC23_ÆÀ¼Û");
+		impressLabels.add("Ë§¸ç");
+		for (int i = 0; i < impressLabels.size(); i++)
+		{
+			updateOrAppendImpressLabel(card, impressLabelMap, impressLabels.getString(i));
+		}
+		
+		// Save to DB
+		DBModule.instance.cache(target);
+	}
+	
+	private void updateOrAppendImpressLabel(Impresscard card, Set<Impresslabelmap> impressLabels, String labelName)
+	{
+		synchronized (impressLabels)
+		{
+			//String labelName = impressLabel.getString(JSONKey.ImpressLabelName);
+			for (Impresslabelmap label : impressLabels)
+			{
+				String tmpLabelName = label.getGlobalimpresslabel().getImpressLabelName();
+				if (tmpLabelName.equals(labelName))
+				{
+					label.setAssessedCount(label.getAssessedCount() + 1);
+					label.setUpdateTime(System.currentTimeMillis());
+					return;
+				}
+			}
+			
+			Globalimpresslabel globalimpresslabel = new Globalimpresslabel();
+			globalimpresslabel.setGlobalAssessCount(1);
+			globalimpresslabel.setImpressLabelName(labelName);
+			globalimpresslabel.setImpresslabelmaps(impressLabels);
+			
+			Impresslabelmap labelMap = new Impresslabelmap();
+			labelMap.setAssessCount(0);
+			labelMap.setAssessedCount(1);
+			labelMap.setGlobalimpresslabel(globalimpresslabel);
+			labelMap.setUpdateTime(System.currentTimeMillis());
+			labelMap.setImpresscard(card);
+			
+			impressLabels.add(labelMap);
+		}
+	}
+	
 	@Test
 	public void testDbOperations()
 	{

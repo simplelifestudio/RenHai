@@ -395,7 +395,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		
 		DeviceDAO dao = new DeviceDAO();
-		Device target = dao.findByDeviceSn(deviceSn).get(0);;
+		Device target = dao.findByDeviceSn(deviceSn).get(0);
 		Impresscard card = target.getProfile().getImpresscard();
 		Set<Impresslabelmap> impressLabelMap = card.getImpresslabelmaps();
 		
@@ -436,30 +436,34 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void updateOrAppendImpressLabel(Impresscard card, Set<Impresslabelmap> impressLabels, String labelName)
 	{
-		//String labelName = impressLabel.getString(JSONKey.ImpressLabelName);
-		for (Impresslabelmap label : impressLabels)
+		synchronized (impressLabels)
 		{
-			if (label.getGlobalimpresslabel().getImpressLabelName().equals(labelName))
+			//String labelName = impressLabel.getString(JSONKey.ImpressLabelName);
+			for (Impresslabelmap label : impressLabels)
 			{
-				label.setAssessedCount(label.getAssessedCount() + 1);
-				label.setUpdateTime(System.currentTimeMillis());
-				return;
+				String tmpLabelName = label.getGlobalimpresslabel().getImpressLabelName();
+				if (tmpLabelName.equals(labelName))
+				{
+					label.setAssessedCount(label.getAssessedCount() + 1);
+					label.setUpdateTime(System.currentTimeMillis());
+					return;
+				}
 			}
+			
+			Globalimpresslabel globalimpresslabel = new Globalimpresslabel();
+			globalimpresslabel.setGlobalAssessCount(1);
+			globalimpresslabel.setImpressLabelName(labelName);
+			globalimpresslabel.setImpresslabelmaps(impressLabels);
+			
+			Impresslabelmap labelMap = new Impresslabelmap();
+			labelMap.setAssessCount(0);
+			labelMap.setAssessedCount(1);
+			labelMap.setGlobalimpresslabel(globalimpresslabel);
+			labelMap.setUpdateTime(System.currentTimeMillis());
+			labelMap.setImpresscard(card);
+			
+			impressLabels.add(labelMap);
 		}
-		
-		Globalimpresslabel globalimpresslabel = new Globalimpresslabel();
-		globalimpresslabel.setGlobalAssessCount(1);
-		globalimpresslabel.setImpressLabelName(labelName);
-		globalimpresslabel.setImpresslabelmaps(impressLabels);
-		
-		Impresslabelmap labelMap = new Impresslabelmap();
-		labelMap.setAssessCount(0);
-		labelMap.setAssessedCount(1);
-		labelMap.setGlobalimpresslabel(globalimpresslabel);
-		labelMap.setUpdateTime(System.currentTimeMillis());
-		labelMap.setImpresscard(card);
-		
-		impressLabels.add(labelMap);
 	}
 	
 	private void assessAndQuit()
