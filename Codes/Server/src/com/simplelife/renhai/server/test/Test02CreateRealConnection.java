@@ -30,7 +30,7 @@ public class Test02CreateRealConnection extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		// 前置条件 Server已经部署
 		// Step_01 通过echo.html和server建立WebSocket连接

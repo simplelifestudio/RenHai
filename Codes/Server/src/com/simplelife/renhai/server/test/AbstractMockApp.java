@@ -88,6 +88,7 @@ public abstract class AbstractMockApp implements IMockApp
     /** */
     protected int sessionId;
     protected Timer pingTimer = new Timer();
+    protected String lastSentMessageSn;
     
     /** */
     protected IDeviceWrapper deviceWrapper;
@@ -160,6 +161,91 @@ public abstract class AbstractMockApp implements IMockApp
     	return lastReceivedCommand;
     }
     
+    
+    public boolean checkLastNotification(Consts.MessageId messageId, 
+    		Consts.NotificationType notifyType)
+    {
+    	if (lastReceivedCommand == null)
+    	{
+    		return false;
+    	}
+    	
+    	JSONObject header = lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope)
+    			.getJSONObject(JSONKey.Header);
+    	JSONObject body = lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope)
+    			.getJSONObject(JSONKey.Body);
+    	
+    	if (messageId != null)
+    	{
+	    	int receivedMessageId = header.getIntValue(JSONKey.MessageId);
+	    	if (receivedMessageId != messageId.getValue())
+	    	{
+	    		logger.error("MessageId verification of device <{}> failed, expected: " 
+	    				+ messageId.name() + "("+ messageId.getValue() +"), received: " + receivedMessageId, deviceWrapper.getDeviceSn());
+	    		
+	    		return false;
+	    	}
+    	}
+    	
+    	if (notifyType != null)
+    	{
+	    	int receivedOperationType = body.getIntValue(JSONKey.OperationType);
+	    	if (receivedOperationType != notifyType.getValue())
+	    	{
+	    		logger.error("OperationType verification of device <{}> failed, expected: " 
+	    				+ notifyType.name() + "("+ notifyType.getValue() +"), received: " + receivedOperationType, deviceWrapper.getDeviceSn());
+	    		
+	    		return false;
+	    	}
+    	}
+    	return true;
+    }
+    
+    public boolean checkLastResponse(Consts.MessageId messageId, 
+    		Consts.OperationType operationType)
+    {
+    	if (lastReceivedCommand == null)
+    	{
+    		return false;
+    	}
+    	
+    	JSONObject header = lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope)
+    			.getJSONObject(JSONKey.Header);
+    	JSONObject body = lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope)
+    			.getJSONObject(JSONKey.Body);
+    	
+    	if (messageId != null)
+    	{
+	    	int receivedMessageId = header.getIntValue(JSONKey.MessageId);
+	    	if (receivedMessageId != messageId.getValue())
+	    	{
+	    		logger.error("MessageId verification of device <{}> failed, expected: " 
+	    				+ messageId.name() + "("+ messageId.getValue() +"), received: " + receivedMessageId, deviceWrapper.getDeviceSn());
+	    		return false;
+	    	}
+    	}
+    	
+		String receivedMessageSn = header.getString(JSONKey.MessageSn);
+    	if (!receivedMessageSn.equals(lastSentMessageSn))
+    	{
+    		logger.error("MessageSn verification of device <{}> failed, expected: " 
+    				+ lastSentMessageSn + ", received: " + receivedMessageSn, deviceWrapper.getDeviceSn());
+    		return false;
+    	}
+    	
+    	if (operationType != null)
+    	{
+	    	int receivedOperationType = body.getIntValue(JSONKey.OperationType);
+	    	if (receivedOperationType != operationType.getValue())
+	    	{
+	    		logger.error("OperationType verification of device <{}> failed, expected: " 
+	    				+ operationType.name() + "("+ operationType.getValue() +"), received: " + receivedOperationType, deviceWrapper.getDeviceSn());
+	    		return false;
+	    	}
+    	}
+    	return true;
+    }
+    
     public boolean lastReceivedCommandIsError()
     {
     	JSONObject header = lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope)
@@ -196,6 +282,7 @@ public abstract class AbstractMockApp implements IMockApp
     	jsonObject.put(JSONKey.Body, body);
     	
     	header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
+    	
     	header.put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
     	header.put(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
     	header.put(JSONKey.DeviceSn, deviceWrapper.getDeviceSn());

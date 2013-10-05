@@ -237,11 +237,18 @@ public class BusinessSessionRequest extends AppJSONMessage
 		{
 			AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(businessType);
 			operationInfo = pool.onDeviceEnter(deviceWrapper); 
-			if (operationInfo == null);
+			if (operationInfo == null)
 			{
 				result = Consts.SuccessOrFail.Success;
 				deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
 				deviceWrapper.setBusinessType(businessType);
+			}
+			else
+			{
+				setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
+				setErrorDescription(operationInfo);
+				responseError(this.getMessageId());
+				return;
 			}
 		}
 		
@@ -255,10 +262,11 @@ public class BusinessSessionRequest extends AppJSONMessage
 		{
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
-		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
+		
 		response.addToBody(JSONKey.OperationType, Consts.OperationType.EnterPool.getValue());
+		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
 		response.addToBody(JSONKey.OperationInfo, operationInfo);
-		response.addToBody(JSONKey.OperationValue, result.getValue());
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		response.asyncResponse();
 	}
 	
@@ -282,8 +290,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.LeavePool.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.BusinessType, Consts.OperationType.LeavePool.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		response.asyncResponse();
@@ -308,9 +316,10 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.AgreeChat.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.BusinessType, Consts.OperationType.AgreeChat.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		response.asyncResponse();
 	}
 	
@@ -332,9 +341,10 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.RejectChat.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.BusinessType, Consts.OperationType.RejectChat.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		response.asyncResponse();
 	}
 	
@@ -356,9 +366,10 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.EndChat.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.BusinessType, Consts.OperationType.EndChat.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		response.asyncResponse();
 	}
 	
@@ -425,10 +436,12 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		if (quitAfterAssess)
 		{
+			response.addToBody(JSONKey.OperationType, Consts.OperationType.AssessAndQuit.getValue());
 			deviceWrapper.getOwnerBusinessSession().onAssessAndQuit(this.deviceWrapper);
 		}
 		else
 		{
+			response.addToBody(JSONKey.OperationType, Consts.OperationType.AssessAndContinue.getValue());
 			deviceWrapper.getOwnerBusinessSession().onAssessAndContinue(this.deviceWrapper);
 		}
 		response.asyncResponse();

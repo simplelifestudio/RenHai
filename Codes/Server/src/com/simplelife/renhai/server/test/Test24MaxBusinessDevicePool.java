@@ -47,15 +47,15 @@ public class Test24MaxBusinessDevicePool extends AbstractTestCase
 		deleteDevice(mockApp1);
 		deleteDevice(mockApp2);
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		businessPool.setCapacity(GlobalSetting.BusinessSetting.RandomBusinessPoolCapacity);
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		
 		mockApp1.syncDevice();
 		mockApp2.syncDevice();

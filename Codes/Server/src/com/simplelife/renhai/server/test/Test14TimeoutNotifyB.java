@@ -53,10 +53,10 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
@@ -81,13 +81,13 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.clearLastReceivedCommand();
 		mockApp1.enterPool(businessType);
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		// Step_07 Mock请求：B进入随机聊天
 		businessPool.getBusinessScheduler().stopScheduler();
 		mockApp2.clearLastReceivedCommand();
 		mockApp2.enterPool(businessType);
-		assertTrue(!mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
@@ -106,6 +106,7 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		
 		// wait for SessionBounded
 		mockApp1.waitMessage();
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
 		
 		// Step_12 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
@@ -121,13 +122,17 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
+		// To wait for Server finish handling of sessionbounded response
+		Thread.sleep(500);
+		
 		mockApp1.chatConfirm(true);
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AgreeChat));
 		
 		// wait for OthersideLost
 		mockApp1.clearLastReceivedCommand();
 		mockApp1.waitMessage();
-		
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.OthersideLost));
+
 		// Step_16 Mock事件：A确认绑定
 		//mockApp1.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
 		

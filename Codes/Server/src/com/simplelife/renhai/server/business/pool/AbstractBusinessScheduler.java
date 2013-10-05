@@ -28,11 +28,13 @@ public abstract class AbstractBusinessScheduler extends Thread implements IBusin
 {
     /** */
     protected AbstractBusinessDevicePool ownerBusinessPool;
-    protected HashMap<String, IDeviceWrapper> deviceMap;
     protected final Lock lock = new ReentrantLock();
     protected final Condition condition = lock.newCondition();
 	protected boolean runFlag = false;
     protected Logger logger = BusinessModule.instance.getLogger();
+    protected HashMap<String, IDeviceWrapper> deviceMap;
+    
+    protected final int deviceCountPerSession = 2;
 
     public Lock getLock()
     {
@@ -59,9 +61,37 @@ public abstract class AbstractBusinessScheduler extends Thread implements IBusin
     }
     
     /** */
-    public void bind(AbstractBusinessDevicePool pool)
-    {
-    	this.ownerBusinessPool = pool;
-    	deviceMap = pool.getDeviceMap();
-    }
+    public abstract void bind(AbstractBusinessDevicePool pool);
+    
+    public abstract boolean meetScheduleCondition();
+    
+    @Override
+	public void run()
+	{
+		lock.lock();
+		try
+		{
+			while (runFlag)
+			{
+				if (meetScheduleCondition())
+				{
+					schedule();
+				}
+				else
+				{
+					logger.debug("Await due to there is no enough device in devicemap");
+					condition.await();
+					logger.debug("Recover from await");
+				}
+			}
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			lock.unlock();
+		}
+	}
 }

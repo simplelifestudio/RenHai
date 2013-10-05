@@ -79,7 +79,7 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 			case OthersideRejected:
 				break;
 			case Invalid:
-				logger.error("Invalid operatrion type received! " + intOperationType + " from device <{}>", deviceWrapper.getDeviceSn());
+				logger.error("Invalid operation type received! " + intOperationType + " from device <{}>", deviceWrapper.getDeviceSn());
 			default:
 				break;
 		}

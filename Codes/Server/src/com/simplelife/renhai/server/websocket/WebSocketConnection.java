@@ -227,12 +227,17 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	else
     	{
     		logger.debug("Response of synchronizd notification from device <{}>", connectionOwner.getDeviceSn());
-    		SyncController controller = syncMap.get(messageSn);
-    		controller.lock.lock();
-    		controller.message = appMessage;
-    		controller.condition.signal();
-    		controller.lock.unlock();
+    		signalForSyncSend(messageSn, appMessage);
     	}
+    }
+    
+    public void signalForSyncSend(String messageSn, AppJSONMessage appMessage)
+    {
+    	SyncController controller = syncMap.get(messageSn);
+		controller.lock.lock();
+		controller.message = appMessage;
+		controller.condition.signal();
+		controller.lock.unlock();
     }
     
     /** */

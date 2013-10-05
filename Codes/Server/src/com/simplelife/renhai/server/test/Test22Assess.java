@@ -43,10 +43,10 @@ public class Test22Assess extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		
 		mockApp1.syncDevice();

@@ -10,18 +10,25 @@
 package com.simplelife.renhai.server.business.pool;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import com.simplelife.renhai.server.business.session.BusinessSessionPool;
 import com.simplelife.renhai.server.util.IBusinessSession;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
 /** */
 public class RandomBusinessScheduler extends AbstractBusinessScheduler
 {
-	private final int deviceCountPerSession = 2; 
+	@Override
+	public void bind(AbstractBusinessDevicePool pool)
+    {
+    	this.ownerBusinessPool = pool;
+    	deviceMap = pool.getDeviceMap();
+    }
 	
 	/** */
 	public void schedule()
@@ -67,34 +74,10 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
 		session.bindBusinessDevicePool(this.ownerBusinessPool);
 		session.startSession(selectedDevice);
 	}
-	
+
 	@Override
-	public void run()
+	public boolean meetScheduleCondition()
 	{
-		lock.lock();
-		try
-		{
-			while (runFlag)
-			{
-				if (deviceMap.size() >= deviceCountPerSession)
-				{
-					schedule();
-				}
-				else
-				{
-					logger.debug("Await due to there is no enough device in devicemap");
-					condition.await();
-					logger.debug("Recover from await");
-				}
-			}
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
-		finally
-		{
-			lock.unlock();
-		}
+		return (deviceMap.size() >= deviceCountPerSession);
 	}
 }

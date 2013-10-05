@@ -54,10 +54,10 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		
 		// Step_01 Mock请求：查询所有统计项，包括：在线设备池设备数，在线设备池上限，随机业务设备池设备数，随机业务设备池上限，处于聊天状态的设备数，处于随机聊天状态的设备数，业务设备池的热门兴趣标签
@@ -92,16 +92,23 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		
 		// Step_02 Mock请求：A进入随机聊天
 		mockApp1.syncDevice();
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
+		
 		mockApp1.enterPool(businessType);
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		// Step_03 Mock请求：B进入随机聊天
 		mockApp2.syncDevice();
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
+		
 		businessPool.getBusinessScheduler().stopScheduler();
 		mockApp2.enterPool(businessType);
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		// Step_04 Mock请求：查询所有统计项
 		mockApp1.clearLastReceivedCommand();
 		mockApp1.sendServerDataSyncRequest();
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.ServerDataSyncResponse, null));
 		
 		lastCmd = mockApp1.getLastReceivedCommand();
 		assertTrue(lastCmd != null);
@@ -130,15 +137,12 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		businessPool.getBusinessScheduler().schedule();
 		
 		mockApp1.waitMessage();
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		
 		mockApp2.waitMessage();
-		try
-		{
-			Thread.sleep(500);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
+		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		
+		Thread.sleep(500);
 		
 		// Step_06 调用：BusinessSession::getStatus
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
@@ -149,9 +153,11 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		
 		// Step_08 Mock事件：A同意聊天
 		mockApp1.chatConfirm(true);
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AgreeChat));
 		
 		// Step_09 Mock事件：B同意聊天
 		mockApp2.chatConfirm(true);
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AgreeChat));
 		
 		// Step_10 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.VideoChat);
@@ -178,6 +184,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		
 		// Step_12 Mock事件：A结束通话
 		mockApp1.endChat();
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EndChat));
 		
 		// Step_13 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Assess);
@@ -203,6 +210,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		
 		// Step_15 Mock事件：B结束通话
 		mockApp2.endChat();
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EndChat));
 		
 		// Step_16 Mock请求：查询所有统计项
 		mockApp1.sendServerDataSyncRequest();
@@ -247,16 +255,8 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		
 		
 		// Step_21 调用：BusinessSession::getStatus
-		try
-		{
-			// 等待Server处理完评论并结束业务会话
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
-		
+		// 等待Server处理完评论并结束业务会话
+		Thread.sleep(500);
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
 		// Step_22 Mock请求：查询所有统计项

@@ -104,7 +104,7 @@ public class Test21UpdateInterestcard extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 

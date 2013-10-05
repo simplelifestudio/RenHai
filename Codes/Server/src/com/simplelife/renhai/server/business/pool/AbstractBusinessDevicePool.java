@@ -123,7 +123,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	String sn = device.getDeviceSn();
     	if (!(deviceMap.containsKey(sn) || chatDeviceMap.containsKey(sn)))
     	{
-    		logger.debug("Device <{}> was not in BusinessDevicePool", sn);
+    		logger.debug("Device <{}> was not in " + this.businessType.name() + " Device Pool", sn);
     		return;
     	}
     	
@@ -133,7 +133,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	    	{
 	    		deviceMap.remove(sn);
 	    	}
-	    	logger.debug("Device <{}> was removed from deviceMap of BusinessDevicePool", sn);
+	    	logger.debug("Device <{}> was removed from deviceMap of " + this.businessType.name() + " Device Pool", sn);
     	}
     	
     	if (chatDeviceMap.containsKey(sn))
@@ -142,7 +142,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	    	{
 	    		chatDeviceMap.remove(sn);
 	    	}
-	    	logger.debug("Device <{}> was removed from chatDeviceMap of BusinessDevicePool", sn);
+	    	logger.debug("Device <{}> was removed from chatDeviceMap of " + this.businessType.name() + " Device Pool", sn);
     	}
     	
     	/*
@@ -161,18 +161,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
      * Starts chat, move device from deviceMap to chatDeviceMap
      */
 	@Override
-	public void startChat(IDeviceWrapper device)
-	{
-		String deviceSn = device.getDeviceSn();
-		synchronized(deviceMap)
-		{
-			deviceMap.remove(deviceSn);
-		}
-		synchronized(chatDeviceMap)
-		{
-			chatDeviceMap.put(deviceSn, device);
-		}
-	}
+	public abstract void startChat(IDeviceWrapper device);
 	
 	@Override
 	public IDeviceWrapper getDevice(String deviceSn)
@@ -198,28 +187,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
      * Chat ends, move device from chatDeviceMap to deviceMap
      */
 	@Override
-	public void endChat(IDeviceWrapper device)
-	{
-		String sn = device.getDeviceSn();
-		boolean existFlag = false;
-		synchronized(chatDeviceMap)
-		{
-			if (chatDeviceMap.containsKey(sn))
-			{
-				existFlag = true;
-				chatDeviceMap.remove(sn);
-			}
-		}
-		
-		if (existFlag)
-		{
-			// Maybe device has been removed from business device pool by another thread
-			synchronized(deviceMap)
-			{
-				deviceMap.put(sn, device);
-			}
-		}
-	}
+	public abstract void endChat(IDeviceWrapper device);
 	
 	@Override
 	public void clearPool()

@@ -52,7 +52,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
@@ -78,7 +78,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		
 		long lastActivity = deviceWrapper.getLastActivityTime().getTime();
 		mockApp.syncDevice();
-		assertTrue(!mockApp.lastReceivedCommandIsError());
+		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_05 µ÷ÓÃ£ºA DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper.getBusinessStatus());

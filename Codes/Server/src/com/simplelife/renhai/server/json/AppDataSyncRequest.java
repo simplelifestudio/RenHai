@@ -10,6 +10,7 @@
 package com.simplelife.renhai.server.json;
 
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -1083,6 +1084,78 @@ public class AppDataSyncRequest extends AppJSONMessage
 		deviceWrapper.setServiceStatus(Consts.ServiceStatus.Normal);
 	}
 	
+	private void parseInterestLabels(
+			JSONArray interestLabelList,
+			Interestcard card,
+			JSONArray responseArray
+			)
+	{
+		JSONObject tmpJSONObj;
+		JSONObject responseObj;
+		String tempStr;
+		
+		GlobalinterestlabelDAO globalInterestDAO = new GlobalinterestlabelDAO();
+		List<Globalinterestlabel> tmpInterestLabelList;
+		Globalinterestlabel globalInterest;
+		
+		Interestlabelmap interestLabelMap;
+		Set<Interestlabelmap> labelMapSet = card.getInterestlabelmaps();
+		
+		// Save old label in temp Map
+		HashMap<String, Interestlabelmap> tempMap = new HashMap<String, Interestlabelmap>();
+		for (Interestlabelmap label : labelMapSet)
+		{
+			tempMap.put(label.getGlobalinterestlabel().getInterestLabelName(), label);
+		}
+		labelMapSet.clear();
+		
+		// Check all labels from APP
+		for (int i = 0; i < interestLabelList.size(); i++)
+		{
+			tmpJSONObj = interestLabelList.getJSONObject(i);
+			responseObj = new JSONObject();
+			
+			tempStr = tmpJSONObj.getString(JSONKey.InterestLabelName);
+			
+			// Check if it's old label
+			if (tempMap.containsKey(tempStr))
+			{
+				interestLabelMap = tempMap.get(tempStr);
+				interestLabelMap.setLabelOrder(tmpJSONObj.getInteger(JSONKey.LabelOrder));
+				labelMapSet.add(interestLabelMap);
+				
+				responseObj.put(JSONKey.InterestLabelName, Consts.SuccessOrFail.Success.getValue());
+				responseObj.put(JSONKey.LabelOrder, Consts.SuccessOrFail.Success.getValue());
+				continue;
+			}
+			
+			interestLabelMap = new Interestlabelmap();
+			tmpInterestLabelList = globalInterestDAO.findByInterestLabelName(tempStr);
+			
+			// Check if it's new interest label for this device but existent global interest label
+			if (tmpInterestLabelList.size() == 0)
+			{
+				globalInterest = new Globalinterestlabel();
+				globalInterest.setInterestLabelName(tempStr);
+				globalInterest.setGlobalMatchCount(0);
+			}
+			else
+			{
+				globalInterest = tmpInterestLabelList.get(0);
+			}
+			interestLabelMap.setMatchCount(0);
+			interestLabelMap.setValidFlag(Consts.ValidInvalid.Valid.name());
+			interestLabelMap.setGlobalinterestlabel(globalInterest);
+			interestLabelMap.setLabelOrder(tmpJSONObj.getInteger(JSONKey.LabelOrder));
+			interestLabelMap.setInterestcard(card);
+			labelMapSet.add(interestLabelMap);
+			
+			responseObj.put(JSONKey.InterestLabelName, Consts.SuccessOrFail.Success.getValue());
+			responseObj.put(JSONKey.LabelOrder, Consts.SuccessOrFail.Success.getValue());
+			responseArray.add(responseObj);
+		}
+	}
+	
 	private void parseInterestCard(JSONObject interestCardObj, JSONObject response)
 	{
 		if (interestCardObj.isEmpty())
@@ -1095,62 +1168,11 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		JSONArray responseArray = new JSONArray();
 		response.put(JSONKey.InterestLabelList, responseArray);
+		parseInterestLabels(interestLabelList, card, responseArray);
 		
-		JSONObject tmpJSONObj;
-		String tmpStr;
-		Set<Interestlabelmap> labelMapList = new LinkedHashSet<Interestlabelmap>();
-		List<Globalinterestlabel> tmpInterestLabelList;
+		//card.setInterestlabelmaps(labelMapList);
 		
-		GlobalinterestlabelDAO globalInterestDAO = new GlobalinterestlabelDAO();
-		Globalinterestlabel globalInterestObj;
-		Interestlabelmap interestLabelMapObj;
-		
-		JSONObject responseObj;
-		for (int i = 0; i < interestLabelList.size(); i++)
-		{
-			tmpJSONObj = interestLabelList.getJSONObject(i);
-			responseObj = new JSONObject();
-			
-			interestLabelMapObj = new Interestlabelmap();
-			
-			// Check if it's new interest label
-			tmpStr = tmpJSONObj.getString(JSONKey.InterestLabelName);
-			tmpInterestLabelList = globalInterestDAO.findByInterestLabelName(tmpStr);
-			if (tmpInterestLabelList.size() == 0)
-			{
-				globalInterestObj = new Globalinterestlabel();
-				globalInterestObj.setInterestLabelName(tmpStr);
-				globalInterestObj.setGlobalMatchCount(0);
-				
-				interestLabelMapObj.setMatchCount(0);
-				interestLabelMapObj.setValidFlag(Consts.ValidInvalid.Valid.name());
-			}
-			else
-			{
-				globalInterestObj = tmpInterestLabelList.get(0);
-				
-				if (tmpJSONObj.containsKey(JSONKey.MatchCount))
-				{
-					interestLabelMapObj.setMatchCount(tmpJSONObj.getInteger(JSONKey.MatchCount));
-				}
-				else
-				{
-					interestLabelMapObj.setMatchCount(0);
-				}
-				interestLabelMapObj.setValidFlag(Consts.ValidInvalid.Valid.name());
-			}
-			responseObj.put(JSONKey.InterestLabelName, Consts.SuccessOrFail.Success.getValue());
-			interestLabelMapObj.setGlobalinterestlabel(globalInterestObj);
-			
-			interestLabelMapObj.setLabelOrder(tmpJSONObj.getInteger(JSONKey.LabelOrder));
-			responseObj.put(JSONKey.LabelOrder, Consts.SuccessOrFail.Success.getValue());
-			labelMapList.add(interestLabelMapObj);
-			
-			interestLabelMapObj.setInterestcard(card);
-		}
-		
-		card.setInterestlabelmaps(labelMapList);
-		
+		/*
 		if (labelMapList.size() > 0)
 		{
 			String interestCardId = DBQueryUtil.getIDByDeviceSn(TableColumnName.InterestCardId,
@@ -1163,6 +1185,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 				DAOWrapper.executeSql(sql);
 			}
 		}
+		*/
 	}
 	
 	private void parseProfile(JSONObject profileObj, JSONObject profileResponse)

@@ -53,10 +53,10 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
@@ -127,14 +127,7 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
 		// Step_21 等待绑定确认超时时间
-		try
-		{
-			Thread.sleep(GlobalSetting.TimeOut.ChatConfirm * 2);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
+		Thread.sleep(GlobalSetting.TimeOut.ChatConfirm * 2);
 		
 		// Step_22 Mock事件：A onPing
 		//mockApp1.ping();
