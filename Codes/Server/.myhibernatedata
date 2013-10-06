@@ -1,5 +1,5 @@
 #MyEclipse Hibernate Properties
-#Sat Sep 28 19:36:59 CST 2013
+#Sun Oct 06 10:44:20 CST 2013
 sessionFactoryName=com.simplelife.renhai.server.db.HibernateSessionFactory
 genBasicCompId=true
 profile=

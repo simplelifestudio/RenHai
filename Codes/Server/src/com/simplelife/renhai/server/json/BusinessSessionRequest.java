@@ -10,8 +10,11 @@
 package com.simplelife.renhai.server.json;
 
 
+import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONArray;
@@ -25,6 +28,8 @@ import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceDAO;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
+import com.simplelife.renhai.server.db.GlobalimpresslabelDAO;
+import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.util.Consts.MessageId;
@@ -409,11 +414,13 @@ public class BusinessSessionRequest extends AppJSONMessage
 		Device target = dao.findByDeviceSn(deviceSn).get(0);
 		Impresscard card = target.getProfile().getImpresscard();
 		Set<Impresslabelmap> impressLabelMap = card.getImpresslabelmaps();
-		
 		JSONObject impressObj = body.getJSONObject(JSONKey.OperationInfo)
 				.getJSONObject(JSONKey.Device)
 				.getJSONObject(JSONKey.Profile)
 				.getJSONObject(JSONKey.ImpressCard);
+		
+		Session session = HibernateSessionFactory.getSession();
+		Transaction t = session.beginTransaction();
 		
 		JSONArray assessLabels = impressObj.getJSONArray(JSONKey.AssessLabelList);
 		updateOrAppendImpressLabel(card, impressLabelMap, assessLabels.getString(0));
@@ -425,7 +432,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		
 		// Save to DB
-		DBModule.instance.cache(target);
+		//DBModule.instance.cache(target);
+		t.commit();
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
@@ -451,7 +459,6 @@ public class BusinessSessionRequest extends AppJSONMessage
 	{
 		synchronized (impressLabels)
 		{
-			//String labelName = impressLabel.getString(JSONKey.ImpressLabelName);
 			for (Impresslabelmap label : impressLabels)
 			{
 				String tmpLabelName = label.getGlobalimpresslabel().getImpressLabelName();
@@ -463,10 +470,21 @@ public class BusinessSessionRequest extends AppJSONMessage
 				}
 			}
 			
-			Globalimpresslabel globalimpresslabel = new Globalimpresslabel();
-			globalimpresslabel.setGlobalAssessCount(1);
-			globalimpresslabel.setImpressLabelName(labelName);
-			globalimpresslabel.setImpresslabelmaps(impressLabels);
+			// Check if it's existent global impress label
+			GlobalimpresslabelDAO dao = new GlobalimpresslabelDAO();
+			List<Globalimpresslabel> globalLabelList = dao.findByImpressLabelName(labelName);
+			Globalimpresslabel globalimpresslabel;
+			if (globalLabelList.size() == 0)
+			{
+				globalimpresslabel = new Globalimpresslabel();
+				globalimpresslabel.setGlobalAssessCount(1);
+				globalimpresslabel.setImpressLabelName(labelName);
+				//globalimpresslabel.setImpresslabelmaps(impressLabels);
+			}
+			else
+			{
+				globalimpresslabel = globalLabelList.get(0); 
+			}
 			
 			Impresslabelmap labelMap = new Impresslabelmap();
 			labelMap.setAssessCount(0);

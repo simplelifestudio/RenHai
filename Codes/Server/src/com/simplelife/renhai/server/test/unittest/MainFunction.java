@@ -231,6 +231,10 @@ public class MainFunction extends AbstractTestCase
 		String deviceSn = "demoDeviceSn";
 		DeviceDAO dao = new DeviceDAO();
 		Device target = dao.findByDeviceSn(deviceSn).get(0);
+		
+		Session session = HibernateSessionFactory.getSession();
+		Transaction t = session.beginTransaction();
+		
 		Impresscard card = target.getProfile().getImpresscard();
 		Set<Impresslabelmap> impressLabelMap = card.getImpresslabelmaps();
 		
@@ -247,7 +251,11 @@ public class MainFunction extends AbstractTestCase
 		}
 		
 		// Save to DB
-		DBModule.instance.cache(target);
+		//DBModule.instance.cache(target);
+		t.commit();
+		
+		//session.flush();
+		//session.close();
 	}
 	
 	private void updateOrAppendImpressLabel(Impresscard card, Set<Impresslabelmap> impressLabels, String labelName)
@@ -269,7 +277,7 @@ public class MainFunction extends AbstractTestCase
 			Globalimpresslabel globalimpresslabel = new Globalimpresslabel();
 			globalimpresslabel.setGlobalAssessCount(1);
 			globalimpresslabel.setImpressLabelName(labelName);
-			globalimpresslabel.setImpresslabelmaps(impressLabels);
+			//globalimpresslabel.setImpresslabelmaps(impressLabels);
 			
 			Impresslabelmap labelMap = new Impresslabelmap();
 			labelMap.setAssessCount(0);

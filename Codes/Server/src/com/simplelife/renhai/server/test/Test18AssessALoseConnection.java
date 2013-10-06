@@ -141,7 +141,7 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		assertTrue(mockApp2.getLastReceivedCommand() != null);
 		
 		// Step_23 Mock事件：B同意聊天
-		mockApp1.clearLastReceivedCommand();
+		mockApp2.clearLastReceivedCommand();
 		mockApp2.chatConfirm(true);
 		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		

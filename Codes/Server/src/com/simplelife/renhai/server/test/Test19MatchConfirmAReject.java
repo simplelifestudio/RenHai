@@ -98,8 +98,14 @@ public class Test19MatchConfirmAReject extends AbstractTestCase
 		// Step_11 调用：RandomBusinessScheduler::schedule
 		mockApp1.clearLastReceivedCommand();
 		businessPool.getBusinessScheduler().schedule();
-		mockApp1.waitMessage();
 		
+		mockApp1.waitMessage();
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		
+		mockApp2.waitMessage();
+		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		
+		Thread.sleep(500);
 		// Step_12 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
 		sessionCount = sessionPool.getElementCount();
@@ -112,7 +118,7 @@ public class Test19MatchConfirmAReject extends AbstractTestCase
 		
 		// Step_16 调用：BusinessSession::getStatus
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
-		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
+		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);
 		
 		// Step_17 Mock事件：A确认绑定
 		mockApp2.clearLastReceivedCommand();
@@ -121,22 +127,14 @@ public class Test19MatchConfirmAReject extends AbstractTestCase
 		mockApp2.waitMessage();
 		assertTrue(mockApp2.getLastReceivedCommand() != null);
 		
-		// Step_18 Mock事件：B确认绑定
-		mockApp1.clearLastReceivedCommand();
-		mockApp2.chatConfirm(true);
-		assertTrue(!mockApp2.lastReceivedCommandIsError());
-		
-		// Step_19 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);
 		
-		// Step_20 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
+		// Step_18 Mock事件：B确认绑定
+		mockApp2.clearLastReceivedCommand();
+		mockApp2.chatConfirm(false);
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.RejectChat));
 		
-		// Step_21 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
-		
-		// Step_15 Mock事件：A拒绝聊天
-		mockApp1.chatConfirm(false);
+		Thread.sleep(500);
 		
 		// Step_16 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());

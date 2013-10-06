@@ -117,6 +117,7 @@ public class LocalMockApp extends AbstractMockApp
 		body.put(JSONKey.DeviceCapacity, deviceCapacityObj);
 		body.put(JSONKey.InterestLabelList, interestObj);
 		
+		lastSentMessageSn = header.getString(JSONKey.MessageSn);
 		sendRawJSONMessage(jsonObject, true);
 	}
 	

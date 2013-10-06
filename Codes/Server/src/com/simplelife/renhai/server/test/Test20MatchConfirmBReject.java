@@ -81,6 +81,7 @@ public class Test20MatchConfirmBReject extends AbstractTestCase
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.enterPool(businessType);
 		
+		businessPool.getBusinessScheduler().stopScheduler();
 		// Step_07 Mock请求：B进入随机聊天
 		mockApp2.enterPool(businessType);
 		
@@ -95,7 +96,13 @@ public class Test20MatchConfirmBReject extends AbstractTestCase
 		randomDeviceCount = businessPool.getElementCount();
 		
 		// Step_11 调用：RandomBusinessScheduler::schedule
-		//businessPool.getBusinessScheduler().schedule();
+		mockApp1.clearLastReceivedCommand();
+		businessPool.getBusinessScheduler().schedule();
+		
+		mockApp1.waitMessage();
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		
+		Thread.sleep(500);
 		
 		// Step_12 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
@@ -107,15 +114,9 @@ public class Test20MatchConfirmBReject extends AbstractTestCase
 		// Step_15 调用：B DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
 		
+		Thread.sleep(500);
 		// Step_16 调用：BusinessSession::getStatus
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
-		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
-		
-		// Step_17 Mock事件：A确认绑定
-		mockApp1.sendNotificationResponse(null, Consts.NotificationType.SessionBinded, "", "1");
-		
-		// Step_18 Mock事件：B确认绑定
-		mockApp2.sendNotificationResponse(null, Consts.NotificationType.SessionBinded, "", "1");
 		
 		// Step_19 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);
@@ -131,6 +132,8 @@ public class Test20MatchConfirmBReject extends AbstractTestCase
 		
 		// Step_16 Mock事件：B拒绝聊天
 		mockApp2.chatConfirm(false);
+		
+		Thread.sleep(500);
 		
 		// Step_17 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());

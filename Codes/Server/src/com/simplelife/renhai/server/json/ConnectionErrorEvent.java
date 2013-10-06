@@ -9,8 +9,12 @@
 
 package com.simplelife.renhai.server.json;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.db.DBModule;
+import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
@@ -31,9 +35,13 @@ public class ConnectionErrorEvent extends AppJSONMessage
 	{
 		logger.debug("Start to handle connection error of device <{}>", deviceWrapper.getDeviceSn());
 		deviceWrapper.onConnectionClose();
+		Session session = HibernateSessionFactory.getSession();
+		Transaction t = session.beginTransaction();
+		
 		Impresscard card =  deviceWrapper.getDevice().getProfile().getImpresscard();
 		card.setChatLossCount(card.getChatLossCount() + 1);
-		DBModule.instance.cache(card);
+		//DBModule.instance.cache(card);
+		t.commit();
 	}
 
 	@Override

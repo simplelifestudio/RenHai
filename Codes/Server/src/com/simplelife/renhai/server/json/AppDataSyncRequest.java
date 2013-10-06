@@ -16,6 +16,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
@@ -31,6 +34,7 @@ import com.simplelife.renhai.server.db.Globalimpresslabel;
 import com.simplelife.renhai.server.db.GlobalimpresslabelDAO;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.db.GlobalinterestlabelDAO;
+import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.db.Interestcard;
@@ -521,11 +525,15 @@ public class AppDataSyncRequest extends AppJSONMessage
 			long unbanDate = profile.getUnbanDate();
 			if (unbanDate <= System.currentTimeMillis())
 			{
+				Session session = HibernateSessionFactory.getSession();
+				Transaction t = session.beginTransaction();
+				
 				// Recover to normal
 				profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
 				profile.setUnbanDate(null);
 				
-				DBModule.instance.cache(profile);
+				//DBModule.instance.cache(profile);
+				t.commit();
 				// ServerJSONMessage response =
 				// JSONFactory.createServerJSONMessage(this,
 				// Consts.MessageId.AppDataSyncResponse);

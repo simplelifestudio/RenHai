@@ -199,7 +199,6 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     /** */
     public void onDeviceLeave(IDeviceWrapper device)
     {
-    	
     	super.onDeviceLeave(device);
     	removeInterestIndex(device);
     }

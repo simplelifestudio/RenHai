@@ -129,12 +129,21 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
         				String deviceSn;
         				for (int i = 0; i < expectedDeviceCount; i++)
         				{
+        					int tempCount = 0;
+        					
         					do
         					{
+        						tempCount ++;
         						tempDevice = (IDeviceWrapper) deviceArray[random.nextInt(deviceArray.length)]; 
         						deviceSn = tempDevice.getDeviceSn();
-        					} while (selectedDevice.contains(deviceSn));
+        					} while (selectedDevice.contains(deviceSn) && tempCount < 100);
         					
+        					if (tempCount >= 100)
+        					{
+        						logger.error("Fatal error: failed to matching device for 100 times, given up");
+        						deadMatchFlag = true;
+        						return;
+        					}
         					selectedDevice.add(deviceSn);
         				}
     				}
