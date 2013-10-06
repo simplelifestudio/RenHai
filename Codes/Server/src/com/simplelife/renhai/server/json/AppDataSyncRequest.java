@@ -42,6 +42,7 @@ import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.db.TableColumnName;
 import com.simplelife.renhai.server.db.TableName;
+import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.DBExistResult;
@@ -463,6 +464,10 @@ public class AppDataSyncRequest extends AppJSONMessage
 			return;
 		}
 		
+		DbLogger.saveSystemLog(Consts.OperationCode.AppDataSyncRequest_1004
+    			, Consts.SystemModule.business
+    			, header.getString(JSONKey.DeviceSn));
+		
 		String deviceSn = header.getString(JSONKey.DeviceSn);
 		if (OnlineDevicePool.instance.isDeviceInPool(deviceSn))
 		{
@@ -580,6 +585,9 @@ public class AppDataSyncRequest extends AppJSONMessage
 			query(body.getJSONObject(JSONKey.DataQuery), response.getBody());
 		}
 		response.asyncResponse();
+		DbLogger.saveSystemLog(Consts.OperationCode.AppDataSyncResponse_1007
+    			, Consts.SystemModule.business
+    			, header.getString(JSONKey.DeviceSn));
 	}
 	
 	private void appendQueryServiceStatus()

@@ -19,11 +19,19 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.session.BusinessSession;
+import com.simplelife.renhai.server.db.HibernateSessionFactory;
+import com.simplelife.renhai.server.db.Statisticsitem;
+import com.simplelife.renhai.server.db.StatisticsitemDAO;
+import com.simplelife.renhai.server.db.Systemstatistics;
+import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -55,8 +63,18 @@ public class OnlineDevicePool extends AbstractDevicePool
 		}
     }
 	
+	private class StatSaveTask extends TimerTask
+    {
+		@Override
+		public void run()
+		{
+			OnlineDevicePool.instance.saveStatistics();
+		}
+    }
+	
 	private Timer inactiveTimer = new Timer();
 	private Timer bannedTimer = new Timer();
+	private Timer statSaveTimer = new Timer();
     private HashMap<String, IDeviceWrapper> queueDeviceMap = new HashMap<String, IDeviceWrapper>();
     private HashMap<Consts.BusinessType, AbstractBusinessDevicePool> businessPoolMap = new HashMap<Consts.BusinessType, AbstractBusinessDevicePool>();
     private List<IDeviceWrapper> bannedDeviceList = new ArrayList<IDeviceWrapper> ();
@@ -160,6 +178,10 @@ public class OnlineDevicePool extends AbstractDevicePool
     	}
     	
     	logger.debug("Create device bases on connection with id: {}", connection.getConnectionId());
+    	DbLogger.saveSystemLog(Consts.OperationCode.SetupWebScoket_1001
+    			, Consts.SystemModule.business
+    			, connection.getConnectionId());
+    	
     	DeviceWrapper deviceWrapper = new DeviceWrapper(connection);
     	deviceWrapper.bindOnlineDevicePool(this);
     	Date now = DateUtil.getNowDate();
@@ -252,6 +274,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     {
     	inactiveTimer.scheduleAtFixedRate(new InactiveCheckTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.OnlineDeviceConnection);
     	bannedTimer.scheduleAtFixedRate(new BannedCheckTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.OnlineDeviceConnection);
+    	statSaveTimer.scheduleAtFixedRate(new StatSaveTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.SaveStatistics);
     	logger.debug("Timers of online device pool started.");
     }
     
@@ -259,6 +282,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     {
     	inactiveTimer.cancel();
     	bannedTimer.cancel();
+    	statSaveTimer.cancel();
     	logger.debug("Timers of online device pool stopped.");
     }
     
@@ -362,6 +386,71 @@ public class OnlineDevicePool extends AbstractDevicePool
 		{
 			device = bannedDeviceList.remove(0);
 			device.unbindOnlineDevicePool();
+		}
+	}
+	
+	public void saveStatistics()
+	{
+		Session session = HibernateSessionFactory.getSession();
+		Transaction trans = null;
+		long now = System.currentTimeMillis();
+		
+		AbstractBusinessDevicePool randomPool = OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Random);
+		InterestBusinessDevicePool interestPool = (InterestBusinessDevicePool) OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Interest);
+		StatisticsitemDAO dao = new StatisticsitemDAO();
+		
+		try
+		{
+			trans = session.beginTransaction();
+			
+			Statisticsitem item = dao.findByStatisticsItem(Consts.StatisticsItem.OnlineDeviceCount.getValue()).get(0);
+			Systemstatistics statItem = new Systemstatistics();
+			statItem.setSaveTime(now);
+			statItem.setStatisticsitem(item);
+			statItem.setCount(OnlineDevicePool.instance.getElementCount());
+			session.save(statItem);
+			
+			item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomDeviceCount.getValue()).get(0);
+			statItem = new Systemstatistics();
+			statItem.setSaveTime(now);
+			statItem.setStatisticsitem(item);
+			statItem.setCount(randomPool.getElementCount());
+			session.save(statItem);
+			
+			item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestDeviceCount.getValue()).get(0);
+			statItem = new Systemstatistics();
+			statItem.setSaveTime(now);
+			statItem.setStatisticsitem(item);
+			statItem.setCount(interestPool.getElementCount());
+			session.save(statItem);
+			
+			item = dao.findByStatisticsItem(Consts.StatisticsItem.ChatDeviceCount.getValue()).get(0);
+			statItem = new Systemstatistics();
+			statItem.setSaveTime(now);
+			statItem.setStatisticsitem(item);
+			statItem.setCount(OnlineDevicePool.instance.getDeviceCountInChat());
+			session.save(statItem);
+			
+			item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomChatDeviceCount.getValue()).get(0);
+			statItem = new Systemstatistics();
+			statItem.setSaveTime(now);
+			statItem.setStatisticsitem(item);
+			statItem.setCount(randomPool.getDeviceCountInChat());
+			session.save(statItem);
+			
+			item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestChatDeviceCount.getValue()).get(0);
+			statItem = new Systemstatistics();
+			statItem.setSaveTime(now);
+			statItem.setStatisticsitem(item);
+			statItem.setCount(interestPool.getDeviceCountInChat());
+			session.save(statItem);
+			
+			trans.commit();
+		}
+		catch(Exception e)
+		{
+			trans.rollback();
+			e.printStackTrace();
 		}
 	}
 }

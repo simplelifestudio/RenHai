@@ -32,6 +32,7 @@ import com.simplelife.renhai.server.db.GlobalimpresslabelDAO;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
+import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -231,6 +232,10 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void enterPool()
 	{
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEnterPool_1014
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
+		
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType businessType = Consts.BusinessType.parseValue(intType);
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
@@ -272,11 +277,19 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
 		response.addToBody(JSONKey.OperationInfo, operationInfo);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
+		
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEnterPool_1014
+    			, deviceWrapper.getDevice().getProfile()
+    			, body.getString(JSONKey.BusinessType) + ", " + deviceWrapper.getDeviceSn());
 		response.asyncResponse();
 	}
 	
 	private void leavePool()
 	{
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestLeavePool_1015
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
+
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType type = Consts.BusinessType.parseValue(intType);
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
@@ -300,10 +313,18 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		response.asyncResponse();
+		
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestLeavePool_1015
+    			, deviceWrapper.getDevice().getProfile()
+    			, body.getString(JSONKey.BusinessType) + ", " + deviceWrapper.getDeviceSn());
 	}
 	
 	private void agreeChat()
 	{
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAgreeChat_1016
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
+		
 		logger.debug("Device <{}> agreed chat.", deviceWrapper.getDeviceSn());
 		
 		IBusinessSession session = deviceWrapper.getOwnerBusinessSession(); 
@@ -325,11 +346,18 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
+
 		response.asyncResponse();
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAgreeChat_1016
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
 	}
 	
 	private void rejectChat()
 	{
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestRejectChat_1017
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
 		logger.debug("Device <{}> rejected chat.", deviceWrapper.getDeviceSn());
 		deviceWrapper.getOwnerBusinessSession().onRejectChat(deviceWrapper);
 		
@@ -351,10 +379,16 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		response.asyncResponse();
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestRejectChat_1017
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
 	}
 	
 	private void endChat()
 	{
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEndChat_1018
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
 		logger.debug("Device <{}> ended chat.", deviceWrapper.getDeviceSn());
 		deviceWrapper.getOwnerBusinessSession().onEndChat(deviceWrapper);
 		
@@ -376,6 +410,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		response.asyncResponse();
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEndChat_1018
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
 	}
 	
 	private void assessAndContinue()
@@ -385,6 +422,19 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void assess(boolean quitAfterAssess)
 	{
+		if (quitAfterAssess)
+		{
+			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessQuit_1020
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
+		}
+		else
+		{
+			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessContinue_1019
+	    			, deviceWrapper.getDevice().getProfile()
+	    			, deviceWrapper.getDeviceSn());
+		}
+		
 		logger.debug("Device <{}> provided assess.", deviceWrapper.getDeviceSn());
 		String deviceSn = body.getJSONObject(JSONKey.OperationInfo)
 				.getJSONObject(JSONKey.Device)
@@ -446,11 +496,19 @@ public class BusinessSessionRequest extends AppJSONMessage
 		{
 			response.addToBody(JSONKey.OperationType, Consts.OperationType.AssessAndQuit.getValue());
 			deviceWrapper.getOwnerBusinessSession().onAssessAndQuit(this.deviceWrapper);
+			
+			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessQuit_1020
+	    			, deviceWrapper.getDevice().getProfile()
+	    			, deviceWrapper.getDeviceSn());
 		}
 		else
 		{
 			response.addToBody(JSONKey.OperationType, Consts.OperationType.AssessAndContinue.getValue());
 			deviceWrapper.getOwnerBusinessSession().onAssessAndContinue(this.deviceWrapper);
+			
+			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessContinue_1019
+	    			, deviceWrapper.getDevice().getProfile()
+	    			, deviceWrapper.getDeviceSn());
 		}
 		response.asyncResponse();
 	}

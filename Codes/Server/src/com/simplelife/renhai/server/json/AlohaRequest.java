@@ -12,6 +12,7 @@ package com.simplelife.renhai.server.json;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.JSONKey;
@@ -63,9 +64,16 @@ public class AlohaRequest extends AppJSONMessage
     		logger.error("createServerJSONMessage returns null");
     		return;
     	}
+
+    	DbLogger.saveSystemLog(Consts.OperationCode.AlohaRequest_1002
+    			, Consts.SystemModule.business
+    			, header.getString(JSONKey.DeviceSn));
     	
     	response.addToBody(JSONKey.Content, helloApp);
     	response.asyncResponse();
+    	DbLogger.saveSystemLog(Consts.OperationCode.AlohaResponse_1003
+    			, Consts.SystemModule.business
+    			, header.getString(JSONKey.DeviceSn));
     }
 
 

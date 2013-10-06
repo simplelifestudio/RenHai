@@ -28,6 +28,7 @@ import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Sessionrecord;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
+import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessProgress;
@@ -267,6 +268,10 @@ public class BusinessSession implements IBusinessSession
 			}
     		notify.setDeviceWrapper(device);
     		notify.syncResponse();
+    		
+    		DbLogger.saveSystemLog(Consts.OperationCode.NotificationSessionBounded_1010
+        			, Consts.SystemModule.business
+        			, notificationType.name() + ", " + device.getDeviceSn());
     	}
 	}
     

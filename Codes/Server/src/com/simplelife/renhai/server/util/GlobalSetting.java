@@ -55,6 +55,8 @@ public class GlobalSetting
 		
 		public static int OnlineDeviceConnection = 5 * 1000;
 		public static int PingInterval = 2 * 1000;
+		
+		public static int SaveStatistics = 60 * 1000;
 	}
 	
 	public static class DBSetting

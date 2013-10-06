@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
+import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
@@ -354,6 +355,12 @@ public class MainFunction extends AbstractTestCase
 		DeviceWrapper deviceWrapper = new DeviceWrapper(null);
 		appRequest.bindDeviceWrapper(deviceWrapper);
 		appRequest.run();
+	}
+	
+	@Test
+	public void testSaveStats()
+	{
+		OnlineDevicePool.instance.saveStatistics();
 	}
 	
 	@Test

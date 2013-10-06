@@ -159,7 +159,41 @@ public class Consts
 		}
 	}
 	
-
+	public enum StatisticsItem
+	{
+		Invalid(0),
+		OnlineDeviceCount(1),
+		RandomDeviceCount(2),
+		InterestDeviceCount(3),
+		ChatDeviceCount(4),
+		RandomChatDeviceCount(5),
+		InterestChatDeviceCount(6),
+		HotInterestLabel(7);
+		
+		private int value;
+		private StatisticsItem(int value)
+		{
+			this.value = value;
+		}
+	
+		public int getValue()
+		{
+			return value;
+		}
+		
+		public static StatisticsItem parseValue(int value)
+		{
+			int intValue = Integer.valueOf(value);
+			for (StatisticsItem item : values())
+			{
+				if (item.value == intValue)
+				{
+					return item;
+				}
+			}
+			return Invalid;
+		}
+	}
 	
 	public enum NotificationType
 	{
@@ -652,5 +686,72 @@ public class Consts
 		{
 			this.value = value;
 		}
+	}
+	
+	public enum SystemModule
+	{
+		business(1),
+		db(2),
+		json(3),
+		log(4),
+		servlets(5),
+		util(6),
+		websocket(7);
+		
+		private int value;
+    	
+    	private SystemModule(int value)
+    	{
+    		this.value = value;
+    	}
+    	
+    	public int getValue()
+		{
+			return value;
+		}
+	}
+	
+	public enum OperationCode
+	{
+		SetupWebScoket_1001(1001),
+		AlohaRequest_1002(1002),
+		AlohaResponse_1003(1003),
+		AppDataSyncRequest_1004(1004),
+
+
+		AppDataSyncResponse_1007(1007),
+		ServerDataSyncRequest_1008(1008),
+		ServerDataSyncResponse_1009(1009),
+		NotificationSessionBounded_1010(1010),
+		NotificationOthersideRejected_1011(1011),
+		NotificationOthersideAgreed_1012(1012),
+		NotificationResponse_1013(1013),
+		BusinessRequestEnterPool_1014(1014),
+		BusinessRequestLeavePool_1015(1015),
+		BusinessRequestAgreeChat_1016(1016),
+		BusinessRequestRejectChat_1017(1017),
+		BusinessRequestEndChat_1018(1018),
+		BusinessRequestAssessContinue_1019(1019),
+		BusinessRequestAssessQuit_1020(1020),
+		BusinessResponse_1021(1021),
+		BroadcastNotification_1022(1022),
+		WebsocketTimeout_1100(1100),
+		DeviceInIdleTimeout_1101(1101),
+		SyncMessageTimeout_1102(1102),
+		FlushToDB_1103(1103),
+		UpdateWebRTCSession_1104(1104);
+
+    	private int value;
+    	
+    	private OperationCode(int value)
+    	{
+    		this.value = value;
+    	}
+    	
+    	public int getValue()
+		{
+			return value;
+		}
+
 	}
 }
