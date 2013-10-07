@@ -10,6 +10,7 @@
 
 @protocol CBJSONable <NSObject>
 
+-(void) fromJSONObject:(NSDictionary*) dic;
 -(NSDictionary*) toJSONObject;
 
 @optional

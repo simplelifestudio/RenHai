@@ -35,9 +35,7 @@
     if (self = [super init])
     {
         _deviceSn = [self _computeDeviceSn];
-        
         _deviceCard = [[RHDeviceCard alloc] init];
-        
         _profile = [[RHProfile alloc] init];
     }
     
@@ -67,6 +65,50 @@
 }
 
 #pragma mark - CBJSONable
+
+-(void) fromJSONObject:(NSDictionary *)dic
+{
+    if (nil != dic)
+    {
+        dic = [dic objectForKey:MESSAGE_KEY_DEVICE];
+        if (nil != dic)
+        {
+            id oDeviceId = [dic objectForKey:MESSAGE_KEY_DEVICEID];
+            if (nil != oDeviceId)
+            {
+                _deviceId = ([NSNull null] != oDeviceId) ? ((NSNumber*)oDeviceId).integerValue : 0;
+            }
+            
+            id oDeviceSn = [dic objectForKey:MESSAGE_KEY_DEVICESN];
+            if (nil != oDeviceSn)
+            {
+                _deviceSn = oDeviceSn;
+            }
+            
+            id oDeviceCard = [dic objectForKey:MESSAGE_KEY_DEVICECARD];
+            if (nil != oDeviceCard)
+            {
+                _deviceCard = [[RHDeviceCard alloc] init];
+                [_deviceCard fromJSONObject:oDeviceCard];
+            }
+            else
+            {
+                _deviceCard = nil;
+            }
+            
+            id oProfile = [dic objectForKey:MESSAGE_KEY_PROFILE];
+            if (nil != oProfile)
+            {
+                _profile = [[RHProfile alloc] init];
+                [_profile fromJSONObject:oProfile];
+            }
+            else
+            {
+                _profile = nil;
+            }
+        }
+    }
+}
 
 -(NSDictionary*) toJSONObject
 {
@@ -103,11 +145,8 @@
     if (self = [super init])
     {
         _deviceId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_DEVICEID];
-        
         _deviceSn = [aDecoder decodeObjectForKey:SERIALIZE_KEY_DEVICESN];
-        
         _deviceCard = [aDecoder decodeObjectForKey:SERIALIZE_KEY_DEVICECARD];
-        
         _profile = [aDecoder decodeObjectForKey:SERIALIZE_KEY_PROFILE];
     }
     
@@ -117,11 +156,8 @@
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeInteger:_deviceId forKey:SERIALIZE_KEY_DEVICEID];
-    
     [aCoder encodeObject:_deviceSn forKey:SERIALIZE_KEY_DEVICESN];
-    
     [aCoder encodeObject:_deviceCard forKey:SERIALIZE_KEY_DEVICECARD];
-    
     [aCoder encodeObject:_profile forKey:SERIALIZE_KEY_PROFILE];
 }
 
@@ -129,14 +165,6 @@
 
 -(id) copyWithZone:(struct _NSZone *)zone
 {
-//    RHDevice* copy = [[RHDevice alloc] init];
-//    
-//    copy.deviceId = _deviceId;
-//    copy.deviceSn = [_deviceSn copy];
-//    copy.profile = [_profile copy];
-//    
-//    return copy;
-
     NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
     return (RHDevice*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
@@ -145,14 +173,6 @@
 
 -(id) mutableCopyWithZone:(struct _NSZone *)zone
 {
-//    RHDevice* mutableCopy = [[RHDevice alloc] init];
-//    
-//    mutableCopy.deviceId = _deviceId;
-//    mutableCopy.deviceSn = [_deviceSn mutableCopy];    
-//    mutableCopy.profile = [_profile mutableCopy];
-//    
-//    return mutableCopy;
-
     return [self copyWithZone:zone];
 }
 

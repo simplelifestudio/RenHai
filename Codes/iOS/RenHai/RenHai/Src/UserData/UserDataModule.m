@@ -52,6 +52,12 @@ SINGLETON(UserDataModule)
     DDLogVerbose(@"Module:%@ is started.", self.moduleIdentity);
     
     [super startService];
+    
+    BOOL loadFlag = [self loadUserData];
+    if (!loadFlag)
+    {
+        [self initUserData];
+    }
 }
 
 -(void) processService

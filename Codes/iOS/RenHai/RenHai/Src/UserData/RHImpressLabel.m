@@ -9,6 +9,7 @@
 #import "RHImpressLabel.h"
 
 #import "CBJSONUtils.h"
+#import "CBDateUtils.h"
 
 #import "RHMessage.h"
 
@@ -43,6 +44,7 @@
 -(id) _getOLabelId
 {
     id oLabelId = nil;
+    
     if (0 >= _labelId)
     {
         oLabelId = [NSNull null];
@@ -51,7 +53,18 @@
     {
         oLabelId = [NSNumber numberWithInteger:_labelId];
     }
+    
     return oLabelId;
+}
+
+-(id) _getOAssessedCount
+{
+    return [NSNumber numberWithInteger:_assessedCount];
+}
+
+-(id) _getOAssessCount
+{
+    return [NSNumber numberWithInteger:_assessCount];
 }
 
 -(id) _getOUpdateTime
@@ -64,7 +77,7 @@
     }
     else
     {
-        oUpdateTime = _updateTime;
+        oUpdateTime = [CBDateUtils dateStringInLocalTimeZoneWithFormat:FULL_DATE_TIME_FORMAT andDate:_updateTime];;
     }
     
     return oUpdateTime;
@@ -72,20 +85,56 @@
 
 #pragma mark - CBJSONable
 
+-(void) fromJSONObject:(NSDictionary*) dic;
+{
+    if (nil != dic)
+    {
+        id oLabelId = [dic objectForKey:MESSAGE_KEY_IMPRESSLABELID];
+        if (nil != oLabelId)
+        {
+            _labelId = ([NSNull null] != oLabelId) ? ((NSNumber*)oLabelId).integerValue : 0;
+        }
+        
+        id oAssessedCount = [dic objectForKey:MESSAGE_KEY_ASSESSEDCOUNT];
+        if (nil != oAssessedCount)
+        {
+            _assessedCount = ([NSNull null] != oAssessedCount) ? ((NSNumber*)oAssessedCount).integerValue : 0;
+        }
+
+        id oUpdateTime = [dic objectForKey:MESSAGE_KEY_UPDATETIME];
+        if (nil != oUpdateTime)
+        {
+            _updateTime = [CBDateUtils dateFromStringWithFormat:oUpdateTime andFormat:FULL_DATE_TIME_FORMAT];
+        }
+        
+        id oAssessCount = [dic objectForKey:MESSAGE_KEY_ASSESSCOUNT];
+        if (nil != oAssessCount)
+        {
+            _assessCount = ([NSNull null] != oAssessCount) ? ((NSNumber*)oAssessCount).integerValue : 0;
+        }
+        
+        NSString* labelName = [dic objectForKey:MESSAGE_KEY_IMPRESSLABELNAME];
+        if (nil != labelName)
+        {
+            _labelName = labelName;
+        }
+    }
+}
+
 -(NSDictionary*) toJSONObject
 {
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
     id oLabelId = [self _getOLabelId];
-    [dic setObject:oLabelId forKey:MESSAGE_KEY_INTERESTLABELNAME];
+    [dic setObject:oLabelId forKey:MESSAGE_KEY_INTERESTLABELID];
     
-    NSNumber* oAssessedCount = [NSNumber numberWithInteger:_assessedCount];
+    id oAssessedCount = [self _getOAssessedCount];
     [dic setObject:oAssessedCount forKey:MESSAGE_KEY_ASSESSEDCOUNT];
 
     id oUpdateTime = [self _getOUpdateTime];
     [dic setObject:oUpdateTime forKey:MESSAGE_KEY_UPDATETIME];
     
-    NSNumber* oAssessCount = [NSNumber numberWithInteger:_assessCount];
+    id oAssessCount = [self _getOAssessCount];
     [dic setObject:oAssessCount forKey:MESSAGE_KEY_ASSESSCOUNT];
     
     [dic setObject:_labelName forKey:MESSAGE_KEY_IMPRESSLABELNAME];
@@ -108,13 +157,9 @@
     if (self = [super init])
     {
         _labelId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_LABELID];
-        
         _assessedCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_ASSESSEDCOUNT];
-        
         _updateTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_UPDATETIME];
-        
         _assessCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_ASSESSCOUNT];
-        
         _labelName = [aDecoder decodeObjectForKey:SERIALIZE_KEY_NAME];
     }
     return self;
@@ -123,13 +168,9 @@
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeInteger:_labelId forKey:SERIALIZE_KEY_LABELID];
-    
     [aCoder encodeInteger:_assessedCount forKey:SERIALIZE_KEY_ASSESSEDCOUNT];
-    
     [aCoder encodeObject:_updateTime forKey:SERIALIZE_KEY_UPDATETIME];
-    
     [aCoder encodeInteger:_assessCount forKey:SERIALIZE_KEY_ASSESSCOUNT];
-    
     [aCoder encodeObject:_labelName forKey:SERIALIZE_KEY_NAME];
 }
 
@@ -137,16 +178,6 @@
 
 -(id) copyWithZone:(struct _NSZone *)zone
 {
-//    RHImpressLabel* copy = [[RHImpressLabel alloc] init];
-//    
-//    copy.labelId = _labelId;
-//    copy.assessedCount = _assessedCount;
-//    copy.updateTime = [_updateTime copy];
-//    copy.assessCount = _assessCount;
-//    copy.labelName = [_labelName copy];
-//    
-//    return copy;
-
     NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
     return (RHImpressLabel*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
@@ -155,16 +186,6 @@
 
 -(id) mutableCopyWithZone:(struct _NSZone *)zone
 {
-//    RHImpressLabel* mutableCopy = [[RHImpressLabel alloc] init];
-//    
-//    mutableCopy.labelId = _labelId;
-//    mutableCopy.assessedCount = _assessedCount;
-//    mutableCopy.updateTime = [_updateTime mutableCopy];
-//    mutableCopy.assessCount = _assessCount;
-//    mutableCopy.labelName = [_labelName mutableCopy];
-//    
-//    return mutableCopy;
-
     return [self copyWithZone:zone];
 }
 

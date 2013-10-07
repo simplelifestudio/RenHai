@@ -29,7 +29,6 @@
 @implementation RHInterestCard
 
 @synthesize interestCardId = _interestCardId;
-
 @synthesize labelMap = _labelMap;
 
 #pragma mark - Public Methods
@@ -171,6 +170,42 @@
 
 #pragma mark - CBJSONable
 
+-(void) fromJSONObject:(NSDictionary *)dic
+{
+    if (nil != dic)
+    {
+        id oCardId = [dic objectForKey:MESSAGE_KEY_INTERESTCARDID];
+        if (nil != oCardId)
+        {
+            _interestCardId = ([NSNull null] != oCardId) ? ((NSNumber*)oCardId).integerValue : 0;
+        }
+        
+        id labelArray = [dic objectForKey:MESSAGE_KEY_INTERESTLABELLIST];
+        if (nil != labelArray)
+        {
+            if ([NSNull null] != labelArray)
+            {
+                NSMutableDictionary* map = [NSMutableDictionary dictionary];
+                
+                NSArray* array = (NSArray*)labelArray;
+                for (NSDictionary* labelDic in array)
+                {
+                    RHInterestLabel* label = [[RHInterestLabel alloc] init];
+                    [label fromJSONObject:labelDic];
+                    
+                    [map setObject:label forKey:label.labelName];
+                }
+                
+                _labelMap = map;
+            }
+            else
+            {
+                _labelMap = nil;
+            }
+        }
+    }
+}
+
 -(NSDictionary*) toJSONObject
 {
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
@@ -199,7 +234,6 @@
     if (self = [super init])
     {
         _interestCardId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CARDID];
-        
         _labelMap = [aDecoder decodeObjectForKey:SERIALIZE_KEY_LABELLIST];
     }
     
@@ -209,7 +243,6 @@
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeInteger:_interestCardId forKey:SERIALIZE_KEY_CARDID];
-    
     [aCoder encodeObject:_labelMap forKey:SERIALIZE_KEY_LABELLIST];
 }
 
@@ -217,13 +250,6 @@
 
 -(id) copyWithZone:(struct _NSZone *)zone
 {
-//    RHInterestCard* copy = [[RHInterestCard alloc] init];
-//    
-//    copy.interestCardId = _interestCardId;
-//    copy.labelMap = [_labelMap copy];
-//    
-//    return copy;
-
     NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
     return (RHInterestCard*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
@@ -232,13 +258,6 @@
 
 -(id) mutableCopyWithZone:(struct _NSZone *)zone
 {
-//    RHInterestCard* mutableCopy = [[RHInterestCard alloc] init];
-//
-//    mutableCopy.interestCardId = _interestCardId;
-//    mutableCopy.labelMap = [_labelMap mutableCopy];
-//    
-//    return mutableCopy;
-
     return [self copyWithZone:zone];
 }
 

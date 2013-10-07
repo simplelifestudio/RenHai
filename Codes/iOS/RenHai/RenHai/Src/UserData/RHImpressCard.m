@@ -57,44 +57,17 @@
 
 -(id) _getOChatTotalCount
 {
-    id oChatTotalCount = nil;
-    if (0 >= _chatTotalCount)
-    {
-        oChatTotalCount = [NSNull null];
-    }
-    else
-    {
-        oChatTotalCount = [NSNumber numberWithInteger:_chatTotalCount];
-    }
-    return oChatTotalCount;
+    return [NSNumber numberWithInteger:_chatTotalCount];
 }
 
 -(id) _getOChatTotalDuration
 {
-    id oChatTotalDuration = nil;
-    if (0 >= _chatTotalDuration)
-    {
-        oChatTotalDuration = [NSNull null];
-    }
-    else
-    {
-        oChatTotalDuration = [NSNumber numberWithInteger:_chatTotalDuration];
-    }
-    return oChatTotalDuration;
+    return [NSNumber numberWithInteger:_chatTotalDuration];
 }
 
 -(id) _getOChatLossCount
 {
-    id oChatLossCount = nil;
-    if (0 >= _chatLossCount)
-    {
-        oChatLossCount = [NSNull null];
-    }
-    else
-    {
-        oChatLossCount = [NSNumber numberWithInteger:_chatLossCount];
-    }
-    return oChatLossCount;
+    return [NSNumber numberWithInteger:_chatLossCount];
 }
 
 -(id) _getOImpressLabelList
@@ -175,6 +148,84 @@
 
 #pragma mark - CBJSONable
 
+-(void) fromJSONObject:(NSDictionary *)dic
+{
+    if (nil != dic)
+    {
+        id oCardId = [dic objectForKey:MESSAGE_KEY_IMPRESSCARDID];
+        if (nil != oCardId)
+        {
+            _impressCardId = ([NSNull null] != oCardId) ? ((NSNumber*)oCardId).integerValue : 0;
+        }
+        
+        id assessLabelListArray = [dic objectForKey:MESSAGE_KEY_ASSESSLABELLIST];
+        if (nil != assessLabelListArray)
+        {
+            if ([NSNull null] != assessLabelListArray)
+            {
+                NSMutableArray* labelArray = [NSMutableArray array];
+                
+                NSArray* dicArray = (NSArray*)assessLabelListArray;
+                for (NSDictionary* labelDic in dicArray)
+                {
+                    RHImpressLabel* label = [[RHImpressLabel alloc] init];
+                    [label fromJSONObject:labelDic];
+                    
+                    [labelArray addObject:label];
+                }
+                
+                _assessLabelList = labelArray;
+            }
+            else
+            {
+                _assessLabelList = nil;
+            }
+        }
+        
+        id impressLabelListArray = [dic objectForKey:MESSAGE_KEY_IMPRESSLABELLIST];
+        if (nil != impressLabelListArray)
+        {
+            if ([NSNull null] != impressLabelListArray)
+            {
+                NSMutableArray* labelArray = [NSMutableArray array];
+                
+                NSArray* dicArray = (NSArray*)impressLabelListArray;
+                for (NSDictionary* labelDic in dicArray)
+                {
+                    RHImpressLabel* label = [[RHImpressLabel alloc] init];
+                    [label fromJSONObject:labelDic];
+                    
+                    [labelArray addObject:label];
+                }
+                
+                _impressLabelList = labelArray;
+            }
+            else
+            {
+                _impressLabelList = nil;
+            }
+        }
+        
+        id oChatTotalCount = [dic objectForKey:MESSAGE_KEY_CHATTOTALCOUNT];
+        if (nil != oChatTotalCount)
+        {
+            _chatTotalCount = ([NSNull null] != oChatTotalCount) ? ((NSNumber*)oChatTotalCount).integerValue : 0;
+        }
+        
+        id oChatTotalDuration = [dic objectForKey:MESSAGE_KEY_CHATTOTALDURATION];
+        if (nil != oChatTotalDuration)
+        {
+            _chatTotalDuration = ([NSNull null] != oChatTotalDuration) ? ((NSNumber*)oChatTotalDuration).integerValue : 0;
+        }
+        
+        id oChatLossCount = [dic objectForKey:MESSAGE_KEY_CHATLOSSCOUNT];
+        if (nil != oChatLossCount)
+        {
+            _chatLossCount = ([NSNull null] != oChatLossCount) ? ((NSNumber*)oChatLossCount).integerValue : 0;
+        }
+    }
+}
+
 -(NSDictionary*) toJSONObject
 {
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
@@ -214,16 +265,11 @@
 {
     if (self = [super init])
     {
-        _impressCardId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CARDID];
-        
+        _impressCardId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CARDID];        
         _assessLabelList = [aDecoder decodeObjectForKey:SERIALIZE_KEY_ASSESSLABELIST];
-        
         _impressLabelList = [aDecoder decodeObjectForKey:SERIALIZE_KEY_IMPRESSLABELIST];
-        
         _chatTotalCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CHATTOTALCOUNT];
-        
         _chatTotalDuration = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CHATTOTALDURATION];
-        
         _chatLossCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CHATLOSSCOUNT];
     }
     
@@ -233,15 +279,10 @@
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeInteger:_impressCardId forKey:SERIALIZE_KEY_CARDID];
-    
     [aCoder encodeObject:_assessLabelList forKey:SERIALIZE_KEY_ASSESSLABELIST];
-    
     [aCoder encodeObject:_impressLabelList forKey:SERIALIZE_KEY_IMPRESSLABELIST];
-    
     [aCoder encodeInteger:_chatTotalCount forKey:SERIALIZE_KEY_CHATTOTALCOUNT];
-
     [aCoder encodeInteger:_chatTotalDuration forKey:SERIALIZE_KEY_CHATTOTALDURATION];
-    
     [aCoder encodeInteger:_chatLossCount forKey:SERIALIZE_KEY_CHATLOSSCOUNT];
 }
 
@@ -249,17 +290,6 @@
 
 -(id) copyWithZone:(struct _NSZone *)zone
 {
-//    RHImpressCard* copy = [[RHImpressCard alloc] init];
-//    
-//    copy.impressCardId = _impressCardId;
-//    copy.assessLabelList = [_assessLabelList copy];
-//    copy.impressLabelList = [_impressLabelList copy];
-//    copy.chatTotalCount = _chatTotalCount;
-//    copy.chatTotalDuration = _chatTotalDuration;
-//    copy.chatLossCount = _chatLossCount;
-//    
-//    return copy;
-
     NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
     return (RHImpressCard*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
@@ -268,17 +298,6 @@
 
 -(id) mutableCopyWithZone:(struct _NSZone *)zone
 {
-//    RHImpressCard* mutableCopy = [[RHImpressCard alloc] init];
-//
-//    mutableCopy.impressCardId = _impressCardId;
-//    mutableCopy.assessLabelList = [_assessLabelList mutableCopy];
-//    mutableCopy.impressLabelList = [_impressLabelList mutableCopy];
-//    mutableCopy.chatTotalCount = _chatTotalCount;
-//    mutableCopy.chatTotalDuration = _chatTotalDuration;
-//    mutableCopy.chatLossCount = _chatLossCount;
-//    
-//    return mutableCopy;
-
     return [self copyWithZone:zone];
 }
 
