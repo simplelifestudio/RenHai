@@ -340,8 +340,6 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
         if (_agent.webSocketState == SR_OPEN)
         {
-            
-            [requestMessage setTimeStamp:[NSDate date]];
             GHTestLog(@"Sent Message: %@", requestMessage.toJSONString);
             
             RHMessage* responseMessage = [_agent syncMessage:requestMessage syncInMainThread:NO];
