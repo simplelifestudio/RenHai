@@ -2,7 +2,7 @@
 //  GUIModule.m
 //  Seeds
 //
-//  Created by Patrick Deng on 13-5-22.
+//  Created by DENG KE on 13-5-22.
 //  Copyright (c) 2013年 SimpleLife Studio. All rights reserved.
 //
 

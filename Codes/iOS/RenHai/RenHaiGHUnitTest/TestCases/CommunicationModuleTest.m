@@ -2,7 +2,7 @@
 //  CommunicationModuleTest.m
 //  RenHai
 //
-//  Created by Patrick Deng on 13-9-4.
+//  Created by DENG KE on 13-9-4.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 

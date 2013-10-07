@@ -2,7 +2,7 @@
 //  CBJSONUtils.m
 //  RenHai
 //
-//  Created by Patrick Deng on 13-9-3.
+//  Created by DENG KE on 13-9-3.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
