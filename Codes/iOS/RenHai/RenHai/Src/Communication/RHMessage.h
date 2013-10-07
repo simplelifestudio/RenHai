@@ -78,6 +78,9 @@
 #define MESSAGE_KEY_UPDATETIME @"updateTime"
 #define MESSAGE_KEY_ASSESSCOUNT @"assessCount"
 #define MESSAGE_KEY_IMPRESSLABELNAME @"impressLabelName"
+#define MESSAGE_KEY_ASSESS_HAPPY @"^#Happy#^"
+#define MESSAGE_KEY_ASSESS_SOSO @"^#SoSo#^"
+#define MESSAGE_KEY_ASSESS_DISGUSTING @"^#Disgusting#^"
 
 // InterestLabel
 #define MESSAGE_KEY_INTERESTLABELID @"globalInterestLabelId"
