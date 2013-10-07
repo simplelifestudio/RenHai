@@ -32,6 +32,7 @@
 SINGLETON(UserDataModule)
 
 @synthesize device = _device;
+@synthesize server = _server;
 
 -(void) initModule
 {
@@ -100,6 +101,8 @@ SINGLETON(UserDataModule)
     @try
     {
         _device = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+        
+        [self _initServerData];
     }
     @catch (NSException *exception)
     {
@@ -118,6 +121,15 @@ SINGLETON(UserDataModule)
 -(void) initUserData
 {
     _device = [[RHDevice alloc] init];
+    
+    [self _initServerData];
+}
+
+#pragma mark - Private Methods
+
+-(void) _initServerData
+{
+    _server = [[RHServer alloc] init];
 }
 
 #pragma mark - UIApplicationDelegate

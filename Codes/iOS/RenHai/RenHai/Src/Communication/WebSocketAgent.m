@@ -130,6 +130,12 @@
         return nil;
     }
     
+    BOOL isLegalMessage = [RHMessage isLegalMessage:requestMessage];
+    if (!isLegalMessage)
+    {
+        return nil;
+    }
+    
     NSTimeInterval timeout = WEBSOCKET_COMM_TIMEOUT;
     NSDate* startTimeStamp = [NSDate date];
     NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
@@ -327,7 +333,7 @@
 
 -(void) _saveResponseMessage:(RHMessage*) message
 {
-    if (nil != message && nil != message.messageSn && 0 < message.messageSn.length)
+    if (nil != message && nil != message.messageSn)
     {
         @synchronized(_responseMessageSet)
         {

@@ -29,13 +29,15 @@ SINGLETON(CommunicationModule)
 @synthesize httpCommAgent = _httpCommAgent;
 @synthesize webSocketCommAgent = _webSocketCommAgent;
 
+#pragma mark - Public Methods
+
 -(void) initModule
 {
     [self setModuleIdentity:NSLocalizedString(@"Communication Module", nil)];
     [self.serviceThread setName:NSLocalizedString(@"Communication Module Thread", nil)];
     [self setKeepAlive:FALSE];
     
-    [RHMessage setMessageNeedEncrypt:YES];
+    [RHMessage setMessageNeedEncrypt:MESSAGE_NEED_ENCRYPT];
     
     _httpCommAgent = [[HTTPAgent alloc] init];
     _webSocketCommAgent = [[WebSocketAgent alloc] init];
@@ -100,6 +102,8 @@ SINGLETON(CommunicationModule)
 {
     [self unregisterReachability];
     
+    [self disconnectWebSocket];
+    
     [super releaseModule];
 }
 
@@ -116,6 +120,55 @@ SINGLETON(CommunicationModule)
     MODULE_DELAY
     
     [self registerReachability];
+}
+
+-(BOOL) connectWebSocket
+{
+    BOOL flag = NO;
+    
+    if (![self isWebSocketConnected])
+    {
+        flag = [_webSocketCommAgent openWebSocket];
+    }
+    else
+    {
+        flag = (_webSocketCommAgent.webSocketState == SR_OPEN);
+    }
+    
+    return flag;
+}
+
+-(void) disconnectWebSocket
+{
+    if ([self isWebSocketConnected])
+    {
+        [_webSocketCommAgent closeWebSocket];
+    }
+}
+
+-(BOOL) isWebSocketConnected
+{
+    BOOL flag = NO;
+    
+    if (nil != _webSocketCommAgent && _webSocketCommAgent.webSocketState == SR_OPEN)
+    {
+        flag = YES;
+    }
+    
+    return flag;
+}
+
+-(RHMessage*) sendMessage:(RHMessage*) requestMessage
+{
+    RHMessage* responseMessagge = nil;
+    
+    BOOL isConnected = [self isWebSocketConnected];
+    if (isConnected)
+    {        
+        responseMessagge = [_webSocketCommAgent syncMessage:requestMessage syncInMainThread:NO];
+    }
+    
+    return responseMessagge;
 }
 
 #pragma mark - UIApplicationDelegate

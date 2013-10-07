@@ -196,6 +196,10 @@
 		C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
 		CD1C4A9A17FAB763009642D3 /* libPods-RenHaiGHUnitTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD1C4A9917FAB763009642D3 /* libPods-RenHaiGHUnitTest.a */; };
+		CD1DFB0918001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
+		CD1DFB0A18001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
+		CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */; };
+		CD1DFB0C18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */; };
 		CD26650D17F41DD20070934F /* UserDataModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = CD26650C17F41DD20070934F /* UserDataModuleTest.m */; };
 		CD32013A17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
 		CD32013B17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
@@ -213,6 +217,14 @@
 		CD734AA917E83E3000EF6CD4 /* help_04.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA317E83E3000EF6CD4 /* help_04.JPG */; };
 		CD734AAA17E83E3000EF6CD4 /* help_05.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA417E83E3000EF6CD4 /* help_05.JPG */; };
 		CD734AAB17E83E3000EF6CD4 /* help_06.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA517E83E3000EF6CD4 /* help_06.JPG */; };
+		CDC0518A1802E055006158B8 /* RHServer.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051891802E055006158B8 /* RHServer.m */; };
+		CDC0518B1802E055006158B8 /* RHServer.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051891802E055006158B8 /* RHServer.m */; };
+		CDC0518E1802E311006158B8 /* RHServerDeviceCapacity.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC0518D1802E311006158B8 /* RHServerDeviceCapacity.m */; };
+		CDC0518F1802E311006158B8 /* RHServerDeviceCapacity.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC0518D1802E311006158B8 /* RHServerDeviceCapacity.m */; };
+		CDC051921802E33D006158B8 /* RHServerDeviceCount.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051911802E33D006158B8 /* RHServerDeviceCount.m */; };
+		CDC051931802E33D006158B8 /* RHServerDeviceCount.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051911802E33D006158B8 /* RHServerDeviceCount.m */; };
+		CDC051961802E389006158B8 /* RHServerInterestLabelList.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051951802E389006158B8 /* RHServerInterestLabelList.m */; };
+		CDC051971802E389006158B8 /* RHServerInterestLabelList.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051951802E389006158B8 /* RHServerInterestLabelList.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -405,6 +417,9 @@
 		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; };
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; };
 		CD1C4A9917FAB763009642D3 /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-RenHaiGHUnitTest.a"; path = "Pods/build/Debug-iphoneos/libPods-RenHaiGHUnitTest.a"; sourceTree = "<group>"; };
+		CD1DFB0618001086006ED9A4 /* ConnectViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectViewController_iPhone.h; sourceTree = "<group>"; };
+		CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectViewController_iPhone.m; sourceTree = "<group>"; };
+		CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConnectViewController_iPhone.xib; sourceTree = "<group>"; };
 		CD26650B17F41DD20070934F /* UserDataModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataModuleTest.h; sourceTree = "<group>"; };
 		CD26650C17F41DD20070934F /* UserDataModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataModuleTest.m; sourceTree = "<group>"; };
 		CD32013717E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHTableViewSwitcherCell_iPhone.h; sourceTree = "<group>"; };
@@ -421,6 +436,14 @@
 		CD734AA317E83E3000EF6CD4 /* help_04.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_04.JPG; sourceTree = "<group>"; };
 		CD734AA417E83E3000EF6CD4 /* help_05.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_05.JPG; sourceTree = "<group>"; };
 		CD734AA517E83E3000EF6CD4 /* help_06.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_06.JPG; sourceTree = "<group>"; };
+		CDC051881802E055006158B8 /* RHServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServer.h; sourceTree = "<group>"; };
+		CDC051891802E055006158B8 /* RHServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServer.m; sourceTree = "<group>"; };
+		CDC0518C1802E311006158B8 /* RHServerDeviceCapacity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServerDeviceCapacity.h; sourceTree = "<group>"; };
+		CDC0518D1802E311006158B8 /* RHServerDeviceCapacity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServerDeviceCapacity.m; sourceTree = "<group>"; };
+		CDC051901802E33D006158B8 /* RHServerDeviceCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServerDeviceCount.h; sourceTree = "<group>"; };
+		CDC051911802E33D006158B8 /* RHServerDeviceCount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServerDeviceCount.m; sourceTree = "<group>"; };
+		CDC051941802E389006158B8 /* RHServerInterestLabelList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServerInterestLabelList.h; sourceTree = "<group>"; };
+		CDC051951802E389006158B8 /* RHServerInterestLabelList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServerInterestLabelList.m; sourceTree = "<group>"; };
 		CDDF0FE017EB227700DA3E06 /* RenHai.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RenHai.entitlements; sourceTree = "<group>"; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -743,6 +766,9 @@
 				C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */,
 				C593C42917D3284600C26367 /* SplashViewController_iPhone.h */,
 				C593C42A17D3284600C26367 /* SplashViewController_iPhone.m */,
+				CD1DFB0618001086006ED9A4 /* ConnectViewController_iPhone.h */,
+				CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */,
+				CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */,
 				C59E2C1617D9ABA5000234A0 /* MainViewController_iPhone.h */,
 				C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */,
 				C593C46917D4224A00C26367 /* LeftBarViewController_iPhone.h */,
@@ -821,6 +847,14 @@
 				C593C48C17D46C5700C26367 /* RHImpressCard.m */,
 				C593C48F17D46CB700C26367 /* RHImpressLabel.h */,
 				C593C49017D46CB700C26367 /* RHImpressLabel.m */,
+				CDC051881802E055006158B8 /* RHServer.h */,
+				CDC051891802E055006158B8 /* RHServer.m */,
+				CDC0518C1802E311006158B8 /* RHServerDeviceCapacity.h */,
+				CDC0518D1802E311006158B8 /* RHServerDeviceCapacity.m */,
+				CDC051901802E33D006158B8 /* RHServerDeviceCount.h */,
+				CDC051911802E33D006158B8 /* RHServerDeviceCount.m */,
+				CDC051941802E389006158B8 /* RHServerInterestLabelList.h */,
+				CDC051951802E389006158B8 /* RHServerInterestLabelList.m */,
 			);
 			path = UserData;
 			sourceTree = "<group>";
@@ -935,6 +969,7 @@
 				C593C47217D4240800C26367 /* LeftBarHeaderView_iPhone.xib in Resources */,
 				C593C47917D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */,
 				C596283917DA08AA009127E6 /* sidebar_menu_icon_landscape.png in Resources */,
+				CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */,
 				C596283B17DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png in Resources */,
 				C596283D17DA08AA009127E6 /* sidebar_menu_icon_portrait.png in Resources */,
 				C596283F17DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png in Resources */,
@@ -961,6 +996,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C55B442A17CF5992009BB21B /* InfoPlist.strings in Resources */,
+				CD1DFB0C18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */,
 				C55B443217CF5993009BB21B /* Default.png in Resources */,
 				C55B443417CF5993009BB21B /* Default@2x.png in Resources */,
 				C55B443617CF5993009BB21B /* Default-568h@2x.png in Resources */,
@@ -1097,12 +1133,15 @@
 				C50505C817D2BD4800DB6589 /* CBHUDAgent.m in Sources */,
 				C50505CA17D2BD4800DB6589 /* CBMathUtils.m in Sources */,
 				C50505CC17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */,
+				CDC0518A1802E055006158B8 /* RHServer.m in Sources */,
 				C50505CE17D2BD4800DB6589 /* CBModuleManager.m in Sources */,
 				C50505D017D2BD4800DB6589 /* CBNetworkUtils.m in Sources */,
 				C50505D217D2BD4800DB6589 /* CBPathUtils.m in Sources */,
+				CDC0518E1802E311006158B8 /* RHServerDeviceCapacity.m in Sources */,
 				C50505D417D2BD4800DB6589 /* CBSecurityUtils.m in Sources */,
 				C50505D617D2BD4800DB6589 /* CBStringUtils.m in Sources */,
 				C50505D817D2BD4800DB6589 /* CBUIUtils.m in Sources */,
+				CD1DFB0918001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */,
 				C50505DA17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
 				C50505DC17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */,
 				C50505E217D2C53A00DB6589 /* LoggerModule.m in Sources */,
@@ -1110,6 +1149,7 @@
 				C50505EA17D2D26C00DB6589 /* GUIStyle.m in Sources */,
 				C50505EE17D2D28600DB6589 /* CommunicationModule.m in Sources */,
 				C593C41817D2F5BF00C26367 /* HomeViewController_iPhone.m in Sources */,
+				CDC051921802E33D006158B8 /* RHServerDeviceCount.m in Sources */,
 				C593C41B17D3244000C26367 /* AppDataModule.m in Sources */,
 				C593C41F17D3258600C26367 /* UserDataModule.m in Sources */,
 				C593C42317D3259600C26367 /* WebRTCModule.m in Sources */,
@@ -1131,6 +1171,7 @@
 				C593C48117D46C2700C26367 /* RHDeviceCard.m in Sources */,
 				C593C48517D46C3300C26367 /* RHProfile.m in Sources */,
 				C593C48917D46C4700C26367 /* RHInterestCard.m in Sources */,
+				CDC051961802E389006158B8 /* RHServerInterestLabelList.m in Sources */,
 				C593C48D17D46C5700C26367 /* RHImpressCard.m in Sources */,
 				C593C49117D46CB800C26367 /* RHImpressLabel.m in Sources */,
 				C593C49517D46CC400C26367 /* RHInterestLabel.m in Sources */,
@@ -1162,6 +1203,7 @@
 				C55B443917CF5993009BB21B /* ViewController.m in Sources */,
 				C55B445217CF5C14009BB21B /* GTMBase64.m in Sources */,
 				C50505C117D2BD4800DB6589 /* CBAppUtils.m in Sources */,
+				CDC0518B1802E055006158B8 /* RHServer.m in Sources */,
 				C50505C317D2BD4800DB6589 /* CBDateUtils.m in Sources */,
 				C50505C517D2BD4800DB6589 /* CBFileUtils.m in Sources */,
 				C50505C717D2BD4800DB6589 /* CBGZipUtils.m in Sources */,
@@ -1172,6 +1214,7 @@
 				C50505D117D2BD4800DB6589 /* CBNetworkUtils.m in Sources */,
 				C50505D317D2BD4800DB6589 /* CBPathUtils.m in Sources */,
 				C50505D517D2BD4800DB6589 /* CBSecurityUtils.m in Sources */,
+				CDC0518F1802E311006158B8 /* RHServerDeviceCapacity.m in Sources */,
 				C50505D717D2BD4800DB6589 /* CBStringUtils.m in Sources */,
 				C50505D917D2BD4800DB6589 /* CBUIUtils.m in Sources */,
 				C50505DB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
@@ -1206,15 +1249,18 @@
 				C593C49217D46CB800C26367 /* RHImpressLabel.m in Sources */,
 				C593C49617D46CC400C26367 /* RHInterestLabel.m in Sources */,
 				C5945F5C17D56DDF0084BB10 /* CBJSONUtils.m in Sources */,
+				CDC051931802E33D006158B8 /* RHServerDeviceCount.m in Sources */,
 				C5945F5F17D56F5D0084BB10 /* CommonModuleTest.m in Sources */,
 				C594602B17D6C7C90084BB10 /* HTTPAgent.m in Sources */,
 				C594602E17D6C9410084BB10 /* CommunicationModuleTest.m in Sources */,
 				C594603217D6CEA60084BB10 /* WebSocketAgent.m in Sources */,
+				CD1DFB0A18001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */,
 				C594603617D7352F0084BB10 /* RHMessage.m in Sources */,
 				C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */,
 				CD43667517F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */,
 				C596284417DA1C8B009127E6 /* RHNavigationController.m in Sources */,
 				C54DC8D617DC11A000BBD498 /* CEPlayer.m in Sources */,
+				CDC051971802E389006158B8 /* RHServerInterestLabelList.m in Sources */,
 				C54DC8D817DC11A000BBD498 /* CBRoundProgressLayer.m in Sources */,
 				C54DC8DA17DC11A000BBD498 /* CBRoundProgressView.m in Sources */,
 				C54DC8DD17DC497000BBD498 /* TestTitle.m in Sources */,

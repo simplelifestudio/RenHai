@@ -195,10 +195,12 @@ static NSTimeInterval s_labelDuration = LABELS_DURATION;
 - (void) _enterInApp
 {
     [self dismissViewControllerAnimated:NO completion:nil];
-
-    MainViewController_iPhone* _mainViewController = _guiModule.mainViewController;
     
+    MainViewController_iPhone* _mainViewController = _guiModule.mainViewController;
     [self presentViewController:_mainViewController animated:NO completion:nil];
+    
+    ConnectViewController_iPhone* _connectViewController = _guiModule.connectViewController;
+    [_connectViewController popConnectView:_mainViewController animated:YES];
 }
 
 - (void) _setupViewController

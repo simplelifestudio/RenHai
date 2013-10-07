@@ -24,9 +24,17 @@
 
 #define NOTIFICATION_ID_RHSERVER @"RHServerNotification"
 
+#define MESSAGE_NEED_ENCRYPT 0
+
 @interface CommunicationModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 
 @property (nonatomic, strong) HTTPAgent* httpCommAgent;
 @property (nonatomic, strong) WebSocketAgent* webSocketCommAgent;
+
+-(BOOL) connectWebSocket;
+-(void) disconnectWebSocket;
+-(BOOL) isWebSocketConnected;
+
+-(RHMessage*) sendMessage:(RHMessage*) message;
 
 @end

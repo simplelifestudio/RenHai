@@ -12,10 +12,12 @@
 #import "CBSharedInstance.h"
 
 #import "RHDevice.h"
+#import "RHServer.h"
 
 @interface UserDataModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 
 @property (atomic, strong, readonly) RHDevice* device;
+@property (atomic, strong, readonly) RHServer* server;
 
 -(NSString*) dataDirectory;
 
