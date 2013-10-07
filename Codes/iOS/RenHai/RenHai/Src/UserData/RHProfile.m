@@ -123,7 +123,7 @@
         id oUnbanDate = [dic objectForKey:MESSAGE_KEY_UNBANDATE];
         if (nil != oUnbanDate)
         {
-            _unbanDate = [CBDateUtils dateFromStringWithFormat:oUnbanDate andFormat:FULL_DATE_TIME_FORMAT];
+            _unbanDate = ([NSNull null] != oUnbanDate) ? [CBDateUtils dateFromStringWithFormat:oUnbanDate andFormat:FULL_DATE_TIME_FORMAT] : nil;
         }
         
         id oActive = [dic objectForKey:MESSAGE_KEY_ACTIVE];
@@ -135,7 +135,7 @@
         id oCreateTime = [dic objectForKey:MESSAGE_KEY_CREATETIME];
         if (nil != oCreateTime)
         {
-            _createTime = [CBDateUtils dateFromStringWithFormat:oCreateTime andFormat:FULL_DATE_TIME_FORMAT];
+            _createTime = ([NSNull null] != oCreateTime) ? [CBDateUtils dateFromStringWithFormat:oCreateTime andFormat:FULL_DATE_TIME_FORMAT] : nil;
         }
         
         id oInterestCard = [dic objectForKey:MESSAGE_KEY_INTERESTCARD];

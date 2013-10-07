@@ -104,7 +104,7 @@
         id oUpdateTime = [dic objectForKey:MESSAGE_KEY_UPDATETIME];
         if (nil != oUpdateTime)
         {
-            _updateTime = [CBDateUtils dateFromStringWithFormat:oUpdateTime andFormat:FULL_DATE_TIME_FORMAT];
+            _updateTime = ([NSNull null] != oUpdateTime) ? [CBDateUtils dateFromStringWithFormat:oUpdateTime andFormat:FULL_DATE_TIME_FORMAT] : nil;
         }
         
         id oAssessCount = [dic objectForKey:MESSAGE_KEY_ASSESSCOUNT];

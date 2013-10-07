@@ -119,16 +119,6 @@ SINGLETON(UserDataModule)
     _device = [[RHDevice alloc] init];
 }
 
--(void) updateUserData
-{
-    
-}
-
--(void) syncUserData
-{
-    
-}
-
 #pragma mark - UIApplicationDelegate
 
 -(void)applicationWillResignActive:(UIApplication *)application

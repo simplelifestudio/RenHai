@@ -22,7 +22,5 @@
 -(BOOL) saveUserData;
 -(BOOL) loadUserData;
 -(void) initUserData;
--(void) updateUserData;
--(void) syncUserData;
 
 @end
