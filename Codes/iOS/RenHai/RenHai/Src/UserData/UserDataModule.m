@@ -17,7 +17,8 @@
 #import "RHImpressCard.h"
 #import "RHImpressLabel.h"
 
-#define ARCHIVE_FILE_NAME @"device.dat"
+#define ARCHIVE_DEVICE_NAME @"device.dat"
+#define ARCHIVE_SERVER_NAME @"server.dat"
 
 @interface UserDataModule()
 {
@@ -83,7 +84,7 @@ SINGLETON(UserDataModule)
 {
     BOOL flag = NO;
     
-    NSString* file = [self.dataDirectory stringByAppendingPathComponent:ARCHIVE_FILE_NAME];
+    NSString* file = [self.dataDirectory stringByAppendingPathComponent:ARCHIVE_DEVICE_NAME];
     
     flag = [NSKeyedArchiver archiveRootObject:_device toFile:file];
     
@@ -94,7 +95,7 @@ SINGLETON(UserDataModule)
 {
     BOOL flag = NO;
     
-    NSString* file = [self.dataDirectory stringByAppendingPathComponent:ARCHIVE_FILE_NAME];
+    NSString* file = [self.dataDirectory stringByAppendingPathComponent:ARCHIVE_DEVICE_NAME];
     
     @try
     {

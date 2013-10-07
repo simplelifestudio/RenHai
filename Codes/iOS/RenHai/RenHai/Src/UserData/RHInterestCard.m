@@ -227,7 +227,7 @@
     return str;
 }
 
-#pragma mark - CBSerializable
+#pragma mark - NSCoding
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
