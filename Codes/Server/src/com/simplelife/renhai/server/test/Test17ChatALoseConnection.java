@@ -52,10 +52,10 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
@@ -79,19 +79,18 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.enterPool(businessType);
-		
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
+
 		// Step_07 Mock请求：B进入随机聊天
 		businessPool.getBusinessScheduler().stopScheduler();
 		mockApp2.enterPool(businessType);
-		
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
+
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
 		
 		// Step_09 调用：B DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper2.getBusinessStatus());
-		
-		// Step_10 调用：BusinessSession::getStatus
-		// 此时Session还没有申请，无法验证
 		
 		// Step_11 调用：RandomBusinessDevicePool::getCount
 		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
@@ -101,6 +100,10 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		mockApp1.clearLastReceivedCommand();
 		businessPool.getBusinessScheduler().schedule();
 		mockApp1.waitMessage();
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+
+		mockApp2.waitMessage();
+		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
 		
 		// Step_13 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
@@ -113,33 +116,27 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
 		
 		// Step_16 调用：BusinessSession::getStatus
+		// 等待Server处理完A和B的绑定确认
+		Thread.sleep(500);
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
-		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
-		
-		// Step_19 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);
-		
-		// Step_20 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
-		
-		// Step_21 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
-
-		
+				
 		// Step_17 Mock事件：A确认绑定
 		mockApp2.clearLastReceivedCommand();
 		mockApp1.chatConfirm(true);
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AgreeChat));
+
 		mockApp2.waitMessage();
-		assertTrue(mockApp2.getLastReceivedCommand() != null);
+		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.OthersideAgreed));
 		
 		// Step_18 Mock事件：B确认绑定
 		mockApp1.clearLastReceivedCommand();
 		mockApp2.chatConfirm(true);
-		assertTrue(!mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AgreeChat));
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.VideoChat);
 		
 		// Step_25 Mock事件：A onClose
+		Thread.sleep(1000);
 		mockApp1.close();
 		
 		// Step_26 调用：BusinessSession::getStatus
@@ -160,16 +157,22 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		// Step_31 Mock事件：B onPing
 		//mockApp2.ping();
 		
+		mockApp2.endChat();
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EndChat));
+		
 		// Step_32 Mock事件：B对A评价
-		mockApp2.assessAndContinue(mockApp1.getDeviceWrapper(), "帅哥");
+		mockApp2.assessAndContinue(mockApp1.getDeviceWrapper(), "TC17_评价,^#Happy#^,美女");
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AssessAndContinue));
 		
 		// Step_33 数据库检查：A 印象卡片信息
-		fail("需要检查数据库中的印象卡片信息");
+		//fail("需要检查数据库中的印象卡片信息");
 		
 		// Step_34 数据库检查：B 印象卡片信息
-		fail("需要检查数据库中的印象卡片信息");
+		//fail("需要检查数据库中的印象卡片信息");
 		
 		// Step_35 调用：BusinessSession::getStatus
+		// 等待server释放会话
+		Thread.sleep(500);
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
 		// Step_36 调用：BusinessSessionPool::getCount

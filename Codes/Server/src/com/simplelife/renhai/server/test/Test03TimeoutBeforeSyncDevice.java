@@ -38,7 +38,7 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		// Step_01 创建MockWebSocketConnection对象
 		
@@ -53,23 +53,8 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 		
 		// Step_02 等待Server的Websocket通信异常时间
 		mockApp.stopTimer();
-		try
-		{
-			logger.debug("Wait for timeout, be patient...\n");
-			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 2);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
-		
-		// Step_03 Mock事件：onPing
-		device = OnlineDevicePool.instance.getDevice(connectionId); 
-		assertTrue(device == null);
-		//assertTrue(device.getOwnerOnlineDevicePool() == null);
-		
-		//assertTrue(OnlineDevicePool.instance.getDevice(deviceSn) == null);
-		// Step_04 建立Websocket连接
-		
+		logger.debug("Wait for timeout, be patient...\n");
+		Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 2);
+		assertTrue(OnlineDevicePool.instance.getDevice(connectionId) == null);
 	}
 }

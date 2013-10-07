@@ -16,8 +16,10 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.AbstractLabel;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
+import com.simplelife.renhai.server.business.pool.HotLabel;
 import com.simplelife.renhai.server.business.pool.InterestBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.CommonFunctions;
@@ -201,11 +203,11 @@ public class ServerDataSyncRequest extends AppJSONMessage
 			
 			JSONArray hotLabelObj = new JSONArray();
 			hotObj.put(JSONKey.Current, hotLabelObj);
-			LinkedList<AbstractLabel> labels = interestPool.getHotInterestLabel(count);
+			LinkedList<HotLabel> labels = interestPool.getHotInterestLabel(count);
 			
-			for (AbstractLabel label : labels)
+			for (HotLabel label : labels)
 			{
-				hotLabelObj.add(label.getName());
+				hotLabelObj.add(label.getLabelName());
 			}
 			//responseObj.addToBody(JSONKey.CurrentHotLabels, );
 			// TODO: 引入新的结构保存热门标签的计数/排序
@@ -227,6 +229,10 @@ public class ServerDataSyncRequest extends AppJSONMessage
 			responseError(Consts.MessageId.ServerDataSyncRequest);
 			return;
 		}
+
+		DbLogger.saveProfileLog(Consts.OperationCode.ServerDataSyncRequest_1008
+    			, deviceWrapper.getDevice().getProfile()
+    			, header.getString(JSONKey.DeviceSn));
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.ServerDataSyncResponse);
 		AbstractBusinessDevicePool randomPool = OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Random);
@@ -252,6 +258,9 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		}
 		
 		response.asyncResponse();
+		DbLogger.saveProfileLog(Consts.OperationCode.ServerDataSyncResponse_1009
+    			, deviceWrapper.getDevice().getProfile()
+    			, header.getString(JSONKey.DeviceSn));
 	}
 
 

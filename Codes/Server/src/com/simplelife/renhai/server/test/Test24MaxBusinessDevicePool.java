@@ -47,15 +47,15 @@ public class Test24MaxBusinessDevicePool extends AbstractTestCase
 		deleteDevice(mockApp1);
 		deleteDevice(mockApp2);
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		businessPool.setCapacity(GlobalSetting.BusinessSetting.RandomBusinessPoolCapacity);
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		
 		mockApp1.syncDevice();
 		mockApp2.syncDevice();
@@ -64,11 +64,12 @@ public class Test24MaxBusinessDevicePool extends AbstractTestCase
 		businessPool.setCapacity(businessPool.getElementCount() + 1);
 		
 		// Step_06 Mock请求：A进入随机聊天
-		mockApp1.enterPool(BusinessType.Random);
-		
+		mockApp1.enterPool(businessType);
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
+
 		// Step_07 Mock请求：B进入随机聊天
 		mockApp2.clearLastReceivedCommand();
-		mockApp2.enterPool(BusinessType.Random);
+		mockApp2.enterPool(businessType);
 		assertTrue(mockApp2.lastReceivedCommandIsError());
 	}
 }

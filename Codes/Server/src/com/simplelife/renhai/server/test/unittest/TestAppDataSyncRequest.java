@@ -70,6 +70,18 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 	}
 	
 	@Test
+	public void testInvalidJSON_NoJSON()
+	{
+		LocalMockApp app = this.createNewMockApp(deviceSn);
+		String message = "fdajfdskaljureijfsdkal";
+		app.sendRawJSONMessage(message, true);
+		
+		JSONObject obj = app.getLastReceivedCommand();
+		int errorCode = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body).getIntValue(JSONKey.ErrorCode);
+		assertTrue(errorCode == Consts.GlobalErrorCode.ParameterError_1103.getValue());
+	}
+	
+	@Test
 	public void testInvalidJSON_NoEnvelope()
 	{
 		envelope.clear();

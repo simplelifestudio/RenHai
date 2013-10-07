@@ -58,7 +58,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 	 * Test function
 	 */
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
@@ -72,7 +72,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		
 		// Step_03 Mock请求：设备同步
 		mockApp.syncDevice();
-		assertTrue(!mockApp.lastReceivedCommandIsError());
+		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_04 数据库检查：设备卡片信息
 		DeviceDAO deviceDAO = new DeviceDAO();
@@ -87,7 +87,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		
 		// Step_05 数据库检查：兴趣卡片信息
 		Interestcard interCardInDB = deviceInDB.getProfile().getInterestcard();
-		assertTrue(interCardInDB.getInterestlabelmaps().isEmpty());
+		assertTrue(interCardInDB.getInterestlabelmaps().size() == 3);
 		
 		// Step_06 数据库检查：印象卡片信息
 		Impresscard impressCardInDB = deviceInDB.getProfile().getImpresscard();
@@ -133,7 +133,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		
 		// Step_16 Mock请求：设备同步
 		mockApp.syncDevice();
-		assertTrue(!mockApp.lastReceivedCommandIsError());
+		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_17 Mock事件：onClose
 		mockApp.close();
@@ -146,7 +146,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		
 		// Step_20 Mock请求：设备同步
 		mockApp.syncDevice();
-		assertTrue(!mockApp.lastReceivedCommandIsError());
+		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		// fail("需要检查此时应该收到系统故障，操作失败");
 	}
 }

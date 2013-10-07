@@ -52,10 +52,10 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
@@ -85,12 +85,12 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.enterPool(businessType);
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		// Step_07 Mock请求：B进入随机聊天
 		businessPool.getBusinessScheduler().stopScheduler();
 		mockApp2.enterPool(businessType);
-		assertTrue(!mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
@@ -112,15 +112,9 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		assertTrue(deviceWrapper1.getOwnerBusinessSession() != null);
 		assertTrue(deviceWrapper2.getOwnerBusinessSession() != null);
 		
-		try
-		{
-			logger.debug("sleep 1000");
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e1)
-		{
-			e1.printStackTrace();
-		}
+		logger.debug("sleep 1000");
+		Thread.sleep(1000);
+
 		logger.debug("Recovered from sleep");
 		
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
@@ -147,7 +141,7 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		assertTrue(mockApp2.getLastReceivedCommand() != null);
 		
 		// Step_23 Mock事件：B同意聊天
-		mockApp1.clearLastReceivedCommand();
+		mockApp2.clearLastReceivedCommand();
 		mockApp2.chatConfirm(true);
 		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		
@@ -159,14 +153,8 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.VideoChat);
 		
 		// Step_25 Mock事件：A结束通话
-		try
-		{
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
+		Thread.sleep(1000);
+
 		mockApp2.clearLastReceivedCommand();
 		mockApp1.endChat();
 		assertTrue(!mockApp1.lastReceivedCommandIsError());
@@ -176,16 +164,8 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		
 		// Step_26 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Assess);
-		
-		try
-		{
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
-		
+		Thread.sleep(1000);
+
 		// Step_27 Mock事件：A onClose
 		mockApp2.clearLastReceivedCommand();
 		mockApp1.close();

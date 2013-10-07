@@ -53,10 +53,10 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
@@ -80,9 +80,12 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 		
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.enterPool(businessType);
+		businessPool.getBusinessScheduler().stopScheduler();
 		
 		// Step_07 Mock请求：B进入随机聊天
 		mockApp2.enterPool(businessType);
+		
+		Thread.sleep(500);
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
@@ -95,14 +98,22 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 		randomDeviceCount = businessPool.getElementCount();
 		
 		// Step_11 调用：RandomBusinessScheduler::schedule
+		mockApp1.clearLastReceivedCommand();
+		mockApp2.clearLastReceivedCommand();
+		mockApp1.stopAutoReply();
 		businessPool.getBusinessScheduler().schedule();
 		
+		mockApp1.waitMessage();
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		
+		mockApp2.waitMessage();
+		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+
 		// Step_12 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
 		sessionCount = sessionPool.getElementCount();
 		
 		// Step_13 周期性Mock事件：A onPing
-		
 		
 		// Step_14 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
@@ -115,26 +126,13 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
 		// Step_17 Mock事件：B 确认绑定
-		mockApp2.sendNotificationResponse(null, Consts.NotificationType.SessionBinded, "", "1");
+		mockApp2.chatConfirm(true);
 		
-		// Step_18 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
-		
-		// Step_19 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
-		
-		// Step_20 调用：BusinessSession::getStatus
+		Thread.sleep(500);
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
 		// Step_21 等待绑定确认超时时间
-		try
-		{
-			Thread.sleep(GlobalSetting.TimeOut.ChatConfirm * 2);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
+		Thread.sleep(GlobalSetting.TimeOut.ChatConfirm * 2);
 		
 		// Step_22 Mock事件：A onPing
 		//mockApp1.ping();

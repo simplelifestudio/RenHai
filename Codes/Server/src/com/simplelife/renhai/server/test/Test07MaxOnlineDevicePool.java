@@ -47,7 +47,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 	
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		
 		OnlineDevicePool pool = OnlineDevicePool.instance;
@@ -77,8 +77,11 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 		
 		// Step_04 Mock请求：A设备同步
 		long lastActivity = deviceWrapper1.getLastActivityTime().getTime();
+		
+		Thread.sleep(200);
+		
 		mockApp1.syncDevice();
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_05 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper1.getBusinessStatus());

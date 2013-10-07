@@ -137,7 +137,7 @@ CREATE TABLE `impresslabelmap` (
   PRIMARY KEY (`impressLabelMaplId`),
   KEY `fk_impressCardId_idx` (`impressCardId`),
   KEY `fk_globalImpressLabelId_idx` (`globalImpressLabelId`),
-  CONSTRAINT `fk_globalImpressLabelId` FOREIGN KEY (`globalImpressLabelId`) REFERENCES `globalimpresslabel` (`globalImpressLabelId`) ON DELETE NO ACTION ON UPDATE CASCADE,
+  CONSTRAINT `fk_globalImpressLabelId` FOREIGN KEY (`globalImpressLabelId`) REFERENCES `globalimpresslabel` (`globalImpressLabelId`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk_impressCardId` FOREIGN KEY (`impressCardId`) REFERENCES `impresscard` (`impressCardId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -255,7 +255,7 @@ DROP TABLE IF EXISTS `profileoperationlog`;
 CREATE TABLE `profileoperationlog` (
   `profileOperationLogId` int(11) NOT NULL AUTO_INCREMENT,
   `profileId` int(11) NOT NULL,
-  `logTime` int(11) NOT NULL,
+  `logTime` bigint(11) NOT NULL,
   `operationCodeId` int(11) NOT NULL,
   `logInfo` varchar(256) DEFAULT NULL,
   PRIMARY KEY (`profileOperationLogId`),
@@ -280,8 +280,8 @@ CREATE TABLE `sessionprofilemap` (
   PRIMARY KEY (`sessionImpressMapId`),
   KEY `fk_sessionRecordId_idx` (`sessionRecordId`),
   KEY `fk_profileId_idx` (`profileId`),
-  CONSTRAINT `sessionprofilemap_ibfk_1` FOREIGN KEY (`sessionRecordId`) REFERENCES `sessionrecord` (`sessionRecordId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_profileId` FOREIGN KEY (`profileId`) REFERENCES `profile` (`profileId`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_profileId` FOREIGN KEY (`profileId`) REFERENCES `profile` (`profileId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `sessionprofilemap_ibfk_1` FOREIGN KEY (`sessionRecordId`) REFERENCES `sessionrecord` (`sessionRecordId`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -379,7 +379,7 @@ CREATE TABLE `systemoperationlog` (
 DROP TABLE IF EXISTS `systemstatistics`;
 CREATE TABLE `systemstatistics` (
   `systemStatisticsId` int(11) NOT NULL AUTO_INCREMENT,
-  `saveTime` int(11) NOT NULL,
+  `saveTime` bigint(11) NOT NULL,
   `statisticsItemId` int(11) NOT NULL,
   `count` int(11) NOT NULL,
   PRIMARY KEY (`systemStatisticsId`),

@@ -45,7 +45,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
@@ -55,7 +55,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 		
 		// Step_02 Mock请求：设备同步
 		mockApp.syncDevice();
-		assertTrue(!mockApp.lastReceivedCommandIsError());
+		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_03 调用：DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper.getBusinessStatus());
@@ -66,14 +66,8 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 		mockApp.stopTimer();
 		logger.debug("Stop ping timer and wait for timeout");
 		// Step_05 等待Server的Websocket通信异常时间
-		try
-		{
-			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 2);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
+		Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 2);
+		
 		logger.debug("Recovered from sleep");
 		// Step_06 Mock事件：onPing
 		//mockApp.ping();

@@ -51,10 +51,10 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 	
 
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random); 
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType); 
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;  
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
@@ -62,11 +62,10 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		MockWebSocketConnection connection1 = getMockWebSocket(deviceWrapper1);
 		MockWebSocketConnection connection2 = getMockWebSocket(deviceWrapper2);
 		mockApp1.syncDevice();
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		mockApp2.syncDevice();
-		assertTrue(!mockApp2.lastReceivedCommandIsError());
-
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		int deviceCount = onlinePool.getElementCount();
@@ -85,13 +84,13 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.enterPool(businessType);
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		businessPool.getBusinessScheduler().stopScheduler();
 		
 		// Step_07 Mock请求：B进入随机聊天
 		mockApp2.enterPool(businessType);
-		assertTrue(!mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
@@ -112,14 +111,7 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		// Step_13 调用：RandomBusinessScheduler::schedule
 		businessPool.getBusinessScheduler().schedule();
 		
-		try
-		{
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
+		Thread.sleep(1000);
 		logger.debug("Recover from sleep");
 		
 		// Step_14 调用：BusinessSessionPool::getCount
@@ -130,7 +122,7 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		assertTrue(businessPool.getDevice(demoDeviceSn2) == null);
 		
 		assertTrue(deviceWrapper1.getOwnerBusinessSession() == null);
-		assertTrue(deviceWrapper1.getOwnerBusinessSession() == null);
+		assertTrue(deviceWrapper2.getOwnerBusinessSession() == null);
 		
 		assertEquals(sessionCount, sessionPool.getElementCount());
 		
@@ -144,9 +136,9 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_19 调用：OnlineDevicePool::getCount
-		//assertEquals(deviceCount - 2, onlinePool.getElementCount());
+		assertEquals(deviceCount - 2, onlinePool.getElementCount());
 		
 		// Step_20 调用：BusinessSessionPool::getCount
-		//assertEquals(sessionCount, sessionPool.getElementCount());
+		assertEquals(sessionCount, sessionPool.getElementCount());
 	}
 }

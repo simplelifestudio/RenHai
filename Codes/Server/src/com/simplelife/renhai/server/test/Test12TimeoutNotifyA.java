@@ -50,19 +50,19 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random); 
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType); 
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;  
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
 		
 		mockApp1.syncDevice();
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		mockApp2.syncDevice();
-		assertTrue(!mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		int deviceCount = onlinePool.getElementCount();
@@ -82,7 +82,7 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.clearLastReceivedCommand();
 		mockApp1.enterPool(businessType);
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		businessPool.getBusinessScheduler().stopScheduler();
 		mockApp1.stopAutoReply();
@@ -90,7 +90,7 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		// Step_07 Mock请求：B进入随机聊天
 		mockApp2.clearLastReceivedCommand();
 		mockApp2.enterPool(businessType);
-		assertTrue(!mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
@@ -111,8 +111,8 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		
 		// Step_12 调用：BusinessSessionPool::getCount
 		//由于A没有回应session会话绑定，等待超时后session会被释放，调度没有成功
-		assertTrue(mockApp1.getLastReceivedCommand() != null);
-		assertTrue(mockApp2.getLastReceivedCommand() != null);
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
 		
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
 		sessionCount = sessionPool.getElementCount();
@@ -128,8 +128,7 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		// Server等待A的响应超时，此时B应该收到A ConnectionLost的通知
 		mockApp2.clearLastReceivedCommand();
 		mockApp2.waitMessage();
-		assertTrue(mockApp2.getLastReceivedCommand() != null);
-		assertFalse(mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.OthersideLost));
 		
 		// Step_16 Mock事件：A onPing
 		//mockApp1.ping();

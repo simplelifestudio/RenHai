@@ -19,7 +19,7 @@ public interface IBusinessPool
     public String onDeviceEnter(IDeviceWrapper device);
     
     /** */
-    public void onDeviceLeave(IDeviceWrapper device);
+    public void onDeviceLeave(IDeviceWrapper device, Consts.DeviceLeaveReason reason);
     
     public void startChat(IDeviceWrapper device);
     

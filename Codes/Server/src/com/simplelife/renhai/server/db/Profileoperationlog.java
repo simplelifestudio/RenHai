@@ -21,7 +21,7 @@ public class Profileoperationlog implements java.io.Serializable {
 	private Integer profileOperationLogId;
 	private Profile profile;
 	private Operationcode operationcode;
-	private Integer logTime;
+	private Long logTime;
 	private String logInfo;
 
 	// Constructors
@@ -32,7 +32,7 @@ public class Profileoperationlog implements java.io.Serializable {
 
 	/** minimal constructor */
 	public Profileoperationlog(Profile profile, Operationcode operationcode,
-			Integer logTime) {
+			Long logTime) {
 		this.profile = profile;
 		this.operationcode = operationcode;
 		this.logTime = logTime;
@@ -40,7 +40,7 @@ public class Profileoperationlog implements java.io.Serializable {
 
 	/** full constructor */
 	public Profileoperationlog(Profile profile, Operationcode operationcode,
-			Integer logTime, String logInfo) {
+			Long logTime, String logInfo) {
 		this.profile = profile;
 		this.operationcode = operationcode;
 		this.logTime = logTime;
@@ -80,11 +80,11 @@ public class Profileoperationlog implements java.io.Serializable {
 	}
 
 	@Column(name = "logTime", nullable = false)
-	public Integer getLogTime() {
+	public Long getLogTime() {
 		return this.logTime;
 	}
 
-	public void setLogTime(Integer logTime) {
+	public void setLogTime(Long logTime) {
 		this.logTime = logTime;
 	}
 

@@ -85,7 +85,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     {
         try
 		{
-			getWsOutbound().close(Consts.DeviceReleaseReason.CloseConnectionByServer.getValue(), null);
+			getWsOutbound().close(Consts.DeviceLeaveReason.WebsocketClosedByApp.getValue(), null);
 		}
 		catch (IOException e)
 		{
@@ -139,6 +139,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 			logger.error("Exception caught in WebSocketConnection.onTextMessage!");
 			e.printStackTrace();
 			appMessage = new InvalidRequest(null);
+			((InvalidRequest) appMessage).setReceivedMessage(message.toString().trim());
 			appMessage.setErrorCode(Consts.GlobalErrorCode.DBException_1001);
 			appMessage.setErrorDescription("Server internal error.");
 		}
@@ -171,6 +172,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		{
 			logger.error("Invalid JSON string which can't be converted into JSON object.");
 			appMessage = new InvalidRequest(null);
+			((InvalidRequest) appMessage).setReceivedMessage(message);
 			appMessage.setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
 			appMessage.setErrorDescription("Invalid JSON string.");
 		}
@@ -227,12 +229,17 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	else
     	{
     		logger.debug("Response of synchronizd notification from device <{}>", connectionOwner.getDeviceSn());
-    		SyncController controller = syncMap.get(messageSn);
-    		controller.lock.lock();
-    		controller.message = appMessage;
-    		controller.condition.signal();
-    		controller.lock.unlock();
+    		signalForSyncSend(messageSn, appMessage);
     	}
+    }
+    
+    public void signalForSyncSend(String messageSn, AppJSONMessage appMessage)
+    {
+    	SyncController controller = syncMap.get(messageSn);
+		controller.lock.lock();
+		controller.message = appMessage;
+		controller.condition.signal();
+		controller.lock.unlock();
     }
     
     /** */
@@ -287,7 +294,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onClose(int status)
     {
-    	if (Consts.DeviceReleaseReason.parseValue(status) == Consts.DeviceReleaseReason.CloseConnectionByServer)
+    	if (Consts.DeviceLeaveReason.parseValue(status) == Consts.DeviceLeaveReason.WebsocketClosedByServer)
     	{
     		return;
     	}

@@ -52,10 +52,10 @@ public class Test13FailToNotifyB extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
@@ -63,10 +63,10 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		MockWebSocketConnection connection2 = getMockWebSocket(deviceWrapper2);
 		
 		mockApp1.syncDevice();
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		mockApp2.syncDevice();
-		assertTrue(!mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		int deviceCount = onlinePool.getElementCount();
@@ -86,13 +86,13 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.clearLastReceivedCommand();
 		mockApp1.enterPool(businessType);
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		businessPool.getBusinessScheduler().stopScheduler();
 		// Step_07 Mock请求：B进入随机聊天
 		mockApp2.clearLastReceivedCommand();
 		mockApp2.enterPool(businessType);
-		assertTrue(!mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
@@ -114,11 +114,13 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		
 		// 接收SessionBounded
 		mockApp1.waitMessage();
-		assertEquals(sessionCount-1, sessionPool.getElementCount());
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		//assertEquals(sessionCount-1, sessionPool.getElementCount());
 		
 		// 接收OthersideLost
 		mockApp1.clearLastReceivedCommand();
 		mockApp1.waitMessage();
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.OthersideLost));
 		
 		//assertEquals(sessionCount, sessionPool.getElementCount());
 		//sessionCount = sessionPool.getElementCount();

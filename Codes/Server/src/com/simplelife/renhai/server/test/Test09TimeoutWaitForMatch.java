@@ -45,15 +45,15 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		
 		mockApp.syncDevice();
-		assertTrue(!mockApp.lastReceivedCommandIsError());
+		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		String deviceSn = mockApp.getDeviceWrapper().getDeviceSn();
-		AbstractBusinessDevicePool randomPool = pool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = pool.getBusinessPool(businessType);
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		int deviceCount = pool.getElementCount();
@@ -62,24 +62,17 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 		//int randomDeviceCount = pool.getBusinessPool(Consts.BusinessType.Random).getElementCount();
 		
 		// Step_03 Mock请求：进入随机聊天
-		assertTrue(randomPool.getDevice(deviceSn) == null);
+		assertTrue(businessPool.getDevice(deviceSn) == null);
 		mockApp.enterPool(businessType);
-		assertTrue(!mockApp.lastReceivedCommandIsError());
+		assertTrue(mockApp.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		// Step_04 调用：RandomBusinessDevicePool::getCount
 		//assertEquals(randomDeviceCount + 1.getElementCount());
-		assertTrue(randomPool.getDevice(deviceSn) != null);
+		assertTrue(businessPool.getDevice(deviceSn) != null);
 		
 		// Step_05 等待Server的Websocket通信异常时间
 		mockApp.stopTimer();
-		try
-		{
-			Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 2);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
+		Thread.sleep(GlobalSetting.TimeOut.OnlineDeviceConnection * 2);
 		
 		// Step_06 Mock事件：onPing
 		//mockApp.ping();
@@ -87,9 +80,9 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 		// Step_07 调用：OnlineDevicePool::getCount
 		assertTrue(mockApp.getDeviceWrapper().getOwnerOnlineDevicePool() == null);
 		assertTrue(pool.getDevice(deviceSn) == null);
-		assertTrue(randomPool.getDevice(deviceSn) == null);
+		assertTrue(businessPool.getDevice(deviceSn) == null);
 		
 		// Step_08 调用：RandomBusinessDevicePool::getCount
-		assertTrue(randomPool.getDevice(deviceSn) == null);
+		assertTrue(businessPool.getDevice(deviceSn) == null);
 	}
 }

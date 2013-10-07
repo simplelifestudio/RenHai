@@ -76,7 +76,7 @@ public class Globalimpresslabel implements java.io.Serializable {
 		this.globalAssessCount = globalAssessCount;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "globalimpresslabel")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "globalimpresslabel")
 	public Set<Impresslabelmap> getImpresslabelmaps() {
 		return this.impresslabelmaps;
 	}

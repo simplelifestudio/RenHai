@@ -1,8 +1,8 @@
 /**
- * TimeoutRequest.java
+ * ConnectionErrorEvent.java
  * 
  * History:
- *     2013-9-6: Tomas Chen, initial version
+ *     2013-10-3: Tomas Chen, initial version
  * 
  * Copyright (c) 2013 SimpleLife Studio. All rights reserved.
  */
@@ -22,13 +22,10 @@ import com.simplelife.renhai.server.util.Consts.MessageId;
 /**
  * 
  */
-public class TimeoutRequest extends AppJSONMessage
+public class ConnectionErrorEvent extends AppJSONMessage
 {
 	
-	/**
-	 * @param jsonObject
-	 */
-	public TimeoutRequest(JSONObject jsonObject)
+	public ConnectionErrorEvent(JSONObject jsonObject)
 	{
 		super(jsonObject);
 	}
@@ -36,8 +33,8 @@ public class TimeoutRequest extends AppJSONMessage
 	@Override
 	public void run()
 	{
-		logger.debug("Start to handle timeout of device <{}>", deviceWrapper.getDeviceSn());
-		
+		logger.debug("Start to handle connection error of device <{}>", deviceWrapper.getDeviceSn());
+		deviceWrapper.onConnectionClose();
 		Session session = HibernateSessionFactory.getSession();
 		Transaction t = session.beginTransaction();
 		
@@ -45,8 +42,6 @@ public class TimeoutRequest extends AppJSONMessage
 		card.setChatLossCount(card.getChatLossCount() + 1);
 		//DBModule.instance.cache(card);
 		t.commit();
-		
-		deviceWrapper.onTimeOut(null);
 	}
 
 	@Override

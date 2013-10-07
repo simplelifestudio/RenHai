@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 
+import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
@@ -27,6 +28,7 @@ import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Sessionrecord;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
+import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessProgress;
@@ -120,7 +122,7 @@ public class BusinessSession implements IBusinessSession
     		{
     			logger.error("Device <{}> is not in online device pool when trying to bind with session.", deviceSn);
     			device = pool.getDevice(deviceSn);
-    			pool.onDeviceLeave(device);
+    			pool.onDeviceLeave(device, Consts.DeviceLeaveReason.UnknownBusinessException);
     			return false;
     		}
     		status = device.getBusinessStatus();
@@ -218,17 +220,19 @@ public class BusinessSession implements IBusinessSession
     
     public void notifyDevices(List<IDeviceWrapper> activeDeviceList, IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
     {
+    	/*
     	if (pool == null)
     	{
     		// Maybe session has been ended by other events
     		logger.warn("Session has been ended and notifying devices has been cancelled");
     		return;
     	}
+    	*/
     	ServerJSONMessage notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
-		notify.getBody().put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(sessionId));
-		notify.getBody().put(JSONKey.BusinessType, pool.getBusinessType().getValue());
-		notify.getBody().put(JSONKey.OperationType, notificationType.getValue());
-		notify.getBody().put(JSONKey.OperationValue, null);
+    	JSONObject body = notify.getBody(); 
+    	body.put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(sessionId));
+    	body.put(JSONKey.OperationType, notificationType.getValue());
+    	body.put(JSONKey.OperationValue, null);
     	
     	List<IDeviceWrapper> tmpList;
     	synchronized(activeDeviceList)
@@ -252,6 +256,8 @@ public class BusinessSession implements IBusinessSession
 			logger.debug(temp);
 			
 			notify.getHeader().put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
+			body.put(JSONKey.BusinessType, device.getBusinessType().getValue());
+			
 			if (triggerDevice == null)
 			{
 				notify.getBody().put(JSONKey.OperationInfo, null);
@@ -262,6 +268,10 @@ public class BusinessSession implements IBusinessSession
 			}
     		notify.setDeviceWrapper(device);
     		notify.syncResponse();
+    		
+    		DbLogger.saveSystemLog(Consts.OperationCode.NotificationSessionBounded_1010
+        			, Consts.SystemModule.business
+        			, notificationType.name() + ", " + device.getDeviceSn());
     	}
 	}
     
@@ -401,15 +411,14 @@ public class BusinessSession implements IBusinessSession
     		logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.ChatEnded.name(), device.getDeviceSn());
     	}
     	
-    	// Change status to Assess for any of App ends chat 
-    	changeStatus(Consts.BusinessSessionStatus.Assess);
-    	
     	if (this.status != Consts.BusinessSessionStatus.VideoChat)
     	{
     		logger.error("EndChat received from {} but current session status is: " + status.name(), device.getDeviceSn());
     		return;
     	}
     	
+    	// Change status to Assess for any of App ends chat 
+    	changeStatus(Consts.BusinessSessionStatus.Assess);
     	notifyDevices(device, Consts.NotificationType.OthersideEndChat);
     }
     
@@ -434,7 +443,7 @@ public class BusinessSession implements IBusinessSession
     		progress = progressMap.get(device.getDeviceSn());
     	}
     	
-    	if (progress == null)
+		if (progress == null)
     	{
     		logger.error("Fatal error that received AgreeChat from device <{}> but there is no progress record for it!");
     		return;
@@ -445,7 +454,7 @@ public class BusinessSession implements IBusinessSession
     		logger.error("Received AgreeChat from device <{}> but it's in status of " + progress.name(), device.getDeviceSn());
     		return;
     	}
-    	
+
     	notifyDevices(device, Consts.NotificationType.OthersideAgreed);
     	
     	synchronized(progressMap)
@@ -454,7 +463,7 @@ public class BusinessSession implements IBusinessSession
     		logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.ChatConfirmed.name(), device.getDeviceSn());
     	}
     	
-    	if (checkAllDevicesReach(Consts.BusinessProgress.SessionBoundConfirmed))
+    	if (checkAllDevicesReach(Consts.BusinessProgress.ChatConfirmed))
     	{
     		logger.debug("All devices agreed chat after device <{}> agreed", device.getDeviceSn());
 			changeStatus(Consts.BusinessSessionStatus.VideoChat);
@@ -493,7 +502,7 @@ public class BusinessSession implements IBusinessSession
     }
 
     @Override
-    public void onDeviceLeave(IDeviceWrapper device)
+    public void onDeviceLeave(IDeviceWrapper device, Consts.DeviceLeaveReason reason)
     {
     	synchronized(progressMap)
     	{
@@ -575,7 +584,7 @@ public class BusinessSession implements IBusinessSession
 	{
 		BusinessType type = sourceDevice.getBusinessType();
     	AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
-    	pool.onDeviceLeave(sourceDevice);
+    	pool.onDeviceLeave(sourceDevice, Consts.DeviceLeaveReason.AssessAndQuit);
     	
     	sourceDevice.changeBusinessStatus(Consts.BusinessStatus.Idle);
     	synchronized(progressMap)

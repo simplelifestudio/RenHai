@@ -49,10 +49,10 @@ public class Test10FailToNotifyA extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random); 
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType); 
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;  
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
@@ -64,10 +64,10 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		MockWebSocketConnection connection1 = (MockWebSocketConnection) deviceWrapper1.getConnection();
 		
 		mockApp1.syncDevice();
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		mockApp2.syncDevice();
-		assertTrue(!mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		int deviceCount = onlinePool.getElementCount();
@@ -89,7 +89,7 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		assertTrue(businessPool.getDevice(deviceSn1) == null);
 		
 		mockApp1.enterPool(businessType);
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		assertTrue(businessPool.getDevice(deviceSn1) != null);
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
@@ -102,6 +102,7 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		assertTrue(businessPool.getDevice(deviceSn2) == null);
 		businessPool.getBusinessScheduler().stopScheduler();
 		mockApp2.enterPool(businessType);
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		assertTrue(businessPool.getDevice(deviceSn2) != null);
 		
 		// Step_09 调用：B DeviceWrapper::getBusinessStatus
@@ -135,14 +136,7 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_17 调用：OnlineDevicePool::getCount
-		try
-		{
-			Thread.sleep(1000);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
+		Thread.sleep(1000);
 		
 		if (deviceWrapper1.getOwnerOnlineDevicePool() == null)
 		{

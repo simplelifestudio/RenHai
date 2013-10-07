@@ -53,8 +53,10 @@ public class GlobalSetting
 		public static int FlushCacheToDB = 30 * 1000;
 		public static int DeviceInIdle = 300 * 1000;
 		
-		public static int OnlineDeviceConnection = 5 * 1000;
-		public static int PingInterval = 2 * 1000;
+		public static int OnlineDeviceConnection = 30 * 1000;
+		public static int PingInterval = 5 * 1000;
+		
+		public static int SaveStatistics = 60 * 1000;
 	}
 	
 	public static class DBSetting
@@ -67,8 +69,8 @@ public class GlobalSetting
 	public static class BusinessSetting
 	{
 		public static int OnlinePoolCapacity = 10000;
-		public static int RandomBusinessPoolCapacity = 10000;
-		public static int InterestBusinessPoolCapacity = 0;
+		public static int RandomBusinessPoolCapacity = 5000;
+		public static int InterestBusinessPoolCapacity = 5000;
 		public static int DefaultImpressLabelCount = 10;
 		public static int HotInterestLabelCount = 10;
 		

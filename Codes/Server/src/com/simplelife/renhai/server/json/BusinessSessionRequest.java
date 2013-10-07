@@ -10,8 +10,11 @@
 package com.simplelife.renhai.server.json;
 
 
+import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONArray;
@@ -25,8 +28,11 @@ import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceDAO;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
+import com.simplelife.renhai.server.db.GlobalimpresslabelDAO;
+import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
+import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -226,6 +232,10 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void enterPool()
 	{
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEnterPool_1014
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
+		
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType businessType = Consts.BusinessType.parseValue(intType);
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
@@ -237,11 +247,18 @@ public class BusinessSessionRequest extends AppJSONMessage
 		{
 			AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(businessType);
 			operationInfo = pool.onDeviceEnter(deviceWrapper); 
-			if (operationInfo == null);
+			if (operationInfo == null)
 			{
 				result = Consts.SuccessOrFail.Success;
 				deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
 				deviceWrapper.setBusinessType(businessType);
+			}
+			else
+			{
+				setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
+				setErrorDescription(operationInfo);
+				responseError(this.getMessageId());
+				return;
 			}
 		}
 		
@@ -255,19 +272,28 @@ public class BusinessSessionRequest extends AppJSONMessage
 		{
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
-		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
+		
 		response.addToBody(JSONKey.OperationType, Consts.OperationType.EnterPool.getValue());
+		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
 		response.addToBody(JSONKey.OperationInfo, operationInfo);
-		response.addToBody(JSONKey.OperationValue, result.getValue());
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
+		
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEnterPool_1014
+    			, deviceWrapper.getDevice().getProfile()
+    			, body.getString(JSONKey.BusinessType) + ", " + deviceWrapper.getDeviceSn());
 		response.asyncResponse();
 	}
 	
 	private void leavePool()
 	{
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestLeavePool_1015
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
+
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType type = Consts.BusinessType.parseValue(intType);
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		onlinePool.getBusinessPool(type).onDeviceLeave(deviceWrapper);
+		onlinePool.getBusinessPool(type).onDeviceLeave(deviceWrapper, Consts.DeviceLeaveReason.AppLeaveBusiness);
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
@@ -282,15 +308,23 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.LeavePool.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.BusinessType, Consts.OperationType.LeavePool.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		response.asyncResponse();
+		
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestLeavePool_1015
+    			, deviceWrapper.getDevice().getProfile()
+    			, body.getString(JSONKey.BusinessType) + ", " + deviceWrapper.getDeviceSn());
 	}
 	
 	private void agreeChat()
 	{
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAgreeChat_1016
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
+		
 		logger.debug("Device <{}> agreed chat.", deviceWrapper.getDeviceSn());
 		
 		IBusinessSession session = deviceWrapper.getOwnerBusinessSession(); 
@@ -308,14 +342,22 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.AgreeChat.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.BusinessType, Consts.OperationType.AgreeChat.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
+
 		response.asyncResponse();
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAgreeChat_1016
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
 	}
 	
 	private void rejectChat()
 	{
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestRejectChat_1017
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
 		logger.debug("Device <{}> rejected chat.", deviceWrapper.getDeviceSn());
 		deviceWrapper.getOwnerBusinessSession().onRejectChat(deviceWrapper);
 		
@@ -332,14 +374,21 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.RejectChat.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.BusinessType, Consts.OperationType.RejectChat.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		response.asyncResponse();
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestRejectChat_1017
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
 	}
 	
 	private void endChat()
 	{
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEndChat_1018
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
 		logger.debug("Device <{}> ended chat.", deviceWrapper.getDeviceSn());
 		deviceWrapper.getOwnerBusinessSession().onEndChat(deviceWrapper);
 		
@@ -356,10 +405,14 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.EndChat.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
-		response.addToBody(JSONKey.BusinessType, Consts.OperationType.EndChat.getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		response.asyncResponse();
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEndChat_1018
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
 	}
 	
 	private void assessAndContinue()
@@ -369,6 +422,19 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void assess(boolean quitAfterAssess)
 	{
+		if (quitAfterAssess)
+		{
+			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessQuit_1020
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
+		}
+		else
+		{
+			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessContinue_1019
+	    			, deviceWrapper.getDevice().getProfile()
+	    			, deviceWrapper.getDeviceSn());
+		}
+		
 		logger.debug("Device <{}> provided assess.", deviceWrapper.getDeviceSn());
 		String deviceSn = body.getJSONObject(JSONKey.OperationInfo)
 				.getJSONObject(JSONKey.Device)
@@ -395,26 +461,35 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		
 		DeviceDAO dao = new DeviceDAO();
-		Device target = dao.findByDeviceSn(deviceSn).get(0);;
-		Impresscard card = target.getProfile().getImpresscard();
-		Set<Impresslabelmap> impressLabelMap = card.getImpresslabelmaps();
-		
+		Device targetDevice = dao.findByDeviceSn(deviceSn).get(0);
+		Impresscard targetCard = targetDevice.getProfile().getImpresscard();
+		Impresscard sourceCard = deviceWrapper.getDevice().getProfile().getImpresscard();
+		Set<Impresslabelmap> impressLabelMap = targetCard.getImpresslabelmaps();
 		JSONObject impressObj = body.getJSONObject(JSONKey.OperationInfo)
 				.getJSONObject(JSONKey.Device)
 				.getJSONObject(JSONKey.Profile)
 				.getJSONObject(JSONKey.ImpressCard);
 		
+		Session session = HibernateSessionFactory.getSession();
+		Transaction t = session.beginTransaction();
+		
+		String tempLabel;
 		JSONArray assessLabels = impressObj.getJSONArray(JSONKey.AssessLabelList);
-		updateOrAppendImpressLabel(card, impressLabelMap, assessLabels.getString(0));
+		tempLabel = assessLabels.getString(0);
+		updateOrAppendImpressLabel(targetCard, tempLabel, true);
+		updateOrAppendImpressLabel(sourceCard, tempLabel, false);
 		
 		JSONArray impressLabels = impressObj.getJSONArray(JSONKey.ImpressLabelList);
 		for (int i = 0; i < impressLabels.size(); i++)
 		{
-			updateOrAppendImpressLabel(card, impressLabelMap, impressLabels.getString(i));
+			tempLabel = impressLabels.getString(i);
+			updateOrAppendImpressLabel(targetCard, tempLabel, true);
+			updateOrAppendImpressLabel(sourceCard, tempLabel, false);
 		}
 		
 		// Save to DB
-		DBModule.instance.cache(target);
+		//DBModule.instance.cache(target);
+		t.commit();
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
@@ -425,41 +500,83 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		if (quitAfterAssess)
 		{
+			response.addToBody(JSONKey.OperationType, Consts.OperationType.AssessAndQuit.getValue());
 			deviceWrapper.getOwnerBusinessSession().onAssessAndQuit(this.deviceWrapper);
+			
+			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessQuit_1020
+	    			, deviceWrapper.getDevice().getProfile()
+	    			, deviceWrapper.getDeviceSn());
 		}
 		else
 		{
+			response.addToBody(JSONKey.OperationType, Consts.OperationType.AssessAndContinue.getValue());
 			deviceWrapper.getOwnerBusinessSession().onAssessAndContinue(this.deviceWrapper);
+			
+			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessContinue_1019
+	    			, deviceWrapper.getDevice().getProfile()
+	    			, deviceWrapper.getDeviceSn());
 		}
 		response.asyncResponse();
 	}
 	
-	private void updateOrAppendImpressLabel(Impresscard card, Set<Impresslabelmap> impressLabels, String labelName)
+	private void updateOrAppendImpressLabel(Impresscard card, String labelName, boolean assessedFlag)
 	{
-		//String labelName = impressLabel.getString(JSONKey.ImpressLabelName);
-		for (Impresslabelmap label : impressLabels)
+		Set<Impresslabelmap> impressLabels = card.getImpresslabelmaps();
+		synchronized (impressLabels)
 		{
-			if (label.getGlobalimpresslabel().getImpressLabelName().equals(labelName))
+			for (Impresslabelmap label : impressLabels)
 			{
-				label.setAssessedCount(label.getAssessedCount() + 1);
-				label.setUpdateTime(System.currentTimeMillis());
-				return;
+				String tmpLabelName = label.getGlobalimpresslabel().getImpressLabelName();
+				if (tmpLabelName.equals(labelName))
+				{
+					if (assessedFlag)
+					{
+						label.setAssessedCount(label.getAssessedCount() + 1);
+						label.setUpdateTime(System.currentTimeMillis());
+						label.getGlobalimpresslabel().setGlobalAssessCount(label.getGlobalimpresslabel().getGlobalAssessCount() + 1);
+					}
+					else
+					{
+						label.setAssessCount(label.getAssessCount() + 1);
+					}
+					return;
+				}
 			}
+			
+			// Check if it's existent global impress label
+			GlobalimpresslabelDAO dao = new GlobalimpresslabelDAO();
+			List<Globalimpresslabel> globalLabelList = dao.findByImpressLabelName(labelName);
+			Globalimpresslabel globalimpresslabel;
+			if (globalLabelList.size() == 0)
+			{
+				globalimpresslabel = new Globalimpresslabel();
+				globalimpresslabel.setGlobalAssessCount(1);
+				globalimpresslabel.setImpressLabelName(labelName);
+				//globalimpresslabel.setImpresslabelmaps(impressLabels);
+			}
+			else
+			{
+				globalimpresslabel = globalLabelList.get(0); 
+			}
+			
+			Impresslabelmap labelMap = new Impresslabelmap();
+			
+			if (assessedFlag)
+			{
+				labelMap.setAssessCount(0);
+				labelMap.setAssessedCount(1);
+			}
+			else
+			{
+				labelMap.setAssessCount(1);
+				labelMap.setAssessedCount(0);
+			}
+			labelMap.setGlobalimpresslabel(globalimpresslabel);
+			labelMap.setUpdateTime(System.currentTimeMillis());
+			labelMap.setImpresscard(card);
+			
+			impressLabels.add(labelMap);
 		}
-		
-		Globalimpresslabel globalimpresslabel = new Globalimpresslabel();
-		globalimpresslabel.setGlobalAssessCount(1);
-		globalimpresslabel.setImpressLabelName(labelName);
-		globalimpresslabel.setImpresslabelmaps(impressLabels);
-		
-		Impresslabelmap labelMap = new Impresslabelmap();
-		labelMap.setAssessCount(0);
-		labelMap.setAssessedCount(1);
-		labelMap.setGlobalimpresslabel(globalimpresslabel);
-		labelMap.setUpdateTime(System.currentTimeMillis());
-		labelMap.setImpresscard(card);
-		
-		impressLabels.add(labelMap);
 	}
 	
 	private void assessAndQuit()

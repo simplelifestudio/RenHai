@@ -37,7 +37,7 @@ public class Test01KeepWebsocket extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		// Step_01 创建MockWebSocketConnection对象
 		MockWebSocketConnection conn = new MockWebSocketConnection();
@@ -58,14 +58,7 @@ public class Test01KeepWebsocket extends AbstractTestCase
 		// Step_06 调用：DeviceWrapper::getLastPingTime()
 		long lastPingTime = mockApp.getDeviceWrapper().getLastPingTime().getTime();
 		
-		try
-		{
-			Thread.sleep(100);
-		}
-		catch (InterruptedException e)
-		{
-			e.printStackTrace();
-		}
+		Thread.sleep(100);
 		
 		// Step_07 Mock事件：onPing
 		mockApp.ping();

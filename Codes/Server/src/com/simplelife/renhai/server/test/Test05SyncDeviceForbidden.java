@@ -51,7 +51,7 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
@@ -76,7 +76,7 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 		// Step_04 Mock请求：设备同步
 		long lastActivity = deviceWrapper.getLastActivityTime().getTime();
 		mockApp.syncDevice();
-		assertTrue(mockApp.lastReceivedCommandIsError());
+		assertTrue(mockApp.checkLastResponse(Consts.MessageId.ServerErrorResponse, null));
 		
 		// Step_05 调用：OnlineDevicePool::getCount
 		//assertEquals(deviceCount - 1, pool.getElementCount());

@@ -20,7 +20,7 @@ public class Systemstatistics implements java.io.Serializable {
 
 	private Integer systemStatisticsId;
 	private Statisticsitem statisticsitem;
-	private Integer saveTime;
+	private Long saveTime;
 	private Integer count;
 
 	// Constructors
@@ -30,7 +30,7 @@ public class Systemstatistics implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public Systemstatistics(Statisticsitem statisticsitem, Integer saveTime,
+	public Systemstatistics(Statisticsitem statisticsitem, Long saveTime,
 			Integer count) {
 		this.statisticsitem = statisticsitem;
 		this.saveTime = saveTime;
@@ -60,11 +60,11 @@ public class Systemstatistics implements java.io.Serializable {
 	}
 
 	@Column(name = "saveTime", nullable = false)
-	public Integer getSaveTime() {
+	public Long getSaveTime() {
 		return this.saveTime;
 	}
 
-	public void setSaveTime(Integer saveTime) {
+	public void setSaveTime(Long saveTime) {
 		this.saveTime = saveTime;
 	}
 

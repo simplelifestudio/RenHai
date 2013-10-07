@@ -36,7 +36,7 @@ public abstract class AbstractTestCase extends TestCase
 	protected Logger logger = LoggerFactory.getLogger(AbstractTestCase.class);
 	protected final String demoDeviceSn = "demoDeviceSn"; 
 	protected final String demoDeviceSn2 = "demoDeviceSn2";
-	protected Consts.BusinessType businessType = Consts.BusinessType.Random;
+	protected Consts.BusinessType businessType = Consts.BusinessType.Interest;
 	
 	public AbstractTestCase()
 	{

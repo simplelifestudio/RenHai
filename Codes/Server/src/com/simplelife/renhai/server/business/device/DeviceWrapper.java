@@ -280,7 +280,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     {
     	if (ownerOnlinePool != null)
     	{
-    		ownerOnlinePool.deleteDevice(this);
+    		ownerOnlinePool.deleteDevice(this, Consts.DeviceLeaveReason.WebsocketClosedByApp);
     	}
     }
 
@@ -288,11 +288,17 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     @Override
     public void onJSONCommand(AppJSONMessage command)
     {
-    	this.updateActivityTime();
+    	Consts.MessageId messageId =  command.getMessageId();
+    	if (messageId != Consts.MessageId.TimeoutRequest
+				&& messageId != Consts.MessageId.Invalid
+				&& messageId != Consts.MessageId.UnkownRequest)
+    	{
+    		this.updateActivityTime();
+    	}
+    	
     	if (this.ownerOnlinePool == null 
     			|| this.businessStatus == Consts.BusinessStatus.Init)
     	{
-    		Consts.MessageId messageId =  command.getMessageId();
     		if (messageId != Consts.MessageId.AlohaRequest 
     				&& messageId != Consts.MessageId.AppDataSyncRequest
     				&& messageId != Consts.MessageId.TimeoutRequest
@@ -360,7 +366,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     	if (ownerOnlinePool != null)
     	{
     		logger.debug("Notify online device pool about timeout of device <{}>", getDeviceSn());
-    		ownerOnlinePool.deleteDevice(this);
+    		ownerOnlinePool.deleteDevice(this, Consts.DeviceLeaveReason.TimeoutOfPing);
     	}
     }
 
@@ -374,7 +380,11 @@ public class DeviceWrapper implements IDeviceWrapper, INode
         		return;
         	}
         	AppJSONMessage appResponse = webSocketConnection.syncSendMessage(message);
-			this.onJSONCommand(appResponse);
+        	
+        	if (appResponse != null)
+        	{
+        		this.onJSONCommand(appResponse);
+        	}
 		}
 		catch (IOException e)
 		{

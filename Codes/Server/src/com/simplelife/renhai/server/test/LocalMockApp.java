@@ -58,6 +58,7 @@ public class LocalMockApp extends AbstractMockApp
 		// Add command body
 		body.put(JSONKey.Content, "Hello Server!");
 		
+		lastSentMessageSn = header.getString(JSONKey.MessageSn);
 		sendRawJSONMessage(jsonObject, true);
 	}
 	
@@ -81,6 +82,7 @@ public class LocalMockApp extends AbstractMockApp
 			body.put(JSONKey.DataUpdate, updateObj);
 		}
 		
+		lastSentMessageSn = header.getString(JSONKey.MessageSn);
 		sendRawJSONMessage(jsonObject, true);
 	}
 	
@@ -115,6 +117,7 @@ public class LocalMockApp extends AbstractMockApp
 		body.put(JSONKey.DeviceCapacity, deviceCapacityObj);
 		body.put(JSONKey.InterestLabelList, interestObj);
 		
+		lastSentMessageSn = header.getString(JSONKey.MessageSn);
 		sendRawJSONMessage(jsonObject, true);
 	}
 	
@@ -210,6 +213,7 @@ public class LocalMockApp extends AbstractMockApp
 		body.put(JSONKey.OperationInfo, operationInfoObj);
 		body.put(JSONKey.OperationValue, operationValue);
 		
+		lastSentMessageSn = header.getString(JSONKey.MessageSn);
 		sendRawJSONMessage(jsonObject, true);
 	}
 	
@@ -353,12 +357,31 @@ public class LocalMockApp extends AbstractMockApp
 		profileObj.put(JSONKey.InterestCard, interestCardObj);
 		
 		deviceObj.put(JSONKey.DeviceSn, CommonFunctions.getJSONValue(deviceWrapper.getDeviceSn()));
+		
 		deviceCardObj.put(JSONKey.OsVersion, CommonFunctions.getJSONValue(getOSVersion()));
 		deviceCardObj.put(JSONKey.AppVersion, CommonFunctions.getJSONValue(getAppVersion()));
 		deviceCardObj.put(JSONKey.IsJailed, Consts.YesNo.No.getValue());
 		deviceCardObj.put(JSONKey.Location, CommonFunctions.getJSONValue(getLocation()));
 		deviceCardObj.put(JSONKey.DeviceSn, CommonFunctions.getJSONValue(getDeviceWrapper().getDeviceSn()));
 		deviceCardObj.put(JSONKey.DeviceModel, CommonFunctions.getJSONValue(getDeviceModel()));
+		
+		JSONArray interestLabelArray = new JSONArray();
+		interestCardObj.put(JSONKey.InterestLabelList, interestLabelArray);
+		
+		JSONObject interestLabelObj = new JSONObject();
+		interestLabelObj.put(JSONKey.InterestLabelName, "“Ù¿÷");
+		interestLabelObj.put(JSONKey.LabelOrder, System.currentTimeMillis() % 5);
+		interestLabelArray.add(interestLabelObj);
+		
+		interestLabelObj = new JSONObject();
+		interestLabelObj.put(JSONKey.InterestLabelName, "ø¥µÁ”∞");
+		interestLabelObj.put(JSONKey.LabelOrder, System.currentTimeMillis() % 5);
+		interestLabelArray.add(interestLabelObj);
+		
+		interestLabelObj = new JSONObject();
+		interestLabelObj.put(JSONKey.InterestLabelName, "privateInterestOf " + deviceWrapper.getDeviceSn());
+		interestLabelObj.put(JSONKey.LabelOrder, System.currentTimeMillis() % 5);
+		interestLabelArray.add(interestLabelObj);
 		
 		sendAppDataSyncRequest(null, updateObj);
 	}

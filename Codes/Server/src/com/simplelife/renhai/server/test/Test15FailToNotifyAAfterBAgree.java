@@ -52,10 +52,10 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 	}
 	
 	@Test
-	public void test()
+	public void test() throws InterruptedException
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(Consts.BusinessType.Random);
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;
 		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
 		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
@@ -99,10 +99,10 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 		mockApp1.clearLastReceivedCommand();
 		businessPool.getBusinessScheduler().schedule();
 		mockApp1.waitMessage();
-		assertFalse(mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
 		
 		mockApp2.waitMessage();
-		assertFalse(mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
 		
 		// Step_12 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
@@ -124,15 +124,8 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 		//mockApp2.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
 		
 		// Step_18 调用：BusinessSession::getStatus
-		try
-		{
-			// 等待Server处理完A和B的绑定确认
-			Thread.sleep(1000);
-		}
-		catch (InterruptedException e1)
-		{
-			e1.printStackTrace();
-		}
+		// 等待Server处理完A和B的绑定确认
+		Thread.sleep(500);
 		
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
 		logger.debug("Status of session:{}", session.getStatus().name());
@@ -148,11 +141,11 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 		mockApp1.clearLastReceivedCommand();
 		mockApp2.clearLastReceivedCommand();
 		mockApp1.chatConfirm(true);
-		assertTrue(!mockApp1.lastReceivedCommandIsError());
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AgreeChat));
 		
 		// 等待Server通知A同意聊天
 		mockApp2.waitMessage();
-		assertFalse(mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.OthersideAgreed));
 		
 		// Step_23 调用：MockWebSocketConnection::disableConnection，禁用A的通信功能
 		MockWebSocketConnection socket1 = getMockWebSocket(deviceWrapper1);
@@ -164,11 +157,12 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 		
 		// 等待B同意聊天的响应
 		mockApp2.waitMessage();
-		assertFalse(mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AgreeChat));
 		
 		// 等待通知来自A的OthersideLost
+		mockApp2.clearLastReceivedCommand();
 		mockApp2.waitMessage();
-		assertFalse(mockApp2.lastReceivedCommandIsError());
+		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.OthersideLost));
 		
 		// Step_24 Mock事件：A onPing
 		//mockApp1.ping();
