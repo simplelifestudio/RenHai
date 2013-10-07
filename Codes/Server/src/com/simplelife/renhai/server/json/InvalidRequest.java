@@ -11,17 +11,52 @@ package com.simplelife.renhai.server.json;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.JSONKey;
 
 /**
  * 
  */
 public class InvalidRequest extends AppJSONMessage
 {
+	private String receivedMessage;
 	public InvalidRequest(JSONObject jsonObject)
 	{
 		super(jsonObject);
 	}
+	
+	public void setReceivedMessage(String message)
+	{
+		receivedMessage = message;
+	}
+	
+	public String getReceivedMessage()
+	{
+		return receivedMessage;
+	}
 
+	/**
+	 * Override responseError in super class as received Message may not be valid JSON Object
+	 */
+	@Override
+	protected void responseError(Consts.MessageId messageId)
+    {
+    	ServerErrorResponse response = createErrorResponse();
+    	if (this.jsonObject != null)
+    	{
+    		response.addToBody(JSONKey.ReceivedMessage, this.jsonObject);
+    	}
+    	else
+    	{
+    		response.addToBody(JSONKey.ReceivedMessage, receivedMessage);
+    	}
+    	
+    	response.addToBody(JSONKey.ErrorCode, Consts.GlobalErrorCode.InvalidJSONRequest_1100);
+    	response.addToBody(JSONKey.ErrorDescription, "Invalid JSON request");
+    	response.addToHeader(JSONKey.MessageSn, this.getMessageSn());
+    	
+    	response.asyncResponse();
+    }
+	
 	@Override
 	public void run()
 	{
@@ -34,8 +69,6 @@ public class InvalidRequest extends AppJSONMessage
 	@Override
 	protected boolean checkJSONRequest()
 	{
-		setErrorDescription("Invalid JSON string");
-		setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
 		return false;
 	}
     

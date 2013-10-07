@@ -293,7 +293,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType type = Consts.BusinessType.parseValue(intType);
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		onlinePool.getBusinessPool(type).onDeviceLeave(deviceWrapper);
+		onlinePool.getBusinessPool(type).onDeviceLeave(deviceWrapper, Consts.DeviceLeaveReason.AppLeaveBusiness);
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
@@ -461,9 +461,10 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		
 		DeviceDAO dao = new DeviceDAO();
-		Device target = dao.findByDeviceSn(deviceSn).get(0);
-		Impresscard card = target.getProfile().getImpresscard();
-		Set<Impresslabelmap> impressLabelMap = card.getImpresslabelmaps();
+		Device targetDevice = dao.findByDeviceSn(deviceSn).get(0);
+		Impresscard targetCard = targetDevice.getProfile().getImpresscard();
+		Impresscard sourceCard = deviceWrapper.getDevice().getProfile().getImpresscard();
+		Set<Impresslabelmap> impressLabelMap = targetCard.getImpresslabelmaps();
 		JSONObject impressObj = body.getJSONObject(JSONKey.OperationInfo)
 				.getJSONObject(JSONKey.Device)
 				.getJSONObject(JSONKey.Profile)
@@ -472,13 +473,18 @@ public class BusinessSessionRequest extends AppJSONMessage
 		Session session = HibernateSessionFactory.getSession();
 		Transaction t = session.beginTransaction();
 		
+		String tempLabel;
 		JSONArray assessLabels = impressObj.getJSONArray(JSONKey.AssessLabelList);
-		updateOrAppendImpressLabel(card, impressLabelMap, assessLabels.getString(0));
+		tempLabel = assessLabels.getString(0);
+		updateOrAppendImpressLabel(targetCard, tempLabel, true);
+		updateOrAppendImpressLabel(sourceCard, tempLabel, false);
 		
 		JSONArray impressLabels = impressObj.getJSONArray(JSONKey.ImpressLabelList);
 		for (int i = 0; i < impressLabels.size(); i++)
 		{
-			updateOrAppendImpressLabel(card, impressLabelMap, impressLabels.getString(i));
+			tempLabel = impressLabels.getString(i);
+			updateOrAppendImpressLabel(targetCard, tempLabel, true);
+			updateOrAppendImpressLabel(sourceCard, tempLabel, false);
 		}
 		
 		// Save to DB
@@ -513,8 +519,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.asyncResponse();
 	}
 	
-	private void updateOrAppendImpressLabel(Impresscard card, Set<Impresslabelmap> impressLabels, String labelName)
+	private void updateOrAppendImpressLabel(Impresscard card, String labelName, boolean assessedFlag)
 	{
+		Set<Impresslabelmap> impressLabels = card.getImpresslabelmaps();
 		synchronized (impressLabels)
 		{
 			for (Impresslabelmap label : impressLabels)
@@ -522,8 +529,16 @@ public class BusinessSessionRequest extends AppJSONMessage
 				String tmpLabelName = label.getGlobalimpresslabel().getImpressLabelName();
 				if (tmpLabelName.equals(labelName))
 				{
-					label.setAssessedCount(label.getAssessedCount() + 1);
-					label.setUpdateTime(System.currentTimeMillis());
+					if (assessedFlag)
+					{
+						label.setAssessedCount(label.getAssessedCount() + 1);
+						label.setUpdateTime(System.currentTimeMillis());
+						label.getGlobalimpresslabel().setGlobalAssessCount(label.getGlobalimpresslabel().getGlobalAssessCount() + 1);
+					}
+					else
+					{
+						label.setAssessCount(label.getAssessCount() + 1);
+					}
 					return;
 				}
 			}
@@ -545,8 +560,17 @@ public class BusinessSessionRequest extends AppJSONMessage
 			}
 			
 			Impresslabelmap labelMap = new Impresslabelmap();
-			labelMap.setAssessCount(0);
-			labelMap.setAssessedCount(1);
+			
+			if (assessedFlag)
+			{
+				labelMap.setAssessCount(0);
+				labelMap.setAssessedCount(1);
+			}
+			else
+			{
+				labelMap.setAssessCount(1);
+				labelMap.setAssessedCount(0);
+			}
 			labelMap.setGlobalimpresslabel(globalimpresslabel);
 			labelMap.setUpdateTime(System.currentTimeMillis());
 			labelMap.setImpresscard(card);

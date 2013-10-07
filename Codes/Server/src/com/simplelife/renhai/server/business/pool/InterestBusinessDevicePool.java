@@ -197,9 +197,10 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     }
     
     /** */
-    public void onDeviceLeave(IDeviceWrapper device)
+    @Override
+    public void onDeviceLeave(IDeviceWrapper device, Consts.DeviceLeaveReason reason)
     {
-    	super.onDeviceLeave(device);
+    	super.onDeviceLeave(device, reason);
     	removeInterestIndex(device);
     }
 
@@ -252,4 +253,5 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 		
 		addInterestIndex(device);
 	}
+
 }

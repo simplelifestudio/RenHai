@@ -136,9 +136,9 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_19 调用：OnlineDevicePool::getCount
-		//assertEquals(deviceCount - 2, onlinePool.getElementCount());
+		assertEquals(deviceCount - 2, onlinePool.getElementCount());
 		
 		// Step_20 调用：BusinessSessionPool::getCount
-		//assertEquals(sessionCount, sessionPool.getElementCount());
+		assertEquals(sessionCount, sessionPool.getElementCount());
 	}
 }

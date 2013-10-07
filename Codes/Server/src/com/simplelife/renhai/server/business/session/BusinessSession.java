@@ -122,7 +122,7 @@ public class BusinessSession implements IBusinessSession
     		{
     			logger.error("Device <{}> is not in online device pool when trying to bind with session.", deviceSn);
     			device = pool.getDevice(deviceSn);
-    			pool.onDeviceLeave(device);
+    			pool.onDeviceLeave(device, Consts.DeviceLeaveReason.UnknownBusinessException);
     			return false;
     		}
     		status = device.getBusinessStatus();
@@ -502,7 +502,7 @@ public class BusinessSession implements IBusinessSession
     }
 
     @Override
-    public void onDeviceLeave(IDeviceWrapper device)
+    public void onDeviceLeave(IDeviceWrapper device, Consts.DeviceLeaveReason reason)
     {
     	synchronized(progressMap)
     	{
@@ -584,7 +584,7 @@ public class BusinessSession implements IBusinessSession
 	{
 		BusinessType type = sourceDevice.getBusinessType();
     	AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
-    	pool.onDeviceLeave(sourceDevice);
+    	pool.onDeviceLeave(sourceDevice, Consts.DeviceLeaveReason.AssessAndQuit);
     	
     	sourceDevice.changeBusinessStatus(Consts.BusinessStatus.Idle);
     	synchronized(progressMap)

@@ -27,17 +27,11 @@ public class AppErrorResposne extends AppJSONMessage
 		super(jsonObject);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.json.AppJSONMessage#run()
-	 */
 	@Override
 	public void run()
 	{
 	}
 
-	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.json.AppJSONMessage#getMessageId()
-	 */
 	@Override
 	public MessageId getMessageId()
 	{

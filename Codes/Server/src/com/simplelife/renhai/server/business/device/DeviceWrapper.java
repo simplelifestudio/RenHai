@@ -280,7 +280,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     {
     	if (ownerOnlinePool != null)
     	{
-    		ownerOnlinePool.deleteDevice(this);
+    		ownerOnlinePool.deleteDevice(this, Consts.DeviceLeaveReason.WebsocketClosedByApp);
     	}
     }
 
@@ -366,7 +366,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     	if (ownerOnlinePool != null)
     	{
     		logger.debug("Notify online device pool about timeout of device <{}>", getDeviceSn());
-    		ownerOnlinePool.deleteDevice(this);
+    		ownerOnlinePool.deleteDevice(this, Consts.DeviceLeaveReason.TimeoutOfPing);
     	}
     }
 

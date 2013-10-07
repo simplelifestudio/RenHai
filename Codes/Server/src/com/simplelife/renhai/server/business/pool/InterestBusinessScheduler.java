@@ -20,6 +20,7 @@ import java.util.Set;
 
 import com.simplelife.renhai.server.business.session.BusinessSessionPool;
 import com.simplelife.renhai.server.db.Interestlabelmap;
+import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
@@ -65,6 +66,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
     	
     	List<String> selectedDevice = new ArrayList<String>();
     	boolean deviceFoundFlag = false;
+    	String deviceFoundInterest = null;
     	
     	Random random = new Random();
 		synchronized (deviceMap)
@@ -148,6 +150,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
         				}
     				}
     				deviceFoundFlag = true;
+    				deviceFoundInterest = strLabel;
     			}
     			
     			if (!deviceFoundFlag)
@@ -166,6 +169,8 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 		}
 		session.bindBusinessDevicePool(this.ownerBusinessPool);
 		session.startSession(selectedDevice);
+		
+		DbLogger.increaseInterestMatchCount(deviceFoundInterest);
     }
     
     @Override

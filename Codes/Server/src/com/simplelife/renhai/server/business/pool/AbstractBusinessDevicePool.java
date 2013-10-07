@@ -112,7 +112,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     /**
      * Device leaves BusinessDevicePool, it may be caused by exit business or device is released
      */
-    public void onDeviceLeave(IDeviceWrapper device)
+    public void onDeviceLeave(IDeviceWrapper device, Consts.DeviceLeaveReason reason)
     {
     	Logger logger = BusinessModule.instance.getLogger();
     	if (device == null)

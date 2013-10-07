@@ -207,7 +207,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		//logger.debug("=============mockApp1 before assess:\n");
 		//System.out.print(JSON.toJSONString(mockApp1.getDeviceWrapper().toJSONObject(), SerializerFeature.WriteMapNullValue));
 		mockApp2.assessAndQuit(mockApp1.getDeviceWrapper(), "TC24_∆¿º€,^#Disgusting#^,±‰Ã¨");
-		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AssessAndContinue));
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AssessAndQuit));
 		//logger.debug("=============mockApp1 after assess:\n");
 		//System.out.print(JSON.toJSONString(mockApp1.getDeviceWrapper().toJSONObject(), SerializerFeature.WriteMapNullValue));
 		

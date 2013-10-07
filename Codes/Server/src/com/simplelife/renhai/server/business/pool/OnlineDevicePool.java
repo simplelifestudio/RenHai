@@ -84,6 +84,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     
     private OnlineDevicePool()
     {
+    	Session session = HibernateSessionFactory.getSession();
     	startTimers();
     	this.addBusinessPool(Consts.BusinessType.Random, new RandomBusinessDevicePool());
     	this.addBusinessPool(Consts.BusinessType.Interest, new InterestBusinessDevicePool());
@@ -110,7 +111,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 			{
 				logger.debug("Device with connection id {} was removed from online device pool due to last activity time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastActivityTime().getTime())
 						, deviceWrapper.getConnection().getConnectionId());
-				deleteDevice(deviceWrapper);
+				deleteDevice(deviceWrapper, Consts.DeviceLeaveReason.TimeoutOfActivity);
 				continue;
 			}
 			
@@ -126,7 +127,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 				}
 				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime()),
 						deviceWrapper.getConnection().getConnectionId());
-				deleteDevice(deviceWrapper);
+				deleteDevice(deviceWrapper, Consts.DeviceLeaveReason.TimeoutOfPing);
 				continue;
 			}
 		}
@@ -204,7 +205,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     }
     
     /** */
-    public void deleteDevice(IDeviceWrapper deviceWrapper)
+    public void deleteDevice(IDeviceWrapper deviceWrapper, Consts.DeviceLeaveReason reason)
     {
     	if (deviceWrapper == null)
     	{
@@ -213,10 +214,8 @@ public class OnlineDevicePool extends AbstractDevicePool
     	
     	logger.debug("Start to remove device <{}> from OnlineDevicePool", deviceWrapper.getDeviceSn());
     	deviceWrapper.unbindOnlineDevicePool();
-    	
+
     	Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
-    	
-    	deviceWrapper.unbindOnlineDevicePool();
     	if (status == Consts.BusinessStatus.Init)
     	{
     		String id = deviceWrapper.getConnection().getConnectionId();
@@ -250,7 +249,7 @@ public class OnlineDevicePool extends AbstractDevicePool
         			AbstractBusinessDevicePool pool = this.getBusinessPool(type);
         			if (pool != null)
         			{
-        				pool.onDeviceLeave(deviceWrapper);
+        				pool.onDeviceLeave(deviceWrapper, reason);
         			}
         		}
     			
@@ -261,7 +260,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 					synchronized (session)
 					{
 						logger.debug("Device <{}> has bound session, notify session to notify other devices.", sn);
-						session.onDeviceLeave(deviceWrapper);
+						session.onDeviceLeave(deviceWrapper, reason);
 					}
 				}
         	}

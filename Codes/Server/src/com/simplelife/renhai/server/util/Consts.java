@@ -48,6 +48,46 @@ public class Consts
 		}
 	}
 	
+	public enum DeviceLeaveReason
+	{
+		Invalid(0), 
+		WebsocketClosedByApp(101),
+		WebsocketClosedByServer(102),
+		ExceptionOnWebsocket(103),
+		TimeoutOnSyncSending(104),
+		TimeoutOfPing(105),
+		TimeoutOfActivity(106),
+		BannedDevice(107),
+		AppLeaveBusiness(108),
+		AssessAndQuit(109),
+		ExceptionInStartSession(110),
+		UnknownBusinessException(111);
+		
+		private int value;
+		private DeviceLeaveReason(int value)
+		{
+			this.value = value;
+		}
+		
+		public int getValue()
+		{
+			return value;
+		}
+		
+		public static DeviceLeaveReason parseValue(int value)
+		{
+			int intValue = Integer.valueOf(value);
+			for (DeviceLeaveReason item : values())
+			{
+				if (item.value == intValue)
+				{
+					return item;
+				}
+			}
+			return null;
+		}
+	}
+	
 	public enum ValidInvalid
 	{
 		Valid(1), Invalid(0);
@@ -81,36 +121,6 @@ public class Consts
 		}
 	}
 	
-	public enum DeviceReleaseReason
-	{
-		Invalid(0), 
-		CloseConnectionByServer(100), 
-		CloseConnectionByApp(101);
-		
-		private int value;
-		private DeviceReleaseReason(int value)
-		{
-			this.value = value;
-		}
-	
-		public int getValue()
-		{
-			return value;
-		}
-		
-		public static DeviceReleaseReason parseValue(int value)
-		{
-			int intValue = Integer.valueOf(value);
-			for (DeviceReleaseReason item : values())
-			{
-				if (item.value == intValue)
-				{
-					return item;
-				}
-			}
-			return null;
-		}
-	}
 	
 	public enum ServiceStatus
 	{
