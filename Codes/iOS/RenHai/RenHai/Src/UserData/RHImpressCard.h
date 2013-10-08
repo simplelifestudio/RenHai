@@ -17,7 +17,7 @@
 @property (nonatomic) NSUInteger impressCardId;
 
 @property (nonatomic, strong) NSArray* assessLabelList;
-@property (nonatomic, strong) NSMutableArray* impressLabelList;
+@property (nonatomic, strong) NSArray* impressLabelList;
 
 @property (nonatomic) NSUInteger chatTotalCount;
 @property (nonatomic) NSUInteger chatTotalDuration;

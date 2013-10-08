@@ -354,7 +354,10 @@ ConnectStatus;
     
     sleep(DELAY);
     
-    [self dismissConnectView:YES];
+    if (_isServerDataSyncSuccess)
+    {
+        [self dismissConnectView:YES];
+    }
 }
 
 - (void)_connectServer

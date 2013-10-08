@@ -12,7 +12,7 @@
 
 @interface RHServerInterestLabelList : NSObject <CBJSONable, NSCopying, NSMutableCopying>
 
-@property (nonatomic, readonly) NSUInteger current;
+@property (nonatomic, readonly) NSArray* current;
 @property (nonatomic, readonly) NSDate* historyStartTime;
 @property (nonatomic, readonly) NSDate* historyEndTime;
 

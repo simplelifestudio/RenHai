@@ -13,6 +13,8 @@
 
 #import "RHMessage.h"
 
+#import "RHInterestLabel.h"
+
 #define SERIALIZE_KEY_CURRENT @"interestLabelList.current"
 #define SERIALIZE_KEY_STARTTIME @"interestLabelList.historyStartTime"
 #define SERIALIZE_KEY_ENDTIME @"interestLabelList.historyEndTime"
@@ -22,7 +24,7 @@
     
 }
 
-@property (nonatomic, readwrite) NSUInteger current;
+@property (nonatomic, readwrite) NSArray* current;
 @property (nonatomic, readwrite) NSDate* historyStartTime;
 @property (nonatomic, readwrite) NSDate* historyEndTime;
 
@@ -55,7 +57,25 @@
         id oCurrent = [dic objectForKey:MESSAGE_KEY_CURRENT];
         if (nil != oCurrent)
         {
-            _current = ([NSNull null] != oCurrent) ? ((NSNumber*)oCurrent).integerValue : 0;
+            if ([NSNull null] != oCurrent)
+            {
+                NSMutableArray* labelArray = [NSMutableArray array];
+                
+                NSArray* dicArray = (NSArray*)oCurrent;
+                for (NSDictionary* labelDic in dicArray)
+                {
+                    RHInterestLabel* label = [[RHInterestLabel alloc] init];
+                    [label fromJSONObject:labelDic];
+                    
+                    [labelArray addObject:label];
+                }
+                
+                _current = labelArray;
+            }
+            else
+            {
+                _current = nil;
+            }
         }
         
         id oHistory = [dic objectForKey:MESSAGE_KEY_HISTORY];
@@ -93,7 +113,7 @@
 {
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
-    id oCurrent = [self _getOCurrent];
+    id oCurrent = [self _getOCurrentDic];
     [dic setObject:oCurrent forKey:MESSAGE_KEY_CURRENT];
     
     NSMutableDictionary* historyDic = [NSMutableDictionary dictionary];
@@ -129,7 +149,7 @@
 {
     if (self = [super init])
     {
-        _current = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CURRENT];
+        _current = [aDecoder decodeObjectForKey:SERIALIZE_KEY_CURRENT];
         _historyStartTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_STARTTIME];
         _historyEndTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_ENDTIME];
     }
@@ -139,7 +159,7 @@
 
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeInteger:_current forKey:SERIALIZE_KEY_CURRENT];
+    [aCoder encodeObject:_current forKey:SERIALIZE_KEY_CURRENT];
     [aCoder encodeObject:_historyStartTime forKey:SERIALIZE_KEY_STARTTIME];
     [aCoder encodeObject:_historyEndTime forKey:SERIALIZE_KEY_ENDTIME];
 }
@@ -163,8 +183,42 @@
 
 -(id) _getOCurrent
 {
-    return [NSNumber numberWithInteger:_current];
+    id oLabelList = nil;
+    
+    if (nil == _current)
+    {
+        oLabelList = [NSNull null];
+    }
+    else
+    {
+        oLabelList = _current;
+    }
+    
+    return oLabelList;
 }
+
+-(id) _getOCurrentDic
+{
+    id labelListDic = nil;
+    
+    id oLabelList = [self _getOCurrent];
+    if (oLabelList == [NSNull null])
+    {
+        labelListDic = oLabelList;
+    }
+    else
+    {
+        labelListDic = [NSMutableArray arrayWithCapacity:_current.count];
+        for (RHInterestLabel* label in _current)
+        {
+            NSDictionary* labelDic = label.toJSONObject;
+            [labelListDic addObject:labelDic];
+        }
+    }
+    
+    return labelListDic;
+}
+
 
 -(id) _getOHistoryStartTime
 {
