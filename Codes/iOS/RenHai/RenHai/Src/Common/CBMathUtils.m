@@ -35,4 +35,29 @@
     return([NSString stringWithFormat:@"%1.1f GB", floatSize]);
 }
 
++(NSArray*) splitIntegerByUnit:(NSInteger) intVal array:(NSMutableArray*) unitVals
+{
+    if (nil == unitVals)
+    {
+        unitVals = [NSMutableArray array];
+    }
+    
+    if (10 > intVal)
+    {
+        [unitVals insertObject:[NSNumber numberWithInteger:intVal] atIndex:0];
+        
+        return unitVals;
+    }
+    else
+    {
+        NSInteger unitVal = intVal % 10;
+        [unitVals insertObject:[NSNumber numberWithInteger:unitVal] atIndex:0];
+    }
+    
+    intVal = intVal / 10;
+    [CBMathUtils splitIntegerByUnit:intVal array:unitVals];
+    
+    return unitVals;
+}
+
 @end
