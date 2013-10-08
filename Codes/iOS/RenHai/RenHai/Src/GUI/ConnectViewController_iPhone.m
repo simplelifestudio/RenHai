@@ -14,7 +14,7 @@
 #import "CommunicationModule.h"
 #import "UserDataModule.h"
 
-#define DELAY 1.0f
+#define DELAY 0.35f
 #define ANIMATION_POP 0.35f
 #define ANIMATION_DISMISS 0.35
 
@@ -53,6 +53,8 @@ ConnectStatus;
     NSInvocationOperation* _connectOperaton;
     NSInvocationOperation* _appSyncOperation;
     NSInvocationOperation* _serverSyncOperation;
+    
+    NSMutableString* _consoleInfo;
 }
 
 @end
@@ -157,13 +159,15 @@ ConnectStatus;
             }
             
             [self dismissViewControllerAnimated:NO completion:^(){
+                [_guiModule.mainViewController resignPresentationModeEntirely:YES animated:NO completion:nil];
             }];
             
             RHNavigationController* navigationVC = _guiModule.navigationController;
             HomeViewController_iPhone* homeVC = _guiModule.homeViewController;
-            if (navigationVC.topViewController != homeVC)
+            UIViewController* topVC = navigationVC.topViewController;
+            if (topVC != homeVC)
             {
-                [_guiModule.navigationController pushViewController:_guiModule.homeViewController animated:NO];
+                [_guiModule.navigationController popToViewController:_guiModule.homeViewController animated:NO];
             }
         }
     });
@@ -228,33 +232,17 @@ ConnectStatus;
     });
 }
 
-- (void) _updateInfoTextView:(NSString*) text
-{
-    [self _updateInfoTextView:text clear:YES];
-}
-
-- (void) _updateInfoTextView:(NSString*) text clear:(BOOL) clear
-{
-    if (clear)
-    {
-        _infoTextView.text = text;
-    }
-    else
-    {
-        NSMutableString* mutableText = [NSMutableString stringWithString:_infoTextView.text];
-        [mutableText appendString:text];
-        _infoTextView.text = mutableText;
-    }
-}
-
 - (void) _updateUIWithConnectStatus:(ConnectStatus) status
 {
+    [NSThread sleepForTimeInterval:DELAY];
+    
     dispatch_async(dispatch_get_main_queue(), ^(){
         
         NSString* infoText = nil;
         NSString* infoDetailText = nil;
         NSString* actionButtonTitle = NSLocalizedString(@"Connect_Retry", nil);
         BOOL isActionButtonHide = YES;
+        BOOL isTextClear = NO;
         
         switch (status)
         {
@@ -263,6 +251,7 @@ ConnectStatus;
                 infoText = NSLocalizedString(@"Connect_Ready", nil);
                 infoDetailText = NSLocalizedString(@"Connect_Ready_Detail", nil);
                 isActionButtonHide = YES;
+                isTextClear = YES;
                 break;
             }
             case ConnectStatus_Connecting:
@@ -335,6 +324,10 @@ ConnectStatus;
         }
 
         _infoLabel.text = infoText;
+        if (isTextClear)
+        {
+            [self _clearInfoTextView];
+        }
         [self _updateInfoTextView:infoDetailText];
         _actionButton.titleLabel.text = actionButtonTitle;
         _actionButton.hidden = isActionButtonHide;
@@ -346,36 +339,37 @@ ConnectStatus;
     dispatch_sync(dispatch_get_main_queue(), ^(){
         [self _clockStart];
     });
+
+    [NSThread sleepForTimeInterval:DELAY];
 }
 
 - (void)_timerStop
 {
     [self _clockCancel];
     
-    sleep(DELAY);
+    [NSThread sleepForTimeInterval:DELAY];
     
-    [self dismissConnectView:YES];
+    if (_isServerDataSyncSuccess)
+    {
+        [self dismissConnectView:YES];
+    }
 }
 
 - (void)_connectServer
 {
     [self _resetInstance];
     
-    sleep(DELAY);
-    
     [self _updateUIWithConnectStatus:ConnectStatus_Connecting];
     
-    BOOL connected = [_commModule connectWebSocket];
-    _isConnectServerSuccess = connected;
-    if (connected)
+    _isConnectServerSuccess = [_commModule connectWebSocket];
+//    _isConnectServerSuccess = NO;
+    if (_isConnectServerSuccess)
     {
         [self _updateUIWithConnectStatus:ConnectStatus_Connected];
-        sleep(DELAY);
     }
     else
     {
         [self _updateUIWithConnectStatus:ConnectStatus_ConnectFailed];
-        sleep(DELAY);
     }
 }
 
@@ -397,13 +391,28 @@ ConnectStatus;
         NSDictionary* deviceDic = [messageBody objectForKey:MESSAGE_KEY_DATAQUERY];
         
         RHDevice* device = _userDataModule.device;
-        [device fromJSONObject:deviceDic];
-        
-        [_userDataModule saveUserData];
-        
-        [self _updateUIWithConnectStatus:ConnectStatus_AppDataSynced];
-        
-        _isAppDataSyncSuccess = YES;
+        @try
+        {
+            [device fromJSONObject:deviceDic];
+            
+            [_userDataModule saveUserData];
+            
+            [self _updateUIWithConnectStatus:ConnectStatus_AppDataSynced];
+            
+            _isAppDataSyncSuccess = YES;
+        }
+        @catch (NSException *exception)
+        {
+            DDLogError(@"Caught Exception: %@", exception.debugDescription);
+            
+            [self _updateUIWithConnectStatus:ConnectStatus_AppDataSyncFailed];
+            
+            _isAppDataSyncSuccess = NO;
+        }
+        @finally
+        {
+            
+        }
     }
     else if (appDataSyncResponseMessage.messageId == MessageId_ServerErrorResponse)
     {
@@ -437,11 +446,27 @@ ConnectStatus;
         NSDictionary* serverDic = messageBody;
         
         RHServer* server = _userDataModule.server;
-        [server fromJSONObject:serverDic];
+        @try
+        {
+            [server fromJSONObject:serverDic];
+            
+            [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSynced];
+            
+            _isServerDataSyncSuccess = YES;
+        }
+        @catch (NSException *exception)
+        {
+            DDLogError(@"Caught Exception: %@", exception.debugDescription);
+            
+            [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSyncFailed];
+            
+            _isAppDataSyncSuccess = NO;
+        }
+        @finally
+        {
+            
+        }
         
-        [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSynced];
-        
-        _isServerDataSyncSuccess = YES;
     }
     else if (serverDataSyncResponseMessage.messageId == MessageId_ServerErrorResponse)
     {
@@ -459,6 +484,8 @@ ConnectStatus;
 
 - (void)_fireOperationQueue
 {
+    [self _clearInfoTextView];
+    
     _isConnectServerSuccess = NO;
     _isAppDataSyncSuccess = NO;
     _isServerDataSyncSuccess = NO;
@@ -481,6 +508,39 @@ ConnectStatus;
     [_operationQueue addOperation:_appSyncOperation];
     [_operationQueue addOperation:_connectOperaton];
     [_operationQueue addOperation:_timerStartOperation];
+}
+
+- (void) _updateInfoTextView:(NSString*) info
+{
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        if (nil == _consoleInfo)
+        {
+            _consoleInfo = [NSMutableString string];
+            
+            NSString* originText = _infoTextView.text;
+            if (nil != originText && 0 < originText.length)
+            {
+                [_consoleInfo appendString:originText];
+                [_consoleInfo appendString:@"\n"];
+            }
+        }
+        
+        if (nil != info && 0 < info.length)
+        {
+            [_consoleInfo appendString:info];
+            [_consoleInfo appendString:@"\n"];
+            
+            [_infoTextView setText:_consoleInfo];
+        }
+    });
+}
+
+- (void) _clearInfoTextView
+{
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        _consoleInfo = [NSMutableString string];
+        [self _updateInfoTextView:nil];
+    });
 }
 
 @end

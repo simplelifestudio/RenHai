@@ -22,9 +22,10 @@
 #define WEBSOCKET_COMM_TIMEOUT 9
 #define HTTP_COMM_TIMEOUT 7.0
 
-#define NOTIFICATION_ID_RHSERVER @"RHServerNotification"
-
 #define MESSAGE_NEED_ENCRYPT 0
+
+#define NOTIFICATION_ID_RHSERVERNOTIFICATION @"RHServerNotification"
+#define NOTIFICATION_ID_RHSERVERDISCONNECTED @"RHServerDisconnected"
 
 @interface CommunicationModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 

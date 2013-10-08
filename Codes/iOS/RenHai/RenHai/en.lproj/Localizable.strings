@@ -10,6 +10,9 @@
 "Common_No" = "No";
 "Common_PullToRefresh" = "Pull to Refresh";
 "Common_Refreshing" = "Refreshing...";
+"Common_Normal" = "Normal";
+"Common_Banned" = "Banned";
+"Common_Invalid" = "Invalid";
 
 "Communication_InternetDisconnected" = "Internet Disconnected";
 "Communication_WiFiConnected" = "WiFi Connected";
@@ -40,18 +43,18 @@
 "Config_ChatOn3G" = "Connect on 3G";
 
 "Connect_Ready" = "Prepare";
-"Connect_Ready_Detail" = "Prepraing...";
+"Connect_Ready_Detail" = "Prepraing connect...";
 "Connect_Connecting" = "Connecting";
 "Connect_Connecting_Detail" = "Trying to connect server...";
 "Connect_Connected" = "Connected";
 "Connect_Connected_Detail" = "Connected server";
-"Connect_ConnectFailed" = "Failed";
+"Connect_ConnectFailed" = "Failure";
 "Connect_ConnectFailed_Detail" = "Can not to connect server";
 "Connect_AppDataSyncing" = "Synchronize";
 "Connect_AppDataSyncing_Detail" = "Synchronizing app data...";
 "Connect_AppDataSynced" = "Synchronize";
 "Connect_AppDataSynced_Detail" = "Synchronized app data...";
-"Connect_AppDataSyncFailed" = "Synchronize";
+"Connect_AppDataSyncFailed" = "Failure";
 "Connect_AppDataSyncFailed_Detail" = "Can not synchronize app data...";
 "Connect_ServerDataSyncing" = "Synchronize";
 "Connect_ServerDataSyncing_Detail" = "Synchronizing server data...";

@@ -8,13 +8,25 @@
 
 #import "HomeViewController_iPhone.h"
 
+#import "CBMathUtils.h"
+
 #import "GUIModule.h"
 #import "GUIStyle.h"
+#import "UserDataModule.h"
+#import "CommunicationModule.h"
+
+#define INTERVAL_ENTERBUTTON_TRACK 0.3
+#define INTERVAL_DATASYNC 5
 
 @interface HomeViewController_iPhone () <CBRoundProgressViewDelegate>
 {
     GUIModule* _guiModule;
+    UserDataModule* _userDataModule;
+    CommunicationModule* _commModule;
+    
     NSTimer* _enterButtonTimer;
+    
+    NSTimer* _dataSyncTimer;
 }
 
 @end
@@ -26,18 +38,47 @@
 @synthesize enterLabel = _enterLabel;
 @synthesize helpButton = _helpButton;
 
+@synthesize onlineDeviceCountUnit1 = _onlineDeviceCountUnit1;
+@synthesize onlineDeviceCountUnit2 = _onlineDeviceCountUnit2;
+@synthesize onlineDeviceCountUnit3 = _onlineDeviceCountUnit3;
+@synthesize onlineDeviceCountUnit4 = _onlineDeviceCountUnit4;
+@synthesize onlineDeviceCountUnit5 = _onlineDeviceCountUnit5;
+
+#pragma mark - Public Methods
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	
+    [self _setupInstance];
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [self _activateDataSyncTimer];
+    
+    [super viewWillAppear:animated];
+}
+
+-(void) viewWillDisappear:(BOOL)animated
+{
+    [self _deactivateDataSyncTimer];
+    
+    [super viewWillDisappear:animated];
+}
+
+#pragma mark - Private Methods
+
+-(void)_setupInstance
+{
     _guiModule = [GUIModule sharedInstance];
+    _userDataModule = [UserDataModule sharedInstance];
+    _commModule = [CommunicationModule sharedInstance];
     
     [self _setupNavigationBar];
     
     [self _setupView];
 }
-
-#pragma mark - Private Methods
 
 -(void)_setupView
 {
@@ -108,18 +149,91 @@
 }
 
 static float progress = 0.1;
--(void)_timerUpdated
+-(void)_enterButtonTimerUpdated
 {
     [_enterButtonProgressView setProgress:progress animated:YES];
     progress+=0.1;
 }
 
--(void)_timerFinished
+-(void)_enterButtonTimerFinished
 {
     [_enterButtonTimer invalidate];
     
     progress = 0.0;
     [_enterButtonProgressView setProgress:progress animated:NO];
+}
+
+-(void)_activateDataSyncTimer
+{
+    _dataSyncTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_DATASYNC target:self selector:@selector(_dataSync) userInfo:nil repeats:YES];
+    [_dataSyncTimer fire];
+}
+
+-(void)_deactivateDataSyncTimer
+{
+    [_dataSyncTimer invalidate];
+}
+
+-(void)_dataSync
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
+        RHDevice* device = _userDataModule.device;
+        RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
+        RHMessage* serverDataSyncResponseMessage = [_commModule sendMessage:serverDataSyncRequestMessage];
+        
+        if (serverDataSyncResponseMessage.messageId == MessageId_ServerDataSyncResponse)
+        {
+            NSDictionary* messageBody = serverDataSyncResponseMessage.body;
+            NSDictionary* serverDic = messageBody;
+            
+            RHServer* server = _userDataModule.server;
+            @try
+            {
+                [server fromJSONObject:serverDic];
+                [self _updateUIWithOnlineDeviceCount];
+            }
+            @catch (NSException *exception)
+            {
+                DDLogError(@"Caught Exception: %@", exception.debugDescription);
+            }
+            @finally
+            {
+                
+            }
+            
+        }
+        else if (serverDataSyncResponseMessage.messageId == MessageId_ServerErrorResponse)
+        {
+            
+        }
+        else if (serverDataSyncResponseMessage.messageId == MessageId_ServerTimeoutResponse)
+        {
+            
+        }
+        else
+        {
+            
+        }
+    });
+}
+
+-(void) _updateUIWithOnlineDeviceCount
+{
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        
+        NSArray* unitLabels = @[_onlineDeviceCountUnit1, _onlineDeviceCountUnit2, _onlineDeviceCountUnit3, _onlineDeviceCountUnit4, _onlineDeviceCountUnit5];
+        
+        RHServer* server = _userDataModule.server;
+        NSUInteger onlineCount = server.deviceCount.online;
+        NSArray* unitVals = [CBMathUtils splitIntegerByUnit:onlineCount array:nil reverseOrder:YES];
+        
+        for (int i = 0; i < unitVals.count; i++)
+        {
+            NSNumber* unitVal = (NSNumber*)unitVals[i];
+            UILabel* label = (UILabel*)unitLabels[i];
+            label.text = [NSString stringWithFormat:@"%d", unitVal.integerValue];
+        }
+    });
 }
 
 #pragma mark - IBActions
@@ -128,9 +242,9 @@ static float progress = 0.1;
 {
     [self performSelector:@selector(_lockViewController) withObject:self afterDelay:0.0];
     
-    [self _timerFinished];
+    [self _enterButtonTimerFinished];
     
-    _enterButtonTimer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(_timerUpdated) userInfo:nil repeats:YES];
+    _enterButtonTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_ENTERBUTTON_TRACK target:self selector:@selector(_enterButtonTimerUpdated) userInfo:nil repeats:YES];
     [_enterButtonTimer fire];
 }
 
@@ -149,7 +263,7 @@ static float progress = 0.1;
 
 - (void) progressFinished
 {
-    [self _timerFinished];      
+    [self _enterButtonTimerFinished];
     
     [self performSelector:@selector(_unlockViewController) withObject:self afterDelay:0.0];
 }

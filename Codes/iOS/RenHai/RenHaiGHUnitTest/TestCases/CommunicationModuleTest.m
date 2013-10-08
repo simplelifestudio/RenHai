@@ -24,6 +24,8 @@
 {    
     RHDevice* _device;
     WebSocketAgent* _agent;
+    
+    UserDataModule* _userDataModule;
 }
 
 @end
@@ -39,9 +41,13 @@
 
 -(void) setUpClass
 {
-    _device = [[RHDevice alloc] init];
+    _userDataModule = [UserDataModule sharedInstance];
+    [_userDataModule initUserData];
+    _device = _userDataModule.device;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onMessage:) name:NOTIFICATION_ID_RHSERVER object:nil];
+//    _device = [[RHDevice alloc] init];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onMessage:) name:NOTIFICATION_ID_RHSERVERNOTIFICATION object:nil];
 }
 
 -(void) tearDownClass
@@ -277,7 +283,7 @@
 {
     if (nil != notification)
     {
-        if ([notification.name isEqualToString:NOTIFICATION_ID_RHSERVER])
+        if ([notification.name isEqualToString:NOTIFICATION_ID_RHSERVERNOTIFICATION])
         {
             GHTestLog(@"$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
             RHMessage* message = (RHMessage*)notification.object;

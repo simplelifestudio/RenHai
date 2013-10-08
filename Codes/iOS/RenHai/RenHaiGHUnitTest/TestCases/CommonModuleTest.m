@@ -10,6 +10,7 @@
 
 #import "CBJSONUtils.h"
 #import "CBStringUtils.h"
+#import "CBMathUtils.h"
 
 #import "TestTitle.h"
 
@@ -57,6 +58,14 @@
     NSString* str = [CBJSONUtils toJSONString:dic];
     NSLog(@"[NSNull null] in NSDictionary: %@", dic);
     NSLog(@"[NSNull null] in JSON string: %@", str);
+}
+
+-(void) testSplitIntegerByUnit
+{
+    NSInteger intVal = 12345;
+    NSMutableArray* unitVals = [NSMutableArray array];
+    NSArray* array = [CBMathUtils splitIntegerByUnit:intVal array:unitVals reverseOrder:NO];
+    GHTestLog(@"array: %@", array);
 }
 
 @end

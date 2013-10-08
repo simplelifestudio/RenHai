@@ -10,11 +10,14 @@
 
 #import "FlatUIKit.h"
 
+#import "UIDevice+CBDeviceExtends.h"
+#import "CBDateUtils.h"
+
 #import "GUIModule.h"
 #import "GUIStyle.h"
-#import "UIDevice+CBDeviceExtends.h"
-
 #import "RHTableViewLabelCell_iPhone.h"
+
+#import "UserDataModule.h"
 
 #define SECTION_ITEMCOUNT_CONFIG 2
 
@@ -35,6 +38,10 @@
 @interface DeviceViewController_iPhone ()
 {
     GUIModule* _guiModule;
+    UserDataModule* _userDataModule;
+    RHDevice* _device;
+    RHDeviceCard* _deviceCard;
+    RHProfile* _profile;
 }
 
 @end
@@ -47,11 +54,7 @@
 {
     [super viewDidLoad];
 	
-    _guiModule = [GUIModule sharedInstance];
-    
-    [self _setupNavigationBar];
-    
-    [self _setupTableView];
+    [self _setupInstance];
 }
 
 #pragma mark - UITableViewDataDelegate
@@ -101,24 +104,25 @@
                 case ITEM_INDEX_DEVICEMODEL:
                 {
                     itemName = NSLocalizedString(@"Device_DeviceModel", nil);
-                    itemVal = [UIDevice deviceSimpleModel];
+                    itemVal = _deviceCard.deviceModel;
                     break;
                 }
                 case ITEM_INDEX_OSVER:
                 {
                     itemName = NSLocalizedString(@"Device_OSVersion", nil);
-                    itemVal = [UIDevice osVersion];
+                    itemVal = _deviceCard.osVersion;
                     break;
                 }
                 case ITEM_INDEX_ISJAILED:
                 {
                     itemName = NSLocalizedString(@"Device_IsJailed", nil);
-                    itemVal = ([UIDevice isJailed]) ? NSLocalizedString(@"Common_Yes", nil) : NSLocalizedString(@"Common_No", nil);
+                    itemVal = (_deviceCard.isJailed) ? NSLocalizedString(@"Common_Yes", nil) : NSLocalizedString(@"Common_No", nil);
                     break;
                 }
                 case ITEM_INDEX_DEVICESN:
                 {
                     itemName = NSLocalizedString(@"Device_DeviceSN", nil);
+                    itemVal = _device.shortDeviceSn;
                     break;
                 }
                 default:
@@ -135,22 +139,26 @@
             {
                 case ITEM_INDEX_APPVER:
                 {
-                    itemName = NSLocalizedString(@"Device_AppVersion", nil);                    
+                    itemName = NSLocalizedString(@"Device_AppVersion", nil);
+                    itemVal = _deviceCard.appVersion;
                     break;
                 }
                 case ITEM_INDEX_REGTIME:
                 {
-                    itemName = NSLocalizedString(@"Device_RegisterTime", nil);                    
+                    itemName = NSLocalizedString(@"Device_RegisterTime", nil);
+                    itemVal = [CBDateUtils dateStringInLocalTimeZoneWithFormat:STANDARD_DATE_TIME_FORMAT andDate:_deviceCard.registerTime];
                     break;
                 }
                 case ITEM_INDEX_SERVICESTATUS:
                 {
                     itemName = NSLocalizedString(@"Device_ServiceStatus", nil);
+                    itemVal = [RHProfile serviceStatusString:_profile.serviceStatus];
                     break;
                 }
                 case ITEM_INDEX_FORBIDDENEXPIREDDATE:
                 {
-                    itemName = NSLocalizedString(@"Device_UnbanDate", nil);                    
+                    itemName = NSLocalizedString(@"Device_UnbanDate", nil);
+                    itemVal = [CBDateUtils dateStringInLocalTimeZoneWithFormat:STANDARD_DATE_TIME_FORMAT andDate:_profile.unbanDate];
                     break;
                 }
                 default:
@@ -176,6 +184,19 @@
 }
 
 #pragma mark - Private Methods
+
+-(void)_setupInstance
+{
+    _guiModule = [GUIModule sharedInstance];
+    _userDataModule = [UserDataModule sharedInstance];
+    _device = _userDataModule.device;
+    _deviceCard = _device.deviceCard;
+    _profile = _device.profile;
+    
+    [self _setupNavigationBar];
+
+    [self _setupTableView];
+}
 
 -(void)_setupTableView
 {

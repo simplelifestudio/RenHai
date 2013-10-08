@@ -21,4 +21,6 @@
 @property (nonatomic, strong) RHDeviceCard* deviceCard;
 @property (nonatomic, strong) RHProfile* profile;
 
+-(NSString*) shortDeviceSn;
+
 @end

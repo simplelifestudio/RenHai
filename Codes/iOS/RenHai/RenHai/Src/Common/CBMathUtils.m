@@ -35,4 +35,45 @@
     return([NSString stringWithFormat:@"%1.1f GB", floatSize]);
 }
 
++(NSArray*) splitIntegerByUnit:(NSInteger) intVal array:(NSMutableArray*) unitVals reverseOrder:(BOOL) reverseOrder
+{
+    if (nil == unitVals)
+    {
+        unitVals = [NSMutableArray array];
+    }
+    
+    if (10 > intVal)
+    {
+        NSNumber* oVal = [NSNumber numberWithInteger:intVal];
+        if (reverseOrder)
+        {
+            [unitVals addObject:oVal];
+        }
+        else
+        {
+            [unitVals insertObject:oVal atIndex:0];
+        }
+        
+        return unitVals;
+    }
+    else
+    {
+        NSInteger unitVal = intVal % 10;
+        NSNumber* oVal = [NSNumber numberWithInteger:unitVal];
+        if (reverseOrder)
+        {
+            [unitVals addObject:oVal];
+        }
+        else
+        {
+            [unitVals insertObject:oVal atIndex:0];
+        }
+    }
+    
+    intVal = intVal / 10;
+    [CBMathUtils splitIntegerByUnit:intVal array:unitVals reverseOrder:reverseOrder];
+    
+    return unitVals;
+}
+
 @end

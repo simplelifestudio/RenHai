@@ -66,27 +66,27 @@ SINGLETON(CommunicationModule)
     NetworkStatus status = [curReach currentReachabilityStatus];
     [curReach connectionRequired];
 
-    GUIModule* guiModule = [GUIModule sharedInstance];
+//    GUIModule* guiModule = [GUIModule sharedInstance];
     
     switch (status)
     {
         case NotReachable:
         {
-            [guiModule showHUD:NSLocalizedString(@"Communication_InternetDisconnected", nil) delay:_HUD_DISPLAY];
+//            [guiModule showHUD:NSLocalizedString(@"Communication_InternetDisconnected", nil) delay:_HUD_DISPLAY];
             
             DDLogWarn(@"App's reachability changed to 'NotReachable'.");
             break;
         }
         case ReachableViaWiFi:
         {
-            [guiModule showHUD:NSLocalizedString(@"Communication_WiFiConnected", nil) delay:_HUD_DISPLAY];
+//            [guiModule showHUD:NSLocalizedString(@"Communication_WiFiConnected", nil) delay:_HUD_DISPLAY];
             
             DDLogWarn(@"App's reachability changed to 'ReachableViaWiFi'.");
             break;
         }
         case ReachableViaWWAN:
         {
-            [guiModule showHUD:NSLocalizedString(@"Communication_3G/GPRSConnected", nil) delay:_HUD_DISPLAY];
+//            [guiModule showHUD:NSLocalizedString(@"Communication_3G/GPRSConnected", nil) delay:_HUD_DISPLAY];
             
             DDLogWarn(@"App's reachability changed to 'ReachableViaWWAN'.");
             break;
@@ -134,6 +134,8 @@ SINGLETON(CommunicationModule)
     {
         flag = (_webSocketCommAgent.webSocketState == SR_OPEN);
     }
+    
+//    [_webSocketCommAgent stopPing];
     
     return flag;
 }

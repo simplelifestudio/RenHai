@@ -15,8 +15,9 @@
 
 typedef enum
 {
-    ServiceStatusNormal = 0,
-    ServiceStatusBanned = 1
+    ServiceStatusInvalid = 0,
+    ServiceStatusNormal = 1,
+    ServiceStatusBanned = 2
 }
 RHProfileServieStatus;
 
@@ -29,5 +30,7 @@ RHProfileServieStatus;
 @property (nonatomic, strong) NSDate* createTime;
 @property (nonatomic, strong) RHInterestCard* interestCard;
 @property (nonatomic, strong) RHImpressCard* impressCard;
+
++(NSString*) serviceStatusString:(RHProfileServieStatus) status;
 
 @end

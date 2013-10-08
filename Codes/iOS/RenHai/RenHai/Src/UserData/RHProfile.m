@@ -33,6 +33,32 @@
 
 #pragma mark - Public Methods
 
++(NSString*) serviceStatusString:(RHProfileServieStatus) status
+{
+    NSString* str = nil;
+    
+    switch (status)
+    {
+        case ServiceStatusNormal:
+        {
+            str = NSLocalizedString(@"Common_Normal", nil);
+            break;
+        }
+        case ServiceStatusBanned:
+        {
+            str = NSLocalizedString(@"Common_Banned", nil);
+            break;
+        }
+        default:
+        {
+            str = NSLocalizedString(@"Common_Invalid", nil);
+            break;
+        }
+    }
+    
+    return str;
+}
+
 -(id) init
 {
     if (self = [super init])
