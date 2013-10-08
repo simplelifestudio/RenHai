@@ -209,14 +209,13 @@ public class ServerDataSyncRequest extends AppJSONMessage
 			{
 				hotLabelObj.add(label.getLabelName());
 			}
-			//responseObj.addToBody(JSONKey.CurrentHotLabels, );
-			// TODO: 引入新的结构保存热门标签的计数/排序
+			responseObj.put(JSONKey.Current, hotLabelObj);
 		}
 		
 		if (hotObj.containsKey(JSONKey.History))
 		{
 			JSONArray hotLabelObj = new JSONArray();
-			hotObj.put(JSONKey.History, hotLabelObj);
+			responseObj.put(JSONKey.History, hotLabelObj);
 			// TODO: 
 		}
 	}

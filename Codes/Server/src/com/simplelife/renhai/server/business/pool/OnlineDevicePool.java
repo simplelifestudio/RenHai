@@ -252,17 +252,6 @@ public class OnlineDevicePool extends AbstractDevicePool
         				pool.onDeviceLeave(deviceWrapper, reason);
         			}
         		}
-    			
-    			// To avoid duplicate recycle of session if more than one device timeout
-    			IBusinessSession session = deviceWrapper.getOwnerBusinessSession();
-				if (session != null)
-				{
-					synchronized (session)
-					{
-						logger.debug("Device <{}> has bound session, notify session to notify other devices.", sn);
-						session.onDeviceLeave(deviceWrapper, reason);
-					}
-				}
         	}
     	}
     }
