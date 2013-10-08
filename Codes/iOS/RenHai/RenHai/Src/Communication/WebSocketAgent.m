@@ -217,7 +217,7 @@
             }
             case MessageType_ServerNotification:
             {
-                NSNotification* notification = [NSNotification notificationWithName:NOTIFICATION_ID_RHSERVER object:jsonMessage userInfo:nil];
+                NSNotification* notification = [NSNotification notificationWithName:NOTIFICATION_ID_RHSERVERNOTIFICATION object:jsonMessage userInfo:nil];
                 [[NSNotificationCenter defaultCenter] postNotification:notification];
                 
                 break;
@@ -250,6 +250,9 @@
     DDLogInfo(@"WebSocket closed with code: %d, reason: %@, wasClean: %@", code, reason, (wasClean) ? @"YES" : @"NO");
  
     [self closeWebSocket];
+    
+    NSNotification* notification = [NSNotification notificationWithName:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:notification];
 }
 
 #pragma mark - Private Methods

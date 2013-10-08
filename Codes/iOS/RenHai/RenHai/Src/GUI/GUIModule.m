@@ -66,6 +66,8 @@ SINGLETON(GUIModule)
 {
     [_HUDAgent releaseResources];
     
+    [self _unregisterNotifications];
+    
     [super releaseModule];
 }
 
@@ -76,6 +78,8 @@ SINGLETON(GUIModule)
     [super startService];
     
     [_networkActivityIndicator setEnabled:YES];
+    
+    [self _registerNotifications];
 }
 
 -(void) processService
@@ -179,6 +183,28 @@ SINGLETON(GUIModule)
                               PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
                               };
     _mainViewController = [MainViewController_iPhone revealControllerWithFrontViewController:_navigationController leftViewController:_leftbarViewController options:options];
+}
+
+-(void) _registerNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil];
+}
+
+-(void) _unregisterNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil];
+}
+
+-(void) _onNotifications:(NSNotification*) notification
+{
+    if (nil != notification)
+    {
+        NSString* notificationName = notification.name;
+        if ([notificationName isEqualToString:NOTIFICATION_ID_RHSERVERDISCONNECTED])
+        {
+            [_connectViewController popConnectView:_mainViewController animated:YES];
+        }
+    }
 }
 
 @end

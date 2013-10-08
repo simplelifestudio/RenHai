@@ -43,7 +43,7 @@
 "Connect_Ready_Detail" = "连接准备中...";
 "Connect_Connecting" = "连接";
 "Connect_Connecting_Detail" = "正在连接服务器...";
-"Connect_Connected" = "已连接";
+"Connect_Connected" = "连接";
 "Connect_Connected_Detail" = "成功连接服务器";
 "Connect_ConnectFailed" = "失败";
 "Connect_ConnectFailed_Detail" = "无法连接服务器";
@@ -51,7 +51,7 @@
 "Connect_AppDataSyncing_Detail" = "正在同步App数据...";
 "Connect_AppDataSynced" = "同步";
 "Connect_AppDataSynced_Detail" = "成功同步App数据";
-"Connect_AppDataSyncFailed" = "同步";
+"Connect_AppDataSyncFailed" = "失败";
 "Connect_AppDataSyncFailed_Detail" = "无法同步App数据";
 "Connect_ServerDataSyncing" = "同步";
 "Connect_ServerDataSyncing_Detail" = "正在同步服务器数据...";
