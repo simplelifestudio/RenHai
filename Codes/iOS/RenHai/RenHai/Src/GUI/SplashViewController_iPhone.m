@@ -21,7 +21,7 @@
 #define STUDIOLABEL_DURATION 0.75
 #define LABELS_DURATION 0.75
 #define LABELS_DURATION_OFFSET 0.5
-#define SPLASH_DURATION 0.75
+#define SPLASH_DURATION 0.25
 
 @interface SplashViewController_iPhone ()
 {
