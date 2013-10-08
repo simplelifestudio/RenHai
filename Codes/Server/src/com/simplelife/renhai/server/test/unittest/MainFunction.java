@@ -9,13 +9,17 @@
 
 package com.simplelife.renhai.server.test.unittest;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
 
-import junit.framework.TestCase;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.java_websocket.client.WebSocketClient;
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.drafts.Draft_10;
+import org.java_websocket.drafts.Draft_17;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,8 +28,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.db.DAOWrapper;
-import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceDAO;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
@@ -40,12 +42,12 @@ import com.simplelife.renhai.server.db.Systemmodule;
 import com.simplelife.renhai.server.db.SystemmoduleDAO;
 import com.simplelife.renhai.server.db.Systemoperationlog;
 import com.simplelife.renhai.server.db.SystemoperationlogDAO;
-import com.simplelife.renhai.server.db.Systemstatistics;
 import com.simplelife.renhai.server.json.AlohaRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.test.AbstractTestCase;
-import com.simplelife.renhai.server.test.LocalMockApp;
+import com.simplelife.renhai.server.test.MockApp;
+import com.simplelife.renhai.server.test.MockWebSocketClient;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.JSONKey;
@@ -126,7 +128,7 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testLeaveRandomPool()
 	{
-		LocalMockApp app = createNewMockApp(this.demoDeviceSn);
+		MockApp app = createNewMockApp(this.demoDeviceSn);
 		
 		String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:29.845\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"58G334J6A89MBA7L\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":1,\"appVersion\":\"0.1\",\"deviceModel\":\"iPhone 5\",\"osVersion\":\"6.1.2\"},\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\"}},\"dataQuery\":{\"device\":null}}}}";
 		sendRawCommand(app, jsonString);
@@ -176,7 +178,7 @@ public class MainFunction extends AbstractTestCase
 		sendRawCommand(app, jsonString);
 	}
 	
-	private void sendRawCommand(LocalMockApp app, String jsonString)
+	private void sendRawCommand(MockApp app, String jsonString)
 	{
 		JSONObject wholeObj = JSONObject.parseObject(jsonString);
 		JSONObject obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope); 
@@ -192,13 +194,14 @@ public class MainFunction extends AbstractTestCase
 		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"194AF3A8-FFB0-4997-B9DE-CD4CFB68252B\",\"timeStamp\":\"2013-09-30 15:28:31.408\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"5I4Z5A61I1250505\",\"deviceId\":0},\"body\":{\"dataQuery\":{\"device\":{\"profile\":{\"impressCard\":null}}}}}}";
 		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"794AF3A8-FFB0-4997-B9DE-CD4CFB68252A\",\"timeStamp\":\"2013-10-01 15:14:30.322\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"E936R0GBTJAAEB0Q\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":0,\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"osVersion\":\"6.1\"},\"deviceSn\":\"794AF3A8-FFB0-4997-B9DE-CD4CFB68252A\"}},\"dataQuery\":{\"device\":null}}}}";
 		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"EFAD498F-9A95-4B90-A59E-FC599AC21FA3\",\"timeStamp\":\"2013-10-01 16:02:44.578\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"816SY86DJ6C88RC7\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":0,\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"osVersion\":\"6.1\"},\"deviceSn\":\"EFAD498F-9A95-4B90-A59E-FC599AC21FA3\"}},\"dataQuery\":{\"device\":null}}}}";
-		String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 12:54:46.097\",\"messageType\":1,\"messageId\":103,\"messageSn\":\"SAUB9WO215092BO9\",\"deviceId\":0},\"body\":{\"operationValue\":null,\"businessSessionId\":null,\"operationInfo\":null,\"operationType\":4,\"businessType\":1}}}";
+		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 12:54:46.097\",\"messageType\":1,\"messageId\":103,\"messageSn\":\"SAUB9WO215092BO9\",\"deviceId\":0},\"body\":{\"operationValue\":null,\"businessSessionId\":null,\"operationInfo\":null,\"operationType\":4,\"businessType\":1}}}";
+		String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"EFAD498F-9A95-4B90-A59E-FC599AC21FA3\",\"timeStamp\":\"2013-10-08 13:01:52.113\",\"messageType\":1,\"messageId\":102,\"messageSn\":\"271Z30DCS7Z6H2B7\",\"deviceId\":0},\"body\":{\"deviceCount\":{\"chat\":null,\"interest\":null,\"randomChat\":null,\"online\":null,\"interestChat\":null,\"random\":null}}}}";
 		
 		JSONObject wholeObj = JSONObject.parseObject(jsonString);
 		JSONObject obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope); 
 		
-		LocalMockApp app = createNewMockApp(this.demoDeviceSn);
-		app.syncDevice();
+		MockApp app = createNewMockApp(this.demoDeviceSn);
+		//app.syncDevice();
 		app.sendRawJSONMessage(obj, true);
 		//app.sendServerDataSyncRequest();
 	}
@@ -373,5 +376,29 @@ public class MainFunction extends AbstractTestCase
 		System.out.print("\nChatConfirmed compareTo Init: " + Consts.BusinessProgress.ChatConfirmed.compareTo(progress1));
 		System.out.print("\nSessionBoundConfirmed compareTo progress2: " + Consts.BusinessProgress.SessionBoundConfirmed.compareTo(progress2));
 		System.out.print("\nprogress1 compareTo SessionBoundConfirmed: " + progress1.compareTo(Consts.BusinessProgress.SessionBoundConfirmed));
+	}
+	
+	@Test
+	public void testWebsocketClient()
+	{
+		String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"EFAD498F-9A95-4B90-A59E-FC599AC21FA3\",\"timeStamp\":\"2013-10-08 13:01:52.113\",\"messageType\":1,\"messageId\":102,\"messageSn\":\"271Z30DCS7Z6H2B7\",\"deviceId\":0},\"body\":{\"deviceCount\":{\"chat\":null,\"interest\":null,\"randomChat\":null,\"online\":null,\"interestChat\":null,\"random\":null}}}}";
+		String serverlocation = "ws://192.81.135.31/renhai/websocket"; 
+		URI uri = URI.create(serverlocation);
+		
+		Draft d = new Draft_17();
+		//AutobahnClientTest e = new AutobahnClientTest(d, uri);
+		MockWebSocketClient e = new MockWebSocketClient(uri);
+		
+		Thread t = new Thread( e );
+		t.start();
+		e.send(jsonString);
+		try {
+			t.join();
+
+		} catch ( InterruptedException e1 ) {
+			e1.printStackTrace();
+		} finally {
+			e.close();
+		}
 	}
 }

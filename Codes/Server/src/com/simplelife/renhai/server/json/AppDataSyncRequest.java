@@ -503,10 +503,12 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		if (syncType == SyncType.ExistentNotLoaded)
 		{
+			logger.debug("Device is ExistentNotLoaded, try to load device from DB.");
 			loadDevice(deviceSn);
 		}
 		else if (syncType == SyncType.NewDevice)
 		{
+			logger.debug("AppDataSyncRequest from new device.");
 			if (body.containsKey(JSONKey.DataUpdate))
 			{
 				newDevice(deviceSn);
@@ -522,7 +524,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		
 		// Check if profile is banned
-		Profile profile = deviceWrapper.getDevice().getProfile();
+		Device device = deviceWrapper.getDevice();
+		Profile profile = device.getProfile();
 		String strServiceStatus = profile.getServiceStatus();
 		Consts.ServiceStatus status = Consts.ServiceStatus.parseFromStringValue(strServiceStatus);
 		if (status == Consts.ServiceStatus.Banned)

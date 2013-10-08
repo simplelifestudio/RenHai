@@ -24,8 +24,8 @@ import com.simplelife.renhai.server.util.GlobalSetting;
  */
 public class Test24MaxBusinessDevicePool extends AbstractTestCase
 {
-	private LocalMockApp mockApp1;
-	private LocalMockApp mockApp2;
+	private MockApp mockApp1;
+	private MockApp mockApp2;
 	
 	/**
 	 * Initialize variables needed in case

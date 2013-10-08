@@ -27,6 +27,7 @@ import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.IMockConnection;
 
 /**
  * 
@@ -81,11 +82,11 @@ public abstract class AbstractTestCase extends TestCase
 		// Create new deviceCard
 		Devicecard deviceCard = new Devicecard();
 		deviceCard.setRegisterTime(now);
-		deviceCard.setOsVersion(AbstractMockApp.OSVersion);
-		deviceCard.setAppVersion(AbstractMockApp.AppVersion);
+		deviceCard.setOsVersion(MockApp.OSVersion);
+		deviceCard.setAppVersion(MockApp.AppVersion);
 		deviceCard.setIsJailed(Consts.YesNo.No.toString());
-		deviceCard.setLocation(AbstractMockApp.Location);
-		deviceCard.setDeviceModel(AbstractMockApp.DeviceModel);
+		deviceCard.setLocation(MockApp.Location);
+		deviceCard.setDeviceModel(MockApp.DeviceModel);
 		
 		// Create Device object and bind with cards
 		Device device = new Device();
@@ -105,7 +106,7 @@ public abstract class AbstractTestCase extends TestCase
 	/**
 	 * Create new device in pool, and bind with mock App with random device SN
 	 */
-	public LocalMockApp createNewMockApp(String deviceSn)
+	public MockApp createNewMockApp(String deviceSn)
 	{
 		if (deviceSn == null || deviceSn.length() == 0)
 		{
@@ -127,12 +128,12 @@ public abstract class AbstractTestCase extends TestCase
 		}
 		deviceWrapper.setDevice(device);
 		
-		LocalMockApp mockApp = new LocalMockApp(conn);
+		MockApp mockApp = new MockApp(conn);
 		mockApp.bindDeviceWrapper(deviceWrapper);
 		return mockApp;
 	}
 	
-	protected void deleteDevice(LocalMockApp mockApp)
+	protected void deleteDevice(MockApp mockApp)
 	{
 		mockApp.pingTimer.cancel();
 		OnlineDevicePool pool = OnlineDevicePool.instance;

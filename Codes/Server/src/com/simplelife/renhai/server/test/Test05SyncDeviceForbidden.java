@@ -28,7 +28,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
  */
 public class Test05SyncDeviceForbidden extends AbstractTestCase
 {
-	private LocalMockApp mockApp;
+	private MockApp mockApp;
 	
 	/**
 	 * Initialize variables needed in case

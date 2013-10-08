@@ -50,8 +50,23 @@ public class InvalidRequest extends AppJSONMessage
     		response.addToBody(JSONKey.ReceivedMessage, receivedMessage);
     	}
     	
-    	response.addToBody(JSONKey.ErrorCode, Consts.GlobalErrorCode.InvalidJSONRequest_1100);
-    	response.addToBody(JSONKey.ErrorDescription, "Invalid JSON request");
+    	if (this.getErrorCode() != null)
+    	{
+    		response.addToBody(JSONKey.ErrorCode, this.getErrorCode());
+    	}
+    	else
+    	{
+    		response.addToBody(JSONKey.ErrorCode, Consts.GlobalErrorCode.InvalidJSONRequest_1100);
+    	}
+    	
+    	if (this.getErrorDescription() != null)
+    	{
+    		response.addToBody(JSONKey.ErrorDescription, this.getErrorDescription());
+    	}
+    	else
+    	{
+    		response.addToBody(JSONKey.ErrorDescription, "Invalid JSON request");
+    	}
     	response.addToHeader(JSONKey.MessageSn, this.getMessageSn());
     	
     	response.asyncResponse();

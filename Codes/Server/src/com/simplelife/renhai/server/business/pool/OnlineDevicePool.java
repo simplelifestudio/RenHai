@@ -94,7 +94,6 @@ public class OnlineDevicePool extends AbstractDevicePool
     
     private void checkDeviceMap(HashMap<String, IDeviceWrapper> deviceMap)
     {
-    	logger.debug("Start to check inactive connections.");
     	Iterator<Entry<String, IDeviceWrapper>> entryKeyIterator = deviceMap.entrySet().iterator();
         IDeviceWrapper deviceWrapper;
         long lastPingTime;
@@ -135,6 +134,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     /** */
     private void checkInactiveDevice()
     {
+    	logger.debug("Start to check inactive connections.");
     	synchronized(deviceMap)
     	{
     		checkDeviceMap(this.deviceMap);

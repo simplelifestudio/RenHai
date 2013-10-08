@@ -28,8 +28,8 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
  */
 public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 {
-	private LocalMockApp mockApp1;
-	private LocalMockApp mockApp2;
+	private MockApp mockApp1;
+	private MockApp mockApp2;
 	
 	/**
 	 * Initialize variables needed in case

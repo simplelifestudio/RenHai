@@ -13,7 +13,7 @@ import org.junit.Test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.test.AbstractTestCase;
-import com.simplelife.renhai.server.test.LocalMockApp;
+import com.simplelife.renhai.server.test.MockApp;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -76,7 +76,7 @@ public class TestSververDataSyncRequest extends AbstractTestCase
 		historyObj.put(JSONKey.EndTime, null);
 		
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.syncDevice();
 		assertTrue(!app.lastReceivedCommandIsError());
 		
@@ -108,7 +108,7 @@ public class TestSververDataSyncRequest extends AbstractTestCase
 		countObj.put(JSONKey.Random, null);
 		countObj.put(JSONKey.RandomChat, null);
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		//app.syncDevice();
 		//assertTrue(!app.lastReceivedCommandIsError());
 		
@@ -145,7 +145,7 @@ public class TestSververDataSyncRequest extends AbstractTestCase
 		historyObj.put(JSONKey.EndTime, null);
 		
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.syncDevice();
 		assertTrue(!app.lastReceivedCommandIsError());
 		
