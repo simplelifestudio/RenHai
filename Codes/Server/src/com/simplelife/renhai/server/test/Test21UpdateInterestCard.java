@@ -24,7 +24,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
  */
 public class Test21UpdateInterestcard extends AbstractTestCase
 {
-	private LocalMockApp mockApp1;
+	private MockApp mockApp1;
 	
 	/**
 	 * Initialize variables needed in case

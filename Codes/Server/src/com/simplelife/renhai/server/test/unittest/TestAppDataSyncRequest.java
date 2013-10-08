@@ -17,7 +17,7 @@ import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.test.AbstractTestCase;
-import com.simplelife.renhai.server.test.LocalMockApp;
+import com.simplelife.renhai.server.test.MockApp;
 import com.simplelife.renhai.server.test.MockWebSocketConnection;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
@@ -61,7 +61,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 	{
 		//wholeObj.clear();
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
@@ -72,7 +72,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 	@Test
 	public void testInvalidJSON_NoJSON()
 	{
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		String message = "fdajfdskaljureijfsdkal";
 		app.sendRawJSONMessage(message, true);
 		
@@ -86,7 +86,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 	{
 		envelope.clear();
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
@@ -101,7 +101,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		//envelope.put(JSONKey.Header, header);
 		envelope.put(JSONKey.Body, body);
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
@@ -116,7 +116,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		envelope.put(JSONKey.Header, header);
 		//envelope.put(JSONKey.Body, body);
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
@@ -136,7 +136,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
@@ -156,7 +156,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
@@ -176,7 +176,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		//header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
@@ -196,7 +196,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
@@ -216,7 +216,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		header.put(JSONKey.DeviceSn, "DeviceSnjfkdlajujfkdla;jl");
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
@@ -244,7 +244,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		queryObj.put(JSONKey.Device, null);
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
@@ -270,7 +270,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		body.put(JSONKey.DataQuery, newQueryObject());
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
@@ -337,7 +337,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		body.put(JSONKey.DataUpdate, newUpdateObject());
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
@@ -376,7 +376,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		deviceObj.put(JSONKey.DeviceId, null);
 		
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		assertTrue(!app.lastReceivedCommandIsError());
 	}
@@ -451,7 +451,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		body.put(JSONKey.DataQuery, newQueryObject());
 		body.put(JSONKey.DataUpdate, newUpdateObject());
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
@@ -479,7 +479,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		body.put(JSONKey.DataQuery, newQueryObject());
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		JSONObject obj = app.getLastReceivedCommand();
@@ -502,7 +502,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		appVersion = DateUtil.getNow();
 		body.put(JSONKey.DataUpdate, newUpdateObject_Partial());
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.clearLastReceivedCommand();
 		app.sendRawJSONMessage(envelope, true);
 		app.waitMessage();
@@ -543,7 +543,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		profileObj.put(JSONKey.ImpressCard, null);
 		
-		LocalMockApp app = this.createNewMockApp(deviceSn);
+		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);
 		
 		assertTrue(!app.lastReceivedCommandIsError());

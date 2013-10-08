@@ -23,7 +23,7 @@ import com.simplelife.renhai.server.util.GlobalSetting;
  */
 public class Test09TimeoutWaitForMatch extends AbstractTestCase
 {
-	private LocalMockApp mockApp;
+	private MockApp mockApp;
 	
 	/**
 	 * Initialize variables needed in case

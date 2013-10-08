@@ -22,7 +22,7 @@ import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
  */
 public class Test01KeepWebsocket extends AbstractTestCase
 {
-	private LocalMockApp mockApp;
+	private MockApp mockApp;
 	
 	@Before
 	public void setUp() throws Exception

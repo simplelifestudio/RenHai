@@ -22,7 +22,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
  */
 public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 {
-	private LocalMockApp mockApp;
+	private MockApp mockApp;
 	@Before
 	public void setUp() throws Exception
 	{

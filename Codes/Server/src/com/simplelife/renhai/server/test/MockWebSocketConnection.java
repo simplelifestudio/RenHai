@@ -13,20 +13,17 @@ import java.io.IOException;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.DateUtil;
+import com.simplelife.renhai.server.util.IMockApp;
+import com.simplelife.renhai.server.util.IMockConnection;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
 
 
 /** */
-public class MockWebSocketConnection extends WebSocketConnection
+public class MockWebSocketConnection extends WebSocketConnection implements IMockConnection
 {
 	private JSONObject lastSentMessage;
-	private AbstractMockApp ownerMockApp;
-	
-	public void bindMockApp(AbstractMockApp mockApp)
-	{
-		this.ownerMockApp = mockApp;
-	}
+	private IMockApp ownerMockApp;
 	
 	public JSONObject getLastSentMessage()
 	{
@@ -68,7 +65,7 @@ public class MockWebSocketConnection extends WebSocketConnection
     
     /** */
     @Override
-    protected void sendMessage(ServerJSONMessage message) throws IOException
+    public void sendMessage(ServerJSONMessage message) throws IOException
     {
     	if (disabled)
     	{
@@ -85,67 +82,9 @@ public class MockWebSocketConnection extends WebSocketConnection
     	}
     }
     
-    /* 
-    @Override
-    public void asyncSendMessage(ServerJSONMessage message) throws IOException
-    {
-    	if (disabled)
-    	{
-    		throw new IOException();
-    	}
-    	
-    	lastSentMessage = new JSONObject();
-    	lastSentMessage.put(JSONKey.JsonEnvelope, message.toJSONObject());
-    	if (ownerMockApp != null)
-    	{
-    		this.ownerMockApp.onJSONCommand(lastSentMessage);
-    	}
-    	sendMessage(lastSentMessage.toJSONString());
-    }
-    */
     
-    
-    /*
-     * 
-    @Override
-    public AppJSONMessage syncSendMessage(String messageSn, String message) throws IOException
-    {
-    	if (disabled)
-    	{
-    		throw new IOException();
-    	}
-    	sendMessage(message);
-    	return null;
-    }
-    */
-    
-    /*
-     *
-    @Override
-    public AppJSONMessage syncSendMessage(ServerJSONMessage message) throws IOException
-    {
-    	if (disabled)
-    	{
-    		throw new IOException();
-    	}
-    	
-    	lastSentMessage = new JSONObject();
-    	lastSentMessage.put(JSONKey.JsonEnvelope, message.toJSONObject());
-    	this.ownerMockApp.onJSONCommand(lastSentMessage);
-    	sendMessage(lastSentMessage.toJSONString());
-    	return null;
-    }
-    */
-    
-    
-    /** */
     public void onTimeout()
     {
-    }
-    
-    public void clear()
-    {
-    	lastSentMessage = null;
     }
     
     @Override
@@ -153,4 +92,10 @@ public class MockWebSocketConnection extends WebSocketConnection
     {
     	
     }
+
+	@Override
+	public void bindMockApp(IMockApp mockApp)
+	{
+		this.ownerMockApp = mockApp;
+	}
 }
