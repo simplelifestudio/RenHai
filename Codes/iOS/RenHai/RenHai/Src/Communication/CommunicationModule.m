@@ -135,6 +135,8 @@ SINGLETON(CommunicationModule)
         flag = (_webSocketCommAgent.webSocketState == SR_OPEN);
     }
     
+//    [_webSocketCommAgent stopPing];
+    
     return flag;
 }
 

@@ -32,6 +32,31 @@
 
 #pragma mark - Public Methods
 
++(NSString*) jailStatusString:(RHDeviceJailStatus) status
+{
+    NSString* str = nil;
+    
+    switch (status)
+    {
+        case NotJailed:
+        {
+            str = NSLocalizedString(@"Common_No", nil);
+            break;
+        }
+        case Jailed:
+        {
+            str = NSLocalizedString(@"Common_Yes", nil);            
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    
+    return str;
+}
+
 -(id) init
 {
     if (self = [super init])

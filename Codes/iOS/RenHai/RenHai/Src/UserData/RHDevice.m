@@ -11,6 +11,7 @@
 #import "SSKeychain.h"
 
 #import "CBJSONUtils.h"
+#import "CBStringUtils.h"
 
 #import "AppDataModule.h"
 #import "RHMessage.h"
@@ -19,6 +20,8 @@
 #define SERIALIZE_KEY_DEVICESN @"device.deviceSn"
 #define SERIALIZE_KEY_DEVICECARD @"device.deviceCard"
 #define SERIALIZE_KEY_PROFILE @"device.profile"
+
+#define LENGTH_SHORTSN 12
 
 @implementation RHDevice
 
@@ -40,6 +43,23 @@
     }
     
     return self;
+}
+
+-(NSString*) shortDeviceSn
+{
+    NSString* shortSn = nil;
+    
+    if (nil != _deviceSn)
+    {
+        NSUInteger length = _deviceSn.length;
+        if (LENGTH_SHORTSN <= length)
+        {
+            NSRange range = NSMakeRange(length - LENGTH_SHORTSN, LENGTH_SHORTSN);
+            shortSn = [_deviceSn substringWithRange:range];
+        }
+    }
+    
+    return shortSn;
 }
 
 #pragma mark - Private Methods

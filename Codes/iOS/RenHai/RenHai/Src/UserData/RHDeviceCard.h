@@ -29,4 +29,6 @@ RHDeviceJailStatus;
 @property (nonatomic, strong) NSString* appVersion;
 @property (nonatomic) RHDeviceJailStatus isJailed;
 
++(NSString*) jailStatusString:(RHDeviceJailStatus) status;
+
 @end

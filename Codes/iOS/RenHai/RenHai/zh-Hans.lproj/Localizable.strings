@@ -10,6 +10,9 @@
 "Common_No" = "否";
 "Common_PullToRefresh" = "下拉刷新";
 "Common_Refreshing" = "刷新...";
+"Common_Normal" = "正常";
+"Common_Banned" = "禁言";
+"Common_Invalid" = "无效";
 
 "Communication_InternetDisconnected" = "网络已断开";
 "Communication_WiFiConnected" = "WiFi已连接";

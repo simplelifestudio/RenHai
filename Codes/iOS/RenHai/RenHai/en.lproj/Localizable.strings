@@ -10,6 +10,9 @@
 "Common_No" = "No";
 "Common_PullToRefresh" = "Pull to Refresh";
 "Common_Refreshing" = "Refreshing...";
+"Common_Normal" = "Normal";
+"Common_Banned" = "Banned";
+"Common_Invalid" = "Invalid";
 
 "Communication_InternetDisconnected" = "Internet Disconnected";
 "Communication_WiFiConnected" = "WiFi Connected";
