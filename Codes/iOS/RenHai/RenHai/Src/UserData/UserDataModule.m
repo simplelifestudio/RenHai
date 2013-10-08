@@ -2,7 +2,7 @@
 //  UserDataModule.m
 //  RenHai
 //
-//  Created by Patrick Deng on 13-9-1.
+//  Created by DENG KE on 13-9-1.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
@@ -17,7 +17,8 @@
 #import "RHImpressCard.h"
 #import "RHImpressLabel.h"
 
-#define ARCHIVE_FILE_NAME @"device.dat"
+#define ARCHIVE_DEVICE_NAME @"device.dat"
+#define ARCHIVE_SERVER_NAME @"server.dat"
 
 @interface UserDataModule()
 {
@@ -31,6 +32,7 @@
 SINGLETON(UserDataModule)
 
 @synthesize device = _device;
+@synthesize server = _server;
 
 -(void) initModule
 {
@@ -52,6 +54,12 @@ SINGLETON(UserDataModule)
     DDLogVerbose(@"Module:%@ is started.", self.moduleIdentity);
     
     [super startService];
+    
+    BOOL loadFlag = [self loadUserData];
+    if (!loadFlag)
+    {
+        [self initUserData];
+    }
 }
 
 -(void) processService
@@ -77,7 +85,7 @@ SINGLETON(UserDataModule)
 {
     BOOL flag = NO;
     
-    NSString* file = [self.dataDirectory stringByAppendingPathComponent:ARCHIVE_FILE_NAME];
+    NSString* file = [self.dataDirectory stringByAppendingPathComponent:ARCHIVE_DEVICE_NAME];
     
     flag = [NSKeyedArchiver archiveRootObject:_device toFile:file];
     
@@ -88,11 +96,13 @@ SINGLETON(UserDataModule)
 {
     BOOL flag = NO;
     
-    NSString* file = [self.dataDirectory stringByAppendingPathComponent:ARCHIVE_FILE_NAME];
+    NSString* file = [self.dataDirectory stringByAppendingPathComponent:ARCHIVE_DEVICE_NAME];
     
     @try
     {
         _device = [NSKeyedUnarchiver unarchiveObjectWithFile:file];
+        
+        [self _initServerData];
     }
     @catch (NSException *exception)
     {
@@ -111,16 +121,15 @@ SINGLETON(UserDataModule)
 -(void) initUserData
 {
     _device = [[RHDevice alloc] init];
+    
+    [self _initServerData];
 }
 
--(void) updateUserData
-{
-    
-}
+#pragma mark - Private Methods
 
--(void) syncUserData
+-(void) _initServerData
 {
-    
+    _server = [[RHServer alloc] init];
 }
 
 #pragma mark - UIApplicationDelegate

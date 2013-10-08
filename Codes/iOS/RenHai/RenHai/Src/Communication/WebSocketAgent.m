@@ -2,7 +2,7 @@
 //  WebSocketAgent.m
 //  RenHai
 //
-//  Created by Patrick Deng on 13-9-4.
+//  Created by DENG KE on 13-9-4.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
@@ -127,6 +127,12 @@
     if (!syncInMainThread && [[NSThread currentThread] isMainThread])
     {
         DDLogWarn(@"Warning: This method CAN NOT be invoked in Main Thread!");
+        return nil;
+    }
+    
+    BOOL isLegalMessage = [RHMessage isLegalMessage:requestMessage];
+    if (!isLegalMessage)
+    {
         return nil;
     }
     
@@ -327,7 +333,7 @@
 
 -(void) _saveResponseMessage:(RHMessage*) message
 {
-    if (nil != message && nil != message.messageSn && 0 < message.messageSn.length)
+    if (nil != message && nil != message.messageSn)
     {
         @synchronized(_responseMessageSet)
         {

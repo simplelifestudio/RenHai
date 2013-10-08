@@ -2,7 +2,7 @@
 //  UserDataModule.h
 //  RenHai
 //
-//  Created by Patrick Deng on 13-9-1.
+//  Created by DENG KE on 13-9-1.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
@@ -12,17 +12,17 @@
 #import "CBSharedInstance.h"
 
 #import "RHDevice.h"
+#import "RHServer.h"
 
 @interface UserDataModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 
 @property (atomic, strong, readonly) RHDevice* device;
+@property (atomic, strong, readonly) RHServer* server;
 
 -(NSString*) dataDirectory;
 
 -(BOOL) saveUserData;
 -(BOOL) loadUserData;
 -(void) initUserData;
--(void) updateUserData;
--(void) syncUserData;
 
 @end

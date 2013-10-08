@@ -2,13 +2,16 @@
 //  RHProfile.m
 //  RenHai
 //
-//  Created by Patrick Deng on 13-9-2.
+//  Created by DENG KE on 13-9-2.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
 #import "RHProfile.h"
 
 #import "CBJSONUtils.h"
+#import "CBDateUtils.h"
+
+#import "RHMessage.h"
 
 #define SERIALIZE_KEY_PROFILEID @"profile.profileId"
 #define SERIALIZE_KEY_SERVICESTATUS @"profile.serviceStatus"
@@ -17,14 +20,6 @@
 #define SERIALIZE_KEY_CREATETIME @"profile.createTime"
 #define SERIALIZE_KEY_INTERESTCARD @"profile.interestCard"
 #define SERIALIZE_KEY_IMPRESSCARD @"profile.impressCard"
-
-#define JSON_KEY_PROFILEID @"profileId"
-#define JSON_KEY_SERVICESTATUS @"serviceStatus"
-#define JSON_KEY_UNBANDATE @"unbanDate"
-#define JSON_KEY_ACTIVE @"active"
-#define JSON_KEY_CREATETIME @"createTime"
-#define JSON_KEY_INTERESTCARD @"interestCard"
-#define JSON_KEY_IMPRESSCARD @"impressCard"
 
 @implementation RHProfile
 
@@ -65,7 +60,7 @@
     return oProfileId;
 }
 
--(NSNumber*) _getOServiceStatus
+-(id) _getOServiceStatus
 {
     return [NSNumber numberWithInt:_serviceStatus];
 }
@@ -80,54 +75,123 @@
     }
     else
     {
-        oUnbanDate = _unbanDate;
+        oUnbanDate = [CBDateUtils dateStringInLocalTimeZoneWithFormat:FULL_DATE_TIME_FORMAT andDate:_unbanDate];
     }
     
     return oUnbanDate;
 }
 
+-(id) _getOActive
+{
+    return [NSNumber numberWithBool:_active];
+}
+
 -(id) _getOCreateTime
 {
-    id oRegisterTime = nil;
+    id oCreateTime = nil;
     
     if (nil == _createTime)
     {
-        oRegisterTime = [NSNull null];
+        oCreateTime = [NSNull null];
     }
     else
     {
-        oRegisterTime = _createTime;
+        oCreateTime = [CBDateUtils dateStringInLocalTimeZoneWithFormat:FULL_DATE_TIME_FORMAT andDate:_createTime];
     }
     
-    return oRegisterTime;
+    return oCreateTime;
 }
 
 #pragma mark - CBJSONable
+
+-(void) fromJSONObject:(NSDictionary *)dic
+{
+    if (nil != dic)
+    {
+        id oProfileId = [dic objectForKey:MESSAGE_KEY_PROFILEID];
+        if (nil != oProfileId)
+        {
+            _profileId = ([NSNull null] != oProfileId) ? ((NSNumber*)oProfileId).integerValue : 0;
+        }
+        
+        id oServiceStatus = [dic objectForKey:MESSAGE_KEY_SERVICESTATUS];
+        if (nil != oServiceStatus)
+        {
+            _serviceStatus = ([NSNull null] != oServiceStatus) ? ((NSNumber*)oServiceStatus).integerValue : 0;
+        }
+        
+        id oUnbanDate = [dic objectForKey:MESSAGE_KEY_UNBANDATE];
+        if (nil != oUnbanDate)
+        {
+            _unbanDate = ([NSNull null] != oUnbanDate) ? [CBDateUtils dateFromStringWithFormat:oUnbanDate andFormat:FULL_DATE_TIME_FORMAT] : nil;
+        }
+        
+        id oActive = [dic objectForKey:MESSAGE_KEY_ACTIVE];
+        if (nil != oActive)
+        {
+            _active = ([NSNull null] != oActive) ? ((NSNumber*)oActive).boolValue : 0;
+        }
+        
+        id oCreateTime = [dic objectForKey:MESSAGE_KEY_CREATETIME];
+        if (nil != oCreateTime)
+        {
+            _createTime = ([NSNull null] != oCreateTime) ? [CBDateUtils dateFromStringWithFormat:oCreateTime andFormat:FULL_DATE_TIME_FORMAT] : nil;
+        }
+        
+        id oInterestCard = [dic objectForKey:MESSAGE_KEY_INTERESTCARD];
+        if (nil != oInterestCard)
+        {
+            if ([NSNull null] != oInterestCard)
+            {
+                _interestCard = [[RHInterestCard alloc] init];
+                [_interestCard fromJSONObject:oInterestCard];
+            }
+            else
+            {
+                _interestCard = nil;
+            }
+        }
+        
+        id oImpressCard = [dic objectForKey:MESSAGE_KEY_IMPRESSCARD];
+        if (nil != oImpressCard)
+        {
+            if ([NSNull null] != oImpressCard)
+            {
+                _impressCard = [[RHImpressCard alloc] init];
+                [_impressCard fromJSONObject:oImpressCard];
+            }
+            else
+            {
+                _impressCard = nil;
+            }
+        }
+    }
+}
 
 -(NSDictionary*) toJSONObject
 {
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
     id oProfileId = [self _getOProfileId];
-    [dic setObject:oProfileId forKey:JSON_KEY_PROFILEID];
+    [dic setObject:oProfileId forKey:MESSAGE_KEY_PROFILEID];
     
-    NSNumber* oServiceStatus = [self _getOServiceStatus];
-    [dic setObject:oServiceStatus forKey:JSON_KEY_SERVICESTATUS];
+    id oServiceStatus = [self _getOServiceStatus];
+    [dic setObject:oServiceStatus forKey:MESSAGE_KEY_SERVICESTATUS];
     
     id oUnbanDate = [self _getOUnbanDate];
-    [dic setObject:oUnbanDate forKey:JSON_KEY_UNBANDATE];
+    [dic setObject:oUnbanDate forKey:MESSAGE_KEY_UNBANDATE];
     
-    NSNumber* oActive = [NSNumber numberWithBool:_active];
-    [dic setObject:oActive forKey:JSON_KEY_ACTIVE];
+    id oActive = [self _getOActive];
+    [dic setObject:oActive forKey:MESSAGE_KEY_ACTIVE];
     
     id oCreateTime = [self _getOCreateTime];
-    [dic setObject:oCreateTime forKey:JSON_KEY_CREATETIME];
+    [dic setObject:oCreateTime forKey:MESSAGE_KEY_CREATETIME];
 
     NSDictionary* interestCardDic = _interestCard.toJSONObject;
-    [dic setObject:interestCardDic forKey:JSON_KEY_INTERESTCARD];
+    [dic setObject:interestCardDic forKey:MESSAGE_KEY_INTERESTCARD];
     
     NSDictionary* impressCardDic = _impressCard.toJSONObject;
-    [dic setObject:impressCardDic forKey:JSON_KEY_IMPRESSCARD];
+    [dic setObject:impressCardDic forKey:MESSAGE_KEY_IMPRESSCARD];
     
     return dic;
 }
@@ -140,24 +204,18 @@
     return str;
 }
 
-#pragma mark - CBSerializable
+#pragma mark - NSCoding
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super init])
     {
         _profileId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_PROFILEID];
-        
         _serviceStatus = [aDecoder decodeIntForKey:SERIALIZE_KEY_SERVICESTATUS];
-
         _unbanDate = [aDecoder decodeObjectForKey:SERIALIZE_KEY_UNBANDATE];
-        
         _active = [aDecoder decodeBoolForKey:SERIALIZE_KEY_ACTIVE];
-
         _createTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_CREATETIME];
-        
         _interestCard = [aDecoder decodeObjectForKey:SERIALIZE_KEY_INTERESTCARD];
-        
         _impressCard = [aDecoder decodeObjectForKey:SERIALIZE_KEY_IMPRESSCARD];
     }
     
@@ -167,17 +225,11 @@
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeInteger:_profileId forKey:SERIALIZE_KEY_PROFILEID];
-    
     [aCoder encodeInt:_serviceStatus forKey:SERIALIZE_KEY_SERVICESTATUS];
-    
     [aCoder encodeObject:_unbanDate forKey:SERIALIZE_KEY_UNBANDATE];
-    
     [aCoder encodeBool:_active forKey:SERIALIZE_KEY_ACTIVE];
-    
     [aCoder encodeObject:_createTime forKey:SERIALIZE_KEY_CREATETIME];
-    
     [aCoder encodeObject:_interestCard forKey:SERIALIZE_KEY_INTERESTCARD];
-    
     [aCoder encodeObject:_impressCard forKey:SERIALIZE_KEY_IMPRESSCARD];
 }
 
@@ -185,18 +237,6 @@
 
 -(id) copyWithZone:(struct _NSZone *)zone
 {
-//    RHProfile* copy = [[RHProfile alloc] init];
-//    
-//    copy.profileId = _profileId;
-//    copy.serviceStatus = _serviceStatus;
-//    copy.unbanDate = [_unbanDate copy];
-//    copy.active = _active;
-//    copy.createTime = [_createTime copy];
-//    copy.interestCard = [_interestCard copy];
-//    copy.impressCard = [_impressCard copy];
-//    
-//    return copy;
-
     NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
     return (RHProfile*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
@@ -205,18 +245,6 @@
 
 -(id) mutableCopyWithZone:(struct _NSZone *)zone
 {
-//    RHProfile* mutableCopy = [[RHProfile alloc] init];
-//    
-//    mutableCopy.profileId = _profileId;
-//    mutableCopy.serviceStatus = _serviceStatus;
-//    mutableCopy.unbanDate = [_unbanDate mutableCopy];
-//    mutableCopy.active = _active;
-//    mutableCopy.createTime = [_createTime mutableCopy];
-//    mutableCopy.interestCard = [_interestCard mutableCopy];
-//    mutableCopy.impressCard = [_impressCard mutableCopy];
-//    
-//    return mutableCopy;
-
     return [self copyWithZone:zone];
 }
 

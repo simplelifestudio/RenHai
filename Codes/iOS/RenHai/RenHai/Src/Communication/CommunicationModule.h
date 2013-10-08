@@ -2,7 +2,7 @@
 //  CommunicationModule.h
 //  RenHai
 //
-//  Created by Patrick Deng on 13-9-1.
+//  Created by DENG KE on 13-9-1.
 //  Copyright (c) 2013年 SimpleLife Studio. All rights reserved.
 //
 
@@ -24,9 +24,17 @@
 
 #define NOTIFICATION_ID_RHSERVER @"RHServerNotification"
 
+#define MESSAGE_NEED_ENCRYPT 0
+
 @interface CommunicationModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 
 @property (nonatomic, strong) HTTPAgent* httpCommAgent;
 @property (nonatomic, strong) WebSocketAgent* webSocketCommAgent;
+
+-(BOOL) connectWebSocket;
+-(void) disconnectWebSocket;
+-(BOOL) isWebSocketConnected;
+
+-(RHMessage*) sendMessage:(RHMessage*) message;
 
 @end

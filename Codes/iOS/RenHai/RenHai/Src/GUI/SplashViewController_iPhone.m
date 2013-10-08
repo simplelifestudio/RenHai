@@ -2,7 +2,7 @@
 //  SplashViewController_iPhone.m
 //  RenHai
 //
-//  Created by Patrick Deng on 13-9-1.
+//  Created by DENG KE on 13-9-1.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
@@ -195,10 +195,12 @@ static NSTimeInterval s_labelDuration = LABELS_DURATION;
 - (void) _enterInApp
 {
     [self dismissViewControllerAnimated:NO completion:nil];
-
-    MainViewController_iPhone* _mainViewController = _guiModule.mainViewController;
     
+    MainViewController_iPhone* _mainViewController = _guiModule.mainViewController;
     [self presentViewController:_mainViewController animated:NO completion:nil];
+    
+    ConnectViewController_iPhone* _connectViewController = _guiModule.connectViewController;
+    [_connectViewController popConnectView:_mainViewController animated:YES];
 }
 
 - (void) _setupViewController

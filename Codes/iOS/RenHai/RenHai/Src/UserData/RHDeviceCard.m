@@ -2,13 +2,14 @@
 //  RHDeviceCard.m
 //  RenHai
 //
-//  Created by Patrick Deng on 13-9-2.
+//  Created by DENG KE on 13-9-2.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
 #import "RHDeviceCard.h"
 
 #import "CBJSONUtils.h"
+#import "CBDateUtils.h"
 
 #import "AppDataModule.h"
 #import "RHMessage.h"
@@ -72,18 +73,60 @@
     }
     else
     {
-        oRegisterTime = _registerTime;
+        oRegisterTime = [CBDateUtils dateStringInLocalTimeZoneWithFormat:FULL_DATE_TIME_FORMAT andDate:_registerTime];
     }
     
     return oRegisterTime;
 }
 
--(NSNumber*) _getOJailStatus
+-(id) _getOJailStatus
 {
     return [NSNumber numberWithInt:_isJailed];
 }
 
 #pragma mark - CBJSONable
+
+-(void) fromJSONObject:(NSDictionary *)dic
+{
+    if (nil != dic)
+    {
+        id oDeviceCardId = [dic objectForKey:MESSAGE_KEY_DEVICECARDID];
+        if (nil != oDeviceCardId)
+        {
+            _deviceCardId = ([NSNull null] != oDeviceCardId) ? ((NSNumber*)oDeviceCardId).integerValue : 0;
+        }
+        
+        id oRegisterTime = [dic objectForKey:MESSAGE_KEY_REGISTERTIME];
+        if (nil != oRegisterTime)
+        {
+            _registerTime = [CBDateUtils dateFromStringWithFormat:oRegisterTime andFormat:FULL_DATE_TIME_FORMAT];
+        }
+        
+        id oDeviceModel = [dic objectForKey:MESSAGE_KEY_DEVICEMODEL];
+        if (nil != oDeviceModel)
+        {
+            _deviceModel = oDeviceModel;
+        }
+        
+        id oOsVersion = [dic objectForKey:MESSAGE_KEY_OSVERSION];
+        if (nil != oOsVersion)
+        {
+            _osVersion = oOsVersion;
+        }
+        
+        id oAppVersion = [dic objectForKey:MESSAGE_KEY_APPVERSION];
+        if (nil != oAppVersion)
+        {
+            _appVersion = oAppVersion;
+        }
+        
+        id oJailStatus = [dic objectForKey:MESSAGE_KEY_ISJAILED];
+        if (nil != oJailStatus)
+        {
+            _isJailed = ((NSNumber*)oJailStatus).intValue;
+        }
+    }
+}
 
 -(NSDictionary*) toJSONObject
 {
@@ -101,7 +144,7 @@
     
     [dic setObject:_appVersion forKey:MESSAGE_KEY_APPVERSION];
     
-    NSNumber* oJailStatus = [self _getOJailStatus];
+    id oJailStatus = [self _getOJailStatus];
     [dic setObject:oJailStatus forKey:MESSAGE_KEY_ISJAILED];
     
     return dic;
@@ -115,22 +158,17 @@
     return str;
 }
 
-#pragma mark - CBSerializable
+#pragma mark - NSCoding
 
 -(id) initWithCoder:(NSCoder *)aDecoder
 {
     if (self = [super init])
     {
         _deviceCardId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_DEVICECARDID];
-        
         _registerTime = [aDecoder decodeObjectForKey:SERIALIZE_KEY_REGISTERTIME];
-        
         _deviceModel = [aDecoder decodeObjectForKey:SERIALIZE_KEY_DEVICEMODEL];
-        
         _osVersion = [aDecoder decodeObjectForKey:SERIALIZE_KEY_OSVERSION];
-        
         _appVersion = [aDecoder decodeObjectForKey:SERIALIZE_KEY_APPVERSION];
-        
         _isJailed = [aDecoder decodeIntForKey:SERIALIZE_KEY_ISJAILED];
     }
     
@@ -140,15 +178,10 @@
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeInteger:_deviceCardId forKey:SERIALIZE_KEY_DEVICECARDID];
-    
     [aCoder encodeObject:_registerTime forKey:SERIALIZE_KEY_REGISTERTIME];
-    
     [aCoder encodeObject:_deviceModel forKey:SERIALIZE_KEY_DEVICEMODEL];
-    
     [aCoder encodeObject:_osVersion forKey:SERIALIZE_KEY_OSVERSION];
-    
     [aCoder encodeObject:_appVersion forKey:SERIALIZE_KEY_APPVERSION];
-    
     [aCoder encodeInt:_isJailed forKey:SERIALIZE_KEY_ISJAILED];
 }
 
@@ -156,17 +189,6 @@
 
 -(id) copyWithZone:(struct _NSZone *)zone
 {
-//    RHDeviceCard* copy = [[RHDeviceCard alloc] init];
-//    
-//    copy.deviceCardId = _deviceCardId;
-//    copy.registerTime = [_registerTime copy];
-//    copy.deviceModel = [_deviceModel copy];
-//    copy.osVersion = [_osVersion copy];
-//    copy.appVersion = [_appVersion copy];
-//    copy.isJailed = _isJailed;
-//    
-//    return copy;
-
     NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
     return (RHDeviceCard*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
@@ -175,17 +197,6 @@
 
 -(id) mutableCopyWithZone:(struct _NSZone *)zone
 {
-//    RHDeviceCard* mutableCopy = [[RHDeviceCard alloc] init];
-//    
-//    mutableCopy.deviceCardId = _deviceCardId;
-//    mutableCopy.registerTime = [_registerTime mutableCopy];
-//    mutableCopy.deviceModel = [_deviceModel mutableCopy];
-//    mutableCopy.osVersion = [_osVersion mutableCopy];
-//    mutableCopy.appVersion = [_appVersion mutableCopy];
-//    mutableCopy.isJailed = _isJailed;
-//    
-//    return mutableCopy;
-
     return [self copyWithZone:zone];
 }
 

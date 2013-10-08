@@ -2,7 +2,7 @@
 //  AppDelegate.h
 //  RenHai
 //
-//  Created by Patrick Deng on 13-8-29.
+//  Created by DENG KE on 13-8-29.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 

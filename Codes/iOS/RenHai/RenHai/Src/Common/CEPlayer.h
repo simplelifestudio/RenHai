@@ -2,7 +2,7 @@
 //  CEPlayer.h
 //  RenHai
 //
-//  Created by Patrick Deng on 13-9-8.
+//  Created by DENG KE on 13-9-8.
 //  Copyright (c) 2013年 SimpleLife Studio. All rights reserved.
 //
 

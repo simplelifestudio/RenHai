@@ -2,7 +2,7 @@
 //  RHJSONMessage.h
 //  RenHai
 //
-//  Created by Patrick Deng on 13-9-4.
+//  Created by DENG KE on 13-9-4.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
@@ -78,6 +78,9 @@
 #define MESSAGE_KEY_UPDATETIME @"updateTime"
 #define MESSAGE_KEY_ASSESSCOUNT @"assessCount"
 #define MESSAGE_KEY_IMPRESSLABELNAME @"impressLabelName"
+#define MESSAGE_KEY_ASSESS_HAPPY @"^#Happy#^"
+#define MESSAGE_KEY_ASSESS_SOSO @"^#SoSo#^"
+#define MESSAGE_KEY_ASSESS_DISGUSTING @"^#Disgusting#^"
 
 // InterestLabel
 #define MESSAGE_KEY_INTERESTLABELID @"globalInterestLabelId"

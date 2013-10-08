@@ -2,7 +2,7 @@
 //  ChatWaitViewController_iPhone.m
 //  RenHai
 //
-//  Created by Patrick Deng on 13-9-1.
+//  Created by DENG KE on 13-9-1.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
@@ -33,6 +33,11 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(IBAction)didPressActionButton:(id)sender
+{
+    
 }
 
 @end

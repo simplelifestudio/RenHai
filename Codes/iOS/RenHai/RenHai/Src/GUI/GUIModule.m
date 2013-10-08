@@ -2,7 +2,7 @@
 //  GUIModule.m
 //  Seeds
 //
-//  Created by Patrick Deng on 13-5-22.
+//  Created by DENG KE on 13-5-22.
 //  Copyright (c) 2013年 SimpleLife Studio. All rights reserved.
 //
 
@@ -19,6 +19,8 @@
 
 #import "RHTableViewLabelCell_iPhone.h"
 
+#import "CommunicationModule.h"
+
 
 @interface GUIModule()
 {
@@ -29,6 +31,7 @@
 
 @implementation GUIModule
 
+@synthesize connectViewController = _connectViewController;
 @synthesize mainViewController = _mainViewController;
 @synthesize leftbarViewController = _leftbarViewController;
 @synthesize homeViewController = _homeViewController;
@@ -147,6 +150,8 @@ SINGLETON(GUIModule)
 -(void) _setupViewControllersFromStoryboard
 {
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:STORYBOARD_IPHONE bundle:nil];
+    
+    _connectViewController = [[ConnectViewController_iPhone alloc] initWithNibName:NIB_CONNECTVIEWCONTROLLER bundle:nil];
     
     _leftbarViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_LEFTBAR_IPHONE];
     _navigationController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_NAVIGATION];

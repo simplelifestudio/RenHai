@@ -2,7 +2,7 @@
 //  GUIModule.h
 //  RenHai
 //
-//  Created by Patrick Deng on 13-9-1.
+//  Created by DENG KE on 13-9-1.
 //  Copyright (c) 2013年 SimpleLife Studio. All rights reserved.
 //
 
@@ -10,6 +10,7 @@
 #import "CBSharedInstance.h"
 #import "CBHUDAgent.h"
 
+#import "ConnectViewController_iPhone.h"
 #import "MainViewController_iPhone.h"
 #import "LeftBarViewController_iPhone.h"
 #import "RHNavigationController.h"
@@ -31,6 +32,7 @@
 #define SEGUE_ID_SPLASH_IPHONE2MAIN_IPHONE @"splash_iphone2main_iphone"
 
 #define STORYBOARD_ID_SPLASH_IPHONE @"splash_iphone"
+#define STORYBOARD_ID_CONNECT_IPHONE @"connect_iphone"
 #define STORYBOARD_ID_MAIN_IPHONE @"main_iphone"
 #define STORYBOARD_ID_LEFTBAR_IPHONE @"leftbar_iphone"
 #define STORYBOARD_ID_NAVIGATION @"navigation"
@@ -45,6 +47,8 @@
 #define STORYBOARD_ID_CHATCONFIRM_IPHONE @"chatconfirm_iphone"
 #define STORYBOARD_ID_CHATWEBRTC_IPHONE @"chatwebrtc_iphone"
 #define STORYBOARD_ID_CHATIMPRESS_IPHONE @"chatimpress_iphone"
+
+#define NIB_CONNECTVIEWCONTROLLER @"ConnectViewController_iPhone"
 
 #define LEFTBAR_WIDTH_IPHONE 120
 
@@ -92,6 +96,7 @@ LEFTBAR_CELL_ID;
 
 @interface GUIModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 
+@property (nonatomic, strong) ConnectViewController_iPhone* connectViewController;
 @property (nonatomic, strong) MainViewController_iPhone* mainViewController;
 @property (nonatomic, strong) LeftBarViewController_iPhone* leftbarViewController;
 @property (nonatomic, strong) RHNavigationController* navigationController;
@@ -113,7 +118,7 @@ LEFTBAR_CELL_ID;
 -(void) showHUD:(NSString*) majorStauts minorStatus:(NSString*) minorStatus delay:(NSInteger)seconds;
 -(void) showHUD:(NSString*) status delay:(NSInteger) seconds;
 
-- (BOOL) isNetworkActivityIndicatorVisible;
-- (void) setNetworkActivityIndicatorVisible:(BOOL) flag;
+-(BOOL) isNetworkActivityIndicatorVisible;
+-(void) setNetworkActivityIndicatorVisible:(BOOL) flag;
 
 @end

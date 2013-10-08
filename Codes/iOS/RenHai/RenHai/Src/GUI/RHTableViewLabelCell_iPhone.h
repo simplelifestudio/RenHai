@@ -2,7 +2,7 @@
 //  RHTableViewLabelCell_iPhone.h
 //  Seeds
 //
-//  Created by Patrick Deng on 13-7-2.
+//  Created by DENG KE on 13-7-2.
 //  Copyright (c) 2013年 SimpleLife Studio. All rights reserved.
 //
 
