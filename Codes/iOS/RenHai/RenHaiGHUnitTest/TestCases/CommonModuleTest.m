@@ -64,7 +64,7 @@
 {
     NSInteger intVal = 12345;
     NSMutableArray* unitVals = [NSMutableArray array];
-    NSArray* array = [CBMathUtils splitIntegerByUnit:intVal array:unitVals];
+    NSArray* array = [CBMathUtils splitIntegerByUnit:intVal array:unitVals reverseOrder:NO];
     GHTestLog(@"array: %@", array);
 }
 

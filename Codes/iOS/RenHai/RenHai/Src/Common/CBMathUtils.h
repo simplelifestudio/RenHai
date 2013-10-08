@@ -12,6 +12,6 @@
 
 +(NSString*) readableStringFromBytesSize:(unsigned long long) bytesSize;
 
-+(NSArray*) splitIntegerByUnit:(NSInteger) intVal array:(NSMutableArray*) unitVals;
++(NSArray*) splitIntegerByUnit:(NSInteger) intVal array:(NSMutableArray*) unitVals reverseOrder:(BOOL) reverseOrder;
 
 @end
