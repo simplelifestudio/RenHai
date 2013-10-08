@@ -159,13 +159,15 @@ ConnectStatus;
             }
             
             [self dismissViewControllerAnimated:NO completion:^(){
+                [_guiModule.mainViewController resignPresentationModeEntirely:YES animated:NO completion:nil];
             }];
             
             RHNavigationController* navigationVC = _guiModule.navigationController;
             HomeViewController_iPhone* homeVC = _guiModule.homeViewController;
-            if (navigationVC.topViewController != homeVC)
+            UIViewController* topVC = navigationVC.topViewController;
+            if (topVC != homeVC)
             {
-                [_guiModule.navigationController pushViewController:_guiModule.homeViewController animated:NO];
+                [_guiModule.navigationController popToViewController:_guiModule.homeViewController animated:NO];
             }
         }
     });
