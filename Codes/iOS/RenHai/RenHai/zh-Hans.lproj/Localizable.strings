@@ -51,11 +51,11 @@
 "Connect_ConnectFailed" = "失败";
 "Connect_ConnectFailed_Detail" = "无法连接服务器";
 "Connect_AppDataSyncing" = "同步";
-"Connect_AppDataSyncing_Detail" = "正在同步App数据...";
+"Connect_AppDataSyncing_Detail" = "正在同步设备数据...";
 "Connect_AppDataSynced" = "同步";
-"Connect_AppDataSynced_Detail" = "成功同步App数据";
+"Connect_AppDataSynced_Detail" = "成功同步设备数据";
 "Connect_AppDataSyncFailed" = "失败";
-"Connect_AppDataSyncFailed_Detail" = "无法同步App数据";
+"Connect_AppDataSyncFailed_Detail" = "无法同步设备数据";
 "Connect_ServerDataSyncing" = "同步";
 "Connect_ServerDataSyncing_Detail" = "正在同步服务器数据...";
 "Connect_ServerDataSynced" = "同步";
