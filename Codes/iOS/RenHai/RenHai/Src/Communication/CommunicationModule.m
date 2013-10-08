@@ -74,6 +74,9 @@ SINGLETON(CommunicationModule)
         {
 //            [guiModule showHUD:NSLocalizedString(@"Communication_InternetDisconnected", nil) delay:_HUD_DISPLAY];
             
+            NSNotification* notification = [NSNotification notificationWithName:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil userInfo:nil];
+            [[NSNotificationCenter defaultCenter] postNotification:notification];
+            
             DDLogWarn(@"App's reachability changed to 'NotReachable'.");
             break;
         }
