@@ -145,15 +145,21 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	    	logger.debug("Device <{}> was removed from chatDeviceMap of " + this.businessType.name() + " Device Pool", sn);
     	}
     	
-    	/*
-    	// 由于存在多个业务设备池，所以
-    	// 这里改成由OnlineDevicePool判断设备是否绑定BusinessSession并通知session释放设备
-    	if (device.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+    	if (device.getBusinessType() == this.getBusinessType())
     	{
-    		IBusinessSession session = device.getOwnerBusinessSession();
-    		session.onDeviceLeave(device);
+	    	if (device.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+	    	{
+	    		IBusinessSession session = device.getOwnerBusinessSession();
+	    		if (session != null)
+				{
+					synchronized (session)
+					{
+						logger.debug("Device <{}> has bound session, notify session to notify other devices.", sn);
+						session.onDeviceLeave(device, reason);
+					}
+				}
+	    	}
     	}
-    	*/
     }
     
     
