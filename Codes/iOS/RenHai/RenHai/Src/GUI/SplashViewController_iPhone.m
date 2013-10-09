@@ -46,7 +46,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-        // Custom initialization
+
     }
     return self;
 }
@@ -63,7 +63,6 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Public Methods
@@ -100,17 +99,6 @@
 
 - (void) finishFadingSplashScreen
 {
-    AppDataModule* appDataModule = [AppDataModule sharedInstance];
-    BOOL isAppLaunchedBefore = [appDataModule isAppLaunchedBefore];
-    if (!isAppLaunchedBefore)
-    {
-        
-    }
-    else
-    {
-        [appDataModule recordAppLaunchedBefore];
-    }
-    
     [self _enterInApp];
 }
 
@@ -198,9 +186,6 @@ static NSTimeInterval s_labelDuration = LABELS_DURATION;
     
     MainViewController_iPhone* _mainViewController = _guiModule.mainViewController;
     [self presentViewController:_mainViewController animated:NO completion:nil];
-    
-    ConnectViewController_iPhone* _connectViewController = _guiModule.connectViewController;
-    [_connectViewController popConnectView:_mainViewController animated:YES];
 }
 
 - (void) _setupViewController

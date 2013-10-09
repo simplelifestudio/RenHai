@@ -9,9 +9,10 @@
 #import "InterestViewController_iPhone.h"
 
 #import "UserDataModule.h"
-
+#import "CommunicationModule.h"
 #import "GUIModule.h"
 #import "GUIStyle.h"
+
 
 #import "RHCollectionLabelCell_iPhone.h"
 
@@ -23,8 +24,9 @@
 
 @interface InterestViewController_iPhone ()
 {
-    UserDataModule* _userDataModule;
     GUIModule* _guiModule;
+    UserDataModule* _userDataModule;
+    CommunicationModule* _commModule;
     
     UIRefreshControl* _interestRefresher;
     UIRefreshControl* _serverInterestRefresher;
@@ -43,14 +45,20 @@
 {
     [super viewDidLoad];
 	
+    [self _setupInstance];
+}
+
+#pragma mark - Private Methods
+
+-(void)_setupInstance
+{
+    _commModule = [CommunicationModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _guiModule = [GUIModule sharedInstance];
     
     [self _setupNavigationBar];
     [self _setupCollectionView];
 }
-
-#pragma mark - Private Methods
 
 -(void)_setupNavigationBar
 {

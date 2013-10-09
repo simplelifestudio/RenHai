@@ -15,8 +15,6 @@
 #define REACHABILITY_HOST @"www.apple.com"
 #define  _HUD_DISPLAY 1
 
-#define PING_DEACTIVATE 0
-
 @interface CommunicationModule()
 {
 
@@ -136,10 +134,6 @@ SINGLETON(CommunicationModule)
     {
         flag = (_webSocketCommAgent.webSocketState == SR_OPEN);
     }
-    
-#ifdef PING_DEACTIVATE
-    [_webSocketCommAgent stopPing];
-#endif
     
     return flag;
 }

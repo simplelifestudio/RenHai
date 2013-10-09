@@ -19,6 +19,7 @@
 
 #define PING_TEXT @"#####RenHai-App-Ping#####"
 #define PONG_LOG 1
+#define PING_ACTIVATE 0
 
 @interface WebSocketAgent()
 {
@@ -179,7 +180,9 @@
     [_openLock signal];
     [_openLock unlock];
     
+#if PING_ACTIVATE
     [self startPing];
+#endif
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
@@ -245,7 +248,7 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)data
 {
-#ifdef PONG_LOG
+#if PONG_LOG
     NSString* str = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
     DDLogInfo(@"WebSocket Received Pong \"%@\"", str);
 #endif

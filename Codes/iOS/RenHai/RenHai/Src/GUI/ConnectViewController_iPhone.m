@@ -9,6 +9,7 @@
 #import "ConnectViewController_iPhone.h"
 
 #import "CBUIUtils.h"
+#import "UINavigationController+CBNavigationControllerExtends.h"
 
 #import "GUIModule.h"
 #import "CommunicationModule.h"
@@ -167,7 +168,14 @@ ConnectStatus;
             UIViewController* topVC = navigationVC.topViewController;
             if (topVC != homeVC)
             {
-                [_guiModule.navigationController popToViewController:_guiModule.homeViewController animated:NO];
+                if ([navigationVC containsViewController:homeVC])
+                {
+                    [navigationVC popToViewController:homeVC animated:NO];
+                }
+                else
+                {
+                    [navigationVC pushViewController:homeVC animated:NO];
+                }       
             }
             
             [self _resetInstance];

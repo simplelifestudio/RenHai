@@ -9,6 +9,7 @@
 #import "HomeViewController_iPhone.h"
 
 #import "CBMathUtils.h"
+#import "UINavigationController+CBNavigationControllerExtends.h"
 
 #import "GUIModule.h"
 #import "GUIStyle.h"
@@ -250,8 +251,11 @@ static float progress = 0.1;
 
 - (IBAction)onPressHelpButton:(id)sender
 {
-    [_guiModule.helpViewController resetDisplayStatus];
-    [_guiModule.navigationController presentViewController:_guiModule.helpViewController animated:YES completion:nil];
+    RHNavigationController* navigationVC = _guiModule.navigationController;
+    HelpViewController_iPhone* helpVC = _guiModule.helpViewController;
+    
+    [helpVC resetDisplayStatus];
+    [navigationVC presentViewController:helpVC animated:YES completion:nil];
 }
 
 #pragma mark - CBRoundProgressViewDelegate

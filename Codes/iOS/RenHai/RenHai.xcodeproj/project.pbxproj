@@ -225,6 +225,8 @@
 		CDC051931802E33D006158B8 /* RHServerDeviceCount.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051911802E33D006158B8 /* RHServerDeviceCount.m */; };
 		CDC051961802E389006158B8 /* RHServerInterestLabelList.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051951802E389006158B8 /* RHServerInterestLabelList.m */; };
 		CDC051971802E389006158B8 /* RHServerInterestLabelList.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051951802E389006158B8 /* RHServerInterestLabelList.m */; };
+		CDC0519A1805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051991805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m */; };
+		CDC0519B1805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051991805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -444,6 +446,8 @@
 		CDC051911802E33D006158B8 /* RHServerDeviceCount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServerDeviceCount.m; sourceTree = "<group>"; };
 		CDC051941802E389006158B8 /* RHServerInterestLabelList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServerInterestLabelList.h; sourceTree = "<group>"; };
 		CDC051951802E389006158B8 /* RHServerInterestLabelList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServerInterestLabelList.m; sourceTree = "<group>"; };
+		CDC051981805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+CBNavigationControllerExtends.h"; sourceTree = "<group>"; };
+		CDC051991805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+CBNavigationControllerExtends.m"; sourceTree = "<group>"; };
 		CDDF0FE017EB227700DA3E06 /* RenHai.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RenHai.entitlements; sourceTree = "<group>"; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -733,6 +737,8 @@
 				C54DC8E917DC926900BBD498 /* UIDevice+CBDeviceExtends.m */,
 				CD43667217F97C2E00586443 /* NSDictionary+MutableDeepCopy.h */,
 				CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */,
+				CDC051981805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.h */,
+				CDC051991805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1191,6 +1197,7 @@
 				C580527117E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m in Sources */,
 				CD32013A17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */,
 				CD43667417F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */,
+				CDC0519A1805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m in Sources */,
 				CD5F065117E8810900D08426 /* ImpressSectionHeaderView_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1199,6 +1206,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDC0519B1805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m in Sources */,
 				C55B442C17CF5992009BB21B /* main.m in Sources */,
 				C55B443917CF5993009BB21B /* ViewController.m in Sources */,
 				C55B445217CF5C14009BB21B /* GTMBase64.m in Sources */,
