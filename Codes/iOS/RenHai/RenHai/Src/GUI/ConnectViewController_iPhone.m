@@ -169,6 +169,8 @@ ConnectStatus;
             {
                 [_guiModule.navigationController popToViewController:_guiModule.homeViewController animated:NO];
             }
+            
+            [self _resetInstance];
         }
     });
 }
