@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONArray;
@@ -124,7 +125,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     		temp += " for device <" + device.getDeviceSn() + ">";
     	}
     	
-    	logger.debug(temp);
+    	LoggerFactory.getLogger("ping").debug(temp);
     	lastPingTime = now;
     }
             
@@ -440,7 +441,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 	@Override
 	public void updateActivityTime()
 	{
-		logger.debug("Update last activity time");
+		LoggerFactory.getLogger("ping").debug("Update last activity time");
 		this.lastActivityTime = DateUtil.getNowDate();
 	}
 	

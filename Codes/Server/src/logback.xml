@@ -4,7 +4,7 @@
         <!-- encoder 默认配置为PatternLayoutEncoder -->
         <encoder>
             <!--pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n%caller{2}</pattern-->
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %msg%n</pattern>
         </encoder>
     </appender>
     
@@ -27,7 +27,9 @@
     </appender>
 
     <logger name="com.simplelife.renhai.server.business.BusinessModule" level = "DEBUG" />
-    <logger name="com.simplelife.renhai.server.business.DBModule" level = "DEBUG" />
+    <logger name="com.simplelife.renhai.server.db.DBModule" level = "DEBUG" />
+    <logger name="com.simplelife.renhai.server.websocket.WebSocketModule" level = "DEBUG" />
+    <logger name="ping" level = "DEBUG" />
     
     <root level="ERROR">
         <appender-ref ref="FILE" />

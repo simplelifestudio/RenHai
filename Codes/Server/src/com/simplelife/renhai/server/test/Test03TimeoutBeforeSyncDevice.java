@@ -46,7 +46,7 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 		mockApp = createNewMockApp(demoDeviceSn);
 		String connectionId = mockApp.getConnectionId();
 		
-		//String deviceSn = mockApp.getDeviceWrapper().getDeviceSn();
+		//String deviceSn = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceSn();
 		IDeviceWrapper device = OnlineDevicePool.instance.getDevice(connectionId); 
 		assertTrue(device != null);
 		assertTrue(device.getOwnerOnlineDevicePool() == OnlineDevicePool.instance);

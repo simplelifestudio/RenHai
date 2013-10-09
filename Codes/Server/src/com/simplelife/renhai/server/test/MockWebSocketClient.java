@@ -54,7 +54,8 @@ public class MockWebSocketClient extends WebSocketClient implements IMockConnect
 		super(serverURI, new Draft_17());
 	}
 
-
+	
+	
 	@Override
 	public void onClose(int arg0, String arg1, boolean arg2)
 	{
@@ -154,5 +155,10 @@ public class MockWebSocketClient extends WebSocketClient implements IMockConnect
 		FrameBuilder builder = (FrameBuilder) frame;
 		builder.setTransferemasked( true );
 		getConnection().sendFrame( frame );
+	}
+	
+	public void close()
+	{
+		super.close();
 	}
 }

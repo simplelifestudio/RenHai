@@ -70,7 +70,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 		
 		assertEquals(deviceCount, pool.getElementCount());
 		
-		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
+		IDeviceWrapper deviceWrapper1 = OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn());
 		
 		// Step_03 µ÷ÓÃ£ºDeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.Init, deviceWrapper1.getBusinessStatus());

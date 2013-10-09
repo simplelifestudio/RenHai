@@ -61,7 +61,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 	public void test() throws InterruptedException
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
-		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn());
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		long lastActivityTime = deviceWrapper.getLastActivityTime().getTime();
@@ -80,7 +80,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		Devicecard deviceCardInDB = deviceInDB.getDevicecard();
 		assertEquals(mockApp.getAppVersion(), deviceCardInDB.getAppVersion());
 		assertEquals(mockApp.getDeviceModel(), deviceCardInDB.getDeviceModel());
-		assertEquals(mockApp.getDeviceWrapper().getDeviceSn(), deviceCardInDB.getDevice().getDeviceSn());
+		assertEquals(OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceSn(), deviceCardInDB.getDevice().getDeviceSn());
 		assertEquals(Consts.YesNo.No.name(), deviceCardInDB.getIsJailed());
 		assertEquals(mockApp.getLocation(), deviceCardInDB.getLocation());
 		assertEquals(mockApp.getOSVersion(), deviceCardInDB.getOsVersion());
@@ -101,7 +101,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertEquals(businessStatus, Consts.BusinessStatus.Idle);
 		
 		// Step_08 调用：OnlineDevicePool::getCount
-		String deviceSn = mockApp.getDeviceWrapper().getDeviceSn();
+		String deviceSn = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceSn();
 		assertTrue(pool.getDevice(deviceSn) != null);
 		
 		// Step_09 调用：DeviceWrapper::getLastActivityTime
@@ -109,13 +109,13 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		lastActivityTime = deviceWrapper.getLastActivityTime().getTime();
 		
 		// Step_10 Mock事件：onClose
-		mockApp.close();
+		mockApp.disconnect();
 		
 		// Step_11 调用：OnlineDevicePool::getCount
-		assertTrue(pool.getDevice(mockApp.getDeviceWrapper().getDeviceSn()) == null);
+		assertTrue(pool.getDevice(OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceSn()) == null);
 		
 		// Step_12 建立WebSocket连接
-		deviceWrapper = mockApp.getDeviceWrapper();
+		deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn());
 		
 		// Step_13 Mock请求：设备同步
 		mockApp.enterPool(businessType);
@@ -136,10 +136,10 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_17 Mock事件：onClose
-		mockApp.close();
+		mockApp.disconnect();
 		
 		// Step_18 建立WebSocket连接
-		deviceWrapper = mockApp.getDeviceWrapper();
+		deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn());
 		
 		// Step_19 停止数据库服务
 		DBModule.instance.stopService();

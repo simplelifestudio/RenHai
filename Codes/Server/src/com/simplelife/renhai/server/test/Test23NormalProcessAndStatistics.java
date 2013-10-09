@@ -105,7 +105,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
-		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
+		IDeviceWrapper deviceWrapper1 = OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn());
 		
 		// Step_01 Mock请求：查询所有统计项，包括：在线设备池设备数，在线设备池上限，随机业务设备池设备数，随机业务设备池上限，处于聊天状态的设备数，处于随机聊天状态的设备数，业务设备池的热门兴趣标签
 		mockApp1.clearLastReceivedCommand();
@@ -196,20 +196,20 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		
 		// Step_19 Mock事件：A对B评价
 		//logger.debug("=============mockApp2 before assess:\n");
-		//System.out.print(JSON.toJSONString(mockApp2.getDeviceWrapper().toJSONObject(), SerializerFeature.WriteMapNullValue));
-		mockApp1.assessAndContinue(mockApp2.getDeviceWrapper(), "TC23_评价,^#Happy#^,帅哥");
+		//System.out.print(JSON.toJSONString(OnlineDevicePool.instance.getDevice(mockApp2.getDeviceSn()).toJSONObject(), SerializerFeature.WriteMapNullValue));
+		mockApp1.assessAndContinue(OnlineDevicePool.instance.getDevice(mockApp2.getDeviceSn()), "TC23_评价,^#Happy#^,帅哥");
 		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AssessAndContinue));
 		//logger.debug("=============mockApp2 after assess:\n");
-		//System.out.print(JSON.toJSONString(mockApp2.getDeviceWrapper().toJSONObject(), SerializerFeature.WriteMapNullValue));
+		//System.out.print(JSON.toJSONString(OnlineDevicePool.instance.getDevice(mockApp2.getDeviceSn()).toJSONObject(), SerializerFeature.WriteMapNullValue));
 		
 		
 		// Step_20 Mock事件：B对A评价
 		//logger.debug("=============mockApp1 before assess:\n");
-		//System.out.print(JSON.toJSONString(mockApp1.getDeviceWrapper().toJSONObject(), SerializerFeature.WriteMapNullValue));
-		mockApp2.assessAndQuit(mockApp1.getDeviceWrapper(), "TC24_评价,^#Disgusting#^,变态");
+		//System.out.print(JSON.toJSONString(OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn()).toJSONObject(), SerializerFeature.WriteMapNullValue));
+		mockApp2.assessAndQuit(OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn()), "TC24_评价,^#Disgusting#^,变态");
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AssessAndQuit));
 		//logger.debug("=============mockApp1 after assess:\n");
-		//System.out.print(JSON.toJSONString(mockApp1.getDeviceWrapper().toJSONObject(), SerializerFeature.WriteMapNullValue));
+		//System.out.print(JSON.toJSONString(OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn()).toJSONObject(), SerializerFeature.WriteMapNullValue));
 		
 		
 		// Step_21 调用：BusinessSession::getStatus

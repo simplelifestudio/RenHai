@@ -57,8 +57,8 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;
-		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
-		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
+		IDeviceWrapper deviceWrapper1 = OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn());
+		IDeviceWrapper deviceWrapper2 = OnlineDevicePool.instance.getDevice(mockApp2.getDeviceSn());
 		mockApp1.syncDevice();
 		mockApp2.syncDevice();
 		
@@ -137,7 +137,7 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		
 		// Step_25 Mock事件：A onClose
 		Thread.sleep(1000);
-		mockApp1.close();
+		mockApp1.disconnect();
 		
 		// Step_26 调用：BusinessSession::getStatus
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.VideoChat);
@@ -161,7 +161,7 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EndChat));
 		
 		// Step_32 Mock事件：B对A评价
-		mockApp2.assessAndContinue(mockApp1.getDeviceWrapper(), "TC17_评价,^#Happy#^,美女");
+		mockApp2.assessAndContinue(OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn()), "TC17_评价,^#Happy#^,美女");
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AssessAndContinue));
 		
 		// Step_33 数据库检查：A 印象卡片信息

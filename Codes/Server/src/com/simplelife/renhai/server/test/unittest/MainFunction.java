@@ -378,6 +378,25 @@ public class MainFunction extends AbstractTestCase
 		System.out.print("\nprogress1 compareTo SessionBoundConfirmed: " + progress1.compareTo(Consts.BusinessProgress.SessionBoundConfirmed));
 	}
 	
+	public void testLossConnection()
+	{
+		MockApp mockApp1 = new MockApp("deviceSn");
+		mockApp1.connect(false);
+		mockApp1.syncDevice();
+		
+		MockApp mockApp2 = new MockApp("deviceSn2");
+		mockApp2.connect(false);
+		mockApp2.syncDevice();
+		
+		MockApp mockApp3 = new MockApp("deviceSn");
+		mockApp3.connect(false);
+		mockApp3.syncDevice();
+		
+		mockApp1.disconnect();
+		mockApp2.disconnect();
+		mockApp3.disconnect();
+	}
+	
 	@Test
 	public void testWebsocketClient()
 	{

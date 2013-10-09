@@ -293,9 +293,15 @@ public class OnlineDevicePool extends AbstractDevicePool
     		return;
     	}
     	
-    	if (deviceMap.containsKey(deviceWrapper.getDeviceSn()))
+    	String deviceSn = deviceWrapper.getDeviceSn();
+    	if (deviceMap.containsKey(deviceSn))
     	{
-    		return;
+    		IDeviceWrapper preDevice = deviceMap.get(deviceSn); 
+    		if (!preDevice.getConnection().getConnectionId().equals(deviceWrapper.getConnection().getConnectionId()))
+    		{
+    			// If receive AppDataSyncRequest from new WebsocketConnection, close the previous one
+    			preDevice.getConnection().close();
+    		}
     	}
     	
     	synchronized(queueDeviceMap)

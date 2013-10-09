@@ -56,8 +56,8 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType); 
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;  
-		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
-		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
+		IDeviceWrapper deviceWrapper1 = OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn());
+		IDeviceWrapper deviceWrapper2 = OnlineDevicePool.instance.getDevice(mockApp2.getDeviceSn());
 		
 		MockWebSocketConnection connection1 = getMockWebSocket(deviceWrapper1);
 		MockWebSocketConnection connection2 = getMockWebSocket(deviceWrapper2);

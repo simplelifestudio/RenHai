@@ -43,8 +43,10 @@ public interface IMockApp
 			JSONObject operationInfoObj,
 			String operationValue);
 	
+	public void connect(boolean realSocket);
+	
 	/** */
-	public void close();
+	public void disconnect();
 	
 	/** */
 	public void enterPool(Consts.BusinessType poolType);
@@ -67,6 +69,4 @@ public interface IMockApp
 	 * @param obj
 	 */
 	public void onJSONCommand(JSONObject obj);
-	
-	public void bindDeviceWrapper(IDeviceWrapper device);
 }

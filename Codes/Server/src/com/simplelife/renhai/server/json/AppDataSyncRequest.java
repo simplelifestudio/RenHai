@@ -498,10 +498,9 @@ public class AppDataSyncRequest extends AppJSONMessage
 			{
 				syncType = SyncType.ExistentNotLoaded;
 			}
-			
 		}
 		
-		if (syncType == SyncType.ExistentNotLoaded)
+		if (syncType == SyncType.ExistentNotLoaded || syncType == SyncType.ExistentLoaded)
 		{
 			logger.debug("Device is ExistentNotLoaded, try to load device from DB.");
 			loadDevice(deviceSn);
@@ -636,6 +635,10 @@ public class AppDataSyncRequest extends AppJSONMessage
 		{
 			DeviceDAO dao = new DeviceDAO();
 			Device device = dao.findByDeviceSn(deviceSn).get(0);
+			if (device == null)
+			{
+				logger.error("Fatal error, device load from DB by SN <{}> is null!", deviceSn);
+			}
 			deviceWrapper.setDevice(device);
 		}
 		catch(Exception e)

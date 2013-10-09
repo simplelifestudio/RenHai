@@ -90,7 +90,7 @@ public class MockWebSocketConnection extends WebSocketConnection implements IMoc
     @Override
     public void close()
     {
-    	
+    	super.onClose(0);
     }
 
 	@Override

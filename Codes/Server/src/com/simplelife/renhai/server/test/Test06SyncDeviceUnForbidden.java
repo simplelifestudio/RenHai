@@ -55,10 +55,10 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 	public void test() throws InterruptedException
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
-		IDeviceWrapper deviceWrapper = mockApp.getDeviceWrapper();
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn());
 		Devicecard deviceCard = deviceWrapper.getDevice().getDevicecard();
 		
-		Device device = mockApp.getDeviceWrapper().getDevice();
+		Device device = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDevice();
 		String deviceId = String.valueOf(device.getDeviceId()); 
 		
 		// Step_01 数据库操作：将设备A的服务状态更新为禁聊，到期日期为明天
