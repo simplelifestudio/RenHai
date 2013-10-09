@@ -15,6 +15,8 @@
 #define REACHABILITY_HOST @"www.apple.com"
 #define  _HUD_DISPLAY 1
 
+#define PING_DEACTIVATE 0
+
 @interface CommunicationModule()
 {
 
@@ -73,9 +75,6 @@ SINGLETON(CommunicationModule)
         case NotReachable:
         {
 //            [guiModule showHUD:NSLocalizedString(@"Communication_InternetDisconnected", nil) delay:_HUD_DISPLAY];
-            
-//            NSNotification* notification = [NSNotification notificationWithName:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil userInfo:nil];
-//            [[NSNotificationCenter defaultCenter] postNotification:notification];
             
             DDLogWarn(@"App's reachability changed to 'NotReachable'.");
             break;
@@ -138,7 +137,9 @@ SINGLETON(CommunicationModule)
         flag = (_webSocketCommAgent.webSocketState == SR_OPEN);
     }
     
-//    [_webSocketCommAgent stopPing];
+#ifdef PING_DEACTIVATE
+    [_webSocketCommAgent stopPing];
+#endif
     
     return flag;
 }

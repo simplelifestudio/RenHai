@@ -18,6 +18,7 @@
 #import "UserDataModule.h"
 
 #define PING_TEXT @"#####RenHai-App-Ping#####"
+#define PONG_LOG 1
 
 @interface WebSocketAgent()
 {
@@ -56,7 +57,7 @@
     _webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:remotePath]]];
     _webSocket.delegate = self;
 
-    NSTimeInterval timeout = WEBSOCKET_COMM_TIMEOUT;
+    NSTimeInterval timeout = WEBSOCKET_OPEN_TIMEOUT;
     NSDate* startTimeStamp = [NSDate date];
     NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
     
@@ -244,8 +245,10 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)data
 {
-//    NSString* str = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-//    DDLogInfo(@"WebSocket Received Pong \"%@\"", str);
+#ifdef PONG_LOG
+    NSString* str = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    DDLogInfo(@"WebSocket Received Pong \"%@\"", str);
+#endif
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
