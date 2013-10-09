@@ -37,6 +37,7 @@ import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Profile;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -334,7 +335,7 @@ public class MockApp implements IMockApp
 		}
 		catch (InterruptedException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
     	lock.unlock();
     }
@@ -470,7 +471,7 @@ public class MockApp implements IMockApp
 		}
 		catch (InterruptedException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 		lock.unlock();
 	}
@@ -625,31 +626,36 @@ public class MockApp implements IMockApp
 		lock.unlock();
 		logger.debug("MockApp <{}> received command: \n" + JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue), deviceSn);
 		
-		int messageId = 0;
+		int intMessageId = 0;
 		JSONObject header = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
 		JSONObject body = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
 		if (header.containsKey(JSONKey.MessageId))
 		{
-			messageId = header.getIntValue(JSONKey.MessageId);
+			intMessageId = header.getIntValue(JSONKey.MessageId);
 		}
 		
-		if (messageId == Consts.MessageId.AppDataSyncResponse.getValue())
+		Consts.MessageId messageId = Consts.MessageId.parseValue(intMessageId);
+		if (messageId == Consts.MessageId.AppDataSyncResponse)
 		{
 			deviceId = body.getJSONObject(JSONKey.DataQuery)
 					.getJSONObject(JSONKey.Device)
 					.getIntValue(JSONKey.DeviceId);
 		}
-		
+		reply(messageId);
+	}
+	
+	private void reply(Consts.MessageId messageId)
+	{
 		// Check if it's notification, and response if it is
 		if (!autoReply)
 		{
 			return;
 		}
 		
-		if (messageId == Consts.MessageId.BusinessSessionNotification.getValue())
+		if (messageId == Consts.MessageId.BusinessSessionNotification)
 		{
 			logger.debug("MockApp <{}> replies BusinessSessionNotification automatically.", deviceSn);
-			AutoReplyTask task = new AutoReplyTask(obj, this);
+			AutoReplyTask task = new AutoReplyTask(lastReceivedCommand, this);
 			task.start();
 		}
 	}

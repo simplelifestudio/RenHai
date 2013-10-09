@@ -727,8 +727,6 @@ public class Consts
 		AlohaRequest_1002(1002),
 		AlohaResponse_1003(1003),
 		AppDataSyncRequest_1004(1004),
-
-
 		AppDataSyncResponse_1007(1007),
 		ServerDataSyncRequest_1008(1008),
 		ServerDataSyncResponse_1009(1009),
@@ -762,6 +760,51 @@ public class Consts
 		{
 			return value;
 		}
-
 	}
+	
+	
+	public enum MockAppBehaviorMode
+	{
+		Invalid(""),
+		SendInvalidJSONCommand("SendInvalidJSONCommand"),
+		NoResponseForSyncResponse("NoResponseForSyncResponse"),
+		NoResponseForSessionBounded("NoResponseForSessionBounded"),
+		NoRequestOfAgreeChat("NoRequestOfAgreeChat"),
+		NoRequestOfAssess("NoRequestOfAgreeChat"),
+		RejectChat("RejectChat"),
+		ConnectLossDuringChatConfirm("ConnectLossDuringChatConfirm"),
+		ConnectLossDuringChat("ConnectLossDuringChat"),
+		Normal("Normal");
+		
+		private String value;
+		private MockAppBehaviorMode(String value)
+		{
+			this.value = value;
+		}
+		
+		public String getValue()
+		{
+			return value;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return value;
+		}
+		
+		public static boolean isBehaviroMode(String label)
+		{
+			for (MockAppBehaviorMode tmpValue : values())
+			{
+				if (tmpValue.value.equals(label))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	
+	
 }

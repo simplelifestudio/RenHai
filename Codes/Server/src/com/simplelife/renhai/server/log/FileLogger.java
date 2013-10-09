@@ -73,7 +73,7 @@ public class FileLogger
 		int length=messages.length;
 		for(int i=0;i<length;i++)
 		{
-		    if (messages[i].toString().contains("com.simplelife.seeds"))
+		    if (messages[i].toString().contains("com.simplelife.renhai"))
 		    {
 		    	logger.error(messages[i].toString());
 		    }

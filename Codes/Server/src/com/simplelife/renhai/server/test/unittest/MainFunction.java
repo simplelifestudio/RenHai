@@ -45,6 +45,7 @@ import com.simplelife.renhai.server.db.SystemoperationlogDAO;
 import com.simplelife.renhai.server.json.AlohaRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.JSONFactory;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.test.AbstractTestCase;
 import com.simplelife.renhai.server.test.MockApp;
 import com.simplelife.renhai.server.test.MockWebSocketClient;
@@ -96,7 +97,7 @@ public class MainFunction extends AbstractTestCase
 				}
 				catch(Exception e)
 				{
-					e.printStackTrace();
+					FileLogger.printStackTrace(e);
 				}
 				count++;
 			}
@@ -121,7 +122,7 @@ public class MainFunction extends AbstractTestCase
 		}
 		catch (InterruptedException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 	}
 	
@@ -138,7 +139,7 @@ public class MainFunction extends AbstractTestCase
 		}
 		catch (InterruptedException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 		
 		jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:38.346\",\"messageType\":1,\"messageId\":103,\"messageSn\":\"QR543EPJ1OJ82FEJ\",\"deviceId\":0},\"body\":{\"operationValue\":null,\"businessSessionId\":null,\"operationInfo\":null,\"operationType\":1,\"businessType\":1}}}";
@@ -149,7 +150,7 @@ public class MainFunction extends AbstractTestCase
 		}
 		catch (InterruptedException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 		
 		jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:43.060\",\"messageType\":1,\"messageId\":102,\"messageSn\":\"7J0I40HDF1AQ0VHM\",\"deviceId\":0},\"body\":{\"deviceCount\":{\"chat\":null,\"interest\":null,\"randomChat\":null,\"online\":null,\"interestChat\":null,\"random\":null}}}}";
@@ -160,7 +161,7 @@ public class MainFunction extends AbstractTestCase
 		}
 		catch (InterruptedException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 		
 		jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:50.593\",\"messageType\":1,\"messageId\":103,\"messageSn\":\"4Q59EA4B0J7TQR82\",\"deviceId\":0},\"body\":{\"operationValue\":null,\"businessSessionId\":null,\"operationInfo\":null,\"operationType\":2,\"businessType\":1}}}";
@@ -171,7 +172,7 @@ public class MainFunction extends AbstractTestCase
 		}
 		catch (InterruptedException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 		
 		jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:56.894\",\"messageType\":1,\"messageId\":102,\"messageSn\":\"X7H2Z3ZPR0Q6WH8L\",\"deviceId\":0},\"body\":{\"deviceCount\":{\"chat\":null,\"interest\":null,\"randomChat\":null,\"online\":null,\"interestChat\":null,\"random\":null}}}}";

@@ -32,6 +32,7 @@ import com.simplelife.renhai.server.db.Statisticsitem;
 import com.simplelife.renhai.server.db.StatisticsitemDAO;
 import com.simplelife.renhai.server.db.Systemstatistics;
 import com.simplelife.renhai.server.log.DbLogger;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -444,7 +445,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 		catch(Exception e)
 		{
 			trans.rollback();
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 	}
 }

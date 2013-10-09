@@ -43,6 +43,7 @@ import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.InvalidRequest;
 import com.simplelife.renhai.server.json.ServerErrorResponse;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -339,7 +340,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
         	response.addToHeader(JSONKey.MessageSn, command.getMessageSn());
         	
         	response.asyncResponse();
-    		e.printStackTrace();
+    		FileLogger.printStackTrace(e);
     	}
     }
 
@@ -393,7 +394,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
     }
     
@@ -418,7 +419,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
     }
 
@@ -664,7 +665,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		{
 			logger.error("Error occurred when saving chatTotalLoss: {}", e.getMessage());
 			t.rollback();
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 	}
 	
@@ -689,7 +690,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		{
 			logger.error("Error occurred when saving chatTotalCount: {}", e.getMessage());
 			t.rollback();
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 	}
 
@@ -714,7 +715,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		{
 			logger.error("Error occurred when saving chatTotalDuration: {}", e.getMessage());
 			t.rollback();
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 	}
 

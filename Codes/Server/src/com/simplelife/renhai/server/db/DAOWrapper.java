@@ -22,6 +22,7 @@ import org.hibernate.Transaction;
 import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -90,7 +91,7 @@ public class DAOWrapper
     		catch(Exception e)
     		{
     			DBModule.instance.getLogger().error(e.getMessage());
-    			e.printStackTrace();
+    			FileLogger.printStackTrace(e);
     		}
     		
     		if (objectCountInCache >= GlobalSetting.DBSetting.MaxRecordCountForFlush)
@@ -118,7 +119,7 @@ public class DAOWrapper
     		catch(Exception e)
     		{
     			DBModule.instance.getLogger().error(e.getMessage());
-    			e.printStackTrace();
+    			FileLogger.printStackTrace(e);
     		}
     	}
     }
@@ -348,7 +349,7 @@ public class DAOWrapper
     	catch(Exception e)
     	{
     		logger.error("Error occurred when trying to flush: " + e.getMessage());
-    		e.printStackTrace();
+    		FileLogger.printStackTrace(e);
     	}
     }
 }

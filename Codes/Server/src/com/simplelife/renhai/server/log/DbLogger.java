@@ -71,7 +71,7 @@ public class DbLogger
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
+				FileLogger.printStackTrace(e);
 				trans.rollback();
 			}
 		}
@@ -106,7 +106,7 @@ public class DbLogger
 			}
 			catch(Exception e)
 			{
-				e.printStackTrace();
+				FileLogger.printStackTrace(e);
 				trans.rollback();
 			}
 		}
@@ -133,7 +133,7 @@ public class DbLogger
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 			trans.rollback();
 		}
 	}
@@ -165,7 +165,7 @@ public class DbLogger
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 			trans.rollback();
 		}
 	}

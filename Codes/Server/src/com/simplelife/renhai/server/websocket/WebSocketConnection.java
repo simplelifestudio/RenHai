@@ -31,6 +31,7 @@ import com.simplelife.renhai.server.json.InvalidRequest;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.json.TimeoutRequest;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
@@ -89,7 +90,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
     }
     
@@ -137,7 +138,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		{
 			AppJSONMessage appMessage;
 			logger.error("Exception caught in WebSocketConnection.onTextMessage!");
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 			appMessage = new InvalidRequest(null);
 			((InvalidRequest) appMessage).setReceivedMessage(message.toString().trim());
 			appMessage.setErrorCode(Consts.GlobalErrorCode.DBException_1001);
@@ -197,7 +198,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 				catch (Exception e)
 				{
 					WebSocketModule.instance.getLogger().error(e.getMessage());
-					e.printStackTrace();
+					FileLogger.printStackTrace(e);
 				}
 	    	}
 	    	
@@ -280,7 +281,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
     }
     
@@ -346,7 +347,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 			logger.error("Connection of device <{}> was broken and will be released.", connectionOwner.getDeviceSn());
 			AppJSONMessage connectionError = new ConnectionErrorEvent(null);
 			connectionOwner.onJSONCommand(connectionError);

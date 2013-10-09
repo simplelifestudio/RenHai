@@ -4,6 +4,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.simplelife.renhai.server.log.FileLogger;
+
 public class SecurityUtils 
 {
 	private static byte[] iv = {1, 9, 8, 9, 0, 6, 0, 4};
@@ -59,7 +61,7 @@ public class SecurityUtils
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 	}
 }

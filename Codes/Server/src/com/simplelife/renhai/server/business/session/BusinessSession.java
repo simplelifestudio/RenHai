@@ -174,6 +174,7 @@ public class BusinessSession implements IBusinessSession
     	Sessionrecord record = new Sessionrecord();
     	record.setBusinessType(pool.getBusinessType().name());
     	record.setSessionStartTime(this.sessionStartTime);
+    	record.setChatStartTime(this.chatStartTime);
     	
     	int duration = (int)((chatEndTime - chatStartTime)/1000);
     	record.setChatDuration(duration);
