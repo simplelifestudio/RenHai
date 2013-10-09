@@ -29,6 +29,29 @@
 
 #pragma mark - Public Methods
 
++(NSString*) assessLabelName:(NSString*) labelName
+{
+    NSString* assessLabelName = nil;
+    
+    if (nil != labelName)
+    {
+        if ([labelName isEqualToString:MESSAGE_KEY_ASSESS_HAPPY])
+        {
+            assessLabelName = NSLocalizedString(@"Impress_AssessKey_Happy", nil);
+        }
+        else if ([labelName isEqualToString:MESSAGE_KEY_ASSESS_SOSO])
+        {
+            assessLabelName = NSLocalizedString(@"Impress_AssessKey_SoSo", nil);
+        }
+        else if ([labelName isEqualToString:MESSAGE_KEY_ASSESS_DISGUSTING])
+        {
+            assessLabelName = NSLocalizedString(@"Impress_AssessKey_Disgusting", nil);
+        }
+    }
+    
+    return assessLabelName;
+}
+
 -(id) init
 {
     if (self = [super init])

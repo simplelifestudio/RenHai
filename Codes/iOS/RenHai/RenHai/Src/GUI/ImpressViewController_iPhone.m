@@ -10,6 +10,8 @@
 
 #import "GUIModule.h"
 #import "GUIStyle.h"
+#import "UserDataModule.h"
+#import "CommunicationModule.h"
 
 #import "RHCollectionLabelCell_iPhone.h"
 
@@ -24,10 +26,18 @@
 #define SECTION_CHATS_ITEMCOUNT 3
 
 #define SECTION_INDEX_LABELS 2
+#define SECTION_IMPRESSES_ITEMCOUNT 9
+
+#define DELAY_REFRESH 0.5f
 
 @interface ImpressViewController_iPhone ()
 {
     GUIModule* _guiModule;
+    UserDataModule* _userDataModule;
+    CommunicationModule* _commModule;
+    
+    RHDevice* _device;
+    RHImpressCard* _impressCard;
     
     UIRefreshControl* _refresher;
 }
@@ -36,15 +46,13 @@
 
 @implementation ImpressViewController_iPhone
 
+#pragma mark - Public Methods
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	
-    _guiModule = [GUIModule sharedInstance];
-    
-    [self _setupNavigationBar];
-    
-    [self _setupCollectionView];
+    [self _setupInstance];
 }
 
 #pragma mark - UICollectionViewDataDelegate
@@ -63,7 +71,9 @@
         }
         case SECTION_INDEX_LABELS:
         {
-            return 9;
+//            NSArray* impressLabelList = [_impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
+//            return impressLabelList.count;
+            return SECTION_IMPRESSES_ITEMCOUNT;
         }
         default:
         {
@@ -76,8 +86,86 @@
 {
     RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_IMPRESSLABEL forIndexPath:indexPath];
 
-    cell.textField.text = @"印象标签";
-    cell.countLabel.text = @"9";
+    NSString* labelName = nil;
+    NSInteger labelCount = -1;
+    NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
+    switch (section)
+    {
+        case SECTION_INDEX_ASSESSES:
+        {
+            NSArray* assessLabelList = _impressCard.assessLabelList;
+            RHImpressLabel* assessLabel = assessLabelList[row];
+            labelName = [RHImpressLabel assessLabelName:assessLabel.labelName];
+            labelCount = assessLabel.assessedCount;
+            
+            break;
+        }
+        case SECTION_INDEX_CHATS:
+        {
+            switch (row)
+            {
+                case 0:
+                {
+                    labelName = NSLocalizedString(@"Impress_ChatTotalCount", nil);
+                    labelCount = _impressCard.chatTotalCount;
+                    break;
+                }
+                case 1:
+                {
+                    labelName = NSLocalizedString(@"Impress_ChatTotalDuration", nil);
+                    labelCount = _impressCard.chatTotalDuration;
+                    break;
+                }
+                case 2:
+                {
+                    labelName = NSLocalizedString(@"Impress_ChatLossCount", nil);
+                    labelCount = _impressCard.chatLossCount;
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+            
+            break;
+        }
+        case SECTION_INDEX_LABELS:
+        {
+            NSArray* impressLabelList = [_impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
+            
+            RHImpressLabel* impressLabel = nil;
+            if (0 < impressLabelList.count && row <= impressLabelList.count)
+            {
+                impressLabel = impressLabelList[row];
+
+                labelName = impressLabel.labelName;
+                labelCount = impressLabel.assessedCount;
+            }
+            else
+            {
+                labelName = NSLocalizedString(@"Impress_Empty", nil);
+            }
+
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    
+    cell.userInteractionEnabled = NO;
+    cell.textField.text = labelName;
+    if (0 <= labelCount)
+    {
+        cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
+    }
+    else
+    {
+        cell.countLabel.text = @"";
+    }
     
     return cell;
 }
@@ -129,6 +217,20 @@ return reusableView;
 
 #pragma mark - Private Methods
 
+-(void)_setupInstance
+{
+    _guiModule = [GUIModule sharedInstance];
+    _userDataModule = [UserDataModule sharedInstance];
+    _commModule = [CommunicationModule sharedInstance];
+    
+    _device = _userDataModule.device;
+    RHProfile* profile = _device.profile;
+    _impressCard = profile.impressCard;
+    
+    [self _setupNavigationBar];
+    [self _setupCollectionView];
+}
+
 -(void)_setupCollectionView
 {
     UINib* nib = [UINib nibWithNibName:NIB_COLLECTIONCELL_LABEL bundle:nil];
@@ -171,7 +273,47 @@ return reusableView;
 
 -(void)_refreshImpressData
 {
-    sleep(1);
+    sleep(DELAY_REFRESH);
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
+
+        RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:_device info:nil];
+        RHMessage* appDataSyncResponseMessage = [_commModule sendMessage:appDataSyncRequestMessage];
+        if (appDataSyncResponseMessage.messageId == MessageId_AppDataSyncResponse)
+        {
+            NSDictionary* messageBody = appDataSyncResponseMessage.body;
+            NSDictionary* deviceDic = [messageBody objectForKey:MESSAGE_KEY_DATAQUERY];
+            
+            RHDevice* device = _userDataModule.device;
+            @try
+            {
+                [device fromJSONObject:deviceDic];
+                
+                [_userDataModule saveUserData];
+            }
+            @catch (NSException *exception)
+            {
+                DDLogError(@"Caught Exception: %@", exception.debugDescription);
+            }
+            @finally
+            {
+                
+            }
+        }
+        else if (appDataSyncResponseMessage.messageId == MessageId_ServerErrorResponse)
+        {
+            
+        }
+        else if (appDataSyncResponseMessage.messageId == MessageId_ServerTimeoutResponse)
+        {
+
+        }
+        else
+        {
+
+        }
+        
+    });
     
     [_refresher endRefreshing];
     

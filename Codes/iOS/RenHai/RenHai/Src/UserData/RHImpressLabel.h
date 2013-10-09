@@ -18,5 +18,6 @@
 @property (nonatomic) NSDate* updateTime;
 @property (nonatomic) NSUInteger assessCount;
 
++(NSString*) assessLabelName:(NSString*) labelName;
 
 @end
