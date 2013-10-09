@@ -17,7 +17,7 @@
 #import "CommunicationModule.h"
 
 #define INTERVAL_ENTERBUTTON_TRACK 0.3
-#define INTERVAL_DATASYNC 5
+#define INTERVAL_DATASYNC 10
 
 @interface HomeViewController_iPhone () <CBRoundProgressViewDelegate>
 {
@@ -54,18 +54,18 @@
     [self _setupInstance];
 }
 
--(void) viewWillAppear:(BOOL)animated
+-(void) viewDidAppear:(BOOL)animated
 {
     [self _activateDataSyncTimer];
     
-    [super viewWillAppear:animated];
+    [super viewDidAppear:animated];
 }
 
--(void) viewWillDisappear:(BOOL)animated
+-(void) viewDidDisappear:(BOOL)animated
 {
     [self _deactivateDataSyncTimer];
     
-    [super viewWillDisappear:animated];
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark - Private Methods
@@ -173,6 +173,7 @@ static float progress = 0.1;
 -(void)_deactivateDataSyncTimer
 {
     [_dataSyncTimer invalidate];
+    _dataSyncTimer = nil;
 }
 
 -(void)_dataSync

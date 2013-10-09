@@ -12,7 +12,7 @@
 
 #import "CBHUDAgent.h"
 #import "CBUIUtils.h"
-
+#import "UIViewController+CBUIViewControlerExtends.h"
 #import "UIFont+FlatUI.h"
 
 #import "GUIStyle.h"
@@ -202,7 +202,10 @@ SINGLETON(GUIModule)
         NSString* notificationName = notification.name;
         if ([notificationName isEqualToString:NOTIFICATION_ID_RHSERVERDISCONNECTED])
         {
-            [_connectViewController popConnectView:_mainViewController animated:YES];
+            if ([_navigationController isVisible])
+            {
+                [_connectViewController popConnectView:_mainViewController animated:YES];   
+            }
         }
     }
 }
