@@ -9,6 +9,7 @@
 #import "HomeViewController_iPhone.h"
 
 #import "CBMathUtils.h"
+#import "UINavigationController+CBNavigationControllerExtends.h"
 
 #import "GUIModule.h"
 #import "GUIStyle.h"
@@ -53,18 +54,18 @@
     [self _setupInstance];
 }
 
--(void) viewWillAppear:(BOOL)animated
+-(void) viewDidAppear:(BOOL)animated
 {
-    [self _activateDataSyncTimer];
+    [super viewDidAppear:animated];
     
-    [super viewWillAppear:animated];
+    [self _activateDataSyncTimer];
 }
 
--(void) viewWillDisappear:(BOOL)animated
+-(void) viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
+
     [self _deactivateDataSyncTimer];
-    
-    [super viewWillDisappear:animated];
 }
 
 #pragma mark - Private Methods
@@ -165,17 +166,28 @@ static float progress = 0.1;
 
 -(void)_activateDataSyncTimer
 {
-    _dataSyncTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_DATASYNC target:self selector:@selector(_dataSync) userInfo:nil repeats:YES];
+    [self _deactivateDataSyncTimer];
+    
+    _dataSyncTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_DATASYNC target:self selector:@selector(_serverDataSync) userInfo:nil repeats:YES];
     [_dataSyncTimer fire];
 }
 
 -(void)_deactivateDataSyncTimer
 {
-    [_dataSyncTimer invalidate];
+    if (nil != _dataSyncTimer)
+    {
+        [_dataSyncTimer invalidate];
+        _dataSyncTimer = nil;
+    }
 }
 
--(void)_dataSync
-{
+-(void)_serverDataSync
+{    
+    if (![_commModule isWebSocketConnected])
+    {
+        return;
+    }
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
         RHDevice* device = _userDataModule.device;
         RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
@@ -250,8 +262,11 @@ static float progress = 0.1;
 
 - (IBAction)onPressHelpButton:(id)sender
 {
-    [_guiModule.helpViewController resetDisplayStatus];
-    [_guiModule.navigationController presentViewController:_guiModule.helpViewController animated:YES completion:nil];
+    RHNavigationController* navigationVC = _guiModule.navigationController;
+    HelpViewController_iPhone* helpVC = _guiModule.helpViewController;
+    
+    [helpVC resetDisplayStatus];
+    [navigationVC presentViewController:helpVC animated:YES completion:nil];
 }
 
 #pragma mark - CBRoundProgressViewDelegate

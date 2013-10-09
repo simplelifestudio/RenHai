@@ -39,6 +39,44 @@
     return self;
 }
 
+-(NSArray*) assessLabelList
+{
+    NSSortDescriptor *sortDescriptor = sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"labelId"
+                                                  ascending:YES];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSArray *sortedArray = [_assessLabelList sortedArrayUsingDescriptors:sortDescriptors];
+    
+    return sortedArray;
+}
+
+-(NSArray*) impressLabelList
+{
+    NSSortDescriptor *sortDescriptor = sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"assessedCount"
+                                                                                    ascending:YES];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSArray *sortedArray = [_impressLabelList sortedArrayUsingDescriptors:sortDescriptors];
+    
+    return sortedArray;
+}
+
+-(NSArray*) topImpressLabelList:(NSUInteger) top
+{
+    NSMutableArray* topList = [NSMutableArray array];
+    
+    if (top >= _impressLabelList.count)
+    {
+        [topList addObjectsFromArray:self.impressLabelList];
+    }
+    else
+    {
+        NSRange subRange = NSMakeRange(0, top - 1);
+        NSArray* subLabelList = [self.impressLabelList subarrayWithRange:subRange];
+        [topList addObjectsFromArray:subLabelList];
+    }
+    
+    return topList;
+}
+
 #pragma mark - Private Methods
 
 -(id) _getOCardId

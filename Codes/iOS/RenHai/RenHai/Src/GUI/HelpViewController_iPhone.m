@@ -10,13 +10,14 @@
 
 #import "GUIModule.h"
 #import "AppDataModule.h"
-
+#import "CommunicationModule.h"
 #import "GUIStyle.h"
 
 @interface HelpViewController_iPhone ()
 {
     GUIModule* _guiModule;
     AppDataModule* _appDataModule;
+    CommunicationModule* _commModule;
     
     NSArray *_imageArray;
     NSTimer *_displayTimer;
@@ -152,6 +153,7 @@
 {
     _guiModule = [GUIModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
+    _commModule = [CommunicationModule sharedInstance];
     
     [self _initArray];
     [self _configHelpViewUI];
@@ -262,18 +264,13 @@
     if (!isAppLaunchedBefore)
     {
         [_appDataModule recordAppLaunchedBefore];
-
-        [self.navigationController setNavigationBarHidden:NO];
-        [self.navigationController popToRootViewControllerAnimated:NO];
-        [self.navigationController pushViewController:_guiModule.homeViewController animated:NO];
-        [_guiModule.mainViewController showViewController:self animated:YES completion:nil];
-        
-        [self removeFromParentViewController];        
     }
     else
     {
-        [self dismissViewControllerAnimated:TRUE completion:^{}];
+
     }
+
+    [self dismissViewControllerAnimated:TRUE completion:nil];
 }
 
 -(void)_scrollToPrevPage:(id)sender

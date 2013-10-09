@@ -10,13 +10,14 @@
 
 #import "GUIModule.h"
 #import "AppDataModule.h"
-
+#import "CommunicationModule.h"
 #import "GUIStyle.h"
 
 @interface RHNavigationController ()
 {
     GUIModule* _guiModule;
     AppDataModule* _appDataModule;
+    CommunicationModule* _commModule;
 }
 
 @end
@@ -44,6 +45,13 @@
     [self _arrangeRootViewController];
 }
 
+-(void) viewDidAppear:(BOOL)animated
+{
+    [self _arrangeConnectViewController];
+    
+    [super viewDidAppear:animated];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -55,22 +63,31 @@
 {
     _guiModule = [GUIModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
+    _commModule = [CommunicationModule sharedInstance];
 }
 
 -(void) _arrangeRootViewController
 {
+    [self setNavigationBarHidden:NO];
+    [self popToRootViewControllerAnimated:NO];
+    [self pushViewController:_guiModule.homeViewController animated:NO];
+    [_guiModule.mainViewController showViewController:self animated:NO completion:nil];
+}
+
+-(void) _arrangeConnectViewController
+{
     BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
     if (!isAppLaunchedBefore)
     {
-        [self setNavigationBarHidden:YES];
-        [self pushViewController:_guiModule.helpViewController animated:YES];
+        [self presentViewController:_guiModule.helpViewController animated:YES completion:nil];
     }
     else
     {
-        [self setNavigationBarHidden:NO];
-        [self popToRootViewControllerAnimated:NO];
-        [self pushViewController:_guiModule.homeViewController animated:NO];
-        [_guiModule.mainViewController showViewController:self animated:YES completion:nil];
+        if (![_commModule isWebSocketConnected])
+        {
+            ConnectViewController_iPhone* _connectViewController = _guiModule.connectViewController;
+            [_connectViewController popConnectView:_guiModule.mainViewController animated:YES];
+        }        
     }
 }
 

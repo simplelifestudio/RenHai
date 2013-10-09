@@ -18,6 +18,8 @@
 #import "UserDataModule.h"
 
 #define PING_TEXT @"#####RenHai-App-Ping#####"
+#define PONG_LOG 1
+#define PING_ACTIVATE 0
 
 @interface WebSocketAgent()
 {
@@ -56,7 +58,7 @@
     _webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:remotePath]]];
     _webSocket.delegate = self;
 
-    NSTimeInterval timeout = WEBSOCKET_COMM_TIMEOUT;
+    NSTimeInterval timeout = WEBSOCKET_OPEN_TIMEOUT;
     NSDate* startTimeStamp = [NSDate date];
     NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
     
@@ -178,7 +180,9 @@
     [_openLock signal];
     [_openLock unlock];
     
+#if PING_ACTIVATE
     [self startPing];
+#endif
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error;
@@ -186,16 +190,19 @@
     DDLogWarn(@"Websocket Failed With Error: %@", error);
     
     [self closeWebSocket];
+    
+    NSNotification* notification = [NSNotification notificationWithName:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:notification];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;
 {
-    DDLogInfo(@"WebSocket Received Message Uncrypted: \"%@\"", message);
+//    DDLogInfo(@"WebSocket Received Message Uncrypted: \"%@\"", message);
     
     NSDictionary* dic = [CBJSONUtils toJSONObject:message];
     RHMessage* jsonMessage = [RHMessage constructWithContent:dic enveloped:YES];
     
-    DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", jsonMessage.toJSONString);
+//    DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", jsonMessage.toJSONString);
     
     BOOL isLegalMessage = [RHMessage isLegalMessage:jsonMessage];
     if (isLegalMessage)
@@ -241,8 +248,10 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceivePong:(NSData *)data
 {
-//    NSString* str = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-//    DDLogInfo(@"WebSocket Received Pong \"%@\"", str);
+#if PONG_LOG
+    NSString* str = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
+    DDLogInfo(@"WebSocket Received Pong \"%@\"", str);
+#endif
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;

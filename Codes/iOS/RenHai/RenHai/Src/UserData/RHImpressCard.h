@@ -23,4 +23,6 @@
 @property (nonatomic) NSUInteger chatTotalDuration;
 @property (nonatomic) NSUInteger chatLossCount;
 
+-(NSArray*) topImpressLabelList:(NSUInteger) top;
+
 @end

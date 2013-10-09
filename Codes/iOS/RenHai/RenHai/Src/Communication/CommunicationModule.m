@@ -74,9 +74,6 @@ SINGLETON(CommunicationModule)
         {
 //            [guiModule showHUD:NSLocalizedString(@"Communication_InternetDisconnected", nil) delay:_HUD_DISPLAY];
             
-            NSNotification* notification = [NSNotification notificationWithName:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil userInfo:nil];
-            [[NSNotificationCenter defaultCenter] postNotification:notification];
-            
             DDLogWarn(@"App's reachability changed to 'NotReachable'.");
             break;
         }
@@ -137,8 +134,6 @@ SINGLETON(CommunicationModule)
     {
         flag = (_webSocketCommAgent.webSocketState == SR_OPEN);
     }
-    
-//    [_webSocketCommAgent stopPing];
     
     return flag;
 }

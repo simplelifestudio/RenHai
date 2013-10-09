@@ -37,6 +37,13 @@
 "Impress_Assesses" = "Gained Assess";
 "Impress_Chats" = "Chat Records";
 "Impress_Labels" = "Gained Labels";
+"Impress_AssessKey_Happy" = "Positive";
+"Impress_AssessKey_SoSo" = "Neutral";
+"Impress_AssessKey_Disgusting" = "Negative";
+"Impress_ChatTotalCount" = "ChatCount";
+"Impress_ChatTotalDuration" = "ChatDuration";
+"Impress_ChatLossCount" = "LossCount";
+"Impress_Empty" = "Empty";
 
 "Config_PushNotification" = "Push Notification";
 "Config_Broadcast" = "Broadcast";

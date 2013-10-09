@@ -37,6 +37,13 @@
 "Impress_Assesses" = "聊天评价";
 "Impress_Chats" = "聊天记录";
 "Impress_Labels" = "印象标签";
+"Impress_AssessKey_Happy" = "好评";
+"Impress_AssessKey_SoSo" = "中评";
+"Impress_AssessKey_Disgusting" = "差评";
+"Impress_ChatTotalCount" = "聊天次数";
+"Impress_ChatTotalDuration" = "聊天时长";
+"Impress_ChatLossCount" = "断线次数";
+"Impress_Empty" = "空缺";
 
 "Config_PushNotification" = "推送通知";
 "Config_Broadcast" = "广播信息";
