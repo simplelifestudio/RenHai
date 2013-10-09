@@ -17,7 +17,7 @@
 #import "CommunicationModule.h"
 
 #define INTERVAL_ENTERBUTTON_TRACK 0.3
-#define INTERVAL_DATASYNC 10
+#define INTERVAL_DATASYNC 5
 
 @interface HomeViewController_iPhone () <CBRoundProgressViewDelegate>
 {

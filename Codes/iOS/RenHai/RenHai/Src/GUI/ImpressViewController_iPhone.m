@@ -290,6 +290,10 @@ return reusableView;
                 [device fromJSONObject:deviceDic];
                 
                 [_userDataModule saveUserData];
+                
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [self.collectionView reloadData];                
+                });
             }
             @catch (NSException *exception)
             {
