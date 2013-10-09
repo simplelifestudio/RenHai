@@ -186,6 +186,9 @@
     DDLogWarn(@"Websocket Failed With Error: %@", error);
     
     [self closeWebSocket];
+    
+    NSNotification* notification = [NSNotification notificationWithName:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:notification];
 }
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;

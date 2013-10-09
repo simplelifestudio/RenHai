@@ -353,6 +353,10 @@ ConnectStatus;
     {
         [self dismissConnectView:YES];
     }
+    else
+    {
+        [_commModule disconnectWebSocket];
+    }
 }
 
 - (void)_connectServer
