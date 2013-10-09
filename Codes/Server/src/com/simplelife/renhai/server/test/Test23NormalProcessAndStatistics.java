@@ -105,7 +105,6 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 	{
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
-		IDeviceWrapper deviceWrapper1 = OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn());
 		
 		// Step_01 Mock请求：查询所有统计项，包括：在线设备池设备数，在线设备池上限，随机业务设备池设备数，随机业务设备池上限，处于聊天状态的设备数，处于随机聊天状态的设备数，业务设备池的热门兴趣标签
 		mockApp1.clearLastReceivedCommand();
@@ -148,6 +147,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		Thread.sleep(500);
 		
 		// Step_06 调用：BusinessSession::getStatus
+		IDeviceWrapper deviceWrapper1 = OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn());
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);
 		

@@ -51,6 +51,7 @@ public class BusinessSession implements IBusinessSession
 	private long sessionStartTime;
 	private long chatStartTime;
 	private long chatEndTime;
+	private long sessionEndTime;
 	
 	private Consts.SessionEndReason endReason = Consts.SessionEndReason.Invalid;
 	
@@ -140,7 +141,7 @@ public class BusinessSession implements IBusinessSession
     public void endSession()
     {
     	logger.debug("Enter endSession.");
-    	System.currentTimeMillis();
+    	sessionEndTime = System.currentTimeMillis();
     	
     	synchronized(deviceList)
     	{
@@ -172,10 +173,14 @@ public class BusinessSession implements IBusinessSession
     	
     	Sessionrecord record = new Sessionrecord();
     	record.setBusinessType(pool.getBusinessType().name());
-    	record.setStartTime(this.sessionStartTime);
+    	record.setSessionStartTime(this.sessionStartTime);
     	
-    	int chatDuration = (int)(chatEndTime - chatStartTime)/1000;
-    	record.setDuration(chatDuration);
+    	int duration = (int)((chatEndTime - chatStartTime)/1000);
+    	record.setChatDuration(duration);
+    	
+    	duration = (int)((sessionEndTime - sessionStartTime)/1000);
+    	record.setSessionDuration(duration);
+    	
     	record.setEndStatus(previousStatus.name());
     	record.setEndReason(endReason.name());
     	
@@ -211,6 +216,35 @@ public class BusinessSession implements IBusinessSession
     	}
     	
     	notifyDevices(null, Consts.NotificationType.SessionBinded);
+    }
+    
+    public void notifyIncreaseChatDuration(int duration)
+    {
+    	List<IDeviceWrapper> tmpList;
+    	synchronized(this.deviceList)
+    	{
+    		tmpList = new ArrayList<IDeviceWrapper>(deviceList);
+    	}
+    	
+    	for (IDeviceWrapper device : tmpList)
+    	{
+			device.increaseChatDuration(duration);
+    	}
+    }
+    
+    
+    public void notifyIncreaseChatCount()
+    {
+    	List<IDeviceWrapper> tmpList;
+    	synchronized(this.deviceList)
+    	{
+    		tmpList = new ArrayList<IDeviceWrapper>(deviceList);
+    	}
+    	
+    	for (IDeviceWrapper device : tmpList)
+    	{
+			device.increaseChatCount();
+    	}
     }
     
     public void notifyDevices(IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
@@ -310,7 +344,9 @@ public class BusinessSession implements IBusinessSession
     		case VideoChat:
     			if (status == Consts.BusinessSessionStatus.ChatConfirm)
     			{
-    				this.chatStartTime = System.currentTimeMillis();
+    				chatStartTime = System.currentTimeMillis();
+    				chatEndTime = 0;
+    				notifyIncreaseChatCount();
     			}
     			else
     			{
@@ -322,7 +358,11 @@ public class BusinessSession implements IBusinessSession
     		case Assess:
     			if (status == Consts.BusinessSessionStatus.VideoChat)
     			{
-    				this.chatEndTime = System.currentTimeMillis();
+    				if (chatEndTime == 0)
+    				{
+    					chatEndTime = System.currentTimeMillis();
+    					notifyIncreaseChatDuration((int)(chatEndTime - chatStartTime));
+    				}
     				//resetDeviceForConfirm();
     			}
     			else
@@ -466,7 +506,7 @@ public class BusinessSession implements IBusinessSession
     	if (checkAllDevicesReach(Consts.BusinessProgress.ChatConfirmed))
     	{
     		logger.debug("All devices agreed chat after device <{}> agreed", device.getDeviceSn());
-			changeStatus(Consts.BusinessSessionStatus.VideoChat);
+    		changeStatus(Consts.BusinessSessionStatus.VideoChat);
     	}
     	else
     	{
@@ -513,6 +553,17 @@ public class BusinessSession implements IBusinessSession
     	{
     		deviceList.remove(device);
     		logger.debug("Device <{}> was removed from business session", device.getDeviceSn());
+    	}
+    	
+    	if (status == Consts.BusinessSessionStatus.VideoChat
+    			|| status == Consts.BusinessSessionStatus.Assess)
+    	{
+    		if (reason == Consts.DeviceLeaveReason.TimeoutOfActivity
+    				|| reason == Consts.DeviceLeaveReason.TimeoutOfPing
+    				|| reason == Consts.DeviceLeaveReason.TimeoutOnSyncSending)
+    		{
+    			device.increaseChatLoss();
+    		}
     	}
     	
     	device.unbindBusinessSession();

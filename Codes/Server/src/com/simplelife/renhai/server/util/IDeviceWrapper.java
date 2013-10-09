@@ -100,4 +100,11 @@ public interface IDeviceWrapper
     public JSONObject toJSONObject_InterestCard(Profile profile);
     public JSONObject toJSONObject_ImpressCard(Profile profile);
     public void toJSONObject_ImpressLabels(Impresscard impressCard, JSONObject impressCardObj, int labelCount);
+    
+    
+    public void increaseChatCount();
+    
+    public void increaseChatDuration(int duration);
+    
+    public void increaseChatLoss();
 }

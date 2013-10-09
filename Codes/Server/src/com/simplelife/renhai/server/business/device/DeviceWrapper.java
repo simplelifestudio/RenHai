@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -28,6 +31,7 @@ import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
+import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.db.ImpresslabelmapSortable;
@@ -367,7 +371,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     	if (ownerOnlinePool != null)
     	{
     		logger.debug("Notify online device pool about timeout of device <{}>", getDeviceSn());
-    		ownerOnlinePool.deleteDevice(this, Consts.DeviceLeaveReason.TimeoutOfPing);
+    		ownerOnlinePool.deleteDevice(this, Consts.DeviceLeaveReason.TimeoutOnSyncSending);
     	}
     }
 
@@ -637,6 +641,81 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 	public void setBusinessType(BusinessType businessType)
 	{
 		this.businessType = businessType;
+	}
+
+	@Override
+	public void increaseChatLoss()
+	{
+		Device device = this.getDevice();
+		Profile profile = device.getProfile();
+		Impresscard card = profile.getImpresscard();
+		
+		Session session = HibernateSessionFactory.getSession();
+		Transaction t = session.beginTransaction();
+		try
+		{
+			synchronized (card)
+			{
+				card.setChatLossCount(card.getChatLossCount() + 1);
+			}
+			t.commit();
+		}
+		catch(Exception e)
+		{
+			logger.error("Error occurred when saving chatTotalLoss: {}", e.getMessage());
+			t.rollback();
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void increaseChatCount()
+	{
+		Device device = this.getDevice();
+		Profile profile = device.getProfile();
+		Impresscard card = profile.getImpresscard();
+		
+		Session session = HibernateSessionFactory.getSession();
+		Transaction t = session.beginTransaction();
+		try
+		{
+			synchronized (card)
+			{
+				card.setChatTotalCount(card.getChatTotalCount() + 1);
+			}
+			t.commit();
+		}
+		catch(Exception e)
+		{
+			logger.error("Error occurred when saving chatTotalCount: {}", e.getMessage());
+			t.rollback();
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public void increaseChatDuration(int duration)
+	{
+		Device device = this.getDevice();
+		Profile profile = device.getProfile();
+		Impresscard card = profile.getImpresscard();
+		
+		Session session = HibernateSessionFactory.getSession();
+		Transaction t = session.beginTransaction();
+		try
+		{
+			synchronized (card)
+			{
+				card.setChatTotalDuration(card.getChatTotalDuration() + duration);
+			}
+			t.commit();
+		}
+		catch(Exception e)
+		{
+			logger.error("Error occurred when saving chatTotalDuration: {}", e.getMessage());
+			t.rollback();
+			e.printStackTrace();
+		}
 	}
 
 }

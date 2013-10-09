@@ -22,8 +22,10 @@ public class Sessionrecord implements java.io.Serializable {
 
 	private Integer sessionRecordId;
 	private String businessType;
-	private Long startTime;
-	private Integer duration;
+	private Long sessionStartTime;
+	private Integer sessionDuration;
+	private Long chatStartTime;
+	private Integer chatDuration;
 	private String endStatus;
 	private String endReason;
 	private Set<Sessionprofilemap> sessionprofilemaps = new HashSet<Sessionprofilemap>(
@@ -36,22 +38,25 @@ public class Sessionrecord implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public Sessionrecord(String businessType, Long startTime, Integer duration,
-			String endStatus, String endReason) {
+	public Sessionrecord(String businessType, Long sessionStartTime,
+			Integer sessionDuration, String endStatus, String endReason) {
 		this.businessType = businessType;
-		this.startTime = startTime;
-		this.duration = duration;
+		this.sessionStartTime = sessionStartTime;
+		this.sessionDuration = sessionDuration;
 		this.endStatus = endStatus;
 		this.endReason = endReason;
 	}
 
 	/** full constructor */
-	public Sessionrecord(String businessType, Long startTime, Integer duration,
+	public Sessionrecord(String businessType, Long sessionStartTime,
+			Integer sessionDuration, Long chatStartTime, Integer chatDuration,
 			String endStatus, String endReason,
 			Set<Sessionprofilemap> sessionprofilemaps) {
 		this.businessType = businessType;
-		this.startTime = startTime;
-		this.duration = duration;
+		this.sessionStartTime = sessionStartTime;
+		this.sessionDuration = sessionDuration;
+		this.chatStartTime = chatStartTime;
+		this.chatDuration = chatDuration;
 		this.endStatus = endStatus;
 		this.endReason = endReason;
 		this.sessionprofilemaps = sessionprofilemaps;
@@ -78,22 +83,40 @@ public class Sessionrecord implements java.io.Serializable {
 		this.businessType = businessType;
 	}
 
-	@Column(name = "startTime", nullable = false)
-	public Long getStartTime() {
-		return this.startTime;
+	@Column(name = "sessionStartTime", nullable = false)
+	public Long getSessionStartTime() {
+		return this.sessionStartTime;
 	}
 
-	public void setStartTime(Long startTime) {
-		this.startTime = startTime;
+	public void setSessionStartTime(Long sessionStartTime) {
+		this.sessionStartTime = sessionStartTime;
 	}
 
-	@Column(name = "duration", nullable = false)
-	public Integer getDuration() {
-		return this.duration;
+	@Column(name = "sessionDuration", nullable = false)
+	public Integer getSessionDuration() {
+		return this.sessionDuration;
 	}
 
-	public void setDuration(Integer duration) {
-		this.duration = duration;
+	public void setSessionDuration(Integer sessionDuration) {
+		this.sessionDuration = sessionDuration;
+	}
+
+	@Column(name = "chatStartTime")
+	public Long getChatStartTime() {
+		return this.chatStartTime;
+	}
+
+	public void setChatStartTime(Long chatStartTime) {
+		this.chatStartTime = chatStartTime;
+	}
+
+	@Column(name = "chatDuration")
+	public Integer getChatDuration() {
+		return this.chatDuration;
+	}
+
+	public void setChatDuration(Integer chatDuration) {
+		this.chatDuration = chatDuration;
 	}
 
 	@Column(name = "endStatus", nullable = false, length = 12)
