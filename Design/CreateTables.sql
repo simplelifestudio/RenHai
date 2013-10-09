@@ -295,8 +295,10 @@ DROP TABLE IF EXISTS `sessionrecord`;
 CREATE TABLE `sessionrecord` (
   `sessionRecordId` int(11) NOT NULL AUTO_INCREMENT,
   `businessType` enum('Random','Interest') NOT NULL,
-  `startTime` bigint(20) NOT NULL,
-  `duration` int(11) NOT NULL,
+  `sessionStartTime` bigint(20) NOT NULL,
+  `sessionDuration` int(11) NOT NULL,
+  `chatStartTime` bigint(20) DEFAULT NULL,
+  `chatDuration` int(11) DEFAULT NULL,
   `endStatus` enum('ChatConfirm','VideoChat','Idle','Assess') NOT NULL,
   `endReason` enum('Reject','ConnectionLoss','NormalEnd') NOT NULL,
   PRIMARY KEY (`sessionRecordId`)
