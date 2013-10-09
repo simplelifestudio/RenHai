@@ -197,12 +197,12 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;
 {
-    DDLogInfo(@"WebSocket Received Message Uncrypted: \"%@\"", message);
+//    DDLogInfo(@"WebSocket Received Message Uncrypted: \"%@\"", message);
     
     NSDictionary* dic = [CBJSONUtils toJSONObject:message];
     RHMessage* jsonMessage = [RHMessage constructWithContent:dic enveloped:YES];
     
-    DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", jsonMessage.toJSONString);
+//    DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", jsonMessage.toJSONString);
     
     BOOL isLegalMessage = [RHMessage isLegalMessage:jsonMessage];
     if (isLegalMessage)

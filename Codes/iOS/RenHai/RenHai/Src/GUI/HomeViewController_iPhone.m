@@ -56,16 +56,16 @@
 
 -(void) viewDidAppear:(BOOL)animated
 {
-    [self _activateDataSyncTimer];
-    
     [super viewDidAppear:animated];
+    
+    [self _activateDataSyncTimer];
 }
 
 -(void) viewDidDisappear:(BOOL)animated
 {
-    [self _deactivateDataSyncTimer];
-    
     [super viewDidDisappear:animated];
+
+    [self _deactivateDataSyncTimer];
 }
 
 #pragma mark - Private Methods
@@ -166,18 +166,28 @@ static float progress = 0.1;
 
 -(void)_activateDataSyncTimer
 {
-    _dataSyncTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_DATASYNC target:self selector:@selector(_dataSync) userInfo:nil repeats:YES];
+    [self _deactivateDataSyncTimer];
+    
+    _dataSyncTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_DATASYNC target:self selector:@selector(_serverDataSync) userInfo:nil repeats:YES];
     [_dataSyncTimer fire];
 }
 
 -(void)_deactivateDataSyncTimer
 {
-    [_dataSyncTimer invalidate];
-    _dataSyncTimer = nil;
+    if (nil != _dataSyncTimer)
+    {
+        [_dataSyncTimer invalidate];
+        _dataSyncTimer = nil;
+    }
 }
 
--(void)_dataSync
-{
+-(void)_serverDataSync
+{    
+    if (![_commModule isWebSocketConnected])
+    {
+        return;
+    }
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
         RHDevice* device = _userDataModule.device;
         RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
