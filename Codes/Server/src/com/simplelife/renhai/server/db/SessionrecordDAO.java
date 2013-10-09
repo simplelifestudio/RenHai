@@ -24,8 +24,10 @@ public class SessionrecordDAO extends AbstractHibernateDAO {
 			.getLogger(SessionrecordDAO.class);
 	// property constants
 	public static final String BUSINESS_TYPE = "businessType";
-	public static final String START_TIME = "startTime";
-	public static final String DURATION = "duration";
+	public static final String SESSION_START_TIME = "sessionStartTime";
+	public static final String SESSION_DURATION = "sessionDuration";
+	public static final String CHAT_START_TIME = "chatStartTime";
+	public static final String CHAT_DURATION = "chatDuration";
 	public static final String END_STATUS = "endStatus";
 	public static final String END_REASON = "endReason";
 
@@ -98,12 +100,20 @@ public class SessionrecordDAO extends AbstractHibernateDAO {
 		return findByProperty(BUSINESS_TYPE, businessType);
 	}
 
-	public List<Sessionrecord> findByStartTime(Object startTime) {
-		return findByProperty(START_TIME, startTime);
+	public List<Sessionrecord> findBySessionStartTime(Object sessionStartTime) {
+		return findByProperty(SESSION_START_TIME, sessionStartTime);
 	}
 
-	public List<Sessionrecord> findByDuration(Object duration) {
-		return findByProperty(DURATION, duration);
+	public List<Sessionrecord> findBySessionDuration(Object sessionDuration) {
+		return findByProperty(SESSION_DURATION, sessionDuration);
+	}
+
+	public List<Sessionrecord> findByChatStartTime(Object chatStartTime) {
+		return findByProperty(CHAT_START_TIME, chatStartTime);
+	}
+
+	public List<Sessionrecord> findByChatDuration(Object chatDuration) {
+		return findByProperty(CHAT_DURATION, chatDuration);
 	}
 
 	public List<Sessionrecord> findByEndStatus(Object endStatus) {

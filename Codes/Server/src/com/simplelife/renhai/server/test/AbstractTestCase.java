@@ -113,23 +113,8 @@ public abstract class AbstractTestCase extends TestCase
 			deviceSn = CommonFunctions.getRandomString(24);
 		}
 		
-		Device device = loadDevice(deviceSn);
-		if (device == null)
-		{
-			device =  createNewDevice(deviceSn);
-		}
-		
-		MockWebSocketConnection conn = new MockWebSocketConnection();
-		OnlineDevicePool pool = OnlineDevicePool.instance;
-		IDeviceWrapper deviceWrapper = pool.newDevice(conn);
-		if (deviceWrapper == null)
-		{
-			return null;
-		}
-		deviceWrapper.setDevice(device);
-		
-		MockApp mockApp = new MockApp(conn);
-		mockApp.bindDeviceWrapper(deviceWrapper);
+		MockApp mockApp = new MockApp(deviceSn);
+		mockApp.connect(false);
 		return mockApp;
 	}
 	
@@ -137,7 +122,7 @@ public abstract class AbstractTestCase extends TestCase
 	{
 		mockApp.pingTimer.cancel();
 		OnlineDevicePool pool = OnlineDevicePool.instance;
-		mockApp.close();
+		mockApp.disconnect();
 	}
 	
 	protected MockWebSocketConnection getMockWebSocket(IDeviceWrapper deviceWrapper)

@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.test;
 
+import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.Timer;
@@ -20,6 +21,8 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.java_websocket.drafts.Draft;
+import org.java_websocket.drafts.Draft_17;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +30,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
@@ -75,7 +79,7 @@ public class MockApp implements IMockApp
 		@Override
 		public void run()
 		{
-			logger.debug("Device <{}> trying to response BusinessSessionNotification", deviceWrapper.getDeviceSn());
+			logger.debug("Device <{}> trying to response BusinessSessionNotification", deviceSn);
 			JSONObject body = message.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
 			JSONObject header = message.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
 			Consts.NotificationType operationType = Consts.NotificationType.parseValue(body.getIntValue(JSONKey.OperationType));
@@ -96,7 +100,6 @@ public class MockApp implements IMockApp
     protected Timer pingTimer = new Timer();
     protected String lastSentMessageSn;
     
-    protected IDeviceWrapper deviceWrapper;
     protected String peerDeviceId;
     protected String businessSessionId;
     protected Consts.BusinessType businessType;
@@ -109,12 +112,30 @@ public class MockApp implements IMockApp
 	protected Lock lock = new ReentrantLock();
 	protected Condition condition = lock.newCondition();
 	
+	protected String deviceSn;
+	protected int deviceId;
 	protected String osVersion = MockApp.OSVersion;
 	protected String appVersion = MockApp.AppVersion;
 	protected String location = MockApp.Location;
 	protected String deviceModel = MockApp.DeviceModel;
 	
 	protected boolean autoReply = true;
+	protected String websocketLink = "ws://192.81.135.31/renhai/websocket";
+	
+	public void setWebsocketLink(String link)
+	{
+		websocketLink = link;
+	}
+	
+	public String getWebsocketLink()
+	{
+		return websocketLink; 
+	}
+	
+	public String getDeviceSn()
+	{
+		return deviceSn;
+	}
 	
 	public String getOSVersion()
 	{
@@ -186,7 +207,7 @@ public class MockApp implements IMockApp
 	    	if (receivedMessageId != messageId.getValue())
 	    	{
 	    		logger.error("MessageId verification of device <{}> failed, expected: " 
-	    				+ messageId.name() + "("+ messageId.getValue() +"), received: " + receivedMessageId, deviceWrapper.getDeviceSn());
+	    				+ messageId.name() + "("+ messageId.getValue() +"), received: " + receivedMessageId, deviceSn);
 	    		
 	    		return false;
 	    	}
@@ -198,7 +219,7 @@ public class MockApp implements IMockApp
 	    	if (receivedOperationType != notifyType.getValue())
 	    	{
 	    		logger.error("OperationType verification of device <{}> failed, expected: " 
-	    				+ notifyType.name() + "("+ notifyType.getValue() +"), received: " + receivedOperationType, deviceWrapper.getDeviceSn());
+	    				+ notifyType.name() + "("+ notifyType.getValue() +"), received: " + receivedOperationType, deviceSn);
 	    		
 	    		return false;
 	    	}
@@ -225,7 +246,7 @@ public class MockApp implements IMockApp
 	    	if (receivedMessageId != messageId.getValue())
 	    	{
 	    		logger.error("MessageId verification of device <{}> failed, expected: " 
-	    				+ messageId.name() + "("+ messageId.getValue() +"), received: " + receivedMessageId, deviceWrapper.getDeviceSn());
+	    				+ messageId.name() + "("+ messageId.getValue() +"), received: " + receivedMessageId, deviceSn);
 	    		return false;
 	    	}
     	}
@@ -234,7 +255,7 @@ public class MockApp implements IMockApp
     	if (!receivedMessageSn.equals(lastSentMessageSn))
     	{
     		logger.error("MessageSn verification of device <{}> failed, expected: " 
-    				+ lastSentMessageSn + ", received: " + receivedMessageSn, deviceWrapper.getDeviceSn());
+    				+ lastSentMessageSn + ", received: " + receivedMessageSn, deviceSn);
     		return false;
     	}
     	
@@ -244,7 +265,7 @@ public class MockApp implements IMockApp
 	    	if (receivedOperationType != operationType.getValue())
 	    	{
 	    		logger.error("OperationType verification of device <{}> failed, expected: " 
-	    				+ operationType.name() + "("+ operationType.getValue() +"), received: " + receivedOperationType, deviceWrapper.getDeviceSn());
+	    				+ operationType.name() + "("+ operationType.getValue() +"), received: " + receivedOperationType, deviceSn);
 	    		return false;
 	    	}
     	}
@@ -272,7 +293,7 @@ public class MockApp implements IMockApp
     /**
      * Clear jsonMap and add default fields
      */
-    protected void init()
+    protected void init(Consts.MessageId messageId)
     {
     	jsonObject.clear();
     	header.clear();
@@ -280,22 +301,23 @@ public class MockApp implements IMockApp
     	jsonObject.put(JSONKey.Header, header);
     	jsonObject.put(JSONKey.Body, body);
     	
-    	header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.toString());
-    	
+    	header.put(JSONKey.MessageId, messageId.getValue());
     	header.put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
-    	header.put(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
-    	header.put(JSONKey.DeviceSn, deviceWrapper.getDeviceSn());
+    	header.put(JSONKey.DeviceId, deviceId);
+    	header.put(JSONKey.DeviceSn, deviceSn);
     	header.put(JSONKey.TimeStamp, DateUtil.getNow());
-    }
-    
-    public void bindDeviceWrapper(IDeviceWrapper deviceWrapper)
-    {
-    	this.deviceWrapper = deviceWrapper;
-    }
-    
-    public IDeviceWrapper getDeviceWrapper()
-    {
-    	return deviceWrapper;
+    	
+    	if (messageId == Consts.MessageId.AlohaRequest
+    			|| messageId == Consts.MessageId.AppDataSyncRequest
+    			|| messageId == Consts.MessageId.ServerDataSyncRequest
+    			|| messageId == Consts.MessageId.BusinessSessionRequest)
+    	{
+    		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
+    	}
+    	else
+    	{
+    		header.put(JSONKey.MessageType, Consts.MessageType.AppResponse.getValue());
+    	}
     }
     
     public void waitMessage()
@@ -327,11 +349,9 @@ public class MockApp implements IMockApp
     	autoReply = false;
     }
     
-    public MockApp(IMockConnection connection)
+    public MockApp(String deviceSn)
 	{
-		this.connection = connection;
-		connection.bindMockApp(this);
-		startTimer();
+    	this.deviceSn = deviceSn;
 	}
 	
 	public String getConnectionId()
@@ -348,9 +368,9 @@ public class MockApp implements IMockApp
 	@Override
 	public void sendAlohaRequest()
 	{
-		init();
+		init(Consts.MessageId.AlohaRequest);
 		// Add command type
-		header.put(JSONKey.MessageId, Consts.MessageId.AlohaRequest.getValue());
+		
 		
 		// Add command body
 		body.put(JSONKey.Content, "Hello Server!");
@@ -363,10 +383,7 @@ public class MockApp implements IMockApp
 	@Override
 	public void sendAppDataSyncRequest(JSONObject queryObj, JSONObject updateObj)
 	{
-		init();
-		
-		// Add command type
-		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
+		init(Consts.MessageId.AppDataSyncRequest);
 		
 		// Add command body
 		if (queryObj != null)
@@ -387,13 +404,9 @@ public class MockApp implements IMockApp
 	@Override
 	public void sendServerDataSyncRequest()
 	{
-		init();
-		
-		// Add command type
-		header.put(JSONKey.MessageId, Consts.MessageId.ServerDataSyncRequest.getValue());
+		init(Consts.MessageId.ServerDataSyncRequest);
 		
 		// Add command body
-		
 		JSONObject deviceCountObj = new JSONObject();
 		deviceCountObj.put(JSONKey.Online, null);
 		deviceCountObj.put(JSONKey.Random, null);
@@ -436,7 +449,7 @@ public class MockApp implements IMockApp
 		envelopeObj.put(JSONKey.JsonEnvelope, jsonObject);
 		
 		String message = JSON.toJSONString(envelopeObj, SerializerFeature.WriteMapNullValue);
-		logger.debug("MockApp <{}> send message: \n" + message, getDeviceWrapper().getDeviceSn());
+		logger.debug("MockApp <{}> send message: \n" + message, deviceSn);
 		if (!syncSend)
 		{
 			connection.onTextMessage(message);
@@ -450,9 +463,9 @@ public class MockApp implements IMockApp
 		{
 			if (lastReceivedCommand == null)
 			{
-				logger.debug("MockApp <{}> sent message and await for response.", getDeviceWrapper().getDeviceSn());
+				logger.debug("MockApp <{}> sent message and await for response.", deviceSn);
 				condition.await(10, TimeUnit.SECONDS);
-				logger.debug("MockApp <{}> recovers from await.", getDeviceWrapper().getDeviceSn());
+				logger.debug("MockApp <{}> recovers from await.", deviceSn);
 			}
 		}
 		catch (InterruptedException e)
@@ -470,11 +483,9 @@ public class MockApp implements IMockApp
 			String operationInfo,
 			String operationValue)
 	{
-		init();
+		init(Consts.MessageId.BusinessSessionNotificationResponse);
 		
 		// Add command header
-		header.put(JSONKey.MessageId, Consts.MessageId.BusinessSessionNotificationResponse.getValue());
-		
 		if (messageSn == null)
 		{
 			messageSn = CommonFunctions.getRandomString(16);
@@ -497,10 +508,7 @@ public class MockApp implements IMockApp
 			JSONObject operationInfoObj,
 			String operationValue)
 	{
-		init();
-		
-		// Add command type
-		header.put(JSONKey.MessageId, Consts.MessageId.BusinessSessionRequest.getValue());
+		init(Consts.MessageId.BusinessSessionRequest);
 		
 		// Add command body
 		body.put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(businessSessionId));
@@ -516,7 +524,7 @@ public class MockApp implements IMockApp
 	
 	/** */
 	@Override
-	public void close()
+	public void disconnect()
 	{
 		connection.close();
 		//connection.onClose(0);
@@ -615,24 +623,34 @@ public class MockApp implements IMockApp
 		lock.lock();
 		condition.signal();
 		lock.unlock();
-		logger.debug("MockApp <{}> received command: \n" + JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue), getDeviceWrapper().getDeviceSn());
+		logger.debug("MockApp <{}> received command: \n" + JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue), deviceSn);
 		
-		// Check if it's notification, and respose if it is
+		int messageId = 0;
+		JSONObject header = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
+		JSONObject body = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
+		if (header.containsKey(JSONKey.MessageId))
+		{
+			messageId = header.getIntValue(JSONKey.MessageId);
+		}
+		
+		if (messageId == Consts.MessageId.AppDataSyncResponse.getValue())
+		{
+			deviceId = body.getJSONObject(JSONKey.DataQuery)
+					.getJSONObject(JSONKey.Device)
+					.getIntValue(JSONKey.DeviceId);
+		}
+		
+		// Check if it's notification, and response if it is
 		if (!autoReply)
 		{
 			return;
 		}
 		
-		JSONObject header = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
-		if (header.containsKey(JSONKey.MessageId))
+		if (messageId == Consts.MessageId.BusinessSessionNotification.getValue())
 		{
-			int messageId = header.getIntValue(JSONKey.MessageId);
-			if (messageId == Consts.MessageId.BusinessSessionNotification.getValue())
-			{
-				logger.debug("MockApp <{}> replies BusinessSessionNotification automatically.", deviceWrapper.getDeviceSn());
-				AutoReplyTask task = new AutoReplyTask(obj, this);
-				task.start();
-			}
+			logger.debug("MockApp <{}> replies BusinessSessionNotification automatically.", deviceSn);
+			AutoReplyTask task = new AutoReplyTask(obj, this);
+			task.start();
 		}
 	}
 	
@@ -641,11 +659,14 @@ public class MockApp implements IMockApp
 	 */
 	public void syncDevice()
 	{
+		JSONObject queryObj = new JSONObject();
 		JSONObject updateObj = new JSONObject();
 		JSONObject deviceObj = new JSONObject();
 		JSONObject deviceCardObj = new JSONObject();
 		JSONObject profileObj = new JSONObject();
 		JSONObject interestCardObj = new JSONObject();
+		
+		queryObj.put(JSONKey.Device, null);
 		
 		updateObj.put(JSONKey.Device, deviceObj);
 		
@@ -654,13 +675,13 @@ public class MockApp implements IMockApp
 		
 		profileObj.put(JSONKey.InterestCard, interestCardObj);
 		
-		deviceObj.put(JSONKey.DeviceSn, CommonFunctions.getJSONValue(deviceWrapper.getDeviceSn()));
+		deviceObj.put(JSONKey.DeviceSn, CommonFunctions.getJSONValue(deviceSn));
 		
 		deviceCardObj.put(JSONKey.OsVersion, CommonFunctions.getJSONValue(getOSVersion()));
 		deviceCardObj.put(JSONKey.AppVersion, CommonFunctions.getJSONValue(getAppVersion()));
 		deviceCardObj.put(JSONKey.IsJailed, Consts.YesNo.No.getValue());
 		deviceCardObj.put(JSONKey.Location, CommonFunctions.getJSONValue(getLocation()));
-		deviceCardObj.put(JSONKey.DeviceSn, CommonFunctions.getJSONValue(getDeviceWrapper().getDeviceSn()));
+		deviceCardObj.put(JSONKey.DeviceSn, CommonFunctions.getJSONValue(deviceSn));
 		deviceCardObj.put(JSONKey.DeviceModel, CommonFunctions.getJSONValue(getDeviceModel()));
 		
 		JSONArray interestLabelArray = new JSONArray();
@@ -677,11 +698,11 @@ public class MockApp implements IMockApp
 		interestLabelArray.add(interestLabelObj);
 		
 		interestLabelObj = new JSONObject();
-		interestLabelObj.put(JSONKey.InterestLabelName, "privateInterestOf " + deviceWrapper.getDeviceSn());
+		interestLabelObj.put(JSONKey.InterestLabelName, "privateInterestOf " + deviceSn);
 		interestLabelObj.put(JSONKey.LabelOrder, System.currentTimeMillis() % 5);
 		interestLabelArray.add(interestLabelObj);
 		
-		sendAppDataSyncRequest(null, updateObj);
+		sendAppDataSyncRequest(queryObj, updateObj);
 	}
 
 	@Override
@@ -694,5 +715,30 @@ public class MockApp implements IMockApp
 	public void assessAndContinue(IDeviceWrapper targetDevice, String impressLabelList)
 	{
 		assess(targetDevice, impressLabelList, true);
+	}
+
+	@Override
+	public void connect(boolean realSocket)
+	{
+		if (realSocket)
+		{
+			URI uri = URI.create(websocketLink);
+			
+			Draft d = new Draft_17();
+			MockWebSocketClient conn = new MockWebSocketClient(uri);
+			
+			Thread t = new Thread(conn);
+			t.start();
+			connection = conn;
+		}
+		else
+		{
+			MockWebSocketConnection conn = new MockWebSocketConnection();
+			connection = conn;
+			OnlineDevicePool.instance.newDevice(conn);
+		}
+		connection.bindMockApp(this);
+		
+		startTimer();
 	}
 }

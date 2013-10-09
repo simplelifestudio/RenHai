@@ -57,8 +57,8 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;
-		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
-		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
+		IDeviceWrapper deviceWrapper1 = OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn());
+		IDeviceWrapper deviceWrapper2 = OnlineDevicePool.instance.getDevice(mockApp2.getDeviceSn());
 		
 		mockApp1.syncDevice();
 		assertTrue(!mockApp1.lastReceivedCommandIsError());
@@ -168,7 +168,7 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 
 		// Step_27 Mock事件：A onClose
 		mockApp2.clearLastReceivedCommand();
-		mockApp1.close();
+		mockApp1.disconnect();
 		
 		mockApp2.waitMessage();
 		assertTrue(mockApp2.getLastReceivedCommand() != null);
@@ -190,7 +190,7 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_33 Mock事件：B对A评价，且之后退出业务
-		mockApp2.assessAndQuit(mockApp1.getDeviceWrapper(), "^#Happy#^,帅哥");
+		mockApp2.assessAndQuit(OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn()), "^#Happy#^,帅哥");
 		assertTrue(mockApp2.getLastReceivedCommand() != null);
 		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		

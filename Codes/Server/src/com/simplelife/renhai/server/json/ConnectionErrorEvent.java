@@ -35,14 +35,8 @@ public class ConnectionErrorEvent extends AppJSONMessage
 	{
 		logger.debug("Start to handle connection error of device <{}>", deviceWrapper.getDeviceSn());
 		deviceWrapper.onConnectionClose();
-		Session session = HibernateSessionFactory.getSession();
-		Transaction t = session.beginTransaction();
-		
-		Impresscard card =  deviceWrapper.getDevice().getProfile().getImpresscard();
-		card.setChatLossCount(card.getChatLossCount() + 1);
-		//DBModule.instance.cache(card);
-		t.commit();
 	}
+	
 
 	@Override
 	public MessageId getMessageId()

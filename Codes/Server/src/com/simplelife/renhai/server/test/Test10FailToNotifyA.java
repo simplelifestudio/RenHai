@@ -54,8 +54,8 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType); 
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;  
-		IDeviceWrapper deviceWrapper1 = mockApp1.getDeviceWrapper();
-		IDeviceWrapper deviceWrapper2 = mockApp2.getDeviceWrapper();
+		IDeviceWrapper deviceWrapper1 = OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn());
+		IDeviceWrapper deviceWrapper2 = OnlineDevicePool.instance.getDevice(mockApp2.getDeviceSn());
 		
 		String deviceSn1 = deviceWrapper1.getDeviceSn();
 		String deviceSn2 = deviceWrapper2.getDeviceSn();

@@ -52,7 +52,7 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 		mockApp.syncDevice();
 		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
-		String deviceSn = mockApp.getDeviceWrapper().getDeviceSn();
+		String deviceSn = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceSn();
 		AbstractBusinessDevicePool businessPool = pool.getBusinessPool(businessType);
 		
 		// Step_01 调用：OnlineDevicePool::getCount
@@ -78,7 +78,7 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 		//mockApp.ping();
 		
 		// Step_07 调用：OnlineDevicePool::getCount
-		assertTrue(mockApp.getDeviceWrapper().getOwnerOnlineDevicePool() == null);
+		assertTrue(OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getOwnerOnlineDevicePool() == null);
 		assertTrue(pool.getDevice(deviceSn) == null);
 		assertTrue(businessPool.getDevice(deviceSn) == null);
 		
