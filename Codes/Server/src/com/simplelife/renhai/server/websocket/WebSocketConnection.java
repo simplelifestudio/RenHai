@@ -84,9 +84,10 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void close()
     {
+    	logger.debug("Close Websocket: " + getConnectionId());
         try
 		{
-			getWsOutbound().close(Consts.DeviceLeaveReason.WebsocketClosedByApp.getValue(), null);
+        	getWsOutbound().close(Consts.DeviceLeaveReason.WebsocketClosedByServer.getValue(), null);
 		}
 		catch (IOException e)
 		{
@@ -295,13 +296,18 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onClose(int status)
     {
-    	if (Consts.DeviceLeaveReason.parseValue(status) == Consts.DeviceLeaveReason.WebsocketClosedByServer)
+    	/*
+    	if (status == Consts.DeviceLeaveReason.WebsocketClosedByServer.getValue())
     	{
     		return;
     	}
+    	*/
     	
-    	WebSocketModule.instance.getLogger().debug("WebSocketConnection onClose triggered");
-    	connectionOwner.onConnectionClose();
+    	WebSocketModule.instance.getLogger().debug("WebSocketConnection onClose triggered, status: " + status);
+    	
+    	// comment out releasing device related resource
+    	// to avoid loop in procedure of device releasing
+    	//connectionOwner.onConnectionClose();
     	super.onClose(status);
     }
 
