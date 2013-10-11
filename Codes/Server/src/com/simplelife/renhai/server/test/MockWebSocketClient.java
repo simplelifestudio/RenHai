@@ -117,16 +117,21 @@ public class MockWebSocketClient extends WebSocketClient implements IMockConnect
 	@Override
 	public void sendMessage(ServerJSONMessage message) throws IOException
 	{
-		if (disabled)
+		
+	}
+	
+	@Override
+    public void sendMessage(String message) throws IOException
+    {
+    	if (disabled)
     	{
     		logger.debug("Mock IOException due to connection is disabled");
     		throw new IOException();
     	}
     	
-    	lastSentMessage = new JSONObject();
-    	lastSentMessage.put(JSONKey.JsonEnvelope, message.toJSONObject());
-    	
+    	lastSentMessage = JSON.parseObject(message);
     	getConnection().send(JSON.toJSONString(lastSentMessage, SerializerFeature.WriteMapNullValue));
+    	//getConnection().send();
 	}
 
 
@@ -160,5 +165,16 @@ public class MockWebSocketClient extends WebSocketClient implements IMockConnect
 	public void close()
 	{
 		super.close();
+	}
+
+	@Override
+	public boolean isOpen()
+	{
+		if (getConnection() == null)
+		{
+			return false;
+		}
+		
+		return getConnection().isOpen();
 	}
 }

@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.test;
 
+import java.io.IOException;
 import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.Date;
@@ -30,26 +31,22 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.db.DBModule;
-import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.Devicecard;
-import com.simplelife.renhai.server.db.Impresscard;
-import com.simplelife.renhai.server.db.Interestcard;
-import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.log.FileLogger;
+import com.simplelife.renhai.server.test.MockAppConsts.MockAppRequest;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
-import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.IMockApp;
 import com.simplelife.renhai.server.util.IMockConnection;
 import com.simplelife.renhai.server.util.JSONKey;
 
 /** */
-public class MockApp implements IMockApp
+public class MockApp implements IMockApp, Runnable
 {
 	private class PingTask extends TimerTask
 	{
@@ -62,30 +59,97 @@ public class MockApp implements IMockApp
 		@Override
 		public void run()
 		{
-			mockApp.ping();
+			try
+			{
+				Thread.currentThread().setName("Ping");
+				mockApp.ping();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
 	}
 	
 	protected class AutoReplyTask extends Thread
 	{
-		private JSONObject message;
+		private MockAppConsts.MockAppRequest messageIdToBeSent;
+		private JSONObject receivedMessage;
 		private MockApp app;
+		private int delay;
+		private MockAppConsts.MockAppBusinessStatus nextStatus;
 		
-		public AutoReplyTask(JSONObject message, MockApp app)
+		public AutoReplyTask(
+				MockAppConsts.MockAppRequest messageIdToBeSent,
+				JSONObject receivedMessage, 
+				MockApp app, 
+				int delay, 
+				MockAppConsts.MockAppBusinessStatus nextStatus)
 		{
-			this.message = message;
+			this.messageIdToBeSent = messageIdToBeSent;
+			this.receivedMessage = receivedMessage;
 			this.app = app;
+			this.delay = delay;
+			this.nextStatus = nextStatus;
 		}
 		
 		@Override
 		public void run()
 		{
-			logger.debug("Device <{}> trying to response BusinessSessionNotification", deviceSn);
-			JSONObject body = message.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
-			JSONObject header = message.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
-			Consts.NotificationType operationType = Consts.NotificationType.parseValue(body.getIntValue(JSONKey.OperationType));
-			String messageSn = header.getString(JSONKey.MessageSn);
-			app.sendNotificationResponse(messageSn, operationType, "", "1");
+			if (delay > 0)
+			{
+				try
+				{
+					AutoReplyTask.sleep(delay);
+					app.setBusinessStatus(nextStatus);
+				}
+				catch (InterruptedException e)
+				{
+					FileLogger.printStackTrace(e);
+				}
+			}
+
+			switch(messageIdToBeSent)
+			{
+				case AlohaRequest:
+					app.sendAlohaRequest();
+					break;
+				case AppDataSyncRequest:
+					app.syncDevice();
+					break;
+				case EnterPool:
+					app.enterPool(BusinessType.Interest);
+					break;
+				case LeavePool:
+					app.leavePool();
+					break;
+				case AgreeChat:
+					app.chatConfirm(true);
+					break;
+				case RejectChat:
+					app.chatConfirm(false);
+					break;
+				case EndChat:
+					app.endChat();
+					break;
+				case AssessAndContinue:
+					app.assessAndContinue("^#Happy#^,assessFromDevice" + deviceSn);
+					break;
+				case AssessAndQuit:
+					app.assessAndContinue("^#SoSo#^,assessFromDevice" + deviceSn);
+					break;
+				case BusinessSessionNotificationResponse:
+					JSONObject body = receivedMessage.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
+					JSONObject header = receivedMessage.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
+					Consts.NotificationType operationType = Consts.NotificationType.parseValue(body.getIntValue(JSONKey.OperationType));
+					String messageSn = header.getString(JSONKey.MessageSn);
+					
+					app.sendNotificationResponse(messageSn, operationType, "", "1");
+					break;
+				case ServerDataSyncRequest:
+					app.sendServerDataSyncRequest();
+					break;
+			}
 		}
 	}
 	
@@ -120,8 +184,23 @@ public class MockApp implements IMockApp
 	protected String location = MockApp.Location;
 	protected String deviceModel = MockApp.DeviceModel;
 	
-	protected boolean autoReply = true;
+	protected JSONObject targetDeviceObject;
+	
+	protected boolean autoReplyInSlaveMode = true;
 	protected String websocketLink = "ws://192.81.135.31/renhai/websocket";
+	
+	protected MockAppConsts.MockAppBehaviorMode behaviorMode = MockAppConsts.MockAppBehaviorMode.Slave; 
+	protected MockAppConsts.MockAppBusinessStatus businessStatus = MockAppConsts.MockAppBusinessStatus.Invalid;
+	
+	protected int chatCount = 0;
+	protected boolean useRealSocket;
+	
+	public MockAppConsts.MockAppBusinessStatus getBusinessStatus()
+	{
+		return businessStatus;
+	}
+	
+	
 	
 	public void setWebsocketLink(String link)
 	{
@@ -342,17 +421,40 @@ public class MockApp implements IMockApp
     
     public void startAutoReply()
     {
-    	autoReply = true;
+    	autoReplyInSlaveMode = true;
     }
     
     public void stopAutoReply()
     {
-    	autoReply = false;
+    	autoReplyInSlaveMode = false;
     }
     
     public MockApp(String deviceSn)
 	{
     	this.deviceSn = deviceSn;
+    	this.behaviorMode = MockAppConsts.MockAppBehaviorMode.Slave;
+    	useRealSocket = false;
+    	this.connect(useRealSocket);
+	}
+    
+    public MockApp(String deviceSn, String strBehaviorMode, boolean realSocket)
+	{
+    	this.deviceSn = deviceSn;
+    	MockAppConsts.MockAppBehaviorMode tmpBehaviorMode = MockAppConsts.MockAppBehaviorMode.parseFromStringValue(strBehaviorMode);
+    	
+    	if (tmpBehaviorMode == MockAppConsts.MockAppBehaviorMode.Invalid)
+    	{
+    		logger.error("Fatal error that {} is invalid behavior mode, Normal mode will be configurated instead.", strBehaviorMode);
+    		tmpBehaviorMode = MockAppConsts.MockAppBehaviorMode.NormalAndQuit;
+    	}
+    	this.behaviorMode = tmpBehaviorMode;
+    	businessStatus = MockAppConsts.MockAppBusinessStatus.Init;
+    	this.useRealSocket = realSocket;
+    	this.connect(realSocket);
+    	if (behaviorMode != MockAppConsts.MockAppBehaviorMode.Slave)
+    	{
+    		this.prepareSending(null);
+    	}
 	}
 	
 	public String getConnectionId()
@@ -443,6 +545,34 @@ public class MockApp implements IMockApp
 		connection.onTextMessage(jsonString);
 	}
 	
+	private void sendByRealWebsocket(String message)
+	{
+		try
+		{
+			int tryCount = 0;
+			while (!connection.isOpen() && tryCount < 5)
+			{
+				Thread.sleep(1000);
+				tryCount++;
+			}
+			
+			if (!connection.isOpen())
+			{
+				logger.error("Fatal error that connection of device <{}> was not opened", deviceSn);
+				return;
+			}
+			connection.sendMessage(message);
+		}
+		catch (IOException e)
+		{
+			FileLogger.printStackTrace(e);
+		}
+		catch (InterruptedException e)
+		{
+			FileLogger.printStackTrace(e);
+		}
+	}
+	
 	@Override
 	public void sendRawJSONMessage(JSONObject jsonObject, boolean syncSend)
 	{
@@ -453,13 +583,29 @@ public class MockApp implements IMockApp
 		logger.debug("MockApp <{}> send message: \n" + message, deviceSn);
 		if (!syncSend)
 		{
-			connection.onTextMessage(message);
+			if (useRealSocket)
+			{
+				sendByRealWebsocket(message);
+			}
+			else
+			{
+				connection.onTextMessage(message);
+			}
 			return;
 		}
 		
 		lock.lock();
 		clearLastReceivedCommand();
-		connection.onTextMessage(message);
+		
+		if (useRealSocket)
+		{
+			sendByRealWebsocket(message);
+		}
+		else
+		{
+			connection.onTextMessage(message);
+		}
+		
 		try
 		{
 			if (lastReceivedCommand == null)
@@ -539,6 +685,12 @@ public class MockApp implements IMockApp
 		sendBusinessSessionRequest(Consts.OperationType.EnterPool, null, businessType.toString());
 	}
 	
+	@Override
+	public void leavePool()
+	{
+		sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, businessType.toString());
+	}
+	
 	/** */
 	@Override
 	public void endChat()
@@ -574,20 +726,19 @@ public class MockApp implements IMockApp
 	}
 	
 	/** */
-	private void assess(IDeviceWrapper targetDevice, String impressLabelList, boolean continueFlag)
+	private void assess(String impressLabelList, boolean continueFlag)
 	{
 		if (impressLabelList == null || impressLabelList.length() == 0)
 		{
 			return;
 		}
 		
-		JSONObject obj = targetDevice.toJSONObject();
-		JSONArray assessObj = obj.getJSONObject(JSONKey.Device)
+		JSONArray assessObj = targetDeviceObject.getJSONObject(JSONKey.Device)
 				.getJSONObject(JSONKey.Profile)
 				.getJSONObject(JSONKey.ImpressCard)
 				.getJSONArray(JSONKey.AssessLabelList);
 		
-		JSONArray impressObj = obj.getJSONObject(JSONKey.Device)
+		JSONArray impressObj = targetDeviceObject.getJSONObject(JSONKey.Device)
 				.getJSONObject(JSONKey.Profile)
 				.getJSONObject(JSONKey.ImpressCard)
 				.getJSONArray(JSONKey.ImpressLabelList);
@@ -609,11 +760,11 @@ public class MockApp implements IMockApp
 		
 		if (continueFlag)
 		{
-			sendBusinessSessionRequest(Consts.OperationType.AssessAndContinue, obj, "");
+			sendBusinessSessionRequest(Consts.OperationType.AssessAndContinue, targetDeviceObject, "");
 		}
 		else
 		{
-			sendBusinessSessionRequest(Consts.OperationType.AssessAndQuit, obj, "");
+			sendBusinessSessionRequest(Consts.OperationType.AssessAndQuit, targetDeviceObject, "");
 		}
 	}
 	
@@ -641,23 +792,252 @@ public class MockApp implements IMockApp
 					.getJSONObject(JSONKey.Device)
 					.getIntValue(JSONKey.DeviceId);
 		}
-		reply(messageId);
-	}
-	
-	private void reply(Consts.MessageId messageId)
-	{
-		// Check if it's notification, and response if it is
-		if (!autoReply)
+		else if (messageId == Consts.MessageId.BusinessSessionNotification)
 		{
-			return;
+			int messageType = body.getIntValue(JSONKey.OperationType);
+			if (messageType == Consts.NotificationType.SessionBinded.getValue())
+			{
+				targetDeviceObject = JSON.parseObject(body.getString(JSONKey.OperationInfo));
+			}
 		}
 		
-		if (messageId == Consts.MessageId.BusinessSessionNotification)
+		if (this.behaviorMode == MockAppConsts.MockAppBehaviorMode.Slave)
 		{
-			logger.debug("MockApp <{}> replies BusinessSessionNotification automatically.", deviceSn);
-			AutoReplyTask task = new AutoReplyTask(lastReceivedCommand, this);
+			// Check if it's notification, and response if it is
+			if (autoReplyInSlaveMode)
+			{
+				if (messageId == Consts.MessageId.BusinessSessionNotification)
+				{
+					AutoReplyTask task = new AutoReplyTask(
+							MockAppRequest.BusinessSessionNotificationResponse, 
+							lastReceivedCommand, 
+							this,
+							0,
+							MockAppConsts.MockAppBusinessStatus.Init);
+					task.start();
+				}
+			}
+			return;
+			
+		}
+		prepareSending(messageId);
+	}
+	
+	private void prepareSending(Consts.MessageId messageId)
+	{
+		AutoReplyTask task = null;
+		if (messageId != null)
+		{
+			logger.debug("Device<"+ deviceSn + "> received " + messageId.name() + " in status of " + businessStatus.name());
+		}
+		switch(businessStatus)
+		{
+			case Init:
+				if (behaviorMode.ordinal() > MockAppConsts.MockAppBehaviorMode.NoAppSyncRequest.ordinal())
+				{
+					task = new AutoReplyTask(MockAppRequest.AppDataSyncRequest, null, this, 0, MockAppConsts.MockAppBusinessStatus.AppDataSyncReqSent);
+					task.setName("AppDataSyncRequestThread");
+				}
+				break;
+				
+			case AppDataSyncReqSent:
+				if (messageId == Consts.MessageId.AppDataSyncResponse)
+				{
+					if (behaviorMode.ordinal() > MockAppConsts.MockAppBehaviorMode.NoEnterPoolRequest.ordinal())
+					{
+						task = new AutoReplyTask(
+								MockAppRequest.EnterPool, 
+								lastReceivedCommand, 
+								this, 
+								0, 
+								MockAppConsts.MockAppBusinessStatus.EnterPoolReqSent);
+						task.setName("EnterPoolRequestThread");
+					}
+				}
+				break;
+				
+			case EnterPoolReqSent:
+				if (messageId == Consts.MessageId.BusinessSessionResponse)
+				{
+					setBusinessStatus(MockAppConsts.MockAppBusinessStatus.EnterPoolResReceived);
+				}
+				else
+				{
+					logger.error("Received {} in status of EnterPoolReqSent", messageId.name());
+				}
+				break;
+			
+			case EnterPoolResReceived:
+				if (messageId == Consts.MessageId.BusinessSessionNotification)
+				{
+					int receivedOperationType = body.getIntValue(JSONKey.OperationType);
+			    	if (receivedOperationType != Consts.NotificationType.SessionBinded.getValue())
+			    	{
+			    		logger.error("Device <" + deviceSn + "> received {} in status of EnterPoolResReceived", messageId.name());
+			    	}
+			    	else
+			    	{
+			    		task = new AutoReplyTask(
+								MockAppRequest.BusinessSessionNotificationResponse, 
+								lastReceivedCommand, 
+								this, 0,
+								MockAppConsts.MockAppBusinessStatus.SessionBoundedReplied);
+			    		
+			    		if (behaviorMode == MockAppConsts.MockAppBehaviorMode.RejectChat)
+						{
+							AutoReplyTask chatConfirmTask = new AutoReplyTask(
+									MockAppRequest.RejectChat, 
+									null, 
+									this, MockAppConsts.Setting.ChatConfirmDuration,
+									MockAppConsts.MockAppBusinessStatus.Ended);
+							chatConfirmTask.setName("AgreeChatThread");
+							chatConfirmTask.start();
+						}
+						else if (behaviorMode == MockAppConsts.MockAppBehaviorMode.ConnectLossDuringChatConfirm)
+						{
+							setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
+						}
+						else if (behaviorMode.ordinal() >= MockAppConsts.MockAppBehaviorMode.ConnectLossDuringChatConfirm.ordinal())
+						{
+							AutoReplyTask chatConfirmTask = new AutoReplyTask(
+									MockAppRequest.AgreeChat, 
+									null, 
+									this, MockAppConsts.Setting.ChatConfirmDuration,
+									MockAppConsts.MockAppBusinessStatus.AgreeChatReqSent);
+							chatConfirmTask.setName("AgreeChatThread");
+							chatConfirmTask.start();
+						}
+			    	}
+				}
+				else
+				{
+					logger.error("Device <" + deviceSn + "> received {} in status of EnterPoolResReceived", messageId.name());
+				}
+				break;
+			case SessionBoundedReplied:
+				if (messageId != Consts.MessageId.BusinessSessionNotification)
+				{
+					logger.error("Device <" + deviceSn + "> received {} in status of SessionBoundedReplied", messageId.name());
+				}
+				break;
+			case AgreeChatReqSent:
+				if (messageId == Consts.MessageId.BusinessSessionResponse)
+				{
+					JSONObject body = lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
+					JSONObject header = lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
+					if (body.getInteger(JSONKey.OperationType) == Consts.NotificationType.OthersideRejected.getValue())
+					{
+						setBusinessStatus(MockAppConsts.MockAppBusinessStatus.EnterPoolResReceived);
+					}
+					else if (body.getInteger(JSONKey.OperationType) == Consts.NotificationType.OthersideAgreed.getValue())
+					{
+						if (behaviorMode ==  MockAppConsts.MockAppBehaviorMode.ConnectLossDuringChat)
+						{
+							try
+							{
+								Thread.sleep(MockAppConsts.Setting.VideoChatDuration);
+							}
+							catch (InterruptedException e)
+							{
+								FileLogger.printStackTrace(e);
+							}
+							setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
+						}
+						else if (behaviorMode.ordinal() >= MockAppConsts.MockAppBehaviorMode.NoRequestOfAssess.ordinal())
+						{
+							task = new AutoReplyTask(
+									MockAppRequest.EndChat, 
+									null, 
+									this, MockAppConsts.Setting.VideoChatDuration,
+									MockAppConsts.MockAppBusinessStatus.EndChatReqSent);
+							task.setName("EndChatRequestThread");
+						}
+					}
+				}
+				else if (messageId == Consts.MessageId.BusinessSessionNotification)
+				{
+					
+				}
+				else
+				{
+					logger.error("Received {} in status of AgreeChatReqSent", messageId.name());
+				}
+				break;
+			
+			case EndChatReqSent:
+				if (messageId == Consts.MessageId.BusinessSessionResponse)
+				{
+					if (behaviorMode.ordinal() >=  MockAppConsts.MockAppBehaviorMode.NoRequestOfAssess.ordinal())
+					{
+						if (behaviorMode ==  MockAppConsts.MockAppBehaviorMode.NormalAndContinue)
+						{
+							task = new AutoReplyTask(
+									MockAppRequest.AssessAndContinue, 
+									null, 
+									this, MockAppConsts.Setting.AssessDuration,
+									MockAppConsts.MockAppBusinessStatus.AssessReqSent);
+						}
+						else
+						{
+							task = new AutoReplyTask(
+									MockAppRequest.AssessAndQuit, 
+									null, 
+									this, MockAppConsts.Setting.AssessDuration,
+									MockAppConsts.MockAppBusinessStatus.AssessReqSent);
+						}
+						task.setName("AssessAndContinueThread");
+					}
+				}
+				else if (messageId != Consts.MessageId.BusinessSessionNotification)
+				{
+					logger.error("Device <" + deviceSn + "> received {} in status of EndChatReqSent", messageId.name());
+				}
+				break;
+				
+			case AssessReqSent:
+				if (messageId == Consts.MessageId.BusinessSessionResponse)
+				{
+					if (behaviorMode ==  MockAppConsts.MockAppBehaviorMode.NormalAndContinue)
+					{
+						chatCount++;
+						if (chatCount > MockAppConsts.Setting.MaxChatCount)
+						{
+							setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
+							return;
+						}
+						else
+						{
+							setBusinessStatus(MockAppConsts.MockAppBusinessStatus.EnterPoolResReceived);
+						}
+						
+					}
+					else if (behaviorMode ==  MockAppConsts.MockAppBehaviorMode.NormalAndQuit)
+					{
+						setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
+						return;
+					}
+				}
+				else
+				{
+					logger.error("Device <" + deviceSn + "> received {} in status of AssessReqSent", messageId.name());
+				}
+				break;
+		}
+		
+		if (task != null)
+		{
 			task.start();
 		}
+	}
+	
+	private void reply(JSONObject receivedMessage)
+	{
+		logger.debug("Device <{}> trying to response BusinessSessionNotification", deviceSn);
+		JSONObject body = receivedMessage.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
+		JSONObject header = receivedMessage.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
+		Consts.NotificationType operationType = Consts.NotificationType.parseValue(body.getIntValue(JSONKey.OperationType));
+		String messageSn = header.getString(JSONKey.MessageSn);
+		sendNotificationResponse(messageSn, operationType, "", "1");
 	}
 	
 	/**
@@ -712,15 +1092,15 @@ public class MockApp implements IMockApp
 	}
 
 	@Override
-	public void assessAndQuit(IDeviceWrapper targetDevice, String impressLabelList)
+	public void assessAndQuit(String impressLabelList)
 	{
-		assess(targetDevice, impressLabelList, false);
+		assess(impressLabelList, false);
 	}
 
 	@Override
-	public void assessAndContinue(IDeviceWrapper targetDevice, String impressLabelList)
+	public void assessAndContinue(String impressLabelList)
 	{
-		assess(targetDevice, impressLabelList, true);
+		assess(impressLabelList, true);
 	}
 
 	@Override
@@ -746,5 +1126,35 @@ public class MockApp implements IMockApp
 		connection.bindMockApp(this);
 		
 		startTimer();
+	}
+	
+	public void setBusinessStatus(MockAppConsts.MockAppBusinessStatus status)
+	{
+		logger.debug("Device <{}> changes status to " + status.name(), deviceSn);
+		businessStatus = status;
+		if (status == MockAppConsts.MockAppBusinessStatus.Ended)
+		{
+			connection.close();
+		}
+	}
+
+
+
+	@Override
+	public void run()
+	{
+		logger.debug("MockApp <{}> started", deviceSn);
+		while (this.businessStatus != MockAppConsts.MockAppBusinessStatus.Ended)
+		{
+			try
+			{
+				Thread.sleep(500);
+			}
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		logger.debug("MockApp <{}> ended", deviceSn);
 	}
 }

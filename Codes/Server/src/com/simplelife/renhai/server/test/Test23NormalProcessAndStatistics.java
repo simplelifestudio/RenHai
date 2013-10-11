@@ -197,7 +197,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		// Step_19 Mock事件：A对B评价
 		//logger.debug("=============mockApp2 before assess:\n");
 		//System.out.print(JSON.toJSONString(OnlineDevicePool.instance.getDevice(mockApp2.getDeviceSn()).toJSONObject(), SerializerFeature.WriteMapNullValue));
-		mockApp1.assessAndContinue(OnlineDevicePool.instance.getDevice(mockApp2.getDeviceSn()), "TC23_评价,^#Happy#^,帅哥");
+		mockApp1.assessAndContinue("TC23_评价,^#Happy#^,帅哥");
 		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AssessAndContinue));
 		//logger.debug("=============mockApp2 after assess:\n");
 		//System.out.print(JSON.toJSONString(OnlineDevicePool.instance.getDevice(mockApp2.getDeviceSn()).toJSONObject(), SerializerFeature.WriteMapNullValue));
@@ -206,7 +206,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		// Step_20 Mock事件：B对A评价
 		//logger.debug("=============mockApp1 before assess:\n");
 		//System.out.print(JSON.toJSONString(OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn()).toJSONObject(), SerializerFeature.WriteMapNullValue));
-		mockApp2.assessAndQuit(OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn()), "TC24_评价,^#Disgusting#^,变态");
+		mockApp2.assessAndQuit("TC24_评价,^#Disgusting#^,变态");
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AssessAndQuit));
 		//logger.debug("=============mockApp1 after assess:\n");
 		//System.out.print(JSON.toJSONString(OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn()).toJSONObject(), SerializerFeature.WriteMapNullValue));

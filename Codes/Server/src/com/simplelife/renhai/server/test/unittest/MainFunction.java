@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -48,6 +49,7 @@ import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.test.AbstractTestCase;
 import com.simplelife.renhai.server.test.MockApp;
+import com.simplelife.renhai.server.test.MockAppConsts;
 import com.simplelife.renhai.server.test.MockWebSocketClient;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -381,21 +383,28 @@ public class MainFunction extends AbstractTestCase
 	
 	public void testLossConnection()
 	{
-		MockApp mockApp1 = new MockApp("deviceSn");
-		mockApp1.connect(false);
+		/*
+		MockApp mockApp1 = new MockApp("deviceSn", "Slave", true);
 		mockApp1.syncDevice();
+		mockApp1.disconnect();
+		*/
 		
-		MockApp mockApp2 = new MockApp("deviceSn2");
-		mockApp2.connect(false);
+		MockApp mockApp1 = new MockApp("deviceSn", "Slave", true);
+		mockApp1.syncDevice();
+
+		// 2把1踢掉
+		MockApp mockApp2 = new MockApp("deviceSn", "Slave", true);
 		mockApp2.syncDevice();
 		
-		MockApp mockApp3 = new MockApp("deviceSn");
-		mockApp3.connect(false);
-		mockApp3.syncDevice();
+		// 1被踢掉，重新建立连接之前无法发消息
+		mockApp1.sendServerDataSyncRequest();
 		
-		mockApp1.disconnect();
-		mockApp2.disconnect();
-		mockApp3.disconnect();
+		// 重新建立连接，同步，理论上应该把2踢掉
+		mockApp1 = new MockApp("deviceSn", "Slave", true);
+		mockApp1.syncDevice();
+		
+		// 应该失败
+		mockApp2.sendServerDataSyncRequest();
 	}
 	
 	@Test
@@ -419,6 +428,26 @@ public class MainFunction extends AbstractTestCase
 			e1.printStackTrace();
 		} finally {
 			e.close();
+		}
+	}
+	
+	@Test
+	public void testIssue9()
+	{
+		
+	}
+	
+	@Test
+	public void testMockAppBehaviorMode() throws InterruptedException
+	{
+		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndContinue", false);
+	
+		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndContinue", false);
+		
+		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended
+				|| app2.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
+		{
+			Thread.sleep(1000);
 		}
 	}
 }

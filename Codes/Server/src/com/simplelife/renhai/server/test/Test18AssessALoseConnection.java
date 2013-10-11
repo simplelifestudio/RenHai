@@ -190,7 +190,7 @@ public class Test18AssessALoseConnection extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_33 Mock事件：B对A评价，且之后退出业务
-		mockApp2.assessAndQuit(OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn()), "^#Happy#^,帅哥");
+		mockApp2.assessAndQuit("^#Happy#^,帅哥");
 		assertTrue(mockApp2.getLastReceivedCommand() != null);
 		assertTrue(!mockApp2.lastReceivedCommandIsError());
 		

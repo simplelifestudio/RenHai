@@ -161,7 +161,7 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EndChat));
 		
 		// Step_32 Mock事件：B对A评价
-		mockApp2.assessAndContinue(OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn()), "TC17_评价,^#Happy#^,美女");
+		mockApp2.assessAndContinue("TC17_评价,^#Happy#^,美女");
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AssessAndContinue));
 		
 		// Step_33 数据库检查：A 印象卡片信息

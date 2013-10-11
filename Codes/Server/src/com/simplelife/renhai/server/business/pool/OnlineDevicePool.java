@@ -51,7 +51,15 @@ public class OnlineDevicePool extends AbstractDevicePool
 		@Override
 		public void run()
 		{
-			OnlineDevicePool.instance.checkInactiveDevice();
+			Thread.currentThread().setName("InactiveCheck");
+			try
+			{
+				OnlineDevicePool.instance.checkInactiveDevice();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
     }
 	
@@ -60,7 +68,15 @@ public class OnlineDevicePool extends AbstractDevicePool
 		@Override
 		public void run()
 		{
-			OnlineDevicePool.instance.deleteBannedDevice();
+			try
+			{
+				Thread.currentThread().setName("BannedCheck");
+				OnlineDevicePool.instance.deleteBannedDevice();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
     }
 	
@@ -69,7 +85,15 @@ public class OnlineDevicePool extends AbstractDevicePool
 		@Override
 		public void run()
 		{
-			OnlineDevicePool.instance.saveStatistics();
+			try
+			{
+				Thread.currentThread().setName("StatSave");
+				OnlineDevicePool.instance.saveStatistics();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
     }
 	
@@ -213,10 +237,11 @@ public class OnlineDevicePool extends AbstractDevicePool
     		return;
     	}
     	
-    	logger.debug("Start to remove device <{}> from OnlineDevicePool", deviceWrapper.getDeviceSn());
-    	deviceWrapper.unbindOnlineDevicePool();
-
     	Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
+    	
+    	logger.debug("Start to remove device <{}> from OnlineDevicePool, device status: " + status.name(), deviceWrapper.getDeviceSn());
+    	deviceWrapper.unbindOnlineDevicePool();
+    	
     	if (status == Consts.BusinessStatus.Init)
     	{
     		String id = deviceWrapper.getConnection().getConnectionId();
@@ -257,8 +282,6 @@ public class OnlineDevicePool extends AbstractDevicePool
     	}
     }
     
-    
-    
     public void startTimers()
     {
     	inactiveTimer.scheduleAtFixedRate(new InactiveCheckTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.OnlineDeviceConnection);
@@ -284,7 +307,8 @@ public class OnlineDevicePool extends AbstractDevicePool
     public void synchronizeDevice(DeviceWrapper deviceWrapper)
     {
     	IBaseConnection connection = deviceWrapper.getConnection();
-    	if (!queueDeviceMap.containsKey(connection.getConnectionId()))
+    	String connectionId = connection.getConnectionId();
+    	if (!queueDeviceMap.containsKey(connectionId))
     	{
     		return;
     	}
@@ -297,10 +321,13 @@ public class OnlineDevicePool extends AbstractDevicePool
     	String deviceSn = deviceWrapper.getDeviceSn();
     	if (deviceMap.containsKey(deviceSn))
     	{
-    		IDeviceWrapper preDevice = deviceMap.get(deviceSn); 
-    		if (!preDevice.getConnection().getConnectionId().equals(deviceWrapper.getConnection().getConnectionId()))
+    		logger.debug("Device <{}> has been in deviceMap", deviceSn);
+    		IDeviceWrapper preDevice = deviceMap.get(deviceSn);
+    		String previousId = preDevice.getConnection().getConnectionId(); 
+    		if (!previousId.equals(connectionId))
     		{
     			// If receive AppDataSyncRequest from new WebsocketConnection, close the previous one
+    			logger.debug("Found same deviceSn <{}> on different Websocket connection, close the previous one: " + previousId, deviceSn);
     			preDevice.getConnection().close();
     		}
     	}

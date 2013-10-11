@@ -37,9 +37,17 @@ public class DAOWrapper
 		@Override
 		public void run()
 		{
-			logger.debug("Start to flush DB cache");
-			DAOWrapper.flushToDB();
-			logger.debug("Finished flush DB cache");
+			try
+			{
+				Thread.currentThread().setName("DBFlush");
+				logger.debug("Start to flush DB cache");
+				DAOWrapper.flushToDB();
+				logger.debug("Finished flush DB cache");
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
 	}
 	private static Logger logger = BusinessModule.instance.getLogger();

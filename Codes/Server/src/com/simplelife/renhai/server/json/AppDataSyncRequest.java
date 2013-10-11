@@ -503,7 +503,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		if (syncType == SyncType.ExistentNotLoaded || syncType == SyncType.ExistentLoaded)
 		{
-			logger.debug("Device is ExistentNotLoaded, try to load device from DB.");
+			logger.debug("Device is Existent, try to load device from DB.");
 			loadDevice(deviceSn);
 		}
 		else if (syncType == SyncType.NewDevice)

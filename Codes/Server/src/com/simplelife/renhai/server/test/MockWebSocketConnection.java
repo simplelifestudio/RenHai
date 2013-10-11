@@ -83,6 +83,12 @@ public class MockWebSocketConnection extends WebSocketConnection implements IMoc
     }
     
     
+    @Override
+    public void sendMessage(String message) throws IOException
+    {
+    	 
+    }
+    
     public void onTimeout()
     {
     }
@@ -97,5 +103,11 @@ public class MockWebSocketConnection extends WebSocketConnection implements IMoc
 	public void bindMockApp(IMockApp mockApp)
 	{
 		this.ownerMockApp = mockApp;
+	}
+
+	@Override
+	public boolean isOpen()
+	{
+		return true;
 	}
 }
