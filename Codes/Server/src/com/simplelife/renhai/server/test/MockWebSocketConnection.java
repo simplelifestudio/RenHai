@@ -10,6 +10,8 @@
 package com.simplelife.renhai.server.test;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -109,5 +111,12 @@ public class MockWebSocketConnection extends WebSocketConnection implements IMoc
 	public boolean isOpen()
 	{
 		return true;
+	}
+	
+	@Override
+	public void ping()
+	{
+		ByteBuffer pingData = ByteBuffer.allocate(5);
+		this.onPing(pingData);
 	}
 }

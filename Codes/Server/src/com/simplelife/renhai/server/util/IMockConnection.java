@@ -29,6 +29,7 @@ public interface IMockConnection
 	public void sendMessage(String message) throws IOException;
 	public void onTimeout();
 	public void close();
+	public void ping();
 	public String getConnectionId();
 	public void onPing(ByteBuffer pingData);
 	

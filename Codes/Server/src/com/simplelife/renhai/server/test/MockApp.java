@@ -1,4 +1,3 @@
-
 /**
  * AbstractMockApp.java
  * 
@@ -22,6 +21,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.hibernate.cfg.SetSimpleValueTypeSecondPass;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_17;
 import org.slf4j.Logger;
@@ -34,6 +34,7 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.log.FileLogger;
+import com.simplelife.renhai.server.test.MockAppConsts.MockAppBusinessStatus;
 import com.simplelife.renhai.server.test.MockAppConsts.MockAppRequest;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
@@ -100,8 +101,9 @@ public class MockApp implements IMockApp, Runnable
 			{
 				try
 				{
+					logger.debug("Sleep " + delay + " ms, next status: " + nextStatus + ", message to be sent: " + messageIdToBeSent);
 					AutoReplyTask.sleep(delay);
-					app.setBusinessStatus(nextStatus);
+					logger.debug("Recover from sleep");
 				}
 				catch (InterruptedException e)
 				{
@@ -109,6 +111,10 @@ public class MockApp implements IMockApp, Runnable
 				}
 			}
 
+			if (nextStatus != null)
+			{
+				app.setBusinessStatus(nextStatus);
+			}
 			switch(messageIdToBeSent)
 			{
 				case AlohaRequest:
@@ -720,9 +726,7 @@ public class MockApp implements IMockApp, Runnable
 		{
 			return;
 		}
-		
-		ByteBuffer pingData = ByteBuffer.allocate(5);
-		connection.onPing(pingData);
+		connection.ping();
 	}
 	
 	/** */
@@ -823,6 +827,16 @@ public class MockApp implements IMockApp, Runnable
 		prepareSending(messageId);
 	}
 	
+	private void replyNotification(JSONObject lastReceivedCommand, MockAppBusinessStatus nextStatus)
+	{
+		AutoReplyTask task = new AutoReplyTask(
+				MockAppRequest.BusinessSessionNotificationResponse, 
+				lastReceivedCommand, 
+				this, 0,
+				nextStatus);
+		task.start();
+	}
+	
 	private void prepareSending(Consts.MessageId messageId)
 	{
 		AutoReplyTask task = null;
@@ -877,12 +891,7 @@ public class MockApp implements IMockApp, Runnable
 			    	}
 			    	else
 			    	{
-			    		task = new AutoReplyTask(
-								MockAppRequest.BusinessSessionNotificationResponse, 
-								lastReceivedCommand, 
-								this, 0,
-								MockAppConsts.MockAppBusinessStatus.SessionBoundedReplied);
-			    		
+			    		replyNotification(lastReceivedCommand, MockAppBusinessStatus.SessionBoundedReceived);
 			    		if (behaviorMode == MockAppConsts.MockAppBehaviorMode.RejectChat)
 						{
 							AutoReplyTask chatConfirmTask = new AutoReplyTask(
@@ -956,7 +965,7 @@ public class MockApp implements IMockApp, Runnable
 				}
 				else if (messageId == Consts.MessageId.BusinessSessionNotification)
 				{
-					
+					replyNotification(lastReceivedCommand, null);
 				}
 				else
 				{
@@ -988,9 +997,13 @@ public class MockApp implements IMockApp, Runnable
 						task.setName("AssessAndContinueThread");
 					}
 				}
-				else if (messageId != Consts.MessageId.BusinessSessionNotification)
+				else if (messageId == Consts.MessageId.BusinessSessionNotification)
 				{
-					logger.error("Device <" + deviceSn + "> received {} in status of EndChatReqSent", messageId.name());
+					replyNotification(lastReceivedCommand, null);
+				}
+				else
+				{
+					logger.error("Device <" + deviceSn + "> received {} in status of AssessReqSent", messageId.name());
 				}
 				break;
 				
@@ -1017,6 +1030,10 @@ public class MockApp implements IMockApp, Runnable
 						return;
 					}
 				}
+				else if (messageId == Consts.MessageId.BusinessSessionNotification)
+				{
+					replyNotification(lastReceivedCommand, null);
+				}
 				else
 				{
 					logger.error("Device <" + deviceSn + "> received {} in status of AssessReqSent", messageId.name());
@@ -1028,16 +1045,6 @@ public class MockApp implements IMockApp, Runnable
 		{
 			task.start();
 		}
-	}
-	
-	private void reply(JSONObject receivedMessage)
-	{
-		logger.debug("Device <{}> trying to response BusinessSessionNotification", deviceSn);
-		JSONObject body = receivedMessage.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
-		JSONObject header = receivedMessage.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
-		Consts.NotificationType operationType = Consts.NotificationType.parseValue(body.getIntValue(JSONKey.OperationType));
-		String messageSn = header.getString(JSONKey.MessageSn);
-		sendNotificationResponse(messageSn, operationType, "", "1");
 	}
 	
 	/**

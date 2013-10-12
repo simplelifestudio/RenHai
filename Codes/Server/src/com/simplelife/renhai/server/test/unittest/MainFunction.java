@@ -432,17 +432,11 @@ public class MainFunction extends AbstractTestCase
 	}
 	
 	@Test
-	public void testIssue9()
-	{
-		
-	}
-	
-	@Test
 	public void testMockAppBehaviorMode() throws InterruptedException
 	{
-		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndContinue", false);
+		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndContinue", true);
 	
-		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndContinue", false);
+		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndContinue", true);
 		
 		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended
 				|| app2.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)

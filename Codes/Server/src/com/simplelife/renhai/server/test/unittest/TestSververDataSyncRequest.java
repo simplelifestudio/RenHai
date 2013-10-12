@@ -75,10 +75,11 @@ public class TestSververDataSyncRequest extends AbstractTestCase
 		historyObj.put(JSONKey.StartTime, null);
 		historyObj.put(JSONKey.EndTime, null);
 		
-		
 		MockApp app = this.createNewMockApp(deviceSn);
 		app.syncDevice();
 		assertTrue(!app.lastReceivedCommandIsError());
+		
+		app.enterPool(businessType);
 		
 		app.sendRawJSONMessage(envelope, true);
 		assertTrue(!app.lastReceivedCommandIsError());

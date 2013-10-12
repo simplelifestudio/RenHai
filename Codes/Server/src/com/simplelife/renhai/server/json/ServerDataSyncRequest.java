@@ -19,6 +19,8 @@ import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.HotLabel;
 import com.simplelife.renhai.server.business.pool.InterestBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.db.Globalinterestlabel;
+import com.simplelife.renhai.server.db.GlobalinterestlabelDAO;
 import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
@@ -205,9 +207,21 @@ public class ServerDataSyncRequest extends AppJSONMessage
 			hotObj.put(JSONKey.Current, hotLabelObj);
 			LinkedList<HotLabel> labels = interestPool.getHotInterestLabel(count);
 			
+			JSONObject tempLabelObj;
+			Globalinterestlabel globalLabel;
+			GlobalinterestlabelDAO globalLabelDao = new GlobalinterestlabelDAO();
 			for (HotLabel label : labels)
 			{
-				hotLabelObj.add(label.getLabelName());
+				globalLabel = globalLabelDao.findByInterestLabelName(label.getLabelName()).get(0);
+				tempLabelObj = new JSONObject();
+				tempLabelObj.put(JSONKey.GlobalInterestLabelId, globalLabel.getGlobalInterestLabelId());
+				tempLabelObj.put(JSONKey.InterestLabelName, label.getLabelName());
+				tempLabelObj.put(JSONKey.GlobalMatchCount, globalLabel.getGlobalMatchCount());
+				tempLabelObj.put(JSONKey.LabelOrder, null);
+				tempLabelObj.put(JSONKey.MatchCount, null);
+				tempLabelObj.put(JSONKey.ValidFlag, null);
+				
+				hotLabelObj.add(tempLabelObj);
 			}
 			responseObj.put(JSONKey.Current, hotLabelObj);
 		}
