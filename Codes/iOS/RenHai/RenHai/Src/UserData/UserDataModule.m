@@ -107,6 +107,7 @@ SINGLETON(UserDataModule)
     @catch (NSException *exception)
     {
         DDLogWarn(@"Failed to load user data from: %@", file);
+        DDLogWarn(@"Caught Exception: %@", exception.callStackSymbols);
     }
     @finally
     {

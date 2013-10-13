@@ -12,6 +12,13 @@
 
 @implementation RHCollectionLabelCell_iPhone
 
+@synthesize textField = _textField;
+@synthesize countLabel = _countLabel;
+
+@synthesize editingDelegate = _editingDelegate;
+
+@synthesize isEmptyCell = _isEmptyCell;
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -39,6 +46,18 @@
 - (IBAction)textFieldDoneEditing:(id)sender
 {
     [sender resignFirstResponder];
+    
+    NSString* labelName = _textField.text;
+    if (nil == labelName || 0 == labelName.length)
+    {
+        labelName = NSLocalizedString(@"Interest_Empty", nil);
+        _textField.text = labelName;
+    }
+    
+    if (nil != _editingDelegate)
+    {
+        [_editingDelegate onTextFieldDoneEditing:self labelName:labelName];
+    }
 }
 
 @end

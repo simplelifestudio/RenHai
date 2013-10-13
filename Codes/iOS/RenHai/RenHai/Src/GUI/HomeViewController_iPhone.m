@@ -182,12 +182,7 @@ static float progress = 0.1;
 }
 
 -(void)_serverDataSync
-{    
-    if (![_commModule isWebSocketConnected])
-    {
-        return;
-    }
-    
+{
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
         RHDevice* device = _userDataModule.device;
         RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
@@ -206,7 +201,7 @@ static float progress = 0.1;
             }
             @catch (NSException *exception)
             {
-                DDLogError(@"Caught Exception: %@", exception.debugDescription);
+                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
             }
             @finally
             {

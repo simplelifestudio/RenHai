@@ -46,7 +46,7 @@
     }
     @catch (NSException *exception)
     {
-        DDLogWarn(@"Caught Exception: %@", exception.debugDescription);
+        DDLogWarn(@"Caught Exception: %@", exception.callStackSymbols);
     }
     @finally
     {

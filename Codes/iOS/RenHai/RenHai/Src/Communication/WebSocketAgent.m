@@ -18,8 +18,8 @@
 #import "UserDataModule.h"
 
 #define PING_TEXT @"#####RenHai-App-Ping#####"
-#define PONG_LOG 1
-#define PING_ACTIVATE 0
+#define PONG_LOG 0
+#define PING_ACTIVATE 1
 
 @interface WebSocketAgent()
 {

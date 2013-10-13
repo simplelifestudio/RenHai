@@ -78,7 +78,7 @@
     }
     @catch (NSException *exception)
     {
-        GHTestLog(@"Caught exception: %@", exception.debugDescription);
+        GHTestLog(@"Caught exception: %@", exception.callStackSymbols);
     }
     @finally
     {

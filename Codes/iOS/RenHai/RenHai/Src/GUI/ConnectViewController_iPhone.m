@@ -417,7 +417,7 @@ ConnectStatus;
         }
         @catch (NSException *exception)
         {
-            DDLogError(@"Caught Exception: %@", exception.debugDescription);
+            DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
             
             [self _updateUIWithConnectStatus:ConnectStatus_AppDataSyncFailed];
             
@@ -470,7 +470,7 @@ ConnectStatus;
         }
         @catch (NSException *exception)
         {
-            DDLogError(@"Caught Exception: %@", exception.debugDescription);
+            DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
             
             [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSyncFailed];
             

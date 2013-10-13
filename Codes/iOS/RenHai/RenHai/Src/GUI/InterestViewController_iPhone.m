@@ -13,6 +13,7 @@
 #import "GUIModule.h"
 #import "GUIStyle.h"
 
+#import "RHInterestLabel.h"
 
 #import "RHCollectionLabelCell_iPhone.h"
 
@@ -22,11 +23,16 @@
 #define SECTION_COUNT_SERVERINTERESTCOLLECTIONVIEW 1
 #define ITEM_COUNT_SERVERINTERESTCOLLECTIONVIEW 6
 
-@interface InterestViewController_iPhone ()
+#define DELAY_REFRESH 0.5f
+
+@interface InterestViewController_iPhone () <RHCollectionLabelCellEditingDelegate>
 {
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
+    RHDevice* _device;
+    RHInterestCard* _interestCard;
+    RHServer* _server;
     
     UIRefreshControl* _interestRefresher;
     UIRefreshControl* _serverInterestRefresher;
@@ -48,6 +54,11 @@
     [self _setupInstance];
 }
 
+-(void) viewDidAppear:(BOOL)animated
+{    
+    [super viewDidAppear:animated];
+}
+
 #pragma mark - Private Methods
 
 -(void)_setupInstance
@@ -55,6 +66,11 @@
     _commModule = [CommunicationModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _guiModule = [GUIModule sharedInstance];
+    
+    _device = _userDataModule.device;
+    RHProfile* profile = _device.profile;
+    _interestCard = profile.interestCard;
+    _server = _userDataModule.server;
     
     [self _setupNavigationBar];
     [self _setupCollectionView];
@@ -164,7 +180,7 @@
 
 -(void)_refreshInterestData
 {
-    sleep(1);
+    [NSThread sleepForTimeInterval:DELAY_REFRESH];
     
     [_interestRefresher endRefreshing];
     [self _resetInterestRefresher];
@@ -172,13 +188,110 @@
 
 -(void)_refreshServerInterestData
 {
-    sleep(1);
+    [NSThread sleepForTimeInterval:DELAY_REFRESH];
     
     [_serverInterestRefresher endRefreshing];
     [self _resetServerInterestRefresher];
 }
 
-#pragma mark - 
+-(void)_updateInterestCard
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
+
+        RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:_device info:nil];
+        RHMessage* appDataSyncResponseMessage = [_commModule sendMessage:appDataSyncRequestMessage];
+        if (appDataSyncResponseMessage.messageId == MessageId_AppDataSyncResponse)
+        {
+            NSDictionary* messageBody = appDataSyncResponseMessage.body;
+            NSDictionary* dataQueryDic = [messageBody objectForKey:MESSAGE_KEY_DATAQUERY];
+            NSDictionary* deviceDic = [dataQueryDic objectForKey:MESSAGE_KEY_DEVICE];
+            NSDictionary* profileDic = [deviceDic objectForKey:MESSAGE_KEY_PROFILE];
+            NSDictionary* interestCardDic = [profileDic objectForKey:MESSAGE_KEY_INTERESTCARD];
+            
+            @try
+            {
+                [_interestCard fromJSONObject:interestCardDic];
+                
+                [_userDataModule saveUserData];
+                
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [_interestLabelCollectionView reloadData];
+                });
+            }
+            @catch (NSException *exception)
+            {
+                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+            }
+            @finally
+            {
+                
+            }
+        }
+        else if (appDataSyncResponseMessage.messageId == MessageId_ServerErrorResponse)
+        {
+
+        }
+        else if (appDataSyncResponseMessage.messageId == MessageId_ServerTimeoutResponse)
+        {
+
+        }
+        else
+        {
+
+        }
+    });
+}
+
+-(void)_refreshServerInterestLabelList
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
+        RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:_device info:nil];
+        RHMessage* serverDataSyncResponseMessage = [_commModule sendMessage:serverDataSyncRequestMessage];
+        
+        if (serverDataSyncResponseMessage.messageId == MessageId_ServerDataSyncResponse)
+        {
+            NSDictionary* messageBody = serverDataSyncResponseMessage.body;
+            NSDictionary* serverDic = messageBody;
+            
+            @try
+            {
+                [_server fromJSONObject:serverDic];
+
+                dispatch_async(dispatch_get_main_queue(), ^(){
+                    [_serverInterestLabelCollectionView reloadData];
+                });
+            }
+            @catch (NSException *exception)
+            {
+                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+            }
+            @finally
+            {
+                
+            }
+            
+        }
+        else if (serverDataSyncResponseMessage.messageId == MessageId_ServerErrorResponse)
+        {
+            
+        }
+        else if (serverDataSyncResponseMessage.messageId == MessageId_ServerTimeoutResponse)
+        {
+            
+        }
+        else
+        {
+            
+        }
+    });
+}
+
+-(void)_showOtherLabels
+{
+    [self _refreshServerInterestLabelList];
+}
+
+#pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)cv
 {
@@ -212,54 +325,132 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[cv dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL forIndexPath:indexPath];
+    cell.editingDelegate = self;
     
+    BOOL isEmptyCell = NO;
+    
+    NSUInteger position = indexPath.item;
+
     if (cv == _interestLabelCollectionView)
     {
-        cell.textField.text = @"兴趣标签";
-        cell.countLabel.text = @"6";
+        NSString* labelName = nil;
+        NSInteger labelCount = -1;
+        
+        NSArray* labelList = _interestCard.labelList;
+        if (0 < labelList.count && position < labelList.count)
+        {
+            RHInterestLabel* label = labelList[position];
+            labelName = label.labelName;
+            labelCount = label.matchCount;
+        }
+        else
+        {
+            labelName = NSLocalizedString(@"Interest_Empty", nil);
+            isEmptyCell = YES;
+        }
+        
+        cell.textField.text = labelName;
+        if (0 <= labelCount)
+        {
+            cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
+        }
+        else
+        {
+            cell.countLabel.text = @"";
+        }
     }
     else if (cv == _serverInterestLabelCollectionView)
     {
-        cell.textField.text = @"热门标签";
-        cell.countLabel.text = @"88";
+        NSString* labelName = nil;
+        NSInteger labelCount = -1;
+        
+        RHServerInterestLabelList* olabelList = _server.interestLabelList;
+        NSArray* labelList = olabelList.current;
+
+        if (0 < labelList.count && position < labelList.count)
+        {
+            RHInterestLabel* label = labelList[position];
+            labelName = label.labelName;
+            labelCount = label.matchCount;
+        }
+        else
+        {
+            labelName = NSLocalizedString(@"Interest_Empty", nil);
+        }
+        
+        cell.textField.text = labelName;
+        if (0 <= labelCount)
+        {
+            cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
+        }
+        else
+        {
+            cell.countLabel.text = @"";
+        }
+        
+        cell.userInteractionEnabled = NO;
     }
+    
+    cell.isEmptyCell = isEmptyCell;
     
     return cell;
 }
 
-- (BOOL)collectionView:(LSCollectionViewHelper *)cv canMoveItemAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)collectionView:(UICollectionView *)cv canMoveItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return YES;
+    BOOL flag = NO;
+    
+    if (cv == _interestLabelCollectionView)
+    {
+        NSInteger position = indexPath.item;
+        NSArray* labelList = _interestCard.labelList;
+        if (0 < labelList.count && position < labelList.count)
+        {
+            flag = YES;
+        }
+    }
+    else if (cv == _serverInterestLabelCollectionView)
+    {
+        flag = NO;
+    }
+    
+    return flag;
 }
 
 - (BOOL)collectionView:(UICollectionView *)cv canMoveItemAtIndexPath:(NSIndexPath *)indexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
-    // Prevent item from being moved to index 0
-    //    if (toIndexPath.item == 0) {
-    //        return NO;
-    //    }
-    return YES;
+    BOOL flag = NO;
+    
+    if (cv == _interestLabelCollectionView)
+    {
+        NSInteger toPosition = toIndexPath.item;
+        NSArray* labelList = _interestCard.labelList;
+        if (0 < labelList.count && toPosition < labelList.count)
+        {
+            flag = YES;
+        }
+    }
+    else if (cv == _serverInterestLabelCollectionView)
+    {
+        flag = NO;
+    }
+
+    return flag;
 }
 
 - (void)collectionView:(LSCollectionViewHelper *)cv moveItemAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
     if ((UICollectionView*)cv == _interestLabelCollectionView)
     {
-//        NSMutableArray *data1 = [sections1 objectAtIndex:fromIndexPath.section];
-//        NSMutableArray *data2 = [sections1 objectAtIndex:toIndexPath.section];
-//        NSString *index = [data1 objectAtIndex:fromIndexPath.item];
-//        
-//        [data1 removeObjectAtIndex:fromIndexPath.item];
-//        [data2 insertObject:index atIndex:toIndexPath.item];
+        NSInteger fromPosition = fromIndexPath.item;
+        NSInteger toPosition = toIndexPath.item;
+        [_interestCard reorderLabel:fromPosition toIndex:toPosition];
+        [_interestLabelCollectionView reloadItemsAtIndexPaths:@[fromIndexPath, toIndexPath]];
+        [self performSelector:@selector(_updateInterestCard) withObject:nil];
     }
     else if ((UICollectionView*)cv == _serverInterestLabelCollectionView)
     {
-//        NSMutableArray *data1 = [sections2 objectAtIndex:fromIndexPath.section];
-//        NSMutableArray *data2 = [sections2 objectAtIndex:toIndexPath.section];
-//        NSString *index = [data1 objectAtIndex:fromIndexPath.item];
-//        
-//        [data1 removeObjectAtIndex:fromIndexPath.item];
-//        [data2 insertObject:index atIndex:toIndexPath.item];
+
     }
 }
 
@@ -290,6 +481,63 @@
     }
 
     return reusableView;
+}
+
+#pragma mark - RHCollectionLabelCellEditingDelegate
+
+-(void) onTextFieldDoneEditing:(RHCollectionLabelCell_iPhone*) cell labelName:(NSString*) labelName
+{
+    if (nil != cell)
+    {
+        NSIndexPath* indexPath = [_interestLabelCollectionView indexPathForCell:cell];
+        NSUInteger item = indexPath.item;
+        
+//        if (nil == labelName || 0 == labelName.length || [labelName isEqualToString:NSLocalizedString(@"Interest_Empty", nil)])
+//        {
+//            [_interestCard removeLabelByIndex:item];
+//        }
+//        else
+//        {
+//            if (item < _interestCard.labelList.count)
+//            {
+//                [_interestCard removeLabelByIndex:item];
+//                [_interestCard insertLabelByName:labelName index:item];
+//            }
+//            else
+//            {
+//                [_interestCard addLabel:labelName];
+//            }
+//
+//        }
+        
+        if (item < _interestCard.labelList.count)
+        {
+            [_interestCard removeLabelByIndex:item];
+            
+            if (nil == labelName || 0 == labelName.length || [labelName isEqualToString:NSLocalizedString(@"Interest_Empty", nil)])
+            {
+                
+            }
+            else
+            {
+                [_interestCard insertLabelByName:labelName index:item];
+            }
+        }
+        else
+        {
+            if (nil == labelName || 0 == labelName.length || [labelName isEqualToString:NSLocalizedString(@"Interest_Empty", nil)])
+            {
+                
+            }
+            else
+            {
+                [_interestCard addLabel:labelName];
+            }
+        }
+        [_interestLabelCollectionView reloadItemsAtIndexPaths:@[indexPath]];
+        
+        [self _updateInterestCard];
+    }
 }
 
 @end

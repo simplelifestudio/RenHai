@@ -22,14 +22,14 @@
     
 }
 
-@property (nonatomic, strong) NSMutableDictionary* labelMap;
+@property (nonatomic, strong) NSMutableArray* labelList;
 
 @end
 
 @implementation RHInterestCard
 
 @synthesize interestCardId = _interestCardId;
-@synthesize labelMap = _labelMap;
+@synthesize labelList = _labelList;
 
 #pragma mark - Public Methods
 
@@ -37,7 +37,7 @@
 {
     if (self = [super init])
     {
-
+        
     }
     
     return self;
@@ -45,16 +45,12 @@
 
 -(NSArray*) labelList
 {
-    NSMutableArray* list = [NSMutableArray array];
+    NSSortDescriptor *sortDescriptor = sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"labelOrder"
+                                                                                    ascending:YES];
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSArray *sortedArray = [_labelList sortedArrayUsingDescriptors:sortDescriptors];
     
-    if (nil != _labelMap)
-    {
-        [_labelMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
-            [list addObject:obj];
-        }];
-    }
-    
-    return list;
+    return sortedArray;
 }
 
 -(BOOL) addLabel:(NSString*) labelName
@@ -66,30 +62,46 @@
         RHInterestLabel* label = [[RHInterestLabel alloc] init];
         label.labelName = labelName;
         
-        if (nil == _labelMap)
+        if (nil == _labelList)
         {
-            _labelMap = [NSMutableDictionary dictionary];
+            _labelList = [NSMutableArray array];
         }
-        [_labelMap setObject:label forKey:labelName];
+        [_labelList addObject:label];
         
         flag = YES;
+        
+        [self _recaculateLabelOrders];
     }
     
     return flag;
 }
 
--(BOOL) removeLabel:(NSString*) labelName
+-(BOOL) removeLabelByName:(NSString*) labelName
 {
     BOOL flag = NO;
     
-    if ([self isLabelExists:labelName])
+    RHInterestLabel* label = [self getLabelByName:labelName];
+    if (nil != label)
     {
-        if (nil != _labelMap)
-        {
-            [_labelMap removeObjectForKey:labelName];
-        }
-
+        [_labelList removeObject:label];
         flag = YES;
+        
+        [self _recaculateLabelOrders];
+    }
+    
+    return flag;
+}
+
+-(BOOL) removeLabelByIndex:(NSUInteger)index
+{
+    BOOL flag = NO;
+    
+    if (index < _labelList.count)
+    {
+        [_labelList removeObjectAtIndex:index];
+        flag = YES;
+        
+        [self _recaculateLabelOrders];
     }
     
     return flag;
@@ -97,29 +109,121 @@
 
 -(BOOL) isLabelExists:(NSString*) labelName
 {
-    if (nil == _labelMap)
-    {
-        _labelMap = [NSMutableDictionary dictionary];
-    }
+    BOOL flag = NO;
     
-    __block BOOL flag = NO;
+    flag = (nil != [self getLabelByName:labelName]) ? YES : NO;
     
-    if (nil != labelName && 0 < labelName.length)
+    return flag;
+}
+
+-(BOOL) insertLabelByName:(NSString*) labelName index:(NSInteger) index
+{
+    BOOL flag = NO;
+    
+    if (nil != labelName && 0 < labelName.length && index < _labelList.count)
     {
-        [_labelMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
-            RHInterestLabel* label = (RHInterestLabel*)obj;
-            if ([label.labelName isEqualToString:labelName])
-            {
-                flag = YES;
-                *stop = YES;
-            }
-        }];
+        NSInteger labelIndex = [self getLabelIndex:labelName];
+        
+        if (labelIndex > 0)
+        {
+            [self reorderLabel:labelIndex toIndex:index];
+        }
+        else
+        {
+            RHInterestLabel* label = [[RHInterestLabel alloc] init];
+            label.labelName = labelName;
+            
+            [_labelList insertObject:label atIndex:index];
+            
+            [self _recaculateLabelOrders];
+        }
     }
     
     return flag;
 }
 
+-(RHInterestLabel*) getLabelByName:(NSString *)labelName
+{
+    __block RHInterestLabel* label = nil;
+    
+    if (nil != labelName && 0 < labelName.length)
+    {
+        [_labelList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop){
+            RHInterestLabel* tempLabel = (RHInterestLabel*)obj;
+            if ([tempLabel.labelName isEqualToString:labelName])
+            {
+                label = tempLabel;
+                *stop = YES;
+            }
+        }];
+    }
+    
+    return label;
+}
+
+-(RHInterestLabel*) getLabelByIndex:(NSUInteger) index
+{
+    __block RHInterestLabel* label = nil;
+    
+    if (_labelList.count > index)
+    {
+        label = _labelList[index];
+    }
+    
+    return label;
+}
+
+-(NSInteger) getLabelIndex:(NSString*) labelName
+{
+    __block NSInteger index = -1;
+    
+    if (nil != labelName && 0 < labelName.length)
+    {
+        [_labelList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop){
+            RHInterestLabel* tempLabel = (RHInterestLabel*)obj;
+            if ([tempLabel.labelName isEqualToString:labelName])
+            {
+                index = idx;
+                *stop = YES;
+            }
+        }];
+    }
+    
+    return index;
+}
+
+-(void) reorderLabel:(NSUInteger) fromIndex toIndex:(NSUInteger) toIndex
+{
+    if (fromIndex >= _labelList.count)
+    {
+        DDLogWarn(@"fromIndex: %d is out of labelList's bound: %d", fromIndex, _labelList.count);
+        return;
+    }
+    
+    if (toIndex >= _labelList.count)
+    {
+        DDLogWarn(@"toIndex: %d is out of labelList's bound: %d", toIndex, _labelList.count);
+        return;
+    }
+    
+    RHInterestLabel* label = [_labelList objectAtIndex:fromIndex];
+    [_labelList removeObjectAtIndex:fromIndex];
+    [_labelList insertObject:label atIndex:toIndex];
+    
+    [self _recaculateLabelOrders];
+}
+
 #pragma mark - Private Methods
+
+-(void) _recaculateLabelOrders
+{
+    NSUInteger idx = 0;
+    for (RHInterestLabel* label in _labelList)
+    {
+        label.labelOrder = idx;
+        idx++;
+    }
+}
 
 -(id) _getOCardId
 {
@@ -135,37 +239,33 @@
     return oCardId;
 }
 
+-(id) _getOLabelList
+{
+    id oLabelList = (nil != _labelList) ? _labelList : [NSNull null];
+    
+    return oLabelList;
+}
+
 -(id) _getOLabelListDic
 {
-    id oLabelListDic = nil;
+    id labelListDic = nil;
     id oLabelList = [self _getOLabelList];
-    if (nil == oLabelList)
+    if ([NSNull null] != oLabelList)
     {
-        oLabelListDic = [NSNull null];
+        labelListDic = [NSMutableArray array];
+        NSArray* array = (NSArray*)oLabelList;
+        for (RHInterestLabel* label in array)
+        {
+            NSDictionary* labelDic = label.toJSONObject;
+            [labelListDic addObject:labelDic];
+        }
     }
     else
     {
-        oLabelListDic = oLabelList;
+        labelListDic = [NSNull null];
     }
     
-    return oLabelListDic;
-}
-
--(id) _getOLabelList
-{
-    id oLabelList = _labelMap;
-    if (nil != oLabelList)
-    {
-        oLabelList = [NSMutableArray arrayWithCapacity:_labelMap.count];
-        
-        [_labelMap enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
-            RHInterestLabel* label = (RHInterestLabel*)obj;            
-            NSDictionary* labelDic = label.toJSONObject;
-            [oLabelList addObject:labelDic];
-        }];
-    }
-    
-    return oLabelList;
+    return labelListDic;
 }
 
 #pragma mark - CBJSONable
@@ -180,27 +280,26 @@
             _interestCardId = ([NSNull null] != oCardId) ? ((NSNumber*)oCardId).integerValue : 0;
         }
         
-        id labelArray = [dic objectForKey:MESSAGE_KEY_INTERESTLABELLIST];
-        if (nil != labelArray)
+        id oLabelArray = [dic objectForKey:MESSAGE_KEY_INTERESTLABELLIST];
+        if (nil != oLabelArray)
         {
-            if ([NSNull null] != labelArray)
+            if ([NSNull null] != oLabelArray)
             {
-                NSMutableDictionary* map = [NSMutableDictionary dictionary];
-                
-                NSArray* array = (NSArray*)labelArray;
-                for (NSDictionary* labelDic in array)
+                NSMutableArray* labelArray = (NSMutableArray*)oLabelArray;
+                NSMutableArray* array = [NSMutableArray arrayWithCapacity:labelArray.count];
+                for (NSDictionary* labelDic in labelArray)
                 {
                     RHInterestLabel* label = [[RHInterestLabel alloc] init];
                     [label fromJSONObject:labelDic];
                     
-                    [map setObject:label forKey:label.labelName];
+                    [array addObject:label];
                 }
                 
-                _labelMap = map;
+                _labelList = array;
             }
             else
             {
-                _labelMap = nil;
+                _labelList = nil;
             }
         }
     }
@@ -213,8 +312,8 @@
     id oCardId = [self _getOCardId];
     [dic setObject:oCardId forKey:MESSAGE_KEY_INTERESTCARDID];
     
-    id labelListDic = [self _getOLabelListDic];
-    [dic setObject:labelListDic forKey:MESSAGE_KEY_INTERESTLABELLIST];
+    id oLabelListDic = [self _getOLabelListDic];
+    [dic setObject:oLabelListDic forKey:MESSAGE_KEY_INTERESTLABELLIST];
     
     return dic;
 }
@@ -234,7 +333,7 @@
     if (self = [super init])
     {
         _interestCardId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CARDID];
-        _labelMap = [aDecoder decodeObjectForKey:SERIALIZE_KEY_LABELLIST];
+        _labelList = [aDecoder decodeObjectForKey:SERIALIZE_KEY_LABELLIST];
     }
     
     return self;
@@ -243,7 +342,7 @@
 -(void) encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeInteger:_interestCardId forKey:SERIALIZE_KEY_CARDID];
-    [aCoder encodeObject:_labelMap forKey:SERIALIZE_KEY_LABELLIST];
+    [aCoder encodeObject:_labelList forKey:SERIALIZE_KEY_LABELLIST];
 }
 
 #pragma mark - NSCopying

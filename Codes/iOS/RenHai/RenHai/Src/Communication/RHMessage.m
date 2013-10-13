@@ -679,6 +679,11 @@ static BOOL s_messageEncrypted;
 
 #pragma mark - CBJSONable
 
+-(void) fromJSONObject:(NSDictionary *)dic
+{
+
+}
+
 -(NSDictionary*) toJSONObject
 {
     NSAssert(nil != _header, @"Header part of message can not be null!");

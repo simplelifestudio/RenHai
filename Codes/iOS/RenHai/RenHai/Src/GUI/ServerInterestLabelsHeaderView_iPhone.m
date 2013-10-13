@@ -10,6 +10,9 @@
 
 @implementation ServerInterestLabelsHeaderView_iPhone
 
+@synthesize headerTitleLabel = _headerTitleLabel;
+@synthesize othersButton = _othersButton;
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
