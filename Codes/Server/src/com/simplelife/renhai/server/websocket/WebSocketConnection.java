@@ -31,6 +31,7 @@ import com.simplelife.renhai.server.json.InvalidRequest;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.json.TimeoutRequest;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
@@ -83,13 +84,14 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void close()
     {
+    	logger.debug("Close Websocket: " + getConnectionId());
         try
 		{
-			getWsOutbound().close(Consts.DeviceLeaveReason.WebsocketClosedByApp.getValue(), null);
+        	getWsOutbound().close(Consts.DeviceLeaveReason.WebsocketClosedByServer.getValue(), null);
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
     }
     
@@ -137,7 +139,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		{
 			AppJSONMessage appMessage;
 			logger.error("Exception caught in WebSocketConnection.onTextMessage!");
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 			appMessage = new InvalidRequest(null);
 			((InvalidRequest) appMessage).setReceivedMessage(message.toString().trim());
 			appMessage.setErrorCode(Consts.GlobalErrorCode.DBException_1001);
@@ -197,7 +199,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 				catch (Exception e)
 				{
 					WebSocketModule.instance.getLogger().error(e.getMessage());
-					e.printStackTrace();
+					FileLogger.printStackTrace(e);
 				}
 	    	}
 	    	
@@ -280,7 +282,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
     }
     
@@ -294,13 +296,18 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onClose(int status)
     {
-    	if (Consts.DeviceLeaveReason.parseValue(status) == Consts.DeviceLeaveReason.WebsocketClosedByServer)
+    	/*
+    	if (status == Consts.DeviceLeaveReason.WebsocketClosedByServer.getValue())
     	{
     		return;
     	}
+    	*/
     	
-    	WebSocketModule.instance.getLogger().debug("WebSocketConnection onClose triggered");
-    	connectionOwner.onConnectionClose();
+    	WebSocketModule.instance.getLogger().debug("WebSocketConnection onClose triggered, status: " + status);
+    	
+    	// comment out releasing device related resource
+    	// to avoid loop in procedure of device releasing
+    	//connectionOwner.onConnectionClose();
     	super.onClose(status);
     }
 
@@ -346,7 +353,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		}
 		catch (IOException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 			logger.error("Connection of device <{}> was broken and will be released.", connectionOwner.getDeviceSn());
 			AppJSONMessage connectionError = new ConnectionErrorEvent(null);
 			connectionOwner.onJSONCommand(connectionError);

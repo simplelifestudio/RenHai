@@ -174,6 +174,7 @@ public class BusinessSession implements IBusinessSession
     	Sessionrecord record = new Sessionrecord();
     	record.setBusinessType(pool.getBusinessType().name());
     	record.setSessionStartTime(this.sessionStartTime);
+    	record.setChatStartTime(this.chatStartTime);
     	
     	int duration = (int)((chatEndTime - chatStartTime)/1000);
     	record.setChatDuration(duration);
@@ -294,7 +295,7 @@ public class BusinessSession implements IBusinessSession
 			
 			if (triggerDevice == null)
 			{
-				notify.getBody().put(JSONKey.OperationInfo, null);
+				notify.getBody().put(JSONKey.OperationInfo, getOperationInfoOfOtherDevices(device));
 			}
 			else
 			{
@@ -308,6 +309,18 @@ public class BusinessSession implements IBusinessSession
         			, notificationType.name() + ", " + device.getDeviceSn());
     	}
 	}
+    
+    private JSONObject getOperationInfoOfOtherDevices(IDeviceWrapper deviceToBeExcluded)
+    {
+    	for (IDeviceWrapper device : deviceList)
+    	{
+    		if (device != deviceToBeExcluded)
+    		{
+    			return device.toJSONObject();
+    		}
+    	}
+    	return null;
+    }
     
     /**
      * BusinessSession需要调用该方法切换状态，该方法中会检查绑定的两个设备的连接情况，如果有设备的连接已经断开，BusinessSession需要根据对应的业务逻辑决定接下来的业务流程，比如：
@@ -414,12 +427,12 @@ public class BusinessSession implements IBusinessSession
     		
     		if (checkAllDevicesReach(Consts.BusinessProgress.SessionBoundConfirmed))
         	{
-        		logger.debug("All devices responsed after Device <{}> responsed.", device.getDeviceSn());
+        		logger.debug("All devices responded after Device <{}> responded.", device.getDeviceSn());
         		changeStatus(Consts.BusinessSessionStatus.ChatConfirm);
         	}
         	else
         	{
-        		logger.debug("Device <{}> responsed but not all devices responsed.", device.getDeviceSn());
+        		logger.debug("Device <{}> responded but not all devices responded.", device.getDeviceSn());
         	}
     	}
     }

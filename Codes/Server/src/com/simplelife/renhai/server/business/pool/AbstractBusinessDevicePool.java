@@ -102,10 +102,6 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	
     	deviceMap.put(sn, device);
     	logger.debug("Device <{}> has entered " + businessType.name() + " pool", device.getDeviceSn());
-    	
-    	businessScheduler.getLock().lock();
-    	businessScheduler.signal();
-    	businessScheduler.getLock().unlock();
     	return null;
     }
 

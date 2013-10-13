@@ -43,6 +43,7 @@ import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.db.TableColumnName;
 import com.simplelife.renhai.server.db.TableName;
 import com.simplelife.renhai.server.log.DbLogger;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.DBExistResult;
@@ -486,7 +487,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 				this.setErrorCode(Consts.GlobalErrorCode.DBException_1001);
 				this.setErrorDescription("Server internal error.");
 				responseError(Consts.MessageId.AppDataSyncRequest);
-				e.printStackTrace();
+				FileLogger.printStackTrace(e);
 				return;
 			}
 			
@@ -502,7 +503,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		if (syncType == SyncType.ExistentNotLoaded || syncType == SyncType.ExistentLoaded)
 		{
-			logger.debug("Device is ExistentNotLoaded, try to load device from DB.");
+			logger.debug("Device is Existent, try to load device from DB.");
 			loadDevice(deviceSn);
 		}
 		else if (syncType == SyncType.NewDevice)
@@ -644,7 +645,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		catch(Exception e)
 		{
 			logger.error("Fatal error when trying to load device <{}> from DB", deviceSn);
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 	}
 	

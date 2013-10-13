@@ -32,6 +32,6 @@
 	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/log/logback-classic-1.0.13.jar"/>
 	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/log/logback-core-1.0.13.jar"/>
 	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/hibernate/p6spy.jar"/>
-	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/websocketclient/java_websocket.jar"/>
+	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/websocketclient/javax.websocket-api.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

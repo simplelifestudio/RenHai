@@ -114,7 +114,6 @@ public abstract class AbstractTestCase extends TestCase
 		}
 		
 		MockApp mockApp = new MockApp(deviceSn);
-		mockApp.connect(false);
 		return mockApp;
 	}
 	

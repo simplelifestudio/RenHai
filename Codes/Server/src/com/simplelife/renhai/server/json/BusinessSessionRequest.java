@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
+import com.simplelife.renhai.server.business.pool.AbstractBusinessScheduler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.session.BusinessSession;
 import com.simplelife.renhai.server.db.DBModule;
@@ -239,21 +240,14 @@ public class BusinessSessionRequest extends AppJSONMessage
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType businessType = Consts.BusinessType.parseValue(intType);
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
+		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		
-		Consts.SuccessOrFail result = Consts.SuccessOrFail.Fail;
 		String operationInfo = null;
 		
 		synchronized (deviceWrapper)
 		{
-			AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(businessType);
-			operationInfo = pool.onDeviceEnter(deviceWrapper); 
-			if (operationInfo == null)
-			{
-				result = Consts.SuccessOrFail.Success;
-				deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
-				deviceWrapper.setBusinessType(businessType);
-			}
-			else
+			operationInfo = businessPool.onDeviceEnter(deviceWrapper); 
+			if (operationInfo != null)
 			{
 				setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
 				setErrorDescription(operationInfo);
@@ -282,6 +276,15 @@ public class BusinessSessionRequest extends AppJSONMessage
     			, deviceWrapper.getDevice().getProfile()
     			, body.getString(JSONKey.BusinessType) + ", " + deviceWrapper.getDeviceSn());
 		response.asyncResponse();
+		
+		// Change status of device after sending response of EnterPool
+		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
+		deviceWrapper.setBusinessType(businessType);
+		
+		AbstractBusinessScheduler businessScheduler = businessPool.getBusinessScheduler(); 
+		businessScheduler.getLock().lock();
+    	businessScheduler.signal();
+    	businessScheduler.getLock().unlock();
 	}
 	
 	private void leavePool()

@@ -727,8 +727,6 @@ public class Consts
 		AlohaRequest_1002(1002),
 		AlohaResponse_1003(1003),
 		AppDataSyncRequest_1004(1004),
-
-
 		AppDataSyncResponse_1007(1007),
 		ServerDataSyncRequest_1008(1008),
 		ServerDataSyncResponse_1009(1009),
@@ -762,6 +760,5 @@ public class Consts
 		{
 			return value;
 		}
-
 	}
 }

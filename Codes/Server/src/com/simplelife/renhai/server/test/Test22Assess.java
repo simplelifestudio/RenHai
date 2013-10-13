@@ -60,7 +60,7 @@ public class Test22Assess extends AbstractTestCase
 		mockApp2.enterPool(businessType);
 		
 		// Step_03 Mock请求：A更新B的印象卡片
-		mockApp1.assessAndContinue(OnlineDevicePool.instance.getDevice(mockApp2.getDeviceSn()), "帅哥");
+		mockApp1.assessAndContinue("帅哥");
 		assertTrue(mockApp1.lastReceivedCommandIsError());
 		//fail("检验server的回复");
 		
@@ -85,7 +85,7 @@ public class Test22Assess extends AbstractTestCase
 		
 		
 		// Step_08 Mock请求：A更新B的印象卡片
-		mockApp1.assessAndContinue(OnlineDevicePool.instance.getDevice(mockApp2.getDeviceSn()), "^#SoSo#^,帅哥");
+		mockApp1.assessAndContinue("^#SoSo#^,帅哥");
 		assertTrue(mockApp1.lastReceivedCommandIsError());
 		
 		// Step_09 Mock事件：A结束通话
@@ -99,11 +99,11 @@ public class Test22Assess extends AbstractTestCase
 		//mockApp1.assess("帅哥");
 		
 		// Step_12 Mock事件：A对B评价
-		mockApp1.assessAndContinue(OnlineDevicePool.instance.getDevice(mockApp2.getDeviceSn()), "^#Disgusting#^,TC22_评价1");
+		mockApp1.assessAndContinue("^#Disgusting#^,TC22_评价1");
 		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AssessAndContinue));
 		
 		// Step_13 Mock事件：B对A评价
-		mockApp2.assessAndContinue(OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn()), "^#Happy#^,美女,气质,TC22_评价2");
+		mockApp2.assessAndContinue("^#Happy#^,美女,气质,TC22_评价2");
 		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.AssessAndContinue));
 		
 		// Step_14 数据库检查：A 印象卡片信息

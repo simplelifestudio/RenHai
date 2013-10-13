@@ -6,6 +6,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
+import com.simplelife.renhai.server.log.FileLogger;
+
 /**
  * Configures and provides access to Hibernate sessions, tied to the
  * current thread of execution.  Follows the Thread Local Session
@@ -36,7 +38,7 @@ public class HibernateSessionFactory {
 			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		} catch (Exception e) {
 			System.err.println("%%%% Error Creating SessionFactory %%%%");
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
     }
     private HibernateSessionFactory() {
@@ -75,7 +77,7 @@ public class HibernateSessionFactory {
 			sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 		} catch (Exception e) {
 			System.err.println("%%%% Error Creating SessionFactory %%%%");
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 	}
 

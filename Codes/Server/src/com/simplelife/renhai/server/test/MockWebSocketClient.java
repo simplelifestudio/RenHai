@@ -19,8 +19,15 @@ import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_10;
 import org.java_websocket.drafts.Draft_17;
+import org.java_websocket.drafts.Draft_75;
+import org.java_websocket.drafts.Draft_76;
+import org.java_websocket.exceptions.InvalidHandshakeException;
 import org.java_websocket.framing.FrameBuilder;
 import org.java_websocket.framing.Framedata;
+import org.java_websocket.framing.FramedataImpl1;
+import org.java_websocket.framing.Framedata.Opcode;
+import org.java_websocket.handshake.ClientHandshakeBuilder;
+import org.java_websocket.handshake.HandshakeImpl1Client;
 import org.java_websocket.handshake.ServerHandshake;
 import org.junit.internal.runners.TestMethod;
 import org.slf4j.Logger;
@@ -31,6 +38,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.IMockApp;
 import com.simplelife.renhai.server.util.IMockConnection;
 import com.simplelife.renhai.server.util.JSONKey;
@@ -41,17 +49,20 @@ public class MockWebSocketClient extends WebSocketClient implements IMockConnect
 	IMockApp mockApp;
 	private JSONObject lastSentMessage;
 	private boolean disabled = false;
+	private FramedataImpl1 pingFrameData;
 	
 	Logger logger = LoggerFactory.getLogger(MockWebSocketClient.class);
 	
 	public MockWebSocketClient(URI serverURI, Draft d)
 	{
 		super(serverURI, d);
+		pingFrameData = new FramedataImpl1(Opcode.PING);
+		pingFrameData.setFin(true);
 	}
 	
 	public MockWebSocketClient(URI serverURI)
 	{
-		super(serverURI, new Draft_17());
+		this(serverURI, new Draft_17());
 	}
 
 	
@@ -117,16 +128,21 @@ public class MockWebSocketClient extends WebSocketClient implements IMockConnect
 	@Override
 	public void sendMessage(ServerJSONMessage message) throws IOException
 	{
-		if (disabled)
+		
+	}
+	
+	@Override
+    public void sendMessage(String message) throws IOException
+    {
+    	if (disabled)
     	{
     		logger.debug("Mock IOException due to connection is disabled");
     		throw new IOException();
     	}
     	
-    	lastSentMessage = new JSONObject();
-    	lastSentMessage.put(JSONKey.JsonEnvelope, message.toJSONObject());
-    	
+    	lastSentMessage = JSON.parseObject(message);
     	getConnection().send(JSON.toJSONString(lastSentMessage, SerializerFeature.WriteMapNullValue));
+    	//getConnection().send();
 	}
 
 
@@ -143,11 +159,16 @@ public class MockWebSocketClient extends WebSocketClient implements IMockConnect
 		return null;
 	}
 
-
+	@Override
+	public void ping()
+	{
+		getConnection().sendFrame(pingFrameData);
+	}
+	
 	@Override
 	public void onPing(ByteBuffer pingData)
 	{
-		logger.debug("==================onPing");
+		logger.debug("onPing triggered");
 	}
 	
 	public void onWebsocketMessageFragment( WebSocket conn, Framedata frame ) 
@@ -160,5 +181,16 @@ public class MockWebSocketClient extends WebSocketClient implements IMockConnect
 	public void close()
 	{
 		super.close();
+	}
+
+	@Override
+	public boolean isOpen()
+	{
+		if (getConnection() == null)
+		{
+			return false;
+		}
+		
+		return getConnection().isOpen();
 	}
 }

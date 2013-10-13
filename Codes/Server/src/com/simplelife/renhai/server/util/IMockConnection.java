@@ -26,8 +26,12 @@ public interface IMockConnection
 	public void enableConnection();
 	public void onTextMessage(String message);
 	public void sendMessage(ServerJSONMessage message) throws IOException;
+	public void sendMessage(String message) throws IOException;
 	public void onTimeout();
 	public void close();
+	public void ping();
 	public String getConnectionId();
 	public void onPing(ByteBuffer pingData);
+	
+	public boolean isOpen();
 }

@@ -47,7 +47,7 @@ public class RenHaiWebSocketServlet extends WebSocketServlet {
     protected StreamInbound createWebSocketInbound(String arg0, HttpServletRequest arg1)
     {
     	Logger logger = WebSocketModule.instance.getLogger();
-    	logger.debug("New connection recieved.");
+    	logger.debug("New connection received.");
     	
         WebSocketConnection msgInbound = new WebSocketConnection(arg1.getRemoteAddr() + "_" + arg1.getRemotePort());
         OnlineDevicePool pool = OnlineDevicePool.instance;

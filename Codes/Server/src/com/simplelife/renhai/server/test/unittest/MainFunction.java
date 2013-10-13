@@ -13,6 +13,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -45,8 +46,10 @@ import com.simplelife.renhai.server.db.SystemoperationlogDAO;
 import com.simplelife.renhai.server.json.AlohaRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.JSONFactory;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.test.AbstractTestCase;
 import com.simplelife.renhai.server.test.MockApp;
+import com.simplelife.renhai.server.test.MockAppConsts;
 import com.simplelife.renhai.server.test.MockWebSocketClient;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -96,7 +99,7 @@ public class MainFunction extends AbstractTestCase
 				}
 				catch(Exception e)
 				{
-					e.printStackTrace();
+					FileLogger.printStackTrace(e);
 				}
 				count++;
 			}
@@ -121,7 +124,7 @@ public class MainFunction extends AbstractTestCase
 		}
 		catch (InterruptedException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 	}
 	
@@ -138,7 +141,7 @@ public class MainFunction extends AbstractTestCase
 		}
 		catch (InterruptedException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 		
 		jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:38.346\",\"messageType\":1,\"messageId\":103,\"messageSn\":\"QR543EPJ1OJ82FEJ\",\"deviceId\":0},\"body\":{\"operationValue\":null,\"businessSessionId\":null,\"operationInfo\":null,\"operationType\":1,\"businessType\":1}}}";
@@ -149,7 +152,7 @@ public class MainFunction extends AbstractTestCase
 		}
 		catch (InterruptedException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 		
 		jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:43.060\",\"messageType\":1,\"messageId\":102,\"messageSn\":\"7J0I40HDF1AQ0VHM\",\"deviceId\":0},\"body\":{\"deviceCount\":{\"chat\":null,\"interest\":null,\"randomChat\":null,\"online\":null,\"interestChat\":null,\"random\":null}}}}";
@@ -160,7 +163,7 @@ public class MainFunction extends AbstractTestCase
 		}
 		catch (InterruptedException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 		
 		jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:50.593\",\"messageType\":1,\"messageId\":103,\"messageSn\":\"4Q59EA4B0J7TQR82\",\"deviceId\":0},\"body\":{\"operationValue\":null,\"businessSessionId\":null,\"operationInfo\":null,\"operationType\":2,\"businessType\":1}}}";
@@ -171,7 +174,7 @@ public class MainFunction extends AbstractTestCase
 		}
 		catch (InterruptedException e)
 		{
-			e.printStackTrace();
+			FileLogger.printStackTrace(e);
 		}
 		
 		jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 16:45:56.894\",\"messageType\":1,\"messageId\":102,\"messageSn\":\"X7H2Z3ZPR0Q6WH8L\",\"deviceId\":0},\"body\":{\"deviceCount\":{\"chat\":null,\"interest\":null,\"randomChat\":null,\"online\":null,\"interestChat\":null,\"random\":null}}}}";
@@ -380,21 +383,28 @@ public class MainFunction extends AbstractTestCase
 	
 	public void testLossConnection()
 	{
-		MockApp mockApp1 = new MockApp("deviceSn");
-		mockApp1.connect(false);
+		/*
+		MockApp mockApp1 = new MockApp("deviceSn", "Slave", true);
 		mockApp1.syncDevice();
+		mockApp1.disconnect();
+		*/
 		
-		MockApp mockApp2 = new MockApp("deviceSn2");
-		mockApp2.connect(false);
+		MockApp mockApp1 = new MockApp("deviceSn", "Slave", true);
+		mockApp1.syncDevice();
+
+		// 2把1踢掉
+		MockApp mockApp2 = new MockApp("deviceSn", "Slave", true);
 		mockApp2.syncDevice();
 		
-		MockApp mockApp3 = new MockApp("deviceSn");
-		mockApp3.connect(false);
-		mockApp3.syncDevice();
+		// 1被踢掉，重新建立连接之前无法发消息
+		mockApp1.sendServerDataSyncRequest();
 		
-		mockApp1.disconnect();
-		mockApp2.disconnect();
-		mockApp3.disconnect();
+		// 重新建立连接，同步，理论上应该把2踢掉
+		mockApp1 = new MockApp("deviceSn", "Slave", true);
+		mockApp1.syncDevice();
+		
+		// 应该失败
+		mockApp2.sendServerDataSyncRequest();
 	}
 	
 	@Test
@@ -418,6 +428,20 @@ public class MainFunction extends AbstractTestCase
 			e1.printStackTrace();
 		} finally {
 			e.close();
+		}
+	}
+	
+	@Test
+	public void testMockAppBehaviorMode() throws InterruptedException
+	{
+		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndContinue", true);
+	
+		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndContinue", true);
+		
+		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended
+				|| app2.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
+		{
+			Thread.sleep(1000);
 		}
 	}
 }
