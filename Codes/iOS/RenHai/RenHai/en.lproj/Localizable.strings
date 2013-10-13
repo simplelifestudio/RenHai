@@ -45,6 +45,8 @@
 "Impress_ChatLossCount" = "LossCount";
 "Impress_Empty" = "Empty";
 
+"Interest_Empty" = "Empty";
+
 "Config_PushNotification" = "Push Notification";
 "Config_Broadcast" = "Broadcast";
 "Config_ChatOn3G" = "Connect on 3G";

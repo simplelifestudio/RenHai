@@ -35,7 +35,7 @@
     @catch (NSException *e)
     {
         DDLogError(@"Failed to read data from file : %@", filePath);
-        DDLogError(@"Exception caught: %@ - %@", [[e class] description], [e description]);
+        DDLogError(@"Exception caught: %@", e.callStackSymbols);
     }
     @finally
     {

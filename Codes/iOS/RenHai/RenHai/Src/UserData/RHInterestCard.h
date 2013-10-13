@@ -10,13 +10,27 @@
 
 #import "CBJSONable.h"
 
+#import "RHInterestLabel.h"
+
 @interface RHInterestCard : NSObject <CBJSONable, NSCopying, NSMutableCopying>
 
 @property (nonatomic) NSUInteger interestCardId;
 
--(BOOL) addLabel:(NSString*) labelName;
--(BOOL) removeLabel:(NSString*) labelName;
--(BOOL) isLabelExists:(NSString*) labelName;
 -(NSArray*) labelList;
+
+-(BOOL) addLabel:(NSString*) labelName;
+
+-(BOOL) removeLabelByName:(NSString*) labelName;
+-(BOOL) removeLabelByIndex:(NSUInteger) index;
+
+-(BOOL) isLabelExists:(NSString*) labelName;
+
+-(BOOL) insertLabelByName:(NSString*) labelName index:(NSInteger) index;
+
+-(RHInterestLabel*) getLabelByName:(NSString*) labelName;
+-(RHInterestLabel*) getLabelByIndex:(NSUInteger) index;
+-(NSInteger) getLabelIndex:(NSString*) labelName;
+
+-(void) reorderLabel:(NSUInteger) fromIndex toIndex:(NSUInteger) toIndex;
 
 @end

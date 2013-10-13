@@ -86,6 +86,8 @@
 {
     RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_IMPRESSLABEL forIndexPath:indexPath];
 
+    BOOL isEmptyCell = NO;
+    
     NSString* labelName = nil;
     NSInteger labelCount = -1;
     NSInteger section = indexPath.section;
@@ -146,6 +148,7 @@
             else
             {
                 labelName = NSLocalizedString(@"Impress_Empty", nil);
+                isEmptyCell = YES;
             }
 
             break;
@@ -166,6 +169,8 @@
     {
         cell.countLabel.text = @"";
     }
+    
+    cell.isEmptyCell = isEmptyCell;
     
     return cell;
 }
@@ -273,7 +278,7 @@ return reusableView;
 
 -(void)_refreshImpressData
 {
-    sleep(DELAY_REFRESH);
+    [NSThread sleepForTimeInterval:DELAY_REFRESH];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
 
@@ -297,7 +302,7 @@ return reusableView;
             }
             @catch (NSException *exception)
             {
-                DDLogError(@"Caught Exception: %@", exception.debugDescription);
+                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
             }
             @finally
             {

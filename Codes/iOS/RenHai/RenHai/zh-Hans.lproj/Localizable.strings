@@ -45,6 +45,8 @@
 "Impress_ChatLossCount" = "断线次数";
 "Impress_Empty" = "空缺";
 
+"Interest_Empty" = "空缺";
+
 "Config_PushNotification" = "推送通知";
 "Config_Broadcast" = "广播信息";
 "Config_ChatOn3G" = "3G连接";
