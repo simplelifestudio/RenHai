@@ -39,6 +39,7 @@ import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Interestlabelmap;
+import com.simplelife.renhai.server.db.InterestlabelmapDAO;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.db.TableColumnName;
 import com.simplelife.renhai.server.db.TableName;
@@ -540,12 +541,9 @@ public class AppDataSyncRequest extends AppJSONMessage
 				profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
 				profile.setUnbanDate(null);
 				
-				//DBModule.instance.cache(profile);
 				t.commit();
-				// ServerJSONMessage response =
-				// JSONFactory.createServerJSONMessage(this,
-				// Consts.MessageId.AppDataSyncResponse);
 				deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
+				session.close();
 			}
 			else
 			{
@@ -587,10 +585,10 @@ public class AppDataSyncRequest extends AppJSONMessage
 		{
 			query(body.getJSONObject(JSONKey.DataQuery), response.getBody());
 		}
-		response.asyncResponse();
 		DbLogger.saveSystemLog(Consts.OperationCode.AppDataSyncResponse_1007
     			, Consts.SystemModule.business
     			, header.getString(JSONKey.DeviceSn));
+		response.asyncResponse();
 	}
 	
 	private void appendQueryServiceStatus()
@@ -1130,7 +1128,9 @@ public class AppDataSyncRequest extends AppJSONMessage
 		{
 			tempMap.put(label.getGlobalinterestlabel().getInterestLabelName(), label);
 		}
+		
 		labelMapSet.clear();
+		//label.setInterestcard(null);
 		
 		// Check all labels from APP
 		for (int i = 0; i < interestLabelList.size(); i++)
@@ -1140,15 +1140,23 @@ public class AppDataSyncRequest extends AppJSONMessage
 			
 			tempStr = tmpJSONObj.getString(JSONKey.InterestLabelName);
 			
+			if (isLabelInLabelMapSet(labelMapSet, tempStr))
+			{
+				tempMap.remove(tempStr);
+				continue;
+			}
+			
 			// Check if it's old label
 			if (tempMap.containsKey(tempStr))
 			{
 				interestLabelMap = tempMap.get(tempStr);
 				interestLabelMap.setLabelOrder(tmpJSONObj.getInteger(JSONKey.LabelOrder));
 				labelMapSet.add(interestLabelMap);
+				tempMap.remove(tempStr);
 				
-				responseObj.put(JSONKey.InterestLabelName, Consts.SuccessOrFail.Success.getValue());
+				responseObj.put(JSONKey.InterestLabelName, tempStr);
 				responseObj.put(JSONKey.LabelOrder, Consts.SuccessOrFail.Success.getValue());
+				responseArray.add(responseObj);
 				continue;
 			}
 			
@@ -1173,10 +1181,33 @@ public class AppDataSyncRequest extends AppJSONMessage
 			interestLabelMap.setInterestcard(card);
 			labelMapSet.add(interestLabelMap);
 			
-			responseObj.put(JSONKey.InterestLabelName, Consts.SuccessOrFail.Success.getValue());
+			responseObj.put(JSONKey.InterestLabelName, tempStr);
 			responseObj.put(JSONKey.LabelOrder, Consts.SuccessOrFail.Success.getValue());
 			responseArray.add(responseObj);
 		}
+		
+		// delete label that are still in tempMap
+		Set <String> keySet = tempMap.keySet();
+		InterestlabelmapDAO interestLabelDAO = new InterestlabelmapDAO();
+		
+		for (String key : keySet)
+		{
+			interestLabelMap = tempMap.get(key);
+			interestLabelMap.setInterestcard(null);
+			interestLabelDAO.delete(interestLabelMap);
+		}
+	}
+	
+	private boolean isLabelInLabelMapSet(Set<Interestlabelmap> labelMapSet, String label)
+	{
+		for (Interestlabelmap labelMap : labelMapSet)
+		{
+			if (labelMap.getGlobalinterestlabel().getInterestLabelName().equals(label))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	private void parseInterestCard(JSONObject interestCardObj, JSONObject response)

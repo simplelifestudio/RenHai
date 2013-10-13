@@ -150,16 +150,6 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onTextMessage(String message)
     {
-//    	if (connectionOwner != null)
-//    	{
-//    		logger.debug("Received message from device <{}>: " + message, connectionOwner.getDeviceSn());
-//    	}
-//    	else
-//    	{
-//    		logger.debug("Received message : ", message);
-//    	}
-    	logger.debug("Received message: \n{}", message);
-    	
     	JSONObject obj = null;
     	try
     	{
@@ -167,7 +157,9 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	}
     	catch(Exception e)
     	{
+    		logger.debug("Received message: \n{}", message);
     	}
+    	logger.debug("Received message: \n{}", JSON.toJSONString(obj, true));
     	
     	AppJSONMessage appMessage;
 		if (obj == null)
@@ -207,20 +199,13 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 	    	
 		}
 
-		//JSONObject obj = JSONObject.parseObject(temp);
-		//JSONObject deviceCount = obj.getJSONObject("jsonEnvelope").getJSONObject("body").getJSONObject("deviceCount");
-		//System.out.print(JSON.toJSONString(deviceCount, SerializerFeature.WriteMapNullValue) + "\n");
-		
-		//deviceCount = appMessage.getBody().getJSONObject("deviceCount");
-		//System.out.print(JSON.toJSONString(deviceCount, SerializerFeature.WriteMapNullValue) + "\n");
-		
+		String messageSn = appMessage.getMessageSn();
     	logger.debug("Received message: {}", appMessage.getMessageId().name());
-    	String messageSn = appMessage.getMessageSn();
     	if (!syncMap.containsKey(messageSn))
     	{
     		if (connectionOwner != null)
     		{
-    			logger.debug("New request message from device <{}>", connectionOwner.getDeviceSn());
+    			logger.debug("New request message from device <{}> with MessageSn: " + messageSn, connectionOwner.getDeviceSn());
     			connectionOwner.onJSONCommand(appMessage);
     		}
     		else
@@ -230,7 +215,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	}
     	else
     	{
-    		logger.debug("Response of synchronizd notification from device <{}>", connectionOwner.getDeviceSn());
+    		logger.debug("Response of synchronized notification from device <{}>", connectionOwner.getDeviceSn());
     		signalForSyncSend(messageSn, appMessage);
     	}
     }
@@ -238,10 +223,13 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     public void signalForSyncSend(String messageSn, AppJSONMessage appMessage)
     {
     	SyncController controller = syncMap.get(messageSn);
-		controller.lock.lock();
-		controller.message = appMessage;
-		controller.condition.signal();
-		controller.lock.unlock();
+    	synchronized(controller)
+    	{
+			controller.lock.lock();
+			controller.message = appMessage;
+			controller.condition.signal();
+			controller.lock.unlock();
+    	}
     }
     
     /** */
@@ -319,16 +307,8 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	obj.put(JSONKey.JsonEnvelope, message.toJSONObject());
     	
     	String strMessage = JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue);
-    	
-//    	if (connectionOwner != null)
-//    	{
-//    		logger.debug("Send message to Device <{}> : " + message, this.connectionOwner.getDeviceSn());
-//    	}
-//    	else
-//    	{
-    		logger.debug("Send message: \n{}", message);
-    	//}
-    	
+   		logger.debug("Send message: \n{}", JSON.toJSONString(message.toJSONObject(), true));
+   		
     	CharBuffer buffer = CharBuffer.allocate(strMessage.length());
         buffer.put(strMessage);
         buffer.flip();
@@ -368,13 +348,13 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     		logger.error("messageSn <" + messageSn+"> is not saved in syncMap!");
     	}
     	
-    	SyncController controller = syncMap.get(messageSn); 
+    	SyncController controller = syncMap.get(messageSn);
     	controller.lock.lock(); 
-    	
+	    	
     	boolean exceptionOcurred = false;
     	try
     	{
-    		logger.debug("Send synchronized message to device <{}>", this.connectionOwner.getDeviceSn());
+    		logger.debug("Send synchronized message to device <{}>, MessageSn: " + messageSn, this.connectionOwner.getDeviceSn());
     		sendMessage(message);
     		controller.condition.await(GlobalSetting.TimeOut.JSONMessageEcho, TimeUnit.SECONDS);
     	}
@@ -400,7 +380,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	{
 	    	if (controller.message == null)
 	    	{
-	    		logger.debug("Timeout when waiting for synchronized response of device <{}>", connectionOwner.getDeviceSn());
+	    		logger.debug("Timeout for synchronized response of device <{}>, MessageSn: " + messageSn, connectionOwner.getDeviceSn());
 	    		controller.message = new TimeoutRequest(null);
 	    	}
 	    	else
@@ -408,7 +388,6 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 	    		logger.debug("Device <{}> replied synchronized message in time.", this.connectionOwner.getDeviceSn());
 	    	}
     	}
-    	
     	return controller.message;
     }
     
@@ -419,6 +398,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	String messageSn = message.getMessageSn();
     	synchronized(syncMap)
     	{
+    		logger.debug("Add {} to synchronized sending map", messageSn);
     		syncMap.put(messageSn, controller);
     	}
     	
@@ -426,6 +406,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 
     	synchronized(syncMap)
     	{
+    		logger.debug("Remove {} from synchronized sending map", messageSn);
     		syncMap.remove(messageSn);
     	}
     	return appMessage;

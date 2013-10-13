@@ -95,6 +95,7 @@ public class DAOWrapper
 	    		Session session = HibernateSessionFactory.getSession();
 	    		session.saveOrUpdate(session.merge(obj));
 	    		objectCountInCache++;
+	    		session.close();
     		}
     		catch(Exception e)
     		{
@@ -122,7 +123,7 @@ public class DAOWrapper
 	        	//session.clear();
 	        	trans.commit();
 	        	//session.beginTransaction().commit();
-	    		//session.close();
+	    		session.close();
     		}
     		catch(Exception e)
     		{
@@ -245,7 +246,8 @@ public class DAOWrapper
 	    
 	    try
 	    {
-		    SQLQuery query = session.createSQLQuery(sql).addEntity(objClass); 
+		    SQLQuery query = session.createSQLQuery(sql).addEntity(objClass);
+		    session.close();
 	    	return query.list();
 		}
 		catch(Exception e)
@@ -289,7 +291,7 @@ public class DAOWrapper
 		}
 		finally
 		{
-			//HibernateSessionFactory.closeSession();
+			session.close();
 		}
 	}
     
@@ -313,6 +315,7 @@ public class DAOWrapper
 			session.save(obj);
 			session.getTransaction().commit();
 			logger.debug("Save data succeed");
+			session.close();
 		}
 		catch(Exception e)
 		{
@@ -353,6 +356,7 @@ public class DAOWrapper
     		//TODO 这个时候如果曾经获取过多个session，怎么办？考虑保存所有获取过的session？
     		session.beginTransaction().commit();		// Commit会隐含调用flush
     		session.clear();
+    		session.close();
         }
     	catch(Exception e)
     	{

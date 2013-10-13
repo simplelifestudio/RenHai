@@ -96,6 +96,7 @@ public class MainFunction extends AbstractTestCase
 		    		System.out.print(name + " update value to " + now + " in session: " + temp + "\n");
 		    		session.beginTransaction().commit();
 		    		Thread.sleep(1);
+		    		session.close();
 				}
 				catch(Exception e)
 				{
@@ -192,18 +193,16 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testRawCommand()
 	{
-		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"194AF3A8-FFB0-4997-B9DE-CD4CFB68252B\",\"timeStamp\":\"2013-09-30 12:54:30.809\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"B569O1MTRE5A0UA6\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":0,\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"osVersion\":\"6.1\"},\"deviceSn\":\"794AF3A8-FFB0-4997-B9DE-CD4CFB68252B\"}},\"dataQuery\":{\"device\":null}}}}";
-		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"794AF3A8-FFB0-4997-B9DE-CD4CFB68252A\",\"timeStamp\":\"2013-09-30 14:26:26.344\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"0871CLZJY289O310\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":0,\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"osVersion\":\"6.1\"}}},\"dataQuery\":{\"device\":{\"deviceId\":null,\"deviceSn\":null,\"deviceCard\":null,\"profile\":null}}}}}";
-		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"194AF3A8-FFB0-4997-B9DE-CD4CFB68252B\",\"timeStamp\":\"2013-09-30 15:28:31.408\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"5I4Z5A61I1250505\",\"deviceId\":0},\"body\":{\"dataQuery\":{\"device\":{\"profile\":{\"impressCard\":null}}}}}}";
-		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"794AF3A8-FFB0-4997-B9DE-CD4CFB68252A\",\"timeStamp\":\"2013-10-01 15:14:30.322\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"E936R0GBTJAAEB0Q\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":0,\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"osVersion\":\"6.1\"},\"deviceSn\":\"794AF3A8-FFB0-4997-B9DE-CD4CFB68252A\"}},\"dataQuery\":{\"device\":null}}}}";
-		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"EFAD498F-9A95-4B90-A59E-FC599AC21FA3\",\"timeStamp\":\"2013-10-01 16:02:44.578\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"816SY86DJ6C88RC7\",\"deviceId\":0},\"body\":{\"dataUpdate\":{\"device\":{\"deviceCard\":{\"isJailed\":0,\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"osVersion\":\"6.1\"},\"deviceSn\":\"EFAD498F-9A95-4B90-A59E-FC599AC21FA3\"}},\"dataQuery\":{\"device\":null}}}}";
-		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-02 12:54:46.097\",\"messageType\":1,\"messageId\":103,\"messageSn\":\"SAUB9WO215092BO9\",\"deviceId\":0},\"body\":{\"operationValue\":null,\"businessSessionId\":null,\"operationInfo\":null,\"operationType\":4,\"businessType\":1}}}";
-		String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"EFAD498F-9A95-4B90-A59E-FC599AC21FA3\",\"timeStamp\":\"2013-10-08 13:01:52.113\",\"messageType\":1,\"messageId\":102,\"messageSn\":\"271Z30DCS7Z6H2B7\",\"deviceId\":0},\"body\":{\"deviceCount\":{\"chat\":null,\"interest\":null,\"randomChat\":null,\"online\":null,\"interestChat\":null,\"random\":null}}}}";
+		//String jsonString ="{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"demoDeviceSn\",\"timeStamp\":\"2013-10-12 16:45:45.003\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"3ZBJO4HCZR43NZX3\",\"deviceId\":3},\"body\":{\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"labelOrder\":0,\"globalMatchCount\":2,\"validFlag\":1,\"interestLabelName\":\"Topic6\",\"matchCount\":0,\"globalInterestLabelId\":2},{\"labelOrder\":0,\"globalMatchCount\":1,\"validFlag\":1,\"interestLabelName\":\"Topic8\",\"matchCount\":0,\"globalInterestLabelId\":1},{\"labelOrder\":0,\"globalMatchCount\":3,\"validFlag\":1,\"interestLabelName\":\"Topic7\",\"matchCount\":0,\"globalInterestLabelId\":3},{\"labelOrder\":0,\"globalMatchCount\":2,\"validFlag\":1,\"interestLabelName\":\"Topic6\",\"matchCount\":0,\"globalInterestLabelId\":2},{\"labelOrder\":0,\"globalMatchCount\":3,\"validFlag\":1,\"interestLabelName\":\"Topic7\",\"matchCount\":0,\"globalInterestLabelId\":3},{\"labelOrder\":0,\"globalMatchCount\":1,\"validFlag\":1,\"interestLabelName\":\"Topic8\",\"matchCount\":0,\"globalInterestLabelId\":1}]}}}},\"dataQuery\":{\"device\":{\"profile\":{\"interestCard\":null}}}}}}";
+		//String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{\"device\":{\"profile\":{}}},\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"globalInterestLabelId\":10,\"globalMatchCount\":10,\"interestLabelName\":\"Patrick\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":12,\"globalMatchCount\":12,\"interestLabelName\":\"Allen\",\"labelOrder\":1,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":13,\"globalMatchCount\":13,\"interestLabelName\":\"Chris\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":11,\"globalMatchCount\":11,\"interestLabelName\":\"Tomas\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":1}]}}}}},\"header\":{\"deviceId\":3,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":101,\"messageSn\":\"48UA5C56982G3MB8\",\"messageType\":1,\"timeStamp\":\"2013-10-12 22:14:00.749\"}}}";
+		String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{\"device\":{\"profile\":{}}},\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"globalInterestLabelId\":10,\"globalMatchCount\":10,\"interestLabelName\":\"Patrick\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":12,\"globalMatchCount\":12,\"interestLabelName\":\"Allen\",\"labelOrder\":1,\"matchCount\":0,\"validFlag\":1}]}}}}},\"header\":{\"deviceId\":3,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":101,\"messageSn\":\"48UA5C56982G3MB8\",\"messageType\":1,\"timeStamp\":\"2013-10-12 22:14:00.749\"}}}";
+		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-12 20:17:41.630\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"O54JKG4HXZ5EU846\",\"deviceId\":3},\"body\":{\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"labelOrder\":1,\"globalMatchCount\":1,\"validFlag\":1,\"interestLabelName\":\"Topic8\",\"matchCount\":0,\"globalInterestLabelId\":1},{\"labelOrder\":4,\"globalMatchCount\":2,\"validFlag\":1,\"interestLabelName\":\"Topic6\",\"matchCount\":0,\"globalInterestLabelId\":2}]}}}},\"dataQuery\":{\"device\":{\"profile\":{\"interestCard\":null}}}}}}";
 		
 		JSONObject wholeObj = JSONObject.parseObject(jsonString);
 		JSONObject obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope); 
 		
-		MockApp app = createNewMockApp(this.demoDeviceSn);
+		//MockApp app = createNewMockApp(this.demoDeviceSn);
+		MockApp app = createNewMockApp("45CF7936-3FA1-49B2-937D-D462AB5F378A");
 		//app.syncDevice();
 		app.sendRawJSONMessage(obj, true);
 		//app.sendServerDataSyncRequest();
@@ -262,7 +261,7 @@ public class MainFunction extends AbstractTestCase
 		t.commit();
 		
 		//session.flush();
-		//session.close();
+		session.close();
 	}
 	
 	private void updateOrAppendImpressLabel(Impresscard card, Set<Impresslabelmap> impressLabels, String labelName)
@@ -348,7 +347,7 @@ public class MainFunction extends AbstractTestCase
 		session.getTransaction().commit();
 		
 		//HibernateSessionFactory.getSession().flush();
-		//HibernateSessionFactory.getSession().close();
+		session.close();
 	}
 	
 	@Test
@@ -434,9 +433,9 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testMockAppBehaviorMode() throws InterruptedException
 	{
-		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndContinue", true);
+		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit", false);
 	
-		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndContinue", true);
+		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndQuit", false);
 		
 		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended
 				|| app2.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)

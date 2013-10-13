@@ -270,10 +270,10 @@ public class ServerDataSyncRequest extends AppJSONMessage
 			queryHotLabels(response, randomPool, interestPool);
 		}
 		
-		response.asyncResponse();
 		DbLogger.saveProfileLog(Consts.OperationCode.ServerDataSyncResponse_1009
     			, deviceWrapper.getDevice().getProfile()
     			, header.getString(JSONKey.DeviceSn));
+		response.asyncResponse();
 	}
 
 

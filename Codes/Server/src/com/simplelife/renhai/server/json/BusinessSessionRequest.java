@@ -350,10 +350,11 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 
-		response.asyncResponse();
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAgreeChat_1016
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceSn());
+		response.asyncResponse();
+		
 	}
 	
 	private void rejectChat()
@@ -381,10 +382,10 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
-		response.asyncResponse();
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestRejectChat_1017
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceSn());
+		response.asyncResponse();
 	}
 	
 	private void endChat()
@@ -412,10 +413,10 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
-		response.asyncResponse();
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEndChat_1018
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceSn());
+		response.asyncResponse();
 	}
 	
 	private void assessAndContinue()
@@ -493,6 +494,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		// Save to DB
 		//DBModule.instance.cache(target);
 		t.commit();
+		session.close();
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);

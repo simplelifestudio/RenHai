@@ -255,14 +255,6 @@ public class BusinessSession implements IBusinessSession
     
     public void notifyDevices(List<IDeviceWrapper> activeDeviceList, IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
     {
-    	/*
-    	if (pool == null)
-    	{
-    		// Maybe session has been ended by other events
-    		logger.warn("Session has been ended and notifying devices has been cancelled");
-    		return;
-    	}
-    	*/
     	ServerJSONMessage notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
     	JSONObject body = notify.getBody(); 
     	body.put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(sessionId));
@@ -332,6 +324,14 @@ public class BusinessSession implements IBusinessSession
     **/
     public void changeStatus(Consts.BusinessSessionStatus targetStatus)
     {
+    	if (status == targetStatus)
+    	{
+    		if (targetStatus == Consts.BusinessSessionStatus.Idle && pool != null)
+    		{
+				endSession();
+    		}
+    		return;
+    	}
     	logger.debug("Business session changes status from {} to " + targetStatus.name(), status.name());
     	switch(targetStatus)
     	{
@@ -464,7 +464,8 @@ public class BusinessSession implements IBusinessSession
     		logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.ChatEnded.name(), device.getDeviceSn());
     	}
     	
-    	if (this.status != Consts.BusinessSessionStatus.VideoChat)
+    	if (this.status != Consts.BusinessSessionStatus.VideoChat
+    			&& this.status != Consts.BusinessSessionStatus.Assess)
     	{
     		logger.error("EndChat received from {} but current session status is: " + status.name(), device.getDeviceSn());
     		return;

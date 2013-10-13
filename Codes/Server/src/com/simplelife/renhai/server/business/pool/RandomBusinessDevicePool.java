@@ -25,7 +25,7 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 		
 		businessScheduler = new RandomBusinessScheduler();
 		businessScheduler.bind(this);
-		
+		businessScheduler.setName("RandomScheduler");
 		businessScheduler.startScheduler();
 		
 		setCapacity(GlobalSetting.BusinessSetting.RandomBusinessPoolCapacity);

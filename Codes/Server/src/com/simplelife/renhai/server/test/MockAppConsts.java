@@ -21,8 +21,8 @@ public class MockAppConsts
 	public static class Setting
 	{
 		public static int ChatConfirmDuration = 3 * 1000;
-		public static int VideoChatDuration = 60 * 1000;
-		public static int AssessDuration = 60 * 1000;
+		public static int VideoChatDuration = 30 * 1000;
+		public static int AssessDuration = 30 * 1000;
 		
 		public static int MaxChatCount = 3;
 	}

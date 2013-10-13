@@ -329,7 +329,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     	try
     	{
     		command.bindDeviceWrapper(this);
-    		(new Thread(command)).run();
+    		Thread cmdThread = new Thread(command);
+    		cmdThread.setName(command.getMessageType().name());
+    		cmdThread.start();
     	}
     	catch(Exception e)
     	{
@@ -401,7 +403,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     @Override
     public void syncSendMessage(ServerJSONMessage message)
     {
-    	(new SyncSendMessageTask(this, message)).start();
+    	SyncSendMessageTask task = new SyncSendMessageTask(this, message);
+    	task.setName("SyncSendMsg");
+    	task.start();
     }
 
     @Override
@@ -544,7 +548,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 			mapObj.put(JSONKey.GlobalInterestLabelId, map.getGlobalinterestlabel().getGlobalInterestLabelId());
 			mapObj.put(JSONKey.InterestLabelName, map.getGlobalinterestlabel().getInterestLabelName());
 			mapObj.put(JSONKey.GlobalMatchCount, map.getGlobalinterestlabel().getGlobalMatchCount());
-			mapObj.put(JSONKey.LabelOrder, map.getGlobalinterestlabel().getGlobalMatchCount());
+			mapObj.put(JSONKey.LabelOrder, map.getLabelOrder());
 			mapObj.put(JSONKey.MatchCount, map.getMatchCount());
 			mapObj.put(JSONKey.ValidFlag, Consts.ValidInvalid.Valid.getValue());
 			
@@ -660,11 +664,15 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 				card.setChatLossCount(card.getChatLossCount() + 1);
 			}
 			t.commit();
+			session.close();
 		}
 		catch(Exception e)
 		{
 			logger.error("Error occurred when saving chatTotalLoss: {}", e.getMessage());
-			t.rollback();
+			if (t != null)
+			{
+				t.rollback();
+			}
 			FileLogger.printStackTrace(e);
 		}
 	}
@@ -685,11 +693,15 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 				card.setChatTotalCount(card.getChatTotalCount() + 1);
 			}
 			t.commit();
+			session.close();
 		}
 		catch(Exception e)
 		{
 			logger.error("Error occurred when saving chatTotalCount: {}", e.getMessage());
-			t.rollback();
+			if (t != null)
+			{
+				t.rollback();
+			}
 			FileLogger.printStackTrace(e);
 		}
 	}
@@ -710,11 +722,15 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 				card.setChatTotalDuration(card.getChatTotalDuration() + duration);
 			}
 			t.commit();
+			session.close();
 		}
 		catch(Exception e)
 		{
 			logger.error("Error occurred when saving chatTotalDuration: {}", e.getMessage());
-			t.rollback();
+			if (t != null)
+			{
+				t.rollback();
+			}
 			FileLogger.printStackTrace(e);
 		}
 	}

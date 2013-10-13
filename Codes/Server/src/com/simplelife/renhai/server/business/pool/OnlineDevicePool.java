@@ -109,11 +109,10 @@ public class OnlineDevicePool extends AbstractDevicePool
     
     private OnlineDevicePool()
     {
-    	Session session = HibernateSessionFactory.getSession();
+    	HibernateSessionFactory.getSession();
     	startTimers();
     	this.addBusinessPool(Consts.BusinessType.Random, new RandomBusinessDevicePool());
     	this.addBusinessPool(Consts.BusinessType.Interest, new InterestBusinessDevicePool());
-    	
     	setCapacity(GlobalSetting.BusinessSetting.OnlinePoolCapacity);
     }
     
@@ -468,10 +467,14 @@ public class OnlineDevicePool extends AbstractDevicePool
 			session.save(statItem);
 			
 			trans.commit();
+			session.close();
 		}
 		catch(Exception e)
 		{
-			trans.rollback();
+			if (trans != null)
+			{
+				trans.rollback();
+			}
 			FileLogger.printStackTrace(e);
 		}
 	}

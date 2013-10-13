@@ -45,7 +45,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	businessType = Consts.BusinessType.Interest;
 		businessScheduler = new InterestBusinessScheduler();
 		businessScheduler.bind(this);
-		
+		businessScheduler.setName("InterestScheduler");
 		businessScheduler.startScheduler();
 		
 		setCapacity(GlobalSetting.BusinessSetting.InterestBusinessPoolCapacity);
