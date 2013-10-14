@@ -308,6 +308,12 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     /** */
     protected void sendMessage(ServerJSONMessage message) throws IOException
     {
+    	if (getWsOutbound().isClosed())
+    	{
+    		logger.error("The websocket connection has been closed, sending is given up.");
+    		return;
+    	}
+    	
     	JSONObject obj = new JSONObject();
     	obj.put(JSONKey.JsonEnvelope, message.toJSONObject());
     	

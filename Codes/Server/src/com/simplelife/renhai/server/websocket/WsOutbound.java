@@ -448,4 +448,9 @@ public class WsOutbound {
         // Reset - bb will be cleared in doWriteBytes()
         cb.clear();
     }
+    
+    public boolean isClosed()
+    {
+    	return closed;
+    }
 }
