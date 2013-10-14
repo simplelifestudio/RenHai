@@ -39,9 +39,6 @@
 {
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
-    RHDevice* _device;
-    RHDeviceCard* _deviceCard;
-    RHProfile* _profile;
 }
 
 @end
@@ -89,6 +86,10 @@
 //    RHTableViewLabelCell_iPhone* cell = (RHTableViewLabelCell_iPhone*)[tableView dequeueReusableCellWithIdentifier:TABLECELL_ID_DEVICEITEM forIndexPath:indexPath];
     
     RHTableViewLabelCell_iPhone* cell = [RHTableViewLabelCell_iPhone configureFlatCellWithColor:FLATUI_COLOR_TABLECELL selectedColor:FLATUI_COLOR_TABLECELL_SELECTED style:UITableViewCellStyleValue1 reuseIdentifier:TABLECELL_ID_LABELER];
+ 
+    RHDevice* device = _userDataModule.device;
+    RHDeviceCard* deviceCard = device.deviceCard;
+    RHProfile* profile = device.profile;
     
     NSString* itemName = @"";
     NSString* itemVal = @"";
@@ -104,25 +105,25 @@
                 case ITEM_INDEX_DEVICEMODEL:
                 {
                     itemName = NSLocalizedString(@"Device_DeviceModel", nil);
-                    itemVal = _deviceCard.deviceModel;
+                    itemVal = deviceCard.deviceModel;
                     break;
                 }
                 case ITEM_INDEX_OSVER:
                 {
                     itemName = NSLocalizedString(@"Device_OSVersion", nil);
-                    itemVal = _deviceCard.osVersion;
+                    itemVal = deviceCard.osVersion;
                     break;
                 }
                 case ITEM_INDEX_ISJAILED:
                 {
                     itemName = NSLocalizedString(@"Device_IsJailed", nil);
-                    itemVal = (_deviceCard.isJailed) ? NSLocalizedString(@"Common_Yes", nil) : NSLocalizedString(@"Common_No", nil);
+                    itemVal = (deviceCard.isJailed) ? NSLocalizedString(@"Common_Yes", nil) : NSLocalizedString(@"Common_No", nil);
                     break;
                 }
                 case ITEM_INDEX_DEVICESN:
                 {
                     itemName = NSLocalizedString(@"Device_DeviceSN", nil);
-                    itemVal = _device.shortDeviceSn;
+                    itemVal = device.shortDeviceSn;
                     break;
                 }
                 default:
@@ -140,25 +141,25 @@
                 case ITEM_INDEX_APPVER:
                 {
                     itemName = NSLocalizedString(@"Device_AppVersion", nil);
-                    itemVal = _deviceCard.appVersion;
+                    itemVal = deviceCard.appVersion;
                     break;
                 }
                 case ITEM_INDEX_REGTIME:
                 {
                     itemName = NSLocalizedString(@"Device_RegisterTime", nil);
-                    itemVal = [CBDateUtils dateStringInLocalTimeZoneWithFormat:STANDARD_DATE_TIME_FORMAT andDate:_deviceCard.registerTime];
+                    itemVal = [CBDateUtils dateStringInLocalTimeZoneWithFormat:STANDARD_DATE_TIME_FORMAT andDate:deviceCard.registerTime];
                     break;
                 }
                 case ITEM_INDEX_SERVICESTATUS:
                 {
                     itemName = NSLocalizedString(@"Device_ServiceStatus", nil);
-                    itemVal = [RHProfile serviceStatusString:_profile.serviceStatus];
+                    itemVal = [RHProfile serviceStatusString:profile.serviceStatus];
                     break;
                 }
                 case ITEM_INDEX_FORBIDDENEXPIREDDATE:
                 {
                     itemName = NSLocalizedString(@"Device_UnbanDate", nil);
-                    itemVal = [CBDateUtils dateStringInLocalTimeZoneWithFormat:STANDARD_DATE_TIME_FORMAT andDate:_profile.unbanDate];
+                    itemVal = [CBDateUtils dateStringInLocalTimeZoneWithFormat:STANDARD_DATE_TIME_FORMAT andDate:profile.unbanDate];
                     break;
                 }
                 default:
@@ -189,12 +190,8 @@
 {
     _guiModule = [GUIModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
-    _device = _userDataModule.device;
-    _deviceCard = _device.deviceCard;
-    _profile = _device.profile;
     
     [self _setupNavigationBar];
-
     [self _setupTableView];
 }
 

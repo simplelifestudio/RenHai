@@ -30,9 +30,6 @@
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
-    RHDevice* _device;
-    RHInterestCard* _interestCard;
-    RHServer* _server;
     
     UIRefreshControl* _interestRefresher;
     UIRefreshControl* _serverInterestRefresher;
@@ -66,11 +63,6 @@
     _commModule = [CommunicationModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _guiModule = [GUIModule sharedInstance];
-    
-    _device = _userDataModule.device;
-    RHProfile* profile = _device.profile;
-    _interestCard = profile.interestCard;
-    _server = _userDataModule.server;
     
     [self _setupNavigationBar];
     [self _setupCollectionView];
@@ -197,8 +189,11 @@
 -(void)_updateInterestCard
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
-
-        RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:_device info:nil];
+        
+        RHDevice* device = _userDataModule.device;
+        RHProfile* profile = device.profile;
+        RHInterestCard* interestCard = profile.interestCard;
+        RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:device info:nil];
         RHMessage* appDataSyncResponseMessage = [_commModule sendMessage:appDataSyncRequestMessage];
         if (appDataSyncResponseMessage.messageId == MessageId_AppDataSyncResponse)
         {
@@ -210,7 +205,7 @@
             
             @try
             {
-                [_interestCard fromJSONObject:interestCardDic];
+                [interestCard fromJSONObject:interestCardDic];
                 
                 [_userDataModule saveUserData];
                 
@@ -245,7 +240,11 @@
 -(void)_refreshServerInterestLabelList
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
-        RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:_device info:nil];
+        
+        RHDevice* device = _userDataModule.device;
+        RHServer* server = _userDataModule.server;
+        
+        RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
         RHMessage* serverDataSyncResponseMessage = [_commModule sendMessage:serverDataSyncRequestMessage];
         
         if (serverDataSyncResponseMessage.messageId == MessageId_ServerDataSyncResponse)
@@ -255,7 +254,7 @@
             
             @try
             {
-                [_server fromJSONObject:serverDic];
+                [server fromJSONObject:serverDic];
 
                 dispatch_async(dispatch_get_main_queue(), ^(){
                     [_serverInterestLabelCollectionView reloadData];
@@ -327,6 +326,11 @@
     RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[cv dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL forIndexPath:indexPath];
     cell.editingDelegate = self;
     
+    RHDevice* device = _userDataModule.device;
+    RHProfile* profile = device.profile;
+    RHInterestCard* interestCard = profile.interestCard;
+    RHServer* server = _userDataModule.server;
+    
     BOOL isEmptyCell = NO;
     
     NSUInteger position = indexPath.item;
@@ -336,7 +340,7 @@
         NSString* labelName = nil;
         NSInteger labelCount = -1;
         
-        NSArray* labelList = _interestCard.labelList;
+        NSArray* labelList = interestCard.labelList;
         if (0 < labelList.count && position < labelList.count)
         {
             RHInterestLabel* label = labelList[position];
@@ -364,7 +368,7 @@
         NSString* labelName = nil;
         NSInteger labelCount = -1;
         
-        RHServerInterestLabelList* olabelList = _server.interestLabelList;
+        RHServerInterestLabelList* olabelList = server.interestLabelList;
         NSArray* labelList = olabelList.current;
 
         if (0 < labelList.count && position < labelList.count)
@@ -400,10 +404,15 @@
 {
     BOOL flag = NO;
     
+    RHDevice* device = _userDataModule.device;
+    RHProfile* profile = device.profile;
+    RHInterestCard* interestCard = profile.interestCard;
+    RHServer* server = _userDataModule.server;
+    
     if (cv == _interestLabelCollectionView)
     {
         NSInteger position = indexPath.item;
-        NSArray* labelList = _interestCard.labelList;
+        NSArray* labelList = interestCard.labelList;
         if (0 < labelList.count && position < labelList.count)
         {
             flag = YES;
@@ -421,10 +430,14 @@
 {
     BOOL flag = NO;
     
+    RHDevice* device = _userDataModule.device;
+    RHProfile* profile = device.profile;
+    RHInterestCard* interestCard = profile.interestCard;
+    
     if (cv == _interestLabelCollectionView)
     {
         NSInteger toPosition = toIndexPath.item;
-        NSArray* labelList = _interestCard.labelList;
+        NSArray* labelList = interestCard.labelList;
         if (0 < labelList.count && toPosition < labelList.count)
         {
             flag = YES;
@@ -440,11 +453,15 @@
 
 - (void)collectionView:(LSCollectionViewHelper *)cv moveItemAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
+    RHDevice* device = _userDataModule.device;
+    RHProfile* profile = device.profile;
+    RHInterestCard* interestCard = profile.interestCard;
+    
     if ((UICollectionView*)cv == _interestLabelCollectionView)
     {
         NSInteger fromPosition = fromIndexPath.item;
         NSInteger toPosition = toIndexPath.item;
-        [_interestCard reorderLabel:fromPosition toIndex:toPosition];
+        [interestCard reorderLabel:fromPosition toIndex:toPosition];
         [_interestLabelCollectionView reloadItemsAtIndexPaths:@[fromIndexPath, toIndexPath]];
         [self performSelector:@selector(_updateInterestCard) withObject:nil];
     }
@@ -489,30 +506,16 @@
 {
     if (nil != cell)
     {
+        RHDevice* device = _userDataModule.device;
+        RHProfile* profile = device.profile;
+        RHInterestCard* interestCard = profile.interestCard;
+        
         NSIndexPath* indexPath = [_interestLabelCollectionView indexPathForCell:cell];
         NSUInteger item = indexPath.item;
         
-//        if (nil == labelName || 0 == labelName.length || [labelName isEqualToString:NSLocalizedString(@"Interest_Empty", nil)])
-//        {
-//            [_interestCard removeLabelByIndex:item];
-//        }
-//        else
-//        {
-//            if (item < _interestCard.labelList.count)
-//            {
-//                [_interestCard removeLabelByIndex:item];
-//                [_interestCard insertLabelByName:labelName index:item];
-//            }
-//            else
-//            {
-//                [_interestCard addLabel:labelName];
-//            }
-//
-//        }
-        
-        if (item < _interestCard.labelList.count)
+        if (item < interestCard.labelList.count)
         {
-            [_interestCard removeLabelByIndex:item];
+            [interestCard removeLabelByIndex:item];
             
             if (nil == labelName || 0 == labelName.length || [labelName isEqualToString:NSLocalizedString(@"Interest_Empty", nil)])
             {
@@ -520,7 +523,7 @@
             }
             else
             {
-                [_interestCard insertLabelByName:labelName index:item];
+                [interestCard insertLabelByName:labelName index:item];
             }
         }
         else
@@ -531,10 +534,9 @@
             }
             else
             {
-                [_interestCard addLabel:labelName];
+                [interestCard addLabel:labelName];
             }
         }
-        [_interestLabelCollectionView reloadItemsAtIndexPaths:@[indexPath]];
         
         [self _updateInterestCard];
     }

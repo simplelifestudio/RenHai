@@ -36,9 +36,6 @@
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
     
-    RHDevice* _device;
-    RHImpressCard* _impressCard;
-    
     UIRefreshControl* _refresher;
 }
 
@@ -86,6 +83,10 @@
 {
     RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_IMPRESSLABEL forIndexPath:indexPath];
 
+    RHDevice* device = _userDataModule.device;
+    RHProfile* profile = device.profile;
+    RHImpressCard* impressCard = profile.impressCard;
+    
     BOOL isEmptyCell = NO;
     
     NSString* labelName = nil;
@@ -96,7 +97,7 @@
     {
         case SECTION_INDEX_ASSESSES:
         {
-            NSArray* assessLabelList = _impressCard.assessLabelList;
+            NSArray* assessLabelList = impressCard.assessLabelList;
             RHImpressLabel* assessLabel = assessLabelList[row];
             labelName = [RHImpressLabel assessLabelName:assessLabel.labelName];
             labelCount = assessLabel.assessedCount;
@@ -110,19 +111,19 @@
                 case 0:
                 {
                     labelName = NSLocalizedString(@"Impress_ChatTotalCount", nil);
-                    labelCount = _impressCard.chatTotalCount;
+                    labelCount = impressCard.chatTotalCount;
                     break;
                 }
                 case 1:
                 {
                     labelName = NSLocalizedString(@"Impress_ChatTotalDuration", nil);
-                    labelCount = _impressCard.chatTotalDuration;
+                    labelCount = impressCard.chatTotalDuration;
                     break;
                 }
                 case 2:
                 {
                     labelName = NSLocalizedString(@"Impress_ChatLossCount", nil);
-                    labelCount = _impressCard.chatLossCount;
+                    labelCount = impressCard.chatLossCount;
                     break;
                 }
                 default:
@@ -135,7 +136,7 @@
         }
         case SECTION_INDEX_LABELS:
         {
-            NSArray* impressLabelList = [_impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
+            NSArray* impressLabelList = [impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
             
             RHImpressLabel* impressLabel = nil;
             if (0 < impressLabelList.count && row <= impressLabelList.count)
@@ -228,10 +229,6 @@ return reusableView;
     _userDataModule = [UserDataModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
     
-    _device = _userDataModule.device;
-    RHProfile* profile = _device.profile;
-    _impressCard = profile.impressCard;
-    
     [self _setupNavigationBar];
     [self _setupCollectionView];
 }
@@ -282,7 +279,9 @@ return reusableView;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
 
-        RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:_device info:nil];
+        RHDevice* device = _userDataModule.device;
+        
+        RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:device info:nil];
         RHMessage* appDataSyncResponseMessage = [_commModule sendMessage:appDataSyncRequestMessage];
         if (appDataSyncResponseMessage.messageId == MessageId_AppDataSyncResponse)
         {

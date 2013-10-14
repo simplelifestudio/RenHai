@@ -25,9 +25,6 @@
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
     
-    RHDevice* _device;
-    RHServer* _server;
-    
     NSTimer* _enterButtonTimer;
     
     NSTimer* _dataSyncTimer;
@@ -78,9 +75,6 @@
     _guiModule = [GUIModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
-    
-    _device = _userDataModule.device;
-    _server = _userDataModule.server;
     
     [self _setupNavigationBar];
     [self _setupView];
@@ -198,7 +192,9 @@ static float progress = 0.1;
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
 
-        RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:_device info:nil];
+        RHDevice* device = _userDataModule.device;
+        
+        RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
         RHMessage* serverDataSyncResponseMessage = [_commModule sendMessage:serverDataSyncRequestMessage];
         
         if (serverDataSyncResponseMessage.messageId == MessageId_ServerDataSyncResponse)
@@ -241,9 +237,11 @@ static float progress = 0.1;
 {
     dispatch_async(dispatch_get_main_queue(), ^(){
         
+        RHServer* server = _userDataModule.server;
+        
         NSArray* unitLabels = @[_onlineDeviceCountUnit1, _onlineDeviceCountUnit2, _onlineDeviceCountUnit3, _onlineDeviceCountUnit4, _onlineDeviceCountUnit5];
         
-        NSUInteger onlineCount = _server.deviceCount.online;
+        NSUInteger onlineCount = server.deviceCount.online;
         NSArray* unitVals = [CBMathUtils splitIntegerByUnit:onlineCount array:nil reverseOrder:YES];
         
         for (int i = 0; i < unitVals.count; i++)
