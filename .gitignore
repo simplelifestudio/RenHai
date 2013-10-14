@@ -16,3 +16,9 @@ Codes/iOS/RenHai/Pods/Pods.xcodeproj/xcuserdata/*.*
 
 Codes/Server/build/*.*
 
+
+Codes/Server/build/classes/hibernate.cfg.xml
+
+Codes/Server/build/classes/logback.xml
+
+Codes/Server/build/classes/spy.properties
