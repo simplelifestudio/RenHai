@@ -31,8 +31,6 @@
 	<classpathentry kind="lib" path="lib/json/fastjson-1.1.33.jar"/>
 	<classpathentry kind="lib" path="lib/log/logback-classic-1.0.13.jar"/>
 	<classpathentry kind="lib" path="lib/log/logback-core-1.0.13.jar"/>
-	<classpathentry kind="lib" path="lib/log/logback.xml"/>
-	<classpathentry kind="lib" path="lib/log/pom.xml"/>
 	<classpathentry kind="lib" path="lib/log/slf4j-api-1.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/websocketclient/java_websocket.jar"/>
 	<classpathentry kind="lib" path="lib/websocketclient/javax.websocket-api.jar"/>
