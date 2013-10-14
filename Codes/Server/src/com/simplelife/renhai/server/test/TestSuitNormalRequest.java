@@ -24,7 +24,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	Test07MaxOnlineDevicePool.class,
 	Test19MatchConfirmAReject.class,
 	Test20MatchConfirmBReject.class,
-	Test21UpdateInterestcard.class,
+	Test21UpdateInterestCard.class,
 	Test22Assess.class,
 	Test23NormalProcessAndStatistics.class,
 	Test24MaxBusinessDevicePool.class 

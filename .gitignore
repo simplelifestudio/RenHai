@@ -6,14 +6,14 @@
 
 *.xcbkptlist
 
-/Documents/~$数据表设计.xlsx
+Documents/~*.*
 
-/Documents/~$产品需求文档_server.docx
-
-/Design/Server.~ml
-
-/Test/~$Server测试用例.xlsm
+Documents/*.~ml
 
 Codes/iOS/RenHai/RenHai.xcworkspace/xcuserdata/*.*
 
 Codes/iOS/RenHai/Pods/Pods.xcodeproj/xcuserdata/*.*
+
+Codes/Server/build/*.*
+
+Codes/Server/build/classes/*.*

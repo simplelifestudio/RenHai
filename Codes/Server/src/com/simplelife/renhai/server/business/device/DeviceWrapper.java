@@ -361,7 +361,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     		return;
     	}
     	
-    	// Ö»ÓÐÃ»ÓÐ±»ÊÍ·ÅµÄÁ¬½Ó²Å»ØÓ¦ping
+    	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ping
         this.updatePingTime();
         connection.pong(payload);
     }
