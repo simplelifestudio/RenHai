@@ -23,7 +23,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 /**
  * 
  */
-public class Test21UpdateInterestcard extends AbstractTestCase
+public class Test21UpdateInterestCard extends AbstractTestCase
 {
 	private MockApp mockApp1;
 	
@@ -109,75 +109,75 @@ public class Test21UpdateInterestcard extends AbstractTestCase
 	{
 		IDeviceWrapper deviceWrapper1 = OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn());
 
-		// Step_01 MockÇëÇó£ºAÉè±¸Í¬²½
+		// Step_01 Mockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		mockApp1.syncDevice();
 		
-		// Step_02 MockÇëÇó£ºA¸üÐÂÐËÈ¤¿¨Æ¬£¬5¸öÐËÈ¤±êÇ©
+		// Step_02 Mockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		HashMap<String, Object> labels = new HashMap<String, Object>();
 		addInterestLabels(labels);
 		//mockApp1.updateInterestcard(labels);
 		// TODO: 
 		
-		// Step_03 µ÷ÓÃ£ºDeviceWrapper::getInterestcard
+		// Step_03 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DeviceWrapper::getInterestcard
 		Interestcard card = deviceWrapper1.getDevice().getProfile().getInterestcard();
 		checkLabel(card);
 		
-		// Step_04 µ÷ÓÃ£ºDaoWrapper::flush
+		// Step_04 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DaoWrapper::flush
 		DAOWrapper.flushToDB();
 		
-		// Step_05 Êý¾Ý¿â¼ì²é£ºAµÄÐËÈ¤±êÇ©
-		//fail("ÐèÒª¼ì²éÊý¾Ý¿âÖÐµÄÐËÈ¤±êÇ©");
+		// Step_05 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		//fail("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 		
-		// Step_06 MockÇëÇó£ºA¸üÐÂÐËÈ¤¿¨Æ¬£¬Ôö¼Ó1¸öÐËÈ¤±êÇ©
+		// Step_06 Mockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		LinkedHashMap<String, Object> labelAttr = new LinkedHashMap<String, Object>();
 		labelAttr.put("order", "5");
 		labelAttr.put("matchCount", "40");
 		labels.put("av", labelAttr);
 		//mockApp1.updateInterestcard(labels);
 		
-		// Step_07 µ÷ÓÃ£ºDeviceWrapper::getInterestcard
+		// Step_07 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DeviceWrapper::getInterestcard
 		checkLabel(card);
 		
 		//InterestLabel label = (InterestLabel)card.getLabelList().get(5); 
 		//assertEquals(label.getOrder(), 5);
 		//assertEquals(label.getName(), "av");
 		
-		// Step_08 µ÷ÓÃ£ºDaoWrapper::flush
+		// Step_08 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DaoWrapper::flush
 		DAOWrapper.flushToDB();
 		
-		// Step_09 Êý¾Ý¿â¼ì²é£ºAµÄÐËÈ¤±êÇ©
-		fail("ÐèÒª¼ì²éÊý¾Ý¿âÖÐµÄÐËÈ¤±êÇ©");
+		// Step_09 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		fail("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 		
-		// Step_10 MockÇëÇó£ºA¸üÐÂÐËÈ¤¿¨Æ¬£¬É¾³ý2¸öÐËÈ¤±êÇ©
+		// Step_10 Mockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		labels.remove("music");
 		
-		// Step_11 µ÷ÓÃ£ºDeviceWrapper::getInterestcard
+		// Step_11 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DeviceWrapper::getInterestcard
 		//label = (InterestLabel)card.getLabelList().get(1); 
 		//assertEquals(label.getOrder(), 1);
 		//assertEquals(label.getName(), "game");
 		
-		// Step_12 µ÷ÓÃ£ºDaoWrapper::flush
+		// Step_12 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DaoWrapper::flush
 		DAOWrapper.flushToDB();
 		
-		// Step_13 Êý¾Ý¿â¼ì²é£ºAµÄÐËÈ¤±êÇ©
-		fail("ÐèÒª¼ì²éÊý¾Ý¿âÖÐµÄÐËÈ¤±êÇ©");
+		// Step_13 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		fail("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 		
-		// Step_14 MockÇëÇó£ºA¸üÐÂÐËÈ¤¿¨Æ¬£¬¸Ä±ä±êÇ©Ë³Ðò
+		// Step_14 Mockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		//label = (InterestLabel)card.getLabelList().get(1);
 		//label.setOrder(3);
 		//label = (InterestLabel)card.getLabelList().get(3);
 		//label.setOrder(1);
 				
-		// Step_15 µ÷ÓÃ£ºDeviceWrapper::getInterestcard
+		// Step_15 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DeviceWrapper::getInterestcard
 		
-		// Step_16 µ÷ÓÃ£ºDaoWrapper::flush
+		// Step_16 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DaoWrapper::flush
 		DAOWrapper.flushToDB();
 		
-		// Step_17 Êý¾Ý¿â¼ì²é£ºAµÄÐËÈ¤±êÇ©
-		fail("ÐèÒª¼ì²éÊý¾Ý¿âÖÐµÄÐËÈ¤±êÇ©");
+		// Step_17 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		fail("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 		
-		// Step_18 MockÇëÇó£ºA²éÑ¯ÐËÈ¤¿¨Æ¬
+		// Step_18 Mockï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		mockApp1.syncDevice();
-		fail("ÐèÒª¼ì²é»Ø¸´µÄ±êÇ©ÊÇ·ñÕýÈ·");
+		fail("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
 	}
 }
