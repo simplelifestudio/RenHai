@@ -164,7 +164,7 @@ public class Profile implements java.io.Serializable {
 		this.sessionprofilemaps = sessionprofilemaps;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "profile")
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "profile")
 	public Set<Profileoperationlog> getProfileoperationlogs() {
 		return this.profileoperationlogs;
 	}

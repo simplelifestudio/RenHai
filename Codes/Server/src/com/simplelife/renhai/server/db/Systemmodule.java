@@ -76,7 +76,7 @@ public class Systemmodule implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "systemmodule")
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "systemmodule")
 	public Set<Systemoperationlog> getSystemoperationlogs() {
 		return this.systemoperationlogs;
 	}
