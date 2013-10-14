@@ -16,7 +16,7 @@
 #import "UserDataModule.h"
 #import "CommunicationModule.h"
 
-#define INTERVAL_ENTERBUTTON_TRACK 0.3
+#define INTERVAL_ENTERBUTTON_TRACK 0.1
 #define INTERVAL_DATASYNC 5
 
 @interface HomeViewController_iPhone () <CBRoundProgressViewDelegate>
@@ -24,6 +24,9 @@
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
+    
+    RHDevice* _device;
+    RHServer* _server;
     
     NSTimer* _enterButtonTimer;
     
@@ -76,8 +79,10 @@
     _userDataModule = [UserDataModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
     
-    [self _setupNavigationBar];
+    _device = _userDataModule.device;
+    _server = _userDataModule.server;
     
+    [self _setupNavigationBar];
     [self _setupView];
 }
 
@@ -149,6 +154,14 @@
     gesturer.enabled = YES;
 }
 
+-(void)_enterButtonTimerStarted
+{
+    [self _enterButtonTimerFinished];
+    
+    _enterButtonTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_ENTERBUTTON_TRACK target:self selector:@selector(_enterButtonTimerUpdated) userInfo:nil repeats:YES];
+    [_enterButtonTimer fire];
+}
+
 static float progress = 0.1;
 -(void)_enterButtonTimerUpdated
 {
@@ -184,8 +197,8 @@ static float progress = 0.1;
 -(void)_serverDataSync
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
-        RHDevice* device = _userDataModule.device;
-        RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
+
+        RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:_device info:nil];
         RHMessage* serverDataSyncResponseMessage = [_commModule sendMessage:serverDataSyncRequestMessage];
         
         if (serverDataSyncResponseMessage.messageId == MessageId_ServerDataSyncResponse)
@@ -230,8 +243,7 @@ static float progress = 0.1;
         
         NSArray* unitLabels = @[_onlineDeviceCountUnit1, _onlineDeviceCountUnit2, _onlineDeviceCountUnit3, _onlineDeviceCountUnit4, _onlineDeviceCountUnit5];
         
-        RHServer* server = _userDataModule.server;
-        NSUInteger onlineCount = server.deviceCount.online;
+        NSUInteger onlineCount = _server.deviceCount.online;
         NSArray* unitVals = [CBMathUtils splitIntegerByUnit:onlineCount array:nil reverseOrder:YES];
         
         for (int i = 0; i < unitVals.count; i++)
@@ -249,10 +261,7 @@ static float progress = 0.1;
 {
     [self performSelector:@selector(_lockViewController) withObject:self afterDelay:0.0];
     
-    [self _enterButtonTimerFinished];
-    
-    _enterButtonTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_ENTERBUTTON_TRACK target:self selector:@selector(_enterButtonTimerUpdated) userInfo:nil repeats:YES];
-    [_enterButtonTimer fire];
+    [self _enterButtonTimerStarted];
 }
 
 - (IBAction)onPressHelpButton:(id)sender
@@ -268,7 +277,8 @@ static float progress = 0.1;
 
 - (void) progressStarted
 {
-    
+//    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_EnterPool device:_device info:nil];
+//    RHMessage* businessSessionResponseMessage = [_commModule sendMessage:businessSessionRequestMessage];
 }
 
 - (void) progressFinished

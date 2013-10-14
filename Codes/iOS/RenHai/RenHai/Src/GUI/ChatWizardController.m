@@ -1,21 +1,21 @@
 //
-//  ChatWaitViewController_iPhone.m
+//  ChatWizardController.m
 //  RenHai
 //
-//  Created by DENG KE on 13-9-1.
+//  Created by DENG KE on 13-10-13.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
-#import "ChatWaitViewController_iPhone.h"
+#import "ChatWizardController.h"
 
-@interface ChatWaitViewController_iPhone ()
+@interface ChatWizardController ()
 {
     
 }
 
 @end
 
-@implementation ChatWaitViewController_iPhone
+@implementation ChatWizardController
 
 #pragma mark - Public Methods
 
@@ -37,13 +37,6 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-}
-
-#pragma mark - IBActions
-
--(IBAction)didPressActionButton:(id)sender
-{
-    
 }
 
 #pragma mark - Private Methods

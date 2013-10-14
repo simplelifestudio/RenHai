@@ -87,7 +87,7 @@ ConnectStatus;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     [self _setupInstance];
 }
 

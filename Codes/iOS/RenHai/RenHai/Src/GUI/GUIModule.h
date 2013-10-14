@@ -22,6 +22,7 @@
 #import "WarningViewController_iPhone.h"
 #import "ConfigViewController_iPhone.h"
 
+#import "ChatWizardController.h"
 #import "ChatWaitViewController_iPhone.h"
 #import "ChatConfirmViewController_iPhone.h"
 #import "ChatWebRTCViewController_iPhone.h"
@@ -43,6 +44,7 @@
 #define STORYBOARD_ID_CONFIG_IPHONE @"config_iphone"
 #define STORYBOARD_ID_HELP_IPHONE @"help_iphone"
 #define STORYBOARD_ID_WARNING_IPHONE @"warning_iphone"
+#define STORYBOARD_ID_CHATWIZARD @"chatwizard"
 #define STORYBOARD_ID_CHATWAIT_IPHONE @"chatwait_iphone"
 #define STORYBOARD_ID_CHATCONFIRM_IPHONE @"chatconfirm_iphone"
 #define STORYBOARD_ID_CHATWEBRTC_IPHONE @"chatwebrtc_iphone"
@@ -108,6 +110,7 @@ LEFTBAR_CELL_ID;
 @property (nonatomic, strong) HelpViewController_iPhone* helpViewController;
 @property (nonatomic, strong) WarningViewController_iPhone* warningViewController;
 
+@property (nonatomic, strong) ChatWizardController* chatWizardController;
 @property (nonatomic, strong) ChatWaitViewController_iPhone* chatWaitViewController;
 @property (nonatomic, strong) ChatConfirmViewController_iPhone* chatConfirmViewContorller;
 @property (nonatomic, strong) ChatWebRTCViewController_iPhone* chatWebRTCViewController;
