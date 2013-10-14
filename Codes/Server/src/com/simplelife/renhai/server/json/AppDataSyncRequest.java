@@ -1198,7 +1198,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		for (String key : keySet)
 		{
 			interestLabelMap = tempMap.get(key);
-			interestLabelMap.setInterestcard(null);
+			//interestLabelMap.setInterestcard(null);
 			interestLabelDAO.delete(interestLabelMap);
 		}
 	}

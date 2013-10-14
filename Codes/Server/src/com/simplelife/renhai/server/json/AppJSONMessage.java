@@ -252,7 +252,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
 		Device device = this.deviceWrapper.getDevice();
 		if ((device != null) && (!hibernateSesion.contains(device)))
 		{
-			hibernateSesion.update(device);
+			hibernateSesion.update(hibernateSesion.merge(device));
 			//hibernateSesion.load(Device.class, device.getDeviceId());
 		}
 	}
