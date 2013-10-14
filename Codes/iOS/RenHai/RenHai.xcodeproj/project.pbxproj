@@ -205,6 +205,10 @@
 		CD32013B17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
 		CD32013C17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */; };
 		CD32013D17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */; };
+		CD34DCAF180A7BC5003BBE06 /* ChatWizardController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD34DCAE180A7BC5003BBE06 /* ChatWizardController.m */; };
+		CD34DCB0180A7BC5003BBE06 /* ChatWizardController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD34DCAE180A7BC5003BBE06 /* ChatWizardController.m */; };
+		CD34DCB3180A8F4F003BBE06 /* RHBusinessSession.m in Sources */ = {isa = PBXBuildFile; fileRef = CD34DCB2180A8F4F003BBE06 /* RHBusinessSession.m */; };
+		CD34DCB4180A8F4F003BBE06 /* RHBusinessSession.m in Sources */ = {isa = PBXBuildFile; fileRef = CD34DCB2180A8F4F003BBE06 /* RHBusinessSession.m */; };
 		CD43667417F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */; };
 		CD43667517F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */; };
 		CD5F065117E8810900D08426 /* ImpressSectionHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5F065017E8810900D08426 /* ImpressSectionHeaderView_iPhone.m */; };
@@ -429,6 +433,10 @@
 		CD32013717E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = RHTableViewSwitcherCell_iPhone.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = RHTableViewSwitcherCell_iPhone.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHTableViewSwitcherCell_iPhone.xib; sourceTree = "<group>"; };
+		CD34DCAD180A7BC5003BBE06 /* ChatWizardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatWizardController.h; sourceTree = "<group>"; };
+		CD34DCAE180A7BC5003BBE06 /* ChatWizardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatWizardController.m; sourceTree = "<group>"; };
+		CD34DCB1180A8F4E003BBE06 /* RHBusinessSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBusinessSession.h; sourceTree = "<group>"; };
+		CD34DCB2180A8F4F003BBE06 /* RHBusinessSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHBusinessSession.m; sourceTree = "<group>"; };
 		CD43667217F97C2E00586443 /* NSDictionary+MutableDeepCopy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+MutableDeepCopy.h"; sourceTree = "<group>"; };
 		CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MutableDeepCopy.m"; sourceTree = "<group>"; };
 		CD5F064F17E8810900D08426 /* ImpressSectionHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpressSectionHeaderView_iPhone.h; sourceTree = "<group>"; };
@@ -806,6 +814,8 @@
 				C593C44A17D329E100C26367 /* ConfigViewController_iPhone.m */,
 				C593C44D17D329F300C26367 /* HelpViewController_iPhone.h */,
 				C593C44E17D329F300C26367 /* HelpViewController_iPhone.m */,
+				CD34DCAD180A7BC5003BBE06 /* ChatWizardController.h */,
+				CD34DCAE180A7BC5003BBE06 /* ChatWizardController.m */,
 				C593C45117D32A8300C26367 /* ChatWaitViewController_iPhone.h */,
 				C593C45217D32A8300C26367 /* ChatWaitViewController_iPhone.m */,
 				C593C45517D32A9700C26367 /* ChatConfirmViewController_iPhone.h */,
@@ -867,6 +877,8 @@
 				CDC051911802E33D006158B8 /* RHServerDeviceCount.m */,
 				CDC051941802E389006158B8 /* RHServerInterestLabelList.h */,
 				CDC051951802E389006158B8 /* RHServerInterestLabelList.m */,
+				CD34DCB1180A8F4E003BBE06 /* RHBusinessSession.h */,
+				CD34DCB2180A8F4F003BBE06 /* RHBusinessSession.m */,
 			);
 			path = UserData;
 			sourceTree = "<group>";
@@ -1173,6 +1185,7 @@
 				C593C44F17D329F300C26367 /* HelpViewController_iPhone.m in Sources */,
 				C593C45317D32A8300C26367 /* ChatWaitViewController_iPhone.m in Sources */,
 				C593C45717D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */,
+				CD34DCAF180A7BC5003BBE06 /* ChatWizardController.m in Sources */,
 				C593C45F17D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */,
 				C593C46317D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m in Sources */,
 				C593C46717D32AF600C26367 /* WarningViewController_iPhone.m in Sources */,
@@ -1203,6 +1216,7 @@
 				C580526D17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m in Sources */,
 				C580527117E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m in Sources */,
 				CD32013A17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */,
+				CD34DCB3180A8F4F003BBE06 /* RHBusinessSession.m in Sources */,
 				CD43667417F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */,
 				CDC0519A1805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m in Sources */,
 				CD5F065117E8810900D08426 /* ImpressSectionHeaderView_iPhone.m in Sources */,
@@ -1239,6 +1253,7 @@
 				C50505E917D2D26C00DB6589 /* GUIModule.m in Sources */,
 				C50505EB17D2D26C00DB6589 /* GUIStyle.m in Sources */,
 				C50505EF17D2D28600DB6589 /* CommunicationModule.m in Sources */,
+				CD34DCB0180A7BC5003BBE06 /* ChatWizardController.m in Sources */,
 				C593C41C17D3244000C26367 /* AppDataModule.m in Sources */,
 				C593C42017D3258600C26367 /* UserDataModule.m in Sources */,
 				C593C42417D3259600C26367 /* WebRTCModule.m in Sources */,
@@ -1275,6 +1290,7 @@
 				CD43667517F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */,
 				CDC0519F18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m in Sources */,
 				C596284417DA1C8B009127E6 /* RHNavigationController.m in Sources */,
+				CD34DCB4180A8F4F003BBE06 /* RHBusinessSession.m in Sources */,
 				C54DC8D617DC11A000BBD498 /* CEPlayer.m in Sources */,
 				CDC051971802E389006158B8 /* RHServerInterestLabelList.m in Sources */,
 				C54DC8D817DC11A000BBD498 /* CBRoundProgressLayer.m in Sources */,

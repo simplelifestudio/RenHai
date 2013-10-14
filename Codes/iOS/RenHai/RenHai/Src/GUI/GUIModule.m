@@ -42,6 +42,7 @@
 @synthesize helpViewController = _helpViewController;
 @synthesize warningViewController = _warningViewController;
 
+@synthesize chatWizardController = _chatWizardController;
 @synthesize chatWaitViewController = _chatWaitViewController;
 @synthesize chatConfirmViewContorller = _chatConfirmViewContorller;
 @synthesize chatWebRTCViewController = _chatWebRTCViewController;
@@ -168,6 +169,7 @@ SINGLETON(GUIModule)
     _configViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CONFIG_IPHONE];
     _warningViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_WARNING_IPHONE];
     
+    _chatWizardController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATWIZARD];
     _chatWaitViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATWAIT_IPHONE];
     _chatConfirmViewContorller = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATCONFIRM_IPHONE];
     _chatWebRTCViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATWEBRTC_IPHONE];

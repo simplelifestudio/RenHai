@@ -20,6 +20,7 @@
 #define PING_TEXT @"#####RenHai-App-Ping#####"
 #define PONG_LOG 0
 #define PING_ACTIVATE 1
+#define MESSAGE_LOG 0
 
 @interface WebSocketAgent()
 {
@@ -197,12 +198,16 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;
 {
-//    DDLogInfo(@"WebSocket Received Message Uncrypted: \"%@\"", message);
+#if MESSAGE_LOG
+    DDLogInfo(@"WebSocket Received Message Uncrypted: \"%@\"", message);
+#endif
     
     NSDictionary* dic = [CBJSONUtils toJSONObject:message];
     RHMessage* jsonMessage = [RHMessage constructWithContent:dic enveloped:YES];
-    
-//    DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", jsonMessage.toJSONString);
+
+#if MESSAGE_LOG
+    DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", jsonMessage.toJSONString);
+#endif
     
     BOOL isLegalMessage = [RHMessage isLegalMessage:jsonMessage];
     if (isLegalMessage)

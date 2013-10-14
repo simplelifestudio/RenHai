@@ -33,6 +33,7 @@ SINGLETON(UserDataModule)
 
 @synthesize device = _device;
 @synthesize server = _server;
+@synthesize businessSession = _businessSession;
 
 -(void) initModule
 {
@@ -131,6 +132,11 @@ SINGLETON(UserDataModule)
 -(void) _initServerData
 {
     _server = [[RHServer alloc] init];
+}
+
+-(void) _initBusinessSession
+{
+    _businessSession = [[RHBusinessSession alloc] init];
 }
 
 #pragma mark - UIApplicationDelegate

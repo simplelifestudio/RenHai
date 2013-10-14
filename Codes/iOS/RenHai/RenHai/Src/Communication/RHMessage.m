@@ -296,8 +296,8 @@ static BOOL s_messageEncrypted;
             dataUpdate = dataUpdateSource;
             
             // dataQuery
-            deviceSource = [NSMutableDictionary dictionary];
-            [dataQuery setObject:oNull forKey:MESSAGE_KEY_DEVICE];
+            deviceSource = oNull;
+            [dataQuery setObject:deviceSource forKey:MESSAGE_KEY_DEVICE];
             
             break;
         }
