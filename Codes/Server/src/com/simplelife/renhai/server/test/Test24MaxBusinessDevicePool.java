@@ -16,7 +16,6 @@ import org.junit.Test;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.GlobalSetting;
 
 /**

@@ -19,12 +19,9 @@ import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessScheduler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.business.session.BusinessSession;
-import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceDAO;
@@ -34,9 +31,9 @@ import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.log.DbLogger;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.IBusinessSession;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts;
 
@@ -179,7 +176,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 	}
 	
 	@Override
-	public void run()
+	public void doRun()
 	{
 		if (!checkJSONRequest())
 		{
@@ -293,6 +290,7 @@ public class BusinessSessionRequest extends AppJSONMessage
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceSn());
 
+		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType type = Consts.BusinessType.parseValue(intType);
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
@@ -475,26 +473,31 @@ public class BusinessSessionRequest extends AppJSONMessage
 				.getJSONObject(JSONKey.ImpressCard);
 		
 		Session session = HibernateSessionFactory.getSession();
-		Transaction t = session.beginTransaction();
+		Transaction t = null;
 		
-		String tempLabel;
-		JSONArray assessLabels = impressObj.getJSONArray(JSONKey.AssessLabelList);
-		tempLabel = assessLabels.getString(0);
-		updateOrAppendImpressLabel(targetCard, tempLabel, true);
-		updateOrAppendImpressLabel(sourceCard, tempLabel, false);
-		
-		JSONArray impressLabels = impressObj.getJSONArray(JSONKey.ImpressLabelList);
-		for (int i = 0; i < impressLabels.size(); i++)
+		try
 		{
-			tempLabel = impressLabels.getString(i);
+			t = session.beginTransaction();
+		
+			String tempLabel;
+			JSONArray assessLabels = impressObj.getJSONArray(JSONKey.AssessLabelList);
+			tempLabel = assessLabels.getString(0);
 			updateOrAppendImpressLabel(targetCard, tempLabel, true);
 			updateOrAppendImpressLabel(sourceCard, tempLabel, false);
+			
+			JSONArray impressLabels = impressObj.getJSONArray(JSONKey.ImpressLabelList);
+			for (int i = 0; i < impressLabels.size(); i++)
+			{
+				tempLabel = impressLabels.getString(i);
+				updateOrAppendImpressLabel(targetCard, tempLabel, true);
+				updateOrAppendImpressLabel(sourceCard, tempLabel, false);
+			}
+			t.commit();
 		}
-		
-		// Save to DB
-		//DBModule.instance.cache(target);
-		t.commit();
-		session.close();
+		catch (Exception e)
+		{
+			FileLogger.printStackTrace(e);
+		}
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);

@@ -24,9 +24,6 @@ public class AlohaResponse extends ServerJSONMessage
 		setMessageId(Consts.MessageId.AlohaResponse);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.json.ServerJSONMessage#getMessageId()
-	 */
 	@Override
 	public MessageId getMessageId()
 	{

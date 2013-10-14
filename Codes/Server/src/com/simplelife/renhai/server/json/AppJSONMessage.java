@@ -11,9 +11,13 @@
 
 package com.simplelife.renhai.server.json;
 
+import org.hibernate.Session;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.db.Device;
+import com.simplelife.renhai.server.db.HibernateSessionFactory;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IAppJSONMessage;
@@ -32,6 +36,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     protected JSONObject header;
     protected JSONObject body;
     protected Consts.MessageId messageId;
+    protected Session hibernateSesion;
     
     public AppJSONMessage(JSONObject jsonObject)
     {
@@ -226,11 +231,41 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     	response.asyncResponse();
     }
 
-	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.json.AbstractJSONMessage#run()
-	 */
-	public abstract void run();
+    @Override
+	public void run()
+	{
+		try
+		{
+			doBeforeRun();
+			doRun();
+			doAfterRun();
+		}
+		catch(Exception e)
+		{
+			FileLogger.printStackTrace(e);
+		}
+	}
 	
+	public void doBeforeRun()
+	{
+		hibernateSesion = HibernateSessionFactory.getSession();
+		Device device = this.deviceWrapper.getDevice();
+		if ((device != null) && (!hibernateSesion.contains(device)))
+		{
+			hibernateSesion.update(device);
+			//hibernateSesion.load(Device.class, device.getDeviceId());
+		}
+	}
+	
+	public void doAfterRun()
+	{
+		if (hibernateSesion != null && hibernateSesion.isOpen())
+		{
+			hibernateSesion.close();
+		}
+	}
+	
+	public abstract void doRun();
 	
 	public void setErrorCode(Consts.GlobalErrorCode errorCode)
 	{

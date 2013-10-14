@@ -18,7 +18,6 @@ import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.test.AbstractTestCase;
 import com.simplelife.renhai.server.test.MockApp;
-import com.simplelife.renhai.server.test.MockWebSocketConnection;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;

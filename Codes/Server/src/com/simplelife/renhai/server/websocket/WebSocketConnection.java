@@ -150,6 +150,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onTextMessage(String message)
     {
+    	Thread.currentThread().setName("WebSocket");
     	JSONObject obj = null;
     	try
     	{
@@ -159,7 +160,11 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	{
     		logger.debug("Received message: \n{}", message);
     	}
-    	logger.debug("Received message: \n{}", JSON.toJSONString(obj, true));
+    	
+    	if (obj != null)
+    	{
+    		logger.debug("Received message: \n{}", JSON.toJSONString(obj, true));
+    	}
     	
     	AppJSONMessage appMessage;
 		if (obj == null)

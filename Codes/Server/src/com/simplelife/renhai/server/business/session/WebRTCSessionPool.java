@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Timer;
 
 import com.simplelife.renhai.server.business.pool.AbstractPool;
-import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 
 

@@ -17,10 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
-
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -34,11 +31,9 @@ import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
-import com.simplelife.renhai.server.db.ImpresslabelmapSortable;
 import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.db.Profile;
-import com.simplelife.renhai.server.json.AppDataSyncRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.InvalidRequest;
 import com.simplelife.renhai.server.json.ServerErrorResponse;
@@ -294,6 +289,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     @Override
     public void onJSONCommand(AppJSONMessage command)
     {
+    	logger.debug("Device <{}> received " 
+    		+ command.getMessageId().name() + " at status of " 
+    		+ businessStatus.name() + ", messageSn: " + command.getMessageSn(), this.getDeviceSn());
+
     	Consts.MessageId messageId =  command.getMessageId();
     	if (messageId != Consts.MessageId.TimeoutRequest
 				&& messageId != Consts.MessageId.Invalid
@@ -330,7 +329,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     	{
     		command.bindDeviceWrapper(this);
     		Thread cmdThread = new Thread(command);
-    		cmdThread.setName(command.getMessageType().name());
+    		cmdThread.setName(command.getMessageId().name());
     		cmdThread.start();
     	}
     	catch(Exception e)
@@ -656,15 +655,15 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		Impresscard card = profile.getImpresscard();
 		
 		Session session = HibernateSessionFactory.getSession();
-		Transaction t = session.beginTransaction();
+		Transaction t = null;
 		try
 		{
+			t = session.beginTransaction();
 			synchronized (card)
 			{
 				card.setChatLossCount(card.getChatLossCount() + 1);
 			}
 			t.commit();
-			session.close();
 		}
 		catch(Exception e)
 		{
@@ -685,15 +684,15 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		Impresscard card = profile.getImpresscard();
 		
 		Session session = HibernateSessionFactory.getSession();
-		Transaction t = session.beginTransaction();
+		Transaction t = null;
 		try
 		{
+			t  = session.beginTransaction();
 			synchronized (card)
 			{
 				card.setChatTotalCount(card.getChatTotalCount() + 1);
 			}
 			t.commit();
-			session.close();
 		}
 		catch(Exception e)
 		{
@@ -714,19 +713,18 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		Impresscard card = profile.getImpresscard();
 		
 		Session session = HibernateSessionFactory.getSession();
-		Transaction t = session.beginTransaction();
+		Transaction t = null;
 		try
 		{
+			t =  session.beginTransaction();
 			synchronized (card)
 			{
 				card.setChatTotalDuration(card.getChatTotalDuration() + duration);
 			}
 			t.commit();
-			session.close();
 		}
 		catch(Exception e)
 		{
-			logger.error("Error occurred when saving chatTotalDuration: {}", e.getMessage());
 			if (t != null)
 			{
 				t.rollback();

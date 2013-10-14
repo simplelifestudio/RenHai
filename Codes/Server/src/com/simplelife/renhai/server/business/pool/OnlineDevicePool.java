@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
-import com.simplelife.renhai.server.business.session.BusinessSession;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Statisticsitem;
 import com.simplelife.renhai.server.db.StatisticsitemDAO;
@@ -37,7 +36,6 @@ import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
-import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
@@ -51,10 +49,12 @@ public class OnlineDevicePool extends AbstractDevicePool
 		@Override
 		public void run()
 		{
-			Thread.currentThread().setName("InactiveCheck");
 			try
 			{
+				Session hibernateSesion = HibernateSessionFactory.getSession();
+				Thread.currentThread().setName("InactiveCheck");
 				OnlineDevicePool.instance.checkInactiveDevice();
+				hibernateSesion.close();
 			}
 			catch(Exception e)
 			{
@@ -70,8 +70,10 @@ public class OnlineDevicePool extends AbstractDevicePool
 		{
 			try
 			{
+				Session hibernateSesion = HibernateSessionFactory.getSession();
 				Thread.currentThread().setName("BannedCheck");
 				OnlineDevicePool.instance.deleteBannedDevice();
+				hibernateSesion.close();
 			}
 			catch(Exception e)
 			{
@@ -87,8 +89,10 @@ public class OnlineDevicePool extends AbstractDevicePool
 		{
 			try
 			{
+				Session hibernateSesion = HibernateSessionFactory.getSession();
 				Thread.currentThread().setName("StatSave");
 				OnlineDevicePool.instance.saveStatistics();
+				hibernateSesion.close();
 			}
 			catch(Exception e)
 			{
@@ -467,7 +471,6 @@ public class OnlineDevicePool extends AbstractDevicePool
 			session.save(statItem);
 			
 			trans.commit();
-			session.close();
 		}
 		catch(Exception e)
 		{

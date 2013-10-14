@@ -16,9 +16,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import sun.security.pkcs11.Secmod.DbMode;
-
-import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
 import com.simplelife.renhai.server.db.GlobalimpresslabelDAO;
@@ -57,6 +55,8 @@ public class DbLogger
 		@Override
 		public void run()
 		{
+			Thread.currentThread().setName("IncreaseImpress");
+			Session hibernateSesion = HibernateSessionFactory.getSession();
 			synchronized (increaseImpressFlag)
 			{
 				GlobalimpresslabelDAO dao = new GlobalimpresslabelDAO();
@@ -69,24 +69,24 @@ public class DbLogger
 				
 				Globalimpresslabel label = list.get(0);
 				Session session = HibernateSessionFactory.getSession();
-				Transaction trans = null;
+				Transaction t = null;
 				
 				try
 				{
-					trans = session.beginTransaction();
+					t = session.beginTransaction();
 					label.setGlobalAssessCount(label.getGlobalAssessCount() + 1);
-					trans.commit();
-					session.close();
+					t.commit();
 				}
 				catch(Exception e)
 				{
 					FileLogger.printStackTrace(e);
-					if (trans != null)
+					if (t != null)
 					{
-						trans.rollback();
+						t.rollback();
 					}
 				}
 			}
+			hibernateSesion.close();
 		}
 	}
 	
@@ -105,6 +105,8 @@ public class DbLogger
 				return;
 			}
 			
+			Thread.currentThread().setName("IncreaseInterest");
+			Session hibernateSesion = HibernateSessionFactory.getSession();
 			synchronized (increaseInterestFlag)
 			{
 				GlobalinterestlabelDAO dao = new GlobalinterestlabelDAO();
@@ -117,24 +119,24 @@ public class DbLogger
 				
 				Globalinterestlabel label = list.get(0);
 				Session session = HibernateSessionFactory.getSession();
-				Transaction trans = null;
+				Transaction t = null;
 				
 				try
 				{
-					trans = session.beginTransaction();
+					t = session.beginTransaction();
 					label.setGlobalMatchCount(label.getGlobalMatchCount()+1);
-					trans.commit();
-					session.close();
+					t.commit();
 				}
 				catch(Exception e)
 				{
 					FileLogger.printStackTrace(e);
-					if (trans != null)
+					if (t != null)
 					{
-						trans.rollback();
+						t.rollback();
 					}
 				}
 			}
+			hibernateSesion.close();
 		}
 	}
 	
@@ -154,32 +156,40 @@ public class DbLogger
 		@Override
 		public void run()
 		{
+			Thread.currentThread().setName("SaveProfileLog");
+			Session hibernateSesion = HibernateSessionFactory.getSession();
+			
 			OperationcodeDAO dao = new OperationcodeDAO();
 			Operationcode codeObj = dao.findByOperationCode(code.getValue()).get(0);
 			
 			Session session = HibernateSessionFactory.getSession();
-			Transaction trans = null;
+			Transaction t = null;
 			long now = System.currentTimeMillis();
 			
 			try
 			{
-				trans = session.beginTransaction();
+				t = session.beginTransaction();
 				Profileoperationlog log = new Profileoperationlog();
 				log.setOperationcode(codeObj);
 				log.setLogInfo(logInfo);
 				log.setLogTime(now);
 				log.setProfile(profile);
+				
+				BusinessModule.instance.getLogger().debug("profile ID: " + profile.getProfileId());
 				session.save(log);
-				trans.commit();
-				session.close();
+				t.commit();
 			}
 			catch(Exception e)
 			{
 				FileLogger.printStackTrace(e);
-				if (trans != null)
+				if (t != null)
 				{
-					trans.rollback();
+					t.rollback();
 				}
+			}
+			finally
+			{
+				hibernateSesion.close();
 			}
 		}
 	}
@@ -203,6 +213,9 @@ public class DbLogger
 		@Override
 		public void run()
 		{
+			Thread.currentThread().setName("IncreaseImpress");
+			Session hibernateSesion = HibernateSessionFactory.getSession();
+			
 			OperationcodeDAO dao = new OperationcodeDAO();
 			Operationcode codeObj = dao.findByOperationCode(code.getValue()).get(0);
 			
@@ -210,29 +223,30 @@ public class DbLogger
 			Systemmodule moduleObj = moduleDao.findByModuleNo(module.getValue()).get(0); 
 			
 			Session session = HibernateSessionFactory.getSession();
-			Transaction trans = null;
+			Transaction t = null;
 			long now = System.currentTimeMillis();
 			
 			try
 			{
-				trans = session.beginTransaction();
+				t = session.beginTransaction();
 				Systemoperationlog log = new Systemoperationlog();
 				log.setLogTime(now);
 				log.setLogInfo(logInfo);
 				log.setOperationcode(codeObj);
 				log.setSystemmodule(moduleObj);
 				session.save(log);
-				trans.commit();
-				session.close();
+				t.commit();
 			}
 			catch(Exception e)
 			{
 				FileLogger.printStackTrace(e);
-				if (trans != null)
+				if (t != null)
 				{
-					trans.rollback();
+					t.rollback();
 				}
 			}
+			
+			hibernateSesion.close();
 		}
 	}
 	

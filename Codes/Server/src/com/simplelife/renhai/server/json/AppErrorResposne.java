@@ -28,7 +28,7 @@ public class AppErrorResposne extends AppJSONMessage
 	}
 
 	@Override
-	public void run()
+	public void doRun()
 	{
 	}
 

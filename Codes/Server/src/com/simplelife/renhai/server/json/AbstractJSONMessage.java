@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
@@ -21,7 +22,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
  */
 public abstract class AbstractJSONMessage
 {
-	protected Logger logger = JSONModule.instance.getLogger();
+	protected Logger logger = BusinessModule.instance.getLogger();
 	
 	protected IDeviceWrapper deviceWrapper;
 	

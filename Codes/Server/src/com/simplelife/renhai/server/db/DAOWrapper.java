@@ -24,9 +24,7 @@ import org.slf4j.Logger;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
-import com.simplelife.renhai.server.util.IDbCache;
 
 
 /** */
@@ -61,7 +59,7 @@ public class DAOWrapper
     
     public static void startTimers()
     {
-    	timer.scheduleAtFixedRate(new FlushTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.FlushCacheToDB);
+    	//timer.scheduleAtFixedRate(new FlushTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.FlushCacheToDB);
     }
     
     public static void stopTimers()
@@ -95,7 +93,6 @@ public class DAOWrapper
 	    		Session session = HibernateSessionFactory.getSession();
 	    		session.saveOrUpdate(session.merge(obj));
 	    		objectCountInCache++;
-	    		session.close();
     		}
     		catch(Exception e)
     		{
@@ -110,24 +107,24 @@ public class DAOWrapper
     	}
     	else
     	{
+    		Transaction t = null;
+    		Session session = HibernateSessionFactory.getSession();
+    		
     		try
     		{
-	    		//Session session = HibernateSessionFactory.getSessionFactory().openSession();
-    			Session session = HibernateSessionFactory.getSession();
-    			
-    			Transaction trans = session.beginTransaction();
+    			t = session.beginTransaction();
     			Object mergedObj = session.merge(obj);
 	    		session.saveOrUpdate(mergedObj);
-    			//session.saveOrUpdate(obj);
 	        	session.flush();
-	        	//session.clear();
-	        	trans.commit();
-	        	//session.beginTransaction().commit();
-	    		session.close();
+	        	t.commit();
     		}
     		catch(Exception e)
     		{
-    			DBModule.instance.getLogger().error(e.getMessage());
+    			if (t != null)
+    			{
+    				t.rollback();
+    			}
+    			
     			FileLogger.printStackTrace(e);
     		}
     	}
@@ -153,30 +150,26 @@ public class DAOWrapper
 			return false;
 		}
 		
+		boolean result = false;
+		Transaction t = null;
 		try
 		{
-			session.beginTransaction();
+			t =  session.beginTransaction();
 			SQLQuery query = session.createSQLQuery(sql);
 			query.executeUpdate();
-			session.getTransaction().commit();
-			session.clear();
-			return true;
+			t.commit();
+			result = true;
 		}
 		catch(Exception e)
 		{
-			logger.error(sql);
-			logger.error(e.getMessage());
-			//logger.printStackTrace(e);
-			if (session.getTransaction() != null)
+			if (t != null)
 			{
-				session.getTransaction().rollback();
+				t.rollback();
 			}
-			return false;
+			result = false;
+			FileLogger.printStackTrace(e);
 		}
-		finally
-		{
-			//HibernateSessionFactory.closeSession();
-		}
+		return result;
 	}
     
 	/**
@@ -186,6 +179,7 @@ public class DAOWrapper
 	 */
 	public static Consts.DBExistResult exists(String sql)
 	{
+		logger.debug("start of exists()");
 		if (sql == null || sql.length() == 0)
 		{
 			logger.error("Invalid SQL string: " + sql);
@@ -201,7 +195,9 @@ public class DAOWrapper
 		
 		try
 		{
-			SQLQuery query = session.createSQLQuery(sql); 
+			logger.debug("before createSQLQuery()");
+			SQLQuery query = session.createSQLQuery(sql);
+			logger.debug("after createSQLQuery()");
 			if (query.list().size() > 0)
 			{
 				return Consts.DBExistResult.Existent;
@@ -214,12 +210,8 @@ public class DAOWrapper
 		catch(Exception e)
 		{
 			logger.error(sql);
-			logger.error(e.getMessage());
+			FileLogger.printStackTrace(e);
 			return Consts.DBExistResult.ErrorOccurred;
-		}
-		finally
-		{
-			//HibernateSessionFactory.closeSession();
 		}
 	}
     
@@ -247,7 +239,6 @@ public class DAOWrapper
 	    try
 	    {
 		    SQLQuery query = session.createSQLQuery(sql).addEntity(objClass);
-		    session.close();
 	    	return query.list();
 		}
 		catch(Exception e)
@@ -275,23 +266,20 @@ public class DAOWrapper
 			return;
 		}
 		
+		Transaction t = null;
 		try
 		{
-			session.beginTransaction();
+			t =  session.beginTransaction();
 			session.delete(obj);
-			session.getTransaction().commit();
+			t.commit();
 		}
 		catch(Exception e)
 		{
-			if (session.getTransaction() != null)
+			if (t != null)
 			{
-				session.getTransaction().rollback();
+				t.rollback();
 			}
-			logger.error(e.getMessage());
-		}
-		finally
-		{
-			session.close();
+			FileLogger.printStackTrace(e);
 		}
 	}
     
@@ -308,26 +296,22 @@ public class DAOWrapper
 			return;
 		}
 		
+		Transaction t = null;
 		try
 		{
 			logger.debug("Start to save data to DB");
-			session.beginTransaction();
+			t = session.beginTransaction();
 			session.save(obj);
-			session.getTransaction().commit();
+			t.commit();
 			logger.debug("Save data succeed");
-			session.close();
 		}
 		catch(Exception e)
 		{
-			if (session.getTransaction() != null)
+			if (t != null)
 			{
-				session.getTransaction().rollback();
+				t.rollback();
 			}
-			logger.error(e.getMessage());
-		}
-		finally
-		{
-			//HibernateSessionFactory.closeSession();
+			FileLogger.printStackTrace(e);
 		}
 	}
 
@@ -350,18 +334,26 @@ public class DAOWrapper
     		return;
     	}
     	
+    	Transaction t = null;
+    	Session session = HibernateSessionFactory.getSession();
     	try
     	{
-    		Session session = HibernateSessionFactory.getSession();
     		//TODO 这个时候如果曾经获取过多个session，怎么办？考虑保存所有获取过的session？
-    		session.beginTransaction().commit();		// Commit会隐含调用flush
+    		t = session.beginTransaction();		// Commit会隐含调用flush
     		session.clear();
-    		session.close();
+    		t.commit();
         }
     	catch(Exception e)
     	{
-    		logger.error("Error occurred when trying to flush: " + e.getMessage());
+    		if (t != null)
+    		{
+    			t.rollback();
+    		}
     		FileLogger.printStackTrace(e);
+    	}
+    	finally
+    	{
+    		session.close();
     	}
     }
 }

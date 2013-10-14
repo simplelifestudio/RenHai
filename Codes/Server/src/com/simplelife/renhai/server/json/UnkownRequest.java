@@ -28,11 +28,8 @@ public class UnkownRequest extends AppJSONMessage
 		super(jsonObject);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.json.AppJSONMessage#run()
-	 */
 	@Override
-	public void run()
+	public void doRun()
 	{
 		String messageId = Consts.MessageId.UnkownRequest.name();  
 		if (header != null)
@@ -45,15 +42,9 @@ public class UnkownRequest extends AppJSONMessage
 		responseError(Consts.MessageId.UnkownRequest);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.json.AppJSONMessage#getMessageId()
-	 */
 	@Override
 	public MessageId getMessageId()
 	{
 		return Consts.MessageId.UnkownRequest;
 	}
-	
-	
-
 }

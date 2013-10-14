@@ -48,7 +48,7 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
     }
 	
 	@Override
-	public void run()
+	public void doRun()
 	{
 		if (!checkJSONRequest())
 		{
@@ -85,9 +85,6 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.json.AppJSONMessage#getMessageId()
-	 */
 	@Override
 	public MessageId getMessageId()
 	{

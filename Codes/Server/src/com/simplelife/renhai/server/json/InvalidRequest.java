@@ -73,7 +73,7 @@ public class InvalidRequest extends AppJSONMessage
     }
 	
 	@Override
-	public void run()
+	public void doRun()
 	{
 		responseError(Consts.MessageId.Invalid);
 	}

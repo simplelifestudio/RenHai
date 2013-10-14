@@ -9,13 +9,7 @@
 
 package com.simplelife.renhai.server.json;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.db.DBModule;
-import com.simplelife.renhai.server.db.HibernateSessionFactory;
-import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 
@@ -34,7 +28,7 @@ public class TimeoutRequest extends AppJSONMessage
 	}
 
 	@Override
-	public void run()
+	public void doRun()
 	{
 		logger.debug("Start to handle timeout of device <{}>", deviceWrapper.getDeviceSn());
 		deviceWrapper.onTimeOut(null);
@@ -45,5 +39,4 @@ public class TimeoutRequest extends AppJSONMessage
 	{
 		return Consts.MessageId.TimeoutRequest;
 	}
-	
 }

@@ -13,8 +13,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
-import com.simplelife.renhai.server.util.Consts.DBExistResult;
-
 /**
  * Utility class for DB query
  */
@@ -27,14 +25,9 @@ public class DBQueryUtil
 	 */
 	public static boolean isNewDevice(String deviceSn)
 	{
-		String sql = "select * from " + TableName.Device 
-				+ " where " + TableColumnName.DeviceSn + " = '" + deviceSn + "'";
-		
-		if (DAOWrapper.exists(sql) == DBExistResult.Existent)
-		{
-			return false;
-		}
-		return true;
+		DeviceDAO dao = new DeviceDAO();
+		List<Device> list = dao.findByDeviceSn(deviceSn);
+		return (list.size() == 0);
 	}
 	
 	/**
@@ -44,10 +37,9 @@ public class DBQueryUtil
 	 */
 	public static Globalimpresslabel getGlobalimpresslabel(String label)
 	{
-		String sql = "select * from " + TableName.GlobalImpressLabel
-				+ " where " + TableColumnName.ImpressLabelName + " = '" + label + "'";
+		GlobalimpresslabelDAO dao = new GlobalimpresslabelDAO();
+		List<Globalimpresslabel> list = dao.findByImpressLabelName(label);
 		
-		List<Globalimpresslabel> list = DAOWrapper.query(sql, Globalimpresslabel.class);
 		if (list == null || list.size() == 0)
 		{
 			return null;

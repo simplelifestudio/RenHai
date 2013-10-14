@@ -12,17 +12,15 @@ package com.simplelife.renhai.server.json;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import ch.qos.logback.core.db.dialect.DBUtil;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.mysql.jdbc.exceptions.jdbc4.CommunicationsException;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLNonTransientConnectionException;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
@@ -34,7 +32,6 @@ import com.simplelife.renhai.server.db.Globalimpresslabel;
 import com.simplelife.renhai.server.db.GlobalimpresslabelDAO;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.db.GlobalinterestlabelDAO;
-import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.db.Interestcard;
@@ -283,12 +280,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 			return false;
 		}
 		
-		DeviceDAO deviceDAO = new DeviceDAO();
 		String deviceSn = header.getString(JSONKey.DeviceSn);
-		
-		String sql = "select * from " + TableName.Device + " where " + TableColumnName.DeviceSn + " = '"
-				+ deviceSn + "' ";
-		if (DAOWrapper.exists(sql) == DBExistResult.NonExistent)
+		if (DBQueryUtil.isNewDevice(deviceSn))
 		{
 			if (!deviceCardObj.containsKey(JSONKey.DeviceModel))
 			{
@@ -366,6 +359,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 	@Override
 	protected boolean checkJSONRequest()
 	{
+		logger.debug("start of checkJSONRequest");
 		String deviceSn = header.getString(JSONKey.DeviceSn);
 		if (DBQueryUtil.isNewDevice(deviceSn))
 		{
@@ -451,7 +445,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 	}
 	
 	@Override
-	public void run()
+	public void doRun()
 	{
 		if (deviceWrapper.getOwnerOnlineDevicePool() == null)
 		{
@@ -534,16 +528,27 @@ public class AppDataSyncRequest extends AppJSONMessage
 			long unbanDate = profile.getUnbanDate();
 			if (unbanDate <= System.currentTimeMillis())
 			{
-				Session session = HibernateSessionFactory.getSession();
-				Transaction t = session.beginTransaction();
+				Transaction t = null;
 				
-				// Recover to normal
-				profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
-				profile.setUnbanDate(null);
+				try
+				{
+					t= hibernateSesion.beginTransaction();
 				
-				t.commit();
-				deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
-				session.close();
+					// Recover to normal
+					profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
+					profile.setUnbanDate(null);
+					
+					t.commit();
+					deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
+				}
+				catch (Exception e)
+				{
+					if (t != null)
+					{
+						t.rollback();
+					}
+					FileLogger.printStackTrace(e);
+				}
 			}
 			else
 			{

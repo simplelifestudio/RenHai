@@ -44,7 +44,7 @@ public class AlohaRequest extends AppJSONMessage
 	
 	
     @Override
-    public void run()
+    public void doRun()
     {
     	Logger logger = JSONModule.instance.getLogger();
     	logger.debug("Start run of AlohaRequest");

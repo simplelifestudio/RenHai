@@ -9,10 +9,6 @@
 
 package com.simplelife.renhai.server.test;
 
-import com.simplelife.renhai.server.util.Consts.DeviceLeaveReason;
-import com.simplelife.renhai.server.util.Consts.MessageId;
-import com.simplelife.renhai.server.util.Consts.ServiceStatus;
-
 /**
  * 
  */
