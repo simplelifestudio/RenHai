@@ -18,8 +18,12 @@ Codes/iOS/RenHai/RenHai.xcworkspace/xcuserdata/*.*
 
 Codes/iOS/RenHai/Pods/Pods.xcodeproj/xcuserdata/*.*
 
+<<<<<<< HEAD
 Codes/Server/build/classes/hibernate.cfg.xml
 
 Codes/Server/build/classes/logback.xml
 
 Codes/Server/build/classes/spy.properties
+=======
+Codes/Server/build/*.*
+>>>>>>> 3c254aa51e34885cbf6e8ae72d791de50820d7d1
