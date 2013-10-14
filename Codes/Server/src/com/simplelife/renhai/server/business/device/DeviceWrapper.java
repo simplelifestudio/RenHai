@@ -34,7 +34,6 @@ import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
-import com.simplelife.renhai.server.db.ImpresslabelmapSortable;
 import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.db.Profile;
@@ -362,7 +361,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     		return;
     	}
     	
-    	// Ö»ÓÐÃ»ÓÐ±»ÊÍ·ÅµÄÁ¬½Ó²Å»ØÓ¦ping
+    	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ping
         this.updatePingTime();
         connection.pong(payload);
     }
