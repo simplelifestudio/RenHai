@@ -13,5 +13,11 @@
 3. AbstractDevicePool.java:32/34，重复定义函数，它们已经在父类AbstractPool中定义过了。
 4. AbstractDevicePool.java:36，此函数定义可以移动到父类中去。
 5. AbstractBusinessDevicePool.java:73/81, public String onDeviceEnter(IDeviceWrapper device)存在多设备同时进入的问题隐患。
-6. AbstractBusinessDevicePoo.java:120, if (!(deviceMap.containsKey(sn) || chatDeviceMap.containsKey(sn)))，后半部分判断条件搞反了。
-7. 
+6. OnlineDevicePool.java:55, Thread.currentThread().setName("InactiveCheck");修改线程名字的操作最好放到Timer的构造器中，这样只需一次即可，不需要每次调度Timer时都执行一次。
+7. OnlineDevicePool.java:54/57, private class InactiveCheckTask extends TimerTask，Session hibernateSesion = HibernateSessionFactory.getSession();此处Session是否没有使用过？
+8. OnlineDevicePool.java:73/76，private class BannedCheckTask extends TimerTask同上。另外建议继承于一个公共的Timer，可以使用doBeforeRun()/doAfterRun()来统一进行相关资源（比如Hibernate Session）的加载与释放，这样就不需要每个实际的业务Timer都反复写这些重复代码。
+9. OnlineDevicePool.java:92/95，private class StatSaveTask extends TimerTask，同上。
+10. OnlineDevicePool.java:116，HibernateSessionFactory.getSession();这句代码放在这里的意义是什么？
+11. OnlineDevicePool.java:310，缺少DeviceWrapper的null判断
+12. RandomBusinessScheduler.java:58, key = (String) keyArray[random.nextInt(keyArray.length)];如果random这个随机产生的数字高于keyArray数据的长度，就会出错。
+13. 
