@@ -15,7 +15,7 @@
 #import "CommunicationModule.h"
 #import "UserDataModule.h"
 
-#define DELAY 0.35f
+#define DELAY 0.0f
 #define ANIMATION_POP 0.35f
 #define ANIMATION_DISMISS 0.35
 
