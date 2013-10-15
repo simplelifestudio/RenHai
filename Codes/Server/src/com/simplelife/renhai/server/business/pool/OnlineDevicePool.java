@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
+import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Statisticsitem;
 import com.simplelife.renhai.server.db.StatisticsitemDAO;
@@ -34,6 +35,7 @@ import com.simplelife.renhai.server.db.Systemstatistics;
 import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.DeviceLeaveReason;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
@@ -119,6 +121,8 @@ public class OnlineDevicePool extends AbstractDevicePool
     	this.addBusinessPool(Consts.BusinessType.Random, new RandomBusinessDevicePool());
     	this.addBusinessPool(Consts.BusinessType.Interest, new InterestBusinessDevicePool());
     	setCapacity(GlobalSetting.BusinessSetting.OnlinePoolCapacity);
+    	
+    	DAOWrapper.startTimers();
     }
     
     private void checkDeviceMap(ConcurrentHashMap<String, IDeviceWrapper> deviceMap)
@@ -316,7 +320,9 @@ public class OnlineDevicePool extends AbstractDevicePool
     		{
     			// If receive AppDataSyncRequest from new WebsocketConnection, close the previous one
     			logger.debug("Found same deviceSn <{}> on different Websocket connection, close the previous one: " + previousId, deviceSn);
-    			preDevice.getConnection().closeConnection();
+    			//preDevice.getConnection().closeConnection();
+    			// 2013-10-15, delete device due to it's hard for app to recover to status before connection loss
+    			deleteDevice(preDevice, DeviceLeaveReason.WebsocketClosedByServer);
     		}
     	}
     	
