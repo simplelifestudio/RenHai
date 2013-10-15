@@ -103,7 +103,7 @@ public class DAOWrapper
 						
 						if (linkToBeSaved.size() > 0)
 						{
-							logger.debug("Resume saving data in cache queue, cache queue size: ", linkToBeSaved.size());
+							logger.debug("Resume saving data in cache queue, cache queue size: {}", linkToBeSaved.size());
 							session = HibernateSessionFactory.getSession();
 						}
 					}
