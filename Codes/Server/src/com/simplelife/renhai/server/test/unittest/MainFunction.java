@@ -10,8 +10,13 @@
 package com.simplelife.renhai.server.test.unittest;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.java_websocket.drafts.Draft;
@@ -48,6 +53,7 @@ import com.simplelife.renhai.server.test.MockAppConsts;
 import com.simplelife.renhai.server.test.RHWebSocketClient;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
 
@@ -194,21 +200,23 @@ public class MainFunction extends AbstractTestCase
 		//String jsonString = "{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"timeStamp\":\"2013-10-12 20:17:41.630\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"O54JKG4HXZ5EU846\",\"deviceId\":3},\"body\":{\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"labelOrder\":1,\"globalMatchCount\":1,\"validFlag\":1,\"interestLabelName\":\"Topic8\",\"matchCount\":0,\"globalInterestLabelId\":1},{\"labelOrder\":4,\"globalMatchCount\":2,\"validFlag\":1,\"interestLabelName\":\"Topic6\",\"matchCount\":0,\"globalInterestLabelId\":2}]}}}},\"dataQuery\":{\"device\":{\"profile\":{\"interestCard\":null}}}}}}";
 		//String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{},\"dataUpdate\":{\"device\":{\"deviceCard\":{\"appVersion\":\"0.1\",\"deviceModel\":\"Simulator\",\"isJailed\":0,\"osVersion\":\"6.1\"},\"deviceSn\":\"EFAD498F-9A95-4B90-A59E-FC599AC21FA3\"}}},\"header\":{\"deviceId\":0,\"deviceSn\":\"EFAD498F-9A95-4B90-A59E-FC599AC21FA3\",\"messageId\":101,\"messageSn\":\"T572P03A06725I13\",\"messageType\":1,\"timeStamp\":\"2013-10-13 20:51:59.747\"}}}";
 		//String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{},\"dataUpdate\":{\"device\":{\"deviceCard\":{\"appVersion\":\"0.1\",\"deviceModel\":\"iPhone 5\",\"isJailed\":1,\"osVersion\":\"6.1.2\"},\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\"}}},\"header\":{\"deviceId\":3,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":101,\"messageSn\":\"97QCOOICO8C4T5XN\",\"messageType\":1,\"timeStamp\":\"2013-10-14 06:17:14.663\"}}}";
-		String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{\"device\":{\"profile\":{}}},\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestLabelList\":[{\"globalMatchCount\":0,\"interestLabelName\":\"Patrick\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":0}]}}}}},\"header\":{\"deviceId\":0,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":101,\"messageSn\":\"UPM59M9KUR485GQ3\",\"messageType\":1,\"timeStamp\":\"2013-10-14 11:18:01.285\"}}}";
+		//String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{\"device\":{\"profile\":{}}},\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestLabelList\":[{\"globalMatchCount\":0,\"interestLabelName\":\"Patrick\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":0}]}}}}},\"header\":{\"deviceId\":0,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":101,\"messageSn\":\"UPM59M9KUR485GQ3\",\"messageType\":1,\"timeStamp\":\"2013-10-14 11:18:01.285\"}}}";
 		
+		// topic 7
+		String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{\"device\":{\"profile\":{}}},\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"globalMatchCount\":0,\"interestLabelName\":\"Patrick\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":0},{\"globalInterestLabelId\":3,\"globalMatchCount\":3,\"interestLabelName\":\"Topic7\",\"labelOrder\":1,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":1,\"globalMatchCount\":1,\"interestLabelName\":\"Topic8\",\"labelOrder\":2,\"matchCount\":0,\"validFlag\":1}]}}}}},\"header\":{\"deviceId\":3,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":101,\"messageSn\":\"52D3Q6SWC9072GQ2\",\"messageType\":1,\"timeStamp\":\"2013-10-14 13:37:50.057\"}}}";
 		JSONObject wholeObj = JSONObject.parseObject(jsonString);
 		JSONObject obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope); 
 		
-		//MockApp app = createNewMockApp(this.demoDeviceSn);
-		MockApp app = createNewMockApp("EFAD498F-9A95-4B90-A59E-FC599AC21FA3");
+		MockApp app = createNewMockApp("45CF7936-3FA1-49B2-937D-D462AB5F378A");
 		//app.syncDevice();
 		app.sendRawJSONMessage(obj, true);
 		
-		jsonString = "{\"jsonEnvelope\":{\"body\":{\"businessType\":1,\"operationType\":1},\"header\":{\"deviceId\":0,\"deviceSn\":\"24237ACE-7F7F-4656-A47C-11CF0473D7BB\",\"messageId\":103,\"messageSn\":\"DL32JN0P4V01M28J\",\"messageType\":1,\"timeStamp\":\"2013-10-14 11:26:32.446\"}}}";
+		// topic 6
+		jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{\"device\":{\"profile\":{}}},\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"globalMatchCount\":0,\"interestLabelName\":\"Patrick\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":0},{\"globalInterestLabelId\":3,\"globalMatchCount\":3,\"interestLabelName\":\"Topic6\",\"labelOrder\":1,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":1,\"globalMatchCount\":1,\"interestLabelName\":\"Topic8\",\"labelOrder\":2,\"matchCount\":0,\"validFlag\":1}]}}}}},\"header\":{\"deviceId\":3,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":101,\"messageSn\":\"52D3Q6SWC9072GQ2\",\"messageType\":1,\"timeStamp\":\"2013-10-14 13:37:50.057\"}}}";
 		wholeObj = JSONObject.parseObject(jsonString);
 		obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope);
 		app.sendRawJSONMessage(obj, true);
-		//app.sendServerDataSyncRequest();
+		
 		int i = 1;
 	}
 	
@@ -430,7 +438,7 @@ public class MainFunction extends AbstractTestCase
 		} catch ( InterruptedException e1 ) {
 			e1.printStackTrace();
 		} finally {
-			e.close();
+			e.closeConnection();
 		}
 	}
 	
@@ -445,6 +453,45 @@ public class MainFunction extends AbstractTestCase
 				|| app2.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
 		{
 			Thread.sleep(1000);
+		}
+	}
+	
+	@Test
+	public void testNullKeyEntry()
+	{
+		ConcurrentHashMap<String, String> deviceMap = new ConcurrentHashMap<String, String>();
+		deviceMap.put("Key1", "Value1");
+		deviceMap.put("Key2", "Value2");
+		deviceMap.put("Key3", "Value3");
+		deviceMap.put("Key4", "Value4");
+		
+		Iterator<Entry<String, String>> entryKeyIterator = deviceMap.entrySet().iterator();
+        
+		int count = 0;
+		
+		/*
+		Set<String> keys = deviceMap.keySet();
+		for (String key : keys)
+		{
+			System.out.println(deviceMap.get(key));
+			count ++;
+			if (count == 2)
+			{
+				deviceMap.remove("Key3");
+			}
+		}
+		*/
+		
+		while (entryKeyIterator.hasNext())
+		{
+			Entry<String, String> e = entryKeyIterator.next();
+			String value = e.getValue();
+			System.out.println(value);
+			count ++;
+			if (count == 2)
+			{
+				deviceMap.remove("Key4");
+			}
 		}
 	}
 }

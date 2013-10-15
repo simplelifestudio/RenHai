@@ -38,6 +38,7 @@ public class ServerDataSyncRequest extends AppJSONMessage
 	public ServerDataSyncRequest(JSONObject messageObject)
 	{
 		super(messageObject);
+		messageId = Consts.MessageId.ServerDataSyncRequest;
 	}
 	
 	/**
@@ -237,7 +238,7 @@ public class ServerDataSyncRequest extends AppJSONMessage
 	{
 		if (!checkJSONRequest())
 		{
-			responseError(Consts.MessageId.ServerDataSyncRequest);
+			responseError();
 			return;
 		}
 

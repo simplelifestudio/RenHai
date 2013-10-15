@@ -30,6 +30,7 @@ public class AlohaRequest extends AppJSONMessage
 	public AlohaRequest(JSONObject jsonObject)
 	{
 		super(jsonObject);
+		messageId = Consts.MessageId.AlohaRequest;
 	}
 
 

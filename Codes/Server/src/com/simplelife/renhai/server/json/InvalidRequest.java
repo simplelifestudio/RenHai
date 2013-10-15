@@ -22,6 +22,7 @@ public class InvalidRequest extends AppJSONMessage
 	public InvalidRequest(JSONObject jsonObject)
 	{
 		super(jsonObject);
+		messageId = Consts.MessageId.Invalid;
 	}
 	
 	public void setReceivedMessage(String message)
@@ -38,7 +39,7 @@ public class InvalidRequest extends AppJSONMessage
 	 * Override responseError in super class as received Message may not be valid JSON Object
 	 */
 	@Override
-	protected void responseError(Consts.MessageId messageId)
+	protected void responseError()
     {
     	ServerErrorResponse response = createErrorResponse();
     	if (this.jsonObject != null)
@@ -75,7 +76,7 @@ public class InvalidRequest extends AppJSONMessage
 	@Override
 	public void doRun()
 	{
-		responseError(Consts.MessageId.Invalid);
+		responseError();
 	}
 	
 	/**

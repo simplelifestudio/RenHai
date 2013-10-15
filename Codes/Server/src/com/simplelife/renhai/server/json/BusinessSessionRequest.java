@@ -52,6 +52,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 	public BusinessSessionRequest(JSONObject jsonObject)
 	{
 		super(jsonObject);
+		messageId = Consts.MessageId.BusinessSessionRequest;
 	}
 	
 	/**
@@ -180,7 +181,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 	{
 		if (!checkJSONRequest())
 		{
-			responseError(Consts.MessageId.BusinessSessionRequest);
+			responseError();
 			return;
 		}
 		
@@ -193,7 +194,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 				logger.error("Received " + operationType.name() + " from Device <{}> but its business progress is " + progress.name());
 				this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
 				this.setErrorDescription("It's not allowed to send " + operationType.name() + " if business progress is " + progress.name());
-				responseError(Consts.MessageId.BusinessSessionRequest);
+				responseError();
 				return;
 			}
 		}
@@ -248,7 +249,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			{
 				setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
 				setErrorDescription(operationInfo);
-				responseError(this.getMessageId());
+				responseError();
 				return;
 			}
 		}
@@ -424,6 +425,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void assess(boolean quitAfterAssess)
 	{
+		logger.debug("Device <{}> provided assess.", deviceWrapper.getDeviceSn());
 		if (quitAfterAssess)
 		{
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessQuit_1020
@@ -437,7 +439,6 @@ public class BusinessSessionRequest extends AppJSONMessage
 	    			, deviceWrapper.getDeviceSn());
 		}
 		
-		logger.debug("Device <{}> provided assess.", deviceWrapper.getDeviceSn());
 		String deviceSn = body.getJSONObject(JSONKey.OperationInfo)
 				.getJSONObject(JSONKey.Device)
 				.getString(JSONKey.DeviceSn);
@@ -445,6 +446,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 		if (deviceSn.equals(deviceWrapper.getDeviceSn()))
     	{
     		logger.warn("Device <{}> is assessing itself", deviceSn);
+    		setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
+			setErrorDescription("Self-assessing is forbidden.");
+			responseError();
     		return;
     	}
 		

@@ -12,6 +12,7 @@
 package com.simplelife.renhai.server.business.pool;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
@@ -20,7 +21,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 public abstract class AbstractDevicePool extends AbstractPool
 {
     /** */
-    protected HashMap<String, IDeviceWrapper> deviceMap = new HashMap<String, IDeviceWrapper>();
+    protected ConcurrentHashMap<String, IDeviceWrapper> deviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     
     /** */
     public IDeviceWrapper getDevice(String deviceSn)

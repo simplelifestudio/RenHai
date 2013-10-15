@@ -26,6 +26,7 @@ public class UnkownRequest extends AppJSONMessage
 	public UnkownRequest(JSONObject jsonObject)
 	{
 		super(jsonObject);
+		messageId = Consts.MessageId.UnkownRequest;
 	}
 
 	@Override
@@ -39,7 +40,7 @@ public class UnkownRequest extends AppJSONMessage
 				messageId = header.getString(JSONKey.MessageId);
 			}
 		}
-		responseError(Consts.MessageId.UnkownRequest);
+		responseError();
 	}
 
 	@Override

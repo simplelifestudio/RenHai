@@ -47,7 +47,7 @@ public interface IBaseConnection
     public AppJSONMessage syncSendMessage(ServerJSONMessage message) throws IOException;
 	
 	/** */
-	public void close();
+	public void closeConnection();
 	
 	/** */
 	public void ping();

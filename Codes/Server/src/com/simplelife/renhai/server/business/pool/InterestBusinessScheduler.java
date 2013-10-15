@@ -69,97 +69,94 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
     	String deviceFoundInterest = null;
     	
     	Random random = new Random();
-		synchronized (deviceMap)
+		// Loop all device from deviceMap
+		Set<Entry<String, IDeviceWrapper>> entrySet = deviceMap.entrySet();
+		Set<Interestlabelmap> labelSet;
+		for (Entry<String, IDeviceWrapper> entry : entrySet)
 		{
-    		// Loop all device from deviceMap
-    		Set<Entry<String, IDeviceWrapper>> entrySet = deviceMap.entrySet();
-    		Set<Interestlabelmap> labelSet;
-    		for (Entry<String, IDeviceWrapper> entry : entrySet)
-    		{
-    			if (deviceFoundFlag)
+			if (deviceFoundFlag)
+			{
+				break;
+			}
+			
+			selectedDevice.clear();
+			
+			IDeviceWrapper device = entry.getValue();
+			selectedDevice.add(device.getDeviceSn());
+			
+			labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
+			String strLabel; 
+			List<IDeviceWrapper> deviceList;
+			
+			// Loop all interest labels of device 
+			for (Interestlabelmap label : labelSet)
+			{
+				if (deviceFoundFlag)
     			{
     				break;
     			}
-    			
-    			selectedDevice.clear();
-    			
-    			IDeviceWrapper device = entry.getValue();
-    			selectedDevice.add(device.getDeviceSn());
-    			
-    			labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
-    			String strLabel; 
-    			List<IDeviceWrapper> deviceList;
-    			
-    			// Loop all interest labels of device 
-    			for (Interestlabelmap label : labelSet)
-    			{
-    				if (deviceFoundFlag)
-        			{
-        				break;
-        			}
 
-    				// Try to find device with same interest label
-    				strLabel = label.getGlobalinterestlabel().getInterestLabelName();
-    				deviceList = interestLabelMap.get(strLabel);
-    				
-    				// The selected device shall be considered
-    				int expectedDeviceCount = deviceCountPerSession - selectedDevice.size() + 1;
-    				
-    				// We don't have enough devices have same interest label
-    				if (deviceList.size() < expectedDeviceCount)
-    				{
-    					continue;
-    				}
-    				
-    				if ((deviceList.size() == expectedDeviceCount))
+				// Try to find device with same interest label
+				strLabel = label.getGlobalinterestlabel().getInterestLabelName();
+				deviceList = interestLabelMap.get(strLabel);
+				
+				// The selected device shall be considered
+				int expectedDeviceCount = deviceCountPerSession - selectedDevice.size() + 1;
+				
+				// We don't have enough devices have same interest label
+				if (deviceList.size() < expectedDeviceCount)
+				{
+					continue;
+				}
+				
+				if ((deviceList.size() == expectedDeviceCount))
+				{
+					String tempSn;
+					// All of devices found can be added to this business session
+					for (IDeviceWrapper tmpDevice : deviceList)
 					{
-    					String tempSn;
-    					// All of devices found can be added to this business session
-    					for (IDeviceWrapper tmpDevice : deviceList)
-    					{
-    						tempSn = tmpDevice.getDeviceSn();
-    						if (!selectedDevice.contains(tempSn))
-    						{
-    							selectedDevice.add(tempSn);
-    						}
-    					}
+						tempSn = tmpDevice.getDeviceSn();
+						if (!selectedDevice.contains(tempSn))
+						{
+							selectedDevice.add(tempSn);
+						}
 					}
-    				else
+				}
+				else
+				{
+					Object[] deviceArray = deviceList.toArray();
+					IDeviceWrapper tempDevice;
+    				String deviceSn;
+    				for (int i = 0; i < expectedDeviceCount; i++)
     				{
-    					Object[] deviceArray = deviceList.toArray();
-    					IDeviceWrapper tempDevice;
-        				String deviceSn;
-        				for (int i = 0; i < expectedDeviceCount; i++)
-        				{
-        					int tempCount = 0;
-        					
-        					do
-        					{
-        						tempCount ++;
-        						tempDevice = (IDeviceWrapper) deviceArray[random.nextInt(deviceArray.length)]; 
-        						deviceSn = tempDevice.getDeviceSn();
-        					} while (selectedDevice.contains(deviceSn) && tempCount < 100);
-        					
-        					if (tempCount >= 100)
-        					{
-        						logger.error("Fatal error: failed to matching device for 100 times, given up");
-        						deadMatchFlag = true;
-        						return;
-        					}
-        					selectedDevice.add(deviceSn);
-        				}
+    					int tempCount = 0;
+    					
+    					do
+    					{
+    						tempCount ++;
+    						tempDevice = (IDeviceWrapper) deviceArray[random.nextInt(deviceArray.length)]; 
+    						deviceSn = tempDevice.getDeviceSn();
+    					} while (selectedDevice.contains(deviceSn) && tempCount < 100);
+    					
+    					if (tempCount >= 100)
+    					{
+    						logger.error("Fatal error: failed to matching device for 100 times, given up");
+    						deadMatchFlag = true;
+    						return;
+    					}
+    					selectedDevice.add(deviceSn);
     				}
-    				deviceFoundFlag = true;
-    				deviceFoundInterest = strLabel;
-    			}
-    			
-    			if (!deviceFoundFlag)
-    			{
-    				// Devices in pool can't be matched by same interest label 
-    				deadMatchFlag = true;
-    				return;
-    			}
-    		}
+				}
+				deviceFoundFlag = true;
+				deviceFoundInterest = strLabel;
+			}
+			
+			if (!deviceFoundFlag)
+			{
+				// Devices in pool can't be matched by same interest label 
+				deadMatchFlag = true;
+				return;
+			}
 		}
     	
     	IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();

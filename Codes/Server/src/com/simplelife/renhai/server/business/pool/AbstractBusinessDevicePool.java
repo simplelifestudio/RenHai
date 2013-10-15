@@ -12,6 +12,8 @@
 package com.simplelife.renhai.server.business.pool;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
@@ -29,7 +31,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     protected Consts.BusinessType businessType;
     
     // Map for saving devices in chat
-    protected HashMap<String, IDeviceWrapper> chatDeviceMap = new HashMap<String, IDeviceWrapper>();
+    protected ConcurrentHashMap<String, IDeviceWrapper> chatDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     
     
     public Consts.BusinessType getBusinessType()
@@ -37,7 +39,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	return businessType;
     }
     
-    public HashMap<String, IDeviceWrapper> getDeviceMap()
+    public ConcurrentHashMap<String, IDeviceWrapper> getDeviceMap()
     {
     	return deviceMap;
     }
@@ -125,19 +127,13 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	
     	if (deviceMap.containsKey(sn))
     	{
-	    	synchronized(deviceMap)
-	    	{
-	    		deviceMap.remove(sn);
-	    	}
+	    	deviceMap.remove(sn);
 	    	logger.debug("Device <{}> was removed from deviceMap of " + this.businessType.name() + " Device Pool", sn);
     	}
     	
     	if (chatDeviceMap.containsKey(sn))
     	{
-	    	synchronized(chatDeviceMap)
-	    	{
-	    		chatDeviceMap.remove(sn);
-	    	}
+	    	chatDeviceMap.remove(sn);
 	    	logger.debug("Device <{}> was removed from chatDeviceMap of " + this.businessType.name() + " Device Pool", sn);
     	}
     	
@@ -168,19 +164,13 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	@Override
 	public IDeviceWrapper getDevice(String deviceSn)
     {
-		synchronized(deviceMap)
+		if (deviceMap.containsKey(deviceSn))
 		{
-			if (deviceMap.containsKey(deviceSn))
-			{
-				return deviceMap.get(deviceSn);
-			}
+			return deviceMap.get(deviceSn);
 		}
-		synchronized(chatDeviceMap)
+		if (chatDeviceMap.containsKey(deviceSn))
 		{
-			if (chatDeviceMap.containsKey(deviceSn))
-			{
-				return chatDeviceMap.get(deviceSn);
-			}
+			return chatDeviceMap.get(deviceSn);
 		}
    		return null;
     }

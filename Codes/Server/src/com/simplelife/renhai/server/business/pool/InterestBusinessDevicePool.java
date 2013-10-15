@@ -215,15 +215,9 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 	public void startChat(IDeviceWrapper device)
 	{
 		String deviceSn = device.getDeviceSn();
-		synchronized(deviceMap)
-		{
-			deviceMap.remove(deviceSn);
-		}
-		synchronized(chatDeviceMap)
-		{
-			chatDeviceMap.put(deviceSn, device);
-		}
-	
+		deviceMap.remove(deviceSn);
+		chatDeviceMap.put(deviceSn, device);
+		
 		Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
 		this.removeInterestIndex(device);
 	}
@@ -233,22 +227,16 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 	{
 		String sn = device.getDeviceSn();
 		boolean existFlag = false;
-		synchronized(chatDeviceMap)
+		if (chatDeviceMap.containsKey(sn))
 		{
-			if (chatDeviceMap.containsKey(sn))
-			{
-				existFlag = true;
-				chatDeviceMap.remove(sn);
-			}
+			existFlag = true;
+			chatDeviceMap.remove(sn);
 		}
 		
 		if (existFlag)
 		{
 			// Maybe device has been removed from business device pool by another thread
-			synchronized(deviceMap)
-			{
-				deviceMap.put(sn, device);
-			}
+			deviceMap.put(sn, device);
 		}
 		
 		addInterestIndex(device);

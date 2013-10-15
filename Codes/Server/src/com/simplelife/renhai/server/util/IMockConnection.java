@@ -26,7 +26,7 @@ public interface IMockConnection
 	public JSONObject syncSendToServer(JSONObject jsonObject);
 	public void asyncSendToServer(JSONObject jsonObject);
 	public void onTimeout();
-	public void close();
+	public void closeConnection();
 	public void ping();
 	public String getConnectionId();
 	public void onPing(ByteBuffer pingData);

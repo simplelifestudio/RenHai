@@ -26,6 +26,7 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 	public BusinessSessionNotificationResponse(JSONObject jsonObject)
 	{
 		super(jsonObject);
+		messageId = Consts.MessageId.BusinessSessionNotificationResponse;
 	}
 	
 	/**
@@ -52,7 +53,7 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 	{
 		if (!checkJSONRequest())
 		{
-			responseError(Consts.MessageId.BusinessSessionNotificationResponse);
+			responseError();
 			return;
 		}
 		

@@ -113,7 +113,7 @@ public class MockWebSocketConnection extends WebSocketConnection implements IMoc
     }
     
     @Override
-    public void close()
+    public void closeConnection()
     {
     	super.onClose(0);
     }
@@ -190,7 +190,7 @@ public class MockWebSocketConnection extends WebSocketConnection implements IMoc
     	{
 	    	if (controller.message == null)
 	    	{
-	    		logger.debug("MockApp <{}> timeout for synchronized response from server, MessageSn: " + messageSn, mockApp.getDeviceSn());
+	    		logger.error("MockApp <{}> timeout for synchronized response from server, MessageSn: " + messageSn, mockApp.getDeviceSn());
 	    		return null;
 	    	}
 	    	else

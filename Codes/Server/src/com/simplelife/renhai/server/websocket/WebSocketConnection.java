@@ -12,6 +12,7 @@
 package com.simplelife.renhai.server.websocket;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.HashMap;
@@ -81,8 +82,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	this.connectionId = connectionId;
     }
     
-    @Override
-    public void close()
+    public void closeConnection()
     {
     	logger.debug("Close Websocket: " + getConnectionId());
         try
@@ -151,6 +151,13 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     public void onTextMessage(String message)
     {
     	Thread.currentThread().setName("WebSocket");
+    	
+    	if (connectionOwner == null)
+		{
+    		logger.error("Message received on connection {} but its device has been released, message ignored", this.getConnectionId());
+    		return;
+		}
+    	
     	JSONObject obj = null;
     	try
     	{
@@ -208,15 +215,8 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	logger.debug("Received message: {}", appMessage.getMessageId().name());
     	if (!syncMap.containsKey(messageSn))
     	{
-    		if (connectionOwner != null)
-    		{
-    			logger.debug("New request message from device <{}> with MessageSn: " + messageSn, connectionOwner.getDeviceSn());
-    			connectionOwner.onJSONCommand(appMessage);
-    		}
-    		else
-    		{
-    			logger.error("New message received on connection {} but its connectionOwner is null!", this.getConnectionId());
-    		}
+			logger.debug("New request message from device <{}> with MessageSn: " + messageSn, connectionOwner.getDeviceSn());
+			connectionOwner.onJSONCommand(appMessage);
     	}
     	else
     	{
@@ -228,20 +228,17 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     public void signalForSyncSend(String messageSn, AppJSONMessage appMessage)
     {
     	SyncController controller = syncMap.get(messageSn);
-    	synchronized(controller)
-    	{
-			controller.lock.lock();
-			controller.message = appMessage;
-			controller.condition.signal();
-			controller.lock.unlock();
-    	}
+		controller.lock.lock();
+		controller.message = appMessage;
+		controller.condition.signal();
+		controller.lock.unlock();
     }
     
     /** */
     @Override
     public void onTimeout()
     {
-    	connectionOwner.onTimeOut(this);
+    	connectionOwner.onTimeOut();
     }
     
     @Override
@@ -296,7 +293,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	}
     	*/
     	
-    	WebSocketModule.instance.getLogger().debug("WebSocketConnection onClose triggered, status: " + status);
+    	WebSocketModule.instance.getLogger().debug("WebSocketConnection onClose triggered, connection id: {}, status: " + status, getConnectionId());
     	
     	// comment out releasing device related resource
     	// to avoid loop in procedure of device releasing
@@ -310,7 +307,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     {
     	if (getWsOutbound().isClosed())
     	{
-    		logger.error("The websocket connection has been closed, sending is given up.");
+    		logger.error("The websocket connection with id {} has been closed, sending is given up.", this.getConnectionId());
     		return;
     	}
     	

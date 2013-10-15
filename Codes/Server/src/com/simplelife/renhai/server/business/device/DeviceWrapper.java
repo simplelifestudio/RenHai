@@ -357,7 +357,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     {
     	if (this.ownerOnlinePool == null)
     	{
-    		logger.debug("ownerOnlinePool of device <{}> is null and ping is ignored", getDeviceSn());
+    		logger.debug("ownerOnlinePool of device <{}> is null and ping is ignored, connection Id: " + connection.getConnectionId(), getDeviceSn());
     		return;
     	}
     	
@@ -368,7 +368,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 
 
     @Override
-    public void onTimeOut(IBaseConnection conection)
+    public void onTimeOut()
     {
     	if (ownerOnlinePool != null)
     	{
@@ -403,7 +403,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     public void syncSendMessage(ServerJSONMessage message)
     {
     	SyncSendMessageTask task = new SyncSendMessageTask(this, message);
-    	task.setName("SyncSendMsg");
+    	task.setName("SyncSendMsg" + (System.currentTimeMillis()%1000));
     	task.start();
     }
 
@@ -470,7 +470,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 	public void unbindOnlineDevicePool()
 	{
 		this.ownerOnlinePool = null;
-		this.webSocketConnection.close();
+		this.webSocketConnection.closeConnection();
 	}
 
 	@Override

@@ -22,6 +22,7 @@ public class ConnectionErrorEvent extends AppJSONMessage
 	public ConnectionErrorEvent(JSONObject jsonObject)
 	{
 		super(jsonObject);
+		messageId = Consts.MessageId.ConnectionErrorEvent;
 	}
 
 	@Override

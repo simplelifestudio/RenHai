@@ -89,7 +89,7 @@ public interface IDeviceWrapper
     public void onJSONCommand(AppJSONMessage command);
     
     /** */
-    public void onTimeOut(IBaseConnection conection);
+    public void onTimeOut();
     
     public IBaseConnection getConnection();
     

@@ -112,6 +112,13 @@ public abstract class StreamInbound implements UpgradeInbound {
     public final SocketState onData() throws IOException {
         // Must be start the start of a message (which may consist of multiple
         // frames)
+    	WsOutbound outBound = getWsOutbound();
+    	if (outBound.isClosed())
+    	{
+    		WebSocketModule.instance.getLogger().warn("Message received from closed connection, ignored");
+    		return SocketState.CLOSED;
+    	}
+    	
         WsInputStream wsIs = new WsInputStream(processor, getWsOutbound());
 
         try {

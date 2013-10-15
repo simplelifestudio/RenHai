@@ -12,6 +12,7 @@
 package com.simplelife.renhai.server.business.pool;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -33,7 +34,7 @@ public abstract class AbstractBusinessScheduler extends Thread implements IBusin
     protected final Condition condition = lock.newCondition();
 	protected boolean runFlag = false;
     protected Logger logger = BusinessModule.instance.getLogger();
-    protected HashMap<String, IDeviceWrapper> deviceMap;
+    protected ConcurrentHashMap<String, IDeviceWrapper> deviceMap;
     
     protected final int deviceCountPerSession = 2;
 

@@ -173,7 +173,7 @@ public class RHWebSocketClient extends WebSocketClient implements IMockConnectio
 		getConnection().sendFrame( frame );
 	}
 	
-	public void close()
+	public void closeConnection()
 	{
 		super.close();
 	}

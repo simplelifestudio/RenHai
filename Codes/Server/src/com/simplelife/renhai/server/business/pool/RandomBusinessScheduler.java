@@ -38,30 +38,26 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
 		
 		List<String> selectedDevice = new ArrayList<String>();
 		
-		synchronized (deviceMap)
+		if (deviceCountPerSession == deviceMap.size())
 		{
-			if (deviceCountPerSession == deviceMap.size())
-			{
-				selectedDevice.addAll(deviceMap.keySet());
-			}
-			else
-			{
-				Set<String> keySet = deviceMap.keySet();
-				Object[] keyArray = keySet.toArray();
-				
-				Random random = new Random();
-				String key;
-				for (int i = 0; i < deviceCountPerSession; i++)
-				{
-					do
-					{
-						key = (String) keyArray[random.nextInt(keyArray.length)];
-					} while (selectedDevice.contains(key));
-					
-					selectedDevice.add(key);
-				}
-			}
+			selectedDevice.addAll(deviceMap.keySet());
+		}
+		else
+		{
+			Set<String> keySet = deviceMap.keySet();
+			Object[] keyArray = keySet.toArray();
 			
+			Random random = new Random();
+			String key;
+			for (int i = 0; i < deviceCountPerSession; i++)
+			{
+				do
+				{
+					key = (String) keyArray[random.nextInt(keyArray.length)];
+				} while (selectedDevice.contains(key));
+				
+				selectedDevice.add(key);
+			}
 		}
 		
 		IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();

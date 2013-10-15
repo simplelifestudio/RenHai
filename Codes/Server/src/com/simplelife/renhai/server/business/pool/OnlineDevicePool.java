@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -104,7 +105,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 	private Timer inactiveTimer = new Timer();
 	private Timer bannedTimer = new Timer();
 	private Timer statSaveTimer = new Timer();
-    private HashMap<String, IDeviceWrapper> queueDeviceMap = new HashMap<String, IDeviceWrapper>();
+    private ConcurrentHashMap<String, IDeviceWrapper> queueDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     private HashMap<Consts.BusinessType, AbstractBusinessDevicePool> businessPoolMap = new HashMap<Consts.BusinessType, AbstractBusinessDevicePool>();
     private List<IDeviceWrapper> bannedDeviceList = new ArrayList<IDeviceWrapper> ();
     
@@ -120,7 +121,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	setCapacity(GlobalSetting.BusinessSetting.OnlinePoolCapacity);
     }
     
-    private void checkDeviceMap(HashMap<String, IDeviceWrapper> deviceMap)
+    private void checkDeviceMap(ConcurrentHashMap<String, IDeviceWrapper> deviceMap)
     {
     	Iterator<Entry<String, IDeviceWrapper>> entryKeyIterator = deviceMap.entrySet().iterator();
         IDeviceWrapper deviceWrapper;
@@ -163,15 +164,8 @@ public class OnlineDevicePool extends AbstractDevicePool
     private void checkInactiveDevice()
     {
     	logger.debug("Start to check inactive connections.");
-    	synchronized(deviceMap)
-    	{
-    		checkDeviceMap(this.deviceMap);
-    	}
-    	
-    	synchronized(queueDeviceMap)
-    	{
-    		checkDeviceMap(this.queueDeviceMap);
-    	}
+    	checkDeviceMap(this.deviceMap);
+    	checkDeviceMap(this.queueDeviceMap);
 	}
     
     /** */
@@ -213,11 +207,8 @@ public class OnlineDevicePool extends AbstractDevicePool
     	
     	DeviceWrapper deviceWrapper = new DeviceWrapper(connection);
     	deviceWrapper.bindOnlineDevicePool(this);
-    	Date now = DateUtil.getNowDate();
     	deviceWrapper.updateActivityTime();
     	deviceWrapper.updatePingTime();
-    	
-    	connection.bind(deviceWrapper);
     	queueDeviceMap.put(connection.getConnectionId(), deviceWrapper);
         return deviceWrapper;
     }
@@ -250,10 +241,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		String id = deviceWrapper.getConnection().getConnectionId();
     		if (queueDeviceMap.containsKey(id))
     		{
-	    		synchronized(queueDeviceMap)
-	    		{
-	    			queueDeviceMap.remove(id);
-	    		}
+	    		queueDeviceMap.remove(id);
 	    		logger.debug("Device <{}> was removed from queueDeviceMap of online device pool, device count after remove: " + getElementCount(), id);
     		}
     	}
@@ -262,10 +250,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		String sn = deviceWrapper.getDeviceSn();
     		if (deviceMap.containsKey(sn))
     		{
-	    		synchronized(deviceMap)
-				{
-					deviceMap.remove(sn);
-				}
+	    		deviceMap.remove(sn);
 	    		logger.debug("Device <{}> was removed from deviceMap of online device pool, device count after remove: " + getElementCount(), sn);
     		}
     		
@@ -331,19 +316,12 @@ public class OnlineDevicePool extends AbstractDevicePool
     		{
     			// If receive AppDataSyncRequest from new WebsocketConnection, close the previous one
     			logger.debug("Found same deviceSn <{}> on different Websocket connection, close the previous one: " + previousId, deviceSn);
-    			preDevice.getConnection().close();
+    			preDevice.getConnection().closeConnection();
     		}
     	}
     	
-    	synchronized(queueDeviceMap)
-    	{
-    		queueDeviceMap.remove(connection.getConnectionId());
-    	}
-    	
-    	synchronized(deviceMap)
-    	{
-    		deviceMap.put(deviceWrapper.getDeviceSn(), deviceWrapper);
-    	}
+    	queueDeviceMap.remove(connection.getConnectionId());
+    	deviceMap.put(deviceWrapper.getDeviceSn(), deviceWrapper);
     }
 
 	@Override
@@ -389,10 +367,8 @@ public class OnlineDevicePool extends AbstractDevicePool
 	public void IdentifyBannedDevice(IDeviceWrapper device)
 	{
 		logger.debug("Device <{}> was identified as banned device", device.getDeviceSn());
-		synchronized(queueDeviceMap)
-		{
-			queueDeviceMap.remove(device.getConnection().getConnectionId());
-		}
+		queueDeviceMap.remove(device.getConnection().getConnectionId());
+		
 		synchronized(bannedDeviceList)
 		{
 			bannedDeviceList.add(device);

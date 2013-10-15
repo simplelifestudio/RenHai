@@ -25,6 +25,7 @@ public class AppErrorResposne extends AppJSONMessage
 	public AppErrorResposne(JSONObject jsonObject)
 	{
 		super(jsonObject);
+		messageId = Consts.MessageId.AppErrorResposne;
 	}
 
 	@Override

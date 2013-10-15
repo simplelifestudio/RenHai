@@ -25,13 +25,14 @@ public class TimeoutRequest extends AppJSONMessage
 	public TimeoutRequest(JSONObject jsonObject)
 	{
 		super(jsonObject);
+		messageId = Consts.MessageId.TimeoutRequest;
 	}
 
 	@Override
 	public void doRun()
 	{
 		logger.debug("Start to handle timeout of device <{}>", deviceWrapper.getDeviceSn());
-		deviceWrapper.onTimeOut(null);
+		deviceWrapper.onTimeOut();
 	}
 
 	@Override

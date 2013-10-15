@@ -14,6 +14,11 @@ import java.net.URI;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_17;
 import org.slf4j.Logger;
@@ -169,6 +174,9 @@ public class MockApp implements IMockApp, Runnable
     protected JSONObject jsonObject = new JSONObject();
     protected JSONObject header = new JSONObject();
     protected JSONObject body = new JSONObject();
+	
+	protected Lock lock = new ReentrantLock();
+	protected Condition condition = lock.newCondition();
 	
 	protected String deviceSn;
 	protected int deviceId;
@@ -395,7 +403,21 @@ public class MockApp implements IMockApp, Runnable
     
     public void waitMessage()
     {
-    	return;
+    	if (lastReceivedCommand != null)
+    	{
+    		return;
+    	}
+    	
+    	lock.lock();
+    	try
+		{
+			condition.await(15, TimeUnit.SECONDS);
+		}
+		catch (InterruptedException e)
+		{
+			FileLogger.printStackTrace(e);
+		}
+    	lock.unlock();
     }
     
     public void startAutoReply()
@@ -524,7 +546,8 @@ public class MockApp implements IMockApp, Runnable
 		
 		if (syncSend)
 		{
-			connection.syncSendToServer(envelopeObj);
+			JSONObject response = connection.syncSendToServer(envelopeObj);
+			this.onJSONCommand(response);
 		}
 		else
 		{
@@ -583,7 +606,7 @@ public class MockApp implements IMockApp, Runnable
 	@Override
 	public void disconnect()
 	{
-		connection.close();
+		connection.closeConnection();
 		//connection.onClose(0);
 	}
 	
@@ -680,7 +703,18 @@ public class MockApp implements IMockApp, Runnable
 	public void onJSONCommand(JSONObject obj)
 	{
 		lastReceivedCommand = obj;
-		logger.debug("MockApp <{}> received command: \n" + JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue), deviceSn);
+		lock.lock();
+		condition.signal();
+		lock.unlock();
+		
+		if (obj == null)
+		{
+			return;
+		}
+		else
+		{
+			logger.debug("MockApp <{}> received command: \n" + JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue), deviceSn);
+		}
 		
 		int intMessageId = 0;
 		JSONObject header = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
@@ -1043,7 +1077,7 @@ public class MockApp implements IMockApp, Runnable
 		businessStatus = status;
 		if (status == MockAppConsts.MockAppBusinessStatus.Ended)
 		{
-			connection.close();
+			connection.closeConnection();
 		}
 	}
 
@@ -1075,17 +1109,8 @@ public class MockApp implements IMockApp, Runnable
 		JSONObject envelopeObj = new JSONObject();
 		envelopeObj.put(JSONKey.JsonEnvelope, obj);
 		
-		String message = JSON.toJSONString(envelopeObj, SerializerFeature.WriteMapNullValue);
-		logger.debug("MockApp <{}> sends message: \n" + message, deviceSn);
-		
-		if (syncSend)
-		{
-			connection.syncSendToServer(jsonObject);
-		}
-		else
-		{
-			connection.asyncSendToServer(jsonObject);
-		}
-		
+		//String message = JSON.toJSONString(envelopeObj, SerializerFeature.WriteMapNullValue);
+		//logger.debug("MockApp <{}> sends message: \n" + message, deviceSn);
+		this.sendRawJSONMessage(envelopeObj, syncSend);
 	}
 }
