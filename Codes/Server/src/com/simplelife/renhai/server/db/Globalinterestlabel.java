@@ -92,7 +92,7 @@ public class Globalinterestlabel implements java.io.Serializable {
 		this.hotinterestlabelstatisticses = hotinterestlabelstatisticses;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "globalinterestlabel")
+	@OneToMany(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, mappedBy = "globalinterestlabel")
 	public Set<Interestlabelmap> getInterestlabelmaps() {
 		return this.interestlabelmaps;
 	}
