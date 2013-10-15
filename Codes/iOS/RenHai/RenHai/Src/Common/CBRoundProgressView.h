@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#define CIRCLE_ANIMATION_DISPLAY 0.25f
+
 @protocol CBRoundProgressViewDelegate <NSObject>
 
 - (void) progressStarted;

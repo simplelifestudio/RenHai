@@ -15,9 +15,9 @@
 #import "CommunicationModule.h"
 #import "UserDataModule.h"
 
-#define DELAY 0.35f
-#define ANIMATION_POP 0.35f
-#define ANIMATION_DISMISS 0.35
+#define DELAY CIRCLE_ANIMATION_DISPLAY
+#define ANIMATION_POP 0.2f
+#define ANIMATION_DISMISS 0.4f
 
 typedef enum
 {

@@ -16,7 +16,7 @@
 #import "UserDataModule.h"
 #import "CommunicationModule.h"
 
-#define INTERVAL_ENTERBUTTON_TRACK 0.1
+#define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
 #define INTERVAL_DATASYNC 5
 
 @interface HomeViewController_iPhone () <CBRoundProgressViewDelegate>
@@ -156,11 +156,11 @@
     [_enterButtonTimer fire];
 }
 
-static float progress = 0.1;
+static float progress = 0.0;
 -(void)_enterButtonTimerUpdated
 {
     [_enterButtonProgressView setProgress:progress animated:YES];
-    progress+=0.1;
+    progress+=INTERVAL_ENTERBUTTON_TRACK;
 }
 
 -(void)_enterButtonTimerFinished
@@ -283,7 +283,7 @@ static float progress = 0.1;
 {
     [self _enterButtonTimerFinished];
     
-    [self performSelector:@selector(_unlockViewController) withObject:self afterDelay:0.0];
+    [self performSelector:@selector(_unlockViewController) withObject:self afterDelay:0.25f];
 }
 
 @end

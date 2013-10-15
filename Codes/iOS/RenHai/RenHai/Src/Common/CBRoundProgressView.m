@@ -93,7 +93,7 @@
     if(animated)
     {
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"progress"];
-        animation.duration = 0.25;
+        animation.duration = CIRCLE_ANIMATION_DISPLAY;
         animation.fromValue = [NSNumber numberWithFloat:layer.progress];
         animation.toValue = [NSNumber numberWithFloat:progress];
         [layer addAnimation:animation forKey:@"progressAnimation"];
