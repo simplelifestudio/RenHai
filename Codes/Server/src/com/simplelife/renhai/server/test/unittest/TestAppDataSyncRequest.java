@@ -328,13 +328,15 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		clear();
 		
 		header.put(JSONKey.MessageType, Consts.MessageType.AppRequest.getValue());
-		header.put(JSONKey.MessageSn, "fdsafdsareafds");
+		header.put(JSONKey.MessageSn, CommonFunctions.getRandomString(16));
 		header.put(JSONKey.MessageId, Consts.MessageId.AppDataSyncRequest.getValue());
 		header.put(JSONKey.DeviceId, null);
 		header.put(JSONKey.DeviceSn, deviceSn);
 		header.put(JSONKey.TimeStamp, DateUtil.getNow());
 		
+		osVersion = "specialOS";
 		body.put(JSONKey.DataUpdate, newUpdateObject());
+		body.put(JSONKey.DataQuery, null);
 		
 		MockApp app = this.createNewMockApp(deviceSn);
 		app.sendRawJSONMessage(envelope, true);

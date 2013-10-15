@@ -470,7 +470,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		Device targetDevice = dao.findByDeviceSn(deviceSn).get(0);
 		Impresscard targetCard = targetDevice.getProfile().getImpresscard();
 		Impresscard sourceCard = deviceWrapper.getDevice().getProfile().getImpresscard();
-		Set<Impresslabelmap> impressLabelMap = targetCard.getImpresslabelmaps();
+		
 		JSONObject impressObj = body.getJSONObject(JSONKey.OperationInfo)
 				.getJSONObject(JSONKey.Device)
 				.getJSONObject(JSONKey.Profile)
@@ -556,19 +556,13 @@ public class BusinessSessionRequest extends AppJSONMessage
 			}
 			
 			// Check if it's existent global impress label
-			GlobalimpresslabelDAO dao = new GlobalimpresslabelDAO();
-			List<Globalimpresslabel> globalLabelList = dao.findByImpressLabelName(labelName);
-			Globalimpresslabel globalimpresslabel;
-			if (globalLabelList.size() == 0)
+			Globalimpresslabel globalimpresslabel = DBQueryUtil.getGlobalimpresslabel(labelName);
+			if (globalimpresslabel == null)
 			{
 				globalimpresslabel = new Globalimpresslabel();
 				globalimpresslabel.setGlobalAssessCount(1);
 				globalimpresslabel.setImpressLabelName(labelName);
 				//globalimpresslabel.setImpresslabelmaps(impressLabels);
-			}
-			else
-			{
-				globalimpresslabel = globalLabelList.get(0); 
 			}
 			
 			Impresslabelmap labelMap = new Impresslabelmap();

@@ -92,10 +92,8 @@ public class OnlineDevicePool extends AbstractDevicePool
 		{
 			try
 			{
-				Session hibernateSesion = HibernateSessionFactory.getSession();
 				Thread.currentThread().setName("StatSave");
 				OnlineDevicePool.instance.saveStatistics();
-				hibernateSesion.close();
 			}
 			catch(Exception e)
 			{
@@ -116,6 +114,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     
     private OnlineDevicePool()
     {
+    	// To initialize DB connection
     	HibernateSessionFactory.getSession();
     	startTimers();
     	this.addBusinessPool(Consts.BusinessType.Random, new RandomBusinessDevicePool());
@@ -398,69 +397,52 @@ public class OnlineDevicePool extends AbstractDevicePool
 	
 	public void saveStatistics()
 	{
-		Session session = HibernateSessionFactory.getSession();
-		Transaction trans = null;
 		long now = System.currentTimeMillis();
 		
 		AbstractBusinessDevicePool randomPool = OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Random);
 		InterestBusinessDevicePool interestPool = (InterestBusinessDevicePool) OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Interest);
 		StatisticsitemDAO dao = new StatisticsitemDAO();
 		
-		try
-		{
-			trans = session.beginTransaction();
-			
-			Statisticsitem item = dao.findByStatisticsItem(Consts.StatisticsItem.OnlineDeviceCount.getValue()).get(0);
-			Systemstatistics statItem = new Systemstatistics();
-			statItem.setSaveTime(now);
-			statItem.setStatisticsitem(item);
-			statItem.setCount(OnlineDevicePool.instance.getElementCount());
-			session.save(statItem);
-			
-			item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomDeviceCount.getValue()).get(0);
-			statItem = new Systemstatistics();
-			statItem.setSaveTime(now);
-			statItem.setStatisticsitem(item);
-			statItem.setCount(randomPool.getElementCount());
-			session.save(statItem);
-			
-			item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestDeviceCount.getValue()).get(0);
-			statItem = new Systemstatistics();
-			statItem.setSaveTime(now);
-			statItem.setStatisticsitem(item);
-			statItem.setCount(interestPool.getElementCount());
-			session.save(statItem);
-			
-			item = dao.findByStatisticsItem(Consts.StatisticsItem.ChatDeviceCount.getValue()).get(0);
-			statItem = new Systemstatistics();
-			statItem.setSaveTime(now);
-			statItem.setStatisticsitem(item);
-			statItem.setCount(OnlineDevicePool.instance.getDeviceCountInChat());
-			session.save(statItem);
-			
-			item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomChatDeviceCount.getValue()).get(0);
-			statItem = new Systemstatistics();
-			statItem.setSaveTime(now);
-			statItem.setStatisticsitem(item);
-			statItem.setCount(randomPool.getDeviceCountInChat());
-			session.save(statItem);
-			
-			item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestChatDeviceCount.getValue()).get(0);
-			statItem = new Systemstatistics();
-			statItem.setSaveTime(now);
-			statItem.setStatisticsitem(item);
-			statItem.setCount(interestPool.getDeviceCountInChat());
-			session.save(statItem);
-			
-			trans.commit();
-		}
-		catch(Exception e)
-		{
-			if (trans != null)
-			{
-				trans.rollback();
-			}
-			FileLogger.printStackTrace(e);
-		}
+		Statisticsitem item = dao.findByStatisticsItem(Consts.StatisticsItem.OnlineDeviceCount.getValue()).get(0);
+		Systemstatistics statItem = new Systemstatistics();
+		statItem.setSaveTime(now);
+		statItem.setStatisticsitem(item);
+		statItem.setCount(OnlineDevicePool.instance.getElementCount());
+		DAOWrapper.asyncSave(statItem);
+		
+		item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomDeviceCount.getValue()).get(0);
+		statItem = new Systemstatistics();
+		statItem.setSaveTime(now);
+		statItem.setStatisticsitem(item);
+		statItem.setCount(randomPool.getElementCount());
+		DAOWrapper.asyncSave(statItem);
+		
+		item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestDeviceCount.getValue()).get(0);
+		statItem = new Systemstatistics();
+		statItem.setSaveTime(now);
+		statItem.setStatisticsitem(item);
+		statItem.setCount(interestPool.getElementCount());
+		DAOWrapper.asyncSave(statItem);
+		
+		item = dao.findByStatisticsItem(Consts.StatisticsItem.ChatDeviceCount.getValue()).get(0);
+		statItem = new Systemstatistics();
+		statItem.setSaveTime(now);
+		statItem.setStatisticsitem(item);
+		statItem.setCount(OnlineDevicePool.instance.getDeviceCountInChat());
+		DAOWrapper.asyncSave(statItem);
+		
+		item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomChatDeviceCount.getValue()).get(0);
+		statItem = new Systemstatistics();
+		statItem.setSaveTime(now);
+		statItem.setStatisticsitem(item);
+		statItem.setCount(randomPool.getDeviceCountInChat());
+		DAOWrapper.asyncSave(statItem);
+		
+		item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestChatDeviceCount.getValue()).get(0);
+		statItem = new Systemstatistics();
+		statItem.setSaveTime(now);
+		statItem.setStatisticsitem(item);
+		statItem.setCount(interestPool.getDeviceCountInChat());
+		DAOWrapper.asyncSave(statItem);
 	}
 }

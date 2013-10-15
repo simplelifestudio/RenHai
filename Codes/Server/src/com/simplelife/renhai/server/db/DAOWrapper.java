@@ -15,6 +15,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -24,42 +28,139 @@ import org.slf4j.Logger;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 
 
 /** */
 public class DAOWrapper
 {
-	private static class FlushTask extends TimerTask
+	private static class FlushTimer extends TimerTask
 	{
+		FlushTask flushTask;
+		
+		public FlushTimer(FlushTask flushTask)
+		{
+			this.flushTask = flushTask; 
+		}
+		
 		@Override
 		public void run()
 		{
-			try
-			{
-				Thread.currentThread().setName("DBFlush");
-				logger.debug("Start to flush DB cache");
-				DAOWrapper.flushToDB();
-				logger.debug("Finished flush DB cache");
-			}
-			catch(Exception e)
-			{
-				FileLogger.printStackTrace(e);
-			}
+			flushTask.getLock().lock();
+	    	flushTask.signal();
+	    	flushTask.getLock().unlock();
 		}
 	}
-	private static Logger logger = BusinessModule.instance.getLogger();
-    /** */
-    protected static LinkedList<Object> linkToBeSaved = new LinkedList<Object>();
+	
+	private static class FlushTask extends Thread
+	{
+		private final ConcurrentLinkedQueue<Object> linkToBeSaved;
+		private final Lock lock = new ReentrantLock();
+		private final Condition condition = lock.newCondition();
+		private boolean continueFlag = true;
+		
+		public FlushTask(ConcurrentLinkedQueue<Object> linkToBeSaved)
+		{
+			this.linkToBeSaved = linkToBeSaved;
+		}
+		
+		public Lock getLock()
+	    {
+	    	return lock;
+	    }
+		
+		public void signal()
+	    {
+	    	condition.signal();
+	    }
+		
+		@Override
+		public void run()
+		{
+			Thread.currentThread().setName("DBCacheTask");
+			Session session = HibernateSessionFactory.getSession();
+			if (session == null)
+			{
+				logger.error("Fatal error: null hibernate session, check DB parameters");
+				return;
+			}
+			
+			Object obj = null;
+			while (continueFlag)
+			{
+				if (linkToBeSaved.size() == 0)
+				{
+					try
+					{
+						lock.lock();
+						if (session.isOpen())
+						{
+							session.close();
+						}
+						logger.debug("Await due to no data in cache queue");
+						condition.await();
+						
+						if (linkToBeSaved.size() > 0)
+						{
+							logger.debug("Resume saving data in cache queue, cache queue size: ", linkToBeSaved.size());
+							session = HibernateSessionFactory.getSession();
+						}
+					}
+					catch (InterruptedException e)
+					{
+						FileLogger.printStackTrace(e);
+					}
+					finally
+					{
+						lock.unlock();
+					}
+				}
+				
+				if (!session.isOpen())
+				{
+					continue;
+				}
+				
+				Transaction t = null;
+				try
+				{
+					t =  session.beginTransaction();
+					Object mergedObj = session.merge(linkToBeSaved.remove());
+					if (mergedObj != null)
+					{
+						session.save(mergedObj);
+					}
+					else
+					{
+						session.save(obj);
+					}
+					t.commit();
+				}
+				catch(Exception e)
+				{
+					FileLogger.printStackTrace(e);
+					if (t != null)
+					{
+						t.rollback();
+					}
+				}
+			}
+		}
+		
+	}
+	
+	protected static Logger logger = BusinessModule.instance.getLogger();
+    protected static ConcurrentLinkedQueue<Object> linkToBeSaved = new ConcurrentLinkedQueue<Object>();
     protected static int objectCountInCache = 0;
-    
-    /** */
     protected static Timer timer = new Timer();
+    protected static FlushTask flushTask = new FlushTask(linkToBeSaved);
     
     
     public static void startTimers()
     {
-    	//timer.scheduleAtFixedRate(new FlushTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.FlushCacheToDB);
+    	flushTask.start();
+    	timer.scheduleAtFixedRate(new FlushTimer(flushTask), DateUtil.getNowDate(), GlobalSetting.TimeOut.FlushCacheToDB);
     }
     
     public static void stopTimers()
@@ -67,67 +168,29 @@ public class DAOWrapper
     	timer.cancel();
     }
     
+    public static void signalForFlush()
+    {
+    	flushTask.getLock().lock();
+    	flushTask.signal();
+    	flushTask.getLock().unlock();
+    }
+    
     /**
      * Save object in cache or to DB 
      * @param obj: object to be saved
      */
-    public static void cache(Object obj)
+    public static void asyncSave(Object obj)
     {
-    	if (GlobalSetting.DBSetting.CacheEnabled)
+    	if (linkToBeSaved.contains(obj))
     	{
-    		/*
-    		synchronized(linkToBeSaved)
-        	{
-	    		if (linkToBeSaved.size() >= GlobalSetting.DBSetting.MaxRecordCountForDiscard)
-	    		{
-	    			logger.error("The first records was discarded due to DB module is unavailable and cache is full!!!");
-	        		linkToBeSaved.removeFirst();
-	    		}
-    		
-        		linkToBeSaved.add(obj);
-        	}
-        	*/
-        	
-    		try
-    		{
-	    		Session session = HibernateSessionFactory.getSession();
-	    		session.saveOrUpdate(session.merge(obj));
-	    		objectCountInCache++;
-    		}
-    		catch(Exception e)
-    		{
-    			DBModule.instance.getLogger().error(e.getMessage());
-    			FileLogger.printStackTrace(e);
-    		}
-    		
-    		if (objectCountInCache >= GlobalSetting.DBSetting.MaxRecordCountForFlush)
-    		{
-    			flushToDB();
-    		}
+    		return;
     	}
-    	else
-    	{
-    		Transaction t = null;
-    		Session session = HibernateSessionFactory.getSession();
-    		
-    		try
-    		{
-    			t = session.beginTransaction();
-    			Object mergedObj = session.merge(obj);
-	    		session.saveOrUpdate(mergedObj);
-	        	session.flush();
-	        	t.commit();
-    		}
-    		catch(Exception e)
-    		{
-    			if (t != null)
-    			{
-    				t.rollback();
-    			}
-    			
-    			FileLogger.printStackTrace(e);
-    		}
-    	}
+    	
+    	linkToBeSaved.add(obj);
+    	if (linkToBeSaved.size() >= GlobalSetting.DBSetting.MaxRecordCountForFlush)
+		{
+    		signalForFlush();
+		}
     }
     
     /**
@@ -320,40 +383,6 @@ public class DAOWrapper
 	 * */
     public static void flushToDB()
     {
-    	if (objectCountInCache == 0)
-    	{
-    		if (!GlobalSetting.DBSetting.CacheEnabled)
-        	{
-        		DAOWrapper.stopTimers();
-        	}
-    		return;
-    	}
-    	
-    	if (!DBModule.instance.isAvailable())
-    	{
-    		return;
-    	}
-    	
-    	Transaction t = null;
-    	Session session = HibernateSessionFactory.getSession();
-    	try
-    	{
-    		//TODO 这个时候如果曾经获取过多个session，怎么办？考虑保存所有获取过的session？
-    		t = session.beginTransaction();		// Commit会隐含调用flush
-    		session.clear();
-    		t.commit();
-        }
-    	catch(Exception e)
-    	{
-    		if (t != null)
-    		{
-    			t.rollback();
-    		}
-    		FileLogger.printStackTrace(e);
-    	}
-    	finally
-    	{
-    		session.close();
-    	}
+    	signalForFlush();
     }
 }

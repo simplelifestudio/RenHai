@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.util.DateUtil;
 
 /**
  * Servlet implementation class SeedsWebSocketServlet
@@ -49,7 +50,7 @@ public class RenHaiWebSocketServlet extends WebSocketServlet {
     	Logger logger = WebSocketModule.instance.getLogger();
     	logger.debug("New connection received.");
     	
-    	Thread.currentThread().setName("WebSocket" + (System.currentTimeMillis() % 1000));
+    	Thread.currentThread().setName("WebSocket" + DateUtil.getCurrentMiliseconds());
     	
         WebSocketConnection msgInbound = new WebSocketConnection(arg1.getRemoteAddr() + "_" + arg1.getRemotePort());
         OnlineDevicePool pool = OnlineDevicePool.instance;

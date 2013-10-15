@@ -452,9 +452,38 @@ public class MockApp implements IMockApp, Runnable
     	businessStatus = MockAppConsts.MockAppBusinessStatus.Init;
     	this.useRealSocket = realSocket;
     	this.connect(realSocket);
-    	if (behaviorMode != MockAppConsts.MockAppBehaviorMode.Slave)
+    	
+    	int count = 0;
+    	while (count < 5)
     	{
-    		this.prepareSending(null);
+    		if (!this.connection.isOpen())
+    		{
+    			try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+    		}
+    		else
+    		{
+    			break;
+    		}
+    		count++;
+    	}
+    	
+    	if (this.connection.isOpen())
+    	{
+    		if (behaviorMode != MockAppConsts.MockAppBehaviorMode.Slave)
+        	{
+        		this.prepareSending(null);
+        	}
+    	}
+    	else
+    	{
+    		logger.error("Fatal error that failed to setup websocket connection with server");
     	}
 	}
 	

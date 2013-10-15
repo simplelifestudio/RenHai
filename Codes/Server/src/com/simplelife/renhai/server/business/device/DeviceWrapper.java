@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.LoggerFactory;
@@ -403,7 +406,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     public void syncSendMessage(ServerJSONMessage message)
     {
     	SyncSendMessageTask task = new SyncSendMessageTask(this, message);
-    	task.setName("SyncSendMsg" + (System.currentTimeMillis()%1000));
+    	task.setName("SyncSendMsg" + DateUtil.getCurrentMiliseconds());
     	task.start();
     }
 
@@ -654,25 +657,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		Profile profile = device.getProfile();
 		Impresscard card = profile.getImpresscard();
 		
-		Session session = HibernateSessionFactory.getSession();
-		Transaction t = null;
-		try
+		synchronized (card)
 		{
-			t = session.beginTransaction();
-			synchronized (card)
-			{
-				card.setChatLossCount(card.getChatLossCount() + 1);
-			}
-			t.commit();
-		}
-		catch(Exception e)
-		{
-			logger.error("Error occurred when saving chatTotalLoss: {}", e.getMessage());
-			if (t != null)
-			{
-				t.rollback();
-			}
-			FileLogger.printStackTrace(e);
+			card.setChatLossCount(card.getChatLossCount() + 1);
 		}
 	}
 	
@@ -683,25 +670,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		Profile profile = device.getProfile();
 		Impresscard card = profile.getImpresscard();
 		
-		Session session = HibernateSessionFactory.getSession();
-		Transaction t = null;
-		try
+		synchronized (card)
 		{
-			t  = session.beginTransaction();
-			synchronized (card)
-			{
-				card.setChatTotalCount(card.getChatTotalCount() + 1);
-			}
-			t.commit();
-		}
-		catch(Exception e)
-		{
-			logger.error("Error occurred when saving chatTotalCount: {}", e.getMessage());
-			if (t != null)
-			{
-				t.rollback();
-			}
-			FileLogger.printStackTrace(e);
+			card.setChatTotalCount(card.getChatTotalCount() + 1);
 		}
 	}
 
@@ -712,24 +683,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		Profile profile = device.getProfile();
 		Impresscard card = profile.getImpresscard();
 		
-		Session session = HibernateSessionFactory.getSession();
-		Transaction t = null;
-		try
+		synchronized (card)
 		{
-			t =  session.beginTransaction();
-			synchronized (card)
-			{
-				card.setChatTotalDuration(card.getChatTotalDuration() + duration);
-			}
-			t.commit();
-		}
-		catch(Exception e)
-		{
-			if (t != null)
-			{
-				t.rollback();
-			}
-			FileLogger.printStackTrace(e);
+			card.setChatTotalDuration(card.getChatTotalDuration() + duration);
 		}
 	}
 

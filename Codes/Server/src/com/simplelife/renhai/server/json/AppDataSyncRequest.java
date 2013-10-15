@@ -518,54 +518,16 @@ public class AppDataSyncRequest extends AppJSONMessage
 			}
 		}
 		
-		
-		// Check if profile is banned
 		Device device = deviceWrapper.getDevice();
 		Profile profile = device.getProfile();
-		String strServiceStatus = profile.getServiceStatus();
-		Consts.ServiceStatus status = Consts.ServiceStatus.parseFromStringValue(strServiceStatus);
-		if (status == Consts.ServiceStatus.Banned)
+		
+		// Check if profile is banned
+		if (!checkBanDate(profile))
 		{
-			long unbanDate = profile.getUnbanDate();
-			if (unbanDate <= System.currentTimeMillis())
-			{
-				Transaction t = null;
-				
-				try
-				{
-					t= hibernateSesion.beginTransaction();
-				
-					// Recover to normal
-					profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
-					profile.setUnbanDate(null);
-					
-					t.commit();
-					deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
-				}
-				catch (Exception e)
-				{
-					if (t != null)
-					{
-						t.rollback();
-					}
-					FileLogger.printStackTrace(e);
-				}
-			}
-			else
-			{
-				OnlineDevicePool.instance.IdentifyBannedDevice(deviceWrapper);
-				this.setErrorCode(Consts.GlobalErrorCode.NoPermission_1102);
-				this.setErrorDescription("Device was banned till "
-						+ DateUtil.getDateStringByLongValue(unbanDate));
-				responseError();
-				return;
-			}
-		}
-		else
-		{
-			deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
+			return;
 		}
 		
+		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.AppDataSyncResponse);
 		if (profile.getServiceStatus().equals(Consts.ServiceStatus.Normal.name()))
@@ -574,10 +536,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 			if (body.containsKey(JSONKey.DataUpdate))
 			{
 				update(body.getJSONObject(JSONKey.DataUpdate), response.getBody());
-				DBModule.instance.cache(this.deviceWrapper.getDevice());
-				
-				// Set deviceId again to fill actual id in DB
-				response.addToHeader(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
 			}
 		}
 		
@@ -591,10 +549,40 @@ public class AppDataSyncRequest extends AppJSONMessage
 		{
 			query(body.getJSONObject(JSONKey.DataQuery), response.getBody());
 		}
+		
+		// Set deviceId again to fill actual id in DB
+		response.addToHeader(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
+		
 		DbLogger.saveSystemLog(Consts.OperationCode.AppDataSyncResponse_1007
     			, Consts.SystemModule.business
     			, header.getString(JSONKey.DeviceSn));
 		response.asyncResponse();
+	}
+	
+	private boolean checkBanDate(Profile profile)
+	{
+		String strServiceStatus = profile.getServiceStatus();
+		Consts.ServiceStatus status = Consts.ServiceStatus.parseFromStringValue(strServiceStatus);
+		if (status == Consts.ServiceStatus.Banned)
+		{
+			long unbanDate = profile.getUnbanDate();
+			if (unbanDate <= System.currentTimeMillis())
+			{
+				// Recover to normal
+				profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
+				profile.setUnbanDate(null);
+			}
+			else
+			{
+				OnlineDevicePool.instance.IdentifyBannedDevice(deviceWrapper);
+				this.setErrorCode(Consts.GlobalErrorCode.NoPermission_1102);
+				this.setErrorDescription("Device was banned till "
+						+ DateUtil.getDateStringByLongValue(unbanDate));
+				responseError();
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	private void appendQueryServiceStatus()
@@ -655,8 +643,11 @@ public class AppDataSyncRequest extends AppJSONMessage
 	
 	private void query(JSONObject queryObj, JSONObject response)
 	{
-		if (queryObj.isEmpty())
+		if (queryObj == null || queryObj.isEmpty())
 		{
+			JSONObject queryResponse = new JSONObject();
+			response.put(JSONKey.DataQuery, queryResponse);
+			queryResponse.put(JSONKey.Device, deviceWrapper.toJSONObject_Device());
 			return;
 		}
 		
@@ -668,7 +659,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 		JSONObject deviceObj = queryObj.getJSONObject(JSONKey.Device);
 		JSONObject queryResponse = new JSONObject();
 		response.put(JSONKey.DataQuery, queryResponse);
-		
 		queryDevice(deviceObj, queryResponse);
 	}
 	
@@ -953,18 +943,33 @@ public class AppDataSyncRequest extends AppJSONMessage
 	
 	private void update(JSONObject updateObj, JSONObject response)
 	{
-		if (updateObj == null)
+		if (updateObj != null)
 		{
-			return;
+			JSONObject dataUpdateResponse = new JSONObject();
+			response.put(JSONKey.DataUpdate, dataUpdateResponse);
+			
+			JSONObject deviceObj = updateObj.getJSONObject(JSONKey.Device);
+			updateDevice(deviceObj, dataUpdateResponse);
+			
+			Profile profile = deviceWrapper.getDevice().getProfile();
+			profile.setActive(Consts.YesNo.Yes.name());
 		}
-		JSONObject dataUpdateResponse = new JSONObject();
-		response.put(JSONKey.DataUpdate, dataUpdateResponse);
 		
-		JSONObject deviceObj = updateObj.getJSONObject(JSONKey.Device);
-		updateDevice(deviceObj, dataUpdateResponse);
-		
-		Profile profile = deviceWrapper.getDevice().getProfile();
-		profile.setActive(Consts.YesNo.Yes.name());
+		Transaction t = null;
+		try
+		{
+			t= hibernateSesion.beginTransaction();
+			hibernateSesion.save(deviceWrapper.getDevice());
+			t.commit();
+		}
+		catch (Exception e)
+		{
+			if (t != null)
+			{
+				t.rollback();
+			}
+			FileLogger.printStackTrace(e);
+		}
 	}
 	
 	private void updateDevice(JSONObject deviceObj, JSONObject dataUpdateResponse)
@@ -1030,9 +1035,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 	
 	private void newDevice(String deviceSn)
 	{
-		GlobalimpresslabelDAO dao = new GlobalimpresslabelDAO();
-		List<Globalimpresslabel> globalLabelList;
-		
 		// Create new impress card
 		Impresscard impressCard = new Impresscard();
 		Interestcard interestCard = new Interestcard();
@@ -1046,17 +1048,12 @@ public class AppDataSyncRequest extends AppJSONMessage
 			}
 			
 			String strValue = label.getValue();
-			Globalimpresslabel impressLabel;
-			globalLabelList = dao.findByImpressLabelName(strValue);
-			if (globalLabelList.size() == 0)
+			Globalimpresslabel impressLabel = DBQueryUtil.getGlobalimpresslabel(strValue);
+			if (impressLabel == null)
 			{
 				impressLabel = new Globalimpresslabel();
 				impressLabel.setGlobalAssessCount(0);
 				impressLabel.setImpressLabelName(strValue);
-			}
-			else
-			{
-				impressLabel = globalLabelList.get(0);
 			}
 			
 			Impresslabelmap labelMap = new Impresslabelmap();
@@ -1121,8 +1118,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 		JSONObject responseObj;
 		String tempStr;
 		
-		GlobalinterestlabelDAO globalInterestDAO = new GlobalinterestlabelDAO();
-		List<Globalinterestlabel> tmpInterestLabelList;
 		Globalinterestlabel globalInterest;
 		
 		Interestlabelmap interestLabelMap;
@@ -1167,19 +1162,17 @@ public class AppDataSyncRequest extends AppJSONMessage
 			}
 			
 			interestLabelMap = new Interestlabelmap();
-			tmpInterestLabelList = globalInterestDAO.findByInterestLabelName(tempStr);
+			
+			globalInterest = DBQueryUtil.getGlobalinterestlabel(tempStr);
 			
 			// Check if it's new interest label for this device but existent global interest label
-			if (tmpInterestLabelList.size() == 0)
+			if (globalInterest == null)
 			{
 				globalInterest = new Globalinterestlabel();
 				globalInterest.setInterestLabelName(tempStr);
 				globalInterest.setGlobalMatchCount(0);
 			}
-			else
-			{
-				globalInterest = tmpInterestLabelList.get(0);
-			}
+			
 			interestLabelMap.setMatchCount(0);
 			interestLabelMap.setValidFlag(Consts.ValidInvalid.Valid.name());
 			interestLabelMap.setGlobalinterestlabel(globalInterest);

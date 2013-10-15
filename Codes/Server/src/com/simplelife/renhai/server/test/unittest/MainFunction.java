@@ -29,14 +29,17 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceDAO;
+import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.db.Operationcode;
 import com.simplelife.renhai.server.db.OperationcodeDAO;
+import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.db.Statisticsitem;
 import com.simplelife.renhai.server.db.StatisticsitemDAO;
 import com.simplelife.renhai.server.db.Systemmodule;
@@ -443,11 +446,16 @@ public class MainFunction extends AbstractTestCase
 	}
 	
 	@Test
-	public void testMockAppBehaviorMode() throws InterruptedException
+	public void testBehaviorMode() throws InterruptedException
 	{
-		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit", false);
+		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit", true);
 	
-		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndQuit", false);
+		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndQuit", true);
+		
+		while (!app1.getConnection().isOpen() || !app2.getConnection().isOpen())
+		{
+			Thread.sleep(1000);
+		}
 		
 		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended
 				|| app2.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
@@ -493,5 +501,27 @@ public class MainFunction extends AbstractTestCase
 				deviceMap.remove("Key4");
 			}
 		}
+	}
+	
+	@Test
+	public void testDBCache()
+	{
+		System.out.print(OnlineDevicePool.instance.getCapacity());
+		
+		DeviceDAO dao = new DeviceDAO();
+		Device device = dao.findByDeviceSn(demoDeviceSn).get(0);
+		Devicecard card = device.getDevicecard();
+		card.setAppVersion("30.0");
+		
+		DAOWrapper.asyncSave(device);
+		//DAOWrapper.flushToDB();
+		
+		Profile profile = device.getProfile();
+		profile.setActive("No");
+		
+		DAOWrapper.asyncSave(profile);
+		DAOWrapper.flushToDB();
+		
+		System.out.print(OnlineDevicePool.instance.getCapacity());
 	}
 }

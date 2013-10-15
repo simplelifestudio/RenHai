@@ -34,6 +34,7 @@ import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.json.TimeoutRequest;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -150,7 +151,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onTextMessage(String message)
     {
-    	Thread.currentThread().setName("WebSocket");
+    	Thread.currentThread().setName("WebSocket" + DateUtil.getCurrentMiliseconds());
     	
     	if (connectionOwner == null)
 		{
@@ -368,11 +369,12 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	}
 		catch (InterruptedException e)
 		{
-			logger.error(e.getMessage());
+			FileLogger.printStackTrace(e);
 			exceptionOcurred = true;
 		}
 		catch (IOException e)
 		{
+			FileLogger.printStackTrace(e);
 			exceptionOcurred = true;
 		}
     	finally

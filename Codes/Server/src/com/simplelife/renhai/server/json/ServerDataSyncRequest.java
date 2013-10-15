@@ -17,6 +17,7 @@ import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.HotLabel;
 import com.simplelife.renhai.server.business.pool.InterestBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.db.GlobalinterestlabelDAO;
 import com.simplelife.renhai.server.log.DbLogger;
@@ -208,10 +209,9 @@ public class ServerDataSyncRequest extends AppJSONMessage
 			
 			JSONObject tempLabelObj;
 			Globalinterestlabel globalLabel;
-			GlobalinterestlabelDAO globalLabelDao = new GlobalinterestlabelDAO();
 			for (HotLabel label : labels)
 			{
-				globalLabel = globalLabelDao.findByInterestLabelName(label.getLabelName()).get(0);
+				globalLabel = DBQueryUtil.getGlobalinterestlabel(label.getLabelName());
 				tempLabelObj = new JSONObject();
 				tempLabelObj.put(JSONKey.GlobalInterestLabelId, globalLabel.getGlobalInterestLabelId());
 				tempLabelObj.put(JSONKey.InterestLabelName, label.getLabelName());
