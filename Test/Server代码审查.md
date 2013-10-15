@@ -19,5 +19,5 @@
 9. OnlineDevicePool.java:92/95，private class StatSaveTask extends TimerTask，同上。
 10. OnlineDevicePool.java:116，HibernateSessionFactory.getSession();这句代码放在这里的意义是什么？
 11. OnlineDevicePool.java:310，缺少DeviceWrapper的null判断
-12. RandomBusinessScheduler.java:58, key = (String) keyArray[random.nextInt(keyArray.length)];如果random这个随机产生的数字高于keyArray数据的长度，就会出错。
-13. 
+12. BusinessSession.java:59，private List<IDeviceWrapper> deviceList = new ArrayList<IDeviceWrapper>(); 这个类中多次使用synchronized访问这个成员变量，因此需要考虑换成线程安全的集合类。解决方法1：Collections.synchronizedList(deviceList)；解决方法2：CopyOnWriteArrayList类。需要进一步分析两个解决方法之间的差异和优劣。参考：http://blog.csdn.net/wind5shy/article/details/5396887。最后，需要看看Java并发容器种类全介绍：http://blog.sina.com.cn/s/blog_56fd58ab0100pl7g.html，可能对兴趣设备池的调度实现有帮助。
+13. BusinessSessionPool.java:31，private List<IBusinessSession> sessionList = new ArrayList<IBusinessSession>();此ArrayList在访问时同样存在多线程安全隐患，比如public IBusinessSession getBusinessSession()这里。
