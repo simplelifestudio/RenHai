@@ -595,6 +595,31 @@ static BOOL s_messageEncrypted;
     return businessSessionNotificationResponseMessage;
 }
 
++(RHMessage*) newBusinessSessionNotificationResponseMessage:(RHMessage*) businessSessionNotificationMessage device:(RHDevice*) device
+{
+    NSAssert(nil != device, @"Device can not be null!");
+    
+    RHMessage* response = nil;
+    
+    if (nil != businessSessionNotificationMessage)
+    {
+        NSDictionary* header = businessSessionNotificationMessage.header;
+        NSString* messageSn = [header objectForKey:MESSAGE_KEY_MESSAGESN];
+        
+        header = [RHMessage constructMessageHeader:MessageType_AppResponse messageId:MessageId_BusinessSessionNotificationResponse messageSn:messageSn deviceId:device.deviceId deviceSn:device.deviceSn];
+        
+        NSDictionary* body = businessSessionNotificationMessage.body;
+        
+        BusinessSessionOperationValue operationValue = BusinessSessionOperationValue_Success;
+        NSNumber* oOperationValue = [NSNumber numberWithInt:operationValue];
+        [body setValue:oOperationValue forKey:MESSAGE_KEY_OPERATIONVALUE];
+        
+        response = [RHMessage constructWithMessageHeader:header messageBody:body enveloped:YES];
+    }
+    
+    return response;
+}
+
 +(BOOL) isServerTimeoutResponseMessage:(RHMessage*) message
 {
     BOOL flag = NO;

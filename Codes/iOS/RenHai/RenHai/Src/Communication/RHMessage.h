@@ -257,6 +257,8 @@ ServerDataSyncRequestType;
 +(RHMessage*) newBusinessSessionRequestMessage:(NSString*) businessSessionId businessType:(RHBusinessType) businessType operationType:(BusinessSessionRequestType) operationType device:(RHDevice*) device info:(NSDictionary*) info;
 +(RHMessage*) newBusinessSessionNotificationResponseMessage:(NSString*) businessSessionId businessType:(RHBusinessType) businessType operationType:(BusinessSessionNotificationType) operationType operationValue:(BusinessSessionOperationValue) operationValue device:(RHDevice*) device info:(NSDictionary*) info;
 
++(RHMessage*) newBusinessSessionNotificationResponseMessage:(RHMessage*) businessSessionNotificationMessage device:(RHDevice*) device;
+
 +(BOOL) isServerTimeoutResponseMessage:(RHMessage*) message;
 +(BOOL) isServerErrorResponseMessage:(RHMessage*) message;
 
