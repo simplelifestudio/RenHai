@@ -13,6 +13,7 @@
 #import "CBHUDAgent.h"
 #import "CBUIUtils.h"
 #import "UIViewController+CBUIViewControlerExtends.h"
+#import "UINavigationController+CBNavigationControllerExtends.h"
 #import "UIFont+FlatUI.h"
 
 #import "GUIStyle.h"
@@ -20,7 +21,6 @@
 #import "RHTableViewLabelCell_iPhone.h"
 
 #import "CommunicationModule.h"
-
 
 @interface GUIModule()
 {
@@ -176,6 +176,8 @@ SINGLETON(GUIModule)
     _chatImpressViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATIMPRESS_IPHONE];
     
     [self _assembleMainViewController];
+    
+    [self _assembleChatWizardController];
 }
 
 -(void) _assembleMainViewController
@@ -185,6 +187,20 @@ SINGLETON(GUIModule)
                               PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
                               };
     _mainViewController = [MainViewController_iPhone revealControllerWithFrontViewController:_navigationController leftViewController:_leftbarViewController options:options];
+}
+
+-(void) _assembleChatWizardController
+{
+    _chatWizardController.modalPresentationStyle = UIModalPresentationFormSheet;
+    _chatWizardController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    if ([_chatWizardController containsViewController:_chatWaitViewController])
+    {
+        [_chatWizardController popToViewController:_chatWaitViewController animated:YES];
+    }
+    else
+    {
+        [_chatWizardController pushViewController:_chatWaitViewController animated:YES];
+    }
 }
 
 -(void) _registerNotifications
@@ -204,9 +220,10 @@ SINGLETON(GUIModule)
         NSString* notificationName = notification.name;
         if ([notificationName isEqualToString:NOTIFICATION_ID_RHSERVERDISCONNECTED])
         {
-            if ([_navigationController isVisible])
+            UIViewController* rootVC = [CBUIUtils getRootController];
+            if ([rootVC isVisible])
             {
-                [_connectViewController popConnectView:_mainViewController animated:YES];   
+                [_connectViewController popConnectView:rootVC animated:YES];                
             }
         }
     }

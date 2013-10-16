@@ -10,4 +10,7 @@
 
 @interface MainViewController_iPhone : PKRevealController
 
+-(void) switchToMainScene;
+-(void) switchToChatScene;
+
 @end

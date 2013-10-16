@@ -16,7 +16,7 @@
 #import "UserDataModule.h"
 
 #define DELAY CIRCLE_ANIMATION_DISPLAY
-#define ANIMATION_POP 0.2f
+#define ANIMATION_POP 0.4f
 #define ANIMATION_DISMISS 0.4f
 
 typedef enum
@@ -121,7 +121,9 @@ ConnectStatus;
 {
     if (!_isViewControllerVisible)
     {
-        presentingViewController = (nil != presentingViewController) ? presentingViewController : [CBUIUtils getKeyWindow].rootViewController;
+        UIViewController* rootVC = [CBUIUtils getRootController];
+        
+        presentingViewController = (nil != presentingViewController) ? presentingViewController : rootVC;
         
         __block CALayer* keyLayer = [UIApplication sharedApplication].keyWindow.layer;
         
@@ -136,6 +138,7 @@ ConnectStatus;
         }
         
         [presentingViewController presentViewController:self animated:NO completion:^(){
+            
         }];
     }
 }
@@ -145,6 +148,9 @@ ConnectStatus;
     dispatch_async(dispatch_get_main_queue(), ^(){
         if (_isViewControllerVisible)
         {
+            UIViewController* rootVC = [CBUIUtils getRootController];
+            MainViewController_iPhone* mainVC = _guiModule.mainViewController;
+            
             [self _clockCancel];
             
             __block CALayer* keyLayer = [UIApplication sharedApplication].keyWindow.layer;
@@ -160,24 +166,15 @@ ConnectStatus;
             }
             
             [self dismissViewControllerAnimated:NO completion:^(){
-                [_guiModule.mainViewController resignPresentationModeEntirely:YES animated:NO completion:nil];
+//                [mainVC resignPresentationModeEntirely:YES animated:NO completion:nil];
             }];
             
-            RHNavigationController* navigationVC = _guiModule.navigationController;
-            HomeViewController_iPhone* homeVC = _guiModule.homeViewController;
-            UIViewController* topVC = navigationVC.topViewController;
-            if (topVC != homeVC)
+            if (rootVC != mainVC)
             {
-                if ([navigationVC containsViewController:homeVC])
-                {
-                    [navigationVC popToViewController:homeVC animated:NO];
-                }
-                else
-                {
-                    [navigationVC pushViewController:homeVC animated:NO];
-                }       
+                [CBUIUtils setRootController:mainVC];
             }
-            
+            [mainVC switchToMainScene];
+
             [self _resetInstance];
         }
     });

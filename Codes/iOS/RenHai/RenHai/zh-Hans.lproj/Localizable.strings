@@ -18,12 +18,18 @@
 "Communication_WiFiConnected" = "WiFi已连接";
 "Communication_3G/GPRSConnected" = "3G/GPRS已连接";
 
-"LeftBar_Home" = "主屏";
+"LeftBar_Home" = "人海";
 "LeftBar_Device" = "设备";
 "LeftBar_Impress" = "印象";
 "LeftBar_Interest" = "兴趣";
 "LeftBar_Config" = "配置";
 "LeftBar_Help" = "帮助";
+
+"Home_OnlineCount" = "在线人数";
+"Home_ChatCount" = "聊天人数";
+"Home_PressToEnterPool" = "点击进入";
+"Home_IsEnteringPool" = "正在进入...";
+"Home_EnterPoolFailed" = "进入失败";
 
 "Device_DeviceModel" = "设备类型";
 "Device_OSVersion" = "系统平台";
