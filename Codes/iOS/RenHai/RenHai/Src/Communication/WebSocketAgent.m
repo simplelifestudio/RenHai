@@ -19,8 +19,9 @@
 
 #define PING_TEXT @"#####RenHai-App-Ping#####"
 #define PONG_LOG 0
-#define PING_ACTIVATE 0
+#define PING_ACTIVATE 1
 #define MESSAGE_LOG 0
+#define SERVERNOTIFICATION_LOG 1
 
 @interface WebSocketAgent()
 {
@@ -113,6 +114,15 @@
 
 -(void) asyncMessage:(RHMessage*) requestMessage
 {
+    BOOL isLegalMessage = [RHMessage isLegalMessage:requestMessage];
+    if (!isLegalMessage)
+    {
+        return;
+    }
+
+    NSDate* timeStamp = [NSDate date];
+    [requestMessage setTimeStamp:timeStamp];
+    
     NSString* jsonString = requestMessage.toJSONString;
     [self _sendJSONStringToWebSocket:jsonString];
 }
@@ -232,6 +242,10 @@
                 if (jsonMessage.messageId == MessageId_BusinessSessionNotification)
                 {
                     RHMessage* responseMessage = [RHMessage newBusinessSessionNotificationResponseMessage:jsonMessage device:_userDataModule.device];
+#if SERVERNOTIFICATION_LOG
+                    DDLogInfo(@"Received Server Notification: %@", jsonMessage.toJSONString);
+                    DDLogInfo(@"Reply Server NotificationResponse: %@", responseMessage.toJSONString);
+#endif
                     [self asyncMessage:responseMessage];
                 }
                 
