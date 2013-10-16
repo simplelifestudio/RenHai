@@ -43,6 +43,21 @@
     }
 }
 
++(void) setRootController:(UIViewController*) rootVC
+{
+    if (nil != rootVC)
+    {
+        UIWindow* keyWindow = [CBUIUtils getKeyWindow];
+        keyWindow.rootViewController = rootVC;
+    }
+}
+
++(UIViewController*) getRootController
+{
+    UIWindow* keyWindow = [CBUIUtils getKeyWindow];
+    return keyWindow.rootViewController;
+}
+
 +(void)removeSubViews:(UIView *)superView
 {
     if (nil != superView)
