@@ -63,8 +63,7 @@ public class Test16TimeoutNotifyAAfterBAgree extends AbstractTestCase
 		mockApp1.syncDevice();
 		mockApp2.syncDevice();
 		
-		// Step_01 调用：OnlineDevicePool::getCount
-		int deviceCount = onlinePool.getElementCount();
+		onlinePool.getElementCount();
 		
 		// Step_02 调用：RandomBusinessDevicePool::getCount
 		int randomDeviceCount = businessPool.getElementCount();

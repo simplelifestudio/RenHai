@@ -54,11 +54,10 @@ public class DBQueryUtil
 	 */
 	public static Globalinterestlabel getGlobalinterestlabel(String label)
 	{
-		String sql = "select * from " + TableName.GlobalInterestLabel
-				+ " where " + TableColumnName.InterestLabelName + " = '" + label + "'";
+		GlobalinterestlabelDAO dao = new GlobalinterestlabelDAO();
+		List<Globalinterestlabel> list = dao.findByInterestLabelName(label);
 		
-		List<Globalinterestlabel> list = DAOWrapper.query(sql, Globalinterestlabel.class);
-		if (list.size() == 0)
+		if (list == null || list.size() == 0)
 		{
 			return null;
 		}

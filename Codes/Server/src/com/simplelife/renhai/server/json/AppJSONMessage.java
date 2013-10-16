@@ -261,7 +261,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
 	{
 		if (hibernateSesion != null && hibernateSesion.isOpen())
 		{
-			hibernateSesion.close();
+			HibernateSessionFactory.closeSession();
 		}
 	}
 	

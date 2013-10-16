@@ -37,6 +37,9 @@ public abstract class AbstractTestCase extends TestCase
 	protected final String demoDeviceSn2 = "demoDeviceSn2";
 	protected Consts.BusinessType businessType = Consts.BusinessType.Interest;
 	
+	// To initialize DAOWrapper
+	protected OnlineDevicePool pol = OnlineDevicePool.instance;
+	
 	public AbstractTestCase()
 	{
 		

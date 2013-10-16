@@ -11,22 +11,20 @@
 
 package com.simplelife.renhai.server.business.pool;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
+import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Statisticsitem;
 import com.simplelife.renhai.server.db.StatisticsitemDAO;
@@ -34,6 +32,7 @@ import com.simplelife.renhai.server.db.Systemstatistics;
 import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.DeviceLeaveReason;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
@@ -55,7 +54,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 				Session hibernateSesion = HibernateSessionFactory.getSession();
 				Thread.currentThread().setName("InactiveCheck");
 				OnlineDevicePool.instance.checkInactiveDevice();
-				hibernateSesion.close();
+				HibernateSessionFactory.closeSession();
 			}
 			catch(Exception e)
 			{
@@ -74,7 +73,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 				Session hibernateSesion = HibernateSessionFactory.getSession();
 				Thread.currentThread().setName("BannedCheck");
 				OnlineDevicePool.instance.deleteBannedDevice();
-				hibernateSesion.close();
+				HibernateSessionFactory.closeSession();
 			}
 			catch(Exception e)
 			{
@@ -90,10 +89,8 @@ public class OnlineDevicePool extends AbstractDevicePool
 		{
 			try
 			{
-				Session hibernateSesion = HibernateSessionFactory.getSession();
 				Thread.currentThread().setName("StatSave");
 				OnlineDevicePool.instance.saveStatistics();
-				hibernateSesion.close();
 			}
 			catch(Exception e)
 			{
@@ -107,18 +104,21 @@ public class OnlineDevicePool extends AbstractDevicePool
 	private Timer statSaveTimer = new Timer();
     private ConcurrentHashMap<String, IDeviceWrapper> queueDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     private HashMap<Consts.BusinessType, AbstractBusinessDevicePool> businessPoolMap = new HashMap<Consts.BusinessType, AbstractBusinessDevicePool>();
-    private List<IDeviceWrapper> bannedDeviceList = new ArrayList<IDeviceWrapper> ();
+    private ConcurrentLinkedQueue<IDeviceWrapper> bannedDeviceList = new ConcurrentLinkedQueue<IDeviceWrapper> ();
     
     public final static OnlineDevicePool instance = new OnlineDevicePool();
     
     
     private OnlineDevicePool()
     {
+    	// To initialize DB connection
     	HibernateSessionFactory.getSession();
     	startTimers();
     	this.addBusinessPool(Consts.BusinessType.Random, new RandomBusinessDevicePool());
     	this.addBusinessPool(Consts.BusinessType.Interest, new InterestBusinessDevicePool());
     	setCapacity(GlobalSetting.BusinessSetting.OnlinePoolCapacity);
+    	
+    	DAOWrapper.startTimers();
     }
     
     private void checkDeviceMap(ConcurrentHashMap<String, IDeviceWrapper> deviceMap)
@@ -316,7 +316,9 @@ public class OnlineDevicePool extends AbstractDevicePool
     		{
     			// If receive AppDataSyncRequest from new WebsocketConnection, close the previous one
     			logger.debug("Found same deviceSn <{}> on different Websocket connection, close the previous one: " + previousId, deviceSn);
-    			preDevice.getConnection().closeConnection();
+    			//preDevice.getConnection().closeConnection();
+    			// 2013-10-15, delete device due to it's hard for app to recover to status before connection loss
+    			deleteDevice(preDevice, DeviceLeaveReason.WebsocketClosedByServer);
     		}
     	}
     	
@@ -369,10 +371,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 		logger.debug("Device <{}> was identified as banned device", device.getDeviceSn());
 		queueDeviceMap.remove(device.getConnection().getConnectionId());
 		
-		synchronized(bannedDeviceList)
-		{
-			bannedDeviceList.add(device);
-		}
+		bannedDeviceList.add(device);
 	}
 	
 	public void deleteBannedDevice()
@@ -385,76 +384,59 @@ public class OnlineDevicePool extends AbstractDevicePool
 		IDeviceWrapper device;
 		while (bannedDeviceList.size() > 0)
 		{
-			device = bannedDeviceList.remove(0);
+			device = bannedDeviceList.remove();
 			device.unbindOnlineDevicePool();
 		}
 	}
 	
 	public void saveStatistics()
 	{
-		Session session = HibernateSessionFactory.getSession();
-		Transaction trans = null;
 		long now = System.currentTimeMillis();
 		
 		AbstractBusinessDevicePool randomPool = OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Random);
 		InterestBusinessDevicePool interestPool = (InterestBusinessDevicePool) OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Interest);
 		StatisticsitemDAO dao = new StatisticsitemDAO();
 		
-		try
-		{
-			trans = session.beginTransaction();
-			
-			Statisticsitem item = dao.findByStatisticsItem(Consts.StatisticsItem.OnlineDeviceCount.getValue()).get(0);
-			Systemstatistics statItem = new Systemstatistics();
-			statItem.setSaveTime(now);
-			statItem.setStatisticsitem(item);
-			statItem.setCount(OnlineDevicePool.instance.getElementCount());
-			session.save(statItem);
-			
-			item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomDeviceCount.getValue()).get(0);
-			statItem = new Systemstatistics();
-			statItem.setSaveTime(now);
-			statItem.setStatisticsitem(item);
-			statItem.setCount(randomPool.getElementCount());
-			session.save(statItem);
-			
-			item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestDeviceCount.getValue()).get(0);
-			statItem = new Systemstatistics();
-			statItem.setSaveTime(now);
-			statItem.setStatisticsitem(item);
-			statItem.setCount(interestPool.getElementCount());
-			session.save(statItem);
-			
-			item = dao.findByStatisticsItem(Consts.StatisticsItem.ChatDeviceCount.getValue()).get(0);
-			statItem = new Systemstatistics();
-			statItem.setSaveTime(now);
-			statItem.setStatisticsitem(item);
-			statItem.setCount(OnlineDevicePool.instance.getDeviceCountInChat());
-			session.save(statItem);
-			
-			item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomChatDeviceCount.getValue()).get(0);
-			statItem = new Systemstatistics();
-			statItem.setSaveTime(now);
-			statItem.setStatisticsitem(item);
-			statItem.setCount(randomPool.getDeviceCountInChat());
-			session.save(statItem);
-			
-			item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestChatDeviceCount.getValue()).get(0);
-			statItem = new Systemstatistics();
-			statItem.setSaveTime(now);
-			statItem.setStatisticsitem(item);
-			statItem.setCount(interestPool.getDeviceCountInChat());
-			session.save(statItem);
-			
-			trans.commit();
-		}
-		catch(Exception e)
-		{
-			if (trans != null)
-			{
-				trans.rollback();
-			}
-			FileLogger.printStackTrace(e);
-		}
+		Statisticsitem item = dao.findByStatisticsItem(Consts.StatisticsItem.OnlineDeviceCount.getValue()).get(0);
+		Systemstatistics statItem = new Systemstatistics();
+		statItem.setSaveTime(now);
+		statItem.setStatisticsitem(item);
+		statItem.setCount(OnlineDevicePool.instance.getElementCount());
+		DAOWrapper.asyncSave(statItem);
+		
+		item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomDeviceCount.getValue()).get(0);
+		statItem = new Systemstatistics();
+		statItem.setSaveTime(now);
+		statItem.setStatisticsitem(item);
+		statItem.setCount(randomPool.getElementCount());
+		DAOWrapper.asyncSave(statItem);
+		
+		item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestDeviceCount.getValue()).get(0);
+		statItem = new Systemstatistics();
+		statItem.setSaveTime(now);
+		statItem.setStatisticsitem(item);
+		statItem.setCount(interestPool.getElementCount());
+		DAOWrapper.asyncSave(statItem);
+		
+		item = dao.findByStatisticsItem(Consts.StatisticsItem.ChatDeviceCount.getValue()).get(0);
+		statItem = new Systemstatistics();
+		statItem.setSaveTime(now);
+		statItem.setStatisticsitem(item);
+		statItem.setCount(OnlineDevicePool.instance.getDeviceCountInChat());
+		DAOWrapper.asyncSave(statItem);
+		
+		item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomChatDeviceCount.getValue()).get(0);
+		statItem = new Systemstatistics();
+		statItem.setSaveTime(now);
+		statItem.setStatisticsitem(item);
+		statItem.setCount(randomPool.getDeviceCountInChat());
+		DAOWrapper.asyncSave(statItem);
+		
+		item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestChatDeviceCount.getValue()).get(0);
+		statItem = new Systemstatistics();
+		statItem.setSaveTime(now);
+		statItem.setStatisticsitem(item);
+		statItem.setCount(interestPool.getDeviceCountInChat());
+		DAOWrapper.asyncSave(statItem);
 	}
 }

@@ -113,18 +113,19 @@ public abstract class StreamInbound implements UpgradeInbound {
         // Must be start the start of a message (which may consist of multiple
         // frames)
     	WsOutbound outBound = getWsOutbound();
-    	if (outBound.isClosed())
-    	{
-    		WebSocketModule.instance.getLogger().warn("Message received from closed connection, ignored");
-    		return SocketState.CLOSED;
-    	}
     	
-        WsInputStream wsIs = new WsInputStream(processor, getWsOutbound());
+    	WsInputStream wsIs = new WsInputStream(processor, getWsOutbound());
 
         try {
             WsFrame frame = wsIs.nextFrame(false);
 
             while (frame != null) {
+            	if (outBound.isClosed())
+            	{
+            		WebSocketModule.instance.getLogger().warn("Message received from closed connection, ignored");
+            		return SocketState.CLOSED;
+            	}
+            	
                 // TODO User defined extensions may define values for rsv
                 if (frame.getRsv() > 0) {
                     closeOutboundConnection(

@@ -29,6 +29,12 @@ public class DateUtil
 		
 	}
 	
+	
+	public static int getCurrentMiliseconds()
+	{
+		return (int) (System.currentTimeMillis() % 1000);
+	}
+	
 	public static String getDateStringByLongValue(long dateInMilliSeconds)
 	{
 		Date date = new Date(dateInMilliSeconds);

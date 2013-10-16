@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Timer;
 
 import com.simplelife.renhai.server.business.pool.AbstractPool;
-import com.simplelife.renhai.server.db.DBModule;
+import com.simplelife.renhai.server.db.DAOWrapper;
 
 
 /** */
@@ -63,7 +63,7 @@ public class WebRTCSessionPool extends AbstractPool
     {
     	for (WebRTCSession session : webRTCSessionList)
     	{
-    		DBModule.instance.cache(session);
+    		DAOWrapper.asyncSave(session);
     	}
         return true;
     }
