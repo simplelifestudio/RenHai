@@ -19,7 +19,6 @@ import com.simplelife.renhai.server.business.pool.InterestBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
-import com.simplelife.renhai.server.db.GlobalinterestlabelDAO;
 import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;

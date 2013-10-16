@@ -11,7 +11,6 @@
 
 package com.simplelife.renhai.server.db;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -96,7 +95,7 @@ public class DAOWrapper
 						lock.lock();
 						if (session.isOpen())
 						{
-							session.close();
+							HibernateSessionFactory.closeSession();
 						}
 						logger.debug("Await due to no data in cache queue");
 						condition.await();

@@ -69,8 +69,7 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		mockApp2.syncDevice();
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
-		// Step_01 调用：OnlineDevicePool::getCount
-		int deviceCount = onlinePool.getElementCount();
+		onlinePool.getElementCount();
 		
 		// Step_02 调用：RandomBusinessDevicePool::getCount
 		int randomDeviceCount = businessPool.getElementCount();

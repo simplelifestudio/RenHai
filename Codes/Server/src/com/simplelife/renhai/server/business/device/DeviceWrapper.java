@@ -17,11 +17,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -31,7 +26,6 @@ import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
-import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.db.Interestcard;
@@ -187,6 +181,8 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     			switch(businessStatus)
     			{
     				case Idle:
+    					break;
+    				case WaitMatch:
     					break;
     				case SessionBound:
     					businessStatus = targetStatus;

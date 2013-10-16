@@ -12,10 +12,9 @@
 package com.simplelife.renhai.server.websocket;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -54,7 +53,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     /** */
     protected IDeviceWrapper connectionOwner;
     protected String remoteIPAddress;
-    protected HashMap<String, SyncController> syncMap = new HashMap<String, SyncController>();
+    protected ConcurrentHashMap<String, SyncController> syncMap = new ConcurrentHashMap<String, SyncController>();
     protected String connectionId;
     protected Logger logger = WebSocketModule.instance.getLogger();
     
@@ -406,19 +405,13 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     {
     	SyncController controller = new SyncController();
     	String messageSn = message.getMessageSn();
-    	synchronized(syncMap)
-    	{
-    		logger.debug("Add {} to synchronized sending map", messageSn);
-    		syncMap.put(messageSn, controller);
-    	}
+    	logger.debug("Add {} to synchronized sending map", messageSn);
+    	syncMap.put(messageSn, controller);
     	
     	AppJSONMessage appMessage = syncSendMessage(messageSn, message);
 
-    	synchronized(syncMap)
-    	{
-    		logger.debug("Remove {} from synchronized sending map", messageSn);
-    		syncMap.remove(messageSn);
-    	}
+    	logger.debug("Remove {} from synchronized sending map", messageSn);
+    	syncMap.remove(messageSn);
     	return appMessage;
     }
 

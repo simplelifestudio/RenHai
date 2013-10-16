@@ -19,7 +19,6 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_17;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -200,8 +199,6 @@ public class MockApp implements IMockApp, Runnable
 	{
 		return businessStatus;
 	}
-	
-	
 	
 	public void setWebsocketLink(String link)
 	{
@@ -440,6 +437,13 @@ public class MockApp implements IMockApp, Runnable
     
     public MockApp(String deviceSn, String strBehaviorMode, boolean realSocket)
 	{
+    	this(deviceSn, strBehaviorMode);
+    	this.useRealSocket = realSocket;
+    	this.connect(realSocket);
+	}
+    
+    public MockApp(String deviceSn, String strBehaviorMode)
+	{
     	this.deviceSn = deviceSn;
     	MockAppConsts.MockAppBehaviorMode tmpBehaviorMode = MockAppConsts.MockAppBehaviorMode.parseFromStringValue(strBehaviorMode);
     	
@@ -450,41 +454,6 @@ public class MockApp implements IMockApp, Runnable
     	}
     	this.behaviorMode = tmpBehaviorMode;
     	businessStatus = MockAppConsts.MockAppBusinessStatus.Init;
-    	this.useRealSocket = realSocket;
-    	this.connect(realSocket);
-    	
-    	int count = 0;
-    	while (count < 5)
-    	{
-    		if (!this.connection.isOpen())
-    		{
-    			try
-				{
-					Thread.sleep(1000);
-				}
-				catch (InterruptedException e)
-				{
-					e.printStackTrace();
-				}
-    		}
-    		else
-    		{
-    			break;
-    		}
-    		count++;
-    	}
-    	
-    	if (this.connection.isOpen())
-    	{
-    		if (behaviorMode != MockAppConsts.MockAppBehaviorMode.Slave)
-        	{
-        		this.prepareSending(null);
-        	}
-    	}
-    	else
-    	{
-    		logger.error("Fatal error that failed to setup websocket connection with server");
-    	}
 	}
 	
 	public String getConnectionId()
@@ -899,7 +868,7 @@ public class MockApp implements IMockApp, Runnable
 				if (messageId == Consts.MessageId.BusinessSessionResponse)
 				{
 					JSONObject body = lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
-					JSONObject header = lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
+					lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
 					if (body.getInteger(JSONKey.OperationType) == Consts.NotificationType.OthersideRejected.getValue())
 					{
 						setBusinessStatus(MockAppConsts.MockAppBusinessStatus.EnterPoolResReceived);
@@ -1082,12 +1051,45 @@ public class MockApp implements IMockApp, Runnable
 		{
 			URI uri = URI.create(websocketLink);
 			
-			Draft d = new Draft_17();
+			new Draft_17();
 			RHWebSocketClient conn = new RHWebSocketClient(uri);
 			
 			Thread t = new Thread(conn);
 			t.start();
 			connection = conn;
+			
+			int count = 0;
+	    	while (count < 5)
+	    	{
+	    		if (!connection.isOpen())
+	    		{
+	    			try
+					{
+						Thread.sleep(400);
+					}
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
+	    		}
+	    		else
+	    		{
+	    			break;
+	    		}
+	    		count++;
+	    	}
+	    	
+	    	if (this.connection.isOpen())
+	    	{
+	    		if (behaviorMode != MockAppConsts.MockAppBehaviorMode.Slave)
+	        	{
+	        		this.prepareSending(null);
+	        	}
+	    	}
+	    	else
+	    	{
+	    		logger.error("Fatal error that failed to setup websocket connection with server");
+	    	}
 		}
 		else
 		{

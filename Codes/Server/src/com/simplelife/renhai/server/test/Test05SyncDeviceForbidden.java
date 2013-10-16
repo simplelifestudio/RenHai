@@ -16,7 +16,6 @@ import org.junit.Test;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.TableColumnName;
 import com.simplelife.renhai.server.db.TableName;
 import com.simplelife.renhai.server.util.Consts;
@@ -55,7 +54,7 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn());
-		Devicecard deviceCard = deviceWrapper.getDevice().getDevicecard();
+		deviceWrapper.getDevice().getDevicecard();
 		
 		Device device = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDevice();
 		String deviceId = String.valueOf(device.getDeviceId()); 

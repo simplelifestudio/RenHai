@@ -11,18 +11,15 @@
 
 package com.simplelife.renhai.server.business.pool;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
@@ -57,7 +54,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 				Session hibernateSesion = HibernateSessionFactory.getSession();
 				Thread.currentThread().setName("InactiveCheck");
 				OnlineDevicePool.instance.checkInactiveDevice();
-				hibernateSesion.close();
+				HibernateSessionFactory.closeSession();
 			}
 			catch(Exception e)
 			{
@@ -76,7 +73,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 				Session hibernateSesion = HibernateSessionFactory.getSession();
 				Thread.currentThread().setName("BannedCheck");
 				OnlineDevicePool.instance.deleteBannedDevice();
-				hibernateSesion.close();
+				HibernateSessionFactory.closeSession();
 			}
 			catch(Exception e)
 			{
@@ -107,7 +104,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 	private Timer statSaveTimer = new Timer();
     private ConcurrentHashMap<String, IDeviceWrapper> queueDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     private HashMap<Consts.BusinessType, AbstractBusinessDevicePool> businessPoolMap = new HashMap<Consts.BusinessType, AbstractBusinessDevicePool>();
-    private List<IDeviceWrapper> bannedDeviceList = new ArrayList<IDeviceWrapper> ();
+    private ConcurrentLinkedQueue<IDeviceWrapper> bannedDeviceList = new ConcurrentLinkedQueue<IDeviceWrapper> ();
     
     public final static OnlineDevicePool instance = new OnlineDevicePool();
     
@@ -374,10 +371,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 		logger.debug("Device <{}> was identified as banned device", device.getDeviceSn());
 		queueDeviceMap.remove(device.getConnection().getConnectionId());
 		
-		synchronized(bannedDeviceList)
-		{
-			bannedDeviceList.add(device);
-		}
+		bannedDeviceList.add(device);
 	}
 	
 	public void deleteBannedDevice()
@@ -390,7 +384,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 		IDeviceWrapper device;
 		while (bannedDeviceList.size() > 0)
 		{
-			device = bannedDeviceList.remove(0);
+			device = bannedDeviceList.remove();
 			device.unbindOnlineDevicePool();
 		}
 	}

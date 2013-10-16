@@ -60,7 +60,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		
 		JSONObject deviceCountObj = body.getJSONObject(JSONKey.DeviceCount);
 		JSONObject deviceCapacityObject = body.getJSONObject(JSONKey.DeviceCapacity);
-		JSONObject interestObj = body.getJSONObject(JSONKey.InterestLabelList);
+		body.getJSONObject(JSONKey.InterestLabelList);
 		
 		// Invalid request before AppDataSyncRequest
 		JSONObject header = lastCmd.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
@@ -73,7 +73,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		
 		deviceCountObj = body.getJSONObject(JSONKey.DeviceCount);
 		deviceCapacityObject = body.getJSONObject(JSONKey.DeviceCapacity);
-		interestObj = body.getJSONObject(JSONKey.InterestLabelList);
+		body.getJSONObject(JSONKey.InterestLabelList);
 		
 		assertEquals(onlinePool.getElementCount(), deviceCountObj.getIntValue(JSONKey.Online));
 		

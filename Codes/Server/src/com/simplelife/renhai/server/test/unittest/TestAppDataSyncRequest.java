@@ -555,9 +555,9 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		JSONObject updateObj = new JSONObject();
 		JSONObject deviceObj = new JSONObject();
 		JSONObject deviceCardObj = new JSONObject();
-		JSONObject profileObj = new JSONObject();
-		JSONObject interestCardObj = new JSONObject();
-		JSONObject impressCardObj = new JSONObject();
+		new JSONObject();
+		new JSONObject();
+		new JSONObject();
 		
 		updateObj.put(JSONKey.Device, deviceObj);
 		

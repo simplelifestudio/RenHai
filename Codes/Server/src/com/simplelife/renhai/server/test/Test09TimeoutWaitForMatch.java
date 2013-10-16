@@ -55,8 +55,7 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 		String deviceSn = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceSn();
 		AbstractBusinessDevicePool businessPool = pool.getBusinessPool(businessType);
 		
-		// Step_01 调用：OnlineDevicePool::getCount
-		int deviceCount = pool.getElementCount();
+		pool.getElementCount();
 		
 		// Step_02 调用：RandomBusinessDevicePool::getCount
 		//int randomDeviceCount = pool.getBusinessPool(Consts.BusinessType.Random).getElementCount();

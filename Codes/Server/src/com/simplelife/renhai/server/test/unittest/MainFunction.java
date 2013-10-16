@@ -10,7 +10,6 @@
 package com.simplelife.renhai.server.test.unittest;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -56,7 +55,6 @@ import com.simplelife.renhai.server.test.MockAppConsts;
 import com.simplelife.renhai.server.test.RHWebSocketClient;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
 
@@ -104,7 +102,7 @@ public class MainFunction extends AbstractTestCase
 				}
 				finally
 				{
-					session.close();
+					HibernateSessionFactory.closeSession();
 				}
 				count++;
 			}
@@ -219,8 +217,6 @@ public class MainFunction extends AbstractTestCase
 		wholeObj = JSONObject.parseObject(jsonString);
 		obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope);
 		app.sendRawJSONMessage(obj, true);
-		
-		int i = 1;
 	}
 	
 	@Test
@@ -230,7 +226,7 @@ public class MainFunction extends AbstractTestCase
 		JSONObject obj = JSONObject.parseObject(strMessage);
 		
 		WebSocketConnection connection = new WebSocketConnection("1");
-		DeviceWrapper device = new DeviceWrapper(connection);
+		new DeviceWrapper(connection);
 		
 		AppJSONMessage request = JSONFactory.createAppJSONMessage(obj);
 		assertTrue(request instanceof AlohaRequest);
@@ -253,9 +249,6 @@ public class MainFunction extends AbstractTestCase
 		DeviceDAO dao = new DeviceDAO();
 		Device target = dao.findByDeviceSn(deviceSn).get(0);
 		
-		Session session = HibernateSessionFactory.getSession();
-		Transaction t = session.beginTransaction();
-		
 		Impresscard card = target.getProfile().getImpresscard();
 		Set<Impresslabelmap> impressLabelMap = card.getImpresslabelmaps();
 		
@@ -264,7 +257,7 @@ public class MainFunction extends AbstractTestCase
 		updateOrAppendImpressLabel(card, impressLabelMap, assessLabels.getString(0));
 		
 		JSONArray impressLabels = new JSONArray();
-		impressLabels.add("TC23_ÆÀ¼Û");
+		impressLabels.add("ÆÀ¼Û_new");
 		impressLabels.add("Ë§¸ç");
 		for (int i = 0; i < impressLabels.size(); i++)
 		{
@@ -273,10 +266,11 @@ public class MainFunction extends AbstractTestCase
 		
 		// Save to DB
 		//DBModule.instance.cache(target);
-		t.commit();
+		DAOWrapper.asyncSave(target);
+		DAOWrapper.flushToDB();
 		
+		System.out.println("ended");
 		//session.flush();
-		session.close();
 	}
 	
 	private void updateOrAppendImpressLabel(Impresscard card, Set<Impresslabelmap> impressLabels, String labelName)
@@ -428,7 +422,7 @@ public class MainFunction extends AbstractTestCase
 		String serverlocation = "ws://192.81.135.31/renhai/websocket"; 
 		URI uri = URI.create(serverlocation);
 		
-		Draft d = new Draft_17();
+		new Draft_17();
 		//AutobahnClientTest e = new AutobahnClientTest(d, uri);
 		RHWebSocketClient e = new RHWebSocketClient(uri);
 		
@@ -448,9 +442,9 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testBehaviorMode() throws InterruptedException
 	{
-		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit", true);
+		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit", false);
 	
-		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndQuit", true);
+		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndQuit", false);
 		
 		while (!app1.getConnection().isOpen() || !app2.getConnection().isOpen())
 		{

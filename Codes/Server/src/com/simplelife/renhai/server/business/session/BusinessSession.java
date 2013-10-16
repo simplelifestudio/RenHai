@@ -12,11 +12,11 @@
 package com.simplelife.renhai.server.business.session;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 
@@ -26,7 +26,6 @@ import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
-import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Sessionrecord;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
@@ -57,7 +56,7 @@ public class BusinessSession implements IBusinessSession
 	
 	private Consts.SessionEndReason endReason = Consts.SessionEndReason.Invalid;
 	
-	private List<IDeviceWrapper> deviceList = new ArrayList<IDeviceWrapper>(); 
+	private CopyOnWriteArrayList<IDeviceWrapper> deviceList = new CopyOnWriteArrayList<IDeviceWrapper>(); 
 	
 	// Temp list for saving devices waiting for confirmation
 	//private List<IDeviceWrapper> tmpConfirmDeviceList = new ArrayList<IDeviceWrapper>();
@@ -142,16 +141,12 @@ public class BusinessSession implements IBusinessSession
     	logger.debug("Enter endSession.");
     	sessionEndTime = System.currentTimeMillis();
     	
-    	synchronized(deviceList)
+    	for (IDeviceWrapper device : deviceList)
     	{
-	    	for (IDeviceWrapper device : deviceList)
-	    	{
-	    		device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
-	    		pool.endChat(device);
-	    	}
-	    	deviceList.clear();
+    		device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
+    		pool.endChat(device);
     	}
-    	
+    	deviceList.clear();
    		progressMap.clear();
     	
     	saveSessionRecord();
@@ -217,13 +212,7 @@ public class BusinessSession implements IBusinessSession
     
     public void notifyIncreaseChatDuration(int duration)
     {
-    	List<IDeviceWrapper> tmpList;
-    	synchronized(this.deviceList)
-    	{
-    		tmpList = new ArrayList<IDeviceWrapper>(deviceList);
-    	}
-    	
-    	for (IDeviceWrapper device : tmpList)
+    	for (IDeviceWrapper device : deviceList)
     	{
 			device.increaseChatDuration(duration);
     	}
@@ -232,13 +221,7 @@ public class BusinessSession implements IBusinessSession
     
     public void notifyIncreaseChatCount()
     {
-    	List<IDeviceWrapper> tmpList;
-    	synchronized(this.deviceList)
-    	{
-    		tmpList = new ArrayList<IDeviceWrapper>(deviceList);
-    	}
-    	
-    	for (IDeviceWrapper device : tmpList)
+    	for (IDeviceWrapper device : deviceList)
     	{
 			device.increaseChatCount();
     	}
@@ -252,15 +235,9 @@ public class BusinessSession implements IBusinessSession
     public void notifyDevices(List<IDeviceWrapper> activeDeviceList, IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
     {
     	ServerJSONMessage notify;
-    	
-    	List<IDeviceWrapper> tmpList;
-    	synchronized(activeDeviceList)
-    	{
-    		tmpList = new ArrayList<IDeviceWrapper>(activeDeviceList);
-    	}
-    	
+
     	String temp;
-		for (IDeviceWrapper device : tmpList)
+		for (IDeviceWrapper device : activeDeviceList)
     	{
 			if (device == triggerDevice)
 			{
@@ -540,11 +517,8 @@ public class BusinessSession implements IBusinessSession
     {
    		progressMap.remove(device.getDeviceSn());
     	
-    	synchronized(deviceList)
-    	{
-    		deviceList.remove(device);
-    		logger.debug("Device <{}> was removed from business session", device.getDeviceSn());
-    	}
+		deviceList.remove(device);
+		logger.debug("Device <{}> was removed from business session", device.getDeviceSn());
     	
     	if (status == Consts.BusinessSessionStatus.VideoChat
     			|| status == Consts.BusinessSessionStatus.Assess)

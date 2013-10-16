@@ -39,8 +39,7 @@ public class Test01KeepWebsocket extends AbstractTestCase
 	@Test
 	public void test() throws InterruptedException
 	{
-		// Step_01 创建MockWebSocketConnection对象
-		MockWebSocketConnection conn = new MockWebSocketConnection();
+		new MockWebSocketConnection();
 		
 		// Step_02 调用：OnlineDevicePool::getCount
 		OnlineDevicePool pool = OnlineDevicePool.instance;

@@ -10,7 +10,6 @@
 package com.simplelife.renhai.server.json;
 
 
-import java.util.List;
 import java.util.Set;
 
 import org.hibernate.Session;
@@ -26,7 +25,6 @@ import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceDAO;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
-import com.simplelife.renhai.server.db.GlobalimpresslabelDAO;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;

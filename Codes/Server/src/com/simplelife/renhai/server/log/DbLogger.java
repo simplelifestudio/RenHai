@@ -11,23 +11,11 @@
 
 package com.simplelife.renhai.server.log;
 
-import java.util.List;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-
-import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
-import com.simplelife.renhai.server.db.GlobalimpresslabelDAO;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
-import com.simplelife.renhai.server.db.GlobalinterestlabelDAO;
-import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Operationcode;
 import com.simplelife.renhai.server.db.OperationcodeDAO;
 import com.simplelife.renhai.server.db.Profile;
@@ -102,19 +90,26 @@ public class DbLogger
 			, Consts.SystemModule module
 			, String logInfo)
 	{
-		OperationcodeDAO dao = new OperationcodeDAO();
-		Operationcode codeObj = dao.findByOperationCode(code.getValue()).get(0);
-		
-		SystemmoduleDAO moduleDao = new SystemmoduleDAO();
-		Systemmodule moduleObj = moduleDao.findByModuleNo(module.getValue()).get(0); 
-		
-		long now = System.currentTimeMillis();
-		
-		Systemoperationlog log = new Systemoperationlog();
-		log.setLogTime(now);
-		log.setLogInfo(logInfo);
-		log.setOperationcode(codeObj);
-		log.setSystemmodule(moduleObj);
-		DAOWrapper.asyncSave(log);
+		try
+		{
+			OperationcodeDAO dao = new OperationcodeDAO();
+			Operationcode codeObj = dao.findByOperationCode(code.getValue()).get(0);
+			
+			SystemmoduleDAO moduleDao = new SystemmoduleDAO();
+			Systemmodule moduleObj = moduleDao.findByModuleNo(module.getValue()).get(0); 
+			
+			long now = System.currentTimeMillis();
+			
+			Systemoperationlog log = new Systemoperationlog();
+			log.setLogTime(now);
+			log.setLogInfo(logInfo);
+			log.setOperationcode(codeObj);
+			log.setSystemmodule(moduleObj);
+			DAOWrapper.asyncSave(log);
+		}
+		catch(Exception e)
+		{
+			FileLogger.printStackTrace(e);
+		}
 	}
 }

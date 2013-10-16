@@ -11,7 +11,6 @@
 
 package com.simplelife.renhai.server.business.pool;
 
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.simplelife.renhai.server.util.IDeviceWrapper;
