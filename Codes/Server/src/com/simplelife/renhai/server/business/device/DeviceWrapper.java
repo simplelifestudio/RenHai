@@ -328,7 +328,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     	{
     		command.bindDeviceWrapper(this);
     		Thread cmdThread = new Thread(command);
-    		cmdThread.setName(command.getMessageId().name());
+    		cmdThread.setName(command.getMessageId().name() + DateUtil.getCurrentMiliseconds());
     		cmdThread.start();
     	}
     	catch(Exception e)

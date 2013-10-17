@@ -197,28 +197,34 @@ public class BusinessSessionRequest extends AppJSONMessage
 			}
 		}
 		
-		logger.debug("Received " + operationType.name() + " from device <{}>", deviceWrapper.getDeviceSn());
 		switch (operationType)
 		{
 			case EnterPool:
+				logger.debug("Received " + operationType.name() + " <EnterPool> from device <{}>", deviceWrapper.getDeviceSn());
 				enterPool();
 				break;
 			case LeavePool:
+				logger.debug("Received " + operationType.name() + " <LeavePool> from device <{}>", deviceWrapper.getDeviceSn());
 				leavePool();
 				break;
 			case AgreeChat:
+				logger.debug("Received " + operationType.name() + " <AgreeChat> from device <{}>", deviceWrapper.getDeviceSn());
 				agreeChat();
 				break;
 			case RejectChat:
+				logger.debug("Received " + operationType.name() + " <RejectChat> from device <{}>", deviceWrapper.getDeviceSn());
 				rejectChat();
 				break;
 			case EndChat:
+				logger.debug("Received " + operationType.name() + " <EndChatChat> from device <{}>", deviceWrapper.getDeviceSn());
 				endChat();
 				break;
 			case AssessAndContinue:
+				logger.debug("Received " + operationType.name() + " <AssessAndContinue> from device <{}>", deviceWrapper.getDeviceSn());
 				assessAndContinue();
 				break;
 			case AssessAndQuit:
+				logger.debug("Received " + operationType.name() + " <AssessAndQuit> from device <{}>", deviceWrapper.getDeviceSn());
 				assessAndQuit();
 				break;
 			default:

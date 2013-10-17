@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IMockApp;
 import com.simplelife.renhai.server.util.IMockConnection;
@@ -74,12 +75,14 @@ public class RHWebSocketClient extends WebSocketClient implements IMockConnectio
 	@Override
 	public void onMessage(String arg0)
 	{
+		Thread.currentThread().setName("MockAppWebSocket" + DateUtil.getCurrentMiliseconds());
 		onTextMessage(arg0);
 	}
 
 	@Override
 	public void onOpen(ServerHandshake arg0)
 	{
+		Thread.currentThread().setName("WebSocketClient" + DateUtil.getCurrentMiliseconds());
 		logger.debug("==================onOpen");
 	}
 

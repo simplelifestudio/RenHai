@@ -250,6 +250,7 @@ public abstract class StreamInbound implements UpgradeInbound {
         // Need to call onPong using the web application's class loader
         Thread t = Thread.currentThread();
         ClassLoader cl = t.getContextClassLoader();
+        t.setName("Ping");
         t.setContextClassLoader(applicationClassLoader);
         try {
             onPing(payload);

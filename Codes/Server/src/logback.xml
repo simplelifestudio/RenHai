@@ -4,7 +4,7 @@
         <!-- encoder 默认配置为PatternLayoutEncoder -->
         <encoder>
             <!--pattern>%d{HH:mm:ss.SSS} [%thread][%-5level]%logger{36} - %msg%n%caller{2}</pattern-->
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %msg%n</pattern>
+            <pattern>%d{HH:mm:ss.SSS}[%-5level][%thread] %msg%n</pattern>
         </encoder>
     </appender>
     
@@ -22,7 +22,7 @@
 
         <encoder>
           <!--pattern>%d{HH:mm:ss.SSS} %caller{1} [%thread] %-5level %msg%n</pattern-->
-          <pattern>%d{HH:mm:ss.SSS} [%thread][%-5level]%msg%n</pattern>
+          <pattern>%d{HH:mm:ss.SSS}[%-5level][%thread] %msg%n</pattern>
         </encoder>
     </appender>
 

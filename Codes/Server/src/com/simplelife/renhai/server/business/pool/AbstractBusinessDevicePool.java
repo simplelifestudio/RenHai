@@ -101,6 +101,9 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     		return temp;
     	}
     	
+    	// Change status of device after sending response of EnterPool
+		device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
+		device.setBusinessType(businessType);
     	deviceMap.put(sn, device);
     	logger.debug("Device <{}> has entered " + businessType.name() + " pool", device.getDeviceSn());
     	return null;

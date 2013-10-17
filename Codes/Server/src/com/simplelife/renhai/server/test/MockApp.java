@@ -34,6 +34,7 @@ import com.simplelife.renhai.server.test.MockAppConsts.MockAppRequest;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
+import com.simplelife.renhai.server.util.Consts.NotificationType;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IMockApp;
@@ -97,7 +98,16 @@ public class MockApp implements IMockApp, Runnable
 				{
 					logger.debug("Sleep " + delay + " ms, next status: " + nextStatus + ", message to be sent: " + messageIdToBeSent);
 					AutoReplyTask.sleep(delay);
-					logger.debug("Recover from sleep");
+					
+					if (app.getBusinessStatus() == MockAppBusinessStatus.Ended)
+					{
+						logger.debug("Recover from sleep but app is ended, sending of " + messageIdToBeSent.name() + " is cancelled");
+						return;
+					}
+					else
+					{
+						logger.debug("Recover from sleep");
+					}
 				}
 				catch (InterruptedException e)
 				{
@@ -578,6 +588,11 @@ public class MockApp implements IMockApp, Runnable
 		body.put(JSONKey.OperationValue, null);
 		
 		sendRawJSONMessage(jsonObject, false);
+		
+		if (operationType == NotificationType.OthersideLost)
+		{
+			setBusinessStatus(MockAppBusinessStatus.Ended);
+		}
 	}
 	
 	/** */
@@ -772,6 +787,26 @@ public class MockApp implements IMockApp, Runnable
 		task.start();
 	}
 	
+	private void endBusiness()
+	{
+		if (behaviorMode ==  MockAppConsts.MockAppBehaviorMode.NormalAndContinue)
+		{
+			chatCount++;
+			if (chatCount > MockAppConsts.Setting.MaxChatCount)
+			{
+				setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
+			}
+			else
+			{
+				setBusinessStatus(MockAppConsts.MockAppBusinessStatus.EnterPoolResReceived);
+			}
+		}
+		else if (behaviorMode ==  MockAppConsts.MockAppBehaviorMode.NormalAndQuit)
+		{
+			setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
+		}
+	}
+	
 	private void prepareSending(Consts.MessageId messageId)
 	{
 		AutoReplyTask task = null;
@@ -779,6 +814,25 @@ public class MockApp implements IMockApp, Runnable
 		{
 			logger.debug("MockApp <"+ deviceSn + "> received " + messageId.name() + " in status of " + businessStatus.name());
 		}
+		
+		if (messageId == Consts.MessageId.BusinessSessionNotification)
+		{
+			int receivedOperationType = body.getIntValue(JSONKey.OperationType);
+			if (receivedOperationType == Consts.NotificationType.OthersideAgreed.getValue()
+					|| receivedOperationType == Consts.NotificationType.OthersideEndChat.getValue())
+			{
+				replyNotification(lastReceivedCommand, null);
+				return;
+			}
+			else if (receivedOperationType == Consts.NotificationType.OthersideRejected.getValue()
+					|| receivedOperationType == Consts.NotificationType.OthersideLost.getValue())
+			{
+				endBusiness();
+				replyNotification(lastReceivedCommand, null);
+				return;
+			}
+		}
+		
 		switch(businessStatus)
 		{
 			case Init:
@@ -830,7 +884,7 @@ public class MockApp implements IMockApp, Runnable
 			    		if (behaviorMode == MockAppConsts.MockAppBehaviorMode.RejectChat)
 						{
 							AutoReplyTask chatConfirmTask = new AutoReplyTask(
-									MockAppRequest.RejectChat, 
+									MockAppRequest.RejectChat,
 									null, 
 									this, MockAppConsts.Setting.ChatConfirmDuration,
 									MockAppConsts.MockAppBusinessStatus.Ended);
@@ -858,12 +912,14 @@ public class MockApp implements IMockApp, Runnable
 					logger.error("MockApp <" + deviceSn + "> received {} in status of EnterPoolResReceived", messageId.name());
 				}
 				break;
+				
 			case SessionBoundedReplied:
 				if (messageId != Consts.MessageId.BusinessSessionNotification)
 				{
 					logger.error("MockApp <" + deviceSn + "> received {} in status of SessionBoundedReplied", messageId.name());
 				}
 				break;
+				
 			case AgreeChatReqSent:
 				if (messageId == Consts.MessageId.BusinessSessionResponse)
 				{
@@ -945,24 +1001,7 @@ public class MockApp implements IMockApp, Runnable
 			case AssessReqSent:
 				if (messageId == Consts.MessageId.BusinessSessionResponse)
 				{
-					if (behaviorMode ==  MockAppConsts.MockAppBehaviorMode.NormalAndContinue)
-					{
-						chatCount++;
-						if (chatCount > MockAppConsts.Setting.MaxChatCount)
-						{
-							setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
-							return;
-						}
-						else
-						{
-							setBusinessStatus(MockAppConsts.MockAppBusinessStatus.EnterPoolResReceived);
-						}
-					}
-					else if (behaviorMode ==  MockAppConsts.MockAppBehaviorMode.NormalAndQuit)
-					{
-						setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
-						return;
-					}
+					endBusiness();
 				}
 				else if (messageId == Consts.MessageId.BusinessSessionNotification)
 				{
@@ -1108,6 +1147,7 @@ public class MockApp implements IMockApp, Runnable
 		businessStatus = status;
 		if (status == MockAppConsts.MockAppBusinessStatus.Ended)
 		{
+			stopTimer();
 			connection.closeConnection();
 		}
 	}

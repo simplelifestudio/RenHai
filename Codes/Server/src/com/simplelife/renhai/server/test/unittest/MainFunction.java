@@ -56,6 +56,7 @@ import com.simplelife.renhai.server.test.RHWebSocketClient;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.JSONKey;
+import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
 
 
@@ -517,5 +518,14 @@ public class MainFunction extends AbstractTestCase
 		DAOWrapper.flushToDB();
 		
 		System.out.print(OnlineDevicePool.instance.getCapacity());
+	}
+	
+	@Test
+	public void testEnterPool()
+	{
+		MockApp app1 = new MockApp(demoDeviceSn);
+		app1.syncDevice();
+		app1.enterPool(BusinessType.Interest);
+		app1.enterPool(BusinessType.Interest);
 	}
 }

@@ -184,7 +184,12 @@ public class BusinessSession implements IBusinessSession
     {
     	sessionStartTime = System.currentTimeMillis();
     	
-    	logger.debug("Enter startSession.");
+    	logger.debug("Enter startSession, deviceList:" );
+    	for (String device : deviceList)
+    	{
+    		logger.debug(device);
+    	}
+    	
     	if (!checkStartSession(deviceList))
     	{
     		endSession();
@@ -271,7 +276,7 @@ public class BusinessSession implements IBusinessSession
 				notify.getBody().put(JSONKey.OperationInfo, triggerDevice.toJSONObject());
 			}
     		notify.setDeviceWrapper(device);
-    		logger.debug("=========send notify for device " + device.getDeviceSn() +": \n" + JSON.toJSONString(notify.toJSONObject(), true));
+    		logger.debug("Send notify for device " + device.getDeviceSn() +": \n" + JSON.toJSONString(notify.toJSONObject(), true));
     		notify.syncResponse();
     		
     		DbLogger.saveSystemLog(Consts.OperationCode.NotificationSessionBounded_1010
