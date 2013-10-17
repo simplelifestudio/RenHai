@@ -8,6 +8,7 @@
 
 #import "HomeViewController_iPhone.h"
 
+#import "CBUIUtils.h"
 #import "CBMathUtils.h"
 #import "UINavigationController+CBNavigationControllerExtends.h"
 
@@ -19,6 +20,15 @@
 #define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
 #define INTERVAL_DATASYNC 5
 
+typedef enum
+{
+    EnterOperationStatus_Ready = 0,
+    EnterOperationStatus_InProcess,
+    EnterOperationStatus_Success,
+    EnterOperationStatus_Fail
+}
+EnterOperationStatus;
+
 @interface HomeViewController_iPhone () <CBRoundProgressViewDelegate>
 {
     GUIModule* _guiModule;
@@ -28,6 +38,8 @@
     NSTimer* _enterButtonTimer;
     
     NSTimer* _dataSyncTimer;
+    
+    BOOL _enterPoolFlag;
 }
 
 @end
@@ -45,6 +57,12 @@
 @synthesize onlineDeviceCountUnit4 = _onlineDeviceCountUnit4;
 @synthesize onlineDeviceCountUnit5 = _onlineDeviceCountUnit5;
 
+@synthesize chatDeviceCountUnit1 = _chatDeviceCountUnit1;
+@synthesize chatDeviceCountUnit2 = _chatDeviceCountUnit2;
+@synthesize chatDeviceCountUnit3 = _chatDeviceCountUnit3;
+@synthesize chatDeviceCountUnit4 = _chatDeviceCountUnit4;
+@synthesize chatDeviceCountUnit5 = _chatDeviceCountUnit5;
+
 #pragma mark - Public Methods
 
 - (void)viewDidLoad
@@ -58,14 +76,17 @@
 {
     [super viewDidAppear:animated];
     
+    [self _updateUIWithServerData];
+    [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Ready];
+    
     [self _activateDataSyncTimer];
 }
 
 -(void) viewDidDisappear:(BOOL)animated
 {
-    [super viewDidDisappear:animated];
-
     [self _deactivateDataSyncTimer];
+    
+    [super viewDidDisappear:animated];
 }
 
 #pragma mark - Private Methods
@@ -75,6 +96,8 @@
     _guiModule = [GUIModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
+    
+    _enterPoolFlag = NO;
     
     [self _setupNavigationBar];
     [self _setupView];
@@ -126,8 +149,9 @@
 {
     _enterButton.highlighted = YES;
     _enterButton.enabled = NO;
-    _enterLabel.hidden = YES;
+//    _enterLabel.hidden = YES;
     _helpButton.enabled = NO;
+    [self _updateUIWithEnterOperationStatus:EnterOperationStatus_InProcess];
     
     self.navigationItem.leftBarButtonItem.enabled = NO;
     
@@ -139,7 +163,7 @@
 {
     _enterButton.highlighted = NO;
     _enterButton.enabled = YES;
-    _enterLabel.hidden = NO;
+//    _enterLabel.hidden = NO;
     _helpButton.enabled = YES;
     
     self.navigationItem.leftBarButtonItem.enabled = YES;
@@ -194,19 +218,20 @@ static float progress = 0.0;
 
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
-        RHMessage* serverDataSyncResponseMessage = [_commModule sendMessage:serverDataSyncRequestMessage];
+        RHMessage* requestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
+        RHMessage* responseMessage = [_commModule sendMessage:requestMessage];
         
-        if (serverDataSyncResponseMessage.messageId == MessageId_ServerDataSyncResponse)
+        if (responseMessage.messageId == MessageId_ServerDataSyncResponse)
         {
-            NSDictionary* messageBody = serverDataSyncResponseMessage.body;
+            NSDictionary* messageBody = responseMessage.body;
             NSDictionary* serverDic = messageBody;
             
             RHServer* server = _userDataModule.server;
             @try
             {
                 [server fromJSONObject:serverDic];
-                [self _updateUIWithOnlineDeviceCount];
+
+                [self _updateUIWithServerData];
             }
             @catch (NSException *exception)
             {
@@ -218,11 +243,11 @@ static float progress = 0.0;
             }
             
         }
-        else if (serverDataSyncResponseMessage.messageId == MessageId_ServerErrorResponse)
+        else if (responseMessage.messageId == MessageId_ServerErrorResponse)
         {
             
         }
-        else if (serverDataSyncResponseMessage.messageId == MessageId_ServerTimeoutResponse)
+        else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
         {
             
         }
@@ -233,23 +258,145 @@ static float progress = 0.0;
     });
 }
 
+-(void) _updateUIWithServerData
+{
+    [self _updateUIWithOnlineDeviceCount];
+    [self _updateUIWithInterestChatDeviceCount];
+}
+
 -(void) _updateUIWithOnlineDeviceCount
 {
     dispatch_async(dispatch_get_main_queue(), ^(){
         
         RHServer* server = _userDataModule.server;
-        
-        NSArray* unitLabels = @[_onlineDeviceCountUnit1, _onlineDeviceCountUnit2, _onlineDeviceCountUnit3, _onlineDeviceCountUnit4, _onlineDeviceCountUnit5];
-        
-        NSUInteger onlineCount = server.deviceCount.online;
-        NSArray* unitVals = [CBMathUtils splitIntegerByUnit:onlineCount array:nil reverseOrder:YES];
-        
-        for (int i = 0; i < unitVals.count; i++)
+        if (nil != server)
         {
-            NSNumber* unitVal = (NSNumber*)unitVals[i];
-            UILabel* label = (UILabel*)unitLabels[i];
-            label.text = [NSString stringWithFormat:@"%d", unitVal.integerValue];
+            NSArray* unitLabels = @[_onlineDeviceCountUnit1, _onlineDeviceCountUnit2, _onlineDeviceCountUnit3, _onlineDeviceCountUnit4, _onlineDeviceCountUnit5];
+            
+            NSUInteger chatCount = server.deviceCount.online;
+            NSArray* unitVals = [CBMathUtils splitIntegerByUnit:chatCount array:nil reverseOrder:YES];
+            
+            for (int i = 0; i < unitVals.count; i++)
+            {
+                NSNumber* unitVal = (NSNumber*)unitVals[i];
+                UILabel* label = (UILabel*)unitLabels[i];
+                label.text = [NSString stringWithFormat:@"%d", unitVal.integerValue];
+            }
         }
+    });
+}
+
+-(void) _updateUIWithInterestChatDeviceCount
+{
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        
+        RHServer* server = _userDataModule.server;
+        if (nil != server)
+        {
+            NSArray* unitLabels = @[_chatDeviceCountUnit1, _chatDeviceCountUnit2, _chatDeviceCountUnit3, _chatDeviceCountUnit4, _chatDeviceCountUnit5];
+            
+            NSUInteger onlineCount = server.deviceCount.chat;
+            NSArray* unitVals = [CBMathUtils splitIntegerByUnit:onlineCount array:nil reverseOrder:YES];
+            
+            for (int i = 0; i < unitVals.count; i++)
+            {
+                NSNumber* unitVal = (NSNumber*)unitVals[i];
+                UILabel* label = (UILabel*)unitLabels[i];
+                label.text = [NSString stringWithFormat:@"%d", unitVal.integerValue];
+            }
+        }
+    });
+}
+
+-(void) _updateUIWithEnterOperationStatus:(EnterOperationStatus) status
+{
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        switch(status)
+        {
+            case EnterOperationStatus_Ready:
+            {
+                _enterLabel.text = NSLocalizedString(@"Home_PressToEnterPool", nil);
+                break;
+            }
+            case EnterOperationStatus_InProcess:
+            {
+                _enterLabel.text = NSLocalizedString(@"Home_IsEnteringPool", nil);
+                break;
+            }
+            case EnterOperationStatus_Success:
+            {
+                _enterLabel.text = NSLocalizedString(@"Home_PressToEnterPool", nil);
+                break;
+            }
+            case EnterOperationStatus_Fail:
+            {
+                _enterLabel.text = NSLocalizedString(@"Home_EnterPoolFailed", nil);
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    });
+}
+
+-(void)_startEnteringPool
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
+        RHDevice* device = _userDataModule.device;
+        
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Interest operationType:BusinessSessionRequestType_EnterPool device:device info:nil];
+        RHMessage* responseMessage = [_commModule sendMessage:requestMessage];
+        
+        if (responseMessage.messageId == MessageId_BusinessSessionResponse)
+        {
+            NSDictionary* messageBody = responseMessage.body;
+            NSDictionary* businessSessionDic = messageBody;
+            
+            @try
+            {
+                NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
+                BusinessSessionOperationValue operationValue = oOperationValue.intValue;
+                operationValue = BusinessSessionOperationValue_Failed;
+                if (operationValue == BusinessSessionOperationValue_Success)
+                {
+                    _enterPoolFlag = YES;
+                }
+                else
+                {
+
+                }
+            }
+            @catch (NSException *exception)
+            {
+                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+            }
+            @finally
+            {
+                
+            }
+        }
+        else if (responseMessage.messageId == MessageId_ServerErrorResponse)
+        {
+
+        }
+        else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
+        {
+
+        }
+        else
+        {
+
+        }
+    });
+}
+
+-(void)_finishEnterPool
+{
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        MainViewController_iPhone* mainVC = _guiModule.mainViewController;
+        [mainVC switchToChatScene];
     });
 }
 
@@ -275,15 +422,26 @@ static float progress = 0.0;
 
 - (void) progressStarted
 {
-//    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_EnterPool device:_device info:nil];
-//    RHMessage* businessSessionResponseMessage = [_commModule sendMessage:businessSessionRequestMessage];
+    [self performSelector:@selector(_startEnteringPool) withObject:self afterDelay:0];
 }
 
 - (void) progressFinished
 {
     [self _enterButtonTimerFinished];
+
+    [NSThread sleepForTimeInterval:INTERVAL_ENTERBUTTON_TRACK];
     
-    [self performSelector:@selector(_unlockViewController) withObject:self afterDelay:0.25f];
+    [self _unlockViewController];
+    
+    if (_enterPoolFlag)
+    {
+        [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Success];
+        [self _finishEnterPool];
+    }
+    else
+    {
+        [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Fail];
+    }
 }
 
 @end

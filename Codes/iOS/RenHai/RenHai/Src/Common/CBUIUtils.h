@@ -37,6 +37,9 @@
 
 +(UIWindow*) getKeyWindow;
 
++(void) setRootController:(UIViewController*) rootVC;
++(UIViewController*) getRootController;
+
 +(void)removeSubViews:(UIView*) superView;
 
 +(void) showInformationAlertWindow:(id) delegate andMessage:(NSString*) message;

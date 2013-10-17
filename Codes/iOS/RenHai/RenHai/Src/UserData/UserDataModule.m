@@ -17,6 +17,8 @@
 #import "RHImpressCard.h"
 #import "RHImpressLabel.h"
 
+#import "CommunicationModule.h"
+
 #define ARCHIVE_DEVICE_NAME @"device.dat"
 #define ARCHIVE_SERVER_NAME @"server.dat"
 
@@ -47,6 +49,8 @@ SINGLETON(UserDataModule)
 
 -(void) releaseModule
 {
+    [self _unregisterNotifications];
+    
     [super releaseModule];
 }
 
@@ -61,6 +65,8 @@ SINGLETON(UserDataModule)
     {
         [self initUserData];
     }
+    
+    [self _registerNotifications];
 }
 
 -(void) processService
@@ -127,6 +133,16 @@ SINGLETON(UserDataModule)
     [self _initServerData];
 }
 
+-(RHBusinessSession*) businessSession
+{
+    if (nil == _businessSession)
+    {
+        [self _initBusinessSession];
+    }
+    
+    return _businessSession;
+}
+
 #pragma mark - Private Methods
 
 -(void) _initServerData
@@ -137,6 +153,46 @@ SINGLETON(UserDataModule)
 -(void) _initBusinessSession
 {
     _businessSession = [[RHBusinessSession alloc] init];
+}
+
+-(void) _registerNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_RHSERVERNOTIFICATION object:nil];
+}
+
+-(void) _unregisterNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void) _onNotifications:(NSNotification*) notification
+{
+    if (nil != notification)
+    {
+        if ([notification.name isEqualToString:NOTIFICATION_ID_RHSERVERNOTIFICATION])
+        {
+            RHMessage* message = (RHMessage*)notification.object;
+            
+            switch (message.messageId)
+            {
+                case MessageId_BusinessSessionNotification:
+                {
+                    [self _processBusinessSessionNotification:message];
+                    
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+        }
+    }
+}
+
+-(void) _processBusinessSessionNotification:(RHMessage*) message
+{
+    
 }
 
 #pragma mark - UIApplicationDelegate

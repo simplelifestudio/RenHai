@@ -19,7 +19,7 @@
 
 #define PING_TEXT @"#####RenHai-App-Ping#####"
 #define PONG_LOG 0
-#define PING_ACTIVATE 1
+#define PING_ACTIVATE 0
 #define MESSAGE_LOG 0
 
 @interface WebSocketAgent()
@@ -229,6 +229,12 @@
             }
             case MessageType_ServerNotification:
             {
+                if (jsonMessage.messageId == MessageId_BusinessSessionNotification)
+                {
+                    RHMessage* responseMessage = [RHMessage newBusinessSessionNotificationResponseMessage:jsonMessage device:_userDataModule.device];
+                    [self asyncMessage:responseMessage];
+                }
+                
                 NSNotification* notification = [NSNotification notificationWithName:NOTIFICATION_ID_RHSERVERNOTIFICATION object:jsonMessage userInfo:nil];
                 [[NSNotificationCenter defaultCenter] postNotification:notification];
                 

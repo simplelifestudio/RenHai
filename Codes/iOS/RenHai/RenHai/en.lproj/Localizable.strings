@@ -25,6 +25,13 @@
 "LeftBar_Config" = "Config";
 "LeftBar_Help" = "Help";
 
+"Home_OnlineCount" = "Online Users";
+"Home_ChatCount" = "Chating Users";
+"Home_PressToEnterPool" = "Press to Enter";
+"Home_IsEnteringPool" = "Entering...";
+"Home_EnterPoolFailed" = "Enter Failed";
+
+
 "Device_DeviceModel" = "Model";
 "Device_OSVersion" = "OS";
 "Device_IsJailed" = "Jailed";
