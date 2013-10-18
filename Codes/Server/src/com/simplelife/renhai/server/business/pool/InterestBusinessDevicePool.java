@@ -120,6 +120,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     }
     
     /** */
+    @Override
     public String onDeviceEnter(IDeviceWrapper device)
     {
     	Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
@@ -200,8 +201,11 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     @Override
     public void onDeviceLeave(IDeviceWrapper device, Consts.DeviceLeaveReason reason)
     {
-    	super.onDeviceLeave(device, reason);
-    	removeInterestIndex(device);
+    	if (null != this.getDevice(device.getDeviceSn()))
+    	{
+    		super.onDeviceLeave(device, reason);
+    		removeInterestIndex(device);
+    	}
     }
 
 	@Override

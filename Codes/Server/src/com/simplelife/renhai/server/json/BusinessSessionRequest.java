@@ -65,6 +65,17 @@ public class BusinessSessionRequest extends AppJSONMessage
 			setErrorDescription(JSONKey.BusinessType + " can't be found.");
 			return false;
 		}
+		else
+		{
+			int intType = body.getIntValue(JSONKey.BusinessType);
+			Consts.BusinessType businessType = Consts.BusinessType.parseValue(intType);
+			if (businessType == Consts.BusinessType.Invalid)
+			{
+				setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+				setErrorDescription("Invalid business type");
+				return false;
+			}
+		}
 		
 		if (!body.containsKey(JSONKey.OperationType))
 		{
@@ -241,6 +252,20 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType businessType = Consts.BusinessType.parseValue(intType);
+		
+		Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
+		if (status.getValue() >= Consts.BusinessStatus.WaitMatch.getValue())
+		{
+			Consts.BusinessType curBusinessType = deviceWrapper.getBusinessType();
+			if (businessType != curBusinessType)
+			{
+				this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
+				this.setErrorDescription("Device <"+ deviceWrapper.getDeviceSn() +"> is still in " + curBusinessType.name() + " pool and request of entering "+ businessType.name() +" pool is rejected.");
+				responseError();
+				return;
+			}
+		}
+		
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		
@@ -279,10 +304,6 @@ public class BusinessSessionRequest extends AppJSONMessage
     			, body.getString(JSONKey.BusinessType) + ", " + deviceWrapper.getDeviceSn());
 		response.asyncResponse();
 		
-		// Change status of device after sending response of EnterPool
-		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
-		deviceWrapper.setBusinessType(businessType);
-		
 		AbstractBusinessScheduler businessScheduler = businessPool.getBusinessScheduler(); 
 		businessScheduler.getLock().lock();
     	businessScheduler.signal();
@@ -295,12 +316,30 @@ public class BusinessSessionRequest extends AppJSONMessage
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceSn());
 
-		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
-		int intType = body.getIntValue(JSONKey.BusinessType);
-		Consts.BusinessType type = Consts.BusinessType.parseValue(intType);
-		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		onlinePool.getBusinessPool(type).onDeviceLeave(deviceWrapper, Consts.DeviceLeaveReason.AppLeaveBusiness);
+		Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
+		if (status.getValue() < Consts.BusinessStatus.WaitMatch.getValue())
+		{
+			this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
+			this.setErrorDescription("Device <"+ deviceWrapper.getDeviceSn() +"> is not in business device pool.");
+			responseError();
+			return;
+		}
 		
+		int intType = body.getIntValue(JSONKey.BusinessType);
+		Consts.BusinessType businessType = Consts.BusinessType.parseValue(intType);
+		Consts.BusinessType curBusinessType = deviceWrapper.getBusinessType();
+		if (businessType != curBusinessType)
+		{
+			this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
+			this.setErrorDescription("Device <"+ deviceWrapper.getDeviceSn() +"> is in " + curBusinessType.name() + " pool and request of leaving "+ businessType.name() +" pool is rejected.");
+			responseError();
+			return;
+		}
+		
+		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
+		onlinePool.getBusinessPool(businessType).onDeviceLeave(deviceWrapper, Consts.DeviceLeaveReason.AppLeaveBusiness);
+		
+		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
 		

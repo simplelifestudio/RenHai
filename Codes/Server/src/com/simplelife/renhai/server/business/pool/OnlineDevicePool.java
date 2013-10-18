@@ -137,7 +137,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 			lastActivityTime = deviceWrapper.getLastActivityTime().getTime();
 			if ((now - lastActivityTime) > GlobalSetting.TimeOut.DeviceInIdle)
 			{
-				logger.debug("Device with connection id {} was removed from online device pool due to last activity time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastActivityTime().getTime())
+				logger.debug("Device with connection id {} will be removed from online device pool due to last activity time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastActivityTime().getTime())
 						, deviceWrapper.getConnection().getConnectionId());
 				deleteDevice(deviceWrapper, Consts.DeviceLeaveReason.TimeoutOfActivity);
 				continue;
@@ -153,7 +153,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 					// The extreme case of there is activity but no ping 
 					continue;
 				}
-				logger.debug("Device with connection id {} was removed from online device pool due to last ping time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime()),
+				logger.debug("Device with connection id {} will be removed from online device pool due to last ping time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime()),
 						deviceWrapper.getConnection().getConnectionId());
 				deleteDevice(deviceWrapper, Consts.DeviceLeaveReason.TimeoutOfPing);
 				continue;
@@ -244,6 +244,10 @@ public class OnlineDevicePool extends AbstractDevicePool
 	    		queueDeviceMap.remove(id);
 	    		logger.debug("Device <{}> was removed from queueDeviceMap of online device pool, device count after remove: " + getElementCount(), id);
     		}
+    		else
+    		{
+    			logger.error("Device with id <> shall be in queueDeviceMap but it can't be found in queueDeviceMap!", id);
+    		}
     	}
     	else
     	{
@@ -252,6 +256,10 @@ public class OnlineDevicePool extends AbstractDevicePool
     		{
 	    		deviceMap.remove(sn);
 	    		logger.debug("Device <{}> was removed from deviceMap of online device pool, device count after remove: " + getElementCount(), sn);
+    		}
+    		else
+    		{
+    			logger.error("Device <> shall be in deviceMap but it can't be found in deviceMap!", sn);
     		}
     		
     		if ((status == Consts.BusinessStatus.WaitMatch)

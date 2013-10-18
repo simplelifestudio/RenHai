@@ -205,6 +205,16 @@ public class MockApp implements IMockApp, Runnable
 	protected int chatCount = 0;
 	protected boolean useRealSocket;
 	
+	public void setBusinessType(Consts.BusinessType businessType)
+	{
+		this.businessType = businessType; 
+	}
+	
+	public Consts.BusinessType getBusinessType()
+	{
+		return businessType;
+	}
+	
 	public MockAppConsts.MockAppBusinessStatus getBusinessStatus()
 	{
 		return businessStatus;
@@ -605,7 +615,16 @@ public class MockApp implements IMockApp, Runnable
 		
 		// Add command body
 		body.put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(businessSessionId));
-		body.put(JSONKey.BusinessType, businessType.getValue());
+		
+		if (businessType != null)
+		{
+			body.put(JSONKey.BusinessType, businessType.getValue());
+		}
+		else
+		{
+			body.put(JSONKey.BusinessType, null);
+		}
+		
 		body.put(JSONKey.OperationType, operationType.getValue());
 		
 		body.put(JSONKey.OperationInfo, operationInfoObj);
@@ -634,7 +653,14 @@ public class MockApp implements IMockApp, Runnable
 	@Override
 	public void leavePool()
 	{
-		sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, businessType.toString());
+		if (businessType != null)
+		{
+			sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, businessType.toString());
+		}
+		else
+		{
+			sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, null);
+		}
 	}
 	
 	/** */

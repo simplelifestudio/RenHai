@@ -87,7 +87,11 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	logger.debug("Close Websocket: " + getConnectionId());
         try
 		{
-        	getWsOutbound().close(Consts.DeviceLeaveReason.WebsocketClosedByServer.getValue(), null);
+        	WsOutbound ws = getWsOutbound(); 
+        	if (ws != null)
+        	{
+        		ws.close(Consts.DeviceLeaveReason.WebsocketClosedByServer.getValue(), null);
+        	}
 		}
 		catch (IOException e)
 		{
