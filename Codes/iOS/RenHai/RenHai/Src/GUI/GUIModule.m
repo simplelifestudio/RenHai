@@ -43,10 +43,6 @@
 @synthesize warningViewController = _warningViewController;
 
 @synthesize chatWizardController = _chatWizardController;
-@synthesize chatWaitViewController = _chatWaitViewController;
-@synthesize chatConfirmViewContorller = _chatConfirmViewContorller;
-@synthesize chatWebRTCViewController = _chatWebRTCViewController;
-@synthesize chatImpressViewController = _chatImpressViewController;
 
 @synthesize HUDAgent = _HUDAgent;
 
@@ -170,14 +166,8 @@ SINGLETON(GUIModule)
     _warningViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_WARNING_IPHONE];
     
     _chatWizardController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATWIZARD];
-    _chatWaitViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATWAIT_IPHONE];
-    _chatConfirmViewContorller = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATCONFIRM_IPHONE];
-    _chatWebRTCViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATWEBRTC_IPHONE];
-    _chatImpressViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATIMPRESS_IPHONE];
     
     [self _assembleMainViewController];
-    
-    [self _assembleChatWizardController];
 }
 
 -(void) _assembleMainViewController
@@ -187,20 +177,6 @@ SINGLETON(GUIModule)
                               PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
                               };
     _mainViewController = [MainViewController_iPhone revealControllerWithFrontViewController:_navigationController leftViewController:_leftbarViewController options:options];
-}
-
--(void) _assembleChatWizardController
-{
-    _chatWizardController.modalPresentationStyle = UIModalPresentationFormSheet;
-    _chatWizardController.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    if ([_chatWizardController containsViewController:_chatWaitViewController])
-    {
-        [_chatWizardController popToViewController:_chatWaitViewController animated:YES];
-    }
-    else
-    {
-        [_chatWizardController pushViewController:_chatWaitViewController animated:YES];
-    }
 }
 
 -(void) _registerNotifications

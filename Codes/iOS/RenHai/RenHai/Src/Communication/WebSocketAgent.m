@@ -19,7 +19,7 @@
 
 #define PING_TEXT @"#####RenHai-App-Ping#####"
 #define PONG_LOG 0
-#define PING_ACTIVATE 1
+#define PING_ACTIVATE 0
 #define MESSAGE_LOG 0
 #define SERVERNOTIFICATION_LOG 1
 

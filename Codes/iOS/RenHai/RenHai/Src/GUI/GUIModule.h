@@ -111,10 +111,7 @@ LEFTBAR_CELL_ID;
 @property (nonatomic, strong) WarningViewController_iPhone* warningViewController;
 
 @property (nonatomic, strong) ChatWizardController* chatWizardController;
-@property (nonatomic, strong) ChatWaitViewController_iPhone* chatWaitViewController;
-@property (nonatomic, strong) ChatConfirmViewController_iPhone* chatConfirmViewContorller;
-@property (nonatomic, strong) ChatWebRTCViewController_iPhone* chatWebRTCViewController;
-@property (nonatomic, strong) ChatImpressViewController_iPhone* chatImpressViewController;
+
 
 @property (strong, nonatomic) CBHUDAgent* HUDAgent;
 

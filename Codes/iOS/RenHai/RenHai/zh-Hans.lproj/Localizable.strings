@@ -77,4 +77,12 @@
 "Connect_ServerDataSynced_Detail" = "成功同步服务器数据";
 "Connect_ServerDataSyncFailed" = "同步";
 "Connect_ServerDataSyncFailed_Detail" = "无法同步服务器数据";
-"Connect_Retry" = "重试";
+"Connect_Action_Retry" = "重试";
+
+"ChatWait_WaitForMatch" = "正在匹配";
+"ChatWait_WaitForMatch_Detail" = "茫茫人海，知音何在...";
+"ChatWait_Matched" = "匹配成功";
+"ChatWait_Matched_Detail" = "发现兴趣相投的陌生人";
+"ChatWait_Cancel" = "取消匹配";
+"ChatWait_Cancel_Detail" = "取消匹配，离开人海...";
+"ChatWait_Action_Cancel" = "取消";

@@ -166,7 +166,7 @@ ConnectStatus;
             }
             
             [self dismissViewControllerAnimated:NO completion:^(){
-//                [mainVC resignPresentationModeEntirely:YES animated:NO completion:nil];
+                [mainVC resignPresentationModeEntirely:YES animated:NO completion:nil];
             }];
             
             if (rootVC != mainVC)
@@ -247,7 +247,7 @@ ConnectStatus;
         
         NSString* infoText = nil;
         NSString* infoDetailText = nil;
-        NSString* actionButtonTitle = NSLocalizedString(@"Connect_Retry", nil);
+        NSString* actionButtonTitle = NSLocalizedString(@"Connect_Action_Retry", nil);
         BOOL isActionButtonHide = YES;
         BOOL isTextClear = NO;
         
@@ -343,11 +343,9 @@ ConnectStatus;
 
 - (void)_timerStart
 {
-    dispatch_sync(dispatch_get_main_queue(), ^(){
-        [self _clockStart];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self _clockStart];    
     });
-
-    [NSThread sleepForTimeInterval:DELAY];
 }
 
 - (void)_timerStop
@@ -471,7 +469,7 @@ ConnectStatus;
             
             [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSyncFailed];
             
-            _isAppDataSyncSuccess = NO;
+            _isServerDataSyncSuccess = NO;
         }
         @finally
         {
