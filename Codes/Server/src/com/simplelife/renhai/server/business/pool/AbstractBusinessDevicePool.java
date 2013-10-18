@@ -105,7 +105,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 		device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
 		device.setBusinessType(businessType);
     	deviceMap.put(sn, device);
-    	logger.debug("Device <{}> has entered " + businessType.name() + " pool", device.getDeviceSn());
+    	logger.debug("Device <{}> has entered " + businessType.name() + " pool, device count after enter: " + this.getElementCount(), device.getDeviceSn());
     	return null;
     }
 

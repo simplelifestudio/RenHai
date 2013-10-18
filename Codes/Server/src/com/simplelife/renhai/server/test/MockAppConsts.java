@@ -31,8 +31,8 @@ public class MockAppConsts
 		AppDataSyncResReceived(3),
 		EnterPoolReqSent(4),
 		EnterPoolResReceived(5),
-		SessionBoundedReceived(6),
-		SessionBoundedReplied(7),
+		SessionBoundReceived(6),
+		SessionBoundReplied(7),
 		AgreeChatReqSent(8),
 		AgreeChatResReceived(9),
 		RejectChatReqSent(8),
@@ -112,8 +112,8 @@ public class MockAppConsts
 		NoEnterPoolRequest("NoEnterPoolRequest"),
 		// Needs to request enter pool from now on 
 		
-		NoResponseForSessionBounded("NoResponseForSessionBounded"),
-		// Needs to response sessionbounded from now on
+		NoResponseForSessionBound("NoResponseForSessionBound"),
+		// Needs to response sessionbound from now on
 		
 		NoRequestOfAgreeChat("NoRequestOfAgreeChat"),
 		ConnectLossDuringChatConfirm("ConnectLossDuringChatConfirm"),

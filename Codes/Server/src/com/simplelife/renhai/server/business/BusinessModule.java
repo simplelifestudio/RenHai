@@ -13,6 +13,9 @@ package com.simplelife.renhai.server.business;
 
 import org.slf4j.LoggerFactory;
 
+import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.util.AbstractModule;
 
 
@@ -25,5 +28,20 @@ public class BusinessModule extends AbstractModule
 	}
 
 	public final static BusinessModule instance = new BusinessModule();
-
+	
+	@Override
+	public void startService()
+    {
+		// To initialize DB connection
+    	HibernateSessionFactory.getSession();
+    	OnlineDevicePool.instance.startTimers();
+    	moduleAvailable = true;
+    }
+	
+	@Override
+	public void stopService()
+	{
+		OnlineDevicePool.instance.stopTimers();
+		moduleAvailable = false;
+	}
 }

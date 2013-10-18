@@ -730,7 +730,7 @@ public class Consts
 		AppDataSyncResponse_1007(1007),
 		ServerDataSyncRequest_1008(1008),
 		ServerDataSyncResponse_1009(1009),
-		NotificationSessionBounded_1010(1010),
+		NotificationSessionBound_1010(1010),
 		NotificationOthersideRejected_1011(1011),
 		NotificationOthersideAgreed_1012(1012),
 		NotificationResponse_1013(1013),

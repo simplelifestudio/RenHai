@@ -13,6 +13,7 @@ package com.simplelife.renhai.server.db;
 
 import org.slf4j.LoggerFactory;
 
+import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.AbstractModule;
 
 
@@ -30,5 +31,20 @@ public class DBModule extends AbstractModule
 		DAOWrapper.asyncSave(obj);
 	}
 	public final static DBModule instance = new DBModule();
+	
+	
+	@Override
+	public void startService()
+    {
+		super.startService();
+		DAOWrapper.startTimers();
+    }
+	
+	@Override
+	public void stopService()
+	{
+		super.stopService();
+		DAOWrapper.stopTimers();
+	}
 	
 }

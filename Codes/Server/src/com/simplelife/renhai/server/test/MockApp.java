@@ -386,6 +386,7 @@ public class MockApp implements IMockApp, Runnable
     public void stopTimer()
     {
     	this.pingTimer.cancel();
+    	logger.debug("Ping timer of MockApp <{}> was stopped", deviceSn);
     }
     
     /**
@@ -906,7 +907,7 @@ public class MockApp implements IMockApp, Runnable
 			    	}
 			    	else
 			    	{
-			    		replyNotification(lastReceivedCommand, MockAppBusinessStatus.SessionBoundedReceived);
+			    		replyNotification(lastReceivedCommand, MockAppBusinessStatus.SessionBoundReceived);
 			    		if (behaviorMode == MockAppConsts.MockAppBehaviorMode.RejectChat)
 						{
 							AutoReplyTask chatConfirmTask = new AutoReplyTask(
@@ -939,10 +940,10 @@ public class MockApp implements IMockApp, Runnable
 				}
 				break;
 				
-			case SessionBoundedReplied:
+			case SessionBoundReplied:
 				if (messageId != Consts.MessageId.BusinessSessionNotification)
 				{
-					logger.error("MockApp <" + deviceSn + "> received {} in status of SessionBoundedReplied", messageId.name());
+					logger.error("MockApp <" + deviceSn + "> received {} in status of SessionBoundReplied", messageId.name());
 				}
 				break;
 				

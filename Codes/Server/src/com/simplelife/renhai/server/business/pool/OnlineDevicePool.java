@@ -111,14 +111,9 @@ public class OnlineDevicePool extends AbstractDevicePool
     
     private OnlineDevicePool()
     {
-    	// To initialize DB connection
-    	HibernateSessionFactory.getSession();
-    	startTimers();
     	this.addBusinessPool(Consts.BusinessType.Random, new RandomBusinessDevicePool());
     	this.addBusinessPool(Consts.BusinessType.Interest, new InterestBusinessDevicePool());
     	setCapacity(GlobalSetting.BusinessSetting.OnlinePoolCapacity);
-    	
-    	DAOWrapper.startTimers();
     }
     
     private void checkDeviceMap(ConcurrentHashMap<String, IDeviceWrapper> deviceMap)
@@ -153,7 +148,8 @@ public class OnlineDevicePool extends AbstractDevicePool
 					// The extreme case of there is activity but no ping 
 					continue;
 				}
-				logger.debug("Device with connection id {} will be removed from online device pool due to last ping time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime()),
+				logger.debug("Device with connection id {} will be removed from online device pool due to last ping time is: " 
+						+ DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime()) + ", id in map: " + e.getKey(),
 						deviceWrapper.getConnection().getConnectionId());
 				deleteDevice(deviceWrapper, Consts.DeviceLeaveReason.TimeoutOfPing);
 				continue;
@@ -200,16 +196,18 @@ public class OnlineDevicePool extends AbstractDevicePool
     		return null;
     	}
     	
-    	logger.debug("Create device bases on connection with id: {}", connection.getConnectionId());
-    	DbLogger.saveSystemLog(Consts.OperationCode.SetupWebScoket_1001
-    			, Consts.SystemModule.business
-    			, connection.getConnectionId());
-    	
     	DeviceWrapper deviceWrapper = new DeviceWrapper(connection);
     	deviceWrapper.bindOnlineDevicePool(this);
     	deviceWrapper.updateActivityTime();
     	deviceWrapper.updatePingTime();
-    	queueDeviceMap.put(connection.getConnectionId(), deviceWrapper);
+    	
+    	String id = connection.getConnectionId();
+    	queueDeviceMap.put(id, deviceWrapper);
+    	
+    	logger.debug("Create device bases on connection with id: {}", id);
+    	DbLogger.saveSystemLog(Consts.OperationCode.SetupWebScoket_1001
+    			, Consts.SystemModule.business
+    			, id);
         return deviceWrapper;
     }
     
@@ -228,6 +226,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     {
     	if (deviceWrapper == null)
     	{
+    		logger.error("Fatal error, device to be deleted is null");
     		return;
     	}
     	

@@ -103,7 +103,7 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		mockApp2.stopAutoReply();
 		businessPool.getBusinessScheduler().schedule();
 		
-		// wait for SessionBounded
+		// wait for SessionBound
 		mockApp1.waitMessage();
 		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
 		
@@ -121,7 +121,7 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
 		
-		// To wait for Server finish handling of sessionbounded response
+		// To wait for Server finish handling of sessionbound response
 		Thread.sleep(500);
 		
 		mockApp1.chatConfirm(true);

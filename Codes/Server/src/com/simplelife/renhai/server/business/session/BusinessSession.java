@@ -279,7 +279,7 @@ public class BusinessSession implements IBusinessSession
     		logger.debug("Send notify for device " + device.getDeviceSn() +": \n" + JSON.toJSONString(notify.toJSONObject(), true));
     		notify.syncResponse();
     		
-    		DbLogger.saveSystemLog(Consts.OperationCode.NotificationSessionBounded_1010
+    		DbLogger.saveSystemLog(Consts.OperationCode.NotificationSessionBound_1010
         			, Consts.SystemModule.business
         			, notificationType.name() + ", " + device.getDeviceSn());
     	}
@@ -384,13 +384,13 @@ public class BusinessSession implements IBusinessSession
     	
     	if (progress == null)
     	{
-    		logger.error("Fatal error that received confirmation SessionBounded from device <{}> but there is no progress record for it!");
+    		logger.error("Fatal error that received confirmation SessionBound from device <{}> but there is no progress record for it!");
     		return;
     	}
     	
     	if (progress.compareTo(Consts.BusinessProgress.Init) != 0)
     	{
-    		logger.error("Received confirmation SessionBounded from device <{}> but it's in status of " + progress.name(), device.getDeviceSn());
+    		logger.error("Received confirmation SessionBound from device <{}> but it's in status of " + progress.name(), device.getDeviceSn());
     		return;
     	}
     	
@@ -422,7 +422,7 @@ public class BusinessSession implements IBusinessSession
     	
     	if (progress == null)
     	{
-    		logger.error("Fatal error that received confirmation SessionBounded from device <{}> but there is no progress record for it!");
+    		logger.error("Fatal error that received confirmation SessionBound from device <{}> but there is no progress record for it!");
     		return;
     	}
     	

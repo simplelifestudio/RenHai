@@ -111,7 +111,7 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		// Step_13 Mock事件：B的通信被禁用掉后，抛出IOException
 		// Step_14 调用：BusinessSessionPool::getCount
 		
-		// 接收SessionBounded
+		// 接收SessionBound
 		mockApp1.waitMessage();
 		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
 		//assertEquals(sessionCount-1, sessionPool.getElementCount());

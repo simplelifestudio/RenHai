@@ -20,6 +20,6 @@ def main(argv):
 
 if __name__ == '__main__':
     if (len(sys.argv) == 1):
-        print("Parameters missed, usage of this tool:\n  LogAnalyzeTool.py inputfile outputfile keys")
+        print("Parameters missed, usage of this tool:\n  LogAnalyzeTool.py inputfile outputfile "key1,key2")
         sys.exit(1)
     main(sys.argv)
