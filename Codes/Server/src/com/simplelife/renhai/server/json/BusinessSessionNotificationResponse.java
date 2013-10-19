@@ -61,14 +61,14 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 		Consts.NotificationType notificationType = Consts.NotificationType.parseValue(intOperationType);
 		switch(notificationType)
 		{
-			case SessionBinded:
+			case SessionBound:
 				if (deviceWrapper.getOwnerBusinessSession() != null)
 				{
 					deviceWrapper.getOwnerBusinessSession().onBindConfirm(deviceWrapper);
 				}
 				else
 				{
-					logger.error("Device <{}> was in status of SessionBinded but its session is null!", deviceWrapper.getDeviceSn());
+					logger.error("Device <{}> was in status of SessionBound but its session is null!", deviceWrapper.getDeviceSn());
 				}
 				break;
 			case OthersideAgreed:

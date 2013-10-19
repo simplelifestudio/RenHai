@@ -100,7 +100,7 @@ public class Test20MatchConfirmBReject extends AbstractTestCase
 		businessPool.getBusinessScheduler().schedule();
 		
 		mockApp1.waitMessage();
-		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBound));
 		
 		Thread.sleep(500);
 		

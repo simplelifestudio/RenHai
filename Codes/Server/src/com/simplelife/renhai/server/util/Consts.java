@@ -208,7 +208,7 @@ public class Consts
 	public enum NotificationType
 	{
 		Invalid(0),
-		SessionBinded(1), 
+		SessionBound(1), 
 		OthersideRejected(2),
 		OthersideAgreed(3), 
 		OthersideLost(4),

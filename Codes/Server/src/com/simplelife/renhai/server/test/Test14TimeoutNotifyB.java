@@ -105,7 +105,7 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		
 		// wait for SessionBound
 		mockApp1.waitMessage();
-		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBound));
 		
 		// Step_12 调用：BusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
@@ -133,10 +133,10 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.OthersideLost));
 
 		// Step_16 Mock事件：A确认绑定
-		//mockApp1.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
+		//mockApp1.sendNotificationResponse(Consts.NotificationType.SessionBound, "", "1");
 		
 		// Step_17 Mock事件：B确认绑定
-		//mockApp2.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
+		//mockApp2.sendNotificationResponse(Consts.NotificationType.SessionBound, "", "1");
 		
 		// Step_18 调用：BusinessSession::getStatus
 		//assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);

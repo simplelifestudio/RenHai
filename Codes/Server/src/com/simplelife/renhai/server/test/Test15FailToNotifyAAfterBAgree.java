@@ -98,10 +98,10 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 		mockApp1.clearLastReceivedCommand();
 		businessPool.getBusinessScheduler().schedule();
 		mockApp1.waitMessage();
-		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBound));
 		
 		mockApp2.waitMessage();
-		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBound));
 		
 		// Step_12 µ÷ÓÃ£ºBusinessSessionPool::getCount
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());

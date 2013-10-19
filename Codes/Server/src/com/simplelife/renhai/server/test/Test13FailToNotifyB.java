@@ -113,7 +113,7 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		
 		// 接收SessionBound
 		mockApp1.waitMessage();
-		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBound));
 		//assertEquals(sessionCount-1, sessionPool.getElementCount());
 		
 		// 接收OthersideLost

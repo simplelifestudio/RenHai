@@ -212,7 +212,7 @@ public class BusinessSession implements IBusinessSession
     		pool.startChat(device);
     	}
     	
-    	notifyDevices(null, Consts.NotificationType.SessionBinded);
+    	notifyDevices(null, Consts.NotificationType.SessionBound);
     }
     
     public void notifyIncreaseChatDuration(int duration)

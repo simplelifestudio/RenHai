@@ -774,7 +774,7 @@ public class MockApp implements IMockApp, Runnable
 		else if (messageId == Consts.MessageId.BusinessSessionNotification)
 		{
 			int messageType = body.getIntValue(JSONKey.OperationType);
-			if (messageType == Consts.NotificationType.SessionBinded.getValue())
+			if (messageType == Consts.NotificationType.SessionBound.getValue())
 			{
 				targetDeviceObject = JSON.parseObject(body.getString(JSONKey.OperationInfo));
 			}
@@ -901,7 +901,7 @@ public class MockApp implements IMockApp, Runnable
 				if (messageId == Consts.MessageId.BusinessSessionNotification)
 				{
 					int receivedOperationType = body.getIntValue(JSONKey.OperationType);
-			    	if (receivedOperationType != Consts.NotificationType.SessionBinded.getValue())
+			    	if (receivedOperationType != Consts.NotificationType.SessionBound.getValue())
 			    	{
 			    		logger.error("MockApp <" + deviceSn + "> received {} in status of EnterPoolResReceived", messageId.name());
 			    	}

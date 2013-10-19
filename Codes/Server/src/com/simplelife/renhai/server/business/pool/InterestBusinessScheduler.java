@@ -79,10 +79,8 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 				break;
 			}
 			
-			selectedDevice.clear();
-			
 			IDeviceWrapper device = entry.getValue();
-			selectedDevice.add(device.getDeviceSn());
+			//selectedDevice.add(device.getDeviceSn());
 			
 			labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
 			String strLabel; 
@@ -96,38 +94,37 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
     				break;
     			}
 
+				selectedDevice.clear();
 				// Try to find device with same interest label
 				strLabel = label.getGlobalinterestlabel().getInterestLabelName();
 				deviceList = interestLabelMap.get(strLabel);
 				
 				// The selected device shall be considered
-				int expectedDeviceCount = deviceCountPerSession - selectedDevice.size() + 1;
+				//int expectedDeviceCount = deviceCountPerSession - selectedDevice.size() + 1;
 				
 				// We don't have enough devices have same interest label
-				if (deviceList.size() < expectedDeviceCount)
+				if (deviceList.size() < deviceCountPerSession)
 				{
 					continue;
 				}
 				
-				if ((deviceList.size() == expectedDeviceCount))
+				if ((deviceList.size() == deviceCountPerSession))
 				{
 					String tempSn;
 					// All of devices found can be added to this business session
 					for (IDeviceWrapper tmpDevice : deviceList)
 					{
 						tempSn = tmpDevice.getDeviceSn();
-						if (!selectedDevice.contains(tempSn))
-						{
-							selectedDevice.add(tempSn);
-						}
+						selectedDevice.add(tempSn);
 					}
 				}
 				else
 				{
+					// More devices than expected 
 					Object[] deviceArray = deviceList.toArray();
 					IDeviceWrapper tempDevice;
     				String deviceSn;
-    				for (int i = 0; i < expectedDeviceCount; i++)
+    				for (int i = 0; i < deviceCountPerSession; i++)
     				{
     					int tempCount = 0;
     					
@@ -153,7 +150,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			
 			if (!deviceFoundFlag)
 			{
-				// Devices in pool can't be matched by same interest label 
+				// Devices in pool can't be matched until new device entered 
 				deadMatchFlag = true;
 				return;
 			}

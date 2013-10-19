@@ -110,8 +110,8 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		
 		// Step_12 调用：BusinessSessionPool::getCount
 		//由于A没有回应session会话绑定，等待超时后session会被释放，调度没有成功
-		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
-		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBinded));
+		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBound));
+		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBound));
 		
 		assertEquals(sessionCount - 1, sessionPool.getElementCount());
 		sessionCount = sessionPool.getElementCount();
