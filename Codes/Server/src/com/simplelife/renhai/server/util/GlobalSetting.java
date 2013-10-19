@@ -53,7 +53,7 @@ public class GlobalSetting
 		public static int FlushCacheToDB = 30 * 1000;
 		public static int DeviceInIdle = 300 * 1000;
 		
-		public static int OnlineDeviceConnection = 15 * 1000;
+		public static int OnlineDeviceConnection = 300 * 1000;
 		public static int PingInterval = 5 * 1000;
 		
 		public static int SaveStatistics = 600 * 1000;

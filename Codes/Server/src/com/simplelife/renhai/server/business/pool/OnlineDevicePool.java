@@ -204,7 +204,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	String id = connection.getConnectionId();
     	queueDeviceMap.put(id, deviceWrapper);
     	
-    	logger.debug("Create device bases on connection with id: {}", id);
+    	logger.debug("Save connection {} in OnlineDevicePool", id);
     	DbLogger.saveSystemLog(Consts.OperationCode.SetupWebScoket_1001
     			, Consts.SystemModule.business
     			, id);
@@ -258,7 +258,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		}
     		else
     		{
-    			logger.error("Device <> shall be in deviceMap but it can't be found in deviceMap!", sn);
+    			logger.error("Device <{}> shall be in deviceMap but it can't be found in deviceMap!", sn);
     		}
     		
     		if ((status == Consts.BusinessStatus.WaitMatch)
@@ -329,8 +329,9 @@ public class OnlineDevicePool extends AbstractDevicePool
     		}
     	}
     	
-    	queueDeviceMap.remove(connection.getConnectionId());
+    	queueDeviceMap.remove(connection);
     	deviceMap.put(deviceWrapper.getDeviceSn(), deviceWrapper);
+    	logger.debug("Create device <{}> bases on connection " + connection, deviceWrapper.getDeviceSn());
     }
 
 	@Override
