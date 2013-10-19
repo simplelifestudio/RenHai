@@ -195,7 +195,7 @@ BusinessSessionRequestType;
 
 typedef enum
 {
-    BusinessSessionNotificationType_SessionBinded = 1,
+    BusinessSessionNotificationType_SessionBound = 1,
     BusinessSessionNotificationType_OthersideRejected,
     BusinessSessionNotificationType_OthersideAgreed,
     BusinessSessionNotificationType_OthersideLost,

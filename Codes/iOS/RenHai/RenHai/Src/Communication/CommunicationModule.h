@@ -28,6 +28,12 @@
 #define NOTIFICATION_ID_RHSERVERNOTIFICATION @"RHServerNotification"
 #define NOTIFICATION_ID_RHSERVERDISCONNECTED @"RHServerDisconnected"
 
+#define NOTIFICATION_ID_SESSIONBOUND @"RHServerSessionBound"
+#define NOTIFICATION_ID_OTHERSIDEAGREED @"RHServerSessionOtherAgreed"
+#define NOTIFICATION_ID_OTHERSIDEREJECTED @"RHServerSessionOtherRejected"
+#define NOTIFICATION_ID_OTHERSIDELOST @"RHServerSessionOthersideLost"
+#define NOTIFICATION_ID_OTHERSIDEENDCHAT @"RHServerSessionOthersideEndChat"
+
 @interface CommunicationModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 
 @property (nonatomic, strong) HTTPAgent* httpCommAgent;

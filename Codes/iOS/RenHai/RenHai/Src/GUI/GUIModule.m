@@ -17,6 +17,7 @@
 #import "UIFont+FlatUI.h"
 
 #import "GUIStyle.h"
+#import "AppDataModule.h"
 
 #import "RHTableViewLabelCell_iPhone.h"
 
@@ -25,6 +26,8 @@
 @interface GUIModule()
 {
     AFNetworkActivityIndicatorManager* _networkActivityIndicator;
+    
+    AppDataModule* _appDataModule;
 }
 
 @end
@@ -55,6 +58,8 @@ SINGLETON(GUIModule)
     [self setKeepAlive:FALSE];
     
     _networkActivityIndicator = [AFNetworkActivityIndicatorManager sharedManager];
+    
+    _appDataModule = [AppDataModule sharedInstance];
     
     [self _setupViewControllersFromStoryboard];
 }
@@ -196,6 +201,8 @@ SINGLETON(GUIModule)
         NSString* notificationName = notification.name;
         if ([notificationName isEqualToString:NOTIFICATION_ID_RHSERVERDISCONNECTED])
         {
+            [_appDataModule updateAppBusinessStatus:AppBusinessStatus_Disconnected];
+            
             UIViewController* rootVC = [CBUIUtils getRootController];
             if ([rootVC isVisible])
             {

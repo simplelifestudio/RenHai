@@ -14,6 +14,7 @@
 #import "GUIModule.h"
 #import "CommunicationModule.h"
 #import "UserDataModule.h"
+#import "AppDataModule.h"
 
 #define DELAY CIRCLE_ANIMATION_DISPLAY
 
@@ -30,6 +31,7 @@ ChatWaitStatus;
     GUIModule* _guiModule;
     CommunicationModule* _commModule;
     UserDataModule* _userDataModule;
+    AppDataModule* _appDataModule;
     
     NSTimer* _timer;
     NSUInteger _count;
@@ -64,23 +66,29 @@ ChatWaitStatus;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     [self.navigationController setNavigationBarHidden:YES];
     
     [self _resetInstance];
-    
-    [super viewWillAppear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    
     [self _clockStart];
     
-    [super viewDidAppear:animated];
+    [self _checkIsSessionAlreadyBound];    
+    
+    [self _registerNotifications];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    
+    [self _unregisterNotifications];
     
     [self _clockCancel];
 }
@@ -106,6 +114,7 @@ ChatWaitStatus;
     _guiModule = [GUIModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
+    _appDataModule = [AppDataModule sharedInstance];
     
     _leavePoolFlag = NO;
 }
@@ -148,7 +157,7 @@ ChatWaitStatus;
     
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Interest operationType:BusinessSessionRequestType_LeavePool device:device info:nil];
+        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_LeavePool device:device info:nil];
         RHMessage* responseMessage = [_commModule sendMessage:businessSessionRequestMessage];
         if (responseMessage.messageId == MessageId_BusinessSessionResponse)
         {
@@ -163,6 +172,8 @@ ChatWaitStatus;
                 if (operationValue == BusinessSessionOperationValue_Success)
                 {
                     _leavePoolFlag = YES;
+                    
+                    [_appDataModule updateAppBusinessStatus:AppBusinessStatus_AppDataSyncCompleted];
                 }
                 else
                 {
@@ -260,57 +271,81 @@ ChatWaitStatus;
 
 - (void) _updateUIWithChatWaitStatus:(ChatWaitStatus) status
 {
-//    [NSThread sleepForTimeInterval:DELAY];
+    NSString* infoText = nil;
+    NSString* infoDetailText = nil;
+    NSString* actionButtonTitle = NSLocalizedString(@"ChatWait_Action_Cancel", nil);
+    BOOL isActionButtonHide = NO;
+    BOOL isTextClear = NO;
     
-//    dispatch_async(dispatch_get_main_queue(), ^(){
+    switch (status)
+    {
+        case ChatWaitStatus_WaitForMatch:
+        {
+            infoText = NSLocalizedString(@"ChatWait_WaitForMatch", nil);
+            infoDetailText = NSLocalizedString(@"ChatWait_WaitForMatch_Detail", nil);
+            isActionButtonHide = NO;
+            isTextClear = YES;
+            break;
+        }
+        case ChatWaitStatus_Matched:
+        {
+            infoText = NSLocalizedString(@"ChatWait_Matched", nil);
+            infoDetailText = NSLocalizedString(@"ChatWait_Matched_Detail", nil);
+            isActionButtonHide = YES;
+            isTextClear = NO;
+            break;
+        }
+        case ChatWaitStatus_Cancel:
+        {
+            infoText = NSLocalizedString(@"ChatWait_Cancel", nil);
+            infoDetailText = NSLocalizedString(@"ChatWait_Cancel_Detail", nil);
+            isActionButtonHide = YES;
+            isTextClear = NO;
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
     
-        NSString* infoText = nil;
-        NSString* infoDetailText = nil;
-        NSString* actionButtonTitle = NSLocalizedString(@"ChatWait_Action_Cancel", nil);
-        BOOL isActionButtonHide = NO;
-        BOOL isTextClear = NO;
-        
-        switch (status)
-        {
-            case ChatWaitStatus_WaitForMatch:
-            {
-                infoText = NSLocalizedString(@"ChatWait_WaitForMatch", nil);
-                infoDetailText = NSLocalizedString(@"ChatWait_WaitForMatch_Detail", nil);
-                isActionButtonHide = NO;
-                isTextClear = YES;
-                break;
-            }
-            case ChatWaitStatus_Matched:
-            {
-                infoText = NSLocalizedString(@"ChatWait_Matched", nil);
-                infoDetailText = NSLocalizedString(@"ChatWait_Matched_Detail", nil);
-                isActionButtonHide = YES;
-                isTextClear = NO;
-                break;
-            }
-            case ChatWaitStatus_Cancel:
-            {
-                infoText = NSLocalizedString(@"ChatWait_Cancel", nil);
-                infoDetailText = NSLocalizedString(@"ChatWait_Cancel_Detail", nil);
-                isActionButtonHide = YES;
-                isTextClear = NO;
-                break;
-            }
-            default:
-            {
-                break;
-            }
-        }
-        
-        _infoLabel.text = infoText;
-        if (isTextClear)
-        {
-            [self _clearInfoTextView];
-        }
-        [self _updateInfoTextView:infoDetailText];
-        _actionButton.titleLabel.text = actionButtonTitle;
-        _actionButton.hidden = isActionButtonHide;
-//    });
+    _infoLabel.text = infoText;
+    if (isTextClear)
+    {
+        [self _clearInfoTextView];
+    }
+    [self _updateInfoTextView:infoDetailText];
+    _actionButton.titleLabel.text = actionButtonTitle;
+    _actionButton.hidden = isActionButtonHide;
 }
 
+-(void) _registerNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onSessionBound) name:NOTIFICATION_ID_SESSIONBOUND object:nil];
+}
+
+-(void) _unregisterNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void) _onSessionBound
+{
+    dispatch_async(dispatch_get_main_queue(), ^(){
+    
+        [self _updateUIWithChatWaitStatus:ChatWaitStatus_Matched];
+    
+        ChatWizardController* chatWizard = _guiModule.chatWizardController;
+        [chatWizard wizardProcess:ChatWizardStatus_ChatConfirm];
+        
+    });
+}
+
+-(void) _checkIsSessionAlreadyBound
+{
+    if (_appDataModule.currentAppBusinessStatus == AppBusinessStatus_SessionBoundCompeleted)
+    {
+        [self _onSessionBound];
+    }
+}
 @end

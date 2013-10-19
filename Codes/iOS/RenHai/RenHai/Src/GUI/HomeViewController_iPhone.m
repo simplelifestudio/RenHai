@@ -16,6 +16,7 @@
 #import "GUIStyle.h"
 #import "UserDataModule.h"
 #import "CommunicationModule.h"
+#import "AppDataModule.h"
 
 #define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
 #define INTERVAL_DATASYNC 5
@@ -34,6 +35,7 @@ EnterOperationStatus;
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
+    AppDataModule* _appDataModule;
     
     NSTimer* _enterButtonTimer;
     
@@ -100,6 +102,7 @@ EnterOperationStatus;
     _guiModule = [GUIModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
+    _appDataModule = [AppDataModule sharedInstance];
     
     _enterPoolFlag = NO;
     
@@ -366,6 +369,8 @@ static float progress = 0.0;
                 if (operationValue == BusinessSessionOperationValue_Success)
                 {
                     _enterPoolFlag = YES;
+                    
+                    [_appDataModule updateAppBusinessStatus:AppBusinessStatus_EnterPoolCompleted];
                 }
                 else
                 {
