@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import "ChatWaitViewController_iPhone.h"
+
 @interface ChatWaitViewController_iPhone : UIViewController
 
 @property (weak, nonatomic) IBOutlet UILabel *infoLabel;

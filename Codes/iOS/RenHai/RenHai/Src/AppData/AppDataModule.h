@@ -21,6 +21,21 @@
 #define KEYCHAIN_SERVICE_DEVICE NAMESPACE_APP
 #define KEYCHAIN_ACCOUNT_IDFV @"idfv"
 
+typedef enum
+{
+    AppBusinessStatus_Disconnected = 0,
+    AppBusinessStatus_Connected,
+    AppBusinessStatus_AppDataSyncCompleted,
+    AppBusinessStatus_EnterPoolCompleted,
+    AppBusinessStatus_SessionBoundNotificationReceived,
+    AppBusinessStatus_SessionBoundCompeleted,
+    AppBusinessStatus_ChatAgreeCompleted,
+    AppBusinessStatus_ChatRejectCompleted,
+    AppBusinessStatus_ChatEndCompleleted,
+    AppBusinessStatus_ChatAssessCompleleted
+}
+AppBusinessStatus;
+
 @interface AppDataModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 
 #pragma mark - Common
@@ -40,5 +55,9 @@
 -(NSString*) osVersion;
 -(NSString*) appVersion;
 -(BOOL) isJailed;
+
+#pragma mark - AppBusinessStatus
+-(AppBusinessStatus) currentAppBusinessStatus;
+-(void) updateAppBusinessStatus:(AppBusinessStatus) status;
 
 @end

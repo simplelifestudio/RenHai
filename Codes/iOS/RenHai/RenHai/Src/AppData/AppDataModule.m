@@ -18,6 +18,8 @@
 @interface AppDataModule()
 {
     NSUserDefaults* _userDefaults;
+    
+    AppBusinessStatus _appBusinessStatus;
 }
 
 @end
@@ -33,6 +35,8 @@ SINGLETON(AppDataModule)
     [self setKeepAlive:FALSE];
     
     _userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    _appBusinessStatus = AppBusinessStatus_Disconnected;
 }
 
 -(void) releaseModule
@@ -164,6 +168,122 @@ SINGLETON(AppDataModule)
 {
     BOOL isJailed = [UIDevice isJailed];
     return isJailed;
+}
+
+#pragma mark - AppBusinessStatus
+
+-(AppBusinessStatus) currentAppBusinessStatus
+{
+    return _appBusinessStatus;
+}
+
+-(void) updateAppBusinessStatus:(AppBusinessStatus) status
+{
+    AppBusinessStatus oldStatus = _appBusinessStatus;
+    AppBusinessStatus newStatus = status;
+    
+    BOOL canUpdate = NO;
+    
+    switch (newStatus)
+    {
+        case AppBusinessStatus_Disconnected:
+        {
+            canUpdate = YES;
+            
+            break;
+        }
+        case AppBusinessStatus_Connected:
+        {
+            if (oldStatus == AppBusinessStatus_Disconnected)
+            {
+                canUpdate = YES;
+            }
+            
+            break;
+        }
+        case AppBusinessStatus_AppDataSyncCompleted:
+        {
+            canUpdate = YES;
+            
+            break;
+        }
+        case AppBusinessStatus_EnterPoolCompleted:
+        {
+            if (oldStatus == AppBusinessStatus_AppDataSyncCompleted || oldStatus == AppBusinessStatus_ChatAssessCompleleted)
+            {
+                canUpdate = YES;
+            }
+            
+            break;
+        }
+        case AppBusinessStatus_SessionBoundNotificationReceived:
+        {
+            if (oldStatus == AppBusinessStatus_EnterPoolCompleted)
+            {
+                canUpdate = YES;
+            }
+            
+            break;
+        }
+        case AppBusinessStatus_SessionBoundCompeleted:
+        {
+            if (oldStatus == AppBusinessStatus_SessionBoundNotificationReceived)
+            {
+                canUpdate = YES;
+            }
+            
+            break;
+        }
+        case AppBusinessStatus_ChatAgreeCompleted:
+        {
+            if (oldStatus == AppBusinessStatus_SessionBoundCompeleted)
+            {
+                canUpdate = YES;
+            }
+            
+            break;
+        }
+        case AppBusinessStatus_ChatRejectCompleted:
+        {
+            if (oldStatus == AppBusinessStatus_SessionBoundCompeleted)
+            {
+                canUpdate = YES;
+            }
+            
+            break;
+        }
+        case AppBusinessStatus_ChatEndCompleleted:
+        {
+            if (oldStatus == AppBusinessStatus_ChatAgreeCompleted)
+            {
+                canUpdate = YES;
+            }
+            
+            break;
+        }
+        case AppBusinessStatus_ChatAssessCompleleted:
+        {
+            if (oldStatus == AppBusinessStatus_ChatEndCompleleted)
+            {
+                canUpdate = YES;
+            }
+            
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    
+    if (canUpdate)
+    {
+        _appBusinessStatus = newStatus;
+    }
+    else
+    {
+        NSAssert(NO, @"Ilegal app business status update!");
+    }
 }
 
 #pragma mark - UIApplicationDelegate

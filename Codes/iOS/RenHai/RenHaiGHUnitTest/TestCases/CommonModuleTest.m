@@ -20,6 +20,8 @@
 
 @implementation CommonModuleTest
 
+/*
+
 -(void) testNSDictionaryToJSONString
 {
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];    
@@ -68,4 +70,6 @@
     GHTestLog(@"array: %@", array);
 }
 
+*/
+ 
 @end

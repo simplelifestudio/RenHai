@@ -143,55 +143,71 @@
     [self _sendMessageThroughWebSocket:serverDataSyncRequestMessage selector:@selector(testServerDataSync_InterestLabelList)];
 }
 
--(void) testBusinessSession_EnterPool
+-(void) testSession_EnterPool_Random
 {
     RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_EnterPool device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_EnterPool)];
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testSession_EnterPool_Random)];
 }
 
--(void) testBusinessSession_LeavePool
+-(void) testSession_EnterPool_Interest
+{
+    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Interest operationType:BusinessSessionRequestType_EnterPool device:_device info:nil];
+    
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testSession_EnterPool_Interest)];
+}
+
+-(void) testSession_LeavePool_Random
 {
     RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_LeavePool device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_LeavePool)];
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testSession_LeavePool_Random)];
 }
 
--(void) testBusinessSession_AgreeChat
+-(void) testSession_LeavePool_Interest
 {
-    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_AgreeChat device:_device info:nil];
+    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Interest operationType:BusinessSessionRequestType_LeavePool device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_AgreeChat)];
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testSession_LeavePool_Interest)];
 }
 
--(void) testBusinessSession_EndChat
+/*
+-(void) testSession_AgreeChat
+{
+    RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Interest operationType:BusinessSessionRequestType_AgreeChat device:_device info:nil];
+    
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testSession_AgreeChat)];
+}
+
+-(void) testSession_EndChat
 {
     RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_EndChat device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_EndChat)];
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testSession_EndChat)];
 }
 
--(void) testBusinessSession_AssessAndContinue
+-(void) testSession_AssessAndContinue
 {
     RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_AssessAndContinue device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_AssessAndContinue)];
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testSession_AssessAndContinue)];
 }
 
--(void) testBusinessSession_AssessAndQuit
+-(void) testSession_AssessAndQuit
 {
     RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_AssessAndQuit device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_AssessAndQuit)];
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testSession_AssessAndQuit)];
 }
 
--(void) testBusinessSession_RejectChat
+-(void) testSession_RejectChat
 {
     RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_RejectChat device:_device info:nil];
     
-    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testBusinessSession_RejectChat)];
+    [self _sendMessageThroughWebSocket:businessSessionRequestMessage selector:@selector(testSession_RejectChat)];
 }
-
+*/
+ 
 -(void) _responseBusinessSessionNotification:(RHMessage*) businessSessionNotification
 {
     NSDictionary* body = businessSessionNotification.body;

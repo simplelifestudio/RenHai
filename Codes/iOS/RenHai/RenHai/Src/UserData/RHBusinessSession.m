@@ -20,12 +20,25 @@
 {
     if (self = [super init])
     {
-        
+        [self _setupInstance];
     }
     
     return self;
 }
 
+-(void) addParter:(RHDevice*) device
+{
+    if (nil != device)
+    {
+        [_chatParters addObject:device];
+    }
+}
+
 #pragma mark - Private Methods
+
+-(void) _setupInstance
+{
+    _chatParters = [NSMutableArray array];
+}
 
 @end

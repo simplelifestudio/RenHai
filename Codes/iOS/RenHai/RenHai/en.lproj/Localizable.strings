@@ -31,7 +31,6 @@
 "Home_IsEnteringPool" = "Entering...";
 "Home_EnterPoolFailed" = "Enter Failed";
 
-
 "Device_DeviceModel" = "Model";
 "Device_OSVersion" = "OS";
 "Device_IsJailed" = "Jailed";
@@ -78,4 +77,12 @@
 "Connect_ServerDataSynced_Detail" = "Synchronized server data...";
 "Connect_ServerDataSyncFailed" = "Synchronize";
 "Connect_ServerDataSyncFailed_Detail" = "Can not synchronize server data...";
-"Connect_Retry" = "Retry";
+"Connect_Action_Retry" = "Retry";
+
+"ChatWait_WaitForMatch" = "Wait Matching";
+"ChatWait_WaitForMatch_Detail" = "Matching strangers with similar interests...";
+"ChatWait_Matched" = "Stranger Matched";
+"ChatWait_Matched_Detail" = "A matched stranger found";
+"ChatWait_Cancel" = "Cancel Matching";
+"ChatWait_Cancel_Detail" = "Matching cancelled";
+"ChatWait_Action_Cancel" = "Cancel";

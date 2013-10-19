@@ -32,21 +32,21 @@
     loggerModule.moduleWeightFactor = 0.1;
     [_moduleManager registerModule:loggerModule];
 
-    id<CBModule> webRTCModule = [WebRTCModule sharedInstance];
-    webRTCModule.moduleWeightFactor = 0.1;
-    [_moduleManager registerModule:webRTCModule];
-    
-    id<CBModule> communicationModule = [CommunicationModule sharedInstance];
-    communicationModule.moduleWeightFactor = 0.2;
-    [_moduleManager registerModule:communicationModule];
-
     id<CBModule> appDataModule = [AppDataModule sharedInstance];
     appDataModule.moduleWeightFactor = 0.1;
     [_moduleManager registerModule:appDataModule];
     
+    id<CBModule> communicationModule = [CommunicationModule sharedInstance];
+    communicationModule.moduleWeightFactor = 0.2;
+    [_moduleManager registerModule:communicationModule];
+    
     id<CBModule> userDataModule = [UserDataModule sharedInstance];
     userDataModule.moduleWeightFactor = 0.1;
     [_moduleManager registerModule:userDataModule];
+    
+    id<CBModule> webRTCModule = [WebRTCModule sharedInstance];
+    webRTCModule.moduleWeightFactor = 0.1;
+    [_moduleManager registerModule:webRTCModule];
     
     id<CBModule> guiModule = [GUIModule sharedInstance];
     guiModule.moduleWeightFactor = 0.4;

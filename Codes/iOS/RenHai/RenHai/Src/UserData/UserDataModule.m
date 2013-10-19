@@ -18,6 +18,7 @@
 #import "RHImpressLabel.h"
 
 #import "CommunicationModule.h"
+#import "AppDataModule.h"
 
 #define ARCHIVE_DEVICE_NAME @"device.dat"
 #define ARCHIVE_SERVER_NAME @"server.dat"
@@ -25,6 +26,8 @@
 @interface UserDataModule()
 {
     NSString* _dataDir;
+    
+    AppDataModule* _appDataModule;
 }
 
 @end
@@ -42,6 +45,8 @@ SINGLETON(UserDataModule)
     [self setModuleIdentity:NSLocalizedString(@"UserData Module", nil)];
     [self.serviceThread setName:NSLocalizedString(@"UserData Module Thread", nil)];
     [self setKeepAlive:FALSE];
+    
+    _appDataModule = [AppDataModule sharedInstance];
     
     [CBFileUtils createDirectory:self.dataDirectory];
     DDLogVerbose(@"App Sandbox Path: %@", NSHomeDirectory());    
@@ -128,31 +133,26 @@ SINGLETON(UserDataModule)
 
 -(void) initUserData
 {
-    _device = [[RHDevice alloc] init];
-    
+    [self _initDeviceData];
+    [self _initBusinessSessionData];
     [self _initServerData];
-}
-
--(RHBusinessSession*) businessSession
-{
-    if (nil == _businessSession)
-    {
-        [self _initBusinessSession];
-    }
-    
-    return _businessSession;
 }
 
 #pragma mark - Private Methods
 
+-(void) _initDeviceData
+{
+    _device = [[RHDevice alloc] init];
+}
+
+-(void) _initBusinessSessionData
+{
+    _businessSession = [[RHBusinessSession alloc] init];
+}
+
 -(void) _initServerData
 {
     _server = [[RHServer alloc] init];
-}
-
--(void) _initBusinessSession
-{
-    _businessSession = [[RHBusinessSession alloc] init];
 }
 
 -(void) _registerNotifications
@@ -192,7 +192,49 @@ SINGLETON(UserDataModule)
 
 -(void) _processBusinessSessionNotification:(RHMessage*) message
 {
-    
+    if (nil != message)
+    {
+        NSDictionary* messageBody = message.body;
+        NSNumber* oOperationType = [messageBody objectForKey:MESSAGE_KEY_OPERATIONTYPE];
+        BusinessSessionNotificationType notificationType = oOperationType.intValue;
+        switch (notificationType)
+        {
+            case BusinessSessionNotificationType_SessionBound:
+            {
+                NSDictionary* deviceDic = [messageBody objectForKey:MESSAGE_KEY_OPERATIONINFO];
+                RHDevice* device = [[RHDevice alloc] init];
+                [device fromJSONObject:deviceDic];
+                
+                [_businessSession addParter:device];
+                
+                [_appDataModule updateAppBusinessStatus:AppBusinessStatus_SessionBoundNotificationReceived];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_SESSIONBOUND object:self];
+                
+                break;
+            }
+            case BusinessSessionNotificationType_OthersideRejected:
+            {
+                break;
+            }
+            case BusinessSessionNotificationType_OthersideAgreed:
+            {
+                break;
+            }
+            case BusinessSessionNotificationType_OthersideLost:
+            {
+                break;
+            }
+            case BusinessSessionNotificationType_OthersideEndChat:
+            {
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
 }
 
 #pragma mark - UIApplicationDelegate

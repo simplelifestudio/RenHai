@@ -16,6 +16,7 @@
 #import "GUIStyle.h"
 #import "UserDataModule.h"
 #import "CommunicationModule.h"
+#import "AppDataModule.h"
 
 #define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
 #define INTERVAL_DATASYNC 5
@@ -34,6 +35,7 @@ EnterOperationStatus;
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
+    AppDataModule* _appDataModule;
     
     NSTimer* _enterButtonTimer;
     
@@ -80,13 +82,17 @@ EnterOperationStatus;
     [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Ready];
     
     [self _activateDataSyncTimer];
+    
+    [self _registerNotifications];
 }
 
--(void) viewDidDisappear:(BOOL)animated
+-(void) viewWillDisappear:(BOOL)animated
 {
     [self _deactivateDataSyncTimer];
     
-    [super viewDidDisappear:animated];
+    [self _unregisterNotifications];
+    
+    [super viewWillDisappear:animated];
 }
 
 #pragma mark - Private Methods
@@ -96,6 +102,7 @@ EnterOperationStatus;
     _guiModule = [GUIModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
+    _appDataModule = [AppDataModule sharedInstance];
     
     _enterPoolFlag = NO;
     
@@ -346,7 +353,7 @@ static float progress = 0.0;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Interest operationType:BusinessSessionRequestType_EnterPool device:device info:nil];
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_EnterPool device:device info:nil];
         RHMessage* responseMessage = [_commModule sendMessage:requestMessage];
         
         if (responseMessage.messageId == MessageId_BusinessSessionResponse)
@@ -358,10 +365,12 @@ static float progress = 0.0;
             {
                 NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
                 BusinessSessionOperationValue operationValue = oOperationValue.intValue;
-                operationValue = BusinessSessionOperationValue_Failed;
+
                 if (operationValue == BusinessSessionOperationValue_Success)
                 {
                     _enterPoolFlag = YES;
+                    
+                    [_appDataModule updateAppBusinessStatus:AppBusinessStatus_EnterPoolCompleted];
                 }
                 else
                 {
@@ -400,6 +409,19 @@ static float progress = 0.0;
     });
 }
 
+-(void)_registerNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_deactivateDataSyncTimer)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+}
+
+-(void)_unregisterNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 #pragma mark - IBActions
 
 - (IBAction)onPressEnterButton:(id)sender
@@ -436,6 +458,7 @@ static float progress = 0.0;
     if (_enterPoolFlag)
     {
         [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Success];
+
         [self _finishEnterPool];
     }
     else

@@ -14,6 +14,7 @@
 #import "GUIModule.h"
 #import "CommunicationModule.h"
 #import "UserDataModule.h"
+#import "AppDataModule.h"
 
 #define DELAY CIRCLE_ANIMATION_DISPLAY
 #define ANIMATION_POP 0.4f
@@ -39,6 +40,7 @@ ConnectStatus;
     GUIModule* _guiModule;
     CommunicationModule* _commModule;
     UserDataModule* _userDataModule;
+    AppDataModule* _appDataModule;
     
     NSTimer* _timer;
     NSUInteger _count;
@@ -166,7 +168,7 @@ ConnectStatus;
             }
             
             [self dismissViewControllerAnimated:NO completion:^(){
-//                [mainVC resignPresentationModeEntirely:YES animated:NO completion:nil];
+                [mainVC resignPresentationModeEntirely:YES animated:NO completion:nil];
             }];
             
             if (rootVC != mainVC)
@@ -194,6 +196,7 @@ ConnectStatus;
     _guiModule = [GUIModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
+    _appDataModule = [AppDataModule sharedInstance];
 
     _isViewControllerVisible = NO;
     
@@ -247,7 +250,7 @@ ConnectStatus;
         
         NSString* infoText = nil;
         NSString* infoDetailText = nil;
-        NSString* actionButtonTitle = NSLocalizedString(@"Connect_Retry", nil);
+        NSString* actionButtonTitle = NSLocalizedString(@"Connect_Action_Retry", nil);
         BOOL isActionButtonHide = YES;
         BOOL isTextClear = NO;
         
@@ -343,11 +346,9 @@ ConnectStatus;
 
 - (void)_timerStart
 {
-    dispatch_sync(dispatch_get_main_queue(), ^(){
-        [self _clockStart];
+    dispatch_async(dispatch_get_main_queue(), ^(){
+        [self _clockStart];    
     });
-
-    [NSThread sleepForTimeInterval:DELAY];
 }
 
 - (void)_timerStop
@@ -373,9 +374,10 @@ ConnectStatus;
     [self _updateUIWithConnectStatus:ConnectStatus_Connecting];
     
     _isConnectServerSuccess = [_commModule connectWebSocket];
-//    _isConnectServerSuccess = NO;
     if (_isConnectServerSuccess)
     {
+        [_appDataModule updateAppBusinessStatus:AppBusinessStatus_Connected];
+        
         [self _updateUIWithConnectStatus:ConnectStatus_Connected];
     }
     else
@@ -396,6 +398,7 @@ ConnectStatus;
     RHDevice* device = _userDataModule.device;
     RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:device info:nil];
     RHMessage* appDataSyncResponseMessage = [_commModule sendMessage:appDataSyncRequestMessage];
+    
     if (appDataSyncResponseMessage.messageId == MessageId_AppDataSyncResponse)
     {
         NSDictionary* messageBody = appDataSyncResponseMessage.body;
@@ -411,6 +414,8 @@ ConnectStatus;
             [self _updateUIWithConnectStatus:ConnectStatus_AppDataSynced];
             
             _isAppDataSyncSuccess = YES;
+            
+            [_appDataModule updateAppBusinessStatus:AppBusinessStatus_AppDataSyncCompleted];
         }
         @catch (NSException *exception)
         {
@@ -451,6 +456,7 @@ ConnectStatus;
     RHDevice* device = _userDataModule.device;
     RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
     RHMessage* serverDataSyncResponseMessage = [_commModule sendMessage:serverDataSyncRequestMessage];
+    
     if (serverDataSyncResponseMessage.messageId == MessageId_ServerDataSyncResponse)
     {
         NSDictionary* messageBody = serverDataSyncResponseMessage.body;
@@ -471,7 +477,7 @@ ConnectStatus;
             
             [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSyncFailed];
             
-            _isAppDataSyncSuccess = NO;
+            _isServerDataSyncSuccess = NO;
         }
         @finally
         {

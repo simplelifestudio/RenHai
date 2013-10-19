@@ -71,9 +71,13 @@
 
 -(void) switchToChatScene
 {
+    ChatWizardController* chatWizard = _guiModule.chatWizardController;
+    
     [self setLeftViewController:nil];
     [self setRightViewController:nil];
-    [self setFrontViewController:_guiModule.chatWizardController focusAfterChange:YES completion:nil];
+    [self setFrontViewController:chatWizard focusAfterChange:YES completion:nil];
+    
+    [chatWizard wizardProcess:ChatWizardStatus_ChatWait];
 }
 
 #pragma mark - Private Methods

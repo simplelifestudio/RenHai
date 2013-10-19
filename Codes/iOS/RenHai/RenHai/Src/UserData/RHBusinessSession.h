@@ -14,6 +14,8 @@
 
 @property (nonatomic, strong) NSString* businessSessionId;
 @property (nonatomic) RHBusinessType businessType;
-@property (nonatomic, strong) NSArray* chatParters;
+@property (nonatomic, strong) NSMutableArray* chatParters;
+
+-(void) addParter:(RHDevice*) device;
 
 @end

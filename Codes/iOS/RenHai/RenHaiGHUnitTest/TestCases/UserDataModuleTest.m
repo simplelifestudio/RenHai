@@ -23,6 +23,8 @@
 
 @implementation UserDataModuleTest
 
+/*
+
 -(void) setUp
 {
     _userDataModule = [UserDataModule sharedInstance];
@@ -94,4 +96,6 @@
     GHAssertTrue(flag, @"test data loaded fail!");
 }
 
+*/
+ 
 @end
