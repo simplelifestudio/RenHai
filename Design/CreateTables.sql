@@ -300,7 +300,7 @@ CREATE TABLE `sessionrecord` (
   `chatStartTime` bigint(20) DEFAULT NULL,
   `chatDuration` int(11) DEFAULT NULL,
   `endStatus` enum('ChatConfirm','VideoChat','Idle','Assess') NOT NULL,
-  `endReason` enum('Reject','ConnectionLoss','NormalEnd') NOT NULL,
+  `endReason` enum('Reject','ConnectionLoss','AllDeviceRemoved','CheckFailed','NormalEnd') NOT NULL,
   PRIMARY KEY (`sessionRecordId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
