@@ -42,9 +42,6 @@ public interface IDeviceWrapper
     public void bindBusinessSession(IBusinessSession session);
     
     /** */
-    public void unbindBusinessSession();
-    
-    /** */
     public void syncSendMessage(ServerJSONMessage message);
     
     /** */
@@ -69,7 +66,7 @@ public interface IDeviceWrapper
     
     public void setServiceStatus(Consts.ServiceStatus serviceStatus);
     
-    public void changeBusinessStatus(Consts.BusinessStatus targetStatus);
+    public void changeBusinessStatus(Consts.BusinessStatus targetStatus, Consts.StatusChangeReason reason);
     
 	public Consts.BusinessType getBusinessType();
     

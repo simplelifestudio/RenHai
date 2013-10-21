@@ -36,6 +36,7 @@ import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
+import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.JSONKey;
 
@@ -438,12 +439,14 @@ public class AppDataSyncRequest extends AppJSONMessage
 	@Override
 	public void doRun()
 	{
+		/*
 		if (deviceWrapper.getOwnerOnlineDevicePool() == null)
 		{
 			logger.debug("Device <{}> synchronizing after connnection was released",
 					deviceWrapper.getDeviceSn());
 			deviceWrapper.bindOnlineDevicePool(OnlineDevicePool.instance);
 		}
+		*/
 		
 		if (!checkJSONRequest())
 		{
@@ -517,7 +520,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			return;
 		}
 		
-		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
+		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle, StatusChangeReason.AppDataSynchronize);
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.AppDataSyncResponse);
 		if (profile.getServiceStatus().equals(Consts.ServiceStatus.Normal.name()))

@@ -33,8 +33,6 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 {
     /** */
     private HashMap<String, List<IDeviceWrapper>> interestLabelMap = new HashMap<String, List<IDeviceWrapper>>();
-    private Logger logger = BusinessModule.instance.getLogger();
-    
     public HashMap<String, List<IDeviceWrapper>> getInterestLabelMap()
     {
     	return interestLabelMap;
@@ -120,9 +118,8 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
         return labelList;
     }
     
-    /** */
     @Override
-    public String onDeviceEnter(IDeviceWrapper device)
+    public String checkDeviceEnter(IDeviceWrapper device)
     {
     	Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
     	if (labelSet.isEmpty())
@@ -132,14 +129,20 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		return temp;
     	}
     	
-    	String result = super.onDeviceEnter(device);
+    	String result = super.checkDeviceEnter(device);
     	if (result != null)
     	{
     		return result;
     	}
-    	
+    	return null;
+    }
+    
+    /** */
+    @Override
+    public void onDeviceEnter(IDeviceWrapper device)
+    {
+    	super.onDeviceEnter(device);
     	addInterestIndex(device);
-        return null;
     }
     
     private void addInterestIndex(IDeviceWrapper device)
@@ -200,12 +203,15 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     
     /** */
     @Override
-    public void onDeviceLeave(IDeviceWrapper device, Consts.DeviceLeaveReason reason)
+    public void onDeviceLeave(IDeviceWrapper device, Consts.StatusChangeReason reason)
     {
     	if (null != this.getDevice(device.getDeviceSn()))
     	{
+    		if (deviceMap.contains(device.getDeviceSn()))
+    		{
+    			removeInterestIndex(device);
+    		}
     		super.onDeviceLeave(device, reason);
-    		removeInterestIndex(device);
     	}
     }
 
@@ -242,9 +248,9 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 		{
 			// Maybe device has been removed from business device pool by another thread
 			deviceMap.put(sn, device);
+			//device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
+			//device.unbindBusinessSession();
+			addInterestIndex(device);
 		}
-		
-		addInterestIndex(device);
 	}
-
 }

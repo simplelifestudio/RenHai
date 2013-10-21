@@ -30,7 +30,9 @@ import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.log.FileLogger;
+import com.simplelife.renhai.server.util.Consts.BusinessStatus;
 import com.simplelife.renhai.server.util.Consts.MessageId;
+import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts;
@@ -211,32 +213,35 @@ public class BusinessSessionRequest extends AppJSONMessage
 		switch (operationType)
 		{
 			case EnterPool:
-				logger.debug("Received " + operationType.name() + " <EnterPool> from device <{}>", deviceWrapper.getDeviceSn());
+				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				enterPool();
 				break;
 			case LeavePool:
-				logger.debug("Received " + operationType.name() + " <LeavePool> from device <{}>", deviceWrapper.getDeviceSn());
+				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				leavePool();
 				break;
 			case AgreeChat:
-				logger.debug("Received " + operationType.name() + " <AgreeChat> from device <{}>", deviceWrapper.getDeviceSn());
+				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				agreeChat();
 				break;
 			case RejectChat:
-				logger.debug("Received " + operationType.name() + " <RejectChat> from device <{}>", deviceWrapper.getDeviceSn());
+				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				rejectChat();
 				break;
 			case EndChat:
-				logger.debug("Received " + operationType.name() + " <EndChatChat> from device <{}>", deviceWrapper.getDeviceSn());
+				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				endChat();
 				break;
 			case AssessAndContinue:
-				logger.debug("Received " + operationType.name() + " <AssessAndContinue> from device <{}>", deviceWrapper.getDeviceSn());
+				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				assessAndContinue();
 				break;
 			case AssessAndQuit:
-				logger.debug("Received " + operationType.name() + " <AssessAndQuit> from device <{}>", deviceWrapper.getDeviceSn());
+				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				assessAndQuit();
+				break;
+			case SessionUnbind:
+				sessionUnbind();
 				break;
 			default:
 				logger.error("Invalid operation type found: " + operationType.toString());
@@ -273,7 +278,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		synchronized (deviceWrapper)
 		{
-			operationInfo = businessPool.onDeviceEnter(deviceWrapper); 
+			operationInfo = businessPool.checkDeviceEnter(deviceWrapper); 
 			if (operationInfo != null)
 			{
 				setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
@@ -281,6 +286,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 				responseError();
 				return;
 			}
+			
+			deviceWrapper.setBusinessType(businessType);
+			deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch, StatusChangeReason.AppEnterBusiness);
 		}
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
@@ -336,10 +344,10 @@ public class BusinessSessionRequest extends AppJSONMessage
 			return;
 		}
 		
-		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
-		onlinePool.getBusinessPool(businessType).onDeviceLeave(deviceWrapper, Consts.DeviceLeaveReason.AppLeaveBusiness);
+		//OnlineDevicePool onlinePool = OnlineDevicePool.instance;
+		//onlinePool.getBusinessPool(businessType).onDeviceLeave(deviceWrapper, Consts.StatusChangeReason.AppLeaveBusiness);
 		
-		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle);
+		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle, Consts.StatusChangeReason.AppLeaveBusiness);
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
 		
@@ -405,7 +413,6 @@ public class BusinessSessionRequest extends AppJSONMessage
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceSn());
 		logger.debug("Device <{}> rejected chat.", deviceWrapper.getDeviceSn());
-		deviceWrapper.getOwnerBusinessSession().onRejectChat(deviceWrapper);
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
@@ -419,6 +426,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 		{
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
+		
+		deviceWrapper.getOwnerBusinessSession().onRejectChat(deviceWrapper);
+		deviceWrapper.changeBusinessStatus(BusinessStatus.WaitMatch, StatusChangeReason.AppRejectChat);
 		
 		response.addToBody(JSONKey.OperationType, Consts.OperationType.RejectChat.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
@@ -557,6 +567,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		{
 			response.addToBody(JSONKey.OperationType, Consts.OperationType.AssessAndQuit.getValue());
 			deviceWrapper.getOwnerBusinessSession().onAssessAndQuit(this.deviceWrapper);
+			deviceWrapper.changeBusinessStatus(BusinessStatus.Idle, StatusChangeReason.AssessAndQuit);
 			
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessQuit_1020
 	    			, deviceWrapper.getDevice().getProfile()
@@ -566,6 +577,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		{
 			response.addToBody(JSONKey.OperationType, Consts.OperationType.AssessAndContinue.getValue());
 			deviceWrapper.getOwnerBusinessSession().onAssessAndContinue(this.deviceWrapper);
+			deviceWrapper.changeBusinessStatus(BusinessStatus.WaitMatch, StatusChangeReason.AssessAndContinue);
 			
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessContinue_1019
 	    			, deviceWrapper.getDevice().getProfile()
@@ -631,6 +643,32 @@ public class BusinessSessionRequest extends AppJSONMessage
 	private void assessAndQuit()
 	{
 		assess(true);
+	}
+	
+	private void sessionUnbind()
+	{
+		logger.debug("Device <{}> request to unbind business session.", deviceWrapper.getDeviceSn());
+		
+		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
+				Consts.MessageId.BusinessSessionResponse);
+		
+		if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+		{
+			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession()
+					.getSessionId());
+		}
+		else
+		{
+			response.addToBody(JSONKey.BusinessSessionId, null);
+		}
+		
+		deviceWrapper.changeBusinessStatus(BusinessStatus.WaitMatch, StatusChangeReason.AppUnbindSession);
+		
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.SessionUnbind.getValue());
+		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
+		response.addToBody(JSONKey.OperationInfo, null);
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
+		response.asyncResponse();
 	}
 	
 	@Override

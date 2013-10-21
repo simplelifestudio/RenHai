@@ -88,9 +88,9 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
         try
 		{
         	WsOutbound ws = getWsOutbound(); 
-        	if (ws != null)
+        	if (ws != null && !ws.isClosed())
         	{
-        		ws.close(Consts.DeviceLeaveReason.WebsocketClosedByServer.getValue(), null);
+        		ws.close(Consts.StatusChangeReason.WebsocketClosedByServer.getValue(), null);
         	}
 		}
 		catch (IOException e)
@@ -212,7 +212,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		}
 
 		String messageSn = appMessage.getMessageSn();
-    	logger.debug("Received message: {}", appMessage.getMessageId().name());
+    	//logger.debug("Received message: {}", appMessage.getMessageId().name());
     	if (!syncMap.containsKey(messageSn))
     	{
 			logger.debug("New request message from device <{}> with MessageSn: " + messageSn, connectionOwner.getDeviceSn());
@@ -296,14 +296,14 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	String temp = "WebSocketConnection onClose triggered, connection id: " + getConnectionId()+ ", status: " + status;
     	if (this.connectionOwner != null)
     	{
-    		temp += "deviceSn: " + connectionOwner.getDeviceSn(); 
+    		temp += ", deviceSn: " + connectionOwner.getDeviceSn(); 
     	}
     	
     	WebSocketModule.instance.getLogger().debug(temp);
     	
     	// comment out releasing device related resource
     	// to avoid loop in procedure of device releasing
-    	//connectionOwner.onConnectionClose();
+    	connectionOwner.onConnectionClose();
     	super.onClose(status);
     }
 

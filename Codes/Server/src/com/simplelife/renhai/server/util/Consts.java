@@ -48,7 +48,7 @@ public class Consts
 		}
 	}
 	
-	public enum DeviceLeaveReason
+	public enum StatusChangeReason
 	{
 		Invalid(0), 
 		WebsocketClosedByApp(101),
@@ -60,11 +60,17 @@ public class Consts
 		BannedDevice(107),
 		AppLeaveBusiness(108),
 		AssessAndQuit(109),
-		ExceptionInStartSession(110),
-		UnknownBusinessException(111);
+		AssessAndContinue(110),
+		SessionEnded(111),
+		UnknownBusinessException(112),
+		BusinessSessionStarted(113),
+		AppDataSynchronize(114),
+		AppEnterBusiness(115),
+		AppRejectChat(116),
+		AppUnbindSession(117);
 		
 		private int value;
-		private DeviceLeaveReason(int value)
+		private StatusChangeReason(int value)
 		{
 			this.value = value;
 		}
@@ -74,10 +80,10 @@ public class Consts
 			return value;
 		}
 		
-		public static DeviceLeaveReason parseValue(int value)
+		public static StatusChangeReason parseValue(int value)
 		{
 			int intValue = Integer.valueOf(value);
-			for (DeviceLeaveReason item : values())
+			for (StatusChangeReason item : values())
 			{
 				if (item.value == intValue)
 				{
@@ -247,7 +253,7 @@ public class Consts
 	
 	public enum BusinessStatus
 	{
-		Invalid(0), Init(1), Idle(2), WaitMatch(3), SessionBound(4);
+		Invalid(0), Offline(1), Init(2), Idle(3), WaitMatch(4), SessionBound(5);
 		
 		private int value;
 		private BusinessStatus(int value)
@@ -323,7 +329,7 @@ public class Consts
 	
 	public enum SessionEndReason
 	{
-		Invalid(0), Reject(1), ConnectionLoss(2), NormalEnd(3), CheckFailed(4);
+		Invalid(0), Reject(1), ConnectionLoss(2), NormalEnd(3), CheckFailed(4), AllDeviceRemoved(5);
 		
 		private int value;
 		private SessionEndReason(int value)
@@ -647,7 +653,8 @@ public class Consts
     	EndChat(5),
 
     	AssessAndContinue(6),
-    	AssessAndQuit(7);
+    	AssessAndQuit(7),
+    	SessionUnbind(8);
 
     	private int value;
     	

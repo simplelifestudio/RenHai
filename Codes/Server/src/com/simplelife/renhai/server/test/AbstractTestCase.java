@@ -115,6 +115,8 @@ public abstract class AbstractTestCase extends TestCase
 		}
 		
 		MockApp mockApp = new MockApp(deviceSn, MockAppConsts.MockAppBehaviorMode.Slave.name(), false);
+		//mockApp.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		//mockApp.connect(true);
 		return mockApp;
 	}
 	
