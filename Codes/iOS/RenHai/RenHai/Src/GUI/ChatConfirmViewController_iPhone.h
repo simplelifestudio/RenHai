@@ -8,6 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ChatConfirmViewController_iPhone : UIViewController
+#import "ChatWizardController.h"
+
+@interface ChatConfirmViewController_iPhone : UIViewController <UICollectionViewDataSource, ChatWizardPage>
+
+@property (weak, nonatomic) IBOutlet UILabel *viewTitleLabel;
+@property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
+@property (weak, nonatomic) IBOutlet UILabel *partnerStatusLabel;
+@property (weak, nonatomic) IBOutlet UILabel *selfStatusLabel;
+
+@property (weak, nonatomic) IBOutlet FUIButton *agreeChatButton;
+@property (weak, nonatomic) IBOutlet FUIButton *rejectChatButton;
+@property (weak, nonatomic) IBOutlet UILabel *countLabel;
+
+- (IBAction)didPressAgreeChatButton:(id)sender;
+- (IBAction)didPressRejectChatButton:(id)sender;
 
 @end

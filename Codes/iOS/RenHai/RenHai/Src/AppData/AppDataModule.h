@@ -27,10 +27,8 @@ typedef enum
     AppBusinessStatus_Connected,
     AppBusinessStatus_AppDataSyncCompleted,
     AppBusinessStatus_EnterPoolCompleted,
-    AppBusinessStatus_SessionBoundNotificationReceived,
-    AppBusinessStatus_SessionBoundCompeleted,
+    AppBusinessStatus_SessionBindCompeleted,
     AppBusinessStatus_ChatAgreeCompleted,
-    AppBusinessStatus_ChatRejectCompleted,
     AppBusinessStatus_ChatEndCompleleted,
     AppBusinessStatus_ChatAssessCompleleted
 }

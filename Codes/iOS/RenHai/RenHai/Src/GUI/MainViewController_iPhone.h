@@ -8,7 +8,7 @@
 
 #import "PKRevealController.h"
 
-@interface MainViewController_iPhone : PKRevealController
+@interface MainViewController_iPhone : PKRevealController <UINavigationControllerDelegate>
 
 -(void) switchToMainScene;
 -(void) switchToChatScene;

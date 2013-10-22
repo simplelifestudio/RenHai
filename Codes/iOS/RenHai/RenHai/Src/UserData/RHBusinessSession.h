@@ -17,5 +17,6 @@
 @property (nonatomic, strong) NSMutableArray* chatParters;
 
 -(void) addParter:(RHDevice*) device;
+-(RHDevice*) getPartner;
 
 @end

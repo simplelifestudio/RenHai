@@ -69,28 +69,21 @@ ChatWaitStatus;
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES];
-    
-    [self _resetInstance];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    [self _clockStart];
-    
-    [self _checkIsSessionAlreadyBound];    
-    
-    [self _registerNotifications];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    
-    [self _unregisterNotifications];
-    
-    [self _clockCancel];
 }
 
 - (void)didReceiveMemoryWarning
@@ -107,6 +100,42 @@ ChatWaitStatus;
     [self _startLeavingPool];
 }
 
+#pragma mark - ChatWizardPage
+
+-(void) resetPage
+{
+    [self _updateUIWithChatWaitStatus:ChatWaitStatus_WaitForMatch];
+    
+    _leavePoolFlag = NO;
+    
+    _count = 0;
+    [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
+}
+
+-(void) pageWillLoad
+{
+    [self _clockStart];
+    
+    [self _checkIsSessionAlreadyBound];
+}
+
+-(void) pageWillUnload
+{
+    [self _clockCancel];    
+}
+
+-(void) onSessionBound
+{
+    [CBAppUtils asyncProcessInMainThread:^(){
+        
+        [self _updateUIWithChatWaitStatus:ChatWaitStatus_Matched];
+        
+        ChatWizardController* chatWizard = _guiModule.chatWizardController;
+        [chatWizard wizardProcess:ChatWizardStatus_ChatConfirm];
+        
+    }];
+}
+
 #pragma mark - Private Methods
 
 - (void)_setupInstance
@@ -115,16 +144,6 @@ ChatWaitStatus;
     _commModule = [CommunicationModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
-    
-    _leavePoolFlag = NO;
-}
-
-- (void)_resetInstance
-{
-    [self _updateUIWithChatWaitStatus:ChatWaitStatus_WaitForMatch];
-    
-    _count = 0;
-    [self _updateCountLabel];
 }
 
 - (void) _clockStart
@@ -157,7 +176,7 @@ ChatWaitStatus;
     
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_LeavePool device:device info:nil];
+        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_LeavePool device:device info:nil];
         RHMessage* responseMessage = [_commModule sendMessage:businessSessionRequestMessage];
         if (responseMessage.messageId == MessageId_BusinessSessionResponse)
         {
@@ -218,8 +237,6 @@ ChatWaitStatus;
             [self _clockCancel];
             
             [_guiModule.mainViewController switchToMainScene];
-            
-            [self _resetInstance];
         }
         else
         {
@@ -319,33 +336,13 @@ ChatWaitStatus;
     _actionButton.hidden = isActionButtonHide;
 }
 
--(void) _registerNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onSessionBound) name:NOTIFICATION_ID_SESSIONBOUND object:nil];
-}
 
--(void) _unregisterNotifications
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
--(void) _onSessionBound
-{
-    dispatch_async(dispatch_get_main_queue(), ^(){
-    
-        [self _updateUIWithChatWaitStatus:ChatWaitStatus_Matched];
-    
-        ChatWizardController* chatWizard = _guiModule.chatWizardController;
-        [chatWizard wizardProcess:ChatWizardStatus_ChatConfirm];
-        
-    });
-}
 
 -(void) _checkIsSessionAlreadyBound
 {
-    if (_appDataModule.currentAppBusinessStatus == AppBusinessStatus_SessionBoundCompeleted)
+    if (_appDataModule.currentAppBusinessStatus == AppBusinessStatus_SessionBindCompeleted)
     {
-        [self _onSessionBound];
+        [self onSessionBound];
     }
 }
 @end

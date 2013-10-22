@@ -71,6 +71,9 @@ SINGLETON(UserDataModule)
         [self initUserData];
     }
     
+    [self _initBusinessSessionData];
+    [self _initServerData];
+    
     [self _registerNotifications];
 }
 
@@ -134,8 +137,6 @@ SINGLETON(UserDataModule)
 -(void) initUserData
 {
     [self _initDeviceData];
-    [self _initBusinessSessionData];
-    [self _initServerData];
 }
 
 #pragma mark - Private Methods
@@ -197,6 +198,7 @@ SINGLETON(UserDataModule)
         NSDictionary* messageBody = message.body;
         NSNumber* oOperationType = [messageBody objectForKey:MESSAGE_KEY_OPERATIONTYPE];
         BusinessSessionNotificationType notificationType = oOperationType.intValue;
+        DDLogInfo(@"$$$$$$$$$$BusinessSessionNotificationType: %d", notificationType);
         switch (notificationType)
         {
             case BusinessSessionNotificationType_SessionBound:
@@ -207,7 +209,7 @@ SINGLETON(UserDataModule)
                 
                 [_businessSession addParter:device];
                 
-                [_appDataModule updateAppBusinessStatus:AppBusinessStatus_SessionBoundNotificationReceived];
+                [_appDataModule updateAppBusinessStatus:AppBusinessStatus_SessionBindCompeleted];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_SESSIONBOUND object:self];
                 
@@ -215,18 +217,26 @@ SINGLETON(UserDataModule)
             }
             case BusinessSessionNotificationType_OthersideRejected:
             {
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_OTHERSIDEREJECTED object:self];
+                
                 break;
             }
             case BusinessSessionNotificationType_OthersideAgreed:
             {
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_OTHERSIDEAGREED object:self];
+                
                 break;
             }
             case BusinessSessionNotificationType_OthersideLost:
             {
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_OTHERSIDELOST object:self];
+                
                 break;
             }
             case BusinessSessionNotificationType_OthersideEndChat:
             {
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_OTHERSIDEENDCHAT object:self];
+                
                 break;
             }
             default:

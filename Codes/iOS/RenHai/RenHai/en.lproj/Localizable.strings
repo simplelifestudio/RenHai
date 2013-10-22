@@ -86,3 +86,13 @@
 "ChatWait_Cancel" = "Cancel Matching";
 "ChatWait_Cancel_Detail" = "Matching cancelled";
 "ChatWait_Action_Cancel" = "Cancel";
+
+"ChatConfirm_Title" = "Impress Card of Partner";
+"ChatConfirm_SelfStatus_Undecided" = "You：Undecided";
+"ChatConfirm_SelfStatus_Agreed" = "You: Agreed";
+"ChatConfirm_SelfStatus_Rejected" = "You: Rejected";
+"ChatConfirm_SelfStatus_Lost" = "You: Lost";
+"ChatConfirm_PartnerStatus_Undecided" = "Partener: Undecided";
+"ChatConfirm_PartnerStatus_Agreed" = "Partener: Agreed";
+"ChatConfirm_PartnerStatus_Rejected" = "Partener: Rejected";
+"ChatConfirm_PartnerStatus_Lost" = "Partener: Lost";

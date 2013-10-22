@@ -12,6 +12,8 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
 
+    #import "CBAppUtils.h"
+
     #import "FlatUIKit.h"
 
     #import "DDLog.h"

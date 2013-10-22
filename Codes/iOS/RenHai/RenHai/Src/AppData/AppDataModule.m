@@ -182,13 +182,15 @@ SINGLETON(AppDataModule)
     AppBusinessStatus oldStatus = _appBusinessStatus;
     AppBusinessStatus newStatus = status;
     
-    BOOL canUpdate = NO;
+    BOOL isUpdateLegal = NO;
+    BOOL needUpdate = NO;
     
     switch (newStatus)
     {
         case AppBusinessStatus_Disconnected:
         {
-            canUpdate = YES;
+            isUpdateLegal = YES;
+            needUpdate = YES;
             
             break;
         }
@@ -196,58 +198,73 @@ SINGLETON(AppDataModule)
         {
             if (oldStatus == AppBusinessStatus_Disconnected)
             {
-                canUpdate = YES;
+                isUpdateLegal = YES;
+                needUpdate = YES;
+            }
+            else
+            {
+                isUpdateLegal = NO;
+                needUpdate = NO;
             }
             
             break;
         }
         case AppBusinessStatus_AppDataSyncCompleted:
         {
-            canUpdate = YES;
+            if (oldStatus != AppBusinessStatus_Disconnected)
+            {
+                isUpdateLegal = YES;
+                needUpdate = YES;
+            }
+            else
+            {
+                isUpdateLegal = NO;
+                needUpdate = NO;
+            }
             
             break;
         }
         case AppBusinessStatus_EnterPoolCompleted:
         {
-            if (oldStatus == AppBusinessStatus_AppDataSyncCompleted || oldStatus == AppBusinessStatus_ChatAssessCompleleted)
+            if (oldStatus == AppBusinessStatus_AppDataSyncCompleted || oldStatus == AppBusinessStatus_ChatAssessCompleleted || oldStatus == AppBusinessStatus_SessionBindCompeleted)
             {
-                canUpdate = YES;
+                isUpdateLegal = YES;
+                needUpdate = YES;
+            }
+            else
+            {
+                isUpdateLegal = NO;
+                needUpdate = NO;
             }
             
             break;
         }
-        case AppBusinessStatus_SessionBoundNotificationReceived:
+        case AppBusinessStatus_SessionBindCompeleted:
         {
-            if (oldStatus == AppBusinessStatus_EnterPoolCompleted)
+            if (oldStatus == AppBusinessStatus_EnterPoolCompleted || oldStatus == AppBusinessStatus_AppDataSyncCompleted)
             {
-                canUpdate = YES;
+                isUpdateLegal = YES;
+                needUpdate = YES;
             }
-            
-            break;
-        }
-        case AppBusinessStatus_SessionBoundCompeleted:
-        {
-            if (oldStatus == AppBusinessStatus_SessionBoundNotificationReceived)
+            else
             {
-                canUpdate = YES;
+                isUpdateLegal = NO;
+                needUpdate = NO;
             }
             
             break;
         }
         case AppBusinessStatus_ChatAgreeCompleted:
         {
-            if (oldStatus == AppBusinessStatus_SessionBoundCompeleted)
+            if (oldStatus == AppBusinessStatus_SessionBindCompeleted)
             {
-                canUpdate = YES;
+                isUpdateLegal = YES;
+                needUpdate = YES;
             }
-            
-            break;
-        }
-        case AppBusinessStatus_ChatRejectCompleted:
-        {
-            if (oldStatus == AppBusinessStatus_SessionBoundCompeleted)
+            else
             {
-                canUpdate = YES;
+                isUpdateLegal = NO;
+                needUpdate = NO;
             }
             
             break;
@@ -256,7 +273,13 @@ SINGLETON(AppDataModule)
         {
             if (oldStatus == AppBusinessStatus_ChatAgreeCompleted)
             {
-                canUpdate = YES;
+                isUpdateLegal = YES;
+                needUpdate = YES;
+            }
+            else
+            {
+                isUpdateLegal = NO;
+                needUpdate = NO;
             }
             
             break;
@@ -265,24 +288,41 @@ SINGLETON(AppDataModule)
         {
             if (oldStatus == AppBusinessStatus_ChatEndCompleleted)
             {
-                canUpdate = YES;
+                isUpdateLegal = YES;
+                needUpdate = YES;
+            }
+            else
+            {
+                isUpdateLegal = NO;
+                needUpdate = NO;
             }
             
             break;
         }
         default:
         {
+            isUpdateLegal = NO;
+            needUpdate = NO;
+            
             break;
         }
     }
     
-    if (canUpdate)
+    if (isUpdateLegal)
     {
-        _appBusinessStatus = newStatus;
+        if (needUpdate)
+        {
+            _appBusinessStatus = newStatus;
+        }
+        else
+        {
+            DDLogWarn(@"Abnormal Business Status Updated - OldStatus:%d, NewStatus:%d", oldStatus, newStatus);
+        }
     }
     else
     {
-        NSAssert(NO, @"Ilegal app business status update!");
+        DDLogError(@"Error Business Status Updated - OldStatus:%d, NewStatus:%d", oldStatus, newStatus);
+        NSAssert2(NO, @"Try to update app business status with illegal value! - OldStatus: %d, - NewStatus: %d", oldStatus, newStatus);
     }
 }
 

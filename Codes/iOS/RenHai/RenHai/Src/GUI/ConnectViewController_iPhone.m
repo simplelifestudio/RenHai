@@ -324,7 +324,7 @@ ConnectStatus;
             {
                 infoText = NSLocalizedString(@"Connect_ServerDataSyncFailed", nil);
                 infoDetailText = NSLocalizedString(@"Connect_ServerDataSyncFailed_Detail", nil);
-                isActionButtonHide = YES;
+                isActionButtonHide = NO;
                 break;
             }
             default:

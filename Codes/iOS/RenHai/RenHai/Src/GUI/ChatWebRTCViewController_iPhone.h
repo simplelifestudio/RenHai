@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ChatWebRTCViewController_iPhone : UIViewController
+#import "ChatWizardController.h"
+
+@interface ChatWebRTCViewController_iPhone : UIViewController <ChatWizardPage>
 
 @end

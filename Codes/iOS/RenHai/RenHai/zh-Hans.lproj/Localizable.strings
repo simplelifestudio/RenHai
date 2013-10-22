@@ -86,3 +86,13 @@
 "ChatWait_Cancel" = "取消匹配";
 "ChatWait_Cancel_Detail" = "取消匹配，离开人海...";
 "ChatWait_Action_Cancel" = "取消";
+
+"ChatConfirm_Title" = "对方的印象卡片";
+"ChatConfirm_SelfStatus_Undecided" = "本方状态：未决定";
+"ChatConfirm_SelfStatus_Agreed" = "本方状态：已同意";
+"ChatConfirm_SelfStatus_Rejected" = "本方状态：已拒绝";
+"ChatConfirm_SelfStatus_Lost" = "本方状态：已掉线";
+"ChatConfirm_PartnerStatus_Undecided" = "对方状态：未决定";
+"ChatConfirm_PartnerStatus_Agreed" = "对方状态：已同意";
+"ChatConfirm_PartnerStatus_Rejected" = "对方状态：已拒绝";
+"ChatConfirm_PartnerStatus_Lost" = "对方状态: 已掉线";

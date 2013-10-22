@@ -14,11 +14,14 @@
 
 @implementation ChatWebRTCViewController_iPhone
 
+#pragma mark - Public Methods
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
+    if (self)
+    {
+        
     }
     return self;
 }
@@ -26,13 +29,69 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    
+    [self _setupInstance];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - ChatWizardPage
+
+-(void) resetPage
+{
+    
+}
+
+-(void) pageWillLoad
+{
+    
+}
+
+-(void) pageWillUnload
+{
+    
+}
+
+-(void) onOthersideEndChat
+{
+    
+}
+
+-(void) onOthersideLost
+{
+    
+}
+
+#pragma mark - Private Methods
+
+-(void) _setupInstance
+{
+    
 }
 
 @end
