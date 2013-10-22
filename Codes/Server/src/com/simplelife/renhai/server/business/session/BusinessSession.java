@@ -33,7 +33,9 @@ import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessProgress;
+import com.simplelife.renhai.server.util.Consts.BusinessStatus;
 import com.simplelife.renhai.server.util.Consts.OperationType;
+import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
@@ -121,7 +123,7 @@ public class BusinessSession implements IBusinessSession
     		{
     			logger.error("Device <{}> is not in online device pool when trying to bind with session.", deviceSn);
     			device = pool.getDevice(deviceSn);
-    			pool.onDeviceLeave(device, Consts.DeviceLeaveReason.UnknownBusinessException);
+    			pool.onDeviceLeave(device, Consts.StatusChangeReason.UnknownBusinessException);
     			return false;
     		}
     		status = device.getBusinessStatus();
@@ -141,11 +143,12 @@ public class BusinessSession implements IBusinessSession
     	logger.debug("Enter endSession.");
     	sessionEndTime = System.currentTimeMillis();
     	
-    	for (IDeviceWrapper device : deviceList)
+    	//for (IDeviceWrapper device : deviceList)
     	{
-    		device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
-    		pool.endChat(device);
+    		//pool.endChat(device);
+    		//device.changeBusinessStatus(BusinessStatus.WaitMatch, StatusChangeReason.SessionEnded);
     	}
+    	
     	deviceList.clear();
    		progressMap.clear();
     	
@@ -207,9 +210,8 @@ public class BusinessSession implements IBusinessSession
     			this.endSession();
     			return;
     		}
-    		this.deviceList.add(device);
     		device.bindBusinessSession(this);
-    		pool.startChat(device);
+    		device.changeBusinessStatus(BusinessStatus.SessionBound, Consts.StatusChangeReason.BusinessSessionStarted);
     	}
     	
     	notifyDevices(null, Consts.NotificationType.SessionBound);
@@ -258,14 +260,17 @@ public class BusinessSession implements IBusinessSession
 			}
 			logger.debug(temp);
 			
-			notify.getHeader().put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
+			JSONObject header = notify.getHeader(); 
+			header.put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
+			header.put(JSONKey.DeviceId, device.getDevice().getDeviceId());
+			header.put(JSONKey.DeviceSn, device.getDeviceSn());
 			
 			JSONObject body = notify.getBody(); 
 	    	body.put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(sessionId));
 	    	body.put(JSONKey.OperationType, notificationType.getValue());
 	    	body.put(JSONKey.OperationValue, null);
+	    	body.put(JSONKey.BusinessType, device.getBusinessType().getValue());
 	    	
-			body.put(JSONKey.BusinessType, device.getBusinessType().getValue());
 			
 			if (triggerDevice == null)
 			{
@@ -514,30 +519,57 @@ public class BusinessSession implements IBusinessSession
     	notifyDevices(device, Consts.NotificationType.OthersideRejected);
 		
 		endReason = Consts.SessionEndReason.Reject;
-    	changeStatus(Consts.BusinessSessionStatus.Idle);
+    	//changeStatus(Consts.BusinessSessionStatus.Idle);
     }
 
     @Override
-    public void onDeviceLeave(IDeviceWrapper device, Consts.DeviceLeaveReason reason)
+    public void onDeviceEnter(IDeviceWrapper device)
     {
+    	this.deviceList.add(device);
+    }
+    
+    @Override
+    public void onDeviceLeave(IDeviceWrapper device, Consts.StatusChangeReason reason)
+    {
+    	deviceList.remove(device);
    		progressMap.remove(device.getDeviceSn());
     	
-		deviceList.remove(device);
+   		//device.unbindBusinessSession();
 		logger.debug("Device <{}> was removed from business session", device.getDeviceSn());
     	
     	if (status == Consts.BusinessSessionStatus.VideoChat
     			|| status == Consts.BusinessSessionStatus.Assess)
     	{
-    		if (reason == Consts.DeviceLeaveReason.TimeoutOfActivity
-    				|| reason == Consts.DeviceLeaveReason.TimeoutOfPing
-    				|| reason == Consts.DeviceLeaveReason.TimeoutOnSyncSending)
+    		if (reason == Consts.StatusChangeReason.TimeoutOfActivity
+    				|| reason == Consts.StatusChangeReason.TimeoutOfPing
+    				|| reason == Consts.StatusChangeReason.TimeoutOnSyncSending)
     		{
     			device.increaseChatLoss();
     		}
     	}
+    
+    	if (deviceList.size() == 0)
+    	{
+    		if (reason == StatusChangeReason.AssessAndContinue
+    				|| reason == StatusChangeReason.AssessAndQuit)
+    		{
+    			endReason = Consts.SessionEndReason.NormalEnd;
+    		}
+    		else
+    		{
+    			endReason = Consts.SessionEndReason.AllDeviceRemoved;
+    		}
+    		changeStatus(Consts.BusinessSessionStatus.Idle);
+    		return;
+    	}
     	
-    	device.unbindBusinessSession();
     	List<IDeviceWrapper> tmpList = new ArrayList<IDeviceWrapper>(deviceList);
+    	if (reason == StatusChangeReason.AppRejectChat)
+    	{
+    		notifyDevices(tmpList, device, Consts.NotificationType.OthersideRejected);
+    	}
+    	
+    	/*
     	switch(status)
     	{
     		case Idle:
@@ -561,7 +593,7 @@ public class BusinessSession implements IBusinessSession
     			if (checkAllDevicesReach(Consts.BusinessProgress.AssessFinished))
     	    	{
     	    		logger.debug("All devices assessed, trying to close BusinessSession");
-    	    		changeStatus(Consts.BusinessSessionStatus.Idle);
+    	    		//changeStatus(Consts.BusinessSessionStatus.Idle);
     	    	}
     			break;
     			
@@ -569,55 +601,55 @@ public class BusinessSession implements IBusinessSession
 				logger.error("Invalid status of BusinessSession: {}", status.name());
 				break;
     	}
-    	
-    	notifyDevices(tmpList, device, Consts.NotificationType.OthersideLost);
+    	*/
     }
 
     @Override
     public void onAssessAndContinue(IDeviceWrapper sourceDevice)
     {
     	BusinessType type = sourceDevice.getBusinessType();
-    	AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
-    	pool.endChat(sourceDevice);
     	
-    	sourceDevice.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
-    	
-   		progressMap.put(sourceDevice.getDeviceSn(), Consts.BusinessProgress.AssessFinished);
-   		logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.AssessFinished.name(), sourceDevice.getDeviceSn());
+    	progressMap.put(sourceDevice.getDeviceSn(), Consts.BusinessProgress.AssessFinished);
+    	logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.AssessFinished.name(), sourceDevice.getDeviceSn());
     	
     	if (checkAllDevicesReach(Consts.BusinessProgress.AssessFinished))
     	{
     		logger.debug("All devices finished assess after device <{}> assessed", sourceDevice.getDeviceSn());
-    		endReason = Consts.SessionEndReason.NormalEnd;
-			changeStatus(Consts.BusinessSessionStatus.Idle);
+    		//endReason = Consts.SessionEndReason.NormalEnd;
+			//changeStatus(Consts.BusinessSessionStatus.Idle);
     	}
     	else
     	{
     		logger.debug("Device <{}> assessed but not all devices assessed.", sourceDevice.getDeviceSn());
     	}
+    	
+    	//AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
+    	//pool.endChat(sourceDevice);
+    	sourceDevice.changeBusinessStatus(Consts.BusinessStatus.WaitMatch, Consts.StatusChangeReason.AssessAndContinue);
     }
     
 	@Override
 	public void onAssessAndQuit(IDeviceWrapper sourceDevice)
 	{
 		BusinessType type = sourceDevice.getBusinessType();
-    	AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
-    	pool.onDeviceLeave(sourceDevice, Consts.DeviceLeaveReason.AssessAndQuit);
     	
-    	sourceDevice.changeBusinessStatus(Consts.BusinessStatus.Idle);
    		progressMap.put(sourceDevice.getDeviceSn(), Consts.BusinessProgress.AssessFinished);
    		logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.AssessFinished.name(), sourceDevice.getDeviceSn());
     	
     	if (checkAllDevicesReach(Consts.BusinessProgress.AssessFinished))
     	{
     		logger.debug("All devices finished assess after device <{}> assessed", sourceDevice.getDeviceSn());
-    		endReason = Consts.SessionEndReason.NormalEnd;
-			changeStatus(Consts.BusinessSessionStatus.Idle);
+    		//endReason = Consts.SessionEndReason.NormalEnd;
+			//changeStatus(Consts.BusinessSessionStatus.Idle);
     	}
     	else
     	{
     		logger.debug("Device <{}> assessed but not all devices assessed.", sourceDevice.getDeviceSn());
     	}
+    	
+    	//AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
+    	//pool.onDeviceLeave(sourceDevice, Consts.StatusChangeReason.AssessAndQuit);
+    	sourceDevice.changeBusinessStatus(Consts.BusinessStatus.Idle, Consts.StatusChangeReason.AssessAndQuit);
 	}
 
 	@Override

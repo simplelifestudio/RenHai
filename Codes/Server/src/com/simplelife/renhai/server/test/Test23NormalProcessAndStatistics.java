@@ -53,6 +53,11 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 	
 	private void checkStat(OnlineDevicePool onlinePool, AbstractBusinessDevicePool businessPool)
 	{
+		if (mockApp1.isUseRealSocket())
+		{
+			return;
+		}
+		
 		JSONObject lastCmd = mockApp1.getLastReceivedCommand();
 		assertTrue(lastCmd != null);
 		assertTrue(lastCmd.containsKey(JSONKey.JsonEnvelope));
@@ -132,9 +137,12 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		checkStat(onlinePool, businessPool);
 		
 		// Step_05 µ÷ÓÃ£ºRandomBusinessScheduler::schedule
-		mockApp1.clearLastReceivedCommand();
-		mockApp2.clearLastReceivedCommand();
-		businessPool.getBusinessScheduler().schedule();
+		if (!mockApp1.isUseRealSocket())
+		{
+			mockApp1.clearLastReceivedCommand();
+			mockApp2.clearLastReceivedCommand();
+			businessPool.getBusinessScheduler().schedule();
+		}
 		
 		mockApp1.waitMessage();
 		assertTrue(mockApp1.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBound));

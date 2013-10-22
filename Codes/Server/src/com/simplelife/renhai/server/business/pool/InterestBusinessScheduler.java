@@ -159,8 +159,10 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
     	IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
 		if (session == null)
 		{
+			logger.debug("No availabel business session.");
 			return;
 		}
+		
 		session.bindBusinessDevicePool(this.ownerBusinessPool);
 		session.startSession(selectedDevice);
 		

@@ -21,7 +21,9 @@ import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
 public interface IBusinessSession
 {
     /** */
-    public void onDeviceLeave(IDeviceWrapper device, Consts.DeviceLeaveReason reason);
+    public void onDeviceLeave(IDeviceWrapper device, Consts.StatusChangeReason reason);
+    
+    public void onDeviceEnter(IDeviceWrapper device);
     
     /** */
     //public void startSession(LinkedList<IDeviceWrapper> deviceList);

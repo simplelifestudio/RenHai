@@ -146,7 +146,7 @@ public class MockApp implements IMockApp, Runnable
 					app.assessAndContinue("^#Happy#^,assessFromDevice" + deviceSn);
 					break;
 				case AssessAndQuit:
-					app.assessAndContinue("^#SoSo#^,assessFromDevice" + deviceSn);
+					app.assessAndQuit("^#SoSo#^,assessFromDevice" + deviceSn);
 					break;
 				case BusinessSessionNotificationResponse:
 					JSONObject body = receivedMessage.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
@@ -204,6 +204,11 @@ public class MockApp implements IMockApp, Runnable
 	
 	protected int chatCount = 0;
 	protected boolean useRealSocket;
+	
+	public boolean isUseRealSocket()
+	{
+		return useRealSocket;
+	}
 	
 	public void setBusinessType(Consts.BusinessType businessType)
 	{
@@ -771,6 +776,10 @@ public class MockApp implements IMockApp, Runnable
 					.getJSONObject(JSONKey.Device)
 					.getIntValue(JSONKey.DeviceId);
 		}
+		else if (messageId == Consts.MessageId.ServerDataSyncResponse)
+		{
+			return;
+		}
 		else if (messageId == Consts.MessageId.BusinessSessionNotification)
 		{
 			int messageType = body.getIntValue(JSONKey.OperationType);
@@ -903,7 +912,7 @@ public class MockApp implements IMockApp, Runnable
 					int receivedOperationType = body.getIntValue(JSONKey.OperationType);
 			    	if (receivedOperationType != Consts.NotificationType.SessionBound.getValue())
 			    	{
-			    		logger.error("MockApp <" + deviceSn + "> received {} in status of EnterPoolResReceived", messageId.name());
+			    		logger.error("MockApp <" + deviceSn + "> received {} in status of EnterPoolResReceived", Consts.NotificationType.parseValue(receivedOperationType).name());
 			    	}
 			    	else
 			    	{
@@ -1113,6 +1122,8 @@ public class MockApp implements IMockApp, Runnable
 	@Override
 	public void connect(boolean realSocket)
 	{
+		setBusinessStatus(MockAppBusinessStatus.Init);
+		useRealSocket = realSocket;
 		if (realSocket)
 		{
 			URI uri = URI.create(websocketLink);
@@ -1131,7 +1142,7 @@ public class MockApp implements IMockApp, Runnable
 	    		{
 	    			try
 					{
-						Thread.sleep(400);
+						Thread.sleep(1000);
 					}
 					catch (InterruptedException e)
 					{

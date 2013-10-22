@@ -194,6 +194,37 @@ public class MainFunction extends AbstractTestCase
 	}
 	
 	@Test
+	public void testRawCommand_AppDataSync()
+	{
+		String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{\"device\":null},\"dataUpdate\":{\"device\":{\"deviceCard\":{\"appVersion\":\"0.1\",\"deviceModel\":\"iPhone6\",\"deviceSn\":\"线程组 1-2\",\"isJailed\":0,\"location\":\"22.511962,113.380301\",\"osVersion\":\"iOS 6.1.2\"},\"deviceSn\":\"线程组 1-2\",\"profile\":{\"interestCard\":{\"interestLabelList\":[{\"interestLabelName\":\"音乐\",\"labelOrder\":0},{\"interestLabelName\":\"看电影\",\"labelOrder\":0},{\"interestLabelName\":\"privateInterestOf 线程组 1-2\",\"labelOrder\":0}]}}}}},\"header\":{\"deviceId\":0,\"deviceSn\":\"线程组 1-2\",\"messageId\":101,\"messageSn\":\"R3RLJ67G4WBNM34V\",\"messageType\":1,\"timeStamp\":\"2013-10-19 13:50:24.250\"}}}";
+		JSONObject wholeObj = JSONObject.parseObject(jsonString);
+		JSONObject obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope);
+
+		MockApp app = createNewMockApp("线程组 1-2");
+		app.sendRawJSONMessage(obj, true);
+	}
+	
+	@Test
+	public void testReplaceWebsocket()
+	{
+		MockApp app = new MockApp(demoDeviceSn, "Slave");
+		
+		app.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		
+		app.connect(false);
+		app.syncDevice();
+		app.sendServerDataSyncRequest();
+		
+		app.connect(false);
+		app.syncDevice();
+		app.sendServerDataSyncRequest();
+		
+		app.connect(false);
+		app.syncDevice();
+		app.sendServerDataSyncRequest();
+	}
+	
+	@Test
 	public void testRawCommand()
 	{
 		//String jsonString ="{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"demoDeviceSn\",\"timeStamp\":\"2013-10-12 16:45:45.003\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"3ZBJO4HCZR43NZX3\",\"deviceId\":3},\"body\":{\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"labelOrder\":0,\"globalMatchCount\":2,\"validFlag\":1,\"interestLabelName\":\"Topic6\",\"matchCount\":0,\"globalInterestLabelId\":2},{\"labelOrder\":0,\"globalMatchCount\":1,\"validFlag\":1,\"interestLabelName\":\"Topic8\",\"matchCount\":0,\"globalInterestLabelId\":1},{\"labelOrder\":0,\"globalMatchCount\":3,\"validFlag\":1,\"interestLabelName\":\"Topic7\",\"matchCount\":0,\"globalInterestLabelId\":3},{\"labelOrder\":0,\"globalMatchCount\":2,\"validFlag\":1,\"interestLabelName\":\"Topic6\",\"matchCount\":0,\"globalInterestLabelId\":2},{\"labelOrder\":0,\"globalMatchCount\":3,\"validFlag\":1,\"interestLabelName\":\"Topic7\",\"matchCount\":0,\"globalInterestLabelId\":3},{\"labelOrder\":0,\"globalMatchCount\":1,\"validFlag\":1,\"interestLabelName\":\"Topic8\",\"matchCount\":0,\"globalInterestLabelId\":1}]}}}},\"dataQuery\":{\"device\":{\"profile\":{\"interestCard\":null}}}}}}";
@@ -443,19 +474,19 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testBehaviorMode() throws InterruptedException
 	{
-		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit", false);
-	
-		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndQuit", false);
+		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit");
+		app1.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		app1.connect(true);
 		
-		while (!app1.getConnection().isOpen() || !app2.getConnection().isOpen())
-		{
-			Thread.sleep(1000);
-		}
+		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndQuit");
+		app2.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		app2.connect(true);
 		
 		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended
 				|| app2.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
 		{
 			Thread.sleep(1000);
+			app1.sendServerDataSyncRequest();
 		}
 	}
 	

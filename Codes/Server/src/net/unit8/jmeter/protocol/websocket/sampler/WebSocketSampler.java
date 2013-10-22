@@ -17,10 +17,12 @@ import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
-import org.eclipse.jetty.util.ConcurrentHashSet;
-import org.eclipse.jetty.websocket.WebSocket;
-import org.eclipse.jetty.websocket.WebSocketClient;
-import org.eclipse.jetty.websocket.WebSocketClientFactory;
+//import org.eclipse.jetty.util.ConcurrentHashSet;
+//import org.eclipse.jetty.websocket.WebSocket;
+//import org.eclipse.jetty.websocket.WebSocketClient;
+//import org.eclipse.jetty.websocket.WebSocketClientFactory;
+import com.simplelife.renhai.server.test.MockApp;
+import com.simplelife.renhai.server.test.MockAppConsts;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -58,9 +60,9 @@ public class WebSocketSampler extends AbstractSampler implements TestStateListen
     private static final int URL_UNSPECIFIED_PORT = 80;
 
 
-    private WebSocket.Connection connection = null;
-    private static final ConcurrentHashSet<WebSocket.Connection> samplerConnections
-            = new ConcurrentHashSet<WebSocket.Connection>();
+    //private WebSocket.Connection connection = null;
+    //private static final ConcurrentHashSet<WebSocket.Connection> samplerConnections
+    //        = new ConcurrentHashSet<WebSocket.Connection>();
 
     private boolean initialized = false;
     private String responseMessage;
@@ -74,8 +76,9 @@ public class WebSocketSampler extends AbstractSampler implements TestStateListen
     public static final String SEND_MESSAGE = "WebSocketSampler.sendMessage";
     public static final String RECV_MESSAGE = "WebSocketSampler.recvMessage";
     public static final String RECV_TIMEOUT = "WebSocketSampler.recvTimeout";
+    public static final String BEHAVIOR_MODE = "WebSocketSampler.behaviorMode";
 
-    private static WebSocketClientFactory webSocketClientFactory = new WebSocketClientFactory();
+    //private static WebSocketClientFactory webSocketClientFactory = new WebSocketClientFactory();
 
 
     public WebSocketSampler() {
@@ -83,6 +86,7 @@ public class WebSocketSampler extends AbstractSampler implements TestStateListen
     }
 
     public void initialize() throws Exception {
+		/*
         URI uri = getUri();
         WebSocketClient webSocketClient = webSocketClientFactory.newWebSocketClient();
         final WebSocketSampler parent = this;
@@ -113,6 +117,7 @@ public class WebSocketSampler extends AbstractSampler implements TestStateListen
         });
         connection = futureConnection.get();
         samplerConnections.add(connection);
+        */
         initialized = true;
     }
     @Override
@@ -130,6 +135,39 @@ public class WebSocketSampler extends AbstractSampler implements TestStateListen
                 return res;
             }
         }
+        
+        
+        String behaviorMode = getPropertyAsString(BEHAVIOR_MODE, "NormalAndQuit");
+        String websocketLink = getPropertyAsString(PATH, "ws://192.81.135.31/renhai/websocket");
+        
+        String name = Thread.currentThread().getName();
+        log.debug("Start to launch MockApp: " + name);
+        
+        MockApp app = new MockApp(name, behaviorMode);
+        app.setWebsocketLink(websocketLink);
+        app.connect(true);
+        
+        while (app.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
+        {
+        	try
+			{
+				Thread.sleep(1000);
+			}
+			catch (InterruptedException e)
+			{
+				app.stopTimer();
+				res.setResponseMessage("MockApp is stopped by JMeter.");
+		        res.setSuccessful(true);
+				return res;
+			}
+        }
+        log.debug("MockApp: " + name + " ended");
+        app.stopTimer();
+        res.setResponseMessage(behaviorMode + " " + websocketLink);
+        res.setSuccessful(true);
+        return res;
+        
+        /*
         String message = getPropertyAsString(SEND_MESSAGE, "default message");
         res.setSamplerData(message);
         res.sampleStart();
@@ -158,6 +196,7 @@ public class WebSocketSampler extends AbstractSampler implements TestStateListen
         res.setSuccessful(isOK);
 
         return res;
+        */
     }
 
 
@@ -493,11 +532,13 @@ public class WebSocketSampler extends AbstractSampler implements TestStateListen
 
     @Override
     public void testStarted(String host) {
+    	/*
         try {
             webSocketClientFactory.start();
         } catch(Exception e) {
             log.error("Can't start WebSocketClientFactory", e);
         }
+        */
     }
 
     @Override
@@ -507,6 +548,7 @@ public class WebSocketSampler extends AbstractSampler implements TestStateListen
 
     @Override
     public void testEnded(String host) {
+    	/*
         try {
             for(WebSocket.Connection connection : samplerConnections) {
                 connection.close();
@@ -515,6 +557,7 @@ public class WebSocketSampler extends AbstractSampler implements TestStateListen
         } catch (Exception e) {
             log.error("sampler error when close.", e);
         }
+        */
     }
 
     /**

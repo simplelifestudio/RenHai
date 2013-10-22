@@ -73,6 +73,7 @@ public class WebSocketSamplerGui extends AbstractSamplerGui {
         protocol.setText(element.getPropertyAsString(WebSocketSampler.PROTOCOL));
         path.setText(element.getPropertyAsString(WebSocketSampler.PATH));
         contentEncoding.setText(element.getPropertyAsString(WebSocketSampler.CONTENT_ENCODING));
+        behaviorMode.setText(element.getPropertyAsString(WebSocketSampler.BEHAVIOR_MODE));
 
         //Arguments arguments = (Arguments) element.getProperty(WebSocketSampler.ARGUMENTS).getObjectValue();
         //argsPanel.configure(arguments);
@@ -101,6 +102,7 @@ public class WebSocketSamplerGui extends AbstractSamplerGui {
         element.setProperty(WebSocketSampler.PORT, port.getText());
         element.setProperty(WebSocketSampler.PROTOCOL, protocol.getText());
         element.setProperty(WebSocketSampler.CONTENT_ENCODING, contentEncoding.getText());
+        element.setProperty(WebSocketSampler.BEHAVIOR_MODE, behaviorMode.getText());
 
         //Arguments args = (Arguments) argsPanel.createTestElement();
         //HTTPArgument.convertArgumentsToHTTP(args);

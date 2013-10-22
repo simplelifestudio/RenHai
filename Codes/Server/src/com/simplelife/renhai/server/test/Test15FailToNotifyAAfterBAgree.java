@@ -117,10 +117,10 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 		
 		
 		// Step_16 Mock事件：A确认绑定
-		//mockApp1.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
+		//mockApp1.sendNotificationResponse(Consts.NotificationType.SessionBound, "", "1");
 		
 		// Step_17 Mock事件：B确认绑定
-		//mockApp2.sendNotificationResponse(Consts.NotificationType.SessionBinded, "", "1");
+		//mockApp2.sendNotificationResponse(Consts.NotificationType.SessionBound, "", "1");
 		
 		// Step_18 调用：BusinessSession::getStatus
 		// 等待Server处理完A和B的绑定确认

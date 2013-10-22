@@ -28,6 +28,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     // Scheduler of current BusinessDevicePool
     protected AbstractBusinessScheduler businessScheduler;
     protected Consts.BusinessType businessType;
+    protected Logger logger = BusinessModule.instance.getLogger();
     
     // Map for saving devices in chat
     protected ConcurrentHashMap<String, IDeviceWrapper> chatDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
@@ -68,17 +69,13 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
         return chatDeviceMap.size() + deviceMap.size();
     }
     
-    /**
-     * Device enters BusinessDevicePool, it's triggered by entering business 
-     */
-    public String onDeviceEnter(IDeviceWrapper device)
+    public String checkDeviceEnter(IDeviceWrapper device)
     {
     	if (device == null)
     	{
     		return "Device is null";
     	}
     	
-    	Logger logger = BusinessModule.instance.getLogger();
     	if (isPoolFull())
     	{
     		String temp = "Pool is full and request of entering pool is rejected"; 
@@ -100,19 +97,22 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     		logger.error(temp);
     		return temp;
     	}
-    	
-    	// Change status of device after sending response of EnterPool
-		device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
-		device.setBusinessType(businessType);
-    	deviceMap.put(sn, device);
-    	logger.debug("Device <{}> has entered " + businessType.name() + " pool, device count after enter: " + this.getElementCount(), device.getDeviceSn());
     	return null;
+    }
+    
+    /**
+     * Device enters BusinessDevicePool, it's triggered by entering business 
+     */
+    public void onDeviceEnter(IDeviceWrapper device)
+    {
+    	deviceMap.put(device.getDeviceSn(), device);
+    	logger.debug("Device <{}> has entered " + businessType.name() + " pool, device count after enter: " + this.getElementCount(), device.getDeviceSn());
     }
 
     /**
      * Device leaves BusinessDevicePool, it may be caused by exit business or device is released
      */
-    public void onDeviceLeave(IDeviceWrapper device, Consts.DeviceLeaveReason reason)
+    public void onDeviceLeave(IDeviceWrapper device, Consts.StatusChangeReason reason)
     {
     	Logger logger = BusinessModule.instance.getLogger();
     	if (device == null)
@@ -138,7 +138,8 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	    	chatDeviceMap.remove(sn);
 	    	logger.debug("Device <{}> was removed from chatDeviceMap of " + this.businessType.name() + " Device Pool", sn);
     	}
-    	
+
+    	/*
     	if (device.getBusinessType() == this.getBusinessType())
     	{
 	    	if (device.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
@@ -154,6 +155,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 				}
 	    	}
     	}
+    	*/
     }
     
     

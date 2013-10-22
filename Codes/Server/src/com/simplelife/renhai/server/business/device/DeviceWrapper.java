@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
+import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
@@ -38,6 +39,7 @@ import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
+import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
@@ -122,7 +124,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     		temp += " for device <" + device.getDeviceSn() + ">";
     	}
     	
-    	LoggerFactory.getLogger("ping").debug(temp);
+    	LoggerFactory.getLogger("Ping").debug(temp);
     	lastPingTime = now;
     }
             
@@ -141,30 +143,73 @@ public class DeviceWrapper implements IDeviceWrapper, INode
      * Change business status of DeviceWrapper, and release/update relevant information if necessary 
      * @param targetStatus: target business status
      */
-    public void changeBusinessStatus(Consts.BusinessStatus targetStatus)
+    public void changeBusinessStatus(Consts.BusinessStatus targetStatus, StatusChangeReason reason)
     {
-    	logger.debug("Device <{}> changed status from " + this.businessStatus.name() + " to " + targetStatus.name(), this.getDeviceSn());
-    	Logger logger = BusinessModule.instance.getLogger();
+    	logger.debug("Device <{}> changes status from " 
+    			+ this.businessStatus.name() + " to " + targetStatus.name() 
+    			+ ", caused by " + reason.name(), this.getDeviceSn());
+    	
+    	if (ownerOnlinePool == null)
+    	{
+    		logger.debug("But ownerOnlinePool == null, return directly");
+    		return;
+    	}
+    	
+    	AbstractBusinessDevicePool businessPool = null;
+    	
+    	if (this.businessStatus.getValue() >= Consts.BusinessStatus.WaitMatch.getValue())
+    	{
+    		businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
+    	}
+    	 
     	switch(targetStatus)
     	{
-    		case Init:
+    		case Offline:
+    			switch(businessStatus)
+    			{
+    				case Init:
+    					ownerOnlinePool.deleteDevice(this, reason);
+    					break;
+    				case Idle:
+    					ownerOnlinePool.deleteDevice(this, reason);
+    					break;
+    				case WaitMatch:
+    					businessPool.onDeviceLeave(this, reason);
+    					ownerOnlinePool.deleteDevice(this, reason);
+    					break;
+    				case SessionBound:
+    					// Leave business device pool
+    					unbindBusinessSession(reason);
+    					businessPool.onDeviceLeave(this, reason);
+    					ownerOnlinePool.deleteDevice(this, reason);
+    					break;
+    				default:
+    					logger.error("Abnormal business status change for device:" + device.getDeviceSn() + ", source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+    					break;
+    			}
+    			if (reason != StatusChangeReason.WebsocketClosedByApp)
+    			{
+    				this.webSocketConnection.closeConnection();
+    			}
     			break;
+    		case Init:
+    			logger.error("Abnormal business status change for device:" + device.getDeviceSn() + ", source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+				break;
     		case Idle:
     			switch(businessStatus)
     			{
-    				case Idle:
-    					break;
     				case Init:
     					// Init -> Idle, typical process of AppDataSyncRequest 
     					ownerOnlinePool.synchronizeDevice(this);
     					break;
     				case WaitMatch:
     					// Leave business device pool
+    					businessPool.onDeviceLeave(this, reason);
     					break;
     				case SessionBound:
     					// Leave business device pool
-    					businessStatus = targetStatus;
-    					this.unbindBusinessSession();
+    					unbindBusinessSession(reason);
+    					businessPool.onDeviceLeave(this, reason);
     					break;
     				default:
     					logger.error("Abnormal business status change for device:" + device.getDeviceSn() + ", source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
@@ -176,17 +221,31 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     			{
     				logger.error("Fatal error when trying to change status of device <{}> to SessionBound but its session is still null.", device.getDeviceSn());
     			}
+    			else
+    			{
+    				switch(businessStatus)
+        			{
+        				case WaitMatch:
+        					ownerBusinessSession.onDeviceEnter(this);
+        					businessPool.startChat(this);
+        					break;
+        				default:
+        					logger.error("Abnormal business status change for device:" + device.getDeviceSn() + ", source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+        					break;
+        			}
+    			}
     			break;
     		case WaitMatch:
     			switch(businessStatus)
     			{
     				case Idle:
-    					break;
-    				case WaitMatch:
+    					businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
+    					businessPool.onDeviceEnter(this);
     					break;
     				case SessionBound:
-    					businessStatus = targetStatus;
-    					this.unbindBusinessSession();
+    					ownerBusinessSession.onDeviceLeave(this, reason);
+    					this.unbindBusinessSession(reason);
+    					businessPool.endChat(this);
     					break;
     				default:
     					logger.error("Abnormal business status change for device:" + device.getDeviceSn() + ", source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
@@ -240,9 +299,15 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     
      
     /** */
-    public void unbindBusinessSession()
+    public void unbindBusinessSession(StatusChangeReason reason)
     {
+    	if (this.businessStatus != Consts.BusinessStatus.SessionBound)
+    	{
+    		return;
+    	}
+    	
     	logger.debug("Unbind device <{}> from business session", getDeviceSn());
+    	ownerBusinessSession.onDeviceLeave(this, reason);
     	ownerBusinessSession = null;
     }
     
@@ -274,14 +339,16 @@ public class DeviceWrapper implements IDeviceWrapper, INode
         return null;
     }
     
-    
     @Override
     public void onConnectionClose()
     {
+    	changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.WebsocketClosedByApp);
+    	/*
     	if (ownerOnlinePool != null)
     	{
-    		ownerOnlinePool.deleteDevice(this, Consts.DeviceLeaveReason.WebsocketClosedByApp);
+    		ownerOnlinePool.deleteDevice(this, Consts.StatusChangeReason.WebsocketClosedByApp);
     	}
+    	*/
     }
 
 
@@ -347,8 +414,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     @Override
     public void bindBusinessSession(IBusinessSession session)
     {
-        this.ownerBusinessSession = session;
-        this.changeBusinessStatus(Consts.BusinessStatus.SessionBound);
+        ownerBusinessSession = session;
     }
 
     @Override
@@ -369,11 +435,14 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     @Override
     public void onTimeOut()
     {
+    	changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.TimeoutOnSyncSending);
+    	/*
     	if (ownerOnlinePool != null)
     	{
     		logger.debug("Notify online device pool about timeout of device <{}>", getDeviceSn());
-    		ownerOnlinePool.deleteDevice(this, Consts.DeviceLeaveReason.TimeoutOnSyncSending);
+    		ownerOnlinePool.deleteDevice(this, Consts.StatusChangeReason.TimeoutOnSyncSending);
     	}
+    	*/
     }
 
     public void syncSendMessageByThread(ServerJSONMessage message)
@@ -448,7 +517,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 	@Override
 	public void updateActivityTime()
 	{
-		LoggerFactory.getLogger("ping").debug("Update last activity time");
+		LoggerFactory.getLogger("Ping").debug("Update last activity time");
 		this.lastActivityTime = DateUtil.getNowDate();
 	}
 	
@@ -469,7 +538,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 	public void unbindOnlineDevicePool()
 	{
 		this.ownerOnlinePool = null;
-		this.webSocketConnection.closeConnection();
+		//this.webSocketConnection.closeConnection();
 	}
 
 	@Override
