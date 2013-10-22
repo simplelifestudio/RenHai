@@ -238,8 +238,8 @@ App与Server通过消息交互完成的数据操作
 ##1. 成功:1/失败:0
 ##2. 是:1/否:0
 ##3. 业务会话请求目标 Random:1, Interest:2
-##4. App业务会话请求动作 EnterPool:1, LeavePool:2, AgreeChat:3, RejectChat:4, EndChat:5, AssessAndContinue:6, AssessAndQuit:7
-##5. Server业务会话通知动作 SessionBinded:1, OthersideRejected:2, OthersideAgreed:3, OthersideLost:4, OthersideEndChat:5, ConnectionCheck: 6
+##4. App业务会话请求动作 EnterPool:1, LeavePool:2, AgreeChat:3, RejectChat:4, EndChat:5, AssessAndContinue:6, AssessAndQuit:7, SessionUnbind:8
+##5. Server业务会话通知动作 SessionBinded:1, OthersideRejected:2, OthersideAgreed:3, OthersideLost:4, OthersideEndChat:5
 ##6. Profile服务状态 正常:1/禁聊:0
 ##7. 日期时间格式 2013-09-11 16:05:38
 
