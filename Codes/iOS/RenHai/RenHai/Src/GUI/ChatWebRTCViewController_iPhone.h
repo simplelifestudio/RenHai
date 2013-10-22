@@ -12,4 +12,12 @@
 
 @interface ChatWebRTCViewController_iPhone : UIViewController <ChatWizardPage>
 
+@property (weak, nonatomic) IBOutlet FUIButton *endChatButton;
+
+- (IBAction)didPressEndChatButton:(id)sender;
+
+@property (weak, nonatomic) IBOutlet UILabel *selfStatusLabel;
+@property (weak, nonatomic) IBOutlet UILabel *partnerStatusLabel;
+
+
 @end

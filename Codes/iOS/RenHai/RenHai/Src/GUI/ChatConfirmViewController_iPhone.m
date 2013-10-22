@@ -374,6 +374,9 @@
     _appDataModule = [AppDataModule sharedInstance];
     
     [self _setupCollectionView];
+    
+    [_agreeChatButton setTitle:NSLocalizedString(@"ChatConfirm_Action_Agree", nil) forState:UIControlStateNormal];
+    [_rejectChatButton setTitle:NSLocalizedString(@"ChatConfirm_Action_Reject", nil) forState:UIControlStateNormal];
 }
 
 -(void)_setupCollectionView

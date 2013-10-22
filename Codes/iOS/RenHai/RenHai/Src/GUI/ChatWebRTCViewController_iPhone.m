@@ -8,11 +8,34 @@
 
 #import "ChatWebRTCViewController_iPhone.h"
 
+#import "GUIModule.h"
+#import "GUIStyle.h"
+#import "UserDataModule.h"
+#import "CommunicationModule.h"
+#import "AppDataModule.h"
+
 @interface ChatWebRTCViewController_iPhone ()
+{
+    GUIModule* _guiModule;
+    UserDataModule* _userDataModule;
+    CommunicationModule* _commModule;
+    AppDataModule* _appDataModule;
+    
+    NSUInteger _countdownSeconds;
+    NSTimer* _timer;
+    
+    volatile BOOL _selfEndChatFlag;
+    volatile BOOL _partnerEndChatFlag;
+}
 
 @end
 
 @implementation ChatWebRTCViewController_iPhone
+
+@synthesize selfStatusLabel = _selfStatusLabel;
+@synthesize partnerStatusLabel = _partnerStatusLabel;
+
+@synthesize endChatButton = _endChatButton;
 
 #pragma mark - Public Methods
 
@@ -64,7 +87,10 @@
 
 -(void) resetPage
 {
+    _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoOpened", nil);
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_VideoOpened", nil);
     
+    _endChatButton.hidden = NO;
 }
 
 -(void) pageWillLoad
@@ -79,19 +105,112 @@
 
 -(void) onOthersideEndChat
 {
-    
+    [CBAppUtils asyncProcessInMainThread:^(){
+        _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoClosed", nil);
+    }];
 }
 
 -(void) onOthersideLost
 {
-    
+    [CBAppUtils asyncProcessInMainThread:^(){
+        _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_VideoClosed", nil);
+    }];
 }
 
 #pragma mark - Private Methods
 
 -(void) _setupInstance
 {
+    _guiModule = [GUIModule sharedInstance];
+    _userDataModule = [UserDataModule sharedInstance];
+    _commModule = [CommunicationModule sharedInstance];
+    _appDataModule = [AppDataModule sharedInstance];
     
+    _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoOpened", nil);
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_VideoOpened", nil);
+    
+    [_endChatButton setTitle:NSLocalizedString(@"ChatVideo_Action_End", nil) forState:UIControlStateNormal];
+}
+
+-(void) _moveToChatImpressView
+{
+    [CBAppUtils asyncProcessInMainThread:^(){
+    
+        [_appDataModule updateAppBusinessStatus:AppBusinessStatus_ChatEndCompleleted];
+        
+        ChatWizardController* chatWizard = _guiModule.chatWizardController;
+        [chatWizard wizardProcess:ChatWizardStatus_ChatImpress];
+    
+    }];
+}
+
+-(void) _endChat
+{
+    [CBAppUtils asyncProcessInMainThread:^(){
+    
+        _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoClosed", nil);
+        _endChatButton.hidden = YES;
+        
+    }];
+    
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
+    
+        RHDevice* device = _userDataModule.device;
+        
+        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_EndChat device:device info:nil];
+        
+        RHMessage* responseMessage = [_commModule sendMessage:businessSessionRequestMessage];
+        if (responseMessage.messageId == MessageId_BusinessSessionResponse)
+        {
+            NSDictionary* messageBody = responseMessage.body;
+            NSDictionary* businessSessionDic = messageBody;
+            
+            @try
+            {
+                NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
+                BusinessSessionOperationValue operationValue = oOperationValue.intValue;
+                
+                if (operationValue == BusinessSessionOperationValue_Success)
+                {
+                    _selfEndChatFlag = YES;
+                    
+                    [self _moveToChatImpressView];
+                }
+                else
+                {
+                    
+                }
+            }
+            @catch (NSException *exception)
+            {
+                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+            }
+            @finally
+            {
+                
+            }
+        }
+        else if (responseMessage.messageId == MessageId_ServerErrorResponse)
+        {
+            
+        }
+        else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
+        {
+            
+        }
+        else
+        {
+            
+        }
+    
+    }];
+}
+
+#pragma mark - IBActions
+
+- (IBAction)didPressEndChatButton:(id)sender
+{
+    [self _endChat];
 }
 
 @end

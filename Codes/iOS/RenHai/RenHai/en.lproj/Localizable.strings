@@ -96,3 +96,11 @@
 "ChatConfirm_PartnerStatus_Agreed" = "Partener: Agreed";
 "ChatConfirm_PartnerStatus_Rejected" = "Partener: Rejected";
 "ChatConfirm_PartnerStatus_Lost" = "Partener: Lost";
+"ChatConfirm_Action_Agree" = "Agree";
+"ChatConfirm_Action_Reject" = "Reject";
+
+"ChatVideo_SelfStatus_VideoOpened" = "Your Video: Opened";
+"ChatVideo_SelfStatus_VideoClosed" = "Your Video: Closed";
+"ChatVideo_PartnerStatus_VideoOpened" = "Partner's Video: Opened";
+"ChatVideo_PartnerStatus_VideoClosed" = "Partner's Video: Closed";
+"ChatVideo_Action_End" = "End";
