@@ -8,10 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
-#import "ChatWaitViewController_iPhone.h"
-#import "ChatConfirmViewController_iPhone.h"
-#import "ChatWebRTCViewController_iPhone.h"
-#import "ChatImpressViewController_iPhone.h"
+@protocol ChatWizardPage <NSObject>
+
+@required
+-(void) resetPage;
+-(void) pageWillLoad;
+-(void) pageWillUnload;
+
+@optional
+-(void) onSessionBound;
+-(void) onOthersideAgreed;
+-(void) onOthersideRejected;
+-(void) onOthersideLost;
+-(void) onOthersideEndChat;
+
+@end
 
 typedef enum
 {
@@ -23,11 +34,6 @@ typedef enum
 ChatWizardStatus;
 
 @interface ChatWizardController : UINavigationController
-
-@property (nonatomic, strong) ChatWaitViewController_iPhone* chatWaitViewController;
-@property (nonatomic, strong) ChatConfirmViewController_iPhone* chatConfirmViewContorller;
-@property (nonatomic, strong) ChatWebRTCViewController_iPhone* chatWebRTCViewController;
-@property (nonatomic, strong) ChatImpressViewController_iPhone* chatImpressViewController;
 
 -(void) wizardProcess:(ChatWizardStatus) status;
 

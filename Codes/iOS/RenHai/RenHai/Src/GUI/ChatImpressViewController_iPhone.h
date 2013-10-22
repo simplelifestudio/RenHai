@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ChatImpressViewController_iPhone : UIViewController
+#import "ChatWizardController.h"
+
+@interface ChatImpressViewController_iPhone : UIViewController <ChatWizardPage>
 
 @end

@@ -353,7 +353,7 @@ static float progress = 0.0;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:BusinessType_Random operationType:BusinessSessionRequestType_EnterPool device:device info:nil];
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_EnterPool device:device info:nil];
         RHMessage* responseMessage = [_commModule sendMessage:requestMessage];
         
         if (responseMessage.messageId == MessageId_BusinessSessionResponse)
@@ -369,12 +369,11 @@ static float progress = 0.0;
                 if (operationValue == BusinessSessionOperationValue_Success)
                 {
                     _enterPoolFlag = YES;
-                    
-                    [_appDataModule updateAppBusinessStatus:AppBusinessStatus_EnterPoolCompleted];
+                    DDLogError(@"#####ENTER_POOL_SUCCESSFULLY#####");
                 }
                 else
                 {
-
+                    DDLogError(@"#####ENTER_POOL_FAILED#####");
                 }
             }
             @catch (NSException *exception)
@@ -388,7 +387,7 @@ static float progress = 0.0;
         }
         else if (responseMessage.messageId == MessageId_ServerErrorResponse)
         {
-
+            
         }
         else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
         {

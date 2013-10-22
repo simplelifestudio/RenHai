@@ -10,7 +10,9 @@
 
 #import "ChatWaitViewController_iPhone.h"
 
-@interface ChatWaitViewController_iPhone : UIViewController
+#import "ChatWizardController.h"
+
+@interface ChatWaitViewController_iPhone : UIViewController <ChatWizardPage>
 
 @property (weak, nonatomic) IBOutlet UILabel *infoLabel;
 @property (weak, nonatomic) IBOutlet UITextView *infoTextView;

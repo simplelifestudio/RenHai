@@ -34,6 +34,18 @@
     }
 }
 
+-(RHDevice*) getPartner
+{
+    RHDevice* device = nil;
+    
+    if (0 < _chatParters.count)
+    {
+        device = [_chatParters objectAtIndex:0];
+    }
+    
+    return device;
+}
+
 #pragma mark - Private Methods
 
 -(void) _setupInstance

@@ -11,6 +11,8 @@
 #import "CBRoundProgressView.h"
 #import "OBShapedButton.h"
 
+#define CURRENT_BUSINESSPOOL BusinessType_Random
+
 @interface HomeViewController_iPhone : UIViewController
 
 @property (weak, nonatomic) IBOutlet CBRoundProgressView *enterButtonProgressView;
