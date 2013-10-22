@@ -111,7 +111,7 @@
     {
         if (nil != _currentPage)
         {
-            [_currentPage pageWillUnload];
+            [_currentPage pageWillUnload];        
         }
         
         if ([self containsViewController:presentedVC])
