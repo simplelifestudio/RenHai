@@ -184,7 +184,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     					ownerOnlinePool.deleteDevice(this, reason);
     					break;
     				default:
-    					logger.error("Abnormal business status change for device:" + device.getDeviceSn() + ", source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+    					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
     					break;
     			}
     			if (reason != StatusChangeReason.WebsocketClosedByApp)
@@ -193,7 +193,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     			}
     			break;
     		case Init:
-    			logger.error("Abnormal business status change for device:" + device.getDeviceSn() + ", source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+    			logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
 				break;
     		case Idle:
     			switch(businessStatus)
@@ -212,7 +212,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     					businessPool.onDeviceLeave(this, reason);
     					break;
     				default:
-    					logger.error("Abnormal business status change for device:" + device.getDeviceSn() + ", source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+    					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
     					break;
     			}
     			break;
@@ -230,7 +230,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
         					businessPool.startChat(this);
         					break;
         				default:
-        					logger.error("Abnormal business status change for device:" + device.getDeviceSn() + ", source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+        					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
         					break;
         			}
     			}
@@ -248,13 +248,13 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     					businessPool.endChat(this);
     					break;
     				default:
-    					logger.error("Abnormal business status change for device:" + device.getDeviceSn() + ", source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+    					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
     					break;
     			}
     			break;
     		default:
-    			logger.error("Abnormal target business status for device:" + device.getDeviceSn());
-    			break;
+    			logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+				break;
     	}
     	
     	businessStatus = targetStatus;

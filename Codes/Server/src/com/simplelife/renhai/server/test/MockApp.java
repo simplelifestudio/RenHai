@@ -57,7 +57,7 @@ public class MockApp implements IMockApp, Runnable
 		{
 			try
 			{
-				Thread.currentThread().setName("Ping");
+				Thread.currentThread().setName("Ping" + DateUtil.getCurrentMiliseconds());
 				mockApp.ping();
 			}
 			catch(Exception e)
@@ -571,7 +571,17 @@ public class MockApp implements IMockApp, Runnable
 		if (syncSend)
 		{
 			JSONObject response = connection.syncSendToServer(envelopeObj);
-			this.onJSONCommand(response);
+			
+			if (response == null)
+			{
+				logger.error("MockApp <" + deviceSn + ">: server has no response for message\n{}", JSON.toJSONString(obj, true));
+				setBusinessStatus(MockAppBusinessStatus.Ended);
+				return;
+			}
+			else
+			{
+				this.onJSONCommand(response);
+			}
 		}
 		else
 		{
@@ -745,7 +755,7 @@ public class MockApp implements IMockApp, Runnable
 	}
 	
 	@Override
-	public void onJSONCommand(JSONObject obj)
+	public synchronized void onJSONCommand(JSONObject obj)
 	{
 		lastReceivedCommand = obj;
 		lock.lock();
@@ -819,7 +829,7 @@ public class MockApp implements IMockApp, Runnable
 				lastReceivedCommand, 
 				this, 0,
 				nextStatus);
-		task.setName("NotificationReply");
+		task.setName("NotificationReply" + DateUtil.getCurrentMiliseconds());
 		task.start();
 	}
 	
@@ -875,7 +885,7 @@ public class MockApp implements IMockApp, Runnable
 				if (behaviorMode.ordinal() > MockAppConsts.MockAppBehaviorMode.NoAppSyncRequest.ordinal())
 				{
 					task = new AutoReplyTask(MockAppRequest.AppDataSyncRequest, null, this, 0, MockAppConsts.MockAppBusinessStatus.AppDataSyncReqSent);
-					task.setName("AppDataSyncRequestThread");
+					task.setName("AppDataSyncRequest" + DateUtil.getCurrentMiliseconds());
 				}
 				break;
 				
@@ -890,7 +900,7 @@ public class MockApp implements IMockApp, Runnable
 								this, 
 								0, 
 								MockAppConsts.MockAppBusinessStatus.EnterPoolReqSent);
-						task.setName("EnterPoolRequestThread");
+						task.setName("EnterPoolRequest" + DateUtil.getCurrentMiliseconds());
 					}
 				}
 				break;
@@ -986,7 +996,7 @@ public class MockApp implements IMockApp, Runnable
 									null, 
 									this, MockAppConsts.Setting.VideoChatDuration,
 									MockAppConsts.MockAppBusinessStatus.EndChatReqSent);
-							task.setName("EndChatRequestThread");
+							task.setName("EndChatRequest" + DateUtil.getCurrentMiliseconds());
 						}
 					}
 				}
@@ -1021,7 +1031,7 @@ public class MockApp implements IMockApp, Runnable
 									this, MockAppConsts.Setting.AssessDuration,
 									MockAppConsts.MockAppBusinessStatus.AssessReqSent);
 						}
-						task.setName("AssessAndContinueThread");
+						task.setName("AssessAndContinue" + DateUtil.getCurrentMiliseconds());
 					}
 				}
 				else if (messageId == Consts.MessageId.BusinessSessionNotification)
@@ -1129,7 +1139,7 @@ public class MockApp implements IMockApp, Runnable
 			URI uri = URI.create(websocketLink);
 			
 			new Draft_17();
-			RHWebSocketClient conn = new RHWebSocketClient(uri);
+			RenHaiWebSocketClient conn = new RenHaiWebSocketClient(uri);
 			
 			Thread t = new Thread(conn);
 			t.start();

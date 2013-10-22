@@ -9,13 +9,20 @@
 
 package com.simplelife.renhai.server.test.unittest;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.Response;
+import org.asynchttpclient.websocket.WebSocket;
+import org.asynchttpclient.websocket.WebSocketTextListener;
+import org.asynchttpclient.websocket.WebSocketUpgradeHandler;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.java_websocket.drafts.Draft;
@@ -52,12 +59,15 @@ import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.test.AbstractTestCase;
 import com.simplelife.renhai.server.test.MockApp;
 import com.simplelife.renhai.server.test.MockAppConsts;
-import com.simplelife.renhai.server.test.RHWebSocketClient;
+import com.simplelife.renhai.server.test.RenHaiWebSocketClient;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
+
+//import com.ning.http.client.*;
+import java.util.concurrent.Future;
 
 
 /**
@@ -456,7 +466,7 @@ public class MainFunction extends AbstractTestCase
 		
 		new Draft_17();
 		//AutobahnClientTest e = new AutobahnClientTest(d, uri);
-		RHWebSocketClient e = new RHWebSocketClient(uri);
+		RenHaiWebSocketClient e = new RenHaiWebSocketClient(uri);
 		
 		Thread t = new Thread( e );
 		t.start();
@@ -574,5 +584,70 @@ public class MainFunction extends AbstractTestCase
 		
 		app1.setBusinessType(Consts.BusinessType.Random);
 		app1.sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, Consts.BusinessType.Random.toString());
+	}
+	
+	@Test
+	public void testWebsocketClient2() throws InterruptedException, ExecutionException, IOException
+	{
+		AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+		/*
+		Future<Response> f;
+		Response r;
+		try
+		{
+			f = asyncHttpClient.prepareGet("http://www.ning.com/").execute();
+			r = f.get();
+		}
+		catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (ExecutionException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
+		
+		WebSocket websocket = asyncHttpClient.prepareGet("ws://127.0.0.1/renhai/websocket")
+			      .execute(new WebSocketUpgradeHandler.Builder().addWebSocketListener(
+			          new WebSocketTextListener() {
+
+			          @Override
+			          public void onMessage(String message) {
+			        	  logger.debug("onMessage: {}", message);
+			          }
+
+			          @Override
+			          public void onOpen(WebSocket websocket) {
+			        	  logger.debug("onOpen");
+			              //websocket.sendTextMessage("...");
+			          }
+
+			          @Override
+			          public void onError(Throwable t) {
+			          }
+
+					@Override
+					public void onClose(WebSocket websocket)
+					{
+						logger.debug("onClose");
+					}
+
+					@Override
+					public void onFragment(String fragment, boolean last)
+					{
+						logger.debug("onFragment: {}", fragment);
+					
+					}
+			      }).build()).get();
+
+		websocket.sendTextMessage("fdsafdsaklj;");
 	}
 }

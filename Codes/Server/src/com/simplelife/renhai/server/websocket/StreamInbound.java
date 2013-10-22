@@ -122,7 +122,7 @@ public abstract class StreamInbound implements UpgradeInbound {
             while (frame != null) {
             	if (outBound.isClosed())
             	{
-            		WebSocketModule.instance.getLogger().warn("Message received from closed connection, ignored");
+            		WebSocketModule.instance.getLogger().warn("Message received from closed connection, ignored: \n{}", frame.getPayLoad().toString());
             		return SocketState.CLOSED;
             	}
             	

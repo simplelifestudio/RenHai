@@ -357,16 +357,13 @@ public class BusinessSession implements IBusinessSession
     			break;
     			
     		case Assess:
-    			if (status == Consts.BusinessSessionStatus.VideoChat)
-    			{
-    				if (chatEndTime == 0)
-    				{
-    					chatEndTime = System.currentTimeMillis();
-    					notifyIncreaseChatDuration((int)(chatEndTime - chatStartTime));
-    				}
-    				//resetDeviceForConfirm();
-    			}
-    			else
+    			if (chatEndTime == 0)
+				{
+					chatEndTime = System.currentTimeMillis();
+					notifyIncreaseChatDuration((int)(chatEndTime - chatStartTime));
+				}
+    			
+    			if ((status != Consts.BusinessSessionStatus.VideoChat) && (status != Consts.BusinessSessionStatus.Assess))
     			{
     				logger.error("Invalid status change from " + status.name() + " to " + targetStatus.name());
     			}
@@ -382,7 +379,7 @@ public class BusinessSession implements IBusinessSession
     
     
     /** */
-    public void onBindConfirm(IDeviceWrapper device)
+    public synchronized void onBindConfirm(IDeviceWrapper device)
     {
     	Consts.BusinessProgress progress;
    		progress = progressMap.get(device.getDeviceSn());
@@ -625,7 +622,7 @@ public class BusinessSession implements IBusinessSession
     	
     	//AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
     	//pool.endChat(sourceDevice);
-    	sourceDevice.changeBusinessStatus(Consts.BusinessStatus.WaitMatch, Consts.StatusChangeReason.AssessAndContinue);
+    	//sourceDevice.changeBusinessStatus(Consts.BusinessStatus.WaitMatch, Consts.StatusChangeReason.AssessAndContinue);
     }
     
 	@Override
@@ -649,7 +646,7 @@ public class BusinessSession implements IBusinessSession
     	
     	//AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(type);
     	//pool.onDeviceLeave(sourceDevice, Consts.StatusChangeReason.AssessAndQuit);
-    	sourceDevice.changeBusinessStatus(Consts.BusinessStatus.Idle, Consts.StatusChangeReason.AssessAndQuit);
+    	//sourceDevice.changeBusinessStatus(Consts.BusinessStatus.Idle, Consts.StatusChangeReason.AssessAndQuit);
 	}
 
 	@Override

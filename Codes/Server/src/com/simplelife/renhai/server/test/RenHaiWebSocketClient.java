@@ -36,7 +36,7 @@ import com.simplelife.renhai.server.util.IMockConnection;
 import com.simplelife.renhai.server.util.JSONKey;
 
 /** */
-public class RHWebSocketClient extends WebSocketClient implements IMockConnection 
+public class RenHaiWebSocketClient extends WebSocketClient implements IMockConnection 
 {
 	IMockApp mockApp;
 	private JSONObject lastSentMessage;
@@ -44,16 +44,16 @@ public class RHWebSocketClient extends WebSocketClient implements IMockConnectio
 	private FramedataImpl1 pingFrameData;
 	protected HashMap<String, MockSyncController> syncMap = new HashMap<String, MockSyncController>();
 	
-	Logger logger = LoggerFactory.getLogger(RHWebSocketClient.class);
+	Logger logger = LoggerFactory.getLogger(RenHaiWebSocketClient.class);
 	
-	public RHWebSocketClient(URI serverURI, Draft d)
+	public RenHaiWebSocketClient(URI serverURI, Draft d)
 	{
 		super(serverURI, d);
 		pingFrameData = new FramedataImpl1(Opcode.PING);
 		pingFrameData.setFin(true);
 	}
 	
-	public RHWebSocketClient(URI serverURI)
+	public RenHaiWebSocketClient(URI serverURI)
 	{
 		this(serverURI, new Draft_17());
 	}
@@ -69,7 +69,12 @@ public class RHWebSocketClient extends WebSocketClient implements IMockConnectio
 	@Override
 	public void onError(Exception arg0)
 	{
-		logger.debug("==================onError: {}", arg0.getMessage());
+		String temp =  "==================onError: " +  arg0.getMessage();
+		if (mockApp != null)
+		{
+			temp += ", MockApp <" + mockApp.getDeviceSn() + ">";
+		}
+		logger.error(temp);
 	}
 
 	@Override
@@ -212,8 +217,10 @@ public class RHWebSocketClient extends WebSocketClient implements IMockConnectio
     	}
     	
     	lastSentMessage = jsonObject;
+    	logger.debug("MockApp <{}> trying to get lock for synchronized sending", mockApp.getDeviceSn());
     	controller.lock.lock(); 
-	    	
+    	logger.debug("MockApp <{}> got lock", mockApp.getDeviceSn());
+
     	boolean exceptionOcurred = false;
     	try
     	{
@@ -229,6 +236,7 @@ public class RHWebSocketClient extends WebSocketClient implements IMockConnectio
     	finally
     	{
     		controller.lock.unlock();
+    		logger.debug("MockApp <{}> release lock for synchronized sending", mockApp.getDeviceSn());
     	}
     	
     	if (exceptionOcurred)
@@ -239,7 +247,7 @@ public class RHWebSocketClient extends WebSocketClient implements IMockConnectio
     	{
 	    	if (controller.message == null)
 	    	{
-	    		logger.debug("MockApp <{}> timeout for synchronized response from server, MessageSn: " + messageSn, mockApp.getDeviceSn());
+	    		logger.error("MockApp <{}> timeout for synchronized response from server, MessageSn: " + messageSn, mockApp.getDeviceSn());
 	    		return null;
 	    	}
 	    	else
@@ -260,6 +268,8 @@ public class RHWebSocketClient extends WebSocketClient implements IMockConnectio
     	}
     	
     	lastSentMessage = jsonObject;
-    	getConnection().send(JSON.toJSONString(lastSentMessage, SerializerFeature.WriteMapNullValue));
+    	String message = JSON.toJSONString(lastSentMessage, SerializerFeature.WriteMapNullValue);
+    	getConnection().send(message);
+    	logger.debug("Sent message over WebSocket: \n{}", message);
 	}
 }
