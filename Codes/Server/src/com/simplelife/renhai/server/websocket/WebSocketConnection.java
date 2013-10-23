@@ -90,7 +90,11 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
         	WsOutbound ws = getWsOutbound(); 
         	if (ws != null && !ws.isClosed())
         	{
-        		ws.close(Consts.StatusChangeReason.WebsocketClosedByServer.getValue(), null);
+        		//ws.close(Consts.StatusChangeReason.WebsocketClosedByServer.getValue(), null);
+        		String reason = "Closed by server";
+        		ByteBuffer buffer = ByteBuffer.allocate(reason.length());
+                buffer.put(reason.getBytes());
+        		ws.close(0, buffer);
         	}
 		}
 		catch (IOException e)
