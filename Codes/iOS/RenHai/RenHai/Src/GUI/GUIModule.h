@@ -25,7 +25,7 @@
 #import "ChatWizardController.h"
 #import "ChatWaitViewController_iPhone.h"
 #import "ChatConfirmViewController_iPhone.h"
-#import "ChatWebRTCViewController_iPhone.h"
+#import "ChatVideoViewController_iPhone.h"
 #import "ChatImpressViewController_iPhone.h"
 
 #define STORYBOARD_IPHONE @"MainStoryboard_iPhone"
@@ -47,7 +47,7 @@
 #define STORYBOARD_ID_CHATWIZARD @"chatwizard"
 #define STORYBOARD_ID_CHATWAIT_IPHONE @"chatwait_iphone"
 #define STORYBOARD_ID_CHATCONFIRM_IPHONE @"chatconfirm_iphone"
-#define STORYBOARD_ID_CHATWEBRTC_IPHONE @"chatwebrtc_iphone"
+#define STORYBOARD_ID_CHATVIDEO_IPHONE @"chatvideo_iphone"
 #define STORYBOARD_ID_CHATIMPRESS_IPHONE @"chatimpress_iphone"
 
 #define NIB_CONNECTVIEWCONTROLLER @"ConnectViewController_iPhone"

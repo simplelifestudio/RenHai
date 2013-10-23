@@ -324,7 +324,7 @@
     
     if (_selfAgreeChatFlag)
     {
-        [self _moveToChatWebRTCView];
+        [self _moveToChatVideoView];
     }
 }
 
@@ -374,6 +374,9 @@
     _appDataModule = [AppDataModule sharedInstance];
     
     [self _setupCollectionView];
+    
+    [_agreeChatButton setTitle:NSLocalizedString(@"ChatConfirm_Action_Agree", nil) forState:UIControlStateNormal];
+    [_rejectChatButton setTitle:NSLocalizedString(@"ChatConfirm_Action_Reject", nil) forState:UIControlStateNormal];
 }
 
 -(void)_setupCollectionView
@@ -457,7 +460,7 @@
                     
                     if (_partnerAgreeChatFlag)
                     {
-                        [self _moveToChatWebRTCView];
+                        [self _moveToChatVideoView];
                     }
                 }
                 else
@@ -602,14 +605,14 @@
     
 }
 
-- (void) _moveToChatWebRTCView
+- (void) _moveToChatVideoView
 {
     dispatch_async(dispatch_get_main_queue(), ^(){
         
         [_appDataModule updateAppBusinessStatus:AppBusinessStatus_ChatAgreeCompleted];
         
         ChatWizardController* chatWizard = _guiModule.chatWizardController;
-        [chatWizard wizardProcess:ChatWizardStatus_ChatWebRTC];
+        [chatWizard wizardProcess:ChatWizardStatus_ChatVideo];
     });
 }
 

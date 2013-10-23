@@ -17,7 +17,7 @@
 {
     ChatWaitViewController_iPhone* _chatWaitViewController;
     ChatConfirmViewController_iPhone* _chatConfirmViewContorller;
-    ChatWebRTCViewController_iPhone* _chatWebRTCViewController;
+    ChatVideoViewController_iPhone* _chatVideoViewController;
     ChatImpressViewController_iPhone* _chatImpressViewController;
     
     id<ChatWizardPage> _currentPage;
@@ -91,9 +91,9 @@
             presentedVC = _chatConfirmViewContorller;
             break;
         }
-        case ChatWizardStatus_ChatWebRTC:
+        case ChatWizardStatus_ChatVideo:
         {
-            presentedVC = _chatWebRTCViewController;
+            presentedVC = _chatVideoViewController;
             break;
         }
         case ChatWizardStatus_ChatImpress:
@@ -111,7 +111,7 @@
     {
         if (nil != _currentPage)
         {
-            [_currentPage pageWillUnload];
+            [_currentPage pageWillUnload];        
         }
         
         if ([self containsViewController:presentedVC])
@@ -137,7 +137,7 @@
     
     _chatWaitViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATWAIT_IPHONE];
     _chatConfirmViewContorller = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATCONFIRM_IPHONE];
-    _chatWebRTCViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATWEBRTC_IPHONE];
+    _chatVideoViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATVIDEO_IPHONE];
     _chatImpressViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATIMPRESS_IPHONE];
     
     self.modalPresentationStyle = UIModalPresentationFormSheet;
@@ -145,7 +145,7 @@
     
     [self addChildViewController:_chatWaitViewController];
     [self addChildViewController:_chatConfirmViewContorller];
-    [self addChildViewController:_chatWebRTCViewController];
+    [self addChildViewController:_chatVideoViewController];
     [self addChildViewController:_chatImpressViewController];
     
     _currentPage = nil;

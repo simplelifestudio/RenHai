@@ -121,7 +121,7 @@ ChatWaitStatus;
 
 -(void) pageWillUnload
 {
-    [self _clockCancel];    
+    [self _clockCancel];
 }
 
 -(void) onSessionBound
@@ -255,36 +255,31 @@ ChatWaitStatus;
 
 - (void) _updateInfoTextView:(NSString*) info
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        if (nil == _consoleInfo)
-        {
-            _consoleInfo = [NSMutableString string];
-            
-            NSString* originText = _infoTextView.text;
-            if (nil != originText && 0 < originText.length)
-            {
-                [_consoleInfo appendString:originText];
-                [_consoleInfo appendString:@"\n"];
-            }
-        }
+    if (nil == _consoleInfo)
+    {
+        _consoleInfo = [NSMutableString string];
         
-        if (nil != info && 0 < info.length)
+        NSString* originText = _infoTextView.text;
+        if (nil != originText && 0 < originText.length)
         {
-            [_consoleInfo appendString:info];
+            [_consoleInfo appendString:originText];
             [_consoleInfo appendString:@"\n"];
-            
-            [_infoTextView setText:_consoleInfo];
         }
-    });
+    }
+    
+    if (nil != info && 0 < info.length)
+    {
+        [_consoleInfo appendString:info];
+        [_consoleInfo appendString:@"\n"];
+        
+        [_infoTextView setText:_consoleInfo];
+    }
 }
 
 - (void) _clearInfoTextView
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        _consoleInfo = [NSMutableString string];
-        [self _updateInfoTextView:nil];
-    });
-}
+    _consoleInfo = [NSMutableString string];
+    [self _updateInfoTextView:nil];}
 
 - (void) _updateUIWithChatWaitStatus:(ChatWaitStatus) status
 {

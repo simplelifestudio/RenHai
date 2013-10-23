@@ -96,3 +96,11 @@
 "ChatConfirm_PartnerStatus_Agreed" = "对方状态：已同意";
 "ChatConfirm_PartnerStatus_Rejected" = "对方状态：已拒绝";
 "ChatConfirm_PartnerStatus_Lost" = "对方状态: 已掉线";
+"ChatConfirm_Action_Agree" = "同意";
+"ChatConfirm_Action_Reject" = "拒绝";
+
+"ChatVideo_SelfStatus_VideoOpened" = "你的视频: 已打开";
+"ChatVideo_SelfStatus_VideoClosed" = "你的视频：已关闭";
+"ChatVideo_PartnerStatus_VideoOpened" = "对方视频：已打开";
+"ChatVideo_PartnerStatus_VideoClosed" = "对方视频：已关闭";
+"ChatVideo_Action_End" = "结束";

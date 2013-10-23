@@ -140,8 +140,8 @@
 		C593C45817D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45617D32A9700C26367 /* ChatConfirmViewController_iPhone.m */; };
 		C593C45F17D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */; };
 		C593C46017D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */; };
-		C593C46317D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46217D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m */; };
-		C593C46417D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46217D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m */; };
+		C593C46317D32ADE00C26367 /* ChatVideoViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46217D32ADE00C26367 /* ChatVideoViewController_iPhone.m */; };
+		C593C46417D32ADE00C26367 /* ChatVideoViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46217D32ADE00C26367 /* ChatVideoViewController_iPhone.m */; };
 		C593C46717D32AF600C26367 /* WarningViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */; };
 		C593C46817D32AF600C26367 /* WarningViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */; };
 		C593C46B17D4224B00C26367 /* LeftBarViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46A17D4224A00C26367 /* LeftBarViewController_iPhone.m */; };
@@ -372,8 +372,8 @@
 		C593C45617D32A9700C26367 /* ChatConfirmViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ChatConfirmViewController_iPhone.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C593C45D17D32AC800C26367 /* ChatImpressViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ChatImpressViewController_iPhone.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ChatImpressViewController_iPhone.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		C593C46117D32ADE00C26367 /* ChatWebRTCViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ChatWebRTCViewController_iPhone.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		C593C46217D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ChatWebRTCViewController_iPhone.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		C593C46117D32ADE00C26367 /* ChatVideoViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ChatVideoViewController_iPhone.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		C593C46217D32ADE00C26367 /* ChatVideoViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ChatVideoViewController_iPhone.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C593C46517D32AF600C26367 /* WarningViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = WarningViewController_iPhone.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = WarningViewController_iPhone.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C593C46917D4224A00C26367 /* LeftBarViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = LeftBarViewController_iPhone.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -820,8 +820,8 @@
 				C593C45217D32A8300C26367 /* ChatWaitViewController_iPhone.m */,
 				C593C45517D32A9700C26367 /* ChatConfirmViewController_iPhone.h */,
 				C593C45617D32A9700C26367 /* ChatConfirmViewController_iPhone.m */,
-				C593C46117D32ADE00C26367 /* ChatWebRTCViewController_iPhone.h */,
-				C593C46217D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m */,
+				C593C46117D32ADE00C26367 /* ChatVideoViewController_iPhone.h */,
+				C593C46217D32ADE00C26367 /* ChatVideoViewController_iPhone.m */,
 				C593C45D17D32AC800C26367 /* ChatImpressViewController_iPhone.h */,
 				C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */,
 				CD32013717E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.h */,
@@ -1187,7 +1187,7 @@
 				C593C45717D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */,
 				CD34DCAF180A7BC5003BBE06 /* ChatWizardController.m in Sources */,
 				C593C45F17D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */,
-				C593C46317D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m in Sources */,
+				C593C46317D32ADE00C26367 /* ChatVideoViewController_iPhone.m in Sources */,
 				C593C46717D32AF600C26367 /* WarningViewController_iPhone.m in Sources */,
 				C593C46B17D4224B00C26367 /* LeftBarViewController_iPhone.m in Sources */,
 				C593C46F17D4235A00C26367 /* LeftBarHeaderView_iPhone.m in Sources */,
@@ -1266,7 +1266,7 @@
 				C593C45417D32A8300C26367 /* ChatWaitViewController_iPhone.m in Sources */,
 				C593C45817D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */,
 				C593C46017D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */,
-				C593C46417D32ADE00C26367 /* ChatWebRTCViewController_iPhone.m in Sources */,
+				C593C46417D32ADE00C26367 /* ChatVideoViewController_iPhone.m in Sources */,
 				C593C46817D32AF600C26367 /* WarningViewController_iPhone.m in Sources */,
 				C593C46C17D4224B00C26367 /* LeftBarViewController_iPhone.m in Sources */,
 				C593C47017D4235A00C26367 /* LeftBarHeaderView_iPhone.m in Sources */,
