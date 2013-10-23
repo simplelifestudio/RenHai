@@ -64,6 +64,7 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	public void onClose(int arg0, String arg1, boolean arg2)
 	{
 		getConnection().close(arg0);
+		mockApp.onClose();
 	}
 
 	@Override
@@ -132,7 +133,7 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
     	}
     	else
     	{
-    		logger.debug("MockApp <{}> response of synchronized notification", mockApp.getDeviceSn());
+    		logger.debug("MockApp <{}> received response of synchronized request, messageSn: " + messageSn, mockApp.getDeviceSn());
     		signalForSyncSend(messageSn, obj);
     	}
 	}

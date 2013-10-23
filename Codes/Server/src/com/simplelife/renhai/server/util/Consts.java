@@ -82,10 +82,9 @@ public class Consts
 		
 		public static StatusChangeReason parseValue(int value)
 		{
-			int intValue = Integer.valueOf(value);
 			for (StatusChangeReason item : values())
 			{
-				if (item.value == intValue)
+				if (item.value == value)
 				{
 					return item;
 				}
@@ -145,10 +144,9 @@ public class Consts
 		
 		public static ServiceStatus parseValue(int value)
 		{
-			int intValue = Integer.valueOf(value);
 			for (ServiceStatus item : values())
 			{
-				if (item.value == intValue)
+				if (item.value == value)
 				{
 					return item;
 				}
@@ -199,10 +197,9 @@ public class Consts
 		
 		public static StatisticsItem parseValue(int value)
 		{
-			int intValue = Integer.valueOf(value);
 			for (StatisticsItem item : values())
 			{
-				if (item.value == intValue)
+				if (item.value == value)
 				{
 					return item;
 				}
@@ -233,10 +230,9 @@ public class Consts
 		
 		public static NotificationType parseValue(int value)
 		{
-			int intValue = Integer.valueOf(value);
 			for (NotificationType item : values())
 			{
-				if (item.value == intValue)
+				if (item.value == value)
 				{
 					return item;
 				}
@@ -268,10 +264,9 @@ public class Consts
 		
 		public static BusinessStatus parseValue(int value)
 		{
-			int intValue = Integer.valueOf(value);
 			for (BusinessStatus item : values())
 			{
-				if (item.value == intValue)
+				if (item.value == value)
 				{
 					return item;
 				}
@@ -309,10 +304,9 @@ public class Consts
 		
 		public static BusinessProgress parseValue(int value)
 		{
-			int intValue = Integer.valueOf(value);
 			for (BusinessProgress item : values())
 			{
-				if (item.value == intValue)
+				if (item.value == value)
 				{
 					return item;
 				}
@@ -344,10 +338,9 @@ public class Consts
 		
 		public static SessionEndReason parseValue(int value)
 		{
-			int intValue = Integer.valueOf(value);
 			for (SessionEndReason item : values())
 			{
-				if (item.value == intValue)
+				if (item.value == value)
 				{
 					return item;
 				}

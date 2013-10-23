@@ -72,5 +72,7 @@ public interface IMockApp
 	 */
 	public void onJSONCommand(JSONObject obj);
 	
+	public void onClose();
+	
 	public String getDeviceSn();
 }

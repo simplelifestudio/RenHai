@@ -818,7 +818,7 @@ public class MockApp implements IMockApp, Runnable
 			return;
 			
 		}
-		prepareSending(messageId);
+		prepareSending(messageId, obj);
 	}
 	
 	private void replyNotification(JSONObject lastReceivedCommand, MockAppBusinessStatus nextStatus)
@@ -853,8 +853,19 @@ public class MockApp implements IMockApp, Runnable
 		}
 	}
 	
-	private void prepareSending(Consts.MessageId messageId)
+	private void prepareSending(Consts.MessageId messageId, JSONObject obj)
 	{
+		int intOperationType = 0;
+		Consts.NotificationType receivedOperationType = null;
+		
+		if (obj != null)
+		{
+			intOperationType = obj.getJSONObject(JSONKey.JsonEnvelope)
+					.getJSONObject(JSONKey.Body)
+					.getIntValue(JSONKey.OperationType);
+			receivedOperationType = Consts.NotificationType.parseValue(intOperationType);
+		}
+		
 		AutoReplyTask task = null;
 		if (messageId != null)
 		{
@@ -863,15 +874,17 @@ public class MockApp implements IMockApp, Runnable
 		
 		if (messageId == Consts.MessageId.BusinessSessionNotification)
 		{
-			int receivedOperationType = body.getIntValue(JSONKey.OperationType);
-			if (receivedOperationType == Consts.NotificationType.OthersideAgreed.getValue()
-					|| receivedOperationType == Consts.NotificationType.OthersideEndChat.getValue())
+			logger.debug("intOperationType: " + intOperationType);
+			
+			logger.debug("MockApp <"+ deviceSn + "> received notification: " + receivedOperationType.name());
+			if (receivedOperationType == Consts.NotificationType.OthersideAgreed
+					|| receivedOperationType == Consts.NotificationType.OthersideEndChat)
 			{
 				replyNotification(lastReceivedCommand, null);
 				return;
 			}
-			else if (receivedOperationType == Consts.NotificationType.OthersideRejected.getValue()
-					|| receivedOperationType == Consts.NotificationType.OthersideLost.getValue())
+			else if (receivedOperationType == Consts.NotificationType.OthersideRejected
+					|| receivedOperationType == Consts.NotificationType.OthersideLost)
 			{
 				endBusiness();
 				replyNotification(lastReceivedCommand, null);
@@ -919,14 +932,14 @@ public class MockApp implements IMockApp, Runnable
 			case EnterPoolResReceived:
 				if (messageId == Consts.MessageId.BusinessSessionNotification)
 				{
-					int receivedOperationType = body.getIntValue(JSONKey.OperationType);
-			    	if (receivedOperationType != Consts.NotificationType.SessionBound.getValue())
+					if (receivedOperationType != Consts.NotificationType.SessionBound)
 			    	{
-			    		logger.error("MockApp <" + deviceSn + "> received {} in status of EnterPoolResReceived", Consts.NotificationType.parseValue(receivedOperationType).name());
+			    		logger.error("MockApp <" + deviceSn + "> received {} in status of EnterPoolResReceived", receivedOperationType.name());
 			    	}
 			    	else
 			    	{
-			    		replyNotification(lastReceivedCommand, MockAppBusinessStatus.SessionBoundReceived);
+			    		setBusinessStatus(MockAppBusinessStatus.SessionBoundReceived);
+			    		replyNotification(lastReceivedCommand, MockAppBusinessStatus.SessionBoundReplied);
 			    		if (behaviorMode == MockAppConsts.MockAppBehaviorMode.RejectChat)
 						{
 							AutoReplyTask chatConfirmTask = new AutoReplyTask(
@@ -934,7 +947,7 @@ public class MockApp implements IMockApp, Runnable
 									null, 
 									this, MockAppConsts.Setting.ChatConfirmDuration,
 									MockAppConsts.MockAppBusinessStatus.Ended);
-							chatConfirmTask.setName("AgreeChatThread");
+							chatConfirmTask.setName("AgreeChatThread" + DateUtil.getCurrentMiliseconds());
 							chatConfirmTask.start();
 						}
 						else if (behaviorMode == MockAppConsts.MockAppBehaviorMode.ConnectLossDuringChatConfirm)
@@ -958,7 +971,7 @@ public class MockApp implements IMockApp, Runnable
 					logger.error("MockApp <" + deviceSn + "> received {} in status of EnterPoolResReceived", messageId.name());
 				}
 				break;
-				
+
 			case SessionBoundReplied:
 				if (messageId != Consts.MessageId.BusinessSessionNotification)
 				{
@@ -1170,7 +1183,7 @@ public class MockApp implements IMockApp, Runnable
 	    	{
 	    		if (behaviorMode != MockAppConsts.MockAppBehaviorMode.Slave)
 	        	{
-	        		this.prepareSending(null);
+	        		this.prepareSending(null, null);
 	        	}
 	    	}
 	    	else
@@ -1231,5 +1244,11 @@ public class MockApp implements IMockApp, Runnable
 		//String message = JSON.toJSONString(envelopeObj, SerializerFeature.WriteMapNullValue);
 		//logger.debug("MockApp <{}> sends message: \n" + message, deviceSn);
 		this.sendRawJSONMessage(envelopeObj, syncSend);
+	}
+	
+	public void onClose()
+	{
+		logger.debug("Quit MockApp <{}> due to WebSocket connection was closed by server", deviceSn);
+		setBusinessStatus(MockAppBusinessStatus.Ended);
 	}
 }

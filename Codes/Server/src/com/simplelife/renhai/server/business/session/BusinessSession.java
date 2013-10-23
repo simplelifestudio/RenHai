@@ -278,7 +278,19 @@ public class BusinessSession implements IBusinessSession
 			}
 			else
 			{
-				notify.getBody().put(JSONKey.OperationInfo, triggerDevice.toJSONObject());
+				if (notificationType == notificationType.SessionBound)
+				{
+					// Safe code, currently triggerDevice for SessionBound is null
+					notify.getBody().put(JSONKey.OperationInfo, triggerDevice.toJSONObject());
+				}
+				else
+				{
+					JSONObject obj = new JSONObject();
+					JSONObject deviceObj = new JSONObject();
+					obj.put(JSONKey.Device, deviceObj);
+					deviceObj.put(JSONKey.DeviceSn, triggerDevice.getDeviceSn());
+					notify.getBody().put(JSONKey.OperationInfo, obj);
+				}
 			}
     		notify.setDeviceWrapper(device);
     		logger.debug("Send notify for device " + device.getDeviceSn() +": \n" + JSON.toJSONString(notify.toJSONObject(), true));
