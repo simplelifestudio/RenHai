@@ -1,5 +1,5 @@
 //
-//  ChatWebRTCViewController_iPhone.h
+//  ChatVideoViewController_iPhone.h
 //  RenHai
 //
 //  Created by DENG KE on 13-9-1.
@@ -10,7 +10,7 @@
 
 #import "ChatWizardController.h"
 
-@interface ChatWebRTCViewController_iPhone : UIViewController <ChatWizardPage>
+@interface ChatVideoViewController_iPhone : UIViewController <ChatWizardPage>
 
 @property (weak, nonatomic) IBOutlet FUIButton *endChatButton;
 

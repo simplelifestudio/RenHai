@@ -282,7 +282,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Xj3-5J-Xwv" userLabel="countLabel">
-                                <rect key="frame" x="80" y="389.99999314662267" width="160" height="80"/>
+                                <rect key="frame" x="80" y="389.99999350550723" width="160" height="80"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="60"/>
                                 <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -410,10 +410,10 @@
             </objects>
             <point key="canvasLocation" x="952" y="420"/>
         </scene>
-        <!--Chat WebRTC View Controller i Phone-->
+        <!--Chat Video View Controller i Phone-->
         <scene sceneID="gbj-pg-eqa">
             <objects>
-                <viewController storyboardIdentifier="chatwebrtc_iphone" id="Rwb-k1-UZq" customClass="ChatWebRTCViewController_iPhone" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="chatvideo_iphone" id="Rwb-k1-UZq" customClass="ChatVideoViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aRm-Ul-Twj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -856,7 +856,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="19" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Oxe-TB-TP1" userLabel="countLabel">
-                                <rect key="frame" x="80" y="364" width="160" height="80"/>
+                                <rect key="frame" x="80" y="364" width="160" height="79.999995156746508"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="60"/>
                                 <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>

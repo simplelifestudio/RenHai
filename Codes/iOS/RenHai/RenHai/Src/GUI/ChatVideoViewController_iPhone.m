@@ -1,12 +1,12 @@
 //
-//  ChatWebRTCViewController_iPhone.m
+//  ChatVideoViewController_iPhone.m
 //  RenHai
 //
 //  Created by DENG KE on 13-9-1.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
-#import "ChatWebRTCViewController_iPhone.h"
+#import "ChatVideoViewController_iPhone.h"
 
 #import "GUIModule.h"
 #import "GUIStyle.h"
@@ -14,7 +14,7 @@
 #import "CommunicationModule.h"
 #import "AppDataModule.h"
 
-@interface ChatWebRTCViewController_iPhone ()
+@interface ChatVideoViewController_iPhone ()
 {
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
@@ -30,7 +30,7 @@
 
 @end
 
-@implementation ChatWebRTCViewController_iPhone
+@implementation ChatVideoViewController_iPhone
 
 @synthesize selfStatusLabel = _selfStatusLabel;
 @synthesize partnerStatusLabel = _partnerStatusLabel;

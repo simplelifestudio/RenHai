@@ -324,7 +324,7 @@
     
     if (_selfAgreeChatFlag)
     {
-        [self _moveToChatWebRTCView];
+        [self _moveToChatVideoView];
     }
 }
 
@@ -460,7 +460,7 @@
                     
                     if (_partnerAgreeChatFlag)
                     {
-                        [self _moveToChatWebRTCView];
+                        [self _moveToChatVideoView];
                     }
                 }
                 else
@@ -605,14 +605,14 @@
     
 }
 
-- (void) _moveToChatWebRTCView
+- (void) _moveToChatVideoView
 {
     dispatch_async(dispatch_get_main_queue(), ^(){
         
         [_appDataModule updateAppBusinessStatus:AppBusinessStatus_ChatAgreeCompleted];
         
         ChatWizardController* chatWizard = _guiModule.chatWizardController;
-        [chatWizard wizardProcess:ChatWizardStatus_ChatWebRTC];
+        [chatWizard wizardProcess:ChatWizardStatus_ChatVideo];
     });
 }
 
