@@ -241,9 +241,9 @@ public class ServerDataSyncRequest extends AppJSONMessage
 			return;
 		}
 
-		DbLogger.saveProfileLog(Consts.OperationCode.ServerDataSyncRequest_1008
-    			, deviceWrapper.getDevice().getProfile()
-    			, header.getString(JSONKey.DeviceSn));
+		//DbLogger.saveProfileLog(Consts.OperationCode.ServerDataSyncRequest_1008
+    	//		, deviceWrapper.getDevice().getProfile()
+    	//		, header.getString(JSONKey.DeviceSn));
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.ServerDataSyncResponse);
 		AbstractBusinessDevicePool randomPool = OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Random);
@@ -268,9 +268,9 @@ public class ServerDataSyncRequest extends AppJSONMessage
 			queryHotLabels(response, randomPool, interestPool);
 		}
 		
-		DbLogger.saveProfileLog(Consts.OperationCode.ServerDataSyncResponse_1009
-    			, deviceWrapper.getDevice().getProfile()
-    			, header.getString(JSONKey.DeviceSn));
+		//DbLogger.saveProfileLog(Consts.OperationCode.ServerDataSyncResponse_1009
+    	//		, deviceWrapper.getDevice().getProfile()
+    	//		, header.getString(JSONKey.DeviceSn));
 		response.asyncResponse();
 	}
 
