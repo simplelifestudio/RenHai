@@ -156,6 +156,7 @@ public class WebSocketSampler extends AbstractSampler implements TestStateListen
 			catch (InterruptedException e)
 			{
 				app.stopTimer();
+				app.disconnect();
 				res.setResponseMessage("MockApp is stopped by JMeter.");
 		        res.setSuccessful(true);
 				return res;
@@ -163,6 +164,7 @@ public class WebSocketSampler extends AbstractSampler implements TestStateListen
         }
         log.debug("MockApp: " + name + " ended");
         app.stopTimer();
+        app.disconnect();
         res.setResponseMessage(behaviorMode + " " + websocketLink);
         res.setSuccessful(true);
         return res;
