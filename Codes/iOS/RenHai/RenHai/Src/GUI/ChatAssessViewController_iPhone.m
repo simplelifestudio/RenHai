@@ -26,6 +26,8 @@
 
 #define COUNTDOWN_SECONDS 30
 
+#define COLOR_ASSESSLABEL_SELECTED [UIColor redColor]
+
 @interface ChatAssessViewController_iPhone () <RHCollectionLabelCellEditingDelegate>
 {
     GUIModule* _guiModule;
@@ -39,8 +41,8 @@
     NSUInteger _countdownSeconds;
     NSTimer* _timer;
     
-    NSMutableArray* _assessLabels;
-    NSMutableArray* _impressLabels;
+    NSArray* _assessLabelNames;
+    NSMutableArray* _impressLabelNames;
     
     volatile BOOL _selfAssessedFlag;
 }
@@ -133,7 +135,7 @@
     _userDataModule = [UserDataModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
     _guiModule = [GUIModule sharedInstance];
-    
+
     [self _setupCollectionView];
 }
 
@@ -150,6 +152,11 @@
     
     _partnerAssessLabelsView.dataSource = self;
     _partnerImpressLabelsView.dataSource = self;
+    
+    _partnerAssessLabelsView.delegate = self;
+    _partnerImpressLabelsView.delegate = self;
+    
+    _assessLabelNames = @[MESSAGE_KEY_ASSESS_HAPPY, MESSAGE_KEY_ASSESS_SOSO, MESSAGE_KEY_ASSESS_DISGUSTING];
 }
 
 #pragma mark - RHCollectionLabelCellEditingDelegate
@@ -161,9 +168,9 @@
         NSIndexPath* indexPath = [_partnerImpressLabelsView indexPathForCell:cell];
         NSUInteger item = indexPath.item;
         
-        if (item < _impressLabels.count)
+        if (item < _impressLabelNames.count)
         {
-            [_impressLabels removeObjectAtIndex:item];
+            [_impressLabelNames removeObjectAtIndex:item];
             
             if (nil == labelName || 0 == labelName.length || [labelName isEqualToString:NSLocalizedString(@"ChatAssess_Empty", nil)])
             {
@@ -171,7 +178,7 @@
             }
             else
             {
-                [_impressLabels insertObject:labelName atIndex:item];
+                [_impressLabelNames insertObject:labelName atIndex:item];
             }
         }
         else
@@ -182,7 +189,7 @@
             }
             else
             {
-                [_impressLabels insertObject:labelName atIndex:item];
+                [_impressLabelNames insertObject:labelName atIndex:item];
             }
         }
     }
@@ -210,7 +217,22 @@
     }];
 }
 
--(void)_updatePartnerImpressCardWithType:(BusinessSessionRequestType) type
+-(RHImpressCard*) _getPartnerAssessedImpressCard
+{
+    NSUInteger assessLabelIndex = 0;
+    NSArray* indexPathes = _partnerAssessLabelsView.indexPathsForSelectedItems;
+    if (0 < indexPathes)
+    {
+        NSIndexPath* indexPath = indexPathes[0];
+        assessLabelIndex = indexPath.item;
+    }
+    
+    RHImpressCard* card = [RHImpressCard newImpressCard:_assessLabelNames[assessLabelIndex] impressLabels:@[]];
+    
+    return card;
+}
+
+-(void)_updatePartnerImpressCardWithType:(BusinessSessionRequestType) requestType
 {
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         
@@ -221,12 +243,12 @@
         RHDevice* partnerDevice = [businessSession getPartner];
         RHProfile* profile = partnerDevice.profile;
 
-        RHImpressCard* impressCard = [RHImpressCard newImpressCard:MESSAGE_KEY_ASSESS_HAPPY impressLabels:@[]];
+        RHImpressCard* impressCard = [self _getPartnerAssessedImpressCard];
         profile.impressCard = impressCard;
         
         NSDictionary* info = partnerDevice.toJSONObject;
         
-        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:CURRENT_BUSINESSPOOL operationType:type device:selfDevice info:info];
+        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:CURRENT_BUSINESSPOOL operationType:requestType device:selfDevice info:info];
         
         RHMessage* responseMessage = [_commModule sendMessage:businessSessionRequestMessage];
         if (responseMessage.messageId == MessageId_BusinessSessionResponse)
@@ -243,7 +265,7 @@
                 {
                     _selfAssessedFlag = YES;
                     
-                    switch (type)
+                    switch (requestType)
                     {
                         case BusinessSessionRequestType_AssessAndContinue:
                         {
@@ -341,6 +363,22 @@
     }
 }
 
+#pragma mark - UICollectionViewDelegate
+
+-(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (collectionView == _partnerAssessLabelsView)
+    {
+        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView cellForItemAtIndexPath:indexPath];
+        
+        [cell setSelected:YES];
+    }
+    else if (collectionView == _partnerImpressLabelsView)
+    {
+        
+    }
+}
+
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)cv
@@ -386,11 +424,10 @@
         NSString* labelName = nil;
         NSInteger labelCount = -1;
         
-        NSArray* labelList = _assessLabels;
-        if (0 < labelList.count && position < labelList.count)
+        if (0 < _assessLabelNames.count && position < _assessLabelNames.count)
         {
-            RHImpressLabel* label = labelList[position];
-            labelName = label.labelName;
+            NSString* name = _assessLabelNames[position];
+            labelName = [RHImpressLabel assessLabelName:name];
         }
         else
         {
@@ -407,13 +444,22 @@
         {
             cell.countLabel.text = @"";
         }
+        
+        if (position == 0)
+        {
+            [_partnerAssessLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            cell.selected = YES;
+        }
+        
+        cell.countLabel.hidden = YES;
+        cell.textField.userInteractionEnabled = NO;
     }
     else if (cv == _partnerImpressLabelsView)
     {
         NSString* labelName = nil;
         NSInteger labelCount = -1;
         
-        NSArray* labelList = _impressLabels;
+        NSArray* labelList = _impressLabelNames;
         
         if (0 < labelList.count && position < labelList.count)
         {
@@ -434,6 +480,8 @@
         {
             cell.countLabel.text = @"";
         }
+        
+        cell.editingDelegate = self;
     }
     
     cell.isEmptyCell = isEmptyCell;

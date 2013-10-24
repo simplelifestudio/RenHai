@@ -36,6 +36,36 @@
     [super awakeFromNib];
 }
 
+-(void) setSelected:(BOOL)selected
+{
+    [super setSelected:selected];
+    [self setNeedsDisplay];
+}
+
+//-(void) setHighlighted:(BOOL)highlighted
+//{
+//    [super setHighlighted:highlighted];
+//    [self setNeedsDisplay];
+//}
+//
+-(void) drawRect:(CGRect)rect
+{
+    [super drawRect:rect];
+    
+//    if (self.highlighted)
+//    {
+//        CGContextRef context = UIGraphicsGetCurrentContext();
+//        CGContextSetRGBFillColor(context, 1, 0, 0, 1);
+//        CGContextFillRect(context, self.bounds);
+//    }
+    if (self.selected)
+    {
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        CGContextSetRGBFillColor(context, 1, 0, 0, 1);
+        CGContextFillRect(context, self.bounds);
+    }
+}
+
 #pragma mark - Private Methods
 
 -(void) _formatFlatUI

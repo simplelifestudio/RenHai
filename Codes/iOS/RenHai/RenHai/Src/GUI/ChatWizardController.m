@@ -111,16 +111,16 @@
     {
         if (nil != _currentPage)
         {
-            [_currentPage pageWillUnload];        
+            [_currentPage pageWillUnload];
         }
         
         if ([self containsViewController:presentedVC])
         {
-            [self popToViewController:presentedVC animated:YES];
+            [self popToViewController:presentedVC animated:NO];
         }
         else
         {
-            [self pushViewController:presentedVC animated:YES];
+            [self pushViewController:presentedVC animated:NO];
         }
         
         _currentPage = (id<ChatWizardPage>)presentedVC;

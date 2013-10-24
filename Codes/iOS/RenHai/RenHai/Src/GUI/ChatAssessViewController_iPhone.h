@@ -12,7 +12,7 @@
 
 #import "ImpressLabelsHeaderView_iPhone.h"
 
-@interface ChatAssessViewController_iPhone : UIViewController <ChatWizardPage, UICollectionViewDataSource>
+@interface ChatAssessViewController_iPhone : UIViewController <ChatWizardPage, UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *partnerAssessLabelsView;
 @property (weak, nonatomic) IBOutlet UICollectionView *partnerImpressLabelsView;
