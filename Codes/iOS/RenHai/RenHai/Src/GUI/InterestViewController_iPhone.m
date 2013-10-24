@@ -33,6 +33,9 @@
     
     UIRefreshControl* _interestRefresher;
     UIRefreshControl* _serverInterestRefresher;
+    
+    InterestLabelsHeaderView_iPhone* _interestLabelsHeaderView;
+    ServerInterestLabelsHeaderView_iPhone* _serverInterestLabelsHeaderView;
 }
 
 @end

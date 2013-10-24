@@ -18,7 +18,4 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *interestLabelCollectionView;
 @property (weak, nonatomic) IBOutlet UICollectionView *serverInterestLabelCollectionView;
 
-@property (weak, nonatomic) IBOutlet InterestLabelsHeaderView_iPhone *interestLabelsHeaderView;
-@property (weak, nonatomic) IBOutlet ServerInterestLabelsHeaderView_iPhone *serverInterestLabelsHeaderView;
-
 @end

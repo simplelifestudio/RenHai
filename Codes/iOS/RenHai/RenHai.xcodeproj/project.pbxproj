@@ -138,8 +138,8 @@
 		C593C45417D32A8300C26367 /* ChatWaitViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45217D32A8300C26367 /* ChatWaitViewController_iPhone.m */; };
 		C593C45717D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45617D32A9700C26367 /* ChatConfirmViewController_iPhone.m */; };
 		C593C45817D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45617D32A9700C26367 /* ChatConfirmViewController_iPhone.m */; };
-		C593C45F17D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */; };
-		C593C46017D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */; };
+		C593C45F17D32AC800C26367 /* ChatAssessViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45E17D32AC800C26367 /* ChatAssessViewController_iPhone.m */; };
+		C593C46017D32AC800C26367 /* ChatAssessViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C45E17D32AC800C26367 /* ChatAssessViewController_iPhone.m */; };
 		C593C46317D32ADE00C26367 /* ChatVideoViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46217D32ADE00C26367 /* ChatVideoViewController_iPhone.m */; };
 		C593C46417D32ADE00C26367 /* ChatVideoViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46217D32ADE00C26367 /* ChatVideoViewController_iPhone.m */; };
 		C593C46717D32AF600C26367 /* WarningViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C46617D32AF600C26367 /* WarningViewController_iPhone.m */; };
@@ -221,6 +221,10 @@
 		CD734AA917E83E3000EF6CD4 /* help_04.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA317E83E3000EF6CD4 /* help_04.JPG */; };
 		CD734AAA17E83E3000EF6CD4 /* help_05.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA417E83E3000EF6CD4 /* help_05.JPG */; };
 		CD734AAB17E83E3000EF6CD4 /* help_06.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA517E83E3000EF6CD4 /* help_06.JPG */; };
+		CD736CEE1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */; };
+		CD736CEF1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */; };
+		CD736CF41817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */; };
+		CD736CF51817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */; };
 		CDC0518A1802E055006158B8 /* RHServer.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051891802E055006158B8 /* RHServer.m */; };
 		CDC0518B1802E055006158B8 /* RHServer.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051891802E055006158B8 /* RHServer.m */; };
 		CDC0518E1802E311006158B8 /* RHServerDeviceCapacity.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC0518D1802E311006158B8 /* RHServerDeviceCapacity.m */; };
@@ -370,8 +374,8 @@
 		C593C45217D32A8300C26367 /* ChatWaitViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ChatWaitViewController_iPhone.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C593C45517D32A9700C26367 /* ChatConfirmViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ChatConfirmViewController_iPhone.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		C593C45617D32A9700C26367 /* ChatConfirmViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ChatConfirmViewController_iPhone.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		C593C45D17D32AC800C26367 /* ChatImpressViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ChatImpressViewController_iPhone.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ChatImpressViewController_iPhone.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		C593C45D17D32AC800C26367 /* ChatAssessViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ChatAssessViewController_iPhone.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		C593C45E17D32AC800C26367 /* ChatAssessViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ChatAssessViewController_iPhone.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C593C46117D32ADE00C26367 /* ChatVideoViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ChatVideoViewController_iPhone.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		C593C46217D32ADE00C26367 /* ChatVideoViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = ChatVideoViewController_iPhone.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C593C46517D32AF600C26367 /* WarningViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = WarningViewController_iPhone.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -448,6 +452,9 @@
 		CD734AA317E83E3000EF6CD4 /* help_04.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_04.JPG; sourceTree = "<group>"; };
 		CD734AA417E83E3000EF6CD4 /* help_05.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_05.JPG; sourceTree = "<group>"; };
 		CD734AA517E83E3000EF6CD4 /* help_06.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_06.JPG; sourceTree = "<group>"; };
+		CD736CEC1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpressLabelsHeaderView_iPhone.h; sourceTree = "<group>"; };
+		CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImpressLabelsHeaderView_iPhone.m; sourceTree = "<group>"; };
+		CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImpressLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
 		CDC051881802E055006158B8 /* RHServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServer.h; sourceTree = "<group>"; };
 		CDC051891802E055006158B8 /* RHServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServer.m; sourceTree = "<group>"; };
 		CDC0518C1802E311006158B8 /* RHServerDeviceCapacity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServerDeviceCapacity.h; sourceTree = "<group>"; };
@@ -822,8 +829,8 @@
 				C593C45617D32A9700C26367 /* ChatConfirmViewController_iPhone.m */,
 				C593C46117D32ADE00C26367 /* ChatVideoViewController_iPhone.h */,
 				C593C46217D32ADE00C26367 /* ChatVideoViewController_iPhone.m */,
-				C593C45D17D32AC800C26367 /* ChatImpressViewController_iPhone.h */,
-				C593C45E17D32AC800C26367 /* ChatImpressViewController_iPhone.m */,
+				C593C45D17D32AC800C26367 /* ChatAssessViewController_iPhone.h */,
+				C593C45E17D32AC800C26367 /* ChatAssessViewController_iPhone.m */,
 				CD32013717E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.h */,
 				CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */,
 				CD32013917E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib */,
@@ -837,6 +844,9 @@
 				C580526C17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m */,
 				C580526F17E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.h */,
 				C580527017E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m */,
+				CD736CEC1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.h */,
+				CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */,
+				CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */,
 			);
 			path = GUI;
 			sourceTree = "<group>";
@@ -983,6 +993,7 @@
 				C55B440017CF580A009BB21B /* Default@2x.png in Resources */,
 				C55B440217CF580A009BB21B /* Default-568h@2x.png in Resources */,
 				C55B445D17CF8632009BB21B /* Icon-72.png in Resources */,
+				CD736CF41817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */,
 				C55B445F17CF8632009BB21B /* Icon-Small-50.png in Resources */,
 				C55B446117CF8632009BB21B /* Icon-Small.png in Resources */,
 				C55B446317CF8632009BB21B /* Icon-Small@2x.png in Resources */,
@@ -1034,6 +1045,7 @@
 				C55B446817CF8632009BB21B /* Icon@2x.png in Resources */,
 				C55B446A17CF8632009BB21B /* iTunesArtwork in Resources */,
 				C593C47317D4240800C26367 /* LeftBarHeaderView_iPhone.xib in Resources */,
+				CD736CF51817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */,
 				C593C47A17D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */,
 				C596283A17DA08AA009127E6 /* sidebar_menu_icon_landscape.png in Resources */,
 				C596283C17DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png in Resources */,
@@ -1153,6 +1165,7 @@
 				C50505C017D2BD4800DB6589 /* CBAppUtils.m in Sources */,
 				C50505C217D2BD4800DB6589 /* CBDateUtils.m in Sources */,
 				C50505C417D2BD4800DB6589 /* CBFileUtils.m in Sources */,
+				CD736CEE1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */,
 				C50505C617D2BD4800DB6589 /* CBGZipUtils.m in Sources */,
 				C50505C817D2BD4800DB6589 /* CBHUDAgent.m in Sources */,
 				C50505CA17D2BD4800DB6589 /* CBMathUtils.m in Sources */,
@@ -1186,7 +1199,7 @@
 				C593C45317D32A8300C26367 /* ChatWaitViewController_iPhone.m in Sources */,
 				C593C45717D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */,
 				CD34DCAF180A7BC5003BBE06 /* ChatWizardController.m in Sources */,
-				C593C45F17D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */,
+				C593C45F17D32AC800C26367 /* ChatAssessViewController_iPhone.m in Sources */,
 				C593C46317D32ADE00C26367 /* ChatVideoViewController_iPhone.m in Sources */,
 				C593C46717D32AF600C26367 /* WarningViewController_iPhone.m in Sources */,
 				C593C46B17D4224B00C26367 /* LeftBarViewController_iPhone.m in Sources */,
@@ -1239,6 +1252,7 @@
 				C50505C917D2BD4800DB6589 /* CBHUDAgent.m in Sources */,
 				C50505CB17D2BD4800DB6589 /* CBMathUtils.m in Sources */,
 				C50505CD17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */,
+				CD736CEF1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */,
 				C50505CF17D2BD4800DB6589 /* CBModuleManager.m in Sources */,
 				C50505D117D2BD4800DB6589 /* CBNetworkUtils.m in Sources */,
 				C50505D317D2BD4800DB6589 /* CBPathUtils.m in Sources */,
@@ -1265,7 +1279,7 @@
 				C593C45017D329F300C26367 /* HelpViewController_iPhone.m in Sources */,
 				C593C45417D32A8300C26367 /* ChatWaitViewController_iPhone.m in Sources */,
 				C593C45817D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */,
-				C593C46017D32AC800C26367 /* ChatImpressViewController_iPhone.m in Sources */,
+				C593C46017D32AC800C26367 /* ChatAssessViewController_iPhone.m in Sources */,
 				C593C46417D32ADE00C26367 /* ChatVideoViewController_iPhone.m in Sources */,
 				C593C46817D32AF600C26367 /* WarningViewController_iPhone.m in Sources */,
 				C593C46C17D4224B00C26367 /* LeftBarViewController_iPhone.m in Sources */,

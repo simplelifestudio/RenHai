@@ -199,7 +199,7 @@
             NSArray* impressLabelList = [impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
             
             RHImpressLabel* impressLabel = nil;
-            if (0 < impressLabelList.count && row <= impressLabelList.count)
+            if (0 < impressLabelList.count && row < impressLabelList.count)
             {
                 impressLabel = impressLabelList[row];
                 
@@ -301,7 +301,7 @@
     _agreeChatButton.hidden = NO;
     _rejectChatButton.hidden = NO;
     
-    [self setCountdownSeconds:COUNTDOWN_SECONDS];
+    [self _setCountdownSeconds:COUNTDOWN_SECONDS];
 }
 
 -(void) pageWillLoad
@@ -403,6 +403,8 @@
     if (0 == _countdownSeconds)
     {
         [self _clockCancel];
+        
+        [self _clockCountFinished];
     }
     else
     {
@@ -422,7 +424,15 @@
     }
 }
 
-- (void) setCountdownSeconds:(NSUInteger) seconds
+- (void) _clockCountFinished
+{
+    if (!_selfAgreeChatFlag)
+    {
+        [self _agreeChat];
+    }
+}
+
+- (void) _setCountdownSeconds:(NSUInteger) seconds
 {
     if (0 < seconds)
     {

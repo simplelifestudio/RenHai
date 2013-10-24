@@ -103,4 +103,11 @@
 "ChatVideo_SelfStatus_VideoClosed" = "Your Video: Closed";
 "ChatVideo_PartnerStatus_VideoOpened" = "Partner's Video: Opened";
 "ChatVideo_PartnerStatus_VideoClosed" = "Partner's Video: Closed";
+"ChatVideo_PartnerStatus_Lost" = "Partner Lost";
 "ChatVideo_Action_End" = "End";
+
+"ChatAssess_Action_Continue" = "Continue";
+"ChatAssess_Action_Finish" = "Finish";
+"ChatAssess_AssessLabels" = "Chat Impress";
+"ChatAssess_ImpressLabels" = "Impress Labels";
+"ChatAssess_Empty" = "Empty";

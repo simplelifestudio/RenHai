@@ -106,15 +106,19 @@
 -(void) onOthersideEndChat
 {
     [CBAppUtils asyncProcessInMainThread:^(){
-        _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoClosed", nil);
+        _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_VideoClosed", nil);
     }];
+    
+    [self _endChat];
 }
 
 -(void) onOthersideLost
 {
     [CBAppUtils asyncProcessInMainThread:^(){
-        _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_VideoClosed", nil);
+        _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Lost", nil);
     }];
+    
+    [self _endChat];
 }
 
 #pragma mark - Private Methods
@@ -132,14 +136,14 @@
     [_endChatButton setTitle:NSLocalizedString(@"ChatVideo_Action_End", nil) forState:UIControlStateNormal];
 }
 
--(void) _moveToChatImpressView
+-(void) _moveToChatAssessView
 {
     [CBAppUtils asyncProcessInMainThread:^(){
     
         [_appDataModule updateAppBusinessStatus:AppBusinessStatus_ChatEndCompleleted];
         
         ChatWizardController* chatWizard = _guiModule.chatWizardController;
-        [chatWizard wizardProcess:ChatWizardStatus_ChatImpress];
+        [chatWizard wizardProcess:ChatWizardStatus_ChatAssess];
     
     }];
 }
@@ -174,7 +178,7 @@
                 {
                     _selfEndChatFlag = YES;
                     
-                    [self _moveToChatImpressView];
+                    [self _moveToChatAssessView];
                 }
                 else
                 {

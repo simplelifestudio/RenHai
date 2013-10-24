@@ -14,6 +14,8 @@
 
 @interface RHImpressCard : NSObject <CBJSONable, NSCopying, NSMutableCopying>
 
++(RHImpressCard*) newImpressCard:(NSString*) assessLabel impressLabels:(NSArray*) impressLabels;
+
 @property (nonatomic) NSUInteger impressCardId;
 
 @property (nonatomic, strong) NSArray* assessLabelList;

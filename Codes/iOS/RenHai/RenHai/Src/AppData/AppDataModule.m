@@ -226,7 +226,7 @@ SINGLETON(AppDataModule)
         }
         case AppBusinessStatus_EnterPoolCompleted:
         {
-            if (oldStatus == AppBusinessStatus_AppDataSyncCompleted || oldStatus == AppBusinessStatus_ChatAssessCompleleted || oldStatus == AppBusinessStatus_SessionBindCompeleted)
+            if (oldStatus == AppBusinessStatus_AppDataSyncCompleted || oldStatus == AppBusinessStatus_ChatEndCompleleted|| oldStatus == AppBusinessStatus_SessionBindCompeleted)
             {
                 isUpdateLegal = YES;
                 needUpdate = YES;
@@ -284,21 +284,21 @@ SINGLETON(AppDataModule)
             
             break;
         }
-        case AppBusinessStatus_ChatAssessCompleleted:
-        {
-            if (oldStatus == AppBusinessStatus_ChatEndCompleleted)
-            {
-                isUpdateLegal = YES;
-                needUpdate = YES;
-            }
-            else
-            {
-                isUpdateLegal = NO;
-                needUpdate = NO;
-            }
-            
-            break;
-        }
+//        case AppBusinessStatus_ChatAssessCompleleted:
+//        {
+//            if (oldStatus == AppBusinessStatus_ChatEndCompleleted)
+//            {
+//                isUpdateLegal = YES;
+//                needUpdate = YES;
+//            }
+//            else
+//            {
+//                isUpdateLegal = NO;
+//                needUpdate = NO;
+//            }
+//            
+//            break;
+//        }
         default:
         {
             isUpdateLegal = NO;
