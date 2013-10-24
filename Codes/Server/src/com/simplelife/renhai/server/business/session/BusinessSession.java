@@ -138,16 +138,22 @@ public class BusinessSession implements IBusinessSession
     }
     
     @Override
-    public void endSession()
+    public synchronized void endSession()
     {
+    	if (pool == null)
+    	{
+    		logger.debug("Enter endSession, but session has been ended.");
+    		return;
+    	}
+    	
     	logger.debug("Enter endSession.");
     	sessionEndTime = System.currentTimeMillis();
     	
     	//for (IDeviceWrapper device : deviceList)
-    	{
+    	//{
     		//pool.endChat(device);
     		//device.changeBusinessStatus(BusinessStatus.WaitMatch, StatusChangeReason.SessionEnded);
-    	}
+    	//}
     	
     	deviceList.clear();
    		progressMap.clear();
@@ -554,6 +560,9 @@ public class BusinessSession implements IBusinessSession
     				|| reason == Consts.StatusChangeReason.TimeoutOnSyncSending)
     		{
     			device.increaseChatLoss();
+    			
+    			int duration = (int) (System.currentTimeMillis() - chatStartTime);
+    			device.increaseChatDuration(duration);
     		}
     	}
     
@@ -572,11 +581,13 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
+    	/*
     	List<IDeviceWrapper> tmpList = new ArrayList<IDeviceWrapper>(deviceList);
     	if (reason == StatusChangeReason.AppRejectChat)
     	{
     		notifyDevices(tmpList, device, Consts.NotificationType.OthersideRejected);
     	}
+    	*/
     	
     	/*
     	switch(status)
@@ -701,14 +712,14 @@ public class BusinessSession implements IBusinessSession
 			case SessionBoundConfirmed:
 				if (operationType != Consts.OperationType.AgreeChat
 						&& operationType != Consts.OperationType.RejectChat
-						&& operationType != Consts.OperationType.LeavePool)
+						&& operationType != Consts.OperationType.SessionUnbind)
 				{
 					return false;
 				}
 			break;
 			case ChatConfirmed:
 				if (operationType != Consts.OperationType.EndChat
-						&& operationType != Consts.OperationType.LeavePool)
+						&& operationType != Consts.OperationType.SessionUnbind)
 				{
 					return false;
 				}
