@@ -104,6 +104,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     // Instance of slf Logger
     private Logger logger = BusinessModule.instance.getLogger();
     
+    // Set service status of Device: Normal or Ban
     public void setServiceStatus(Consts.ServiceStatus serviceStatus)
     {
     	this.serviceStatus = serviceStatus;
@@ -243,7 +244,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     					businessPool.onDeviceEnter(this);
     					break;
     				case SessionBound:
-    					ownerBusinessSession.onDeviceLeave(this, reason);
     					this.unbindBusinessSession(reason);
     					businessPool.endChat(this);
     					break;
@@ -260,7 +260,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     	businessStatus = targetStatus;
     }
     
-    /** */
+    /**
+     * Return BusinessSession of Device, it's null if Device is not in status of SessionBound  
+     */
     public IBusinessSession getOwnerBusinessSession()
     {
         return ownerBusinessSession;
