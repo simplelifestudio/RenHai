@@ -139,7 +139,7 @@
             NSArray* impressLabelList = [impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
             
             RHImpressLabel* impressLabel = nil;
-            if (0 < impressLabelList.count && row <= impressLabelList.count)
+            if (0 < impressLabelList.count && row < impressLabelList.count)
             {
                 impressLabel = impressLabelList[row];
 
