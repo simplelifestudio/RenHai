@@ -15,6 +15,7 @@ import java.util.Set;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -184,6 +185,32 @@ public class BusinessSessionRequest extends AppJSONMessage
 			return false;
 		}
 		
+		JSONObject label;
+		for (int i = 0; i < assessLabelList.size(); i++)
+		{
+			label = assessLabelList.getJSONObject(i); 
+			if (!label.containsKey(JSONKey.ImpressLabelName))
+			{
+				setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+				setErrorDescription(JSONKey.ImpressLabelName + " is missed from " + JSONKey.AssessLabelList + ".");
+				return false;
+			}
+		}
+		
+		JSONArray impressLabelList = getJSONArray(impressObj, JSONKey.ImpressLabelList);
+		if (impressLabelList != null)
+		{
+			for (int i = 0; i < impressLabelList.size(); i++)
+			{
+				label = impressLabelList.getJSONObject(i);
+				if (!label.containsKey(JSONKey.ImpressLabelName))
+				{
+					setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+					setErrorDescription(JSONKey.ImpressLabelName + " is missed from " + JSONKey.ImpressLabelList + ".");
+					return false;
+				}
+			}
+		}
 		return true;
 	}
 	
@@ -534,22 +561,26 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		try
 		{
+			LoggerFactory.getLogger("DB").debug("Begins transaction of updating impress label for: ", deviceWrapper.getDeviceSn());
 			t = session.beginTransaction();
 		
 			String tempLabel;
 			JSONArray assessLabels = impressObj.getJSONArray(JSONKey.AssessLabelList);
-			tempLabel = assessLabels.getString(0);
+			JSONObject tempLabelObj = assessLabels.getJSONObject(0); 
+			tempLabel = tempLabelObj.getString(JSONKey.ImpressLabelName);
 			updateOrAppendImpressLabel(targetCard, tempLabel, true);
 			updateOrAppendImpressLabel(sourceCard, tempLabel, false);
 			
 			JSONArray impressLabels = impressObj.getJSONArray(JSONKey.ImpressLabelList);
 			for (int i = 0; i < impressLabels.size(); i++)
 			{
-				tempLabel = impressLabels.getString(i);
+				tempLabelObj = impressLabels.getJSONObject(i); 
+				tempLabel = tempLabelObj.getString(JSONKey.ImpressLabelName);
 				updateOrAppendImpressLabel(targetCard, tempLabel, true);
 				updateOrAppendImpressLabel(sourceCard, tempLabel, false);
 			}
 			t.commit();
+			LoggerFactory.getLogger("DB").debug("Committed transaction of updating impress label for: ", deviceWrapper.getDeviceSn());
 		}
 		catch (Exception e)
 		{
