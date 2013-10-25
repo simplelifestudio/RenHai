@@ -496,7 +496,11 @@ public class MainFunction extends AbstractTestCase
 				|| app2.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
 		{
 			Thread.sleep(1000);
-			app1.sendServerDataSyncRequest();
+			
+			if (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
+			{
+				app1.sendServerDataSyncRequest();
+			}
 		}
 	}
 	
@@ -649,5 +653,36 @@ public class MainFunction extends AbstractTestCase
 			      }).build()).get();
 
 		websocket.sendTextMessage("fdsafdsaklj;");
+	}
+	
+	@Test
+	public void testRandomScheduler() throws InterruptedException
+	{
+		MockApp app1 = new MockApp(demoDeviceSn);
+		app1.syncDevice();
+		app1.enterPool(BusinessType.Random);
+		
+		MockApp app2 = new MockApp(demoDeviceSn2);
+		app2.syncDevice();
+		app2.enterPool(BusinessType.Random);
+		
+		app1.waitMessage();
+		app2.waitMessage();
+		
+		Thread.sleep(2000);
+		app1.chatConfirm(true);
+		app2.chatConfirm(true);
+		
+		//String jsonString = "{\"body\":{\"businessType\":1,\"operationInfo\":{\"device\":{\"deviceCard\":{\"appVersion\":\"0.1\",\"deviceCardId\":3,\"deviceModel\":\"iPhone5\",\"isJailed\":1,\"osVersion\":\"6.1.2\",\"registerTime\":\"2013-10-0806:15:30.854\"},\"deviceId\":3,\"deviceSn\":\"demoDeviceSn\",\"profile\":{\"active\":true,\"createTime\":\"2013-10-0806:15:30.854\",\"impressCard\":{\"assessLabelList\":[{\"assessCount\":0,\"assessedCount\":0,\"impressLabelName\":\"^#Happy#^\"}],\"chatLossCount\":0,\"chatTotalCount\":0,\"chatTotalDuration\":0,\"impressLabelList\":[]},\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"globalInterestLabelId\":2,\"globalMatchCount\":2,\"interestLabelName\":\"Topic6\",\"labelOrder\":2,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":1,\"globalMatchCount\":1,\"interestLabelName\":\"Topic8\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":3,\"globalMatchCount\":3,\"interestLabelName\":\"Topic7\",\"labelOrder\":1,\"matchCount\":0,\"validFlag\":1}]},\"profileId\":3,\"serviceStatus\":1}}},\"operationType\":7},\"header\":{\"deviceId\":3,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":103,\"messageSn\":\"7JWX0VP8R9T2C931\",\"messageType\":1,\"timeStamp\":\"2013-10-2414:30:16.733\"}}";
+		//app1.sendRawJSONMessage(jsonString, true);
+		Thread.sleep(3000);
+		app1.endChat();
+		app2.endChat();
+		
+		Thread.sleep(2000);
+		app1.assessAndQuit("^#Happy#^,好感");
+		app2.assessAndQuit("^#Happy#^,还行");
+		
+		app1.sendServerDataSyncRequest();
 	}
 }

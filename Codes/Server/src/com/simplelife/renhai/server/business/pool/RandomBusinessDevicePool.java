@@ -54,6 +54,7 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 		{
 			// Maybe device has been removed from business device pool by another thread
 			deviceMap.put(sn, device);
+			
 		}
 	}
 

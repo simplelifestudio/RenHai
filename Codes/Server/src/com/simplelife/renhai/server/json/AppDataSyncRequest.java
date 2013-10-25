@@ -15,9 +15,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.hibernate.Transaction;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.mysql.jdbc.log.LogFactory;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Device;
@@ -951,9 +953,11 @@ public class AppDataSyncRequest extends AppJSONMessage
 		Transaction t = null;
 		try
 		{
+			LoggerFactory.getLogger("DB").debug("Begins transaction of saving device: ", deviceWrapper.getDeviceSn());
 			t= hibernateSesion.beginTransaction();
 			hibernateSesion.save(deviceWrapper.getDevice());
 			t.commit();
+			LoggerFactory.getLogger("DB").debug("Committed transaction of saving device: ", deviceWrapper.getDeviceSn());
 		}
 		catch (Exception e)
 		{

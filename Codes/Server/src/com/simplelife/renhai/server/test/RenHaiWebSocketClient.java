@@ -64,7 +64,10 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	public void onClose(int arg0, String arg1, boolean arg2)
 	{
 		getConnection().close(arg0);
-		mockApp.onClose();
+		if (mockApp != null)
+		{
+			mockApp.onClose();
+		}
 	}
 
 	@Override

@@ -554,6 +554,7 @@ public class MockApp implements IMockApp, Runnable
 		body.put(JSONKey.DeviceCount, deviceCountObj);
 		body.put(JSONKey.DeviceCapacity, deviceCapacityObj);
 		body.put(JSONKey.InterestLabelList, interestObj);
+		body.put(JSONKey.DetailedDeviceInfo, null);
 		
 		lastSentMessageSn = header.getString(JSONKey.MessageSn);
 		sendRawJSONMessage(jsonObject, true);
@@ -574,7 +575,7 @@ public class MockApp implements IMockApp, Runnable
 			
 			if (response == null)
 			{
-				logger.error("MockApp <" + deviceSn + ">: server has no response for message\n{}", JSON.toJSONString(obj, true));
+				logger.error("MockApp <" + deviceSn + ">: server has no response for message\n{}", JSON.toJSONString(envelopeObj, true));
 				setBusinessStatus(MockAppBusinessStatus.Ended);
 				return;
 			}
@@ -736,11 +737,15 @@ public class MockApp implements IMockApp, Runnable
 		{
 			if (Consts.SolidAssessLabel.isSolidAssessLabel(label))
 			{
-				assessObj.add(label);
+				JSONObject obj = new JSONObject();
+				obj.put(JSONKey.ImpressLabelName, label);
+				assessObj.add(obj);
 			}
 			else
 			{
-				impressObj.add(label);
+				JSONObject obj = new JSONObject();
+				obj.put(JSONKey.ImpressLabelName, label);
+				impressObj.add(obj);
 			}
 		}
 		
@@ -874,8 +879,6 @@ public class MockApp implements IMockApp, Runnable
 		
 		if (messageId == Consts.MessageId.BusinessSessionNotification)
 		{
-			logger.debug("intOperationType: " + intOperationType);
-			
 			logger.debug("MockApp <"+ deviceSn + "> received notification: " + receivedOperationType.name());
 			if (receivedOperationType == Consts.NotificationType.OthersideAgreed
 					|| receivedOperationType == Consts.NotificationType.OthersideEndChat)
@@ -1181,6 +1184,7 @@ public class MockApp implements IMockApp, Runnable
 	    	
 	    	if (this.connection.isOpen())
 	    	{
+	    		connection.bindMockApp(this);
 	    		if (behaviorMode != MockAppConsts.MockAppBehaviorMode.Slave)
 	        	{
 	        		this.prepareSending(null, null);
@@ -1196,9 +1200,9 @@ public class MockApp implements IMockApp, Runnable
 			MockWebSocketConnection conn = new MockWebSocketConnection();
 			connection = conn;
 			OnlineDevicePool.instance.newDevice(conn);
+			connection.bindMockApp(this);
 		}
-		connection.bindMockApp(this);
-		
+
 		startTimer();
 	}
 	
@@ -1238,12 +1242,12 @@ public class MockApp implements IMockApp, Runnable
 	public void sendRawJSONMessage(String jsonString, boolean syncSend)
 	{
 		JSONObject obj = JSON.parseObject(jsonString);
-		JSONObject envelopeObj = new JSONObject();
-		envelopeObj.put(JSONKey.JsonEnvelope, obj);
+		//JSONObject envelopeObj = new JSONObject();
+		//envelopeObj.put(JSONKey.JsonEnvelope, obj);
 		
 		//String message = JSON.toJSONString(envelopeObj, SerializerFeature.WriteMapNullValue);
 		//logger.debug("MockApp <{}> sends message: \n" + message, deviceSn);
-		this.sendRawJSONMessage(envelopeObj, syncSend);
+		this.sendRawJSONMessage(obj, syncSend);
 	}
 	
 	public void onClose()

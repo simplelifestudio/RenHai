@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 
+import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.db.DAOWrapper;
@@ -38,6 +39,7 @@ import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */
@@ -336,7 +338,12 @@ public class OnlineDevicePool extends AbstractDevicePool
     		}
     	}
     	
-    	queueDeviceMap.remove(connection.getConnectionId());
+    	queueDeviceMap.remove(connectionId);
+    	if (deviceSn == null || deviceSn.length() == 0)
+    	{
+    		logger.error("Fatal error that device on connection {} has empty deviceSn", connectionId);
+    		return;
+    	}
     	deviceMap.put(deviceWrapper.getDeviceSn(), deviceWrapper);
     	logger.debug("Create device <{}> bases on connection " + connection, deviceWrapper.getDeviceSn());
     }
@@ -402,6 +409,36 @@ public class OnlineDevicePool extends AbstractDevicePool
 			device = bannedDeviceList.remove();
 			device.changeBusinessStatus(BusinessStatus.Offline, StatusChangeReason.BannedDevice);
 		}
+	}
+
+	private void reportDeviceInMap(ConcurrentHashMap<String, IDeviceWrapper> deviceMap, JSONObject response)
+	{
+		Iterator<Entry<String, IDeviceWrapper>> entryKeyIterator = deviceMap.entrySet().iterator();
+        IDeviceWrapper deviceWrapper;
+        while (entryKeyIterator.hasNext())
+		{
+        	Entry<String, IDeviceWrapper> e = entryKeyIterator.next();
+			deviceWrapper = e.getValue();
+			
+			JSONObject deviceObj = new JSONObject();
+        	response.put(deviceWrapper.getDeviceSn(), deviceObj);
+        	
+        	deviceObj.put(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
+        	deviceObj.put(JSONKey.DeviceSn, deviceWrapper.getDeviceSn());
+        	deviceObj.put(JSONKey.BusinessType, deviceWrapper.getBusinessType().name());
+        	deviceObj.put(JSONKey.BusinessStatus, deviceWrapper.getBusinessStatus().name());
+        	
+        	if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+        	{
+        		deviceObj.put(JSONKey.SessionId, deviceWrapper.getOwnerBusinessSession().getSessionId());
+        		deviceObj.put("businessSessionStatus", deviceWrapper.getOwnerBusinessSession().getStatus().name());
+        	}
+		}
+	}
+	public void reportDeviceDetails(JSONObject response)
+	{
+		reportDeviceInMap(deviceMap, response);
+		reportDeviceInMap(queueDeviceMap, response);
 	}
 	
 	public void saveStatistics()

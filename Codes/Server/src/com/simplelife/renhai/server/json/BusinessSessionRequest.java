@@ -185,7 +185,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			return false;
 		}
 		
-		JSONObject label;
+		JSONObject label = null;
 		for (int i = 0; i < assessLabelList.size(); i++)
 		{
 			label = assessLabelList.getJSONObject(i); 
@@ -313,9 +313,6 @@ public class BusinessSessionRequest extends AppJSONMessage
 				responseError();
 				return;
 			}
-			
-			deviceWrapper.setBusinessType(businessType);
-			deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch, StatusChangeReason.AppEnterBusiness);
 		}
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
@@ -339,10 +336,11 @@ public class BusinessSessionRequest extends AppJSONMessage
     			, body.getString(JSONKey.BusinessType) + ", " + deviceWrapper.getDeviceSn());
 		response.asyncResponse();
 		
-		AbstractBusinessScheduler businessScheduler = businessPool.getBusinessScheduler(); 
-		businessScheduler.getLock().lock();
-    	businessScheduler.signal();
-    	businessScheduler.getLock().unlock();
+		synchronized (deviceWrapper)
+		{
+			deviceWrapper.setBusinessType(businessType);
+			deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch, StatusChangeReason.AppEnterBusiness);
+		}
 	}
 	
 	private void leavePool()

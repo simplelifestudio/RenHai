@@ -24,6 +24,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
+import com.simplelife.renhai.server.business.pool.AbstractBusinessScheduler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
@@ -146,7 +147,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
      */
     public void changeBusinessStatus(Consts.BusinessStatus targetStatus, StatusChangeReason reason)
     {
-    	logger.debug("Device <{}> changes status from " 
+    	logger.debug("[Milestone] Device <{}> changes status from " 
     			+ this.businessStatus.name() + " to " + targetStatus.name() 
     			+ ", caused by " + reason.name(), this.getDeviceSn());
     	
@@ -199,6 +200,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     		case Idle:
     			switch(businessStatus)
     			{
+    				case Idle:
+    					// do nothing
+    					break;
     				case Init:
     					// Init -> Idle, typical process of AppDataSyncRequest 
     					ownerOnlinePool.synchronizeDevice(this);
@@ -237,15 +241,27 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     			}
     			break;
     		case WaitMatch:
+    			AbstractBusinessScheduler businessScheduler = null;
     			switch(businessStatus)
     			{
     				case Idle:
     					businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
+    					businessStatus = targetStatus;				// To ensure that status of device is WaitMatch before enter business pool 
     					businessPool.onDeviceEnter(this);
+    					
+    					businessScheduler = businessPool.getBusinessScheduler(); 
+    					businessScheduler.getLock().lock();
+    			    	businessScheduler.signal();
+    			    	businessScheduler.getLock().unlock();
     					break;
     				case SessionBound:
     					this.unbindBusinessSession(reason);
     					businessPool.endChat(this);
+    					
+    					businessScheduler = businessPool.getBusinessScheduler(); 
+    					businessScheduler.getLock().lock();
+    			    	businessScheduler.signal();
+    			    	businessScheduler.getLock().unlock();
     					break;
     				default:
     					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
@@ -399,6 +415,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     		Thread cmdThread = new Thread(command);
     		cmdThread.setName(command.getMessageId().name() + DateUtil.getCurrentMiliseconds());
     		cmdThread.start();
+    		//command.run();
     	}
     	catch(Exception e)
     	{

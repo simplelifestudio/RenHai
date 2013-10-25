@@ -13,6 +13,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 
+import com.simplelife.renhai.server.log.FileLogger;
+
 /**
  * Utility class for DB query
  */
@@ -26,7 +28,24 @@ public class DBQueryUtil
 	public static boolean isNewDevice(String deviceSn)
 	{
 		DeviceDAO dao = new DeviceDAO();
-		List<Device> list = dao.findByDeviceSn(deviceSn);
+		List<Device> list = null;
+		try
+		{
+			list = dao.findByDeviceSn(deviceSn);
+		}
+		catch(RuntimeException re)
+		{
+			// try again
+			try
+			{
+				list = dao.findByDeviceSn(deviceSn);
+			}
+			catch(RuntimeException e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+		}
+		
 		return (list.size() == 0);
 	}
 	
@@ -38,7 +57,23 @@ public class DBQueryUtil
 	public static Globalimpresslabel getGlobalimpresslabel(String label)
 	{
 		GlobalimpresslabelDAO dao = new GlobalimpresslabelDAO();
-		List<Globalimpresslabel> list = dao.findByImpressLabelName(label);
+		List<Globalimpresslabel> list = null;
+		try
+		{
+			list = dao.findByImpressLabelName(label);
+		}
+		catch(Exception re)
+		{
+			// try again
+			try
+			{
+				list = dao.findByImpressLabelName(label);
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+		}
 		
 		if (list == null || list.size() == 0)
 		{
@@ -55,7 +90,23 @@ public class DBQueryUtil
 	public static Globalinterestlabel getGlobalinterestlabel(String label)
 	{
 		GlobalinterestlabelDAO dao = new GlobalinterestlabelDAO();
-		List<Globalinterestlabel> list = dao.findByInterestLabelName(label);
+		List<Globalinterestlabel> list = null;
+		try
+		{
+			list = dao.findByInterestLabelName(label);
+		}
+		catch(RuntimeException re)
+		{
+			// try again
+			try
+			{
+				list = dao.findByInterestLabelName(label);
+			}
+			catch(RuntimeException e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+		}
 		
 		if (list == null || list.size() == 0)
 		{

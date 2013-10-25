@@ -57,7 +57,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
     /** */
     public void schedule()
     {
-    	logger.debug("Start to schedule devices in InterestBusinessDevicePool.");
+    	logger.debug("Start to schedule devices in InterestBusinessDevicePool, devices count: " + deviceMap.size());
     	if (deviceMap.size() < deviceCountPerSession)
 		{
     		logger.debug("There is no enough devices, return directly");
@@ -80,8 +80,6 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			}
 			
 			IDeviceWrapper device = entry.getValue();
-			//selectedDevice.add(device.getDeviceSn());
-			
 			labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
 			String strLabel; 
 			List<IDeviceWrapper> deviceList;
@@ -99,12 +97,15 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 				strLabel = label.getGlobalinterestlabel().getInterestLabelName();
 				deviceList = interestLabelMap.get(strLabel);
 				
+				logger.debug("Find {} devices with same interest: " + strLabel, deviceList.size());
+				
 				// The selected device shall be considered
 				//int expectedDeviceCount = deviceCountPerSession - selectedDevice.size() + 1;
 				
 				// We don't have enough devices have same interest label
 				if (deviceList.size() < deviceCountPerSession)
 				{
+					logger.debug("Not enough device count, try next interest label");
 					continue;
 				}
 				
@@ -151,11 +152,20 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			if (!deviceFoundFlag)
 			{
 				// Devices in pool can't be matched until new device entered 
+				logger.debug("Device <{}> can't be scheduled by its interest labels", device.getDeviceSn());
 				deadMatchFlag = true;
-				return;
+				continue;
 			}
 		}
     	
+		if (!deviceFoundFlag)
+		{
+			// Devices in pool can't be matched until new device entered 
+			logger.debug("Devices in pool can't be matched by interest labels");
+			deadMatchFlag = true;
+			return;
+		}
+		
     	IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
 		if (session == null)
 		{

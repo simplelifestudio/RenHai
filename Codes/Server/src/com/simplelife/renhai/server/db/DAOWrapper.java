@@ -23,6 +23,7 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.log.FileLogger;
@@ -124,8 +125,10 @@ public class DAOWrapper
 				Transaction t = null;
 				try
 				{
+					obj = linkToBeSaved.remove();
+					LoggerFactory.getLogger("DB").debug("DAOWrapper begins transaction for saving: " + obj.getClass().getName());
 					t =  session.beginTransaction();
-					Object mergedObj = session.merge(linkToBeSaved.remove());
+					Object mergedObj = session.merge(obj);
 					if (mergedObj != null)
 					{
 						session.save(mergedObj);
@@ -135,18 +138,38 @@ public class DAOWrapper
 						session.save(obj);
 					}
 					t.commit();
+					LoggerFactory.getLogger("DB").debug("DAOWrapper committed transaction for saving: " + obj.getClass().getName());
 				}
 				catch(Exception e)
 				{
-					FileLogger.printStackTrace(e);
-					if (t != null)
+					// Try again
+					try
 					{
-						t.rollback();
+						LoggerFactory.getLogger("DB").debug("DAOWrapper begins transaction for saving: " + obj.getClass().getName());
+						t =  session.beginTransaction();
+						Object mergedObj = session.merge(obj);
+						if (mergedObj != null)
+						{
+							session.save(mergedObj);
+						}
+						else
+						{
+							session.save(obj);
+						}
+						t.commit();
+						LoggerFactory.getLogger("DB").debug("DAOWrapper committed transaction for saving: " + obj.getClass().getName());
+					}
+					catch(Exception e2)
+					{
+						FileLogger.printStackTrace(e2);
+						if (t != null)
+						{
+							t.rollback();
+						}
 					}
 				}
 			}
 		}
-		
 	}
 	
 	protected static Logger logger = BusinessModule.instance.getLogger();

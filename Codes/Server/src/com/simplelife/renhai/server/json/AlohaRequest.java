@@ -33,7 +33,6 @@ public class AlohaRequest extends AppJSONMessage
 		messageId = Consts.MessageId.AlohaRequest;
 	}
 
-
 	/**
 	 * Check if JSON request is valid
 	 */
@@ -42,7 +41,6 @@ public class AlohaRequest extends AppJSONMessage
     {
 		return true;
     }
-	
 	
     @Override
     public void doRun()
@@ -77,10 +75,6 @@ public class AlohaRequest extends AppJSONMessage
     			, header.getString(JSONKey.DeviceSn));
     }
 
-
-	/* (non-Javadoc)
-	 * @see com.simplelife.renhai.server.json.AppJSONMessage#getMessageId()
-	 */
 	@Override
 	public MessageId getMessageId()
 	{
