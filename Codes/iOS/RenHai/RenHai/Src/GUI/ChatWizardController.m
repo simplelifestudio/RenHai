@@ -18,7 +18,7 @@
     ChatWaitViewController_iPhone* _chatWaitViewController;
     ChatConfirmViewController_iPhone* _chatConfirmViewContorller;
     ChatVideoViewController_iPhone* _chatVideoViewController;
-    ChatImpressViewController_iPhone* _chatImpressViewController;
+    ChatAssessViewController_iPhone* _chatAssessViewController;
     
     id<ChatWizardPage> _currentPage;
 }
@@ -96,9 +96,9 @@
             presentedVC = _chatVideoViewController;
             break;
         }
-        case ChatWizardStatus_ChatImpress:
+        case ChatWizardStatus_ChatAssess:
         {
-            presentedVC = _chatImpressViewController;
+            presentedVC = _chatAssessViewController;
             break;
         }
         default:
@@ -111,16 +111,16 @@
     {
         if (nil != _currentPage)
         {
-            [_currentPage pageWillUnload];        
+            [_currentPage pageWillUnload];
         }
         
         if ([self containsViewController:presentedVC])
         {
-            [self popToViewController:presentedVC animated:YES];
+            [self popToViewController:presentedVC animated:NO];
         }
         else
         {
-            [self pushViewController:presentedVC animated:YES];
+            [self pushViewController:presentedVC animated:NO];
         }
         
         _currentPage = (id<ChatWizardPage>)presentedVC;
@@ -138,7 +138,7 @@
     _chatWaitViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATWAIT_IPHONE];
     _chatConfirmViewContorller = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATCONFIRM_IPHONE];
     _chatVideoViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATVIDEO_IPHONE];
-    _chatImpressViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATIMPRESS_IPHONE];
+    _chatAssessViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATASSESS_IPHONE];
     
     self.modalPresentationStyle = UIModalPresentationFormSheet;
     self.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
@@ -146,7 +146,7 @@
     [self addChildViewController:_chatWaitViewController];
     [self addChildViewController:_chatConfirmViewContorller];
     [self addChildViewController:_chatVideoViewController];
-    [self addChildViewController:_chatImpressViewController];
+    [self addChildViewController:_chatAssessViewController];
     
     _currentPage = nil;
 }

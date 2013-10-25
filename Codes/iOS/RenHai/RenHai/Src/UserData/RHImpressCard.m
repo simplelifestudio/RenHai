@@ -20,6 +20,19 @@
 
 @implementation RHImpressCard
 
++(RHImpressCard*) newImpressCard:(NSString*) assessLabel impressLabels:(NSArray*) impressLabels
+{
+    RHImpressCard* card = [[RHImpressCard alloc] init];
+    
+    RHImpressLabel* oAssessLabel = [[RHImpressLabel alloc] init];
+    oAssessLabel.labelName = assessLabel;
+    
+    card.assessLabelList = @[oAssessLabel];
+    card.impressLabelList = impressLabels;
+    
+    return card;
+}
+
 @synthesize impressCardId = _impressCardId;
 @synthesize assessLabelList = _assessLabelList;
 @synthesize impressLabelList = _impressLabelList;
@@ -53,8 +66,11 @@
 {
     NSSortDescriptor *sortDescriptor = sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"assessedCount"
                                                                                     ascending:YES];
-    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-    NSArray *sortedArray = [_impressLabelList sortedArrayUsingDescriptors:sortDescriptors];
+    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+    
+//    NSArray *sortedArray = [_impressLabelList sortedArrayUsingDescriptors:sortDescriptors];
+    
+    NSArray *sortedArray = [[NSMutableArray alloc] initWithArray:[_impressLabelList sortedArrayUsingDescriptors:sortDescriptors]];
     
     return sortedArray;
 }
@@ -69,9 +85,10 @@
     }
     else
     {
+        NSArray* sortedImpressLabelList = self.impressLabelList;
         NSRange subRange = NSMakeRange(0, top - 1);
-        NSArray* subLabelList = [self.impressLabelList subarrayWithRange:subRange];
-        [topList addObjectsFromArray:subLabelList];
+        NSArray* subLabelList = [sortedImpressLabelList subarrayWithRange:subRange];
+        [topList addObjectsFromArray:subLabelList]; 
     }
     
     return topList;

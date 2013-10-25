@@ -103,4 +103,11 @@
 "ChatVideo_SelfStatus_VideoClosed" = "你的视频：已关闭";
 "ChatVideo_PartnerStatus_VideoOpened" = "对方视频：已打开";
 "ChatVideo_PartnerStatus_VideoClosed" = "对方视频：已关闭";
+"ChatVideo_PartnerStatus_Lost" = "对方掉线";
 "ChatVideo_Action_End" = "结束";
+
+"ChatAssess_Action_Continue" = "继续";
+"ChatAssess_Action_Finish" = "结束";
+"ChatAssess_AssessLabels" = "聊天印象";
+"ChatAssess_ImpressLabels" = "评价标签";
+"ChatAssess_Empty" = "空缺";

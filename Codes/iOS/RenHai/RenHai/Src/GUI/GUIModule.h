@@ -26,7 +26,7 @@
 #import "ChatWaitViewController_iPhone.h"
 #import "ChatConfirmViewController_iPhone.h"
 #import "ChatVideoViewController_iPhone.h"
-#import "ChatImpressViewController_iPhone.h"
+#import "ChatAssessViewController_iPhone.h"
 
 #define STORYBOARD_IPHONE @"MainStoryboard_iPhone"
 
@@ -48,7 +48,7 @@
 #define STORYBOARD_ID_CHATWAIT_IPHONE @"chatwait_iphone"
 #define STORYBOARD_ID_CHATCONFIRM_IPHONE @"chatconfirm_iphone"
 #define STORYBOARD_ID_CHATVIDEO_IPHONE @"chatvideo_iphone"
-#define STORYBOARD_ID_CHATIMPRESS_IPHONE @"chatimpress_iphone"
+#define STORYBOARD_ID_CHATASSESS_IPHONE @"chatassess_iphone"
 
 #define NIB_CONNECTVIEWCONTROLLER @"ConnectViewController_iPhone"
 
@@ -69,8 +69,10 @@
 #define REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW @"InterestLabelsHeaderView"
 #define REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW @"ServerInterestLabelsHeaderView"
 #define REUSABLEVIEW_ID_IMPRESSSECTIONHEADERVIEW @"ImpressSectionHeaderView"
+#define REUSABLEVIEW_ID_IMPRESSLABELSHEADERVIEW @"ImpressLabelsHeaderView"
 
 #define NIB_IMPRESSSECTIONHEADERVIEW @"ImpressSectionHeaderView_iPhone"
+#define NIB_IMPRESSLABELSHEADERVIEW @"ImpressLabelsHeaderView_iPhone"
 
 #define DELAY_UIREFRESHCONTROL_SHOW 0.75f
 #define DELAY_UIREFRESHCONTROL_RESET 0.75f

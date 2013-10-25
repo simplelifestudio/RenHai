@@ -30,7 +30,7 @@ typedef enum
     AppBusinessStatus_SessionBindCompeleted,
     AppBusinessStatus_ChatAgreeCompleted,
     AppBusinessStatus_ChatEndCompleleted,
-    AppBusinessStatus_ChatAssessCompleleted
+//    AppBusinessStatus_ChatAssessCompleleted
 }
 AppBusinessStatus;
 

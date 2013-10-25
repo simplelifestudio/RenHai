@@ -29,7 +29,7 @@ typedef enum
     ChatWizardStatus_ChatWait = 0,
     ChatWizardStatus_ChatConfirm,
     ChatWizardStatus_ChatVideo,
-    ChatWizardStatus_ChatImpress
+    ChatWizardStatus_ChatAssess
 }
 ChatWizardStatus;
 

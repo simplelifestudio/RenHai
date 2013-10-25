@@ -19,7 +19,7 @@
 #import "AppDataModule.h"
 
 #define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
-#define INTERVAL_DATASYNC 5
+#define INTERVAL_DATASYNC 10
 
 typedef enum
 {
