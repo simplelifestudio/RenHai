@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "356E2B1C91934EFBA707D0BF"
+               BlueprintIdentifier = "8B519C6963E04D69AB768B07"
                BuildableName = "libPods-OBShapedButton.a"
                BlueprintName = "Pods-OBShapedButton"
                ReferencedContainer = "container:Pods.xcodeproj">

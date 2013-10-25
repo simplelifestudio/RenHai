@@ -25,7 +25,7 @@ the [non-WebRTC version](https://github.com/opentok/opentok-ios-sdk) of the Open
 *  You must use a [peer-to-peer streaming](http://www.tokbox.com/opentok/docs/concepts/peer_to_peer.html)
    enabled OpenTok Session. You can enable p2p when creating a session using the Project Tools on your
    [Developer Dashboard](https://dashboard.tokbox.com/projects) or enable it for any Session created with
-   our supported [server-side libraries](http://www.tokbox.com/opentok/docs/concepts/server_side_libraries.html).
+   our supported [server-side libraries](http://tokbox.com/opentok/docs/server/server_side_libraries.html).
 
    Peer-to-peer streaming helps reduce latency by letting the media stream skip a hop to an external server,
    resulting in better performance. A few limitations introduced by this technique are discussed below.
@@ -50,6 +50,22 @@ The OpenTok on WebRTC iOS SDK is supported on wifi connections.
 
 Release notes
 -------------
+
+August 30, 2013 - Version 2.1.5
+
+* New signaling API -- This version adds support for the new OpenTok signaling API. 
+  You can now send messages and data to other clients connected to an OpenTok session. 
+  See the [OTSession signalWithType:data:completionHandler:],
+  [OTSession signalWithType:data:connections:completionHandler:], 
+  and [OTSession receiveSignalType:withHandler:] methods.
+* Dynamic traffic shaping -- [OTSubscriberDelegate subscriberVideoDisabled:] 
+  is invoked when the OpenTok media server stops sending video to a subscriber. 
+  This feature of the OpenTok media server has a subscriber drop the video stream when
+   connectivity degrades. The subscriber continues to receive the audio stream, if there is one.
+* New connection events -- [OTSessionDelegate session:didCreateConnection:] and
+  [OTSessionDelegate session:didDropConnection:] are invoked when clients connect to and disconnect from a session.
+* iOS 7 Support -- This version resolves several iOS 7 compatability issues. Note that iOS 7 introduces a system-level
+  end-user prompt for microphone access.
 
 August 7, 2013 - Version 2.1.4
 
