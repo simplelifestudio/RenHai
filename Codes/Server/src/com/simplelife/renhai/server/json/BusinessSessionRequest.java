@@ -559,7 +559,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		try
 		{
-			LoggerFactory.getLogger("DB").debug("Begins transaction of updating impress label for: ", deviceWrapper.getDeviceSn());
+			LoggerFactory.getLogger("DB").debug("Begins transaction of updating impress label for: {}", deviceWrapper.getDeviceSn());
 			t = session.beginTransaction();
 		
 			String tempLabel;

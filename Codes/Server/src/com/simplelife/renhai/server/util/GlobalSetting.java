@@ -80,5 +80,6 @@ public class GlobalSetting
 		public static int LengthOfMessageSn = 16;
 		
 		public static int MaxImpressLabelCount = 32;
+		public static int MessageHandleThreads = 100;
 	} 
 }

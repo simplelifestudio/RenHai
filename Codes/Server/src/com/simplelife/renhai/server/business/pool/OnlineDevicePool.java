@@ -425,7 +425,11 @@ public class OnlineDevicePool extends AbstractDevicePool
         	
         	deviceObj.put(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
         	deviceObj.put(JSONKey.DeviceSn, deviceWrapper.getDeviceSn());
-        	deviceObj.put(JSONKey.BusinessType, deviceWrapper.getBusinessType().name());
+        	
+        	if (deviceWrapper.getBusinessType() != null)
+        	{
+        		deviceObj.put(JSONKey.BusinessType, deviceWrapper.getBusinessType().name());
+        	}
         	deviceObj.put(JSONKey.BusinessStatus, deviceWrapper.getBusinessStatus().name());
         	
         	if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)

@@ -399,7 +399,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	{
 	    	if (controller.message == null)
 	    	{
-	    		logger.debug("Timeout for synchronized response of device <{}>, MessageSn: " + messageSn, connectionOwner.getDeviceSn());
+	    		logger.error("Timeout for synchronized response of device <{}>, MessageSn: " + messageSn, connectionOwner.getDeviceSn());
 	    		controller.message = new TimeoutRequest(null);
 	    	}
 	    	else

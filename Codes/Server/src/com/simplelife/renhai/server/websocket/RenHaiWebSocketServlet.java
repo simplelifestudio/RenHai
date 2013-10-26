@@ -55,7 +55,10 @@ public class RenHaiWebSocketServlet extends WebSocketServlet {
     	
         WebSocketConnection conn = new WebSocketConnection(id);
         OnlineDevicePool pool = OnlineDevicePool.instance;
-        pool.newDevice(conn);
+        if (pool.newDevice(conn) == null)
+        {
+        	return null;
+        }
         return conn;
     }
     
