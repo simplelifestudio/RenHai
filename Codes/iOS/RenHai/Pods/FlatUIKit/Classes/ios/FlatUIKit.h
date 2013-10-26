@@ -22,6 +22,7 @@
 
 #import "FUIAlertView.h"
 #import "FUIButton.h"
+#import "FUITextField.h"
 #import "FUICellBackgroundView.h"
 #import "FUISegmentedControl.h"
 #import "FUISwitch.h"
@@ -35,5 +36,4 @@
 #import "UISlider+FlatUI.h"
 #import "UITabBar+FlatUI.h"
 #import "UITableViewCell+FlatUI.h"
-// Updated by RenHai
 #import "UIToolbar+FlatUI.h"
