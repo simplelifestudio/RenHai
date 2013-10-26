@@ -41,7 +41,7 @@ EnterOperationStatus;
     
     NSTimer* _dataSyncTimer;
     
-    BOOL _enterPoolFlag;
+    volatile BOOL _enterPoolFlag;
 }
 
 @end
@@ -184,7 +184,6 @@ EnterOperationStatus;
     [self _enterButtonTimerFinished];
     
     _enterButtonTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_ENTERBUTTON_TRACK target:self selector:@selector(_enterButtonTimerUpdated) userInfo:nil repeats:YES];
-    [_enterButtonTimer fire];
 }
 
 static float progress = 0.0;
