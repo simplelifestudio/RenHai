@@ -61,7 +61,7 @@ public class GlobalSetting
 	
 	public static class DBSetting
 	{
-		public static int MaxRecordCountForFlush = 10;
+		public static int MaxRecordCountForFlush = 30;
 		public static int MaxRecordCountForDiscard = 1000;
 		public static boolean CacheEnabled = false;
 	}

@@ -11,8 +11,10 @@
 
 package com.simplelife.renhai.server.business;
 
+import org.hibernate.Session;
 import org.slf4j.LoggerFactory;
 
+import com.simplelife.renhai.server.business.pool.MessageCenter;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
@@ -33,8 +35,11 @@ public class BusinessModule extends AbstractModule
 	public void startService()
     {
 		// To initialize DB connection
-    	HibernateSessionFactory.getSession();
+    	Session session = HibernateSessionFactory.getSession();
+    	HibernateSessionFactory.closeSession();
+    	
     	OnlineDevicePool.instance.startTimers();
+    	MessageCenter.instance.startThreads();
     	moduleAvailable = true;
     }
 	
@@ -42,6 +47,7 @@ public class BusinessModule extends AbstractModule
 	public void stopService()
 	{
 		OnlineDevicePool.instance.stopTimers();
+		MessageCenter.instance.stopThreads();
 		moduleAvailable = false;
 	}
 }

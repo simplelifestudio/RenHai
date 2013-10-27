@@ -59,7 +59,10 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 		
 		int intOperationType = body.getIntValue(JSONKey.OperationType);
 		Consts.NotificationType notificationType = Consts.NotificationType.parseValue(intOperationType);
-		logger.debug("Received confirm of " + notificationType.name() + " from Device <" + deviceWrapper.getDeviceSn() + ">, session status: {}", deviceWrapper.getOwnerBusinessSession().getStatus().name());
+		logger.debug("Received confirm of " + notificationType.name() 
+				+ " from Device <" + deviceWrapper.getDeviceSn() 
+				+ ">, session status: {}"
+				, deviceWrapper.getOwnerBusinessSession().getStatus().name());
 		switch(notificationType)
 		{
 			case SessionBound:

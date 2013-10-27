@@ -43,6 +43,7 @@ public class DBModule extends AbstractModule
 	@Override
 	public void stopService()
 	{
+		DAOWrapper.flushToDB();
 		super.stopService();
 		DAOWrapper.stopTimers();
 	}

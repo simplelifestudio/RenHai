@@ -34,6 +34,7 @@ import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessProgress;
 import com.simplelife.renhai.server.util.Consts.BusinessStatus;
+import com.simplelife.renhai.server.util.Consts.NotificationType;
 import com.simplelife.renhai.server.util.Consts.OperationType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -300,12 +301,14 @@ public class BusinessSession implements IBusinessSession
 				}
 			}
     		notify.setDeviceWrapper(device);
-    		logger.debug("Send notify for device " + device.getDeviceSn() +": \n" + JSON.toJSONString(notify.toJSONObject(), true));
+    		logger.debug("Send notify for device <" + device.getDeviceSn() +">: \n" + JSON.toJSONString(notify.toJSONObject(), true));
     		notify.syncResponse();
     		
+    		/*
     		DbLogger.saveSystemLog(Consts.OperationCode.NotificationSessionBound_1010
         			, Consts.SystemModule.business
         			, notificationType.name() + ", " + device.getDeviceSn());
+        	*/
     	}
 	}
     
@@ -409,6 +412,7 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
+    	/*
     	if (progress.getValue() >= Consts.BusinessProgress.ChatConfirmed.getValue())
     	{
     		// TODO: it's not good here, normal business progress is broken
@@ -416,6 +420,7 @@ public class BusinessSession implements IBusinessSession
     		logger.debug("Business progress of " + device.getDeviceSn() + " is " + progress.name() + " and response of SessionBound is ignored");
     		return;
     	}
+    	*/
     	
     	if (progress != Consts.BusinessProgress.Init)
     	{
@@ -512,7 +517,7 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-    	if (progress.getValue() >= Consts.BusinessProgress.ChatConfirmed.getValue())
+    	if (progress != Consts.BusinessProgress.SessionBoundConfirmed)
     	{
     		logger.error("Received AgreeChat from device <{}> but its business progress is " + progress.name(), device.getDeviceSn());
     		return;
@@ -579,16 +584,19 @@ public class BusinessSession implements IBusinessSession
     	{
     		if (reason == Consts.StatusChangeReason.TimeoutOfActivity
     				|| reason == Consts.StatusChangeReason.TimeoutOfPing
-    				|| reason == Consts.StatusChangeReason.TimeoutOnSyncSending)
+    				|| reason == Consts.StatusChangeReason.TimeoutOnSyncSending
+    				|| reason == Consts.StatusChangeReason.WebSocketReconnect)
     		{
     			device.increaseChatLoss();
     			
     			int duration = (int) (System.currentTimeMillis() - chatStartTime);
     			device.increaseChatDuration(duration);
+    			
+    			notifyDevices(device, NotificationType.OthersideLost);
     		}
     	}
     
-    	if (deviceList.size() == 0)
+    	if (deviceList.isEmpty())
     	{
     		if (reason == StatusChangeReason.AssessAndContinue
     				|| reason == StatusChangeReason.AssessAndQuit)

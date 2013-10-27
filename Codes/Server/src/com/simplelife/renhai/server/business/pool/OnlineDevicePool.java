@@ -54,10 +54,10 @@ public class OnlineDevicePool extends AbstractDevicePool
 		{
 			try
 			{
-				Session hibernateSesion = HibernateSessionFactory.getSession();
+				//Session hibernateSesion = HibernateSessionFactory.getSession();
 				Thread.currentThread().setName("InactiveCheck");
 				OnlineDevicePool.instance.checkInactiveDevice();
-				HibernateSessionFactory.closeSession();
+				//HibernateSessionFactory.closeSession();
 			}
 			catch(Exception e)
 			{
@@ -73,10 +73,10 @@ public class OnlineDevicePool extends AbstractDevicePool
 		{
 			try
 			{
-				Session hibernateSesion = HibernateSessionFactory.getSession();
+				//Session hibernateSesion = HibernateSessionFactory.getSession();
 				Thread.currentThread().setName("BannedCheck");
 				OnlineDevicePool.instance.deleteBannedDevice();
-				HibernateSessionFactory.closeSession();
+				//HibernateSessionFactory.closeSession();
 			}
 			catch(Exception e)
 			{
@@ -131,11 +131,10 @@ public class OnlineDevicePool extends AbstractDevicePool
 			Entry<String, IDeviceWrapper> e = entryKeyIterator.next();
 			deviceWrapper = e.getValue();
 			
-			
-			lastActivityTime = deviceWrapper.getLastActivityTime().getTime();
-			if ((now - lastActivityTime) > GlobalSetting.TimeOut.DeviceInIdle)
+			lastActivityTime = deviceWrapper.getLastActivityTime();
+			if ((lastActivityTime > 0) && ((now - lastActivityTime) > GlobalSetting.TimeOut.DeviceInIdle))
 			{
-				logger.debug("Device with connection id {} will be removed from online device pool due to last activity time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastActivityTime().getTime())
+				logger.debug("Device with connection id {} will be removed from online device pool due to last activity time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastActivityTime())
 						, deviceWrapper.getConnection().getConnectionId());
 				
 				deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.TimeoutOfActivity);
@@ -211,10 +210,12 @@ public class OnlineDevicePool extends AbstractDevicePool
     	queueDeviceMap.put(id, deviceWrapper);
     	
     	logger.debug("Save connection {} in OnlineDevicePool", id);
+    	/*
     	DbLogger.saveSystemLog(Consts.OperationCode.SetupWebScoket_1001
     			, Consts.SystemModule.business
     			, id);
-        return deviceWrapper;
+    	*/
+    	return deviceWrapper;
     }
     
     public int getDeviceCountInChat()
@@ -334,7 +335,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     			//preDevice.getConnection().closeConnection();
     			// 2013-10-15, delete device due to it's hard for app to recover to status before connection loss
     			//deleteDevice(preDevice, StatusChangeReason.WebsocketClosedByServer);
-    			preDevice.changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.WebsocketClosedByServer);
+    			preDevice.changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.WebSocketReconnect);
     		}
     	}
     	
@@ -398,13 +399,13 @@ public class OnlineDevicePool extends AbstractDevicePool
 	
 	public void deleteBannedDevice()
 	{
-		if (bannedDeviceList.size() > 0)
+		if (!bannedDeviceList.isEmpty())
 		{
 			logger.debug("Start to delete {} banned devices", bannedDeviceList.size());
 		}
 		
 		IDeviceWrapper device;
-		while (bannedDeviceList.size() > 0)
+		while (!bannedDeviceList.isEmpty())
 		{
 			device = bannedDeviceList.remove();
 			device.changeBusinessStatus(BusinessStatus.Offline, StatusChangeReason.BannedDevice);

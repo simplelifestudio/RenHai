@@ -17,6 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.slf4j.Logger;
 
@@ -32,8 +34,8 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 {
     /** */
-    private HashMap<String, List<IDeviceWrapper>> interestLabelMap = new HashMap<String, List<IDeviceWrapper>>();
-    public HashMap<String, List<IDeviceWrapper>> getInterestLabelMap()
+    private ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>> interestLabelMap = new ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>>();
+    public ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>> getInterestLabelMap()
     {
     	return interestLabelMap;
     }
@@ -63,8 +65,8 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		return labelList;
     	}
     	
-    	Set<Entry<String, List<IDeviceWrapper>>> entrySet = interestLabelMap.entrySet();
-    	for (Entry<String, List<IDeviceWrapper>> entry : entrySet)
+    	Set<Entry<String, ConcurrentSkipListSet<IDeviceWrapper>>> entrySet = interestLabelMap.entrySet();
+    	for (Entry<String, ConcurrentSkipListSet<IDeviceWrapper>> entry : entrySet)
     	{
     		HotLabel hotLabel = new HotLabel();
     		hotLabel.setLabelName(entry.getKey());
@@ -158,10 +160,10 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		String strLabel = label.getGlobalinterestlabel().getInterestLabelName();
     		if (!this.interestLabelMap.containsKey(strLabel))
     		{
-    			interestLabelMap.put(strLabel, new ArrayList<IDeviceWrapper>());
+    			interestLabelMap.put(strLabel, new ConcurrentSkipListSet<IDeviceWrapper>());
     		}
     		
-    		List<IDeviceWrapper> deviceList = interestLabelMap.get(strLabel);
+    		ConcurrentSkipListSet<IDeviceWrapper> deviceList = interestLabelMap.get(strLabel);
     		if (deviceList.contains(device))
     		{
     			logger.warn("Device <{}> has been in list of interest queue: " + strLabel, device.getDeviceSn());
@@ -190,7 +192,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     			continue;
     		}
     		
-    		List<IDeviceWrapper> deviceList = interestLabelMap.get(strLabel);
+    		ConcurrentSkipListSet<IDeviceWrapper> deviceList = interestLabelMap.get(strLabel);
     		if (!deviceList.contains(device))
     		{
     			logger.warn("Device <{}> is not in list of interest queue: " + strLabel, device.getDeviceSn());

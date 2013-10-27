@@ -56,6 +56,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     protected ConcurrentHashMap<String, SyncController> syncMap = new ConcurrentHashMap<String, SyncController>();
     protected String connectionId;
     protected Logger logger = WebSocketModule.instance.getLogger();
+    protected boolean isConnectionOpen = false;
     
     /**
 	 * @return the remoteIPAddress
@@ -250,6 +251,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     {
     	WebSocketModule.instance.getLogger().debug("WebSocketConnection onOpen triggered");
         super.onOpen(outbound);
+        isConnectionOpen = true;
     }
     
     @Override
@@ -297,6 +299,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	}
     	*/
     	
+    	isConnectionOpen = false;
     	String temp = "WebSocketConnection onClose triggered, connection id: " + getConnectionId()+ ", status: " + status;
     	if (this.connectionOwner != null)
     	{
@@ -325,7 +328,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	obj.put(JSONKey.JsonEnvelope, message.toJSONObject());
     	
     	String strMessage = JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue);
-   		logger.debug("Send message: \n{}", JSON.toJSONString(message.toJSONObject(), true));
+   		logger.debug("Send message over WebSocket: \n{}", JSON.toJSONString(message.toJSONObject(), true));
    		
     	CharBuffer buffer = CharBuffer.allocate(strMessage.length());
         buffer.put(strMessage);
@@ -337,8 +340,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
         } 
         catch (IOException e)
         {
-        	logger.error(e.getMessage());
-        	throw(e);
+        	FileLogger.printStackTrace(e);
         }
     }
     
@@ -429,5 +431,14 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 	public String getConnectionId()
 	{
 		return connectionId;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.simplelife.renhai.server.util.IBaseConnection#isOpen()
+	 */
+	@Override
+	public boolean isOpen()
+	{
+		return isConnectionOpen;
 	}
 }

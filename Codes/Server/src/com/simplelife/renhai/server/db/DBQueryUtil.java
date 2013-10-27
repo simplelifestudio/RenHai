@@ -12,7 +12,9 @@ package com.simplelife.renhai.server.db;
 import java.util.List;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.log.FileLogger;
 
 /**
@@ -20,6 +22,7 @@ import com.simplelife.renhai.server.log.FileLogger;
  */
 public class DBQueryUtil
 {
+	private static Logger logger = BusinessModule.instance.getLogger();
 	/**
 	 * Check if given deviceSn is new device in DB
 	 * @param deviceSn: SN of device
@@ -27,6 +30,13 @@ public class DBQueryUtil
 	 */
 	public static boolean isNewDevice(String deviceSn)
 	{
+		Device device = DAOWrapper.getDeviceInCache(deviceSn);
+		if (device != null)
+		{
+			logger.debug("======check if it's new device");
+			return false;
+		}
+		
 		DeviceDAO dao = new DeviceDAO();
 		List<Device> list = null;
 		try
@@ -35,6 +45,7 @@ public class DBQueryUtil
 		}
 		catch(RuntimeException re)
 		{
+			FileLogger.printStackTrace(re);
 			// try again
 			try
 			{
@@ -46,7 +57,7 @@ public class DBQueryUtil
 			}
 		}
 		
-		return (list.size() == 0);
+		return (list.isEmpty());
 	}
 	
 	/**

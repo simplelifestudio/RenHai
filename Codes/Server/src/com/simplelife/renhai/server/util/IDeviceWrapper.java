@@ -48,7 +48,7 @@ public interface IDeviceWrapper
     public void asyncSendMessage(ServerJSONMessage message);
     
     /** */
-    public Date getLastActivityTime();
+    public long getLastActivityTime();
     
     public Device getDevice();
     

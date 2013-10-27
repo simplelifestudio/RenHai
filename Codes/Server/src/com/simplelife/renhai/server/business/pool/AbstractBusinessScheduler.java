@@ -34,6 +34,7 @@ public abstract class AbstractBusinessScheduler extends Thread implements IBusin
 	protected boolean runFlag = false;
     protected Logger logger = BusinessModule.instance.getLogger();
     protected ConcurrentHashMap<String, IDeviceWrapper> deviceMap;
+    protected volatile boolean isWorking = false;
     
     protected final int deviceCountPerSession = 2;
 
@@ -54,11 +55,19 @@ public abstract class AbstractBusinessScheduler extends Thread implements IBusin
     public void stopScheduler()
     {
     	runFlag = false;
+    	resumeSchedule();
     }
 
-    public void signal()
+    public void resumeSchedule()
     {
+    	if (isWorking)
+    	{
+    		return;
+    	}
+    	
+    	lock.lock();
     	condition.signal();
+    	lock.unlock();
     }
     
     /** */
@@ -76,10 +85,12 @@ public abstract class AbstractBusinessScheduler extends Thread implements IBusin
 			{
 				if (meetScheduleCondition())
 				{
+					isWorking = true;
 					schedule();
 				}
 				else
 				{
+					isWorking = false;
 					logger.debug("Await due to there is no enough device in devicemap");
 					condition.await();
 					logger.debug("Recover from await");

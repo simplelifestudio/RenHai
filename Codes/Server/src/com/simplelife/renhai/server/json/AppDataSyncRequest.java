@@ -21,6 +21,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.mysql.jdbc.log.LogFactory;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceDAO;
@@ -166,7 +167,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			return false;
 		}
 		
-		if (interestLabelList.size() == 0)
+		if (interestLabelList.isEmpty())
 		{
 			String temp = JSONKey.InterestLabelList + " can't be empty for updating interestCard.";
 			logger.error(temp);
@@ -353,7 +354,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 	@Override
 	protected boolean checkJSONRequest()
 	{
-		logger.debug("start of checkJSONRequest");
 		String deviceSn = header.getString(JSONKey.DeviceSn);
 		if (DBQueryUtil.isNewDevice(deviceSn))
 		{
@@ -494,7 +494,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		if (syncType == SyncType.ExistentNotLoaded || syncType == SyncType.ExistentLoaded)
 		{
-			logger.debug("Device is Existent, try to load device from DB.");
+			logger.debug("Device is Existent in DB, try to load it from DB.");
 			loadDevice(deviceSn);
 		}
 		else if (syncType == SyncType.NewDevice)
@@ -613,6 +613,14 @@ public class AppDataSyncRequest extends AppJSONMessage
 	
 	private void loadDevice(String deviceSn)
 	{
+		Device device = DAOWrapper.getDeviceInCache(deviceSn);
+		if (device != null)
+		{
+			logger.debug("Find Device object in DB cache, reuse it directly");
+			deviceWrapper.setDevice(device);
+			return;
+		}
+		
 		if (DBQueryUtil.isNewDevice(deviceSn))
 		{
 			logger.error("DeviceCard can't be found in DB with SN: " + deviceSn);
@@ -622,7 +630,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		try
 		{
 			DeviceDAO dao = new DeviceDAO();
-			Device device = dao.findByDeviceSn(deviceSn).get(0);
+			device = dao.findByDeviceSn(deviceSn).get(0);
 			if (device == null)
 			{
 				logger.error("Fatal error, device load from DB by SN <{}> is null!", deviceSn);
@@ -950,6 +958,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			profile.setActive(Consts.YesNo.Yes.name());
 		}
 		
+		/*
 		Transaction t = null;
 		try
 		{
@@ -967,6 +976,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			}
 			FileLogger.printStackTrace(e);
 		}
+		*/
 	}
 	
 	private void updateDevice(JSONObject deviceObj, JSONObject dataUpdateResponse)

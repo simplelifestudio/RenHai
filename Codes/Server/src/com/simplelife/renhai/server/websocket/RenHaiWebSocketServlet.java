@@ -53,10 +53,11 @@ public class RenHaiWebSocketServlet extends WebSocketServlet {
     	String id = arg1.getRemoteAddr() + "_" + arg1.getRemotePort();
     	logger.debug("New connection received from {}", id);
     	
-        WebSocketConnection conn = new WebSocketConnection(id);
+    	WebSocketConnection conn = new WebSocketConnection(id);
         OnlineDevicePool pool = OnlineDevicePool.instance;
         if (pool.newDevice(conn) == null)
         {
+        	logger.error("pool.newDevice(conn) == null");
         	return null;
         }
         return conn;

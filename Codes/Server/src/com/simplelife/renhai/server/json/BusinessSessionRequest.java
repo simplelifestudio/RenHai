@@ -237,34 +237,28 @@ public class BusinessSessionRequest extends AppJSONMessage
 			}
 		}
 		
+		logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 		switch (operationType)
 		{
 			case EnterPool:
-				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				enterPool();
 				break;
 			case LeavePool:
-				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				leavePool();
 				break;
 			case AgreeChat:
-				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				agreeChat();
 				break;
 			case RejectChat:
-				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				rejectChat();
 				break;
 			case EndChat:
-				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				endChat();
 				break;
 			case AssessAndContinue:
-				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				assessAndContinue();
 				break;
 			case AssessAndQuit:
-				logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 				assessAndQuit();
 				break;
 			case SessionUnbind:
@@ -281,7 +275,6 @@ public class BusinessSessionRequest extends AppJSONMessage
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEnterPool_1014
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceSn());
-		
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType businessType = Consts.BusinessType.parseValue(intType);
 		
@@ -554,35 +547,50 @@ public class BusinessSessionRequest extends AppJSONMessage
 				.getJSONObject(JSONKey.Profile)
 				.getJSONObject(JSONKey.ImpressCard);
 		
-		Session session = HibernateSessionFactory.getSession();
-		Transaction t = null;
+		//Session session = HibernateSessionFactory.getSession();
+		//Transaction t = null;
 		
-		try
+		//try
 		{
-			LoggerFactory.getLogger("DB").debug("Begins transaction of updating impress label for: {}", deviceWrapper.getDeviceSn());
-			t = session.beginTransaction();
+			//LoggerFactory.getLogger("DB").debug("Begins transaction of updating impress label for: {}", deviceWrapper.getDeviceSn());
+			//t = session.beginTransaction();
 		
 			String tempLabel;
 			JSONArray assessLabels = impressObj.getJSONArray(JSONKey.AssessLabelList);
 			JSONObject tempLabelObj = assessLabels.getJSONObject(0); 
 			tempLabel = tempLabelObj.getString(JSONKey.ImpressLabelName);
-			updateOrAppendImpressLabel(targetCard, tempLabel, true);
-			updateOrAppendImpressLabel(sourceCard, tempLabel, false);
+			
+			synchronized(targetCard)
+			{
+				updateOrAppendImpressLabel(targetCard, tempLabel, true);
+			}
+			
+			synchronized(sourceCard)
+			{
+				updateOrAppendImpressLabel(sourceCard, tempLabel, false);
+			}
 			
 			JSONArray impressLabels = impressObj.getJSONArray(JSONKey.ImpressLabelList);
 			for (int i = 0; i < impressLabels.size(); i++)
 			{
 				tempLabelObj = impressLabels.getJSONObject(i); 
 				tempLabel = tempLabelObj.getString(JSONKey.ImpressLabelName);
-				updateOrAppendImpressLabel(targetCard, tempLabel, true);
-				updateOrAppendImpressLabel(sourceCard, tempLabel, false);
+				synchronized(targetCard)
+				{
+					updateOrAppendImpressLabel(targetCard, tempLabel, true);
+				}
+				
+				synchronized(sourceCard)
+				{
+					updateOrAppendImpressLabel(sourceCard, tempLabel, false);
+				}
 			}
-			t.commit();
-			LoggerFactory.getLogger("DB").debug("Committed transaction of updating impress label for: ", deviceWrapper.getDeviceSn());
+			//t.commit();
+			//LoggerFactory.getLogger("DB").debug("Committed transaction of updating impress label for: ", deviceWrapper.getDeviceSn());
 		}
-		catch (Exception e)
+		//catch (Exception e)
 		{
-			FileLogger.printStackTrace(e);
+		//	FileLogger.printStackTrace(e);
 		}
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,

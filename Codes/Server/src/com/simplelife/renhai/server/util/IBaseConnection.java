@@ -60,4 +60,6 @@ public interface IBaseConnection
 	public IDeviceWrapper getOwner();
 	
 	public String getConnectionId();
+	
+	public boolean isOpen();
 }

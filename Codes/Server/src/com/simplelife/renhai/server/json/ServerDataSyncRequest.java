@@ -83,7 +83,7 @@ public class ServerDataSyncRequest extends AppJSONMessage
 					if (!CommonFunctions.IsNumric(labelCount))
 					{
 						this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-						this.setErrorDescription(JSONKey.Current + "in" + JSONKey.InterestLabelList +" must be numric.");
+						this.setErrorDescription(JSONKey.Current + " in " + JSONKey.InterestLabelList +" must be numric.");
 						return false;
 					}
 				}
@@ -204,21 +204,10 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		
 		if (hotObj.containsKey(JSONKey.Current))
 		{
-			String labelCount = hotObj.getString(JSONKey.Current);
-			
-			int count = 0;
-			if (labelCount == null || labelCount.length() == 0)
-			{
-				count = GlobalSetting.BusinessSetting.HotInterestLabelCount;
-			}
-			else
-			{
-				count = Integer.parseInt(labelCount);
-			}
-			
+			int labelCount = hotObj.getIntValue(JSONKey.Current);
 			JSONArray hotLabelObj = new JSONArray();
 			hotObj.put(JSONKey.Current, hotLabelObj);
-			LinkedList<HotLabel> labels = interestPool.getHotInterestLabel(count);
+			LinkedList<HotLabel> labels = interestPool.getHotInterestLabel(labelCount);
 			
 			JSONObject tempLabelObj;
 			Globalinterestlabel globalLabel;

@@ -25,7 +25,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessScheduler;
+import com.simplelife.renhai.server.business.pool.MessageCenter;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Impresscard;
@@ -51,7 +53,7 @@ import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */
-public class DeviceWrapper implements IDeviceWrapper, INode
+public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceWrapper>
 {
 	/**
 	 * Task for sending message to app by synchronized mode 
@@ -82,9 +84,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     protected Date lastPingTime;
     
     // Time of last request (including AlohaRequest and AppDataSyncRequest) from APP
-    protected Date lastActivityTime;
-    
+    //protected Date lastActivityTime;
     // Owner business session of this device, be null if device is not in status of SessionBound
+    
     protected IBusinessSession ownerBusinessSession;
     
     // Real device object enclosed in this DeviceWrapper
@@ -171,28 +173,29 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     			{
     				case Init:
     					ownerOnlinePool.deleteDevice(this, reason);
+    					DAOWrapper.asyncSave(this.getDevice());
     					break;
     				case Idle:
     					ownerOnlinePool.deleteDevice(this, reason);
+    					DAOWrapper.asyncSave(this.getDevice());
     					break;
     				case WaitMatch:
     					businessPool.onDeviceLeave(this, reason);
     					ownerOnlinePool.deleteDevice(this, reason);
+    					DAOWrapper.asyncSave(this.getDevice());
     					break;
     				case SessionBound:
     					// Leave business device pool
     					unbindBusinessSession(reason);
     					businessPool.onDeviceLeave(this, reason);
     					ownerOnlinePool.deleteDevice(this, reason);
+    					DAOWrapper.asyncSave(this.getDevice());
     					break;
     				default:
     					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
     					break;
     			}
-    			if (reason != StatusChangeReason.WebsocketClosedByApp)
-    			{
-    				this.webSocketConnection.closeConnection();
-    			}
+    			this.webSocketConnection.closeConnection();
     			break;
     		case Init:
     			logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
@@ -246,23 +249,37 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     			{
     				case Idle:
     					businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
-    					businessStatus = targetStatus;				// To ensure that status of device is WaitMatch before enter business pool 
-    					businessPool.onDeviceEnter(this);
+    					businessStatus = targetStatus;				// To ensure that status of device is WaitMatch before enter business pool
     					
+    					try
+						{
+							Thread.sleep(3000);
+						}
+						catch (InterruptedException e)
+						{
+							FileLogger.printStackTrace(e);
+						}
+    					
+    					businessPool.onDeviceEnter(this);
     					businessScheduler = businessPool.getBusinessScheduler(); 
-    					businessScheduler.getLock().lock();
-    			    	businessScheduler.signal();
-    			    	businessScheduler.getLock().unlock();
+    					businessScheduler.resumeSchedule();
     					break;
     				case SessionBound:
     					this.unbindBusinessSession(reason);
+    					
+    					try
+						{
+							Thread.sleep(3000);
+						}
+						catch (InterruptedException e)
+						{
+							FileLogger.printStackTrace(e);
+						}
     					businessPool.endChat(this);
     					
     					businessScheduler = businessPool.getBusinessScheduler(); 
-    					businessScheduler.getLock().lock();
-    			    	businessScheduler.signal();
-    			    	businessScheduler.getLock().unlock();
-    					break;
+    					businessScheduler.resumeSchedule();
+    			    	break;
     				default:
     					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
     					break;
@@ -330,9 +347,13 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     }
     
     /** */
-    public Date getLastActivityTime()
+    public long getLastActivityTime()
     {
-        return lastActivityTime;
+    	if (device == null)
+    	{
+    		return 0;
+    	}
+        return device.getProfile().getLastActivityTime();
     }
     
     /** */
@@ -412,10 +433,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode
     	try
     	{
     		command.bindDeviceWrapper(this);
-    		Thread cmdThread = new Thread(command);
-    		cmdThread.setName(command.getMessageId().name() + DateUtil.getCurrentMiliseconds());
-    		cmdThread.start();
-    		//command.run();
+    		//Thread cmdThread = new Thread(command);
+    		//cmdThread.setName(command.getMessageId().name() + DateUtil.getCurrentMiliseconds());
+    		//cmdThread.start();
+    		MessageCenter.instance.addMessage(command);
     	}
     	catch(Exception e)
     	{
@@ -537,7 +558,11 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 	public void updateActivityTime()
 	{
 		LoggerFactory.getLogger("Ping").debug("Update last activity time");
-		this.lastActivityTime = DateUtil.getNowDate();
+		if (device == null)
+		{
+			return;
+		}
+		device.getProfile().setLastActivityTime(System.currentTimeMillis());
 	}
 	
 	@Override
@@ -771,6 +796,12 @@ public class DeviceWrapper implements IDeviceWrapper, INode
 		{
 			card.setChatTotalDuration(card.getChatTotalDuration() + duration);
 		}
+	}
+
+	@Override
+	public int compareTo(IDeviceWrapper device)
+	{
+		return this.getDeviceSn().compareTo(device.getDeviceSn());
 	}
 
 }

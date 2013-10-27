@@ -23,6 +23,7 @@ import org.asynchttpclient.Response;
 import org.asynchttpclient.websocket.WebSocket;
 import org.asynchttpclient.websocket.WebSocketTextListener;
 import org.asynchttpclient.websocket.WebSocketUpgradeHandler;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.java_websocket.drafts.Draft;
@@ -75,6 +76,25 @@ import java.util.concurrent.Future;
  */
 public class MainFunction extends AbstractTestCase
 {
+	private class SaveDeviceThread extends Thread
+	{
+		private Device device;
+		
+		public SaveDeviceThread(Device device)
+		{
+			this.device = device;
+		}
+		
+		@Override
+		public void run()
+		{
+			Session session = HibernateSessionFactory.getSession();
+			Transaction t = session.beginTransaction();
+			session.save(device);
+			t.commit();
+			HibernateSessionFactory.closeSession();
+		}
+	}
 	private class SaveTask extends Thread
 	{
 		private Statisticsitem item;
@@ -404,13 +424,8 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testSyncDevice()
 	{
-		String jsonMessage = "{\"header\":{\"messageType\":\"1\",\"messageSn\":\"AFLNWERJ2228FDLGSLDF\",\"messageId\":\"104\",\"deviceId\":\"1234\",\"deviceSn\":\"ABCD77fdsdGGWQ\",\"timeStamp\":\"2013-08-14 21:18:49\"},\"body\":{\"dataQuery\":{\"deviceCard\":{},\"impressCard\":{\"labelListCount\":\"10\"},\"interestCard\":{\"labelListCount\":\"5\"}},\"dataUpdate\":{\"deviceCard\":{\"osVersion\":\"iOS 6.1.3\",\"deviceModel\":\"iPhone5s\",\"appVersion\":\"1.5\",\"isJailed\":\"No\",\"location\":\"22.511962,113.380301\"},\"interestCard\":{\"soccer\":{\"order\":\"0\",\"matchCount\":\"7\"},\"music\":{\"order\":\"1\",\"matchCount\":\"3\"}}}}}";
-		JSONObject obj = JSONObject.parseObject(jsonMessage);
-		
-		AppJSONMessage appRequest = JSONFactory.createAppJSONMessage(obj);
-		DeviceWrapper deviceWrapper = new DeviceWrapper(null);
-		appRequest.bindDeviceWrapper(deviceWrapper);
-		appRequest.run();
+		MockApp app = new MockApp(demoDeviceSn);
+		app.syncDevice();
 	}
 	
 	@Test
@@ -656,6 +671,20 @@ public class MainFunction extends AbstractTestCase
 	}
 	
 	@Test
+	public void testServerDataSync()
+	{
+		//MockApp app1 = new MockApp(demoDeviceSn,"Slave");
+		//app1.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		//app1.connect(true);
+		
+		MockApp app1 = new MockApp(demoDeviceSn);
+		app1.syncDevice();
+		app1.sendServerDataSyncRequest();
+		
+		app1.sendServerDataSyncRequest();
+	}
+	
+	@Test
 	public void testRandomScheduler() throws InterruptedException
 	{
 		MockApp app1 = new MockApp(demoDeviceSn);
@@ -685,4 +714,20 @@ public class MainFunction extends AbstractTestCase
 		
 		app1.sendServerDataSyncRequest();
 	}
+	
+	@Test
+	public void testSaveObject() throws InterruptedException
+	{
+		DeviceDAO dao = new DeviceDAO();
+		Device device = dao.findByDeviceSn(demoDeviceSn).get(0);
+		
+		device.getDevicecard().setAppVersion("15.0123");
+		
+		Thread.sleep(1000);
+		SaveDeviceThread thread = new SaveDeviceThread(device);
+		thread.start();
+		
+		Thread.sleep(1000);
+	}
+	
 }

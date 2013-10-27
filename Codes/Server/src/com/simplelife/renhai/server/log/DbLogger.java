@@ -72,6 +72,8 @@ public class DbLogger
 	
 	public static void saveProfileLog(Consts.OperationCode code, Profile profile, String logInfo)
 	{
+		return;
+		/*
 		OperationcodeDAO dao = new OperationcodeDAO();
 		Operationcode codeObj = dao.findByOperationCode(code.getValue()).get(0);
 		
@@ -84,12 +86,15 @@ public class DbLogger
 		log.setProfile(profile);
 		
 		DAOWrapper.asyncSave(log);
+		*/
 	}
 	
 	public static void saveSystemLog(Consts.OperationCode code
 			, Consts.SystemModule module
 			, String logInfo)
 	{
+		return;
+		/*
 		try
 		{
 			OperationcodeDAO dao = new OperationcodeDAO();
@@ -111,5 +116,6 @@ public class DbLogger
 		{
 			FileLogger.printStackTrace(e);
 		}
+		*/
 	}
 }

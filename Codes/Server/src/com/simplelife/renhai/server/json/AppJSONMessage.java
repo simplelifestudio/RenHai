@@ -20,6 +20,7 @@ import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IAppJSONMessage;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
@@ -38,7 +39,21 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     protected Consts.MessageId messageId;
     protected Session hibernateSesion;
     
-    public AppJSONMessage(JSONObject jsonObject)
+    protected long queueTime;
+    
+    protected String messageSn;
+    
+	public long getQueueTime()
+	{
+		return queueTime;
+	}
+
+	public void setQueueTime(long queueTime)
+	{
+		this.queueTime = queueTime;
+	}
+
+	public AppJSONMessage(JSONObject jsonObject)
     {
     	Logger logger = JSONModule.instance.getLogger();
     	this.jsonObject = jsonObject;
@@ -234,8 +249,17 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     @Override
 	public void run()
 	{
-		try
+    	try
 		{
+			//Thread.currentThread().setName(messageId.name() + DateUtil.getCurrentMiliseconds());
+			logger.debug("Start to execute " + this.messageId.name() + " with MessageSN: " + this.getMessageSn() + " which was queued " + (System.currentTimeMillis() - getQueueTime()) 
+					+ "ms ago.");
+			
+			if (deviceWrapper == null || !deviceWrapper.getConnection().isOpen())
+	    	{
+	    		logger.warn("deviceWrapper of message with SN: {} is disabled, execution of message is given up", this.getMessageSn());
+	    		return;
+	    	}
 			doBeforeRun();
 			doRun();
 			doAfterRun();
@@ -249,6 +273,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
 	public void doBeforeRun()
 	{
 		hibernateSesion = HibernateSessionFactory.getSession();
+		/*
 		Device device = this.deviceWrapper.getDevice();
 		if ((device != null) && (!hibernateSesion.contains(device)))
 		{
@@ -263,6 +288,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
 			}
 			//hibernateSesion.load(Device.class, device.getDeviceId());
 		}
+		*/
 	}
 	
 	public void doAfterRun()
@@ -313,6 +339,11 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
 
     public String getMessageSn()
     {
+    	if (messageSn != null)
+    	{
+    		return messageSn;
+    	}
+    	
     	if (getHeader() == null)
     	{
     		return null;
@@ -323,7 +354,8 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     		return null;
     	}
     	
-    	return header.getString(JSONKey.MessageSn); 
+    	messageSn = header.getString(JSONKey.MessageSn);
+    	return messageSn; 
     }
     
     
