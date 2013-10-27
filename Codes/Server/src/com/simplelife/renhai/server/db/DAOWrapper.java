@@ -11,18 +11,22 @@
 
 package com.simplelife.renhai.server.db;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.hamcrest.core.IsInstanceOf;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.log.FileLogger;
@@ -74,36 +78,73 @@ public class DAOWrapper
 	    	condition.signal();
 	    }
 		
-		@Override
-		public void run()
+		private boolean saveObjectToDB(Object obj)
 		{
-			Thread.currentThread().setName("DBCacheTask");
 			Session session = HibernateSessionFactory.getSession();
 			if (session == null)
 			{
 				logger.error("Fatal error: null hibernate session, check DB parameters");
-				return;
+				return false;
 			}
 			
+			Transaction t = null;
+			try
+			{
+				t =  session.beginTransaction();
+				
+				Object mergedObj = session.merge(obj);
+				if (mergedObj != null)
+				{
+					session.save(mergedObj);
+				}
+				else
+				{
+					session.save(obj);
+				}
+				t.commit();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+				if (t != null)
+				{
+					t.rollback();
+				}
+				return false;
+			}
+			finally
+			{
+				session.close();
+			}
+			return true;
+		}
+		
+		@Override
+		public void run()
+		{
+			Thread.currentThread().setName("DBCacheTask");
 			Object obj = null;
 			while (continueFlag)
 			{
-				if (linkToBeSaved.size() == 0)
+				if (linkToBeSaved.isEmpty())
 				{
 					try
 					{
 						lock.lock();
+						/*
 						if (session.isOpen())
 						{
-							HibernateSessionFactory.closeSession();
+							//HibernateSessionFactory.closeSession();
+							session.close();
 						}
+						*/
 						logger.debug("Await due to no data in cache queue");
 						condition.await();
 						
-						if (linkToBeSaved.size() > 0)
+						if (!linkToBeSaved.isEmpty())
 						{
 							logger.debug("Resume saving data in cache queue, cache queue size: {}", linkToBeSaved.size());
-							session = HibernateSessionFactory.getSession();
+							//session = HibernateSessionFactory.getSession();
 						}
 					}
 					catch (InterruptedException e)
@@ -116,45 +157,47 @@ public class DAOWrapper
 					}
 				}
 				
-				if (!session.isOpen())
+				if (linkToBeSaved.isEmpty())
 				{
 					continue;
 				}
 				
-				Transaction t = null;
-				try
+				
+				obj = linkToBeSaved.remove();
+				if (!saveObjectToDB(obj))
 				{
-					t =  session.beginTransaction();
-					Object mergedObj = session.merge(linkToBeSaved.remove());
-					if (mergedObj != null)
-					{
-						session.save(mergedObj);
-					}
-					else
-					{
-						session.save(obj);
-					}
-					t.commit();
-				}
-				catch(Exception e)
-				{
-					FileLogger.printStackTrace(e);
-					if (t != null)
-					{
-						t.rollback();
-					}
+					// Try again
+					saveObjectToDB(obj);
 				}
 			}
 		}
-		
 	}
-	
+
 	protected static Logger logger = BusinessModule.instance.getLogger();
     protected static ConcurrentLinkedQueue<Object> linkToBeSaved = new ConcurrentLinkedQueue<Object>();
     protected static int objectCountInCache = 0;
     protected static Timer timer = new Timer();
     protected static FlushTask flushTask = new FlushTask(linkToBeSaved);
     
+    
+    public static Device getDeviceInCache(String deviceSn)
+    {
+    	Iterator<Object> it = linkToBeSaved.iterator();
+    	Object obj;
+    	while (it.hasNext())
+    	{
+    		obj = it.next();
+    		if (obj instanceof Device)
+    		{
+    			Device device = (Device) obj;
+    			if (deviceSn.equals(device.getDeviceSn()))
+    			{
+    				return device;
+    			}
+    		}
+    	}
+    	return null;
+    }
     
     public static void startTimers()
     {
@@ -180,6 +223,11 @@ public class DAOWrapper
      */
     public static void asyncSave(Object obj)
     {
+    	if(obj == null)
+    	{
+    		return;
+    	}
+    	
     	if (linkToBeSaved.contains(obj))
     	{
     		return;

@@ -34,6 +34,7 @@ import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessProgress;
 import com.simplelife.renhai.server.util.Consts.BusinessStatus;
+import com.simplelife.renhai.server.util.Consts.NotificationType;
 import com.simplelife.renhai.server.util.Consts.OperationType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -208,7 +209,8 @@ public class BusinessSession implements IBusinessSession
     	IDeviceWrapper device;
     	for (String deviceSn : deviceList)
     	{
-    		progressMap.put(deviceSn, Consts.BusinessProgress.Init);
+    		updateBusinessProgress(deviceSn, Consts.BusinessProgress.Init);
+    		//progressMap.put(deviceSn, Consts.BusinessProgress.Init);
     		device = OnlineDevicePool.instance.getDevice(deviceSn);
     		if (device == null)
     		{
@@ -299,12 +301,14 @@ public class BusinessSession implements IBusinessSession
 				}
 			}
     		notify.setDeviceWrapper(device);
-    		logger.debug("Send notify for device " + device.getDeviceSn() +": \n" + JSON.toJSONString(notify.toJSONObject(), true));
+    		logger.debug("Send notify for device <" + device.getDeviceSn() +">: \n" + JSON.toJSONString(notify.toJSONObject(), true));
     		notify.syncResponse();
     		
+    		/*
     		DbLogger.saveSystemLog(Consts.OperationCode.NotificationSessionBound_1010
         			, Consts.SystemModule.business
         			, notificationType.name() + ", " + device.getDeviceSn());
+        	*/
     	}
 	}
     
@@ -338,7 +342,7 @@ public class BusinessSession implements IBusinessSession
     		}
     		return;
     	}
-    	logger.debug("Business session changes status from {} to " + targetStatus.name(), status.name());
+    	logger.debug("[Milestone] Business session changes status from {} to " + targetStatus.name(), status.name());
     	switch(targetStatus)
     	{
     		case Idle:
@@ -408,9 +412,19 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-    	if (progress.compareTo(Consts.BusinessProgress.Init) != 0)
+    	/*
+    	if (progress.getValue() >= Consts.BusinessProgress.ChatConfirmed.getValue())
     	{
-    		logger.error("Received confirmation SessionBound from device <{}> but it's in status of " + progress.name(), device.getDeviceSn());
+    		// TODO: it's not good here, normal business progress is broken
+    		// Purpose of the code is handling abnormal situation of confirm of SessionBounded is handled after AgreeChat
+    		logger.debug("Business progress of " + device.getDeviceSn() + " is " + progress.name() + " and response of SessionBound is ignored");
+    		return;
+    	}
+    	*/
+    	
+    	if (progress != Consts.BusinessProgress.Init)
+    	{
+    		logger.error("Received confirmation SessionBound from device <{}> but its business progress is " + progress.name(), device.getDeviceSn());
     		return;
     	}
     	
@@ -420,8 +434,10 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-		progressMap.put(device.getDeviceSn(), Consts.BusinessProgress.SessionBoundConfirmed);
-		logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.SessionBoundConfirmed.name(), device.getDeviceSn());
+    	logger.debug("Device <{}> confirmed SessionBound", device.getDeviceSn());
+    	updateBusinessProgress(device.getDeviceSn(), Consts.BusinessProgress.SessionBoundConfirmed);
+    	//progressMap.put(device.getDeviceSn(), Consts.BusinessProgress.SessionBoundConfirmed);
+		//logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.SessionBoundConfirmed.name(), device.getDeviceSn());
 		
 		if (checkAllDevicesReach(Consts.BusinessProgress.SessionBoundConfirmed))
     	{
@@ -446,19 +462,20 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-    	if (progress.compareTo(Consts.BusinessProgress.ChatConfirmed) != 0)
+    	if (progress != Consts.BusinessProgress.ChatConfirmed)
     	{
     		logger.error("Received confirmation EndChat from device <{}> but it's not in status of " + progress.name(), device.getDeviceSn());
     		return;
     	}
     	
-		progressMap.put(device.getDeviceSn(), Consts.BusinessProgress.ChatEnded);
-		logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.ChatEnded.name(), device.getDeviceSn());
+    	updateBusinessProgress(device.getDeviceSn(), Consts.BusinessProgress.ChatEnded);
+		//progressMap.put(device.getDeviceSn(), Consts.BusinessProgress.ChatEnded);
+		//logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.ChatEnded.name(), device.getDeviceSn());
     	
     	if (this.status != Consts.BusinessSessionStatus.VideoChat
     			&& this.status != Consts.BusinessSessionStatus.Assess)
     	{
-    		logger.error("EndChat received from {} but current session status is: " + status.name(), device.getDeviceSn());
+    		logger.error("EndChat received from <{}> but current session status is: " + status.name(), device.getDeviceSn());
     		return;
     	}
     	
@@ -479,6 +496,15 @@ public class BusinessSession implements IBusinessSession
         return status;
     }
     
+    private void updateBusinessProgress(String deviceSn, BusinessProgress progress)
+    {
+    	if (progress != BusinessProgress.Init)
+    	{
+    		logger.debug("[Milestone] Business progress of Device <" + deviceSn + "> is changed from {} to " + progress.name(),progressMap.get(deviceSn).name());
+    	}
+    	progressMap.put(deviceSn, progress);
+    }
+    
     @Override
     public void onAgreeChat(IDeviceWrapper device)
     {
@@ -491,16 +517,17 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-    	if (progress.compareTo(Consts.BusinessProgress.SessionBoundConfirmed) != 0)
+    	if (progress != Consts.BusinessProgress.SessionBoundConfirmed)
     	{
-    		logger.error("Received AgreeChat from device <{}> but it's in status of " + progress.name(), device.getDeviceSn());
+    		logger.error("Received AgreeChat from device <{}> but its business progress is " + progress.name(), device.getDeviceSn());
     		return;
     	}
 
     	notifyDevices(device, Consts.NotificationType.OthersideAgreed);
     	
-   		progressMap.put(device.getDeviceSn(), Consts.BusinessProgress.ChatConfirmed);
-   		logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.ChatConfirmed.name(), device.getDeviceSn());
+    	updateBusinessProgress(device.getDeviceSn(), Consts.BusinessProgress.ChatConfirmed);
+   		//progressMap.put(device.getDeviceSn(), Consts.BusinessProgress.ChatConfirmed);
+   		//logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.ChatConfirmed.name(), device.getDeviceSn());
     	
     	if (checkAllDevicesReach(Consts.BusinessProgress.ChatConfirmed))
     	{
@@ -509,7 +536,7 @@ public class BusinessSession implements IBusinessSession
     	}
     	else
     	{
-    		logger.debug("Device <{}> agreed chat but not all devices agreed.", device.getDeviceSn());
+    		logger.debug("Device <{}> agreed chat but not all devices agreed so far.", device.getDeviceSn());
     	}
     }
     
@@ -527,7 +554,7 @@ public class BusinessSession implements IBusinessSession
     	
     	if (progress.compareTo(Consts.BusinessProgress.SessionBoundConfirmed) != 0)
     	{
-    		logger.error("Received RejectChat from device <{}> but it's in status of " + progress.name(), device.getDeviceSn());
+    		logger.error("Received RejectChat from device <{}> but its business progress is " + progress.name(), device.getDeviceSn());
     		return;
     	}
     	
@@ -557,16 +584,19 @@ public class BusinessSession implements IBusinessSession
     	{
     		if (reason == Consts.StatusChangeReason.TimeoutOfActivity
     				|| reason == Consts.StatusChangeReason.TimeoutOfPing
-    				|| reason == Consts.StatusChangeReason.TimeoutOnSyncSending)
+    				|| reason == Consts.StatusChangeReason.TimeoutOnSyncSending
+    				|| reason == Consts.StatusChangeReason.WebSocketReconnect)
     		{
     			device.increaseChatLoss();
     			
     			int duration = (int) (System.currentTimeMillis() - chatStartTime);
     			device.increaseChatDuration(duration);
+    			
+    			notifyDevices(device, NotificationType.OthersideLost);
     		}
     	}
     
-    	if (deviceList.size() == 0)
+    	if (deviceList.isEmpty())
     	{
     		if (reason == StatusChangeReason.AssessAndContinue
     				|| reason == StatusChangeReason.AssessAndQuit)
@@ -629,8 +659,9 @@ public class BusinessSession implements IBusinessSession
     {
     	BusinessType type = sourceDevice.getBusinessType();
     	
-    	progressMap.put(sourceDevice.getDeviceSn(), Consts.BusinessProgress.AssessFinished);
-    	logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.AssessFinished.name(), sourceDevice.getDeviceSn());
+    	updateBusinessProgress(sourceDevice.getDeviceSn(), Consts.BusinessProgress.AssessFinished);
+    	//progressMap.put(sourceDevice.getDeviceSn(), Consts.BusinessProgress.AssessFinished);
+    	//logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.AssessFinished.name(), sourceDevice.getDeviceSn());
     	
     	if (checkAllDevicesReach(Consts.BusinessProgress.AssessFinished))
     	{
@@ -653,8 +684,9 @@ public class BusinessSession implements IBusinessSession
 	{
 		BusinessType type = sourceDevice.getBusinessType();
     	
-   		progressMap.put(sourceDevice.getDeviceSn(), Consts.BusinessProgress.AssessFinished);
-   		logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.AssessFinished.name(), sourceDevice.getDeviceSn());
+		updateBusinessProgress(sourceDevice.getDeviceSn(), Consts.BusinessProgress.AssessFinished);
+   		//progressMap.put(sourceDevice.getDeviceSn(), Consts.BusinessProgress.AssessFinished);
+   		//logger.debug("Business progress of device <{}> was updated to " + Consts.BusinessProgress.AssessFinished.name(), sourceDevice.getDeviceSn());
     	
     	if (checkAllDevicesReach(Consts.BusinessProgress.AssessFinished))
     	{

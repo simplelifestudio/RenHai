@@ -190,12 +190,12 @@ public class MockWebSocketConnection extends WebSocketConnection implements IMoc
     	{
 	    	if (controller.message == null)
 	    	{
-	    		logger.error("MockApp <{}> timeout for synchronized response from server, MessageSn: " + messageSn, mockApp.getDeviceSn());
+	    		logger.error("MockApp <{}> timeout for synchronized response from server, messageSn: " + messageSn, mockApp.getDeviceSn());
 	    		return null;
 	    	}
 	    	else
 	    	{
-	    		logger.debug("MockApp <{}> received synchronized message from server in time.", mockApp.getDeviceSn());
+	    		logger.debug("MockApp <{}> received synchronized message from server in time, messageSn:" + messageSn, mockApp.getDeviceSn());
 	    	}
     	}
     	return controller.message;

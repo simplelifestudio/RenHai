@@ -22,6 +22,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 
+import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.db.DAOWrapper;
@@ -38,6 +39,7 @@ import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */
@@ -52,10 +54,10 @@ public class OnlineDevicePool extends AbstractDevicePool
 		{
 			try
 			{
-				Session hibernateSesion = HibernateSessionFactory.getSession();
+				//Session hibernateSesion = HibernateSessionFactory.getSession();
 				Thread.currentThread().setName("InactiveCheck");
 				OnlineDevicePool.instance.checkInactiveDevice();
-				HibernateSessionFactory.closeSession();
+				//HibernateSessionFactory.closeSession();
 			}
 			catch(Exception e)
 			{
@@ -71,10 +73,10 @@ public class OnlineDevicePool extends AbstractDevicePool
 		{
 			try
 			{
-				Session hibernateSesion = HibernateSessionFactory.getSession();
+				//Session hibernateSesion = HibernateSessionFactory.getSession();
 				Thread.currentThread().setName("BannedCheck");
 				OnlineDevicePool.instance.deleteBannedDevice();
-				HibernateSessionFactory.closeSession();
+				//HibernateSessionFactory.closeSession();
 			}
 			catch(Exception e)
 			{
@@ -129,11 +131,10 @@ public class OnlineDevicePool extends AbstractDevicePool
 			Entry<String, IDeviceWrapper> e = entryKeyIterator.next();
 			deviceWrapper = e.getValue();
 			
-			
-			lastActivityTime = deviceWrapper.getLastActivityTime().getTime();
-			if ((now - lastActivityTime) > GlobalSetting.TimeOut.DeviceInIdle)
+			lastActivityTime = deviceWrapper.getLastActivityTime();
+			if ((lastActivityTime > 0) && ((now - lastActivityTime) > GlobalSetting.TimeOut.DeviceInIdle))
 			{
-				logger.debug("Device with connection id {} will be removed from online device pool due to last activity time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastActivityTime().getTime())
+				logger.debug("Device with connection id {} will be removed from online device pool due to last activity time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastActivityTime())
 						, deviceWrapper.getConnection().getConnectionId());
 				
 				deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.TimeoutOfActivity);
@@ -209,10 +210,12 @@ public class OnlineDevicePool extends AbstractDevicePool
     	queueDeviceMap.put(id, deviceWrapper);
     	
     	logger.debug("Save connection {} in OnlineDevicePool", id);
+    	/*
     	DbLogger.saveSystemLog(Consts.OperationCode.SetupWebScoket_1001
     			, Consts.SystemModule.business
     			, id);
-        return deviceWrapper;
+    	*/
+    	return deviceWrapper;
     }
     
     public int getDeviceCountInChat()
@@ -332,11 +335,16 @@ public class OnlineDevicePool extends AbstractDevicePool
     			//preDevice.getConnection().closeConnection();
     			// 2013-10-15, delete device due to it's hard for app to recover to status before connection loss
     			//deleteDevice(preDevice, StatusChangeReason.WebsocketClosedByServer);
-    			preDevice.changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.WebsocketClosedByServer);
+    			preDevice.changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.WebSocketReconnect);
     		}
     	}
     	
-    	queueDeviceMap.remove(connection.getConnectionId());
+    	queueDeviceMap.remove(connectionId);
+    	if (deviceSn == null || deviceSn.length() == 0)
+    	{
+    		logger.error("Fatal error that device on connection {} has empty deviceSn", connectionId);
+    		return;
+    	}
     	deviceMap.put(deviceWrapper.getDeviceSn(), deviceWrapper);
     	logger.debug("Create device <{}> bases on connection " + connection, deviceWrapper.getDeviceSn());
     }
@@ -391,17 +399,51 @@ public class OnlineDevicePool extends AbstractDevicePool
 	
 	public void deleteBannedDevice()
 	{
-		if (bannedDeviceList.size() > 0)
+		if (!bannedDeviceList.isEmpty())
 		{
 			logger.debug("Start to delete {} banned devices", bannedDeviceList.size());
 		}
 		
 		IDeviceWrapper device;
-		while (bannedDeviceList.size() > 0)
+		while (!bannedDeviceList.isEmpty())
 		{
 			device = bannedDeviceList.remove();
 			device.changeBusinessStatus(BusinessStatus.Offline, StatusChangeReason.BannedDevice);
 		}
+	}
+
+	private void reportDeviceInMap(ConcurrentHashMap<String, IDeviceWrapper> deviceMap, JSONObject response)
+	{
+		Iterator<Entry<String, IDeviceWrapper>> entryKeyIterator = deviceMap.entrySet().iterator();
+        IDeviceWrapper deviceWrapper;
+        while (entryKeyIterator.hasNext())
+		{
+        	Entry<String, IDeviceWrapper> e = entryKeyIterator.next();
+			deviceWrapper = e.getValue();
+			
+			JSONObject deviceObj = new JSONObject();
+        	response.put(deviceWrapper.getDeviceSn(), deviceObj);
+        	
+        	deviceObj.put(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
+        	deviceObj.put(JSONKey.DeviceSn, deviceWrapper.getDeviceSn());
+        	
+        	if (deviceWrapper.getBusinessType() != null)
+        	{
+        		deviceObj.put(JSONKey.BusinessType, deviceWrapper.getBusinessType().name());
+        	}
+        	deviceObj.put(JSONKey.BusinessStatus, deviceWrapper.getBusinessStatus().name());
+        	
+        	if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+        	{
+        		deviceObj.put(JSONKey.SessionId, deviceWrapper.getOwnerBusinessSession().getSessionId());
+        		deviceObj.put("businessSessionStatus", deviceWrapper.getOwnerBusinessSession().getStatus().name());
+        	}
+		}
+	}
+	public void reportDeviceDetails(JSONObject response)
+	{
+		reportDeviceInMap(deviceMap, response);
+		reportDeviceInMap(queueDeviceMap, response);
 	}
 	
 	public void saveStatistics()

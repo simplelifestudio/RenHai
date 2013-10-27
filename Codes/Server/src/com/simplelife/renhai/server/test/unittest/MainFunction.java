@@ -23,6 +23,7 @@ import org.asynchttpclient.Response;
 import org.asynchttpclient.websocket.WebSocket;
 import org.asynchttpclient.websocket.WebSocketTextListener;
 import org.asynchttpclient.websocket.WebSocketUpgradeHandler;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.java_websocket.drafts.Draft;
@@ -75,6 +76,25 @@ import java.util.concurrent.Future;
  */
 public class MainFunction extends AbstractTestCase
 {
+	private class SaveDeviceThread extends Thread
+	{
+		private Device device;
+		
+		public SaveDeviceThread(Device device)
+		{
+			this.device = device;
+		}
+		
+		@Override
+		public void run()
+		{
+			Session session = HibernateSessionFactory.getSession();
+			Transaction t = session.beginTransaction();
+			session.save(device);
+			t.commit();
+			HibernateSessionFactory.closeSession();
+		}
+	}
 	private class SaveTask extends Thread
 	{
 		private Statisticsitem item;
@@ -404,13 +424,8 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testSyncDevice()
 	{
-		String jsonMessage = "{\"header\":{\"messageType\":\"1\",\"messageSn\":\"AFLNWERJ2228FDLGSLDF\",\"messageId\":\"104\",\"deviceId\":\"1234\",\"deviceSn\":\"ABCD77fdsdGGWQ\",\"timeStamp\":\"2013-08-14 21:18:49\"},\"body\":{\"dataQuery\":{\"deviceCard\":{},\"impressCard\":{\"labelListCount\":\"10\"},\"interestCard\":{\"labelListCount\":\"5\"}},\"dataUpdate\":{\"deviceCard\":{\"osVersion\":\"iOS 6.1.3\",\"deviceModel\":\"iPhone5s\",\"appVersion\":\"1.5\",\"isJailed\":\"No\",\"location\":\"22.511962,113.380301\"},\"interestCard\":{\"soccer\":{\"order\":\"0\",\"matchCount\":\"7\"},\"music\":{\"order\":\"1\",\"matchCount\":\"3\"}}}}}";
-		JSONObject obj = JSONObject.parseObject(jsonMessage);
-		
-		AppJSONMessage appRequest = JSONFactory.createAppJSONMessage(obj);
-		DeviceWrapper deviceWrapper = new DeviceWrapper(null);
-		appRequest.bindDeviceWrapper(deviceWrapper);
-		appRequest.run();
+		MockApp app = new MockApp(demoDeviceSn);
+		app.syncDevice();
 	}
 	
 	@Test
@@ -496,7 +511,11 @@ public class MainFunction extends AbstractTestCase
 				|| app2.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
 		{
 			Thread.sleep(1000);
-			app1.sendServerDataSyncRequest();
+			
+			if (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
+			{
+				app1.sendServerDataSyncRequest();
+			}
 		}
 	}
 	
@@ -650,4 +669,65 @@ public class MainFunction extends AbstractTestCase
 
 		websocket.sendTextMessage("fdsafdsaklj;");
 	}
+	
+	@Test
+	public void testServerDataSync()
+	{
+		//MockApp app1 = new MockApp(demoDeviceSn,"Slave");
+		//app1.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		//app1.connect(true);
+		
+		MockApp app1 = new MockApp(demoDeviceSn);
+		app1.syncDevice();
+		app1.sendServerDataSyncRequest();
+		
+		app1.sendServerDataSyncRequest();
+	}
+	
+	@Test
+	public void testRandomScheduler() throws InterruptedException
+	{
+		MockApp app1 = new MockApp(demoDeviceSn);
+		app1.syncDevice();
+		app1.enterPool(BusinessType.Random);
+		
+		MockApp app2 = new MockApp(demoDeviceSn2);
+		app2.syncDevice();
+		app2.enterPool(BusinessType.Random);
+		
+		app1.waitMessage();
+		app2.waitMessage();
+		
+		Thread.sleep(2000);
+		app1.chatConfirm(true);
+		app2.chatConfirm(true);
+		
+		//String jsonString = "{\"body\":{\"businessType\":1,\"operationInfo\":{\"device\":{\"deviceCard\":{\"appVersion\":\"0.1\",\"deviceCardId\":3,\"deviceModel\":\"iPhone5\",\"isJailed\":1,\"osVersion\":\"6.1.2\",\"registerTime\":\"2013-10-0806:15:30.854\"},\"deviceId\":3,\"deviceSn\":\"demoDeviceSn\",\"profile\":{\"active\":true,\"createTime\":\"2013-10-0806:15:30.854\",\"impressCard\":{\"assessLabelList\":[{\"assessCount\":0,\"assessedCount\":0,\"impressLabelName\":\"^#Happy#^\"}],\"chatLossCount\":0,\"chatTotalCount\":0,\"chatTotalDuration\":0,\"impressLabelList\":[]},\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"globalInterestLabelId\":2,\"globalMatchCount\":2,\"interestLabelName\":\"Topic6\",\"labelOrder\":2,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":1,\"globalMatchCount\":1,\"interestLabelName\":\"Topic8\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":3,\"globalMatchCount\":3,\"interestLabelName\":\"Topic7\",\"labelOrder\":1,\"matchCount\":0,\"validFlag\":1}]},\"profileId\":3,\"serviceStatus\":1}}},\"operationType\":7},\"header\":{\"deviceId\":3,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":103,\"messageSn\":\"7JWX0VP8R9T2C931\",\"messageType\":1,\"timeStamp\":\"2013-10-2414:30:16.733\"}}";
+		//app1.sendRawJSONMessage(jsonString, true);
+		Thread.sleep(3000);
+		app1.endChat();
+		app2.endChat();
+		
+		Thread.sleep(2000);
+		app1.assessAndQuit("^#Happy#^,好感");
+		app2.assessAndQuit("^#Happy#^,还行");
+		
+		app1.sendServerDataSyncRequest();
+	}
+	
+	@Test
+	public void testSaveObject() throws InterruptedException
+	{
+		DeviceDAO dao = new DeviceDAO();
+		Device device = dao.findByDeviceSn(demoDeviceSn).get(0);
+		
+		device.getDevicecard().setAppVersion("15.0123");
+		
+		Thread.sleep(1000);
+		SaveDeviceThread thread = new SaveDeviceThread(device);
+		thread.start();
+		
+		Thread.sleep(1000);
+	}
+	
 }

@@ -64,7 +64,10 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	public void onClose(int arg0, String arg1, boolean arg2)
 	{
 		getConnection().close(arg0);
-		mockApp.onClose();
+		if (mockApp != null)
+		{
+			mockApp.onClose();
+		}
 	}
 
 	@Override
@@ -120,6 +123,12 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	@Override
 	public void onTextMessage(String message)
 	{
+		if (mockApp == null)
+		{
+			logger.error("Fatal error: mockApp == null");
+			return;
+		}
+		
 		logger.debug("Received message: " + message);
 		JSONObject obj = JSONObject.parseObject(message);
 		
@@ -201,6 +210,12 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	@Override
 	public JSONObject syncSendToServer(JSONObject jsonObject)
 	{
+		if (mockApp == null)
+		{
+			logger.error("Fatal error: mockApp == null");
+			return null;
+		}
+		
 		if (disabled)
     	{
     		logger.debug("Mock IOException due to connection is disabled");

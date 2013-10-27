@@ -62,7 +62,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn());
 		
 		// Step_01 调用：OnlineDevicePool::getCount
-		long lastActivityTime = deviceWrapper.getLastActivityTime().getTime();
+		long lastActivityTime = deviceWrapper.getLastActivityTime();
 		
 		// Step_02 调用：DeviceWrapper::getBusinessStatus
 		Consts.BusinessStatus businessStatus = deviceWrapper.getBusinessStatus();
@@ -103,8 +103,8 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertTrue(pool.getDevice(deviceSn) != null);
 		
 		// Step_09 调用：DeviceWrapper::getLastActivityTime
-		assertTrue(deviceWrapper.getLastActivityTime().getTime() > lastActivityTime);
-		lastActivityTime = deviceWrapper.getLastActivityTime().getTime();
+		assertTrue(deviceWrapper.getLastActivityTime() > lastActivityTime);
+		lastActivityTime = deviceWrapper.getLastActivityTime();
 		
 		// Step_10 Mock事件：onClose
 		mockApp.disconnect();
@@ -123,7 +123,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertTrue(!mockApp.lastReceivedCommandIsError());
 		
 		// Step_14 调用：DeviceWrapper::getLastActivityTime
-		assertTrue(deviceWrapper.getLastActivityTime().getTime() > lastActivityTime);
+		assertTrue(deviceWrapper.getLastActivityTime() > lastActivityTime);
 		
 		// Step_15 Mock请求：进入随机聊天
 		mockApp.enterPool(businessType);

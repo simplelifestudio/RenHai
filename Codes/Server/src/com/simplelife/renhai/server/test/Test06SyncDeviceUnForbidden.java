@@ -75,7 +75,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		
 		// Step_04 Mock请求：设备同步
 		
-		long lastActivity = deviceWrapper.getLastActivityTime().getTime();
+		long lastActivity = deviceWrapper.getLastActivityTime();
 		mockApp.syncDevice();
 		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
@@ -86,6 +86,6 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		assertEquals(deviceCount, pool.getElementCount());
 		
 		// Step_06 调用：DeviceWrapper::getLastActivityTime
-		assertTrue(deviceWrapper.getLastActivityTime().getTime() > lastActivity);
+		assertTrue(deviceWrapper.getLastActivityTime() > lastActivity);
 	}
 }

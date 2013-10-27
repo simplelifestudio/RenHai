@@ -67,7 +67,8 @@ public class Consts
 		AppDataSynchronize(114),
 		AppEnterBusiness(115),
 		AppRejectChat(116),
-		AppUnbindSession(117);
+		AppUnbindSession(117),
+		WebSocketReconnect(118);
 		
 		private int value;
 		private StatusChangeReason(int value)

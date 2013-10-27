@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentSkipListSet;
 
 import com.simplelife.renhai.server.business.session.BusinessSessionPool;
 import com.simplelife.renhai.server.db.Interestlabelmap;
@@ -28,7 +30,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 /** */
 public class InterestBusinessScheduler extends AbstractBusinessScheduler
 {
-	private HashMap<String, List<IDeviceWrapper>> interestLabelMap;
+	private ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>> interestLabelMap;
 	private boolean deadMatchFlag = false; 
 	
 	@Override
@@ -50,15 +52,15 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 	@Override
 	public boolean meetScheduleCondition()
 	{
-		return ((deviceMap.size() >= deviceCountPerSession)
-				&& !deadMatchFlag);
+		return ((deviceMap.size() >= deviceCountPerSession));
 	}
 	
     /** */
     public void schedule()
     {
-    	logger.debug("Start to schedule devices in InterestBusinessDevicePool.");
-    	if (deviceMap.size() < deviceCountPerSession)
+    	int deviceMapsize = deviceMap.size();
+    	logger.debug("Start to schedule devices in InterestBusinessDevicePool, devices count: " + deviceMapsize);
+    	if (deviceMapsize < deviceCountPerSession)
 		{
     		logger.debug("There is no enough devices, return directly");
 			return;
@@ -80,12 +82,11 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			}
 			
 			IDeviceWrapper device = entry.getValue();
-			//selectedDevice.add(device.getDeviceSn());
-			
 			labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
 			String strLabel; 
-			List<IDeviceWrapper> deviceList;
+			ConcurrentSkipListSet<IDeviceWrapper> deviceList;
 			
+			int deviceListSize = 0;
 			// Loop all interest labels of device 
 			for (Interestlabelmap label : labelSet)
 			{
@@ -98,17 +99,20 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 				// Try to find device with same interest label
 				strLabel = label.getGlobalinterestlabel().getInterestLabelName();
 				deviceList = interestLabelMap.get(strLabel);
+				deviceListSize = deviceList.size();
+				logger.debug("Find {} devices by interest label: " + strLabel, deviceListSize);
 				
 				// The selected device shall be considered
 				//int expectedDeviceCount = deviceCountPerSession - selectedDevice.size() + 1;
 				
 				// We don't have enough devices have same interest label
-				if (deviceList.size() < deviceCountPerSession)
+				if (deviceListSize < deviceCountPerSession)
 				{
+					logger.debug("Not enough device count, try next interest label");
 					continue;
 				}
 				
-				if ((deviceList.size() == deviceCountPerSession))
+				if ((deviceListSize == deviceCountPerSession))
 				{
 					String tempSn;
 					// All of devices found can be added to this business session
@@ -151,11 +155,19 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			if (!deviceFoundFlag)
 			{
 				// Devices in pool can't be matched until new device entered 
-				deadMatchFlag = true;
-				return;
+				logger.debug("Device <{}> can't be scheduled by its interest labels", device.getDeviceSn());
+				continue;
 			}
 		}
     	
+		if (!deviceFoundFlag)
+		{
+			// Devices in pool can't be matched until new device entered 
+			logger.debug("Devices in pool can't be matched by interest labels");
+			deadMatchFlag = true;
+			return;
+		}
+		
     	IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
 		if (session == null)
 		{
@@ -170,9 +182,9 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
     }
     
     @Override
-    public void signal()
+    public void resumeSchedule()
     {
-    	super.signal();
+    	super.resumeSchedule();
     	deadMatchFlag = false;
     }
 }

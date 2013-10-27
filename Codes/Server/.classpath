@@ -32,6 +32,6 @@
 	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/jmeter/jorphan.jar"/>
 	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/jmeter/commons-lang3-3.1.jar"/>
 	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/jmeter/logkit-2.0.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/WebSocketClient2"/>
+	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/websocketclient/async-http-client-api-2.0.0.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

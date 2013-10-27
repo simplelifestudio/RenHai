@@ -59,6 +59,10 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 		
 		int intOperationType = body.getIntValue(JSONKey.OperationType);
 		Consts.NotificationType notificationType = Consts.NotificationType.parseValue(intOperationType);
+		logger.debug("Received confirm of " + notificationType.name() 
+				+ " from Device <" + deviceWrapper.getDeviceSn() 
+				+ ">, session status: {}"
+				, deviceWrapper.getOwnerBusinessSession().getStatus().name());
 		switch(notificationType)
 		{
 			case SessionBound:
@@ -68,7 +72,7 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 				}
 				else
 				{
-					logger.error("Device <{}> was in status of SessionBound but its session is null!", deviceWrapper.getDeviceSn());
+					logger.error("Fatal error: Device <{}> was in status of SessionBound but its session is null!", deviceWrapper.getDeviceSn());
 				}
 				break;
 			case OthersideAgreed:

@@ -61,7 +61,7 @@ public class GlobalSetting
 	
 	public static class DBSetting
 	{
-		public static int MaxRecordCountForFlush = 10;
+		public static int MaxRecordCountForFlush = 30;
 		public static int MaxRecordCountForDiscard = 1000;
 		public static boolean CacheEnabled = false;
 	}
@@ -80,5 +80,6 @@ public class GlobalSetting
 		public static int LengthOfMessageSn = 16;
 		
 		public static int MaxImpressLabelCount = 32;
+		public static int MessageHandleThreads = 100;
 	} 
 }
