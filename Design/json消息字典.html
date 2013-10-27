@@ -177,22 +177,6 @@ sup {
 
 <h2>300. 业务会话通知 BusinessSessionNotification &lt;--> 202. 业务会话通知响应 BusinessSessionNotificationResponse</h2>
 
-<h1>数据类型</h1>
-
-<h2>null用来指代所有数据类型的空值</h2>
-
-<h2>数字用Integer(Java)/NSInteger(Objective-C)来表示</h2>
-
-<h2>只有在表达零长度的字符串数据时，空字符串null才是合法的</h2>
-
-<h1>数据操作</h1>
-
-<p>App与Server通过消息交互完成的数据操作</p>
-
-<h2>1. 查询 dataQuery</h2>
-
-<h2>2. 更新 dataUpdate</h2>
-
 <h1>数据格式</h1>
 
 <h2>1. 成功:1/失败:0</h2>
@@ -201,13 +185,29 @@ sup {
 
 <h2>3. 业务会话请求目标 Random:1, Interest:2</h2>
 
-<h2>4. App业务会话请求动作 EnterPool:1, LeavePool:2, AgreeChat:3, RejectChat:4, EndChat:5, AssessAndContinue:6, AssessAndQuit:7, SessionUnbind:8, MatchStart:9;</h2>
+<h2>4. App业务会话请求动作 EnterPool:1, LeavePool:2, AgreeChat:3, RejectChat:4, EndChat:5, AssessAndContinue:6, AssessAndQuit:7, SessionUnbind:8, MatchStart:9</h2>
 
 <h2>5. Server业务会话通知动作 SessionBinded:1, OthersideRejected:2, OthersideAgreed:3, OthersideLost:4, OthersideEndChat:5</h2>
 
 <h2>6. Profile服务状态 正常:1/禁聊:0</h2>
 
 <h2>7. 日期时间格式 2013-09-11 16:05:38</h2>
+
+<h1>数据类型</h1>
+
+<h2>1. null用来指代所有数据类型的空值</h2>
+
+<h2>2. 数字用Integer(Java)/NSInteger(Objective-C)来表示</h2>
+
+<h2>3. 只有在表达零长度的字符串数据时，空字符串null才是合法的</h2>
+
+<h1>数据操作</h1>
+
+<p>App与Server通过消息交互完成的数据操作</p>
+
+<h2>1. 查询 dataQuery</h2>
+
+<h2>2. 更新 dataUpdate</h2>
 
 <h1>消息格式 MessageFormat</h1>
 
