@@ -38,7 +38,9 @@ ChatWaitStatus;
     
     NSMutableString* _consoleInfo;
     
-    BOOL _leavePoolFlag;
+    volatile BOOL _leavePoolFlag;
+    
+    volatile BOOL _didOnSessionBind;
 }
 
 @end
@@ -69,6 +71,8 @@ ChatWaitStatus;
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES];
+    
+//    [self resetPage];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -79,11 +83,17 @@ ChatWaitStatus;
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+//    [self _clockStart];
+//    
+//    [self _checkIsSessionAlreadyBound];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    
+//    [self _clockCancel];
 }
 
 - (void)didReceiveMemoryWarning
@@ -108,6 +118,8 @@ ChatWaitStatus;
     
     _leavePoolFlag = NO;
     
+    _didOnSessionBind = NO;
+    
     _count = 0;
     [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
 }
@@ -126,14 +138,23 @@ ChatWaitStatus;
 
 -(void) onSessionBound
 {
-    [CBAppUtils asyncProcessInMainThread:^(){
+    if (!_didOnSessionBind)
+    {
+        DDLogInfo(@"^^^^^SessionBound");
         
-        [self _updateUIWithChatWaitStatus:ChatWaitStatus_Matched];
+        [CBAppUtils asyncProcessInMainThread:^(){
+            
+            [self _updateUIWithChatWaitStatus:ChatWaitStatus_Matched];
+            
+            ChatWizardController* chatWizard = _guiModule.chatWizardController;
+            [chatWizard wizardProcess:ChatWizardStatus_ChatConfirm];
+            
+        }];
         
-        ChatWizardController* chatWizard = _guiModule.chatWizardController;
-        [chatWizard wizardProcess:ChatWizardStatus_ChatConfirm];
-        
-    }];
+        _didOnSessionBind = YES;
+    }
+    
+
 }
 
 #pragma mark - Private Methods
@@ -266,6 +287,10 @@ ChatWaitStatus;
             [_consoleInfo appendString:@"\n"];
         }
     }
+    else
+    {
+        _consoleInfo = [NSMutableString string];
+    }
     
     if (nil != info && 0 < info.length)
     {
@@ -274,12 +299,17 @@ ChatWaitStatus;
         
         [_infoTextView setText:_consoleInfo];
     }
+    else
+    {
+        [_infoTextView setText:@""];
+    }
 }
 
 - (void) _clearInfoTextView
 {
     _consoleInfo = [NSMutableString string];
-    [self _updateInfoTextView:nil];}
+    [self _updateInfoTextView:nil];
+}
 
 - (void) _updateUIWithChatWaitStatus:(ChatWaitStatus) status
 {
@@ -331,13 +361,14 @@ ChatWaitStatus;
     _actionButton.hidden = isActionButtonHide;
 }
 
-
-
 -(void) _checkIsSessionAlreadyBound
 {
-    if (_appDataModule.currentAppBusinessStatus == AppBusinessStatus_SessionBindCompeleted)
+    AppBusinessStatus status = [[AppDataModule sharedInstance] currentAppBusinessStatus];
+    
+    if (status == AppBusinessStatus_SessionBindCompeleted || status == AppBusinessStatus_OthersideChatAgreed || status == AppBusinessStatus_OthersideChatRejected || status == AppBusinessStatus_OthersideChatLost)
     {
         [self onSessionBound];
     }
 }
+
 @end

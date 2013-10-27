@@ -83,6 +83,8 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES];
+    
+//    [self resetPage];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -93,11 +95,15 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+//    [self _clockStart];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    
+//    [self _clockCancel];
 }
 
 - (void)didReceiveMemoryWarning

@@ -28,9 +28,11 @@ typedef enum
     AppBusinessStatus_AppDataSyncCompleted,
     AppBusinessStatus_EnterPoolCompleted,
     AppBusinessStatus_SessionBindCompeleted,
+    AppBusinessStatus_OthersideChatAgreed,
+    AppBusinessStatus_OthersideChatRejected,
+    AppBusinessStatus_OthersideChatLost,
     AppBusinessStatus_ChatAgreeCompleted,
-    AppBusinessStatus_ChatEndCompleleted,
-//    AppBusinessStatus_ChatAssessCompleleted
+    AppBusinessStatus_ChatEndCompleleted
 }
 AppBusinessStatus;
 

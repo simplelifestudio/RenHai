@@ -97,11 +97,11 @@ static UIImage* sidebarMenuIconLandscape;
     }
 }
 
-+(void) formatFlatUITableViewCell:(UITableViewCell*) cell backColor:(UIColor*) backColor selectedColor:(UIColor*) selectedColor style:(UITableViewCellStyle)style reuseIdentifier:(NSString*)reuseIdentifier
++(void) formatFlatUITableViewCell:(UITableViewCell*) cell backColor:(UIColor*) backColor selectedColor:(UIColor *)selectedColor reuseIdentifier:(NSString *)reuseIdentifier tableView:(UITableView*) tableView
 {
     if (cell)
     {
-        [UITableViewCell configureFlatCellWithColor:backColor selectedColor:selectedColor style:style reuseIdentifier:reuseIdentifier];
+        [UITableViewCell configureFlatCellWithColor:backColor selectedColor:selectedColor reuseIdentifier:reuseIdentifier inTableView:tableView];
     }
 }
 

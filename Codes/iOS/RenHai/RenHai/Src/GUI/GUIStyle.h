@@ -69,6 +69,6 @@
 +(void) formatFlatUINavigationBar:(UINavigationBar*) navigationBar;
 +(void) formatFlatUIBarButtonItem:(UIBarButtonItem*) buttonItem;
 +(void) formatFlatUIToolbar:(UIToolbar*) toolbar;
-+(void) formatFlatUITableViewCell:(UITableViewCell*) cell backColor:(UIColor*) backColor selectedColor:(UIColor*) selectedColor style:(UITableViewCellStyle)style reuseIdentifier:(NSString*)reuseIdentifier;
++(void) formatFlatUITableViewCell:(UITableViewCell*) cell backColor:(UIColor*) backColor selectedColor:(UIColor *)selectedColor reuseIdentifier:(NSString *)reuseIdentifier tableView:(UITableView*) tableView;
 
 @end

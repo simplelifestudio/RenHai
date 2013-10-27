@@ -198,7 +198,7 @@ SINGLETON(UserDataModule)
         NSDictionary* messageBody = message.body;
         NSNumber* oOperationType = [messageBody objectForKey:MESSAGE_KEY_OPERATIONTYPE];
         BusinessSessionNotificationType notificationType = oOperationType.intValue;
-        DDLogInfo(@"$$$$$$$$$$BusinessSessionNotificationType: %d", notificationType);
+
         switch (notificationType)
         {
             case BusinessSessionNotificationType_SessionBound:
@@ -217,18 +217,24 @@ SINGLETON(UserDataModule)
             }
             case BusinessSessionNotificationType_OthersideRejected:
             {
+                [_appDataModule updateAppBusinessStatus:AppBusinessStatus_OthersideChatRejected];
+                
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_OTHERSIDEREJECTED object:self];
                 
                 break;
             }
             case BusinessSessionNotificationType_OthersideAgreed:
             {
+                [_appDataModule updateAppBusinessStatus:AppBusinessStatus_OthersideChatAgreed];
+                
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_OTHERSIDEAGREED object:self];
                 
                 break;
             }
             case BusinessSessionNotificationType_OthersideLost:
             {
+                [_appDataModule updateAppBusinessStatus:AppBusinessStatus_OthersideChatLost];
+                
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_OTHERSIDELOST object:self];
                 
                 break;

@@ -29,7 +29,7 @@
 #define SECTION_INDEX_LABELS 2
 #define SECTION_IMPRESSES_ITEMCOUNT 3
 
-#define COUNTDOWN_SECONDS 9
+#define COUNTDOWN_SECONDS 30
 
 @interface ChatConfirmViewController_iPhone ()
 {
@@ -89,6 +89,8 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES];
+    
+//    [self resetPage];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -99,11 +101,17 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+//    [self _clockStart];
+//    
+//    [self _checkIsOthersideAlreadyDecided];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    
+//    [self _clockCancel];
 }
 
 - (void)didReceiveMemoryWarning
@@ -298,6 +306,9 @@
     _partnerRejectChatFlag = NO;
     _partnerLostFlag = NO;
     
+    _agreeChatButton.enabled = YES;
+    _rejectChatButton.enabled = YES;
+    
     _agreeChatButton.hidden = NO;
     _rejectChatButton.hidden = NO;
     
@@ -307,6 +318,8 @@
 -(void) pageWillLoad
 {
     [self _clockStart];
+    
+    [self _checkIsOthersideAlreadyDecided];
 }
 
 -(void) pageWillUnload
@@ -626,7 +639,7 @@
     });
 }
 
-- (void) _moveToChatWaitView
+-(void) _moveToChatWaitView
 {
     dispatch_async(dispatch_get_main_queue(), ^(){
         
@@ -635,6 +648,37 @@
         ChatWizardController* chatWizard = _guiModule.chatWizardController;
         [chatWizard wizardProcess:ChatWizardStatus_ChatWait];
     });
+}
+
+-(void) _checkIsOthersideAlreadyDecided
+{
+    AppBusinessStatus status = [[AppDataModule sharedInstance] currentAppBusinessStatus];
+    
+    switch (status)
+    {
+        case AppBusinessStatus_OthersideChatAgreed:
+        {
+            [self onOthersideAgreed];
+            
+            break;
+        }
+        case AppBusinessStatus_OthersideChatRejected:
+        {
+            [self onOthersideRejected];
+            
+            break;
+        }
+        case AppBusinessStatus_OthersideChatLost:
+        {
+            [self onOthersideLost];
+            
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
 }
 
 #pragma mark - IBActions

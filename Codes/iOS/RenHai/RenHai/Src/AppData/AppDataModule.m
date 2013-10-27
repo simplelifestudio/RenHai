@@ -1,3 +1,4 @@
+
 //
 //  AppDataModule.m
 //  RenHai
@@ -226,7 +227,7 @@ SINGLETON(AppDataModule)
         }
         case AppBusinessStatus_EnterPoolCompleted:
         {
-            if (oldStatus == AppBusinessStatus_AppDataSyncCompleted || oldStatus == AppBusinessStatus_ChatEndCompleleted|| oldStatus == AppBusinessStatus_SessionBindCompeleted)
+            if (oldStatus == AppBusinessStatus_AppDataSyncCompleted || oldStatus == AppBusinessStatus_EnterPoolCompleted || oldStatus == AppBusinessStatus_ChatEndCompleleted|| oldStatus == AppBusinessStatus_SessionBindCompeleted || oldStatus == AppBusinessStatus_OthersideChatAgreed || oldStatus == AppBusinessStatus_OthersideChatRejected || oldStatus == AppBusinessStatus_OthersideChatLost)
             {
                 isUpdateLegal = YES;
                 needUpdate = YES;
@@ -241,7 +242,7 @@ SINGLETON(AppDataModule)
         }
         case AppBusinessStatus_SessionBindCompeleted:
         {
-            if (oldStatus == AppBusinessStatus_EnterPoolCompleted || oldStatus == AppBusinessStatus_AppDataSyncCompleted)
+            if (oldStatus == AppBusinessStatus_EnterPoolCompleted || oldStatus == AppBusinessStatus_AppDataSyncCompleted || oldStatus == AppBusinessStatus_OthersideChatRejected || oldStatus == AppBusinessStatus_OthersideChatLost)
             {
                 isUpdateLegal = YES;
                 needUpdate = YES;
@@ -254,9 +255,59 @@ SINGLETON(AppDataModule)
             
             break;
         }
-        case AppBusinessStatus_ChatAgreeCompleted:
+        case AppBusinessStatus_OthersideChatAgreed:
         {
             if (oldStatus == AppBusinessStatus_SessionBindCompeleted)
+            {
+                isUpdateLegal = YES;
+                needUpdate = YES;
+            }
+            else
+            {
+                isUpdateLegal = NO;
+                needUpdate = NO;
+            }
+            
+            break;
+        }
+        case AppBusinessStatus_OthersideChatRejected:
+        {
+            if (oldStatus == AppBusinessStatus_SessionBindCompeleted)
+            {
+                isUpdateLegal = YES;
+                needUpdate = YES;
+            }
+            else
+            {
+                isUpdateLegal = NO;
+                needUpdate = NO;
+            }
+            
+            break;
+        }
+        case AppBusinessStatus_OthersideChatLost:
+        {
+            if (oldStatus == AppBusinessStatus_SessionBindCompeleted)
+            {
+                isUpdateLegal = YES;
+                needUpdate = YES;
+            }
+            else if (oldStatus == AppBusinessStatus_ChatAgreeCompleted)
+            {
+                isUpdateLegal = YES;
+                needUpdate = NO;
+            }
+            else
+            {
+                isUpdateLegal = NO;
+                needUpdate = NO;
+            }
+            
+            break;
+        }
+        case AppBusinessStatus_ChatAgreeCompleted:
+        {
+            if (oldStatus == AppBusinessStatus_SessionBindCompeleted || oldStatus == AppBusinessStatus_OthersideChatAgreed)
             {
                 isUpdateLegal = YES;
                 needUpdate = YES;
@@ -284,21 +335,6 @@ SINGLETON(AppDataModule)
             
             break;
         }
-//        case AppBusinessStatus_ChatAssessCompleleted:
-//        {
-//            if (oldStatus == AppBusinessStatus_ChatEndCompleleted)
-//            {
-//                isUpdateLegal = YES;
-//                needUpdate = YES;
-//            }
-//            else
-//            {
-//                isUpdateLegal = NO;
-//                needUpdate = NO;
-//            }
-//            
-//            break;
-//        }
         default:
         {
             isUpdateLegal = NO;

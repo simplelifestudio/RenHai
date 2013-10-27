@@ -61,6 +61,8 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES];
+    
+//    [self resetPage];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -71,6 +73,8 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    
+//    [self _checkIsOthersideLost];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -95,7 +99,7 @@
 
 -(void) pageWillLoad
 {
-    
+    [self _checkIsOthersideLost];
 }
 
 -(void) pageWillUnload
@@ -208,6 +212,16 @@
         }
     
     }];
+}
+
+-(void) _checkIsOthersideLost
+{
+    AppBusinessStatus status = [[AppDataModule sharedInstance] currentAppBusinessStatus];
+    
+    if (status == AppBusinessStatus_OthersideChatLost)
+    {
+        [self onOthersideLost];
+    }
 }
 
 #pragma mark - IBActions

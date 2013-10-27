@@ -30,6 +30,11 @@
 {
     if (nil != device)
     {
+        if (0 < _chatParters.count)
+        {
+            [_chatParters removeObjectAtIndex:0];
+        }
+    
         [_chatParters addObject:device];
     }
 }

@@ -116,17 +116,53 @@
         
         if ([self containsViewController:presentedVC])
         {
-            [self popToViewController:presentedVC animated:NO];
+            [self popToViewController:presentedVC animated:YES];
         }
         else
         {
-            [self pushViewController:presentedVC animated:NO];
+            [self pushViewController:presentedVC animated:YES];
         }
         
         _currentPage = (id<ChatWizardPage>)presentedVC;
         [_currentPage resetPage];
-        [_currentPage pageWillLoad];        
+        [_currentPage pageWillLoad];
     }
+}
+
+#pragma mark - UINavigationControllerDelegate
+
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+//    static UIViewController *lastController = nil;
+//    
+//    if (nil != lastController)
+//    {
+//        if ([lastController respondsToSelector:@selector(viewWillDisappear:)])
+//        {
+//            [lastController viewWillDisappear:animated];
+//        }
+//    }
+//    
+//    lastController = viewController;
+//    
+//    [viewController viewWillAppear:animated];
+}
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+//    static UIViewController *lastController = nil;
+//    
+//    if (nil != lastController)
+//    {
+//        if ([lastController respondsToSelector:@selector(viewDidDisappear:)])
+//        {
+//            [lastController viewDidDisappear:animated];
+//        }
+//    }
+//    
+//    lastController = viewController;
+//    
+//    [viewController viewDidAppear:animated];
 }
 
 #pragma mark - Private Methods
@@ -149,6 +185,8 @@
     [self addChildViewController:_chatAssessViewController];
     
     _currentPage = nil;
+    
+    self.delegate = self;
 }
 
 -(void) _registerNotifications
@@ -168,7 +206,7 @@
 -(void) _onNotifications:(NSNotification*) notification
 {
     if (nil != notification)
-    {
+    {   
         if ([notification.name isEqualToString:NOTIFICATION_ID_SESSIONBOUND])
         {
             if (nil != _currentPage && [_currentPage respondsToSelector:@selector(onSessionBound)])

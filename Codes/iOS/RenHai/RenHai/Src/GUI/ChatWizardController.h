@@ -33,7 +33,7 @@ typedef enum
 }
 ChatWizardStatus;
 
-@interface ChatWizardController : UINavigationController
+@interface ChatWizardController : UINavigationController <UINavigationControllerDelegate>
 
 -(void) wizardProcess:(ChatWizardStatus) status;
 
