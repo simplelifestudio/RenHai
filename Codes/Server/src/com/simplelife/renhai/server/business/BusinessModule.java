@@ -14,8 +14,9 @@ package com.simplelife.renhai.server.business;
 import org.hibernate.Session;
 import org.slf4j.LoggerFactory;
 
-import com.simplelife.renhai.server.business.pool.MessageCenter;
+import com.simplelife.renhai.server.business.pool.InputMessageCenter;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.util.AbstractModule;
@@ -39,7 +40,8 @@ public class BusinessModule extends AbstractModule
     	HibernateSessionFactory.closeSession();
     	
     	OnlineDevicePool.instance.startTimers();
-    	MessageCenter.instance.startThreads();
+    	InputMessageCenter.instance.startThreads();
+    	OutputMessageCenter.instance.startThreads();
     	moduleAvailable = true;
     }
 	
@@ -47,7 +49,8 @@ public class BusinessModule extends AbstractModule
 	public void stopService()
 	{
 		OnlineDevicePool.instance.stopTimers();
-		MessageCenter.instance.stopThreads();
+		InputMessageCenter.instance.stopThreads();
+		OutputMessageCenter.instance.stopThreads();
 		moduleAvailable = false;
 	}
 }

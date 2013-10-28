@@ -25,8 +25,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessScheduler;
-import com.simplelife.renhai.server.business.pool.MessageCenter;
+import com.simplelife.renhai.server.business.pool.InputMessageCenter;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
@@ -54,29 +55,7 @@ import com.simplelife.renhai.server.util.JSONKey;
 
 /** */
 public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceWrapper>
-{
-	/**
-	 * Task for sending message to app by synchronized mode 
-	 */
-	private class SyncSendMessageTask extends Thread
-	{
-		private DeviceWrapper device;
-		private ServerJSONMessage message;
-		
-		public SyncSendMessageTask(DeviceWrapper device, ServerJSONMessage message)
-		{
-			this.device = device;
-			this.message = message;
-		}
-		
-		@Override
-		public void run()
-		{
-			device.syncSendMessageByThread(message);
-		}
-		
-	}
-	
+{	
 	// WebScoket connection enclosed in DeviceWrapper, all JSON messages are sent/received by this connection 
     protected IBaseConnection webSocketConnection;
     
@@ -436,7 +415,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     		//Thread cmdThread = new Thread(command);
     		//cmdThread.setName(command.getMessageId().name() + DateUtil.getCurrentMiliseconds());
     		//cmdThread.start();
-    		MessageCenter.instance.addMessage(command);
+    		InputMessageCenter.instance.addMessage(command);
     	}
     	catch(Exception e)
     	{
@@ -446,7 +425,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
         	response.addToBody(JSONKey.ErrorDescription, "Server internal error");
         	response.addToHeader(JSONKey.MessageSn, command.getMessageSn());
         	
-        	response.asyncResponse();
+        	OutputMessageCenter.instance.addMessage(response);
     		FileLogger.printStackTrace(e);
     	}
     }
@@ -485,7 +464,8 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     	*/
     }
 
-    public void syncSendMessageByThread(ServerJSONMessage message)
+    @Override
+    public void syncSendMessage(ServerJSONMessage message)
     {
         try
 		{
@@ -507,6 +487,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		}
     }
     
+    /*
     @Override
     public void syncSendMessage(ServerJSONMessage message)
     {
@@ -514,6 +495,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     	task.setName("SyncSendMsg" + DateUtil.getCurrentMiliseconds());
     	task.start();
     }
+    */
 
     @Override
     public void asyncSendMessage(ServerJSONMessage message)

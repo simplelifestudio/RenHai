@@ -32,6 +32,17 @@ public abstract class AbstractJSONMessage
     
     public abstract Consts.MessageId getMessageId();
     
+    protected long queueTime;
+	public long getQueueTime()
+	{
+		return queueTime;
+	}
+	
+	public void setQueueTime(long queueTime)
+	{
+		this.queueTime = queueTime;
+	}
+    
     public IDeviceWrapper getDeviceWrapper()
     {
     	return deviceWrapper;

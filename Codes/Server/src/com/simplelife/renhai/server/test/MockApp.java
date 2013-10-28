@@ -1047,7 +1047,7 @@ public class MockApp implements IMockApp, Runnable
 									this, MockAppConsts.Setting.AssessDuration,
 									MockAppConsts.MockAppBusinessStatus.AssessReqSent);
 						}
-						task.setName("AssessAndContinue" + DateUtil.getCurrentMiliseconds());
+						task.setName("AssessAndQuit" + DateUtil.getCurrentMiliseconds());
 					}
 				}
 				else if (messageId == Consts.MessageId.BusinessSessionNotification)

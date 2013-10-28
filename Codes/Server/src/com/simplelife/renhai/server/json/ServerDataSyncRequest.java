@@ -19,6 +19,7 @@ import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.HotLabel;
 import com.simplelife.renhai.server.business.pool.InterestBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.log.DbLogger;
@@ -279,7 +280,7 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		//DbLogger.saveProfileLog(Consts.OperationCode.ServerDataSyncResponse_1009
     	//		, deviceWrapper.getDevice().getProfile()
     	//		, header.getString(JSONKey.DeviceSn));
-		response.asyncResponse();
+		OutputMessageCenter.instance.addMessage(response);		
 	}
 
 

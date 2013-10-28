@@ -25,6 +25,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Sessionrecord;
 import com.simplelife.renhai.server.json.JSONFactory;
@@ -302,7 +303,8 @@ public class BusinessSession implements IBusinessSession
 			}
     		notify.setDeviceWrapper(device);
     		logger.debug("Send notify for device <" + device.getDeviceSn() +">: \n" + JSON.toJSONString(notify.toJSONObject(), true));
-    		notify.syncResponse();
+    		OutputMessageCenter.instance.addMessage(notify);
+    		
     		
     		/*
     		DbLogger.saveSystemLog(Consts.OperationCode.NotificationSessionBound_1010

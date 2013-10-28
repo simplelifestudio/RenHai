@@ -22,6 +22,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessScheduler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceDAO;
@@ -109,7 +110,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			if (deviceWrapper.getOwnerBusinessSession() == null)
 			{
 				setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
-				setErrorDescription("Device <" + deviceWrapper.getDeviceSn() +"> can't deliver business request before bound with session.");
+				setErrorDescription("Device <" + deviceWrapper.getDeviceSn() +"> shall not deliver business request before bound with session.");
 				return false;
 			}
 		}
@@ -327,7 +328,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEnterPool_1014
     			, deviceWrapper.getDevice().getProfile()
     			, body.getString(JSONKey.BusinessType) + ", " + deviceWrapper.getDeviceSn());
-		response.asyncResponse();
+		OutputMessageCenter.instance.addMessage(response);
 		
 		synchronized (deviceWrapper)
 		{
@@ -383,7 +384,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
-		response.asyncResponse();
+		OutputMessageCenter.instance.addMessage(response);
 		
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestLeavePool_1015
     			, deviceWrapper.getDevice().getProfile()
@@ -421,8 +422,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAgreeChat_1016
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceSn());
-		response.asyncResponse();
-		
+		OutputMessageCenter.instance.addMessage(response);
 	}
 	
 	private void rejectChat()
@@ -455,7 +455,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestRejectChat_1017
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceSn());
-		response.asyncResponse();
+		OutputMessageCenter.instance.addMessage(response);
 	}
 	
 	private void endChat()
@@ -486,7 +486,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEndChat_1018
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceSn());
-		response.asyncResponse();
+		OutputMessageCenter.instance.addMessage(response);
 	}
 	
 	private void assessAndContinue()
@@ -533,7 +533,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessType, deviceWrapper.getBusinessType().getValue());
 			response.addToBody(JSONKey.OperationInfo, temp);
 			response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Fail.getValue());
-			response.asyncResponse();
+			OutputMessageCenter.instance.addMessage(response);
 			return;
 		}
 		
@@ -620,7 +620,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 	    			, deviceWrapper.getDevice().getProfile()
 	    			, deviceWrapper.getDeviceSn());
 		}
-		response.asyncResponse();
+		OutputMessageCenter.instance.addMessage(response);
 	}
 	
 	private void updateOrAppendImpressLabel(Impresscard card, String labelName, boolean assessedFlag)
@@ -705,7 +705,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
-		response.asyncResponse();
+		OutputMessageCenter.instance.addMessage(response);
 	}
 	
 	@Override

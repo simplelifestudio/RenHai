@@ -12,6 +12,7 @@ package com.simplelife.renhai.server.json;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
@@ -54,7 +55,7 @@ public class AlohaRequest extends AppJSONMessage
     		response.addToBody(JSONKey.ReceivedMessage, Consts.MessageId.AlohaResponse);
     		response.addToBody(JSONKey.ErrorCode, this.getErrorCode());
     		response.addToBody(JSONKey.ErrorDescription, this.getErrorDescription());
-    		response.asyncResponse();
+    		OutputMessageCenter.instance.addMessage(response);
     	}
     	
     	ServerJSONMessage response = JSONFactory.createServerJSONMessage(this, Consts.MessageId.AlohaResponse);
@@ -69,7 +70,7 @@ public class AlohaRequest extends AppJSONMessage
     			, header.getString(JSONKey.DeviceSn));
     	
     	response.addToBody(JSONKey.Content, helloApp);
-    	response.asyncResponse();
+    	response.response();
     	DbLogger.saveSystemLog(Consts.OperationCode.AlohaResponse_1003
     			, Consts.SystemModule.business
     			, header.getString(JSONKey.DeviceSn));

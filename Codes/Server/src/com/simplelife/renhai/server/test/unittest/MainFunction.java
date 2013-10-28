@@ -35,7 +35,10 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
+import com.simplelife.renhai.server.business.pool.InputMessageCenter;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
+import com.simplelife.renhai.server.business.pool.RandomBusinessDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceDAO;
@@ -517,6 +520,32 @@ public class MainFunction extends AbstractTestCase
 				app1.sendServerDataSyncRequest();
 			}
 		}
+	}
+	
+	@Test
+	public void testOutputMessageCenter() throws InterruptedException
+	{
+		OutputMessageCenter.instance.startThreads();
+		InputMessageCenter.instance.startThreads();
+		OnlineDevicePool.instance.startTimers();
+		
+		MockApp app1 = new MockApp(demoDeviceSn);
+		app1.stopAutoReply();
+		app1.syncDevice();
+		app1.enterPool(BusinessType.Random);
+		
+		MockApp app2 = new MockApp(demoDeviceSn2);
+		app2.stopAutoReply();
+		app2.syncDevice();
+		app2.enterPool(BusinessType.Random);
+		
+		Thread.sleep(1000);
+		//app1.waitMessage();
+		//app2.waitMessage();
+		
+		app1.chatConfirm(true);
+		app2.chatConfirm(true);
+		app1.sendServerDataSyncRequest();
 	}
 	
 	@Test

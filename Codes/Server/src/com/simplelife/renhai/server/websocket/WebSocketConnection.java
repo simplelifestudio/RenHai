@@ -325,12 +325,14 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	}
     	
     	JSONObject obj = new JSONObject();
+    	message.addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
     	obj.put(JSONKey.JsonEnvelope, message.toJSONObject());
     	
+    	message.addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
     	String strMessage = JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue);
    		logger.debug("Send message over WebSocket: \n{}", JSON.toJSONString(message.toJSONObject(), true));
    		
-    	CharBuffer buffer = CharBuffer.allocate(strMessage.length());
+   		CharBuffer buffer = CharBuffer.allocate(strMessage.length());
         buffer.put(strMessage);
         buffer.flip();
         

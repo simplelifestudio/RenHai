@@ -29,4 +29,10 @@ public class BusinessSessionNotification extends ServerJSONMessage
 	{
 		return Consts.MessageId.BusinessSessionNotification;
 	}
+	
+	@Override
+	public boolean isSyncMessage()
+    {
+    	return true;
+    }
 }

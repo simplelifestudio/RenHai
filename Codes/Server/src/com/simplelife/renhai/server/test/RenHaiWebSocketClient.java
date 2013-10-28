@@ -129,7 +129,7 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 			return;
 		}
 		
-		logger.debug("Received message: " + message);
+		logger.debug("MockWebSocket received message: " + message);
 		JSONObject obj = JSONObject.parseObject(message);
 		
 		JSONObject env = obj.getJSONObject(JSONKey.JsonEnvelope);

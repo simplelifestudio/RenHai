@@ -31,6 +31,11 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     protected JSONObject header = new JSONObject();
     protected JSONObject body = new JSONObject();
     private Logger logger = BusinessModule.instance.getLogger();
+
+    public boolean isSyncMessage()
+    {
+    	return false;
+    }
     
 	public JSONObject getJsonObject()
 	{
@@ -95,7 +100,7 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
         	}
     	}
 		
-    	addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
+    	//addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
     }
     
     /** */
@@ -142,22 +147,9 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     public abstract Consts.MessageId getMessageId();
     
     
-    public void asyncResponse()
+    public void response()
     {
     	Logger logger = JSONModule.instance.getLogger();
-    	if (deviceWrapper == null)
-    	{
-    		logger.error("deviceWrapper is null in response");
-    		return;
-    	}
-    	
-    	// Update current time again before sending
-    	addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
-    	deviceWrapper.asyncSendMessage(this);
-    }
-    
-    public void syncResponse()
-    {
     	if (deviceWrapper == null)
     	{
     		logger.error("deviceWrapper of ServerJSONMessage is null! message Id: {}", this.header.getString(JSONKey.MessageId));
@@ -165,8 +157,22 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     	}
     	
     	// Update current time again before sending
-    	addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
-    	deviceWrapper.syncSendMessage(this);
+    	//addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
+    	int duration =(int)(System.currentTimeMillis() - this.getQueueTime());
+    	if (duration > GlobalSetting.BusinessSetting.MessageQueueTime)
+    	{
+    		logger.warn("Response with SN {} was queued " + duration + "ms ago, consider increasing size of input message execution thread pool.");
+    	}
+    	
+    	if (this.isSyncMessage())
+    	{
+    		deviceWrapper.syncSendMessage(this);
+    	}
+    	else
+    	{
+    		deviceWrapper.asyncSendMessage(this);
+    	}
+    	
     }
 
     @Override
