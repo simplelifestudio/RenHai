@@ -74,10 +74,10 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 		// Loop all device from deviceMap
 		Set<Entry<String, IDeviceWrapper>> entrySet = deviceMap.entrySet();
 		Set<Interestlabelmap> labelSet;
-		//logger.debug("==================1==================");
+		logger.debug("==================1==================");
 		for (Entry<String, IDeviceWrapper> entry : entrySet)
 		{
-			//logger.debug("==================2==================");
+			logger.debug("==================2==================");
 			if (deviceFoundFlag)
 			{
 				break;
@@ -85,7 +85,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			
 			IDeviceWrapper device = entry.getValue();
 			labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
-			//logger.debug("==================3==================");
+			logger.debug("==================3==================");
 			String strLabel; 
 			ConcurrentSkipListSet<IDeviceWrapper> deviceList;
 			
@@ -93,13 +93,13 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			// Loop all interest labels of device 
 			for (Interestlabelmap label : labelSet)
 			{
-				//logger.debug("==================4==================");
+				logger.debug("==================4==================");
 				if (deviceFoundFlag)
     			{
     				break;
     			}
 
-				//logger.debug("==================5==================");
+				logger.debug("==================5==================");
 				selectedDevice.clear();
 				// Try to find device with same interest label
 				strLabel = label.getGlobalinterestlabel().getInterestLabelName();
@@ -119,6 +119,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 				
 				if ((deviceListSize == deviceCountPerSession))
 				{
+					logger.debug("==================6==================");
 					String tempSn;
 					// All of devices found can be added to this business session
 					for (IDeviceWrapper tmpDevice : deviceList)

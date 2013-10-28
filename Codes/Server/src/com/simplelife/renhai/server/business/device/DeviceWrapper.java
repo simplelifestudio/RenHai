@@ -140,7 +140,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     	
     	AbstractBusinessDevicePool businessPool = null;
     	
-    	if (this.businessStatus.getValue() >= Consts.BusinessStatus.WaitMatch.getValue())
+    	if (this.businessStatus.getValue() >= Consts.BusinessStatus.MatchCache.getValue())
     	{
     		businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
     	}
@@ -158,6 +158,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     					ownerOnlinePool.deleteDevice(this, reason);
     					DAOWrapper.asyncSave(this.getDevice());
     					break;
+    				case MatchCache:
     				case WaitMatch:
     					businessPool.onDeviceLeave(this, reason);
     					ownerOnlinePool.deleteDevice(this, reason);
@@ -176,9 +177,11 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     			}
     			this.webSocketConnection.closeConnection();
     			break;
+    			
     		case Init:
     			logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
 				break;
+				
     		case Idle:
     			switch(businessStatus)
     			{
@@ -189,6 +192,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     					// Init -> Idle, typical process of AppDataSyncRequest 
     					ownerOnlinePool.synchronizeDevice(this);
     					break;
+    				case MatchCache:
     				case WaitMatch:
     					// Leave business device pool
     					businessPool.onDeviceLeave(this, reason);
@@ -203,6 +207,40 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     					break;
     			}
     			break;
+    			
+    		case MatchCache:
+    			AbstractBusinessScheduler businessScheduler = null;
+    			switch(businessStatus)
+    			{
+    				case Idle:
+    					businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
+    					businessStatus = targetStatus;				// To ensure that status of device is WaitMatch before enter business pool
+    					businessPool.onDeviceEnter(this);
+    					break;
+    				case SessionBound:
+    					this.unbindBusinessSession(reason);
+    					businessPool.endChat(this);
+    					break;
+    				default:
+    					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+    					break;
+    			}
+    			break;
+    			
+    		case WaitMatch:
+    			switch(businessStatus)
+    			{
+    				case MatchCache:
+    					businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
+    					businessStatus = targetStatus;				// To ensure that status of device is WaitMatch before enter business pool
+    					businessPool.startMatch(this);
+    					break;
+    				default:
+    					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+    					break;
+    			}
+    			break;
+    			
     		case SessionBound:
     			if (this.ownerBusinessSession == null)
     			{
@@ -220,48 +258,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
         					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
         					break;
         			}
-    			}
-    			break;
-    		case WaitMatch:
-    			AbstractBusinessScheduler businessScheduler = null;
-    			switch(businessStatus)
-    			{
-    				case Idle:
-    					businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
-    					businessStatus = targetStatus;				// To ensure that status of device is WaitMatch before enter business pool
-    					
-    					try
-						{
-							Thread.sleep(3000);
-						}
-						catch (InterruptedException e)
-						{
-							FileLogger.printStackTrace(e);
-						}
-    					
-    					businessPool.onDeviceEnter(this);
-    					businessScheduler = businessPool.getBusinessScheduler(); 
-    					businessScheduler.resumeSchedule();
-    					break;
-    				case SessionBound:
-    					this.unbindBusinessSession(reason);
-    					
-    					try
-						{
-							Thread.sleep(3000);
-						}
-						catch (InterruptedException e)
-						{
-							FileLogger.printStackTrace(e);
-						}
-    					businessPool.endChat(this);
-    					
-    					businessScheduler = businessPool.getBusinessScheduler(); 
-    					businessScheduler.resumeSchedule();
-    			    	break;
-    				default:
-    					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
-    					break;
     			}
     			break;
     		default:

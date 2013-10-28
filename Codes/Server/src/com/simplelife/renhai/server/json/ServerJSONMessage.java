@@ -161,7 +161,7 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     	int duration =(int)(System.currentTimeMillis() - this.getQueueTime());
     	if (duration > GlobalSetting.BusinessSetting.MessageQueueTime)
     	{
-    		logger.warn("Response with SN {} was queued " + duration + "ms ago, consider increasing size of input message execution thread pool.");
+    		logger.warn("Response with SN {} was queued " + duration + "ms ago, consider increasing size of output message execution thread pool.");
     	}
     	
     	if (this.isSyncMessage())

@@ -32,6 +32,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     
     // Map for saving devices in chat
     protected ConcurrentHashMap<String, IDeviceWrapper> chatDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
+    protected ConcurrentHashMap<String, IDeviceWrapper> cacheDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     
     
     public Consts.BusinessType getBusinessType()
@@ -66,7 +67,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
      */
     public int getElementCount()
     {
-        return chatDeviceMap.size() + deviceMap.size();
+        return chatDeviceMap.size() + deviceMap.size() + cacheDeviceMap.size();
     }
     
     public String checkDeviceEnter(IDeviceWrapper device)
@@ -84,7 +85,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	}
     	
     	String sn = device.getDeviceSn();
-    	if (deviceMap.containsKey(sn))
+    	if (deviceMap.containsKey(sn) || cacheDeviceMap.containsKey(sn))
     	{
     		String temp = "Device ("+ sn +") has been in BusinessDevicePool";
     		logger.warn(temp);
@@ -105,10 +106,10 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
      */
     public void onDeviceEnter(IDeviceWrapper device)
     {
-    	deviceMap.put(device.getDeviceSn(), device);
+    	cacheDeviceMap.put(device.getDeviceSn(), device);
     	logger.debug("Device <{}> has entered " + businessType.name() + " pool, device count after enter: " + this.getElementCount(), device.getDeviceSn());
     }
-
+    
     /**
      * Device leaves BusinessDevicePool, it may be caused by exit business or device is released
      */
@@ -121,7 +122,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	}
     	
     	String sn = device.getDeviceSn();
-    	if (!(deviceMap.containsKey(sn) || chatDeviceMap.containsKey(sn)))
+    	if (!(deviceMap.containsKey(sn) || chatDeviceMap.containsKey(sn) || cacheDeviceMap.contains(sn)))
     	{
     		logger.debug("Device <{}> was not in " + this.businessType.name() + " Device Pool", sn);
     		return;
@@ -131,12 +132,21 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	{
 	    	deviceMap.remove(sn);
 	    	logger.debug("Device <{}> was removed from deviceMap of " + this.businessType.name() + " Device Pool", sn);
+	    	return;
     	}
     	
     	if (chatDeviceMap.containsKey(sn))
     	{
 	    	chatDeviceMap.remove(sn);
 	    	logger.debug("Device <{}> was removed from chatDeviceMap of " + this.businessType.name() + " Device Pool", sn);
+	    	return;
+    	}
+    	
+    	if (cacheDeviceMap.containsKey(sn))
+    	{
+	    	cacheDeviceMap.remove(sn);
+	    	logger.debug("Device <{}> was removed from cacheDeviceMap of " + this.businessType.name() + " Device Pool", sn);
+	    	return;
     	}
 
     	/*
@@ -165,6 +175,14 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	@Override
 	public abstract void startChat(IDeviceWrapper device);
 	
+	public void startMatch(IDeviceWrapper device)
+    {
+		String deviceSn = device.getDeviceSn();
+		cacheDeviceMap.remove(deviceSn);
+		deviceMap.put(deviceSn, device);
+		businessScheduler.resumeSchedule();
+    }
+	
 	@Override
 	public IDeviceWrapper getDevice(String deviceSn)
     {
@@ -175,6 +193,10 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 		if (chatDeviceMap.containsKey(deviceSn))
 		{
 			return chatDeviceMap.get(deviceSn);
+		}
+		if (cacheDeviceMap.containsKey(deviceSn))
+		{
+			return cacheDeviceMap.get(deviceSn);
 		}
    		return null;
     }
@@ -190,6 +212,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	{
 		deviceMap.clear();
 		chatDeviceMap.clear();
+		cacheDeviceMap.clear();
 	}
 	
 	public int getDeviceCountInChat()

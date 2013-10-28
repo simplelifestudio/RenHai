@@ -517,7 +517,7 @@ public class MainFunction extends AbstractTestCase
 			
 			if (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
 			{
-				app1.sendServerDataSyncRequest();
+				//app1.sendServerDataSyncRequest();
 			}
 		}
 	}

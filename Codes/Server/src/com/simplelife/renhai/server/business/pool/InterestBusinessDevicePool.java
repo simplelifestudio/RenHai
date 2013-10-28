@@ -220,8 +220,8 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 	@Override
 	public void clearPool()
 	{
-		deviceMap.clear();
 		interestLabelMap.clear();
+		super.clearPool();
 	}
 
 	@Override
@@ -249,7 +249,8 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 		if (existFlag)
 		{
 			// Maybe device has been removed from business device pool by another thread
-			deviceMap.put(sn, device);
+			//deviceMap.put(sn, device);
+			cacheDeviceMap.put(sn, device);
 			//device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
 			//device.unbindBusinessSession();
 			addInterestIndex(device);

@@ -31,17 +31,19 @@ public class MockAppConsts
 		AppDataSyncResReceived(3),
 		EnterPoolReqSent(4),
 		EnterPoolResReceived(5),
-		SessionBoundReceived(6),
-		SessionBoundReplied(7),
-		AgreeChatReqSent(8),
-		AgreeChatResReceived(9),
-		RejectChatReqSent(8),
-		RejectChatResReceived(9),
-		EndChatReqSent(10),
-		EndChatResReceived(11),
-		AssessReqSent(12),
-		AssessResReceived(13),
-		Ended(14);
+		MatchStartReqSent(6),
+		MatchStartResReceived(7),
+		SessionBoundReceived(8),
+		SessionBoundReplied(9),
+		AgreeChatReqSent(10),
+		AgreeChatResReceived(11),
+		RejectChatReqSent(10),			// same with AgreeChatReqSent 
+		RejectChatResReceived(11),
+		EndChatReqSent(12),
+		EndChatResReceived(13),
+		AssessReqSent(14),
+		AssessResReceived(15),
+		Ended(16);
 		
 		private int value;
 		private MockAppBusinessStatus(int value)
@@ -64,11 +66,12 @@ public class MockAppConsts
 		RejectChat(203),
 		ServerDataSyncRequest(204),
 		EnterPool(205),
-		LeavePool(206),
-		EndChat(207),
-		AssessAndContinue(208),
-		AssessAndQuit(209),
-		BusinessSessionNotificationResponse(202);
+		MatchStart(206),
+		LeavePool(207),
+		EndChat(208),
+		AssessAndContinue(209),
+		AssessAndQuit(210),
+		BusinessSessionNotificationResponse(211);
 		
 		private int value ;
 		

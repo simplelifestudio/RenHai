@@ -53,8 +53,8 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 		if (existFlag)
 		{
 			// Maybe device has been removed from business device pool by another thread
-			deviceMap.put(sn, device);
-			
+			//deviceMap.put(sn, device);
+			cacheDeviceMap.put(sn, device);
 		}
 	}
 

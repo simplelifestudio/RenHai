@@ -104,10 +104,6 @@ public class MockApp implements IMockApp, Runnable
 						logger.debug("Recover from sleep but app is ended, sending of " + messageIdToBeSent.name() + " is cancelled");
 						return;
 					}
-					else
-					{
-						logger.debug("Recover from sleep");
-					}
 				}
 				catch (InterruptedException e)
 				{
@@ -132,6 +128,9 @@ public class MockApp implements IMockApp, Runnable
 					break;
 				case LeavePool:
 					app.leavePool();
+					break;
+				case MatchStart:
+					app.matchStart();
 					break;
 				case AgreeChat:
 					app.chatConfirm(true);
@@ -159,6 +158,8 @@ public class MockApp implements IMockApp, Runnable
 				case ServerDataSyncRequest:
 					app.sendServerDataSyncRequest();
 					break;
+				default:
+					logger.error("Unknown message id");
 			}
 		}
 	}
@@ -668,6 +669,12 @@ public class MockApp implements IMockApp, Runnable
 	}
 	
 	@Override
+	public void matchStart()
+	{
+		sendBusinessSessionRequest(Consts.OperationType.MatchStart, null, "");
+	}
+	
+	@Override
 	public void leavePool()
 	{
 		if (businessType != null)
@@ -925,14 +932,32 @@ public class MockApp implements IMockApp, Runnable
 				if (messageId == Consts.MessageId.BusinessSessionResponse)
 				{
 					setBusinessStatus(MockAppConsts.MockAppBusinessStatus.EnterPoolResReceived);
+					
+					task = new AutoReplyTask(
+							MockAppRequest.MatchStart, 
+							lastReceivedCommand, 
+							this, 
+							MockAppConsts.Setting.ChatConfirmDuration,
+							MockAppConsts.MockAppBusinessStatus.MatchStartReqSent);
+					task.setName("MatchStart" + DateUtil.getCurrentMiliseconds());
 				}
 				else
 				{
 					logger.error("Received {} in status of EnterPoolReqSent", messageId.name());
 				}
 				break;
-			
-			case EnterPoolResReceived:
+			case MatchStartReqSent:
+				if (messageId == Consts.MessageId.BusinessSessionResponse)
+				{
+					setBusinessStatus(MockAppConsts.MockAppBusinessStatus.MatchStartResReceived);
+				}
+				else
+				{
+					logger.error("Received {} in status of MatchStartReqSent", messageId.name());
+				}
+				break;
+				
+			case MatchStartResReceived:
 				if (messageId == Consts.MessageId.BusinessSessionNotification)
 				{
 					if (receivedOperationType != Consts.NotificationType.SessionBound)

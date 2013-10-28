@@ -105,7 +105,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		
 		if (operationType != Consts.OperationType.EnterPool
-				&& operationType != Consts.OperationType.LeavePool)
+				&& operationType != Consts.OperationType.LeavePool
+				&& operationType != Consts.OperationType.MatchStart)
 		{
 			if (deviceWrapper.getOwnerBusinessSession() == null)
 			{
@@ -265,6 +266,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 			case SessionUnbind:
 				sessionUnbind();
 				break;
+			case MatchStart:
+				matchStart();
+				break;
 			default:
 				logger.error("Invalid operation type found: " + operationType.toString());
 				break;
@@ -280,7 +284,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		Consts.BusinessType businessType = Consts.BusinessType.parseValue(intType);
 		
 		Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
-		if (status.getValue() >= Consts.BusinessStatus.WaitMatch.getValue())
+		if (status.getValue() >= Consts.BusinessStatus.MatchCache.getValue())
 		{
 			Consts.BusinessType curBusinessType = deviceWrapper.getBusinessType();
 			if (businessType != curBusinessType)
@@ -333,7 +337,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		synchronized (deviceWrapper)
 		{
 			deviceWrapper.setBusinessType(businessType);
-			deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.WaitMatch, StatusChangeReason.AppEnterBusiness);
+			deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.MatchCache, StatusChangeReason.AppEnterBusiness);
 		}
 	}
 	
@@ -344,7 +348,7 @@ public class BusinessSessionRequest extends AppJSONMessage
     			, deviceWrapper.getDeviceSn());
 
 		Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
-		if (status.getValue() < Consts.BusinessStatus.WaitMatch.getValue())
+		if (status.getValue() < Consts.BusinessStatus.MatchCache.getValue())
 		{
 			this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
 			this.setErrorDescription("Device <"+ deviceWrapper.getDeviceSn() +"> is not in business device pool.");
@@ -446,7 +450,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		
 		deviceWrapper.getOwnerBusinessSession().onRejectChat(deviceWrapper);
-		deviceWrapper.changeBusinessStatus(BusinessStatus.WaitMatch, StatusChangeReason.AppRejectChat);
+		deviceWrapper.changeBusinessStatus(BusinessStatus.MatchCache, StatusChangeReason.AppRejectChat);
 		
 		response.addToBody(JSONKey.OperationType, Consts.OperationType.RejectChat.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
@@ -614,7 +618,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		{
 			response.addToBody(JSONKey.OperationType, Consts.OperationType.AssessAndContinue.getValue());
 			deviceWrapper.getOwnerBusinessSession().onAssessAndContinue(this.deviceWrapper);
-			deviceWrapper.changeBusinessStatus(BusinessStatus.WaitMatch, StatusChangeReason.AssessAndContinue);
+			deviceWrapper.changeBusinessStatus(BusinessStatus.MatchCache, StatusChangeReason.AssessAndContinue);
 			
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessContinue_1019
 	    			, deviceWrapper.getDevice().getProfile()
@@ -682,6 +686,32 @@ public class BusinessSessionRequest extends AppJSONMessage
 		assess(true);
 	}
 	
+	private void matchStart()
+	{
+		logger.debug("Device <{}> request to start match.", deviceWrapper.getDeviceSn());
+		
+		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
+				Consts.MessageId.BusinessSessionResponse);
+		
+		if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+		{
+			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession()
+					.getSessionId());
+		}
+		else
+		{
+			response.addToBody(JSONKey.BusinessSessionId, null);
+		}
+		
+		deviceWrapper.changeBusinessStatus(BusinessStatus.WaitMatch, StatusChangeReason.AppUnbindSession);
+		
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.MatchStart.getValue());
+		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
+		response.addToBody(JSONKey.OperationInfo, null);
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
+		OutputMessageCenter.instance.addMessage(response);
+	}
+	
 	private void sessionUnbind()
 	{
 		logger.debug("Device <{}> request to unbind business session.", deviceWrapper.getDeviceSn());
@@ -699,7 +729,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
-		deviceWrapper.changeBusinessStatus(BusinessStatus.WaitMatch, StatusChangeReason.AppUnbindSession);
+		deviceWrapper.changeBusinessStatus(BusinessStatus.MatchCache, StatusChangeReason.AppUnbindSession);
 		
 		response.addToBody(JSONKey.OperationType, Consts.OperationType.SessionUnbind.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));

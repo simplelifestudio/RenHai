@@ -250,7 +250,7 @@ public class Consts
 	
 	public enum BusinessStatus
 	{
-		Invalid(0), Offline(1), Init(2), Idle(3), WaitMatch(4), SessionBound(5);
+		Invalid(0), Offline(1), Init(2), Idle(3), MatchCache(4), WaitMatch(5), SessionBound(6);
 		
 		private int value;
 		private BusinessStatus(int value)
@@ -648,7 +648,8 @@ public class Consts
 
     	AssessAndContinue(6),
     	AssessAndQuit(7),
-    	SessionUnbind(8);
+    	SessionUnbind(8),
+    	MatchStart(9);
 
     	private int value;
     	

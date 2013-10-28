@@ -56,6 +56,8 @@ public interface IMockApp
 	/** */
 	public void endChat();
 	
+	public void matchStart();
+	
 	/** */
 	public void chatConfirm(boolean agree);
 	
