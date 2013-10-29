@@ -703,13 +703,16 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
-		deviceWrapper.changeBusinessStatus(BusinessStatus.WaitMatch, StatusChangeReason.AppUnbindSession);
-		
 		response.addToBody(JSONKey.OperationType, Consts.OperationType.MatchStart.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		OutputMessageCenter.instance.addMessage(response);
+		
+		synchronized (deviceWrapper)
+		{
+			deviceWrapper.changeBusinessStatus(BusinessStatus.WaitMatch, StatusChangeReason.AppRequestStartMatch);
+		}
 	}
 	
 	private void sessionUnbind()

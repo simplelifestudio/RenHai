@@ -67,7 +67,6 @@ public class BusinessSession implements IBusinessSession
 	private ConcurrentHashMap<String, Consts.BusinessProgress> progressMap = new ConcurrentHashMap<String, Consts.BusinessProgress>();
 	
 	private Consts.BusinessSessionStatus status = Consts.BusinessSessionStatus.Idle;
-	private Consts.BusinessSessionStatus previousStatus = Consts.BusinessSessionStatus.Idle;
 	
 	public BusinessSession()
 	{
@@ -184,7 +183,7 @@ public class BusinessSession implements IBusinessSession
     	duration = (int)((sessionEndTime - sessionStartTime)/1000);
     	record.setSessionDuration(duration);
     	
-    	record.setEndStatus(previousStatus.name());
+    	record.setEndStatus(status.name());
     	record.setEndReason(endReason.name());
     	
     	DAOWrapper.asyncSave(record);
@@ -396,8 +395,6 @@ public class BusinessSession implements IBusinessSession
 			default:
 				break;
     	}
-    	
-    	previousStatus = status;
     	status = targetStatus;
     }
     

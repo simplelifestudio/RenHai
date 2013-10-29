@@ -175,13 +175,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	@Override
 	public abstract void startChat(IDeviceWrapper device);
 	
-	public void startMatch(IDeviceWrapper device)
-    {
-		String deviceSn = device.getDeviceSn();
-		cacheDeviceMap.remove(deviceSn);
-		deviceMap.put(deviceSn, device);
-		businessScheduler.resumeSchedule();
-    }
+	public abstract void startMatch(IDeviceWrapper device);
 	
 	@Override
 	public IDeviceWrapper getDevice(String deviceSn)

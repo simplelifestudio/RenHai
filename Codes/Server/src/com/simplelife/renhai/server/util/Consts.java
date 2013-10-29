@@ -68,7 +68,8 @@ public class Consts
 		AppEnterBusiness(115),
 		AppRejectChat(116),
 		AppUnbindSession(117),
-		WebSocketReconnect(118);
+		WebSocketReconnect(118),
+		AppRequestStartMatch(119);
 		
 		private int value;
 		private StatusChangeReason(int value)

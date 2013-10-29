@@ -144,7 +144,6 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     public void onDeviceEnter(IDeviceWrapper device)
     {
     	super.onDeviceEnter(device);
-    	addInterestIndex(device);
     }
     
     private void addInterestIndex(IDeviceWrapper device)
@@ -234,6 +233,16 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 		Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
 		this.removeInterestIndex(device);
 	}
+	
+	@Override
+	public void startMatch(IDeviceWrapper device)
+    {
+		String deviceSn = device.getDeviceSn();
+		cacheDeviceMap.remove(deviceSn);
+		deviceMap.put(deviceSn, device);
+		addInterestIndex(device);
+		businessScheduler.resumeSchedule();
+    }
 
 	@Override
 	public void endChat(IDeviceWrapper device)

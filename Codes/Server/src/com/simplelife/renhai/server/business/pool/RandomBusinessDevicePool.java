@@ -38,6 +38,15 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 		deviceMap.remove(deviceSn);
 		chatDeviceMap.put(deviceSn, device);
 	}
+	
+	@Override
+	public void startMatch(IDeviceWrapper device)
+    {
+		String deviceSn = device.getDeviceSn();
+		cacheDeviceMap.remove(deviceSn);
+		deviceMap.put(deviceSn, device);
+		businessScheduler.resumeSchedule();
+    }
 
 	@Override
 	public void endChat(IDeviceWrapper device)

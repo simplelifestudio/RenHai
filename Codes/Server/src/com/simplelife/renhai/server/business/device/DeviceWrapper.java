@@ -214,7 +214,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     			{
     				case Idle:
     					businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
-    					businessStatus = targetStatus;				// To ensure that status of device is WaitMatch before enter business pool
     					businessPool.onDeviceEnter(this);
     					break;
     				case SessionBound:
