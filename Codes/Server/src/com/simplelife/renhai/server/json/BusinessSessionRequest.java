@@ -531,32 +531,34 @@ public class BusinessSessionRequest extends AppJSONMessage
     		return;
     	}
 		
-		/*
-		if (DBQueryUtil.isNewDevice(deviceSn))
-		{
-			String temp = "Failed to assess Device <" + deviceSn + "> due to it's not in online pool";
-			logger.error(temp);
-			ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
-					Consts.MessageId.BusinessSessionResponse);
-			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession().getSessionId());
-			response.addToBody(JSONKey.BusinessType, deviceWrapper.getBusinessType().getValue());
-			response.addToBody(JSONKey.OperationInfo, temp);
-			response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Fail.getValue());
-			OutputMessageCenter.instance.addMessage(response);
-			return;
-		}
-		*/
-		
 		//DeviceDAO dao = new DeviceDAO();
 		//Device targetDevice = dao.findByDeviceSn(deviceSn).get(0);
+		boolean isDeviceInPool = true;
 		IDeviceWrapper targetDeviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
 		Device targetDevice = null;
 		if (targetDeviceWrapper == null)
 		{
+			isDeviceInPool = false;
 			targetDevice = DAOWrapper.getDeviceInCache(deviceSn);
 			
 			if (targetDevice == null)
 			{
+				// Check if it's totally invalid deviceSn in DB
+				if (DBQueryUtil.isNewDevice(deviceSn))
+				{
+					String temp = "Failed to assess Device <" + deviceSn + "> due to it's not in online pool";
+					logger.error(temp);
+					ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
+							Consts.MessageId.BusinessSessionResponse);
+					response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession().getSessionId());
+					response.addToBody(JSONKey.BusinessType, deviceWrapper.getBusinessType().getValue());
+					response.addToBody(JSONKey.OperationInfo, temp);
+					response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Fail.getValue());
+					OutputMessageCenter.instance.addMessage(response);
+					return;
+				}
+				
+				// Load device from DB 
 				DeviceDAO dao = new DeviceDAO();
 				targetDevice = dao.findByDeviceSn(deviceSn).get(0);
 			}
@@ -617,6 +619,13 @@ public class BusinessSessionRequest extends AppJSONMessage
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessContinue_1019
 	    			, deviceWrapper.getDevice().getProfile()
 	    			, deviceWrapper.getDeviceSn());
+		}
+		
+		if (!isDeviceInPool)
+		{
+			// If device has leaved OnlineDevicePool before assess, save to DB after assess
+			logger.warn("Device <{}> was released before Device <" + deviceWrapper.getDeviceSn() + "> trying to assess it");
+			DAOWrapper.asyncSave(targetDevice);
 		}
 		OutputMessageCenter.instance.addMessage(response);
 	}
