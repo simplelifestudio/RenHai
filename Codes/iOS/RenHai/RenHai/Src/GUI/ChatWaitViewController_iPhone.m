@@ -15,8 +15,11 @@
 #import "CommunicationModule.h"
 #import "UserDataModule.h"
 #import "AppDataModule.h"
+#import "BusinessStatusModule.h"
 
 #define DELAY CIRCLE_ANIMATION_DISPLAY
+
+#define DELAY_MATCHSTART 3.0f
 
 typedef enum
 {
@@ -32,6 +35,7 @@ ChatWaitStatus;
     CommunicationModule* _commModule;
     UserDataModule* _userDataModule;
     AppDataModule* _appDataModule;
+    BusinessStatusModule* _statusModule;
     
     NSTimer* _timer;
     NSUInteger _count;
@@ -39,7 +43,7 @@ ChatWaitStatus;
     NSMutableString* _consoleInfo;
     
     volatile BOOL _leavePoolFlag;
-    
+    volatile BOOL _matchStartFlag;
     volatile BOOL _didOnSessionBind;
 }
 
@@ -117,7 +121,7 @@ ChatWaitStatus;
     [self _updateUIWithChatWaitStatus:ChatWaitStatus_WaitForMatch];
     
     _leavePoolFlag = NO;
-    
+    _matchStartFlag = NO;
     _didOnSessionBind = NO;
     
     _count = 0;
@@ -127,8 +131,6 @@ ChatWaitStatus;
 -(void) pageWillLoad
 {
     [self _clockStart];
-    
-    [self _checkIsSessionAlreadyBound];
 }
 
 -(void) pageWillUnload
@@ -140,8 +142,6 @@ ChatWaitStatus;
 {
     if (!_didOnSessionBind)
     {
-        DDLogInfo(@"^^^^^SessionBound");
-        
         [CBAppUtils asyncProcessInMainThread:^(){
             
             [self _updateUIWithChatWaitStatus:ChatWaitStatus_Matched];
@@ -153,8 +153,6 @@ ChatWaitStatus;
         
         _didOnSessionBind = YES;
     }
-    
-
 }
 
 #pragma mark - Private Methods
@@ -165,6 +163,7 @@ ChatWaitStatus;
     _commModule = [CommunicationModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
+    _statusModule = [BusinessStatusModule sharedInstance];
 }
 
 - (void) _clockStart
@@ -180,6 +179,11 @@ ChatWaitStatus;
     [self _updateCountLabel];
     
     _count++;
+    
+    if (_count > DELAY_MATCHSTART)
+    {
+        [self _requestMatchStart];
+    }
 }
 
 - (void) _clockCancel
@@ -193,8 +197,7 @@ ChatWaitStatus;
 
 - (void) _startLeavingPool
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
-    
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         
         RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_LeavePool device:device info:nil];
@@ -212,12 +215,12 @@ ChatWaitStatus;
                 if (operationValue == BusinessSessionOperationValue_Success)
                 {
                     _leavePoolFlag = YES;
-                    
-                    [_appDataModule updateAppBusinessStatus:AppBusinessStatus_AppDataSyncCompleted];
+                
+                    [_statusModule recordAppMessage:AppMessageIdentifier_LeavePool];
                 }
                 else
                 {
-                    
+                    _leavePoolFlag = NO;
                 }
             }
             @catch (NSException *exception)
@@ -243,17 +246,15 @@ ChatWaitStatus;
         }
         
         [self _finishLeavingPool];
-    });
-
+    }];
 }
 
 - (void) _finishLeavingPool
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
-
+    [CBAppUtils asyncProcessInMainThread:^(){
         if (_leavePoolFlag)
         {
-            [NSThread sleepForTimeInterval:DELAY];            
+            [NSThread sleepForTimeInterval:DELAY];
             
             [self _clockCancel];
             
@@ -263,15 +264,66 @@ ChatWaitStatus;
         {
             NSAssert(NO, @"Failed to leave pool!");
         }
+    }];
+}
+
+- (void) _requestMatchStart
+{
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
+        RHDevice* device = _userDataModule.device;
         
-    });
+        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_MatchStart device:device info:nil];
+        RHMessage* responseMessage = [_commModule sendMessage:businessSessionRequestMessage];
+        if (responseMessage.messageId == MessageId_BusinessSessionResponse)
+        {
+            NSDictionary* messageBody = responseMessage.body;
+            NSDictionary* businessSessionDic = messageBody;
+            
+            @try
+            {
+                NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
+                BusinessSessionOperationValue operationValue = oOperationValue.intValue;
+                
+                if (operationValue == BusinessSessionOperationValue_Success)
+                {
+                    _matchStartFlag = YES;
+                    
+                    [_statusModule recordAppMessage:AppMessageIdentifier_MatchStart];
+                }
+                else
+                {
+                    _matchStartFlag = NO;
+                }
+            }
+            @catch (NSException *exception)
+            {
+                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+            }
+            @finally
+            {
+                
+            }
+        }
+        else if (responseMessage.messageId == MessageId_ServerErrorResponse)
+        {
+            
+        }
+        else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
+        {
+            
+        }
+        else
+        {
+            
+        }
+    }];
 }
 
 - (void) _updateCountLabel
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
+    [CBAppUtils asyncProcessInMainThread:^(){
         [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
-    });
+    }];
 }
 
 - (void) _updateInfoTextView:(NSString*) info
@@ -359,16 +411,6 @@ ChatWaitStatus;
     [self _updateInfoTextView:infoDetailText];
     _actionButton.titleLabel.text = actionButtonTitle;
     _actionButton.hidden = isActionButtonHide;
-}
-
--(void) _checkIsSessionAlreadyBound
-{
-    AppBusinessStatus status = [[AppDataModule sharedInstance] currentAppBusinessStatus];
-    
-    if (status == AppBusinessStatus_SessionBindCompeleted || status == AppBusinessStatus_OthersideChatAgreed || status == AppBusinessStatus_OthersideChatRejected || status == AppBusinessStatus_OthersideChatLost)
-    {
-        [self onSessionBound];
-    }
 }
 
 @end

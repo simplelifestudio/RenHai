@@ -15,6 +15,7 @@
 #import "CommunicationModule.h"
 #import "UserDataModule.h"
 #import "AppDataModule.h"
+#import "BusinessStatusModule.h"
 
 #define DELAY CIRCLE_ANIMATION_DISPLAY
 #define ANIMATION_POP 0.4f
@@ -41,6 +42,7 @@ ConnectStatus;
     CommunicationModule* _commModule;
     UserDataModule* _userDataModule;
     AppDataModule* _appDataModule;
+    BusinessStatusModule* _statusModule;
     
     NSTimer* _timer;
     NSUInteger _count;
@@ -147,7 +149,7 @@ ConnectStatus;
 
 - (void) dismissConnectView:(BOOL) animated
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
+    [CBAppUtils asyncProcessInMainThread:^(){
         if (_isViewControllerVisible)
         {
             UIViewController* rootVC = [CBUIUtils getRootController];
@@ -176,10 +178,10 @@ ConnectStatus;
                 [CBUIUtils setRootController:mainVC];
             }
             [mainVC switchToMainScene];
-
+            
             [self _resetInstance];
         }
-    });
+    }];
 }
 
 #pragma mark - IBAction Methods
@@ -197,6 +199,7 @@ ConnectStatus;
     _commModule = [CommunicationModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
+    _statusModule = [BusinessStatusModule sharedInstance];
 
     _isViewControllerVisible = NO;
     
@@ -237,17 +240,16 @@ ConnectStatus;
 
 - (void) _updateCountLabel
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
+    [CBAppUtils asyncProcessInMainThread:^(){
         [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
-    });
+    }];
 }
 
 - (void) _updateUIWithConnectStatus:(ConnectStatus) status
 {
     [NSThread sleepForTimeInterval:DELAY];
     
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        
+    [CBAppUtils asyncProcessInMainThread:^(){
         NSString* infoText = nil;
         NSString* infoDetailText = nil;
         NSString* actionButtonTitle = NSLocalizedString(@"Connect_Action_Retry", nil);
@@ -332,7 +334,7 @@ ConnectStatus;
                 break;
             }
         }
-
+        
         _infoLabel.text = infoText;
         if (isTextClear)
         {
@@ -341,14 +343,14 @@ ConnectStatus;
         [self _updateInfoTextView:infoDetailText];
         _actionButton.titleLabel.text = actionButtonTitle;
         _actionButton.hidden = isActionButtonHide;
-    });
+    }];
 }
 
 - (void)_timerStart
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        [self _clockStart];    
-    });
+    [CBAppUtils asyncProcessInMainThread:^(){
+        [self _clockStart];
+    }];
 }
 
 - (void)_timerStop
@@ -376,7 +378,7 @@ ConnectStatus;
     _isConnectServerSuccess = [_commModule connectWebSocket];
     if (_isConnectServerSuccess)
     {
-        [_appDataModule updateAppBusinessStatus:AppBusinessStatus_Connected];
+        [_statusModule recordAppMessage:AppMessageIdentifier_Connect];
         
         [self _updateUIWithConnectStatus:ConnectStatus_Connected];
     }
@@ -415,7 +417,7 @@ ConnectStatus;
             
             _isAppDataSyncSuccess = YES;
             
-            [_appDataModule updateAppBusinessStatus:AppBusinessStatus_AppDataSyncCompleted];
+            [_statusModule recordAppMessage:AppMessageIdentifier_AppDataSync];
         }
         @catch (NSException *exception)
         {
@@ -470,6 +472,8 @@ ConnectStatus;
             [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSynced];
             
             _isServerDataSyncSuccess = YES;
+            
+            [_statusModule recordAppMessage:AppMessageIdentifier_ServerDataSync];
         }
         @catch (NSException *exception)
         {
@@ -529,7 +533,7 @@ ConnectStatus;
 
 - (void) _updateInfoTextView:(NSString*) info
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
+    [CBAppUtils asyncProcessInMainThread:^(){
         if (nil == _consoleInfo)
         {
             _consoleInfo = [NSMutableString string];
@@ -549,15 +553,15 @@ ConnectStatus;
             
             [_infoTextView setText:_consoleInfo];
         }
-    });
+    }];
 }
 
 - (void) _clearInfoTextView
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
+    [CBAppUtils asyncProcessInMainThread:^(){
         _consoleInfo = [NSMutableString string];
         [self _updateInfoTextView:nil];
-    });
+    }];
 }
 
 @end

@@ -13,6 +13,7 @@
 #import "CommunicationModule.h"
 #import "GUIModule.h"
 #import "GUIStyle.h"
+#import "BusinessStatusModule.h"
 
 #import "RHCollectionLabelCell_iPhone.h"
 
@@ -34,6 +35,7 @@
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
     AppDataModule* _appDataModule;
+    BusinessStatusModule* _statusModule;
     
     ImpressLabelsHeaderView_iPhone* _partnerAssessLabelsHeaderView;
     ImpressLabelsHeaderView_iPhone* _partnerImpressLabelsHeaderView;
@@ -141,7 +143,8 @@
     _userDataModule = [UserDataModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
     _guiModule = [GUIModule sharedInstance];
-
+    _statusModule = [BusinessStatusModule sharedInstance];
+    
     [self _setupCollectionView];
 }
 
@@ -203,23 +206,15 @@
 
 -(void)_moveToChatWaitView
 {
-    [_appDataModule updateAppBusinessStatus:AppBusinessStatus_EnterPoolCompleted];
-    
     [CBAppUtils asyncProcessInMainThread:^(){
-    
         [_guiModule.chatWizardController wizardProcess:ChatWizardStatus_ChatWait];
-    
     }];
 }
 
 -(void)_moveToHomeView
 {
-    [_appDataModule updateAppBusinessStatus:AppBusinessStatus_AppDataSyncCompleted];
-    
     [CBAppUtils asyncProcessInMainThread:^(){
-    
         [_guiModule.mainViewController switchToMainScene];
-    
     }];
 }
 
@@ -275,11 +270,13 @@
                     {
                         case BusinessSessionRequestType_AssessAndContinue:
                         {
+                            [_statusModule recordAppMessage:AppMessageIdentifier_AssessAndContinue];
                             [self _moveToChatWaitView];
                             break;
                         }
                         case BusinessSessionRequestType_AssessAndQuit:
                         {
+                            [_statusModule recordAppMessage:AppMessageIdentifier_AssessAndQuit];
                             [self _moveToHomeView];
                             break;
                         }
@@ -291,7 +288,7 @@
                 }
                 else
                 {
-                    
+                    _selfAssessedFlag = NO;
                 }
             }
             @catch (NSException *exception)

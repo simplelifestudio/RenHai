@@ -190,7 +190,8 @@ typedef enum
     BusinessSessionRequestType_EndChat,
     BusinessSessionRequestType_AssessAndContinue,
     BusinessSessionRequestType_AssessAndQuit,
-    BusinessSessionRequestType_UnbindSession
+    BusinessSessionRequestType_UnbindSession,
+    BusinessSessionRequestType_MatchStart
 }
 BusinessSessionRequestType;
 

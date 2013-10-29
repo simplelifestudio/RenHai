@@ -13,6 +13,7 @@
 #import "UserDataModule.h"
 #import "CommunicationModule.h"
 #import "AppDataModule.h"
+#import "BusinessStatusModule.h"
 
 #import "RHCollectionLabelCell_iPhone.h"
 
@@ -37,6 +38,7 @@
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
     AppDataModule* _appDataModule;
+    BusinessStatusModule* _statusModule;
     
     NSUInteger _countdownSeconds;
     NSTimer* _timer;
@@ -331,9 +333,9 @@
 {
     _partnerAgreeChatFlag = YES;
     
-    dispatch_async(dispatch_get_main_queue(), ^(){
+    [CBAppUtils asyncProcessInMainThread:^(){
         _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Agreed", nil);
-    });
+    }];
     
     if (_selfAgreeChatFlag)
     {
@@ -345,14 +347,12 @@
 {
     _partnerRejectChatFlag = YES;
     
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        
+    [CBAppUtils asyncProcessInMainThread:^(){
         _agreeChatButton.enabled = NO;
         _rejectChatButton.enabled = NO;
         
         _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Rejected", nil);
-        
-    });
+    }];
     
     [self _clockCancel];
     
@@ -363,14 +363,12 @@
 {
     _partnerLostFlag = YES;
     
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        
+    [CBAppUtils asyncProcessInMainThread:^(){
         _agreeChatButton.enabled = NO;
         _rejectChatButton.enabled = NO;
         
         _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Lost", nil);
-        
-    });
+    }];
     
     [self _clockCancel];
     
@@ -385,6 +383,7 @@
     _userDataModule = [UserDataModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
+    _statusModule = [BusinessStatusModule sharedInstance];
     
     [self _setupCollectionView];
     
@@ -424,9 +423,9 @@
         _countdownSeconds--;
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^(){
+    [CBAppUtils asyncProcessInMainThread:^(){
         [_countLabel setText:[NSString stringWithFormat:@"%d", _countdownSeconds]];
-    });
+    }];
 }
 
 - (void) _clockCancel
@@ -460,8 +459,7 @@
     _rejectChatButton.hidden = YES;
     _selfStatusLabel.text = NSLocalizedString(@"ChatConfirm_SelfStatus_Agreed", nil);
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
-        
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         
         RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_AgreeChat device:device info:nil];
@@ -480,6 +478,7 @@
                 if (operationValue == BusinessSessionOperationValue_Success)
                 {
                     _selfAgreeChatFlag = YES;
+                    [_statusModule recordAppMessage:AppMessageIdentifier_AgreeChat];
                     
                     if (_partnerAgreeChatFlag)
                     {
@@ -488,7 +487,7 @@
                 }
                 else
                 {
-                    
+                    _selfAgreeChatFlag = NO;
                 }
             }
             @catch (NSException *exception)
@@ -512,7 +511,7 @@
         {
             
         }
-    });
+    }];
 }
 
 - (void) _rejectChat
@@ -521,8 +520,7 @@
     _rejectChatButton.hidden = YES;
     _selfStatusLabel.text = NSLocalizedString(@"ChatConfirm_SelfStatus_Rejected", nil);
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
-        
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         
         RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_RejectChat device:device info:nil];
@@ -539,14 +537,15 @@
                 BusinessSessionOperationValue operationValue = oOperationValue.intValue;
                 
                 if (operationValue == BusinessSessionOperationValue_Success)
-                {   
+                {
                     _selfRejectChatFlag = YES;
+                    [_statusModule recordAppMessage:AppMessageIdentifier_RejectChat];
                     
                     [self _moveToChatWaitView];
                 }
                 else
                 {
-                    
+                    _selfRejectChatFlag = NO;
                 }
             }
             @catch (NSException *exception)
@@ -570,13 +569,12 @@
         {
             
         }
-    });
+    }];
 }
 
 - (void) _unbindSession
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
-        
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         
         RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_UnbindSession device:device info:nil];
@@ -595,12 +593,13 @@
                 if (operationValue == BusinessSessionOperationValue_Success)
                 {
                     _selfUnbindSessionFlag = YES;
+                    [_statusModule recordAppMessage:AppMessageIdentifier_UnbindSession];
                     
                     [self _moveToChatWaitView];
                 }
                 else
                 {
-                    
+                    _selfUnbindSessionFlag = NO;
                 }
             }
             @catch (NSException *exception)
@@ -624,60 +623,41 @@
         {
             
         }
-    });
-    
+    }];
 }
 
 - (void) _moveToChatVideoView
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        
-        [_appDataModule updateAppBusinessStatus:AppBusinessStatus_ChatAgreeCompleted];
-        
+    [CBAppUtils asyncProcessInMainThread:^(){
         ChatWizardController* chatWizard = _guiModule.chatWizardController;
         [chatWizard wizardProcess:ChatWizardStatus_ChatVideo];
-    });
+    }];
 }
 
 -(void) _moveToChatWaitView
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        
-        [_appDataModule updateAppBusinessStatus:AppBusinessStatus_EnterPoolCompleted];
-        
+    [CBAppUtils asyncProcessInMainThread:^(){
         ChatWizardController* chatWizard = _guiModule.chatWizardController;
         [chatWizard wizardProcess:ChatWizardStatus_ChatWait];
-    });
+    }];
 }
 
 -(void) _checkIsOthersideAlreadyDecided
 {
-    AppBusinessStatus status = [[AppDataModule sharedInstance] currentAppBusinessStatus];
-    
-    switch (status)
+    BusinessStatusModule* statusModule = [BusinessStatusModule sharedInstance];
+    BusinessStatus* currentStatus = statusModule.currentBusinessStatus;
+    ServerNotificationIdentifier serverNotificationId = currentStatus.latestServerNotificationRecord;
+    if (serverNotificationId == ServerNotificationIdentifier_OthersideAgreeChat)
     {
-        case AppBusinessStatus_OthersideChatAgreed:
-        {
-            [self onOthersideAgreed];
-            
-            break;
-        }
-        case AppBusinessStatus_OthersideChatRejected:
-        {
-            [self onOthersideRejected];
-            
-            break;
-        }
-        case AppBusinessStatus_OthersideChatLost:
-        {
-            [self onOthersideLost];
-            
-            break;
-        }
-        default:
-        {
-            break;
-        }
+        [self onOthersideAgreed];
+    }
+    else if (serverNotificationId == ServerNotificationIdentifier_OthersideRejectChat)
+    {
+        [self onOthersideRejected];
+    }
+    else if (serverNotificationId == ServerNotificationIdentifier_OthersideLost)
+    {
+        [self onOthersideLost];
     }
 }
 

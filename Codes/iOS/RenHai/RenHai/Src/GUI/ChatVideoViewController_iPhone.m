@@ -13,6 +13,7 @@
 #import "UserDataModule.h"
 #import "CommunicationModule.h"
 #import "AppDataModule.h"
+#import "BusinessStatusModule.h"
 
 @interface ChatVideoViewController_iPhone ()
 {
@@ -20,6 +21,7 @@
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
     AppDataModule* _appDataModule;
+    BusinessStatusModule* _statusModule;
     
     NSUInteger _countdownSeconds;
     NSTimer* _timer;
@@ -133,6 +135,7 @@
     _userDataModule = [UserDataModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
+    _statusModule = [BusinessStatusModule sharedInstance];
     
     _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoOpened", nil);
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_VideoOpened", nil);
@@ -143,26 +146,19 @@
 -(void) _moveToChatAssessView
 {
     [CBAppUtils asyncProcessInMainThread:^(){
-    
-        [_appDataModule updateAppBusinessStatus:AppBusinessStatus_ChatEndCompleleted];
-        
         ChatWizardController* chatWizard = _guiModule.chatWizardController;
         [chatWizard wizardProcess:ChatWizardStatus_ChatAssess];
-    
     }];
 }
 
 -(void) _endChat
 {
     [CBAppUtils asyncProcessInMainThread:^(){
-    
         _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoClosed", nil);
         _endChatButton.hidden = YES;
-        
     }];
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
-    
         RHDevice* device = _userDataModule.device;
         
         RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_EndChat device:device info:nil];
@@ -181,12 +177,13 @@
                 if (operationValue == BusinessSessionOperationValue_Success)
                 {
                     _selfEndChatFlag = YES;
+                    [_statusModule recordAppMessage:AppMessageIdentifier_EndChat];
                     
                     [self _moveToChatAssessView];
                 }
                 else
                 {
-                    
+                    _selfEndChatFlag = NO;
                 }
             }
             @catch (NSException *exception)
@@ -216,11 +213,16 @@
 
 -(void) _checkIsOthersideLost
 {
-    AppBusinessStatus status = [[AppDataModule sharedInstance] currentAppBusinessStatus];
-    
-    if (status == AppBusinessStatus_OthersideChatLost)
+    BusinessStatusModule* statusModule = [BusinessStatusModule sharedInstance];
+    BusinessStatus* currentStatus = statusModule.currentBusinessStatus;
+    ServerNotificationIdentifier serverNotificationId = currentStatus.latestServerNotificationRecord;
+    if (serverNotificationId == ServerNotificationIdentifier_OthersideLost)
     {
         [self onOthersideLost];
+    }
+    else if (serverNotificationId == ServerNotificationIdentifier_OthersideEndChat)
+    {
+        [self onOthersideEndChat];
     }
 }
 

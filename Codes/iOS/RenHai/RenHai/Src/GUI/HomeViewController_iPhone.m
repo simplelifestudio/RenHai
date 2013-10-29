@@ -17,6 +17,7 @@
 #import "UserDataModule.h"
 #import "CommunicationModule.h"
 #import "AppDataModule.h"
+#import "BusinessStatusModule.h"
 
 #define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
 #define INTERVAL_DATASYNC 10
@@ -36,6 +37,7 @@ EnterOperationStatus;
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
     AppDataModule* _appDataModule;
+    BusinessStatusModule* _statusModule;
     
     NSTimer* _enterButtonTimer;
     
@@ -103,6 +105,7 @@ EnterOperationStatus;
     _userDataModule = [UserDataModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
+    _statusModule = [BusinessStatusModule sharedInstance];
     
     _enterPoolFlag = NO;
     
@@ -220,8 +223,7 @@ static float progress = 0.0;
 
 -(void)_serverDataSync
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
-
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         
         RHMessage* requestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
@@ -236,7 +238,7 @@ static float progress = 0.0;
             @try
             {
                 [server fromJSONObject:serverDic];
-
+                
                 [self _updateUIWithServerData];
             }
             @catch (NSException *exception)
@@ -261,7 +263,7 @@ static float progress = 0.0;
         {
             
         }
-    });
+    }];
 }
 
 -(void) _updateUIWithServerData
@@ -272,8 +274,7 @@ static float progress = 0.0;
 
 -(void) _updateUIWithOnlineDeviceCount
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        
+    [CBAppUtils asyncProcessInMainThread:^(){
         RHServer* server = _userDataModule.server;
         if (nil != server)
         {
@@ -289,13 +290,12 @@ static float progress = 0.0;
                 label.text = [NSString stringWithFormat:@"%d", unitVal.integerValue];
             }
         }
-    });
+    }];
 }
 
 -(void) _updateUIWithInterestChatDeviceCount
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
-        
+    [CBAppUtils asyncProcessInMainThread:^(){
         RHServer* server = _userDataModule.server;
         if (nil != server)
         {
@@ -311,12 +311,12 @@ static float progress = 0.0;
                 label.text = [NSString stringWithFormat:@"%d", unitVal.integerValue];
             }
         }
-    });
+    }];
 }
 
 -(void) _updateUIWithEnterOperationStatus:(EnterOperationStatus) status
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
+    [CBAppUtils asyncProcessInMainThread:^(){
         switch(status)
         {
             case EnterOperationStatus_Ready:
@@ -344,12 +344,12 @@ static float progress = 0.0;
                 break;
             }
         }
-    });
+    }];
 }
 
 -(void)_startEnteringPool
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         
         RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_EnterPool device:device info:nil];
@@ -364,15 +364,16 @@ static float progress = 0.0;
             {
                 NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
                 BusinessSessionOperationValue operationValue = oOperationValue.intValue;
-
+                
                 if (operationValue == BusinessSessionOperationValue_Success)
                 {
                     _enterPoolFlag = YES;
-                    DDLogError(@"#####ENTER_POOL_SUCCESSFULLY#####");
+                    
+                    [_statusModule recordAppMessage:AppMessageIdentifier_EnterPool];
                 }
                 else
                 {
-                    DDLogError(@"#####ENTER_POOL_FAILED#####");
+                    _enterPoolFlag = NO;
                 }
             }
             @catch (NSException *exception)
@@ -390,21 +391,21 @@ static float progress = 0.0;
         }
         else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
         {
-
+            
         }
         else
         {
-
+            
         }
-    });
+    }];
 }
 
 -(void)_finishEnterPool
 {
-    dispatch_async(dispatch_get_main_queue(), ^(){
+    [CBAppUtils asyncProcessInMainThread:^(){
         MainViewController_iPhone* mainVC = _guiModule.mainViewController;
         [mainVC switchToChatScene];
-    });
+    }];
 }
 
 -(void)_registerNotifications
