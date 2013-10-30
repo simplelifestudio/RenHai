@@ -209,6 +209,10 @@
 		CD34DCB0180A7BC5003BBE06 /* ChatWizardController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD34DCAE180A7BC5003BBE06 /* ChatWizardController.m */; };
 		CD34DCB3180A8F4F003BBE06 /* RHBusinessSession.m in Sources */ = {isa = PBXBuildFile; fileRef = CD34DCB2180A8F4F003BBE06 /* RHBusinessSession.m */; };
 		CD34DCB4180A8F4F003BBE06 /* RHBusinessSession.m in Sources */ = {isa = PBXBuildFile; fileRef = CD34DCB2180A8F4F003BBE06 /* RHBusinessSession.m */; };
+		CD3C04DF181F906B002B19A3 /* BusinessStatusModule.m in Sources */ = {isa = PBXBuildFile; fileRef = CD3C04DE181F906B002B19A3 /* BusinessStatusModule.m */; };
+		CD3C04E0181F906B002B19A3 /* BusinessStatusModule.m in Sources */ = {isa = PBXBuildFile; fileRef = CD3C04DE181F906B002B19A3 /* BusinessStatusModule.m */; };
+		CD3C04E7181FD1C0002B19A3 /* BusinessStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = CD3C04E6181FD1C0002B19A3 /* BusinessStatus.m */; };
+		CD3C04E8181FD1C0002B19A3 /* BusinessStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = CD3C04E6181FD1C0002B19A3 /* BusinessStatus.m */; };
 		CD43667417F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */; };
 		CD43667517F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */; };
 		CD5F065117E8810900D08426 /* ImpressSectionHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5F065017E8810900D08426 /* ImpressSectionHeaderView_iPhone.m */; };
@@ -441,6 +445,10 @@
 		CD34DCAE180A7BC5003BBE06 /* ChatWizardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatWizardController.m; sourceTree = "<group>"; };
 		CD34DCB1180A8F4E003BBE06 /* RHBusinessSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHBusinessSession.h; sourceTree = "<group>"; };
 		CD34DCB2180A8F4F003BBE06 /* RHBusinessSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHBusinessSession.m; sourceTree = "<group>"; };
+		CD3C04DD181F906B002B19A3 /* BusinessStatusModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BusinessStatusModule.h; sourceTree = "<group>"; };
+		CD3C04DE181F906B002B19A3 /* BusinessStatusModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusinessStatusModule.m; sourceTree = "<group>"; };
+		CD3C04E5181FD1C0002B19A3 /* BusinessStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BusinessStatus.h; sourceTree = "<group>"; };
+		CD3C04E6181FD1C0002B19A3 /* BusinessStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusinessStatus.m; sourceTree = "<group>"; };
 		CD43667217F97C2E00586443 /* NSDictionary+MutableDeepCopy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+MutableDeepCopy.h"; sourceTree = "<group>"; };
 		CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MutableDeepCopy.m"; sourceTree = "<group>"; };
 		CD5F064F17E8810900D08426 /* ImpressSectionHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpressSectionHeaderView_iPhone.h; sourceTree = "<group>"; };
@@ -685,6 +693,7 @@
 		C5F8936817CFA136003EF1B3 /* Src */ = {
 			isa = PBXGroup;
 			children = (
+				CD3C04DC181F9055002B19A3 /* BusinessStatus */,
 				C5F8936A17CFA136003EF1B3 /* Common */,
 				C5F8936B17CFA136003EF1B3 /* Communication */,
 				C5F8936C17CFA136003EF1B3 /* GUI */,
@@ -900,6 +909,17 @@
 				C593C42217D3259600C26367 /* WebRTCModule.m */,
 			);
 			path = WebRTC;
+			sourceTree = "<group>";
+		};
+		CD3C04DC181F9055002B19A3 /* BusinessStatus */ = {
+			isa = PBXGroup;
+			children = (
+				CD3C04DD181F906B002B19A3 /* BusinessStatusModule.h */,
+				CD3C04DE181F906B002B19A3 /* BusinessStatusModule.m */,
+				CD3C04E5181FD1C0002B19A3 /* BusinessStatus.h */,
+				CD3C04E6181FD1C0002B19A3 /* BusinessStatus.m */,
+			);
+			path = BusinessStatus;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1182,6 +1202,7 @@
 				C50505DA17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
 				C50505DC17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */,
 				C50505E217D2C53A00DB6589 /* LoggerModule.m in Sources */,
+				CD3C04E7181FD1C0002B19A3 /* BusinessStatus.m in Sources */,
 				C50505E817D2D26C00DB6589 /* GUIModule.m in Sources */,
 				C50505EA17D2D26C00DB6589 /* GUIStyle.m in Sources */,
 				C50505EE17D2D28600DB6589 /* CommunicationModule.m in Sources */,
@@ -1223,6 +1244,7 @@
 				C54DC8D517DC11A000BBD498 /* CEPlayer.m in Sources */,
 				C54DC8D717DC11A000BBD498 /* CBRoundProgressLayer.m in Sources */,
 				C54DC8D917DC11A000BBD498 /* CBRoundProgressView.m in Sources */,
+				CD3C04DF181F906B002B19A3 /* BusinessStatusModule.m in Sources */,
 				C54DC8E417DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.m in Sources */,
 				C54DC8EA17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */,
 				C53A7F1117DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m in Sources */,
@@ -1251,6 +1273,7 @@
 				C50505C717D2BD4800DB6589 /* CBGZipUtils.m in Sources */,
 				C50505C917D2BD4800DB6589 /* CBHUDAgent.m in Sources */,
 				C50505CB17D2BD4800DB6589 /* CBMathUtils.m in Sources */,
+				CD3C04E8181FD1C0002B19A3 /* BusinessStatus.m in Sources */,
 				C50505CD17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */,
 				CD736CEF1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */,
 				C50505CF17D2BD4800DB6589 /* CBModuleManager.m in Sources */,
@@ -1295,6 +1318,7 @@
 				C5945F5C17D56DDF0084BB10 /* CBJSONUtils.m in Sources */,
 				CDC051931802E33D006158B8 /* RHServerDeviceCount.m in Sources */,
 				C5945F5F17D56F5D0084BB10 /* CommonModuleTest.m in Sources */,
+				CD3C04E0181F906B002B19A3 /* BusinessStatusModule.m in Sources */,
 				C594602B17D6C7C90084BB10 /* HTTPAgent.m in Sources */,
 				C594602E17D6C9410084BB10 /* CommunicationModuleTest.m in Sources */,
 				C594603217D6CEA60084BB10 /* WebSocketAgent.m in Sources */,

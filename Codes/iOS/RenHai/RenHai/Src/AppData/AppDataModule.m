@@ -20,7 +20,7 @@
 {
     NSUserDefaults* _userDefaults;
     
-    AppBusinessStatus _appBusinessStatus;
+//    AppBusinessStatus _appBusinessStatus;
 }
 
 @end
@@ -37,7 +37,7 @@ SINGLETON(AppDataModule)
     
     _userDefaults = [NSUserDefaults standardUserDefaults];
     
-    _appBusinessStatus = AppBusinessStatus_Disconnected;
+//    _appBusinessStatus = AppBusinessStatus_Disconnected;
 }
 
 -(void) releaseModule
@@ -169,197 +169,6 @@ SINGLETON(AppDataModule)
 {
     BOOL isJailed = [UIDevice isJailed];
     return isJailed;
-}
-
-#pragma mark - AppBusinessStatus
-
--(AppBusinessStatus) currentAppBusinessStatus
-{
-    return _appBusinessStatus;
-}
-
--(void) updateAppBusinessStatus:(AppBusinessStatus) status
-{
-    AppBusinessStatus oldStatus = _appBusinessStatus;
-    AppBusinessStatus newStatus = status;
-    
-    BOOL isUpdateLegal = NO;
-    BOOL needUpdate = NO;
-    
-    switch (newStatus)
-    {
-        case AppBusinessStatus_Disconnected:
-        {
-            isUpdateLegal = YES;
-            needUpdate = YES;
-            
-            break;
-        }
-        case AppBusinessStatus_Connected:
-        {
-            if (oldStatus == AppBusinessStatus_Disconnected)
-            {
-                isUpdateLegal = YES;
-                needUpdate = YES;
-            }
-            else
-            {
-                isUpdateLegal = NO;
-                needUpdate = NO;
-            }
-            
-            break;
-        }
-        case AppBusinessStatus_AppDataSyncCompleted:
-        {
-            if (oldStatus != AppBusinessStatus_Disconnected)
-            {
-                isUpdateLegal = YES;
-                needUpdate = YES;
-            }
-            else
-            {
-                isUpdateLegal = NO;
-                needUpdate = NO;
-            }
-            
-            break;
-        }
-        case AppBusinessStatus_EnterPoolCompleted:
-        {
-            if (oldStatus == AppBusinessStatus_AppDataSyncCompleted || oldStatus == AppBusinessStatus_EnterPoolCompleted || oldStatus == AppBusinessStatus_ChatEndCompleleted|| oldStatus == AppBusinessStatus_SessionBindCompeleted || oldStatus == AppBusinessStatus_OthersideChatAgreed || oldStatus == AppBusinessStatus_OthersideChatRejected || oldStatus == AppBusinessStatus_OthersideChatLost)
-            {
-                isUpdateLegal = YES;
-                needUpdate = YES;
-            }
-            else
-            {
-                isUpdateLegal = NO;
-                needUpdate = NO;
-            }
-            
-            break;
-        }
-        case AppBusinessStatus_SessionBindCompeleted:
-        {
-            if (oldStatus == AppBusinessStatus_EnterPoolCompleted || oldStatus == AppBusinessStatus_AppDataSyncCompleted || oldStatus == AppBusinessStatus_OthersideChatRejected || oldStatus == AppBusinessStatus_OthersideChatLost)
-            {
-                isUpdateLegal = YES;
-                needUpdate = YES;
-            }
-            else
-            {
-                isUpdateLegal = NO;
-                needUpdate = NO;
-            }
-            
-            break;
-        }
-        case AppBusinessStatus_OthersideChatAgreed:
-        {
-            if (oldStatus == AppBusinessStatus_SessionBindCompeleted)
-            {
-                isUpdateLegal = YES;
-                needUpdate = YES;
-            }
-            else
-            {
-                isUpdateLegal = NO;
-                needUpdate = NO;
-            }
-            
-            break;
-        }
-        case AppBusinessStatus_OthersideChatRejected:
-        {
-            if (oldStatus == AppBusinessStatus_SessionBindCompeleted)
-            {
-                isUpdateLegal = YES;
-                needUpdate = YES;
-            }
-            else
-            {
-                isUpdateLegal = NO;
-                needUpdate = NO;
-            }
-            
-            break;
-        }
-        case AppBusinessStatus_OthersideChatLost:
-        {
-            if (oldStatus == AppBusinessStatus_SessionBindCompeleted)
-            {
-                isUpdateLegal = YES;
-                needUpdate = YES;
-            }
-            else if (oldStatus == AppBusinessStatus_ChatAgreeCompleted)
-            {
-                isUpdateLegal = YES;
-                needUpdate = NO;
-            }
-            else
-            {
-                isUpdateLegal = NO;
-                needUpdate = NO;
-            }
-            
-            break;
-        }
-        case AppBusinessStatus_ChatAgreeCompleted:
-        {
-            if (oldStatus == AppBusinessStatus_SessionBindCompeleted || oldStatus == AppBusinessStatus_OthersideChatAgreed)
-            {
-                isUpdateLegal = YES;
-                needUpdate = YES;
-            }
-            else
-            {
-                isUpdateLegal = NO;
-                needUpdate = NO;
-            }
-            
-            break;
-        }
-        case AppBusinessStatus_ChatEndCompleleted:
-        {
-            if (oldStatus == AppBusinessStatus_ChatAgreeCompleted)
-            {
-                isUpdateLegal = YES;
-                needUpdate = YES;
-            }
-            else
-            {
-                isUpdateLegal = NO;
-                needUpdate = NO;
-            }
-            
-            break;
-        }
-        default:
-        {
-            isUpdateLegal = NO;
-            needUpdate = NO;
-            
-            break;
-        }
-    }
-    
-    if (isUpdateLegal)
-    {
-        if (needUpdate)
-        {
-            _appBusinessStatus = newStatus;
-        }
-        else
-        {
-            DDLogWarn(@"Abnormal Business Status Updated - OldStatus:%d, NewStatus:%d", oldStatus, newStatus);
-        }
-    }
-    else
-    {
-        DDLogError(@"Error Business Status Updated - OldStatus:%d, NewStatus:%d", oldStatus, newStatus);
-        NSAssert2(NO, @"Try to update app business status with illegal value! - OldStatus: %d, - NewStatus: %d", oldStatus, newStatus);
-    }
 }
 
 #pragma mark - UIApplicationDelegate

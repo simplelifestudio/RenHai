@@ -19,6 +19,7 @@
 
 #import "CommunicationModule.h"
 #import "AppDataModule.h"
+#import "BusinessStatusModule.h"
 
 #define ARCHIVE_DEVICE_NAME @"device.dat"
 #define ARCHIVE_SERVER_NAME @"server.dat"
@@ -28,6 +29,7 @@
     NSString* _dataDir;
     
     AppDataModule* _appDataModule;
+    BusinessStatusModule* _statusModule;
 }
 
 @end
@@ -47,6 +49,7 @@ SINGLETON(UserDataModule)
     [self setKeepAlive:FALSE];
     
     _appDataModule = [AppDataModule sharedInstance];
+    _statusModule = [BusinessStatusModule sharedInstance];
     
     [CBFileUtils createDirectory:self.dataDirectory];
     DDLogVerbose(@"App Sandbox Path: %@", NSHomeDirectory());    
@@ -208,8 +211,8 @@ SINGLETON(UserDataModule)
                 [device fromJSONObject:deviceDic];
                 
                 [_businessSession addParter:device];
-                
-                [_appDataModule updateAppBusinessStatus:AppBusinessStatus_SessionBindCompeleted];
+            
+                [_statusModule recordServerNotification:ServerNotificationIdentifier_SessionBound];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_SESSIONBOUND object:self];
                 
@@ -217,7 +220,7 @@ SINGLETON(UserDataModule)
             }
             case BusinessSessionNotificationType_OthersideRejected:
             {
-                [_appDataModule updateAppBusinessStatus:AppBusinessStatus_OthersideChatRejected];
+                [_statusModule recordServerNotification:ServerNotificationIdentifier_OthersideRejectChat];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_OTHERSIDEREJECTED object:self];
                 
@@ -225,7 +228,7 @@ SINGLETON(UserDataModule)
             }
             case BusinessSessionNotificationType_OthersideAgreed:
             {
-                [_appDataModule updateAppBusinessStatus:AppBusinessStatus_OthersideChatAgreed];
+                [_statusModule recordServerNotification:ServerNotificationIdentifier_OthersideAgreeChat];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_OTHERSIDEAGREED object:self];
                 
@@ -233,7 +236,7 @@ SINGLETON(UserDataModule)
             }
             case BusinessSessionNotificationType_OthersideLost:
             {
-                [_appDataModule updateAppBusinessStatus:AppBusinessStatus_OthersideChatLost];
+                [_statusModule recordServerNotification:ServerNotificationIdentifier_OthersideLost];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_OTHERSIDELOST object:self];
                 
@@ -241,6 +244,8 @@ SINGLETON(UserDataModule)
             }
             case BusinessSessionNotificationType_OthersideEndChat:
             {
+                [_statusModule recordServerNotification:ServerNotificationIdentifier_OthersideEndChat];
+                
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_OTHERSIDEENDCHAT object:self];
                 
                 break;

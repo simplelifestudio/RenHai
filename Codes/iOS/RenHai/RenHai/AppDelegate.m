@@ -14,6 +14,7 @@
 #import "CommunicationModule.h"
 #import "AppDataModule.h"
 #import "UserDataModule.h"
+#import "BusinessStatusModule.h"
 #import "WebRTCModule.h"
 #import "GUIModule.h"
 
@@ -44,12 +45,16 @@
     userDataModule.moduleWeightFactor = 0.1;
     [_moduleManager registerModule:userDataModule];
     
+    id<CBModule> businessStatusModule = [BusinessStatusModule sharedInstance];
+    businessStatusModule.moduleWeightFactor = 0.1;
+    [_moduleManager registerModule:businessStatusModule];
+    
     id<CBModule> webRTCModule = [WebRTCModule sharedInstance];
     webRTCModule.moduleWeightFactor = 0.1;
     [_moduleManager registerModule:webRTCModule];
     
     id<CBModule> guiModule = [GUIModule sharedInstance];
-    guiModule.moduleWeightFactor = 0.4;
+    guiModule.moduleWeightFactor = 0.3;
     [_moduleManager registerModule:guiModule];
     
     DDLogVerbose(@"App Sandbox Path: %@", NSHomeDirectory());

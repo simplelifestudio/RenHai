@@ -114,7 +114,6 @@ SINGLETON(CommunicationModule)
     [super startService];
 }
 
-
 -(void) processService
 {
     MODULE_DELAY
