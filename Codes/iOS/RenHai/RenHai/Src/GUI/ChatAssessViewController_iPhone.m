@@ -239,19 +239,19 @@
 
 -(void)_updatePartnerImpressCardWithType:(BusinessSessionRequestType) requestType
 {
-    @synchronized(self)
-    {
-        if (_isDeciding)
-        {
-            return;
-        }
-        else
-        {
-            _isDeciding = YES;
-        }
-    }
-    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
+        
+        @synchronized(self)
+        {
+            if (_isDeciding)
+            {
+                return;
+            }
+            else
+            {
+                _isDeciding = YES;
+            }
+        }
         
         RHDevice* selfDevice = _userDataModule.device;
         

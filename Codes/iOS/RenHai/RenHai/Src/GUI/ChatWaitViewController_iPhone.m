@@ -150,14 +150,10 @@ ChatWaitStatus;
 {
     if (!_didOnSessionBind && !_isDeciding)
     {
-        [CBAppUtils asyncProcessInMainThread:^(){
-            
-            [self _updateUIWithChatWaitStatus:ChatWaitStatus_Matched];
-            
-            ChatWizardController* chatWizard = _guiModule.chatWizardController;
-            [chatWizard wizardProcess:ChatWizardStatus_ChatConfirm];
-            
-        }];
+        [self _updateUIWithChatWaitStatus:ChatWaitStatus_Matched];
+        
+        ChatWizardController* chatWizard = _guiModule.chatWizardController;
+        [chatWizard wizardProcess:ChatWizardStatus_ChatConfirm];
         
         _didOnSessionBind = YES;
     }

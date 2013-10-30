@@ -15,6 +15,8 @@
 #import "AppDataModule.h"
 #import "BusinessStatusModule.h"
 
+#define DELAY_ENDCHAT 1.0f
+
 @interface ChatVideoViewController_iPhone ()
 {
     GUIModule* _guiModule;
@@ -118,18 +120,14 @@
 
 -(void) onOthersideEndChat
 {
-    [CBAppUtils asyncProcessInMainThread:^(){
-        _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_VideoClosed", nil);
-    }];
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_VideoClosed", nil);
     
     [self _endChat];
 }
 
 -(void) onOthersideLost
 {
-    [CBAppUtils asyncProcessInMainThread:^(){
-        _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Lost", nil);
-    }];
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Lost", nil);
     
     [self _endChat];
 }
@@ -160,24 +158,27 @@
 
 -(void) _endChat
 {
-    @synchronized(self)
-    {
-        if (_isDeciding)
-        {
-            return;
-        }
-        else
-        {
-            _isDeciding = YES;
-        }
-    }
-    
     [CBAppUtils asyncProcessInMainThread:^(){
         _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoClosed", nil);
         _endChatButton.hidden = YES;
     }];
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
+        
+        @synchronized(self)
+        {
+            if (_isDeciding)
+            {
+                return;
+            }
+            else
+            {
+                _isDeciding = YES;
+            }
+        }
+        
+        [NSThread sleepForTimeInterval:DELAY_ENDCHAT];
+        
         RHDevice* device = _userDataModule.device;
         
         RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_EndChat device:device info:nil];

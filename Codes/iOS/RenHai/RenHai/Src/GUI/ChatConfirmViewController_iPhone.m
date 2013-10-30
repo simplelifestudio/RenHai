@@ -33,6 +33,9 @@
 #define COUNTDOWN_SECONDS 30
 
 #define DELAY_DECIDE 0.5f
+#define DELAY_UNBINDSESSION 1.0f
+#define DELAY_AGREECHAT 1.0f
+#define DELAY_REJECTCHAT 1.0f
 
 @interface ChatConfirmViewController_iPhone ()
 {
@@ -314,9 +317,6 @@
     
     _isDeciding = NO;
     
-    _agreeChatButton.enabled = YES;
-    _rejectChatButton.enabled = YES;
-    
     _agreeChatButton.hidden = NO;
     _rejectChatButton.hidden = NO;
     
@@ -339,9 +339,7 @@
 {
     _partnerAgreeChatFlag = YES;
     
-    [CBAppUtils asyncProcessInMainThread:^(){
-        _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Agreed", nil);
-    }];
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Agreed", nil);
     
     if (_selfAgreeChatFlag)
     {
@@ -353,12 +351,10 @@
 {
     _partnerRejectChatFlag = YES;
     
-    [CBAppUtils asyncProcessInMainThread:^(){
-        _agreeChatButton.enabled = NO;
-        _rejectChatButton.enabled = NO;
-        
-        _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Rejected", nil);
-    }];
+    _agreeChatButton.hidden = YES;
+    _rejectChatButton.hidden = YES;
+    
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Rejected", nil);
     
     [self _clockCancel];
     
@@ -369,12 +365,10 @@
 {
     _partnerLostFlag = YES;
     
-    [CBAppUtils asyncProcessInMainThread:^(){
-        _agreeChatButton.enabled = NO;
-        _rejectChatButton.enabled = NO;
-        
-        _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Lost", nil);
-    }];
+    _agreeChatButton.hidden = YES;
+    _rejectChatButton.hidden = YES;
+    
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Lost", nil);
     
     [self _clockCancel];
     
@@ -468,6 +462,8 @@
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         _isDeciding = YES;
         
+        [NSThread sleepForTimeInterval:DELAY_AGREECHAT];
+        
         RHDevice* device = _userDataModule.device;
         
         RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_AgreeChat device:device info:nil];
@@ -533,6 +529,8 @@
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         _isDeciding = YES;
         
+        [NSThread sleepForTimeInterval:DELAY_REJECTCHAT];
+        
         RHDevice* device = _userDataModule.device;
         
         RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_RejectChat device:device info:nil];
@@ -594,8 +592,11 @@
         {
             [NSThread sleepForTimeInterval:DELAY_DECIDE];
         }
+        
         if (!_selfRejectChatFlag)
         {
+            [NSThread sleepForTimeInterval:DELAY_UNBINDSESSION];
+            
             RHDevice* device = _userDataModule.device;
             
             RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_UnbindSession device:device info:nil];
