@@ -47,6 +47,8 @@
     NSMutableArray* _impressLabelNames;
     
     volatile BOOL _selfAssessedFlag;
+    
+    volatile BOOL _isDeciding;
 }
 
 @end
@@ -121,6 +123,8 @@
     [_finishButton setTitle:NSLocalizedString(@"ChatAssess_Action_Finish", nil) forState:UIControlStateNormal];
     
     _selfAssessedFlag = NO;
+    
+    _isDeciding = NO;
     
     [self _setCountdownSeconds:COUNTDOWN_SECONDS];
 }
@@ -235,6 +239,18 @@
 
 -(void)_updatePartnerImpressCardWithType:(BusinessSessionRequestType) requestType
 {
+    @synchronized(self)
+    {
+        if (_isDeciding)
+        {
+            return;
+        }
+        else
+        {
+            _isDeciding = YES;
+        }
+    }
+    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         
         RHDevice* selfDevice = _userDataModule.device;

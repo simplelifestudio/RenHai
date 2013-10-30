@@ -111,7 +111,7 @@ SINGLETON(BusinessStatusModule)
                     // M0
                     case AppMessageIdentifier_Disconnect:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     // M1
@@ -1208,13 +1208,13 @@ SINGLETON(BusinessStatusModule)
                       // E3
                       case ServerNotificationIdentifier_OthersideEndChat:
                       {
-                          [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                          // IGNORE
                           break;
                       }
                       // E4
                       case ServerNotificationIdentifier_OthersideLost:
                       {
-                          [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                          // IGNORE
                           break;
                       }
                       default:
@@ -1236,7 +1236,7 @@ SINGLETON(BusinessStatusModule)
     
     NSString* identifierString = [NSString stringWithFormat:@"%d", identifier];
     BusinessStatus* status = [_businessStatusMap objectForKey:identifierString];
-    
+    [status clearAllRecords];
     _currentBusinessStatus = status;
 }
 

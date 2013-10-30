@@ -134,8 +134,15 @@ typedef void (^ServerNotificationHandleBlock)(ServerNotificationIdentifier);
 
 -(void) clearAllRecords
 {
-    [_appMessageRecords removeAllObjects];
-    [_serverNotificationRecords removeAllObjects];
+    @synchronized(_appMessageRecords)
+    {
+        [_appMessageRecords removeAllObjects];
+    }
+    
+    @synchronized(_serverNotificationRecords)
+    {
+        [_serverNotificationRecords removeAllObjects];        
+    }
 }
 
 @end

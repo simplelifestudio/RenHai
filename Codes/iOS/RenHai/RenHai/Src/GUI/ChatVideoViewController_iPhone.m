@@ -28,6 +28,8 @@
     
     volatile BOOL _selfEndChatFlag;
     volatile BOOL _partnerEndChatFlag;
+    
+    volatile BOOL _isDeciding;
 }
 
 @end
@@ -96,6 +98,11 @@
     _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoOpened", nil);
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_VideoOpened", nil);
     
+    _selfEndChatFlag = NO;
+    _partnerEndChatFlag = NO;
+    
+    _isDeciding = NO;
+    
     _endChatButton.hidden = NO;
 }
 
@@ -153,6 +160,18 @@
 
 -(void) _endChat
 {
+    @synchronized(self)
+    {
+        if (_isDeciding)
+        {
+            return;
+        }
+        else
+        {
+            _isDeciding = YES;
+        }
+    }
+    
     [CBAppUtils asyncProcessInMainThread:^(){
         _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoClosed", nil);
         _endChatButton.hidden = YES;

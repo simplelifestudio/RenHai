@@ -45,6 +45,10 @@ ChatWaitStatus;
     volatile BOOL _leavePoolFlag;
     volatile BOOL _matchStartFlag;
     volatile BOOL _didOnSessionBind;
+    
+    volatile BOOL _isDeciding;
+    
+    volatile BOOL _hasRequestedMatchStart;
 }
 
 @end
@@ -124,6 +128,10 @@ ChatWaitStatus;
     _matchStartFlag = NO;
     _didOnSessionBind = NO;
     
+    _isDeciding = NO;
+    
+    _hasRequestedMatchStart = NO;
+    
     _count = 0;
     [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
 }
@@ -140,7 +148,7 @@ ChatWaitStatus;
 
 -(void) onSessionBound
 {
-    if (!_didOnSessionBind)
+    if (!_didOnSessionBind && !_isDeciding)
     {
         [CBAppUtils asyncProcessInMainThread:^(){
             
@@ -197,6 +205,8 @@ ChatWaitStatus;
 
 - (void) _startLeavingPool
 {
+    _isDeciding = YES;
+    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         
@@ -269,6 +279,15 @@ ChatWaitStatus;
 
 - (void) _requestMatchStart
 {
+    if (_hasRequestedMatchStart)
+    {
+        return;
+    }
+    else
+    {
+        _hasRequestedMatchStart = YES;
+    }
+    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         
