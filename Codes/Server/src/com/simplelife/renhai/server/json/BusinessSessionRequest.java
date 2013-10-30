@@ -102,7 +102,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		if (operationType != Consts.OperationType.EnterPool
 				&& operationType != Consts.OperationType.LeavePool
-				&& operationType != Consts.OperationType.MatchStart)
+				&& operationType != Consts.OperationType.MatchStart
+				&& operationType != Consts.OperationType.SessionUnbind)
 		{
 			if (deviceWrapper.getOwnerBusinessSession() == null)
 			{
@@ -149,7 +150,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 			this.setErrorDescription(JSONKey.Device + " must be provided correctly.");
 			return false;
 		}
-		
+
+		/*
 		String deviceSn = deviceObj.getString(JSONKey.DeviceSn);
 		if (null == OnlineDevicePool.instance.getDevice(deviceSn))
 		{
@@ -157,6 +159,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			this.setErrorDescription("Device <" + deviceSn+ "> is not active device in OnlineDevicePool.");
 			return false;
 		}
+		*/
 		
 		JSONObject profileObj = getJSONObject(deviceObj, JSONKey.Profile);
 		if (profileObj == null)
@@ -739,7 +742,10 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
-		deviceWrapper.changeBusinessStatus(BusinessStatus.MatchCache, StatusChangeReason.AppUnbindSession);
+		if (deviceWrapper.getBusinessStatus() != BusinessStatus.MatchCache)
+		{
+			deviceWrapper.changeBusinessStatus(BusinessStatus.MatchCache, StatusChangeReason.AppUnbindSession);
+		}
 		
 		response.addToBody(JSONKey.OperationType, Consts.OperationType.SessionUnbind.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
