@@ -12,32 +12,28 @@ package com.simplelife.renhai.server.json;
 
 import java.util.Set;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
-import com.simplelife.renhai.server.business.pool.AbstractBusinessScheduler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
+import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceDAO;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
-import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.log.DbLogger;
-import com.simplelife.renhai.server.log.FileLogger;
+import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessStatus;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.IBusinessSession;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
-import com.simplelife.renhai.server.util.Consts;
 
 
 /**
@@ -151,6 +147,14 @@ public class BusinessSessionRequest extends AppJSONMessage
 		{
 			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
 			this.setErrorDescription(JSONKey.Device + " must be provided correctly.");
+			return false;
+		}
+		
+		String deviceSn = deviceObj.getString(JSONKey.DeviceSn);
+		if (null == OnlineDevicePool.instance.getDevice(deviceSn))
+		{
+			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+			this.setErrorDescription("Device <" + deviceSn+ "> is not active device in OnlineDevicePool.");
 			return false;
 		}
 		
@@ -527,6 +531,7 @@ public class BusinessSessionRequest extends AppJSONMessage
     		return;
     	}
 		
+		/*
 		if (DBQueryUtil.isNewDevice(deviceSn))
 		{
 			String temp = "Failed to assess Device <" + deviceSn + "> due to it's not in online pool";
@@ -540,9 +545,27 @@ public class BusinessSessionRequest extends AppJSONMessage
 			OutputMessageCenter.instance.addMessage(response);
 			return;
 		}
+		*/
 		
-		DeviceDAO dao = new DeviceDAO();
-		Device targetDevice = dao.findByDeviceSn(deviceSn).get(0);
+		//DeviceDAO dao = new DeviceDAO();
+		//Device targetDevice = dao.findByDeviceSn(deviceSn).get(0);
+		IDeviceWrapper targetDeviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
+		Device targetDevice = null;
+		if (targetDeviceWrapper == null)
+		{
+			targetDevice = DAOWrapper.getDeviceInCache(deviceSn);
+			
+			if (targetDevice == null)
+			{
+				DeviceDAO dao = new DeviceDAO();
+				targetDevice = dao.findByDeviceSn(deviceSn).get(0);
+			}
+		}
+		else
+		{
+			targetDevice = targetDeviceWrapper.getDevice();
+		}
+		
 		Impresscard targetCard = targetDevice.getProfile().getImpresscard();
 		Impresscard sourceCard = deviceWrapper.getDevice().getProfile().getImpresscard();
 		
@@ -551,50 +574,21 @@ public class BusinessSessionRequest extends AppJSONMessage
 				.getJSONObject(JSONKey.Profile)
 				.getJSONObject(JSONKey.ImpressCard);
 		
-		//Session session = HibernateSessionFactory.getSession();
-		//Transaction t = null;
+		String tempLabel;
+		JSONArray assessLabels = impressObj.getJSONArray(JSONKey.AssessLabelList);
+		JSONObject tempLabelObj = assessLabels.getJSONObject(0); 
+		tempLabel = tempLabelObj.getString(JSONKey.ImpressLabelName);
 		
-		//try
+		updateOrAppendImpressLabel(targetCard, tempLabel, true);
+		updateOrAppendImpressLabel(sourceCard, tempLabel, false);
+		
+		JSONArray impressLabels = impressObj.getJSONArray(JSONKey.ImpressLabelList);
+		for (int i = 0; i < impressLabels.size(); i++)
 		{
-			//LoggerFactory.getLogger("DB").debug("Begins transaction of updating impress label for: {}", deviceWrapper.getDeviceSn());
-			//t = session.beginTransaction();
-		
-			String tempLabel;
-			JSONArray assessLabels = impressObj.getJSONArray(JSONKey.AssessLabelList);
-			JSONObject tempLabelObj = assessLabels.getJSONObject(0); 
+			tempLabelObj = impressLabels.getJSONObject(i); 
 			tempLabel = tempLabelObj.getString(JSONKey.ImpressLabelName);
-			
-			synchronized(targetCard)
-			{
-				updateOrAppendImpressLabel(targetCard, tempLabel, true);
-			}
-			
-			synchronized(sourceCard)
-			{
-				updateOrAppendImpressLabel(sourceCard, tempLabel, false);
-			}
-			
-			JSONArray impressLabels = impressObj.getJSONArray(JSONKey.ImpressLabelList);
-			for (int i = 0; i < impressLabels.size(); i++)
-			{
-				tempLabelObj = impressLabels.getJSONObject(i); 
-				tempLabel = tempLabelObj.getString(JSONKey.ImpressLabelName);
-				synchronized(targetCard)
-				{
-					updateOrAppendImpressLabel(targetCard, tempLabel, true);
-				}
-				
-				synchronized(sourceCard)
-				{
-					updateOrAppendImpressLabel(sourceCard, tempLabel, false);
-				}
-			}
-			//t.commit();
-			//LoggerFactory.getLogger("DB").debug("Committed transaction of updating impress label for: ", deviceWrapper.getDeviceSn());
-		}
-		//catch (Exception e)
-		{
-		//	FileLogger.printStackTrace(e);
+			updateOrAppendImpressLabel(targetCard, tempLabel, true);
+			updateOrAppendImpressLabel(sourceCard, tempLabel, false);
 		}
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
@@ -630,12 +624,13 @@ public class BusinessSessionRequest extends AppJSONMessage
 	private void updateOrAppendImpressLabel(Impresscard card, String labelName, boolean assessedFlag)
 	{
 		Set<Impresslabelmap> impressLabels = card.getImpresslabelmaps();
-		synchronized (impressLabels)
+
+		for (Impresslabelmap label : impressLabels)
 		{
-			for (Impresslabelmap label : impressLabels)
+			String tmpLabelName = label.getGlobalimpresslabel().getImpressLabelName();
+			if (tmpLabelName.equals(labelName))
 			{
-				String tmpLabelName = label.getGlobalimpresslabel().getImpressLabelName();
-				if (tmpLabelName.equals(labelName))
+				synchronized(label)
 				{
 					if (assessedFlag)
 					{
@@ -647,36 +642,39 @@ public class BusinessSessionRequest extends AppJSONMessage
 					{
 						label.setAssessCount(label.getAssessCount() + 1);
 					}
-					return;
 				}
+				return;
 			}
+		}
 			
-			// Check if it's existent global impress label
-			Globalimpresslabel globalimpresslabel = DBQueryUtil.getGlobalimpresslabel(labelName);
-			if (globalimpresslabel == null)
-			{
-				globalimpresslabel = new Globalimpresslabel();
-				globalimpresslabel.setGlobalAssessCount(1);
-				globalimpresslabel.setImpressLabelName(labelName);
-				//globalimpresslabel.setImpresslabelmaps(impressLabels);
-			}
-			
-			Impresslabelmap labelMap = new Impresslabelmap();
-			
-			if (assessedFlag)
-			{
-				labelMap.setAssessCount(0);
-				labelMap.setAssessedCount(1);
-			}
-			else
-			{
-				labelMap.setAssessCount(1);
-				labelMap.setAssessedCount(0);
-			}
-			labelMap.setGlobalimpresslabel(globalimpresslabel);
-			labelMap.setUpdateTime(System.currentTimeMillis());
-			labelMap.setImpresscard(card);
-			
+		// Check if it's existent global impress label
+		Globalimpresslabel globalimpresslabel = DBQueryUtil.getGlobalimpresslabel(labelName);
+		if (globalimpresslabel == null)
+		{
+			globalimpresslabel = new Globalimpresslabel();
+			globalimpresslabel.setGlobalAssessCount(1);
+			globalimpresslabel.setImpressLabelName(labelName);
+			//globalimpresslabel.setImpresslabelmaps(impressLabels);
+		}
+		
+		Impresslabelmap labelMap = new Impresslabelmap();
+		
+		if (assessedFlag)
+		{
+			labelMap.setAssessCount(0);
+			labelMap.setAssessedCount(1);
+		}
+		else
+		{
+			labelMap.setAssessCount(1);
+			labelMap.setAssessedCount(0);
+		}
+		labelMap.setGlobalimpresslabel(globalimpresslabel);
+		labelMap.setUpdateTime(System.currentTimeMillis());
+		labelMap.setImpresscard(card);
+		
+		synchronized (impressLabels)
+		{
 			impressLabels.add(labelMap);
 		}
 	}
