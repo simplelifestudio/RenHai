@@ -65,7 +65,7 @@ public class Interestlabelmap implements java.io.Serializable {
 		this.interestcard = interestcard;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "globalInterestLabelId", nullable = false)
 	public Globalinterestlabel getGlobalinterestlabel() {
 		return this.globalinterestlabel;

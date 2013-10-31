@@ -16,12 +16,10 @@ import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
-import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IAppJSONMessage;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -35,9 +33,6 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     private Consts.GlobalErrorCode errorCode;
     
     /** */
-    protected JSONObject jsonObject;
-    protected JSONObject header;
-    protected JSONObject body;
     protected Consts.MessageId messageId;
     protected Session hibernateSesion;
     
@@ -242,16 +237,16 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     	try
 		{
 			//Thread.currentThread().setName(messageId.name() + DateUtil.getCurrentMiliseconds());
-    		int duration = (int) (System.currentTimeMillis() - getQueueTime());
+    		int duration = getQueueDuration();
+    		logger.debug("Start to execute " + this.messageId.name() + " with MessageSN: " + this.getMessageSn() + " which was queued " + duration + "ms ago");
     		if (duration >= GlobalSetting.BusinessSetting.MessageQueueTime)
     		{
-    			logger.warn("Start to execute " + this.messageId.name() + " with MessageSN: " + this.getMessageSn() + " which was queued " + duration 
-					+ "ms ago, consider increasing size of input message execution thread pool.");
+    			logger.warn("Queue duration is too long, consider increasing size of input message execution thread pool.");
     		}
 			
 			if (deviceWrapper == null || !deviceWrapper.getConnection().isOpen())
 	    	{
-	    		logger.warn("deviceWrapper of message with SN: {} is disabled, execution of message is given up", this.getMessageSn());
+	    		logger.warn("deviceWrapper of message with SN: {} is released, execution of message is given up", this.getMessageSn());
 	    		return;
 	    	}
 			doBeforeRun();

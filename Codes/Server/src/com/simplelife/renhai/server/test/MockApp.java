@@ -727,6 +727,12 @@ public class MockApp implements IMockApp, Runnable
 			return;
 		}
 		
+		if (targetDeviceObject == null)
+		{
+			logger.error("Fatal error that targetDeviceObject is null when try to assess it");
+			return;
+		}
+		
 		JSONArray assessObj = targetDeviceObject.getJSONObject(JSONKey.Device)
 				.getJSONObject(JSONKey.Profile)
 				.getJSONObject(JSONKey.ImpressCard)

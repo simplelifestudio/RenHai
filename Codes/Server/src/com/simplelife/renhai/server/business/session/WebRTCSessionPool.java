@@ -63,7 +63,7 @@ public class WebRTCSessionPool extends AbstractPool
     {
     	for (WebRTCSession session : webRTCSessionList)
     	{
-    		DAOWrapper.asyncSave(session);
+    		DAOWrapper.cache(session);
     	}
         return true;
     }

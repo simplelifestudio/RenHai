@@ -149,13 +149,7 @@ public class BusinessSession implements IBusinessSession
     	
     	logger.debug("Enter endSession.");
     	sessionEndTime = System.currentTimeMillis();
-    	
-    	//for (IDeviceWrapper device : deviceList)
-    	//{
-    		//pool.endChat(device);
-    		//device.changeBusinessStatus(BusinessStatus.WaitMatch, StatusChangeReason.SessionEnded);
-    	//}
-    	
+
     	deviceList.clear();
    		progressMap.clear();
     	
@@ -186,11 +180,11 @@ public class BusinessSession implements IBusinessSession
     	record.setEndStatus(status.name());
     	record.setEndReason(endReason.name());
     	
-    	DAOWrapper.asyncSave(record);
+    	DAOWrapper.cache(record);
     }
     
     @Override
-    public void startSession(List<String> deviceList)
+    public boolean startSession(List<String> deviceList)
     {
     	sessionStartTime = System.currentTimeMillis();
     	
@@ -200,15 +194,18 @@ public class BusinessSession implements IBusinessSession
     		logger.debug(device);
     	}
     	
+    	logger.debug("===============before check start session");
     	if (!checkStartSession(deviceList))
     	{
+    		logger.debug("===============check start session failed, to be end session");
     		endSession();
-    		return;
+    		return false;
     	}
     	
     	IDeviceWrapper device;
     	for (String deviceSn : deviceList)
     	{
+    		logger.debug("===============init business progress for Device <{}>", deviceSn);
     		updateBusinessProgress(deviceSn, Consts.BusinessProgress.Init);
     		//progressMap.put(deviceSn, Consts.BusinessProgress.Init);
     		device = OnlineDevicePool.instance.getDevice(deviceSn);
@@ -216,13 +213,17 @@ public class BusinessSession implements IBusinessSession
     		{
     			logger.error("Device <{}> is not in online device pool anymore, to be end business session", deviceSn);
     			this.endSession();
-    			return;
+    			return false;
     		}
     		device.bindBusinessSession(this);
+    		logger.debug("===============before change status of device <{}>", deviceSn);
     		device.changeBusinessStatus(BusinessStatus.SessionBound, Consts.StatusChangeReason.BusinessSessionStarted);
+    		logger.debug("===============after status of device <{}>", deviceSn);
     	}
     	
+    	logger.debug("===============notify SessionBound");
     	notifyDevices(null, Consts.NotificationType.SessionBound);
+    	return true;
     }
     
     public void notifyIncreaseChatDuration(int duration)
@@ -301,7 +302,7 @@ public class BusinessSession implements IBusinessSession
 				}
 			}
     		notify.setDeviceWrapper(device);
-    		logger.debug("Send notify for device <" + device.getDeviceSn() +">: \n" + JSON.toJSONString(notify.toJSONObject(), true));
+    		//logger.debug("Send notify for device <" + device.getDeviceSn() +">");
     		OutputMessageCenter.instance.addMessage(notify);
     		
     		
@@ -501,7 +502,9 @@ public class BusinessSession implements IBusinessSession
     	{
     		logger.debug("[Milestone] Business progress of Device <" + deviceSn + "> is changed from {} to " + progress.name(),progressMap.get(deviceSn).name());
     	}
+    	logger.debug("=================before put device <{}> in progressMap", deviceSn);
     	progressMap.put(deviceSn, progress);
+    	logger.debug("=================after put device <{}> in progressMap", deviceSn);
     }
     
     @Override
@@ -576,23 +579,26 @@ public class BusinessSession implements IBusinessSession
    		progressMap.remove(device.getDeviceSn());
     	
    		//device.unbindBusinessSession();
-		logger.debug("Device <{}> was removed from business session", device.getDeviceSn());
+		logger.debug("Device <{}> was removed from business session due to " + reason.name(), device.getDeviceSn());
     	
-    	if (status == Consts.BusinessSessionStatus.VideoChat
-    			|| status == Consts.BusinessSessionStatus.Assess)
-    	{
-    		if (reason == Consts.StatusChangeReason.TimeoutOfActivity
-    				|| reason == Consts.StatusChangeReason.TimeoutOfPing
-    				|| reason == Consts.StatusChangeReason.TimeoutOnSyncSending
-    				|| reason == Consts.StatusChangeReason.WebSocketReconnect)
-    		{
-    			device.increaseChatLoss();
-    			
-    			int duration = (int) (System.currentTimeMillis() - chatStartTime);
-    			device.increaseChatDuration(duration);
-    			
-    			notifyDevices(device, NotificationType.OthersideLost);
-    		}
+    	
+		if (reason == Consts.StatusChangeReason.TimeoutOfActivity
+				|| reason == Consts.StatusChangeReason.TimeoutOfPing
+				|| reason == Consts.StatusChangeReason.TimeoutOnSyncSending
+				|| reason == Consts.StatusChangeReason.WebSocketReconnect
+				|| reason == Consts.StatusChangeReason.WebsocketClosedByApp)
+		{
+			device.increaseChatLoss();
+			int duration = (int) (System.currentTimeMillis() - chatStartTime);
+			device.increaseChatDuration(duration);
+			notifyDevices(device, NotificationType.OthersideLost);
+			
+			/*
+			if (status == Consts.BusinessSessionStatus.VideoChat
+	    			|| status == Consts.BusinessSessionStatus.Assess)
+	    	{
+	    	}
+	    	*/
     	}
     
     	if (deviceList.isEmpty())

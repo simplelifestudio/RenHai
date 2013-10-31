@@ -20,6 +20,7 @@ import java.util.Set;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
@@ -42,6 +43,7 @@ import com.simplelife.renhai.server.json.ServerErrorResponse;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.BusinessStatus;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -126,7 +128,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
      * Change business status of DeviceWrapper, and release/update relevant information if necessary 
      * @param targetStatus: target business status
      */
-    public void changeBusinessStatus(Consts.BusinessStatus targetStatus, StatusChangeReason reason)
+    public synchronized void changeBusinessStatus(Consts.BusinessStatus targetStatus, StatusChangeReason reason)
     {
     	logger.debug("[Milestone] Device <{}> changes status from " 
     			+ this.businessStatus.name() + " to " + targetStatus.name() 
@@ -134,7 +136,11 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     	
     	if (ownerOnlinePool == null)
     	{
-    		logger.debug("But ownerOnlinePool == null, return directly");
+    		if (targetStatus == BusinessStatus.Offline)
+    		{
+    			businessStatus = targetStatus;
+    		}
+    		//logger.debug("But ownerOnlinePool == null, return directly");
     		return;
     	}
     	
@@ -152,30 +158,34 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     			{
     				case Init:
     					ownerOnlinePool.deleteDevice(this, reason);
-    					DAOWrapper.asyncSave(this.getDevice());
+    					unbindOnlineDevicePool();				// No request is accepted from now on
+    					DAOWrapper.cache(this.getDevice());
     					break;
     				case Idle:
     					ownerOnlinePool.deleteDevice(this, reason);
-    					DAOWrapper.asyncSave(this.getDevice());
+    					unbindOnlineDevicePool();				// No request is accepted from now on
+    					DAOWrapper.cache(this.getDevice());
     					break;
     				case MatchCache:
     				case WaitMatch:
     					businessPool.onDeviceLeave(this, reason);
     					ownerOnlinePool.deleteDevice(this, reason);
-    					DAOWrapper.asyncSave(this.getDevice());
+    					unbindOnlineDevicePool();				// No request is accepted from now on
+    					DAOWrapper.cache(this.getDevice());
     					break;
     				case SessionBound:
     					// Leave business device pool
     					unbindBusinessSession(reason);
     					businessPool.onDeviceLeave(this, reason);
     					ownerOnlinePool.deleteDevice(this, reason);
-    					DAOWrapper.asyncSave(this.getDevice());
+    					unbindOnlineDevicePool();				// No request is accepted from now on
+    					DAOWrapper.cache(this.getDevice());
     					break;
     				default:
     					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
     					break;
     			}
-    			this.webSocketConnection.closeConnection();
+    			this.webSocketConnection.closeConnection();			// Close socket at last step
     			break;
     			
     		case Init:
@@ -372,6 +382,12 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     		+ command.getMessageId().name() + " at status of " 
     		+ businessStatus.name() + ", messageSn: " + command.getMessageSn(), this.getDeviceSn());
 
+    	if (this.businessStatus == Consts.BusinessStatus.Offline)
+    	{
+    		logger.warn("Received command from offline device <"+ getDeviceSn() +">\n{}", command.toReadableString());
+    		return;
+    	}
+    	
     	Consts.MessageId messageId =  command.getMessageId();
     	if (messageId != Consts.MessageId.TimeoutRequest
 				&& messageId != Consts.MessageId.Invalid

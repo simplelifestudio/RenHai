@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.log;
 
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.DBQueryUtil;
@@ -33,7 +34,7 @@ public class DbLogger
 	private static Object increaseInterestFlag = new Object();
 	private static Object increaseImpressFlag = new Object();
 	
-	public static void increaseImpressMatchCount(String labelName)
+	public static void increaseImpressAssessCount(String labelName)
 	{
 		synchronized (increaseImpressFlag)
 		{
@@ -43,10 +44,13 @@ public class DbLogger
 				DBModule.instance.getLogger().error("Target label can't be found in DB: ", labelName);
 				return;
 			}
-			
 		
+			int count = label.getGlobalAssessCount();
 			label.setGlobalAssessCount(label.getGlobalAssessCount() + 1);
-			DAOWrapper.asyncSave(label);
+			BusinessModule.instance.getLogger().debug("Assess count of global impress label <" 
+					+ labelName + "> was increased from " + count 
+					+ " to " + label.getGlobalAssessCount());
+			DAOWrapper.cache(label);
 		}
 	}
 	
@@ -65,8 +69,12 @@ public class DbLogger
 				DBModule.instance.getLogger().error("Target label can't be found in DB: ", labelName);
 				return;
 			}
+			int count = label.getGlobalMatchCount();
 			label.setGlobalMatchCount(label.getGlobalMatchCount()+1);
-			DAOWrapper.asyncSave(label);
+			BusinessModule.instance.getLogger().debug("Match count of global interest label <" 
+					+ labelName + "> was increased from " + count 
+					+ " to " + label.getGlobalMatchCount());
+			DAOWrapper.cache(label);
 		}
 	}
 	

@@ -28,7 +28,7 @@ public class DBModule extends AbstractModule
 	
 	public void cache(Object obj)
 	{
-		DAOWrapper.asyncSave(obj);
+		DAOWrapper.cache(obj);
 	}
 	public final static DBModule instance = new DBModule();
 	

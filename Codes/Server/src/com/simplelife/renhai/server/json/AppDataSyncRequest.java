@@ -1063,6 +1063,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 				impressLabel = new Globalimpresslabel();
 				impressLabel.setGlobalAssessCount(0);
 				impressLabel.setImpressLabelName(strValue);
+				DAOWrapper.cache(impressLabel);
 			}
 			
 			Impresslabelmap labelMap = new Impresslabelmap();
@@ -1177,9 +1178,11 @@ public class AppDataSyncRequest extends AppJSONMessage
 			// Check if it's new interest label for this device but existent global interest label
 			if (globalInterest == null)
 			{
+				logger.debug("New interest label " +  tempStr + " submitted by device <{}>", deviceWrapper.getDeviceSn());
 				globalInterest = new Globalinterestlabel();
 				globalInterest.setInterestLabelName(tempStr);
 				globalInterest.setGlobalMatchCount(0);
+				DAOWrapper.cache(globalInterest);
 			}
 			
 			interestLabelMap.setMatchCount(0);

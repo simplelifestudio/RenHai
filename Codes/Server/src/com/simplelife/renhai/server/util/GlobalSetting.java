@@ -82,6 +82,6 @@ public class GlobalSetting
 		public static int MaxImpressLabelCount = 32;
 		public static int InputMessageHandleThreads = 100;
 		public static int OutputMessageSendThreads = 300;
-		public static int MessageQueueTime = 8 * 1000;
+		public static int MessageQueueTime = 3 * 1000;
 	} 
 }

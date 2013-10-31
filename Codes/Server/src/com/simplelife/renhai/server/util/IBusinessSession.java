@@ -28,7 +28,7 @@ public interface IBusinessSession
     /** */
     //public void startSession(LinkedList<IDeviceWrapper> deviceList);
     
-    public void startSession(List<String> deviceList);
+    public boolean startSession(List<String> deviceList);
     
     public void endSession();
     

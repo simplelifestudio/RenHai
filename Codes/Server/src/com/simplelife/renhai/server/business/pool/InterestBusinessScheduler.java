@@ -12,10 +12,9 @@
 package com.simplelife.renhai.server.business.pool;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -74,10 +73,8 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 		// Loop all device from deviceMap
 		Set<Entry<String, IDeviceWrapper>> entrySet = deviceMap.entrySet();
 		Set<Interestlabelmap> labelSet;
-		logger.debug("==================1==================");
 		for (Entry<String, IDeviceWrapper> entry : entrySet)
 		{
-			logger.debug("==================2==================");
 			if (deviceFoundFlag)
 			{
 				break;
@@ -85,7 +82,6 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			
 			IDeviceWrapper device = entry.getValue();
 			labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
-			logger.debug("==================3==================");
 			String strLabel; 
 			ConcurrentSkipListSet<IDeviceWrapper> deviceList;
 			
@@ -93,13 +89,11 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			// Loop all interest labels of device 
 			for (Interestlabelmap label : labelSet)
 			{
-				logger.debug("==================4==================");
 				if (deviceFoundFlag)
     			{
     				break;
     			}
 
-				logger.debug("==================5==================");
 				selectedDevice.clear();
 				// Try to find device with same interest label
 				strLabel = label.getGlobalinterestlabel().getInterestLabelName();
@@ -119,7 +113,6 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 				
 				if ((deviceListSize == deviceCountPerSession))
 				{
-					logger.debug("==================6==================");
 					String tempSn;
 					// All of devices found can be added to this business session
 					for (IDeviceWrapper tmpDevice : deviceList)
@@ -173,7 +166,11 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			deadMatchFlag = true;
 			return;
 		}
-		
+		startSession(selectedDevice, deviceFoundInterest);
+    }
+    
+    private void startSession(List<String> selectedDevice, String deviceFoundInterest)
+    {
     	IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
 		if (session == null)
 		{
@@ -182,9 +179,14 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 		}
 		
 		session.bindBusinessDevicePool(this.ownerBusinessPool);
-		session.startSession(selectedDevice);
-		
-		DbLogger.increaseInterestMatchCount(deviceFoundInterest);
+		if (session.startSession(selectedDevice))
+		{
+			DbLogger.increaseInterestMatchCount(deviceFoundInterest);
+		}
+		else
+		{
+			recycleDevice(selectedDevice);
+		}
     }
     
     @Override

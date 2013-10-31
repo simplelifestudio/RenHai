@@ -27,9 +27,6 @@ import com.simplelife.renhai.server.util.JSONKey;
 /** */
 public abstract class ServerJSONMessage extends AbstractJSONMessage implements IJSONObject
 {
-	protected JSONObject jsonObject = new JSONObject();
-    protected JSONObject header = new JSONObject();
-    protected JSONObject body = new JSONObject();
     private Logger logger = BusinessModule.instance.getLogger();
 
     public boolean isSyncMessage()
@@ -55,6 +52,10 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     
     protected ServerJSONMessage(AppJSONMessage request)
     {
+    	jsonObject = new JSONObject();
+    	header = new JSONObject();
+    	body = new JSONObject();
+    	
     	if (request != null)
     	{
     		this.deviceWrapper = request.getDeviceWrapper();
@@ -152,13 +153,13 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     	Logger logger = JSONModule.instance.getLogger();
     	if (deviceWrapper == null)
     	{
-    		logger.error("deviceWrapper of ServerJSONMessage is null! message Id: {}", this.header.getString(JSONKey.MessageId));
+    		logger.error("DeviceWrapper of ServerJSONMessage is null! message Id: {}", this.header.getString(JSONKey.MessageId));
     		return;
     	}
     	
     	// Update current time again before sending
     	//addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
-    	int duration =(int)(System.currentTimeMillis() - this.getQueueTime());
+    	int duration = this.getQueueDuration();
     	if (duration > GlobalSetting.BusinessSetting.MessageQueueTime)
     	{
     		logger.warn("Response with SN {} was queued " + duration + "ms ago, consider increasing size of output message execution thread pool.");

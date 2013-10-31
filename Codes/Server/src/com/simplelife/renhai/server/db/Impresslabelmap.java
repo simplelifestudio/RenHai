@@ -55,7 +55,7 @@ public class Impresslabelmap implements java.io.Serializable {
 		this.impressLabelMaplId = impressLabelMaplId;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "globalImpressLabelId", nullable = false)
 	public Globalimpresslabel getGlobalimpresslabel() {
 		return this.globalimpresslabel;

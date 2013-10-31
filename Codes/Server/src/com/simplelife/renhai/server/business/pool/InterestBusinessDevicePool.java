@@ -176,9 +176,22 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     private void removeInterestIndex(IDeviceWrapper device)
     {
     	logger.debug("Start to remove interest label index for device <{}>", device.getDeviceSn());
-    	Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
+    	
+    	if (device.getDevice() == null)
+    	{
+    		logger.error("Fatal error, DeviceWrapper <{}> has empty device object!");
+    		return;
+    	}
+    	
+    	Set<Interestlabelmap> labelSet = device
+    			.getDevice()
+    			.getProfile()
+    			.getInterestcard()
+    			.getInterestlabelmaps();
+    	
     	if (labelSet.isEmpty())
     	{
+    		logger.warn("Interest label set of Device <{}> is empty when trying to remove it from interest device pool.", device.getDeviceSn());
     		return;
     	}
     	
@@ -206,9 +219,11 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     @Override
     public void onDeviceLeave(IDeviceWrapper device, Consts.StatusChangeReason reason)
     {
-    	if (null != this.getDevice(device.getDeviceSn()))
+    	logger.debug("Enter onDeviceLeave of InterBusinessDevicePool, Device <{}> to be removed", device.getDeviceSn());
+    	String deviceSn = device.getDeviceSn();
+    	if (null != this.getDevice(deviceSn))
     	{
-    		if (deviceMap.contains(device.getDeviceSn()))
+    		if (deviceMap.containsKey(deviceSn))
     		{
     			removeInterestIndex(device);
     		}

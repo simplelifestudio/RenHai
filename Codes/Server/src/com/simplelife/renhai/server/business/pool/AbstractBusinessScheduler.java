@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.business.pool;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -20,6 +21,7 @@ import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.log.FileLogger;
+import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.IBusinessScheduler;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
@@ -86,7 +88,14 @@ public abstract class AbstractBusinessScheduler extends Thread implements IBusin
 				if (meetScheduleCondition())
 				{
 					isWorking = true;
-					schedule();
+					try
+					{
+						schedule();
+					}
+					catch(Exception en)
+					{
+						FileLogger.printStackTrace(en);
+					}
 				}
 				else
 				{
@@ -106,4 +115,27 @@ public abstract class AbstractBusinessScheduler extends Thread implements IBusin
 			lock.unlock();
 		}
 	}
+    
+    /**
+     * Recycle devices due to failure of start session 
+     * @param selectedDevice
+     */
+    protected void recycleDevice(List<String> selectedDevice)
+    {
+    	logger.debug("Recycle devices due to failure of starting session");
+    	IDeviceWrapper device;
+    	for (String deviceSn : selectedDevice)
+    	{
+    		device = ownerBusinessPool.getDevice(deviceSn); 
+    		if (device != null)
+    		{
+    			ownerBusinessPool.endChat(device);
+    		}
+    		else
+    		{
+   				logger.error("Abnormal status of Device <{}>, it can't be found in business device pool after failed to start session", deviceSn);
+   				ownerBusinessPool.onDeviceLeave(device, StatusChangeReason.FailedToStartSession);
+    		}
+    	}
+    }
 }

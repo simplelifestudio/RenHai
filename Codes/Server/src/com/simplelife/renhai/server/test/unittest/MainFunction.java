@@ -331,7 +331,7 @@ public class MainFunction extends AbstractTestCase
 		
 		// Save to DB
 		//DBModule.instance.cache(target);
-		DAOWrapper.asyncSave(target);
+		DAOWrapper.cache(target);
 		DAOWrapper.flushToDB();
 		
 		System.out.println("ended");
@@ -503,11 +503,11 @@ public class MainFunction extends AbstractTestCase
 	public void testBehaviorMode() throws InterruptedException
 	{
 		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit");
-		app1.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		app1.setWebsocketLink("ws://192.168.1.5/renhai/websocket");
 		app1.connect(true);
 		
 		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndQuit");
-		app2.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		app2.setWebsocketLink("ws://192.168.1.5/renhai/websocket");
 		app2.connect(true);
 		
 		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended
@@ -597,13 +597,13 @@ public class MainFunction extends AbstractTestCase
 		Devicecard card = device.getDevicecard();
 		card.setAppVersion("30.0");
 		
-		DAOWrapper.asyncSave(device);
+		DAOWrapper.cache(device);
 		//DAOWrapper.flushToDB();
 		
 		Profile profile = device.getProfile();
 		profile.setActive("No");
 		
-		DAOWrapper.asyncSave(profile);
+		DAOWrapper.cache(profile);
 		DAOWrapper.flushToDB();
 		
 		System.out.print(OnlineDevicePool.instance.getCapacity());

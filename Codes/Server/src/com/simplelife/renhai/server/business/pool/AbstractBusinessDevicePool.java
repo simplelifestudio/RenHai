@@ -87,8 +87,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	String sn = device.getDeviceSn();
     	if (deviceMap.containsKey(sn) || cacheDeviceMap.containsKey(sn))
     	{
-    		String temp = "Device ("+ sn +") has been in BusinessDevicePool";
-    		logger.warn(temp);
+    		logger.warn("Device <{}> has been in BusinessDevicePool", sn);
     		return null;
     	}
     	
@@ -122,7 +121,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	}
     	
     	String sn = device.getDeviceSn();
-    	if (!(deviceMap.containsKey(sn) || chatDeviceMap.containsKey(sn) || cacheDeviceMap.contains(sn)))
+    	if (!(deviceMap.containsKey(sn) || chatDeviceMap.containsKey(sn) || cacheDeviceMap.containsKey(sn)))
     	{
     		logger.debug("Device <{}> was not in " + this.businessType.name() + " Device Pool", sn);
     		return;

@@ -69,7 +69,8 @@ public class Consts
 		AppRejectChat(116),
 		AppUnbindSession(117),
 		WebSocketReconnect(118),
-		AppRequestStartMatch(119);
+		AppRequestStartMatch(119),
+		FailedToStartSession(120);
 		
 		private int value;
 		private StatusChangeReason(int value)

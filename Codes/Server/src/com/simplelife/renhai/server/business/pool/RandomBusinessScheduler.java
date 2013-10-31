@@ -15,6 +15,7 @@ import java.util.Random;
 import java.util.Set;
 
 import com.simplelife.renhai.server.business.session.BusinessSessionPool;
+import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.IBusinessSession;
 
 
@@ -63,10 +64,15 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
 		IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
 		if (session == null)
 		{
+			logger.debug("No availabel business session.");
 			return;
 		}
+		
 		session.bindBusinessDevicePool(this.ownerBusinessPool);
-		session.startSession(selectedDevice);
+		if (!session.startSession(selectedDevice))
+		{
+			recycleDevice(selectedDevice);
+		}
 	}
 
 	@Override

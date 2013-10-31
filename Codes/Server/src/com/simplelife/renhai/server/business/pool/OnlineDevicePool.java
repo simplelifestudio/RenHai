@@ -240,7 +240,6 @@ public class OnlineDevicePool extends AbstractDevicePool
     	Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
     	
     	logger.debug("Start to remove device <{}> from OnlineDevicePool, device status: " + status.name(), deviceWrapper.getDeviceSn());
-    	deviceWrapper.unbindOnlineDevicePool();
     	
     	if (status == Consts.BusinessStatus.Init)
     	{
@@ -459,41 +458,41 @@ public class OnlineDevicePool extends AbstractDevicePool
 		statItem.setSaveTime(now);
 		statItem.setStatisticsitem(item);
 		statItem.setCount(OnlineDevicePool.instance.getElementCount());
-		DAOWrapper.asyncSave(statItem);
+		DAOWrapper.cache(statItem);
 		
 		item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomDeviceCount.getValue()).get(0);
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
 		statItem.setStatisticsitem(item);
 		statItem.setCount(randomPool.getElementCount());
-		DAOWrapper.asyncSave(statItem);
+		DAOWrapper.cache(statItem);
 		
 		item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestDeviceCount.getValue()).get(0);
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
 		statItem.setStatisticsitem(item);
 		statItem.setCount(interestPool.getElementCount());
-		DAOWrapper.asyncSave(statItem);
+		DAOWrapper.cache(statItem);
 		
 		item = dao.findByStatisticsItem(Consts.StatisticsItem.ChatDeviceCount.getValue()).get(0);
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
 		statItem.setStatisticsitem(item);
 		statItem.setCount(OnlineDevicePool.instance.getDeviceCountInChat());
-		DAOWrapper.asyncSave(statItem);
+		DAOWrapper.cache(statItem);
 		
 		item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomChatDeviceCount.getValue()).get(0);
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
 		statItem.setStatisticsitem(item);
 		statItem.setCount(randomPool.getDeviceCountInChat());
-		DAOWrapper.asyncSave(statItem);
+		DAOWrapper.cache(statItem);
 		
 		item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestChatDeviceCount.getValue()).get(0);
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
 		statItem.setStatisticsitem(item);
 		statItem.setCount(interestPool.getDeviceCountInChat());
-		DAOWrapper.asyncSave(statItem);
+		DAOWrapper.cache(statItem);
 	}
 }

@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.simplelife.renhai.server.business.BusinessModule;
+import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.log.FileLogger;
 
 /**
@@ -33,7 +34,11 @@ public class DBQueryUtil
 		Device device = DAOWrapper.getDeviceInCache(deviceSn);
 		if (device != null)
 		{
-			logger.debug("======check if it's new device");
+			return false;
+		}
+		
+		if (null != OnlineDevicePool.instance.getDevice(deviceSn))
+		{
 			return false;
 		}
 		
@@ -65,20 +70,26 @@ public class DBQueryUtil
 	 * @param label: impress label, such as ¡°Ë§¸ç¡±
 	 * @return Return Object of globalimpresslabel if label existed, else return null 
 	 */
-	public static Globalimpresslabel getGlobalimpresslabel(String label)
+	public static Globalimpresslabel getGlobalimpresslabel(String labelName)
 	{
+		Globalimpresslabel label = DAOWrapper.getImpressLabelInCache(labelName);
+		if (label != null)
+		{
+			return label;
+		}
+		
 		GlobalimpresslabelDAO dao = new GlobalimpresslabelDAO();
 		List<Globalimpresslabel> list = null;
 		try
 		{
-			list = dao.findByImpressLabelName(label);
+			list = dao.findByImpressLabelName(labelName);
 		}
 		catch(Exception re)
 		{
 			// try again
 			try
 			{
-				list = dao.findByImpressLabelName(label);
+				list = dao.findByImpressLabelName(labelName);
 			}
 			catch(Exception e)
 			{
@@ -98,20 +109,26 @@ public class DBQueryUtil
 	 * @param label: interest label, such as "×ãÇò"
 	 * @return Return Object of globainterestlabel if label existed, else return null
 	 */
-	public static Globalinterestlabel getGlobalinterestlabel(String label)
+	public static Globalinterestlabel getGlobalinterestlabel(String labelName)
 	{
+		Globalinterestlabel label = DAOWrapper.getInterestLabelInCache(labelName);
+		if (label != null)
+		{
+			return label;
+		}
+		
 		GlobalinterestlabelDAO dao = new GlobalinterestlabelDAO();
 		List<Globalinterestlabel> list = null;
 		try
 		{
-			list = dao.findByInterestLabelName(label);
+			list = dao.findByInterestLabelName(labelName);
 		}
 		catch(RuntimeException re)
 		{
 			// try again
 			try
 			{
-				list = dao.findByInterestLabelName(label);
+				list = dao.findByInterestLabelName(labelName);
 			}
 			catch(RuntimeException e)
 			{

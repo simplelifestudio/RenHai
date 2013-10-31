@@ -62,6 +62,7 @@ public class DAOWrapper
 		private final Lock lock = new ReentrantLock();
 		private final Condition condition = lock.newCondition();
 		private boolean continueFlag = true;
+		private Session session = null;
 		
 		public FlushTask(ConcurrentLinkedQueue<Object> linkToBeSaved)
 		{
@@ -80,7 +81,7 @@ public class DAOWrapper
 		
 		private boolean saveObjectToDB(Object obj)
 		{
-			Session session = HibernateSessionFactory.getSession();
+			//Session session = HibernateSessionFactory.getSession();
 			if (session == null)
 			{
 				logger.error("Fatal error: null hibernate session, check DB parameters");
@@ -114,7 +115,7 @@ public class DAOWrapper
 			}
 			finally
 			{
-				session.close();
+				//session.close();
 			}
 			return true;
 		}
@@ -131,20 +132,19 @@ public class DAOWrapper
 					try
 					{
 						lock.lock();
-						/*
-						if (session.isOpen())
+						if (session != null && session.isOpen())
 						{
-							//HibernateSessionFactory.closeSession();
-							session.close();
+							HibernateSessionFactory.closeSession();
+							session = null;
+							//session.close();
 						}
-						*/
 						logger.debug("Await due to no data in cache queue");
 						condition.await();
 						
 						if (!linkToBeSaved.isEmpty())
 						{
 							logger.debug("Resume saving data in cache queue, cache queue size: {}", linkToBeSaved.size());
-							//session = HibernateSessionFactory.getSession();
+							session = HibernateSessionFactory.getSession();
 						}
 					}
 					catch (InterruptedException e)
@@ -156,18 +156,14 @@ public class DAOWrapper
 						lock.unlock();
 					}
 				}
-				
-				if (linkToBeSaved.isEmpty())
+				else
 				{
-					continue;
-				}
-				
-				
-				obj = linkToBeSaved.remove();
-				if (!saveObjectToDB(obj))
-				{
-					// Try again
-					saveObjectToDB(obj);
+					obj = linkToBeSaved.remove();
+					if (!saveObjectToDB(obj))
+					{
+						// Try again
+						saveObjectToDB(obj);
+					}
 				}
 			}
 		}
@@ -199,6 +195,44 @@ public class DAOWrapper
     	return null;
     }
     
+    public static Globalimpresslabel getImpressLabelInCache(String lableName)
+    {
+    	Iterator<Object> it = linkToBeSaved.iterator();
+    	Object obj;
+    	while (it.hasNext())
+    	{
+    		obj = it.next();
+    		if (obj instanceof Globalimpresslabel)
+    		{
+    			Globalimpresslabel label = (Globalimpresslabel) obj;
+    			if (lableName.equals(label.getImpressLabelName()))
+    			{
+    				return label;
+    			}
+    		}
+    	}
+    	return null;
+    }
+    
+    public static Globalinterestlabel getInterestLabelInCache(String lableName)
+    {
+    	Iterator<Object> it = linkToBeSaved.iterator();
+    	Object obj;
+    	while (it.hasNext())
+    	{
+    		obj = it.next();
+    		if (obj instanceof Globalinterestlabel)
+    		{
+    			Globalinterestlabel label = (Globalinterestlabel) obj;
+    			if (lableName.equals(label.getInterestLabelName()))
+    			{
+    				return label;
+    			}
+    		}
+    	}
+    	return null;
+    }
+    
     public static void startTimers()
     {
     	flushTask.start();
@@ -221,7 +255,7 @@ public class DAOWrapper
      * Save object in cache or to DB 
      * @param obj: object to be saved
      */
-    public static void asyncSave(Object obj)
+    public static void cache(Object obj)
     {
     	if(obj == null)
     	{

@@ -627,8 +627,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 		if (!isDeviceInPool)
 		{
 			// If device has leaved OnlineDevicePool before assess, save to DB after assess
-			logger.warn("Device <{}> was released before Device <" + deviceWrapper.getDeviceSn() + "> trying to assess it");
-			DAOWrapper.asyncSave(targetDevice);
+			logger.debug("Device <{}> was released before Device <" + deviceWrapper.getDeviceSn() + "> trying to assess it", targetDevice.getDeviceSn());
+			DAOWrapper.cache(targetDevice);
 		}
 		OutputMessageCenter.instance.addMessage(response);
 	}
@@ -648,7 +648,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 					{
 						label.setAssessedCount(label.getAssessedCount() + 1);
 						label.setUpdateTime(System.currentTimeMillis());
-						label.getGlobalimpresslabel().setGlobalAssessCount(label.getGlobalimpresslabel().getGlobalAssessCount() + 1);
+						//label.getGlobalimpresslabel().setGlobalAssessCount(label.getGlobalimpresslabel().getGlobalAssessCount() + 1);
+						DbLogger.increaseImpressAssessCount(tmpLabelName);
 					}
 					else
 					{
@@ -663,9 +664,11 @@ public class BusinessSessionRequest extends AppJSONMessage
 		Globalimpresslabel globalimpresslabel = DBQueryUtil.getGlobalimpresslabel(labelName);
 		if (globalimpresslabel == null)
 		{
+			logger.debug("New impress label {} from device <" + deviceWrapper.getDeviceSn() + ">", labelName);
 			globalimpresslabel = new Globalimpresslabel();
 			globalimpresslabel.setGlobalAssessCount(1);
 			globalimpresslabel.setImpressLabelName(labelName);
+			DAOWrapper.cache(globalimpresslabel);
 			//globalimpresslabel.setImpresslabelmaps(impressLabels);
 		}
 		

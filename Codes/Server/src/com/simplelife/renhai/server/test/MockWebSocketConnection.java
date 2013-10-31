@@ -78,7 +78,7 @@ public class MockWebSocketConnection extends WebSocketConnection implements IMoc
     		throw new IOException();
     	}
     	
-    	logger.debug("MockWebSocket received message: \n" + JSON.toJSONString(message.toJSONObject(), true));
+    	logger.debug("MockWebSocket received message: \n{}", message.toReadableString());
 		JSONObject obj = message.toJSONObject();
 		JSONObject header = obj.getJSONObject(JSONKey.Header);
 		String messageSn = header.getString(JSONKey.MessageSn);

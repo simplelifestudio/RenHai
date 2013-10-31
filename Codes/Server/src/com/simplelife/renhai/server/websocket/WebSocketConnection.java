@@ -330,7 +330,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	
     	message.addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
     	String strMessage = JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue);
-   		logger.debug("Send message over WebSocket: \n{}", JSON.toJSONString(message.toJSONObject(), true));
+   		logger.debug("Send message over WebSocket: \n{}", message.toReadableString());
    		
    		CharBuffer buffer = CharBuffer.allocate(strMessage.length());
         buffer.put(strMessage);
