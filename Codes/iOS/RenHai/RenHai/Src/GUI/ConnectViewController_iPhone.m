@@ -394,56 +394,45 @@ ConnectStatus;
     {
         return;
     }
-
+    
     [self _updateUIWithConnectStatus:ConnectStatus_AppDataSyncing];
     
     RHDevice* device = _userDataModule.device;
-    RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:device info:nil];
-    RHMessage* appDataSyncResponseMessage = [_commModule sendMessage:appDataSyncRequestMessage];
+    RHMessage* requestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:device info:nil];
     
-    if (appDataSyncResponseMessage.messageId == MessageId_AppDataSyncResponse)
-    {
-        NSDictionary* messageBody = appDataSyncResponseMessage.body;
-        NSDictionary* deviceDic = [messageBody objectForKey:MESSAGE_KEY_DATAQUERY];
-        
-        RHDevice* device = _userDataModule.device;
-        @try
-        {
-            [device fromJSONObject:deviceDic];
-            
-            [_userDataModule saveUserData];
-            
-            [self _updateUIWithConnectStatus:ConnectStatus_AppDataSynced];
-            
-            _isAppDataSyncSuccess = YES;
-            
-            [_statusModule recordAppMessage:AppMessageIdentifier_AppDataSync];
+    [_commModule appDataSyncRequest:requestMessage
+        successCompletionBlock:^(NSDictionary* deviceDic){
+            RHDevice* device = _userDataModule.device;
+            @try
+            {
+                [device fromJSONObject:deviceDic];
+                
+                [_userDataModule saveUserData];
+                
+                [self _updateUIWithConnectStatus:ConnectStatus_AppDataSynced];
+                
+                _isAppDataSyncSuccess = YES;
+                
+                [_statusModule recordAppMessage:AppMessageIdentifier_AppDataSync];
+            }
+            @catch (NSException *exception)
+            {
+                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+                
+                [self _updateUIWithConnectStatus:ConnectStatus_AppDataSyncFailed];
+                
+                _isAppDataSyncSuccess = NO;
+            }
+            @finally
+            {
+                
+            }
         }
-        @catch (NSException *exception)
-        {
-            DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
-            
+        failureCompletionBlock:^(){
             [self _updateUIWithConnectStatus:ConnectStatus_AppDataSyncFailed];
-            
-            _isAppDataSyncSuccess = NO;
         }
-        @finally
-        {
-            
-        }
-    }
-    else if (appDataSyncResponseMessage.messageId == MessageId_ServerErrorResponse)
-    {
-        [self _updateUIWithConnectStatus:ConnectStatus_AppDataSyncFailed];
-    }
-    else if (appDataSyncResponseMessage.messageId == MessageId_ServerTimeoutResponse)
-    {
-        [self _updateUIWithConnectStatus:ConnectStatus_AppDataSyncFailed];
-    }
-    else
-    {
-        [self _updateUIWithConnectStatus:ConnectStatus_AppDataSyncFailed];
-    }
+        afterCompletionBlock:nil
+     ];
 }
 
 - (void)_serverDataSync
@@ -456,51 +445,39 @@ ConnectStatus;
     [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSyncing];
     
     RHDevice* device = _userDataModule.device;
-    RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
-    RHMessage* serverDataSyncResponseMessage = [_commModule sendMessage:serverDataSyncRequestMessage];
+    RHMessage* requestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
     
-    if (serverDataSyncResponseMessage.messageId == MessageId_ServerDataSyncResponse)
-    {
-        NSDictionary* messageBody = serverDataSyncResponseMessage.body;
-        NSDictionary* serverDic = messageBody;
-        
-        RHServer* server = _userDataModule.server;
-        @try
-        {
-            [server fromJSONObject:serverDic];
-            
-            [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSynced];
-            
-            _isServerDataSyncSuccess = YES;
-            
-            [_statusModule recordAppMessage:AppMessageIdentifier_ServerDataSync];
+    [_commModule serverDataSyncRequest:requestMessage
+        successCompletionBlock:^(NSDictionary* serverDic){
+            RHServer* server = _userDataModule.server;
+            @try
+            {
+                [server fromJSONObject:serverDic];
+                
+                [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSynced];
+                
+                _isServerDataSyncSuccess = YES;
+                
+                [_statusModule recordAppMessage:AppMessageIdentifier_ServerDataSync];
+            }
+            @catch (NSException *exception)
+            {
+                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+                
+                [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSyncFailed];
+                
+                _isServerDataSyncSuccess = NO;
+            }
+            @finally
+            {
+                
+            }
         }
-        @catch (NSException *exception)
-        {
-            DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
-            
+        failureCompletionBlock:^(){
             [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSyncFailed];
-            
-            _isServerDataSyncSuccess = NO;
         }
-        @finally
-        {
-            
-        }
-        
-    }
-    else if (serverDataSyncResponseMessage.messageId == MessageId_ServerErrorResponse)
-    {
-        [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSyncFailed];
-    }
-    else if (serverDataSyncResponseMessage.messageId == MessageId_ServerTimeoutResponse)
-    {
-        [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSyncFailed];
-    }
-    else
-    {
-        [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSyncFailed];
-    }
+        afterCompletionBlock:nil
+     ];
 }
 
 - (void)_fireOperationQueue

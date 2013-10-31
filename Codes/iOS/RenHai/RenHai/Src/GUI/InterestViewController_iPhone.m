@@ -189,15 +189,25 @@
     [self _resetServerInterestRefresher];
 }
 
+//-(void)_updateInterestCard2
+//{
+//    [CBAppUtils asyncProcessInBackgroundThread:^(){
+//        RHDevice* device = _userDataModule.device;
+//        RHProfile* profile = device.profile;
+//        RHInterestCard* interestCard = profile.interestCard;
+//        RHMessage* requestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:device info:nil];
+//    
+//    }];
+//}
+
 -(void)_updateInterestCard
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
-        
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         RHProfile* profile = device.profile;
         RHInterestCard* interestCard = profile.interestCard;
         RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:device info:nil];
-        RHMessage* appDataSyncResponseMessage = [_commModule sendMessage:appDataSyncRequestMessage];
+        RHMessage* appDataSyncResponseMessage = [_commModule syncSendMessage:appDataSyncRequestMessage];
         if (appDataSyncResponseMessage.messageId == MessageId_AppDataSyncResponse)
         {
             NSDictionary* messageBody = appDataSyncResponseMessage.body;
@@ -227,17 +237,17 @@
         }
         else if (appDataSyncResponseMessage.messageId == MessageId_ServerErrorResponse)
         {
-
+            
         }
         else if (appDataSyncResponseMessage.messageId == MessageId_ServerTimeoutResponse)
         {
-
+            
         }
         else
         {
-
+            
         }
-    });
+    }];
 }
 
 -(void)_refreshServerInterestLabelList
@@ -248,7 +258,7 @@
         RHServer* server = _userDataModule.server;
         
         RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
-        RHMessage* serverDataSyncResponseMessage = [_commModule sendMessage:serverDataSyncRequestMessage];
+        RHMessage* serverDataSyncResponseMessage = [_commModule syncSendMessage:serverDataSyncRequestMessage];
         
         if (serverDataSyncResponseMessage.messageId == MessageId_ServerDataSyncResponse)
         {

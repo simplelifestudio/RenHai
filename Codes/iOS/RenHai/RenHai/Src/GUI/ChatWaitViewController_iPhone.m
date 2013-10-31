@@ -204,54 +204,24 @@ ChatWaitStatus;
     _isDeciding = YES;
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
+        
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_LeavePool device:device info:nil];
-        RHMessage* responseMessage = [_commModule sendMessage:businessSessionRequestMessage];
-        if (responseMessage.messageId == MessageId_BusinessSessionResponse)
-        {
-            NSDictionary* messageBody = responseMessage.body;
-            NSDictionary* businessSessionDic = messageBody;
-            
-            @try
-            {
-                NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
-                BusinessSessionOperationValue operationValue = oOperationValue.intValue;
-                
-                if (operationValue == BusinessSessionOperationValue_Success)
-                {
-                    _leavePoolFlag = YES;
-                
-                    [_statusModule recordAppMessage:AppMessageIdentifier_LeavePool];
-                }
-                else
-                {
-                    _leavePoolFlag = NO;
-                }
-            }
-            @catch (NSException *exception)
-            {
-                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
-            }
-            @finally
-            {
-                
-            }
-        }
-        else if (responseMessage.messageId == MessageId_ServerErrorResponse)
-        {
-            
-        }
-        else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
-        {
-            
-        }
-        else
-        {
-            
-        }
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_LeavePool device:device info:nil];
         
-        [self _finishLeavingPool];
+        [_commModule businessSessionRequest:requestMessage
+            successCompletionBlock:^(){
+                _leavePoolFlag = YES;
+                [_statusModule recordAppMessage:AppMessageIdentifier_LeavePool];
+            }
+            failureCompletionBlock:^(){
+                _leavePoolFlag = NO;
+            }
+            afterCompletionBlock:^(){
+                [self _finishLeavingPool];
+            }
+         ];
+    
     }];
 }
 
@@ -273,7 +243,7 @@ ChatWaitStatus;
     }];
 }
 
-- (void) _requestMatchStart
+-(void)_requestMatchStart
 {
     if (_hasRequestedMatchStart)
     {
@@ -285,52 +255,21 @@ ChatWaitStatus;
     }
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
+        
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_MatchStart device:device info:nil];
-        RHMessage* responseMessage = [_commModule sendMessage:businessSessionRequestMessage];
-        if (responseMessage.messageId == MessageId_BusinessSessionResponse)
-        {
-            NSDictionary* messageBody = responseMessage.body;
-            NSDictionary* businessSessionDic = messageBody;
-            
-            @try
-            {
-                NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
-                BusinessSessionOperationValue operationValue = oOperationValue.intValue;
-                
-                if (operationValue == BusinessSessionOperationValue_Success)
-                {
-                    _matchStartFlag = YES;
-                    
-                    [_statusModule recordAppMessage:AppMessageIdentifier_MatchStart];
-                }
-                else
-                {
-                    _matchStartFlag = NO;
-                }
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_MatchStart device:device info:nil];
+        
+        [_commModule businessSessionRequest:requestMessage
+            successCompletionBlock:^(){
+                _matchStartFlag = YES;
+                [_statusModule recordAppMessage:AppMessageIdentifier_MatchStart];
             }
-            @catch (NSException *exception)
-            {
-                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+            failureCompletionBlock:^(){
+                _matchStartFlag = NO;
             }
-            @finally
-            {
-                
-            }
-        }
-        else if (responseMessage.messageId == MessageId_ServerErrorResponse)
-        {
-            
-        }
-        else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
-        {
-            
-        }
-        else
-        {
-            
-        }
+            afterCompletionBlock:nil
+         ];
     }];
 }
 

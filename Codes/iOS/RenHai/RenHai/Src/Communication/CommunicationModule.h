@@ -43,6 +43,15 @@
 -(void) disconnectWebSocket;
 -(BOOL) isWebSocketConnected;
 
--(RHMessage*) sendMessage:(RHMessage*) message;
+-(RHMessage*) syncSendMessage:(RHMessage*) message;
+-(void) asyncSendMessage:(RHMessage*) message;
+
+-(void)alohaRequest:(RHDevice*) device;
+
+-(void)appDataSyncRequest:(RHMessage*) requestMessage successCompletionBlock:(void(^)(NSDictionary* deviceDic)) successCompletionBlock failureCompletionBlock:(void(^)()) failureCompletionBlock afterCompletionBlock:(void(^)()) afterCompletionBlock;
+
+-(void)serverDataSyncRequest:(RHMessage*) requestMessage successCompletionBlock:(void(^)(NSDictionary* serverDic)) successCompletionBlock failureCompletionBlock:(void(^)()) failureCompletionBlock afterCompletionBlock:(void(^)()) afterCompletionBlock;
+
+-(void)businessSessionRequest:(RHMessage*) requestMessage successCompletionBlock:(void(^)()) successCompletionBlock failureCompletionBlock:(void(^)()) failureCompletionBlock afterCompletionBlock:(void(^)()) afterCompletionBlock;
 
 @end

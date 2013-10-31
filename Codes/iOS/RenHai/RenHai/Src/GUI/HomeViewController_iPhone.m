@@ -83,7 +83,7 @@ EnterOperationStatus;
     [self _updateUIWithServerData];
     [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Ready];
     
-    [self _activateDataSyncTimer];
+    [NSThread detachNewThreadSelector:@selector(_activateDataSyncTimer) toTarget:self withObject:nil];
     
     [self _registerNotifications];
 }
@@ -208,8 +208,11 @@ static float progress = 0.0;
 {
     [self _deactivateDataSyncTimer];
     
-    _dataSyncTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_DATASYNC target:self selector:@selector(_serverDataSync) userInfo:nil repeats:YES];
-    [_dataSyncTimer fire];
+    _dataSyncTimer = [NSTimer timerWithTimeInterval:INTERVAL_DATASYNC target:self selector:@selector(_serverDataSync) userInfo:nil repeats:YES];
+    
+    NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+    [currentRunLoop addTimer:_dataSyncTimer forMode:NSDefaultRunLoopMode];
+    [currentRunLoop run];
 }
 
 -(void)_deactivateDataSyncTimer
@@ -221,19 +224,14 @@ static float progress = 0.0;
     }
 }
 
--(void)_serverDataSync
+- (void)_serverDataSync
 {
-    [CBAppUtils asyncProcessInBackgroundThread:^(){
-        RHDevice* device = _userDataModule.device;
-        
-        RHMessage* requestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
-        RHMessage* responseMessage = [_commModule sendMessage:requestMessage];
-        
-        if (responseMessage.messageId == MessageId_ServerDataSyncResponse)
-        {
-            NSDictionary* messageBody = responseMessage.body;
-            NSDictionary* serverDic = messageBody;
-            
+    RHDevice* device = _userDataModule.device;
+    
+    RHMessage* requestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
+    
+    [_commModule serverDataSyncRequest:requestMessage
+        successCompletionBlock:^(NSDictionary* serverDic){
             RHServer* server = _userDataModule.server;
             @try
             {
@@ -249,21 +247,10 @@ static float progress = 0.0;
             {
                 
             }
-            
         }
-        else if (responseMessage.messageId == MessageId_ServerErrorResponse)
-        {
-            
-        }
-        else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
-        {
-            
-        }
-        else
-        {
-            
-        }
-    }];
+        failureCompletionBlock:nil
+        afterCompletionBlock:nil
+     ];
 }
 
 -(void) _updateUIWithServerData
@@ -350,53 +337,21 @@ static float progress = 0.0;
 -(void)_startEnteringPool
 {
     [CBAppUtils asyncProcessInBackgroundThread:^(){
+    
         RHDevice* device = _userDataModule.device;
         
         RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_EnterPool device:device info:nil];
-        RHMessage* responseMessage = [_commModule sendMessage:requestMessage];
         
-        if (responseMessage.messageId == MessageId_BusinessSessionResponse)
-        {
-            NSDictionary* messageBody = responseMessage.body;
-            NSDictionary* businessSessionDic = messageBody;
-            
-            @try
-            {
-                NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
-                BusinessSessionOperationValue operationValue = oOperationValue.intValue;
-                
-                if (operationValue == BusinessSessionOperationValue_Success)
-                {
-                    _enterPoolFlag = YES;
-                    
-                    [_statusModule recordAppMessage:AppMessageIdentifier_EnterPool];
-                }
-                else
-                {
-                    _enterPoolFlag = NO;
-                }
+        [_commModule businessSessionRequest:requestMessage
+            successCompletionBlock:^(){
+                _enterPoolFlag = YES;
+                [_statusModule recordAppMessage:AppMessageIdentifier_EnterPool];
             }
-            @catch (NSException *exception)
-            {
-                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+            failureCompletionBlock:^(){
+                _enterPoolFlag = NO;
             }
-            @finally
-            {
-                
-            }
-        }
-        else if (responseMessage.messageId == MessageId_ServerErrorResponse)
-        {
-            
-        }
-        else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
-        {
-            
-        }
-        else
-        {
-            
-        }
+            afterCompletionBlock:nil
+         ];
     }];
 }
 

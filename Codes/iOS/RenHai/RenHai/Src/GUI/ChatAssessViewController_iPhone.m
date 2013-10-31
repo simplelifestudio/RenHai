@@ -259,75 +259,43 @@
         NSString* businessSessionId = businessSession.businessSessionId;
         RHDevice* partnerDevice = [businessSession getPartner];
         RHProfile* profile = partnerDevice.profile;
-
+        
         RHImpressCard* impressCard = [self _getPartnerAssessedImpressCard];
         profile.impressCard = impressCard;
         
         NSDictionary* info = partnerDevice.toJSONObject;
         
-        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:CURRENT_BUSINESSPOOL operationType:requestType device:selfDevice info:info];
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:CURRENT_BUSINESSPOOL operationType:requestType device:selfDevice info:info];
         
-        RHMessage* responseMessage = [_commModule sendMessage:businessSessionRequestMessage];
-        if (responseMessage.messageId == MessageId_BusinessSessionResponse)
-        {
-            NSDictionary* messageBody = responseMessage.body;
-            NSDictionary* businessSessionDic = messageBody;
-            
-            @try
-            {
-                NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
-                BusinessSessionOperationValue operationValue = oOperationValue.intValue;
+        [_commModule businessSessionRequest:requestMessage
+            successCompletionBlock:^(){
+                _selfAssessedFlag = YES;
                 
-                if (operationValue == BusinessSessionOperationValue_Success)
+                switch (requestType)
                 {
-                    _selfAssessedFlag = YES;
-                    
-                    switch (requestType)
+                    case BusinessSessionRequestType_AssessAndContinue:
                     {
-                        case BusinessSessionRequestType_AssessAndContinue:
-                        {
-                            [_statusModule recordAppMessage:AppMessageIdentifier_AssessAndContinue];
-                            [self _moveToChatWaitView];
-                            break;
-                        }
-                        case BusinessSessionRequestType_AssessAndQuit:
-                        {
-                            [_statusModule recordAppMessage:AppMessageIdentifier_AssessAndQuit];
-                            [self _moveToHomeView];
-                            break;
-                        }
-                        default:
-                        {
-                            break;
-                        }
+                        [_statusModule recordAppMessage:AppMessageIdentifier_AssessAndContinue];
+                        [self _moveToChatWaitView];
+                        break;
+                    }
+                    case BusinessSessionRequestType_AssessAndQuit:
+                    {
+                        [_statusModule recordAppMessage:AppMessageIdentifier_AssessAndQuit];
+                        [self _moveToHomeView];
+                        break;
+                    }
+                    default:
+                    {
+                        break;
                     }
                 }
-                else
-                {
-                    _selfAssessedFlag = NO;
-                }
             }
-            @catch (NSException *exception)
-            {
-                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+            failureCompletionBlock:^(){
+                _selfAssessedFlag = NO;
             }
-            @finally
-            {
-                
-            }
-        }
-        else if (responseMessage.messageId == MessageId_ServerErrorResponse)
-        {
-            
-        }
-        else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
-        {
-            
-        }
-        else
-        {
-            
-        }
+            afterCompletionBlock:nil
+         ];
     }];
 }
 

@@ -277,55 +277,42 @@
 {
     [NSThread sleepForTimeInterval:DELAY_REFRESH];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
-
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:device info:nil];
-        RHMessage* appDataSyncResponseMessage = [_commModule sendMessage:appDataSyncRequestMessage];
-        if (appDataSyncResponseMessage.messageId == MessageId_AppDataSyncResponse)
-        {
-            NSDictionary* messageBody = appDataSyncResponseMessage.body;
-            NSDictionary* deviceDic = [messageBody objectForKey:MESSAGE_KEY_DATAQUERY];
-            
-            RHDevice* device = _userDataModule.device;
-            @try
-            {
-                [device fromJSONObject:deviceDic];
-                
-                [_userDataModule saveUserData];
-                
-                dispatch_async(dispatch_get_main_queue(), ^(){
-                    [self.collectionView reloadData];                
-                });
-            }
-            @catch (NSException *exception)
-            {
-                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
-            }
-            @finally
-            {
-                
-            }
-        }
-        else if (appDataSyncResponseMessage.messageId == MessageId_ServerErrorResponse)
-        {
-            
-        }
-        else if (appDataSyncResponseMessage.messageId == MessageId_ServerTimeoutResponse)
-        {
-
-        }
-        else
-        {
-
-        }
+        RHMessage* requestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_TotalSync device:device info:nil];
         
-    });
-    
-    [_refresher endRefreshing];
-    
-    [self _resetRefresher];
+        [_commModule appDataSyncRequest:requestMessage
+            successCompletionBlock:^(NSDictionary* deviceDic){
+                RHDevice* device = _userDataModule.device;
+                @try
+                {
+                    [device fromJSONObject:deviceDic];
+
+                    [_userDataModule saveUserData];
+
+                    [CBAppUtils asyncProcessInMainThread:^(){
+                        [self.collectionView reloadData];
+                    }];
+                }
+                @catch (NSException *exception)
+                {
+                    DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+                }
+                @finally
+                {
+
+                }
+            }
+            failureCompletionBlock:^(){
+            }
+            afterCompletionBlock:^(){
+                [CBAppUtils asyncProcessInMainThread:^(){
+                [_refresher endRefreshing];
+                [self _resetRefresher];
+            }];
+        }];
+    }];
 }
 
 -(void)_setupNavigationBar

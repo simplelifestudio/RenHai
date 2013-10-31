@@ -17,6 +17,8 @@
 
 #define DELAY_ENDCHAT 1.0f
 
+#define INTERVAL_ALOHA 30
+
 @interface ChatVideoViewController_iPhone ()
 {
     GUIModule* _guiModule;
@@ -27,6 +29,8 @@
     
     NSUInteger _countdownSeconds;
     NSTimer* _timer;
+    
+    NSTimer* _alohaTimer;
     
     volatile BOOL _selfEndChatFlag;
     volatile BOOL _partnerEndChatFlag;
@@ -111,11 +115,13 @@
 -(void) pageWillLoad
 {
     [self _checkIsOthersideLost];
+    
+    [NSThread detachNewThreadSelector:@selector(_activateAlohaTimer) toTarget:self withObject:nil];
 }
 
 -(void) pageWillUnload
 {
-    
+    [self _deactivateAlohaTimer];
 }
 
 -(void) onOthersideEndChat
@@ -181,53 +187,19 @@
         
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_EndChat device:device info:nil];
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_EndChat device:device info:nil];
         
-        RHMessage* responseMessage = [_commModule sendMessage:businessSessionRequestMessage];
-        if (responseMessage.messageId == MessageId_BusinessSessionResponse)
-        {
-            NSDictionary* messageBody = responseMessage.body;
-            NSDictionary* businessSessionDic = messageBody;
-            
-            @try
-            {
-                NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
-                BusinessSessionOperationValue operationValue = oOperationValue.intValue;
-                
-                if (operationValue == BusinessSessionOperationValue_Success)
-                {
-                    _selfEndChatFlag = YES;
-                    [_statusModule recordAppMessage:AppMessageIdentifier_EndChat];
-                    
-                    [self _moveToChatAssessView];
-                }
-                else
-                {
-                    _selfEndChatFlag = NO;
-                }
+        [_commModule businessSessionRequest:requestMessage
+            successCompletionBlock:^(){
+                _selfEndChatFlag = YES;
+                [_statusModule recordAppMessage:AppMessageIdentifier_EndChat];
+                [self _moveToChatAssessView];
             }
-            @catch (NSException *exception)
-            {
-                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+            failureCompletionBlock:^(){
+                _selfEndChatFlag = NO;
             }
-            @finally
-            {
-                
-            }
-        }
-        else if (responseMessage.messageId == MessageId_ServerErrorResponse)
-        {
-            
-        }
-        else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
-        {
-            
-        }
-        else
-        {
-            
-        }
-    
+            afterCompletionBlock:nil
+         ];
     }];
 }
 
@@ -244,6 +216,32 @@
     {
         [self onOthersideEndChat];
     }
+}
+
+-(void)_activateAlohaTimer
+{
+    [self _deactivateAlohaTimer];
+    
+    _alohaTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_ALOHA target:self selector:@selector(_aloha) userInfo:nil repeats:YES];
+    
+    _alohaTimer = [NSTimer timerWithTimeInterval:INTERVAL_ALOHA target:self selector:@selector(_aloha) userInfo:nil repeats:YES];
+    NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+    [currentRunLoop addTimer:_alohaTimer forMode:NSRunLoopCommonModes];
+    [currentRunLoop run];
+}
+
+-(void)_deactivateAlohaTimer
+{
+    if (nil != _alohaTimer)
+    {
+        [_alohaTimer invalidate];
+        _alohaTimer = nil;
+    }
+}
+
+-(void) _aloha
+{
+    [_commModule alohaRequest:_userDataModule.device];
 }
 
 #pragma mark - IBActions

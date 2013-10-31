@@ -157,7 +157,7 @@ SINGLETON(CommunicationModule)
     return flag;
 }
 
--(RHMessage*) sendMessage:(RHMessage*) requestMessage
+-(RHMessage*) syncSendMessage:(RHMessage*) requestMessage
 {
     RHMessage* responseMessagge = nil;
     
@@ -168,6 +168,186 @@ SINGLETON(CommunicationModule)
     }
     
     return responseMessagge;
+}
+
+-(void) asyncSendMessage:(RHMessage*) message
+{
+    BOOL isConnected = [self isWebSocketConnected];
+    if (isConnected)
+    {
+        [_webSocketCommAgent asyncMessage:message];
+    }}
+
+-(void)alohaRequest:(RHDevice*) device
+{
+    RHMessage* requestMessage = [RHMessage newAlohaRequestMessage:device];
+    [self asyncSendMessage:requestMessage];
+}
+
+-(void)appDataSyncRequest:(RHMessage*) requestMessage successCompletionBlock:(void(^)(NSDictionary* deviceDic)) successCompletionBlock failureCompletionBlock:(void(^)()) failureCompletionBlock afterCompletionBlock:(void(^)()) afterCompletionBlock
+{
+    BOOL isSuccess = NO;
+    
+    RHMessage* responseMessage = [self syncSendMessage:requestMessage];
+    
+    NSDictionary* deviceDic = nil;
+    
+    if (responseMessage.messageId == MessageId_AppDataSyncResponse)
+    {
+        NSDictionary* messageBody = responseMessage.body;
+        deviceDic = [messageBody objectForKey:MESSAGE_KEY_DATAQUERY];
+        
+        isSuccess = YES;
+    }
+    else if (responseMessage.messageId == MessageId_ServerErrorResponse)
+    {
+        
+    }
+    else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
+    {
+        
+    }
+    else
+    {
+        
+    }
+    
+    if (isSuccess)
+    {
+        if (nil != successCompletionBlock)
+        {
+            successCompletionBlock(deviceDic);
+        }
+    }
+    else
+    {
+        if (nil != failureCompletionBlock)
+        {
+            failureCompletionBlock();
+        }
+    }
+    
+    if (nil != afterCompletionBlock)
+    {
+        afterCompletionBlock();
+    }
+}
+
+-(void)serverDataSyncRequest:(RHMessage*) requestMessage successCompletionBlock:(void(^)(NSDictionary* serverDic)) successCompletionBlock failureCompletionBlock:(void(^)()) failureCompletionBlock afterCompletionBlock:(void(^)()) afterCompletionBlock
+{
+    BOOL isSuccess = NO;
+    
+    RHMessage* responseMessage = [self syncSendMessage:requestMessage];
+    
+    NSDictionary* serverDic = nil;
+    
+    if (responseMessage.messageId == MessageId_ServerDataSyncResponse)
+    {
+        NSDictionary* messageBody = responseMessage.body;
+        serverDic = messageBody;
+        
+        isSuccess = YES;
+    }
+    else if (responseMessage.messageId == MessageId_ServerErrorResponse)
+    {
+        
+    }
+    else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
+    {
+        
+    }
+    else
+    {
+        
+    }
+    
+    if (isSuccess)
+    {
+        if (nil != successCompletionBlock)
+        {
+            successCompletionBlock(serverDic);
+        }
+    }
+    else
+    {
+        if (nil != failureCompletionBlock)
+        {
+            failureCompletionBlock();
+        }
+    }
+    
+    if (nil != afterCompletionBlock)
+    {
+        afterCompletionBlock();
+    }
+}
+
+-(void)businessSessionRequest:(RHMessage*) requestMessage successCompletionBlock:(void(^)()) successCompletionBlock failureCompletionBlock:(void(^)()) failureCompletionBlock afterCompletionBlock:(void(^)()) afterCompletionBlock
+{
+    BOOL isSuccess = NO;
+    
+    RHMessage* responseMessage = [self syncSendMessage:requestMessage];
+    
+    if (responseMessage.messageId == MessageId_BusinessSessionResponse)
+    {
+        NSDictionary* messageBody = responseMessage.body;
+        NSDictionary* businessSessionDic = messageBody;
+        
+        @try
+        {
+            NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
+            BusinessSessionOperationValue operationValue = oOperationValue.intValue;
+            
+            if (operationValue == BusinessSessionOperationValue_Success)
+            {
+                isSuccess = YES;
+            }
+            else
+            {
+                
+            }
+        }
+        @catch (NSException *exception)
+        {
+            DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+        }
+        @finally
+        {
+            
+        }
+    }
+    else if (responseMessage.messageId == MessageId_ServerErrorResponse)
+    {
+        
+    }
+    else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
+    {
+        
+    }
+    else
+    {
+        
+    }
+    
+    if (isSuccess)
+    {
+        if (nil != successCompletionBlock)
+        {
+            successCompletionBlock();
+        }
+    }
+    else
+    {
+        if (nil != failureCompletionBlock)
+        {
+            failureCompletionBlock();
+        }
+    }
+    
+    if (nil != afterCompletionBlock)
+    {
+        afterCompletionBlock();
+    }
 }
 
 #pragma mark - UIApplicationDelegate
