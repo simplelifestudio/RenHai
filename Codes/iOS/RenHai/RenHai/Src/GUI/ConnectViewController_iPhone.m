@@ -430,6 +430,8 @@ ConnectStatus;
         }
         failureCompletionBlock:^(){
             [self _updateUIWithConnectStatus:ConnectStatus_AppDataSyncFailed];
+            
+            [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
         }
         afterCompletionBlock:nil
      ];
@@ -475,6 +477,8 @@ ConnectStatus;
         }
         failureCompletionBlock:^(){
             [self _updateUIWithConnectStatus:ConnectStatus_ServerDataSyncFailed];
+            
+            [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];            
         }
         afterCompletionBlock:nil
      ];

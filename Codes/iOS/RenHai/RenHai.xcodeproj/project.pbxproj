@@ -241,6 +241,8 @@
 		CDC0519B1805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051991805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m */; };
 		CDC0519E18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC0519D18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m */; };
 		CDC0519F18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC0519D18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m */; };
+		CDDA9FA8182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDA9FA7182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib */; };
+		CDDA9FA9182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDA9FA7182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -475,6 +477,7 @@
 		CDC051991805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+CBNavigationControllerExtends.m"; sourceTree = "<group>"; };
 		CDC0519C18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+CBUIViewControlerExtends.h"; sourceTree = "<group>"; };
 		CDC0519D18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CBUIViewControlerExtends.m"; sourceTree = "<group>"; };
+		CDDA9FA7182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InterestLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
 		CDDF0FE017EB227700DA3E06 /* RenHai.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RenHai.entitlements; sourceTree = "<group>"; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -826,6 +829,11 @@
 				CD5F065317E8813200D08426 /* ImpressSectionHeaderView_iPhone.xib */,
 				C593C44517D329D200C26367 /* InterestViewController_iPhone.h */,
 				C593C44617D329D200C26367 /* InterestViewController_iPhone.m */,
+				C580526B17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.h */,
+				C580526C17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m */,
+				CDDA9FA7182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib */,
+				C580526F17E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.h */,
+				C580527017E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m */,
 				C593C44917D329E100C26367 /* ConfigViewController_iPhone.h */,
 				C593C44A17D329E100C26367 /* ConfigViewController_iPhone.m */,
 				C593C44D17D329F300C26367 /* HelpViewController_iPhone.h */,
@@ -849,10 +857,6 @@
 				C53A7F0F17DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.h */,
 				C53A7F1017DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m */,
 				C53A7F1317DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib */,
-				C580526B17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.h */,
-				C580526C17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m */,
-				C580526F17E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.h */,
-				C580527017E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m */,
 				CD736CEC1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.h */,
 				CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */,
 				CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */,
@@ -1027,6 +1031,7 @@
 				CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */,
 				C596283B17DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png in Resources */,
 				C596283D17DA08AA009127E6 /* sidebar_menu_icon_portrait.png in Resources */,
+				CDDA9FA8182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib in Resources */,
 				C596283F17DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png in Resources */,
 				C54DC8C717DC069900BBD498 /* enterbutton_highlighted.png in Resources */,
 				C54DC8C917DC069900BBD498 /* enterbutton_highlighted@2x.png in Resources */,
@@ -1067,6 +1072,7 @@
 				C593C47317D4240800C26367 /* LeftBarHeaderView_iPhone.xib in Resources */,
 				CD736CF51817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */,
 				C593C47A17D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */,
+				CDDA9FA9182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib in Resources */,
 				C596283A17DA08AA009127E6 /* sidebar_menu_icon_landscape.png in Resources */,
 				C596283C17DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png in Resources */,
 				C596283E17DA08AA009127E6 /* sidebar_menu_icon_portrait.png in Resources */,
