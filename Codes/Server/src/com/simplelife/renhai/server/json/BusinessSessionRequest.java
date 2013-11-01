@@ -542,7 +542,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		if (targetDeviceWrapper == null)
 		{
 			isDeviceInPool = false;
-			targetDevice = DAOWrapper.getDeviceInCache(deviceSn);
+			targetDevice = DAOWrapper.getDeviceInCache(deviceSn, true);
 			
 			if (targetDevice == null)
 			{

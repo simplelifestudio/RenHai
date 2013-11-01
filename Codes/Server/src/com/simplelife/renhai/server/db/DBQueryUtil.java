@@ -31,14 +31,16 @@ public class DBQueryUtil
 	 */
 	public static boolean isNewDevice(String deviceSn)
 	{
-		Device device = DAOWrapper.getDeviceInCache(deviceSn);
+		Device device = DAOWrapper.getDeviceInCache(deviceSn, false);
 		if (device != null)
 		{
+			logger.debug("Device is in DB cache");
 			return false;
 		}
 		
 		if (null != OnlineDevicePool.instance.getDevice(deviceSn))
 		{
+			logger.debug("Device is in OnlineDevicePool");
 			return false;
 		}
 		

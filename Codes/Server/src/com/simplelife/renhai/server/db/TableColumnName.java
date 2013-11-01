@@ -46,10 +46,10 @@ public class TableColumnName
 	public static final String ImpressCardId					= "impressCardId";
 
 	public static final String ImpressLabelName					= "impressLabelName";
-	public static final String ImpressLabelMaplId				= "impressLabelMaplId";
+	public static final String ImpressLabelMapId				= "impressLabelMapId";
 	public static final String InterestCardId					= "interestCardId";
 	public static final String InterestLabelName				= "interestLabelName";
-	public static final String InterestLabelMaplId				= "interestLabelMaplId";
+	public static final String InterestLabelMapId				= "interestLabelMapId";
 
 	public static final String IsJailed							= "isJailed";
 	public static final String LastActivityTime					= "lastActivityTime";

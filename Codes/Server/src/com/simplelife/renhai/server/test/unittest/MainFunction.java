@@ -32,14 +32,17 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.InputMessageCenter;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.business.pool.RandomBusinessDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceDAO;
 import com.simplelife.renhai.server.db.Devicecard;
@@ -50,6 +53,7 @@ import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.db.Operationcode;
 import com.simplelife.renhai.server.db.OperationcodeDAO;
 import com.simplelife.renhai.server.db.Profile;
+import com.simplelife.renhai.server.db.SqlUtil;
 import com.simplelife.renhai.server.db.Statisticsitem;
 import com.simplelife.renhai.server.db.StatisticsitemDAO;
 import com.simplelife.renhai.server.db.Systemmodule;
@@ -59,6 +63,7 @@ import com.simplelife.renhai.server.db.SystemoperationlogDAO;
 import com.simplelife.renhai.server.json.AlohaRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.JSONFactory;
+import com.simplelife.renhai.server.json.JSONModule;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.test.AbstractTestCase;
 import com.simplelife.renhai.server.test.MockApp;
@@ -66,9 +71,11 @@ import com.simplelife.renhai.server.test.MockAppConsts;
 import com.simplelife.renhai.server.test.RenHaiWebSocketClient;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
+import com.simplelife.renhai.server.websocket.WebSocketModule;
 
 //import com.ning.http.client.*;
 import java.util.concurrent.Future;
@@ -260,6 +267,11 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testRawCommand()
 	{
+		BusinessModule.instance.startService();
+		DBModule.instance.startService();
+		JSONModule.instance.startService();
+		WebSocketModule.instance.startService();
+		
 		//String jsonString ="{\"jsonEnvelope\":{\"header\":{\"deviceSn\":\"demoDeviceSn\",\"timeStamp\":\"2013-10-12 16:45:45.003\",\"messageType\":1,\"messageId\":101,\"messageSn\":\"3ZBJO4HCZR43NZX3\",\"deviceId\":3},\"body\":{\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"labelOrder\":0,\"globalMatchCount\":2,\"validFlag\":1,\"interestLabelName\":\"Topic6\",\"matchCount\":0,\"globalInterestLabelId\":2},{\"labelOrder\":0,\"globalMatchCount\":1,\"validFlag\":1,\"interestLabelName\":\"Topic8\",\"matchCount\":0,\"globalInterestLabelId\":1},{\"labelOrder\":0,\"globalMatchCount\":3,\"validFlag\":1,\"interestLabelName\":\"Topic7\",\"matchCount\":0,\"globalInterestLabelId\":3},{\"labelOrder\":0,\"globalMatchCount\":2,\"validFlag\":1,\"interestLabelName\":\"Topic6\",\"matchCount\":0,\"globalInterestLabelId\":2},{\"labelOrder\":0,\"globalMatchCount\":3,\"validFlag\":1,\"interestLabelName\":\"Topic7\",\"matchCount\":0,\"globalInterestLabelId\":3},{\"labelOrder\":0,\"globalMatchCount\":1,\"validFlag\":1,\"interestLabelName\":\"Topic8\",\"matchCount\":0,\"globalInterestLabelId\":1}]}}}},\"dataQuery\":{\"device\":{\"profile\":{\"interestCard\":null}}}}}}";
 		//String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{\"device\":{\"profile\":{}}},\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"globalInterestLabelId\":10,\"globalMatchCount\":10,\"interestLabelName\":\"Patrick\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":12,\"globalMatchCount\":12,\"interestLabelName\":\"Allen\",\"labelOrder\":1,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":13,\"globalMatchCount\":13,\"interestLabelName\":\"Chris\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":11,\"globalMatchCount\":11,\"interestLabelName\":\"Tomas\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":1}]}}}}},\"header\":{\"deviceId\":3,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":101,\"messageSn\":\"48UA5C56982G3MB8\",\"messageType\":1,\"timeStamp\":\"2013-10-12 22:14:00.749\"}}}";
 		//String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{\"device\":{\"profile\":{}}},\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"globalInterestLabelId\":10,\"globalMatchCount\":10,\"interestLabelName\":\"Patrick\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":12,\"globalMatchCount\":12,\"interestLabelName\":\"Allen\",\"labelOrder\":1,\"matchCount\":0,\"validFlag\":1}]}}}}},\"header\":{\"deviceId\":3,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":101,\"messageSn\":\"48UA5C56982G3MB8\",\"messageType\":1,\"timeStamp\":\"2013-10-12 22:14:00.749\"}}}";
@@ -268,20 +280,24 @@ public class MainFunction extends AbstractTestCase
 		//String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{},\"dataUpdate\":{\"device\":{\"deviceCard\":{\"appVersion\":\"0.1\",\"deviceModel\":\"iPhone 5\",\"isJailed\":1,\"osVersion\":\"6.1.2\"},\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\"}}},\"header\":{\"deviceId\":3,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":101,\"messageSn\":\"97QCOOICO8C4T5XN\",\"messageType\":1,\"timeStamp\":\"2013-10-14 06:17:14.663\"}}}";
 		//String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{\"device\":{\"profile\":{}}},\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestLabelList\":[{\"globalMatchCount\":0,\"interestLabelName\":\"Patrick\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":0}]}}}}},\"header\":{\"deviceId\":0,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":101,\"messageSn\":\"UPM59M9KUR485GQ3\",\"messageType\":1,\"timeStamp\":\"2013-10-14 11:18:01.285\"}}}";
 		
-		// topic 7
+		// Patrick, topic 7, topic 8
 		String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{\"device\":{\"profile\":{}}},\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"globalMatchCount\":0,\"interestLabelName\":\"Patrick\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":0},{\"globalInterestLabelId\":3,\"globalMatchCount\":3,\"interestLabelName\":\"Topic7\",\"labelOrder\":1,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":1,\"globalMatchCount\":1,\"interestLabelName\":\"Topic8\",\"labelOrder\":2,\"matchCount\":0,\"validFlag\":1}]}}}}},\"header\":{\"deviceId\":3,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":101,\"messageSn\":\"52D3Q6SWC9072GQ2\",\"messageType\":1,\"timeStamp\":\"2013-10-14 13:37:50.057\"}}}";
 		JSONObject wholeObj = JSONObject.parseObject(jsonString);
 		JSONObject obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope); 
 		
 		MockApp app = createNewMockApp("45CF7936-3FA1-49B2-937D-D462AB5F378A");
-		//app.syncDevice();
+		app.syncDevice();
 		app.sendRawJSONMessage(obj, true);
 		
-		// topic 6
+		// Patrick, topic 6, topic 8
 		jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{\"device\":{\"profile\":{}}},\"dataUpdate\":{\"device\":{\"profile\":{\"interestCard\":{\"interestCardId\":3,\"interestLabelList\":[{\"globalMatchCount\":0,\"interestLabelName\":\"Patrick\",\"labelOrder\":0,\"matchCount\":0,\"validFlag\":0},{\"globalInterestLabelId\":3,\"globalMatchCount\":3,\"interestLabelName\":\"Topic6\",\"labelOrder\":1,\"matchCount\":0,\"validFlag\":1},{\"globalInterestLabelId\":1,\"globalMatchCount\":1,\"interestLabelName\":\"Topic8\",\"labelOrder\":2,\"matchCount\":0,\"validFlag\":1}]}}}}},\"header\":{\"deviceId\":3,\"deviceSn\":\"45CF7936-3FA1-49B2-937D-D462AB5F378A\",\"messageId\":101,\"messageSn\":\"52D3Q6SWC9072GQ2\",\"messageType\":1,\"timeStamp\":\"2013-10-14 13:37:50.057\"}}}";
 		wholeObj = JSONObject.parseObject(jsonString);
 		obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope);
 		app.sendRawJSONMessage(obj, true);
+		app.disconnect();
+		
+		DAOWrapper.flushToDB();
+		app.sendServerDataSyncRequest();
 	}
 	
 	@Test
@@ -500,14 +516,34 @@ public class MainFunction extends AbstractTestCase
 	}
 	
 	@Test
+	public void testSqlBuilder()
+	{
+		OutputMessageCenter.instance.startThreads();
+		InputMessageCenter.instance.startThreads();
+		OnlineDevicePool.instance.startTimers();
+		
+		MockApp app1 = new MockApp(demoDeviceSn + "cccc");
+		app1.syncDevice();
+		
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(app1.getDeviceSn());
+		Device device = deviceWrapper.getDevice();
+		
+		StringBuilder strBui = new StringBuilder();
+		SqlUtil.getDeviceSaveSql(device, strBui);
+		
+		System.out.print(strBui.toString());
+		System.out.print(JSON.toJSONString(deviceWrapper.toJSONObject(), true));
+	}
+	
+	@Test
 	public void testBehaviorMode() throws InterruptedException
 	{
 		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit");
-		app1.setWebsocketLink("ws://192.168.1.5/renhai/websocket");
+		app1.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
 		app1.connect(true);
 		
 		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndQuit");
-		app2.setWebsocketLink("ws://192.168.1.5/renhai/websocket");
+		app2.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
 		app2.connect(true);
 		
 		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended

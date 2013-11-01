@@ -615,7 +615,13 @@ public class AppDataSyncRequest extends AppJSONMessage
 	
 	private void loadDevice(String deviceSn)
 	{
-		Device device = DAOWrapper.getDeviceInCache(deviceSn);
+		if (OnlineDevicePool.instance.getDevice(deviceSn) != null)
+		{
+			logger.debug("Device is in OnlineDevicePool, reuse it directly");
+			return;
+		}
+		
+		Device device = DAOWrapper.getDeviceInCache(deviceSn, false);
 		if (device != null)
 		{
 			logger.debug("Find Device object in DB cache, reuse it directly");

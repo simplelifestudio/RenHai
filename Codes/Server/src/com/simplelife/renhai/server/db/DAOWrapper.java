@@ -13,6 +13,7 @@ package com.simplelife.renhai.server.db;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -24,11 +25,15 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.hamcrest.core.IsInstanceOf;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.simplelife.renhai.server.business.BusinessModule;
+import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -81,6 +86,38 @@ public class DAOWrapper
 		
 		private boolean saveObjectToDB(Object obj)
 		{
+			/*
+			if (obj instanceof Globalimpresslabel)
+			{
+				Globalimpresslabel label = (Globalimpresslabel) obj;
+				logger.debug("===========Save Globalimpresslabel: " + label.getImpressLabelName());
+			}
+			else if (obj instanceof Globalinterestlabel)
+			{
+				Globalinterestlabel label = (Globalinterestlabel) obj;
+				logger.debug("===========Save Globalinterestlabel: " + label.getInterestLabelName());
+			} 
+			else if (obj instanceof Device)
+			{
+				Device device = (Device) obj;
+				logger.debug("===========Save device:" + device.getDeviceSn() + ", associated labels:");
+				
+				for (Impresslabelmap labelMap : device.getProfile().getImpresscard().getImpresslabelmaps())
+				{
+					logger.debug("===========Impress label:" + labelMap.getGlobalimpresslabel().getImpressLabelName() + ", global id: " + labelMap.getGlobalimpresslabel().getGlobalImpressLabelId());
+				}
+				
+				for (Interestlabelmap labelMap : device.getProfile().getInterestcard().getInterestlabelmaps())
+				{
+					logger.debug("===========Interest label:" + labelMap.getGlobalinterestlabel().getInterestLabelName() + ", global id: " + labelMap.getGlobalinterestlabel().getGlobalInterestLabelId());
+				}
+			}
+			else
+			{
+				logger.debug("===========Save " + obj.toString());
+			}
+			*/
+			
 			//Session session = HibernateSessionFactory.getSession();
 			if (session == null)
 			{
@@ -92,6 +129,46 @@ public class DAOWrapper
 			try
 			{
 				t =  session.beginTransaction();
+				
+				
+				/*
+				if (obj instanceof Device)
+				{
+					Device device = (Device) obj;
+					Set<Impresslabelmap> impressLabelSet = device.getProfile().getImpresscard().getImpresslabelmaps();
+					GlobalimpresslabelDAO impressDao = new GlobalimpresslabelDAO();
+					for (Impresslabelmap labelMap : impressLabelSet)
+					{
+						String labelName = labelMap.getGlobalimpresslabel().getImpressLabelName();
+						if (labelName == null)
+						{
+							logger.error("Fatal error, labelname == null in device <{}>", device.getDeviceSn());
+							continue;
+						}
+						Globalimpresslabel globalLabel = impressDao.findByImpressLabelName(labelName).get(0);
+						labelMap.setGlobalimpresslabel(globalLabel);
+					}
+					
+					GlobalinterestlabelDAO interestDao = new GlobalinterestlabelDAO();
+					Set<Interestlabelmap> interestLabelSet = device.getProfile().getInterestcard().getInterestlabelmaps();
+					for (Interestlabelmap labelMap : interestLabelSet)
+					{
+						String labelName = labelMap.getGlobalinterestlabel().getInterestLabelName();
+						if (labelName == null)
+						{
+							logger.error("Fatal error, labelname == null in device <{}>", device.getDeviceSn());
+							continue;
+						}
+						Globalinterestlabel globalLabel = interestDao.findByInterestLabelName(labelName).get(0);
+						labelMap.setGlobalinterestlabel(globalLabel);
+					}
+					/*
+					String sql = SqlUtil.getDeviceSaveSql(device);
+					SQLQuery query = session.createSQLQuery(sql);
+					logger.debug("Executing sql:\n{}", sql);
+					query.executeUpdate();
+				}
+				*/
 				
 				Object mergedObj = session.merge(obj);
 				if (mergedObj != null)
@@ -119,6 +196,8 @@ public class DAOWrapper
 			}
 			return true;
 		}
+		
+		
 		
 		@Override
 		public void run()
@@ -176,7 +255,7 @@ public class DAOWrapper
     protected static FlushTask flushTask = new FlushTask(linkToBeSaved);
     
     
-    public static Device getDeviceInCache(String deviceSn)
+    public static Device getDeviceInCache(String deviceSn, boolean removeFlag)
     {
     	Iterator<Object> it = linkToBeSaved.iterator();
     	Object obj;
@@ -188,6 +267,10 @@ public class DAOWrapper
     			Device device = (Device) obj;
     			if (deviceSn.equals(device.getDeviceSn()))
     			{
+    				if (removeFlag)
+    				{
+    					linkToBeSaved.remove(obj);
+    				}
     				return device;
     			}
     		}

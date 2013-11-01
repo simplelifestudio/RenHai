@@ -19,7 +19,7 @@ public class Impresslabelmap implements java.io.Serializable {
 
 	// Fields
 
-	private Integer impressLabelMaplId;
+	private Integer impressLabelMapId;
 	private Globalimpresslabel globalimpresslabel;
 	private Impresscard impresscard;
 	private Integer assessedCount;
@@ -46,13 +46,13 @@ public class Impresslabelmap implements java.io.Serializable {
 	// Property accessors
 	@Id
 	@GeneratedValue
-	@Column(name = "impressLabelMaplId", unique = true, nullable = false)
+	@Column(name = "impressLabelMapId", unique = true, nullable = false)
 	public Integer getImpressLabelMaplId() {
-		return this.impressLabelMaplId;
+		return this.impressLabelMapId;
 	}
 
 	public void setImpressLabelMaplId(Integer impressLabelMaplId) {
-		this.impressLabelMaplId = impressLabelMaplId;
+		this.impressLabelMapId = impressLabelMaplId;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
