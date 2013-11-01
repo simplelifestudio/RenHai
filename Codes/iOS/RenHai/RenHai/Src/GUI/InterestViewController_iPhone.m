@@ -191,77 +191,59 @@
 
 -(void)_updateInterestCard
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
-        
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         RHProfile* profile = device.profile;
         RHInterestCard* interestCard = profile.interestCard;
-        RHMessage* appDataSyncRequestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:device info:nil];
-        RHMessage* appDataSyncResponseMessage = [_commModule sendMessage:appDataSyncRequestMessage];
-        if (appDataSyncResponseMessage.messageId == MessageId_AppDataSyncResponse)
-        {
-            NSDictionary* messageBody = appDataSyncResponseMessage.body;
-            NSDictionary* dataQueryDic = [messageBody objectForKey:MESSAGE_KEY_DATAQUERY];
-            NSDictionary* deviceDic = [dataQueryDic objectForKey:MESSAGE_KEY_DEVICE];
-            NSDictionary* profileDic = [deviceDic objectForKey:MESSAGE_KEY_PROFILE];
-            NSDictionary* interestCardDic = [profileDic objectForKey:MESSAGE_KEY_INTERESTCARD];
-            
-            @try
-            {
-                [interestCard fromJSONObject:interestCardDic];
-                
-                [_userDataModule saveUserData];
-                
-                dispatch_async(dispatch_get_main_queue(), ^(){
+        RHMessage* requestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:device info:nil];
+    
+        [_commModule appDataSyncRequest:requestMessage
+            successCompletionBlock:^(NSDictionary* deviceDic){
+                deviceDic = [deviceDic objectForKey:MESSAGE_KEY_DEVICE];
+                NSDictionary* profileDic = [deviceDic objectForKey:MESSAGE_KEY_PROFILE];
+                NSDictionary* interestCardDic = [profileDic objectForKey:MESSAGE_KEY_INTERESTCARD];
+                @try
+                {
+                    [interestCard fromJSONObject:interestCardDic];
+                    
+                    [_userDataModule saveUserData];
+                }
+                @catch (NSException *exception)
+                {
+                    DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+                }
+                @finally
+                {
+                    
+                }
+            }
+            failureCompletionBlock:^(){
+            }
+            afterCompletionBlock:^(){
+                [CBAppUtils asyncProcessInMainThread:^(){
                     [_interestLabelCollectionView reloadData];
-                });
+                }];
             }
-            @catch (NSException *exception)
-            {
-                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
-            }
-            @finally
-            {
-                
-            }
-        }
-        else if (appDataSyncResponseMessage.messageId == MessageId_ServerErrorResponse)
-        {
-
-        }
-        else if (appDataSyncResponseMessage.messageId == MessageId_ServerTimeoutResponse)
-        {
-
-        }
-        else
-        {
-
-        }
-    });
+         ];
+    }];
 }
 
 -(void)_refreshServerInterestLabelList
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^(){
-        
-        RHDevice* device = _userDataModule.device;
-        RHServer* server = _userDataModule.server;
-        
-        RHMessage* serverDataSyncRequestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
-        RHMessage* serverDataSyncResponseMessage = [_commModule sendMessage:serverDataSyncRequestMessage];
-        
-        if (serverDataSyncResponseMessage.messageId == MessageId_ServerDataSyncResponse)
-        {
-            NSDictionary* messageBody = serverDataSyncResponseMessage.body;
-            NSDictionary* serverDic = messageBody;
-            
+    RHDevice* device = _userDataModule.device;
+    RHServer* server = _userDataModule.server;
+    
+    RHMessage* requestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
+    
+    [_commModule serverDataSyncRequest:requestMessage
+        successCompletionBlock:^(NSDictionary* serverDic){
             @try
             {
                 [server fromJSONObject:serverDic];
-
-                dispatch_async(dispatch_get_main_queue(), ^(){
+                
+                [CBAppUtils asyncProcessInMainThread:^(){
                     [_serverInterestLabelCollectionView reloadData];
-                });
+                }];
             }
             @catch (NSException *exception)
             {
@@ -271,21 +253,11 @@
             {
                 
             }
-            
         }
-        else if (serverDataSyncResponseMessage.messageId == MessageId_ServerErrorResponse)
-        {
-            
+        failureCompletionBlock:^(){
         }
-        else if (serverDataSyncResponseMessage.messageId == MessageId_ServerTimeoutResponse)
-        {
-            
-        }
-        else
-        {
-            
-        }
-    });
+        afterCompletionBlock:nil
+     ];
 }
 
 -(void)_showOtherLabels
@@ -410,7 +382,6 @@
     RHDevice* device = _userDataModule.device;
     RHProfile* profile = device.profile;
     RHInterestCard* interestCard = profile.interestCard;
-    RHServer* server = _userDataModule.server;
     
     if (cv == _interestLabelCollectionView)
     {
@@ -465,7 +436,8 @@
         NSInteger fromPosition = fromIndexPath.item;
         NSInteger toPosition = toIndexPath.item;
         [interestCard reorderLabel:fromPosition toIndex:toPosition];
-        [_interestLabelCollectionView reloadItemsAtIndexPaths:@[fromIndexPath, toIndexPath]];
+//        [_interestLabelCollectionView reloadItemsAtIndexPaths:@[fromIndexPath, toIndexPath]];
+//        [_interestLabelCollectionView reloadData];
         [self performSelector:@selector(_updateInterestCard) withObject:nil];
     }
     else if ((UICollectionView*)cv == _serverInterestLabelCollectionView)

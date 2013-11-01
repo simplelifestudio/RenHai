@@ -33,6 +33,9 @@
 #define COUNTDOWN_SECONDS 30
 
 #define DELAY_DECIDE 0.5f
+#define DELAY_UNBINDSESSION 1.0f
+#define DELAY_AGREECHAT 1.0f
+#define DELAY_REJECTCHAT 1.0f
 
 @interface ChatConfirmViewController_iPhone ()
 {
@@ -314,9 +317,6 @@
     
     _isDeciding = NO;
     
-    _agreeChatButton.enabled = YES;
-    _rejectChatButton.enabled = YES;
-    
     _agreeChatButton.hidden = NO;
     _rejectChatButton.hidden = NO;
     
@@ -339,9 +339,7 @@
 {
     _partnerAgreeChatFlag = YES;
     
-    [CBAppUtils asyncProcessInMainThread:^(){
-        _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Agreed", nil);
-    }];
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Agreed", nil);
     
     if (_selfAgreeChatFlag)
     {
@@ -353,12 +351,10 @@
 {
     _partnerRejectChatFlag = YES;
     
-    [CBAppUtils asyncProcessInMainThread:^(){
-        _agreeChatButton.enabled = NO;
-        _rejectChatButton.enabled = NO;
-        
-        _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Rejected", nil);
-    }];
+    _agreeChatButton.hidden = YES;
+    _rejectChatButton.hidden = YES;
+    
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Rejected", nil);
     
     [self _clockCancel];
     
@@ -369,12 +365,10 @@
 {
     _partnerLostFlag = YES;
     
-    [CBAppUtils asyncProcessInMainThread:^(){
-        _agreeChatButton.enabled = NO;
-        _rejectChatButton.enabled = NO;
-        
-        _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Lost", nil);
-    }];
+    _agreeChatButton.hidden = YES;
+    _rejectChatButton.hidden = YES;
+    
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Lost", nil);
     
     [self _clockCancel];
     
@@ -459,68 +453,39 @@
     }
 }
 
-- (void) _agreeChat
+-(void)_agreeChat
 {
     _agreeChatButton.hidden = YES;
     _rejectChatButton.hidden = YES;
     _selfStatusLabel.text = NSLocalizedString(@"ChatConfirm_SelfStatus_Agreed", nil);
     
+    _isDeciding = YES;
+    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
-        _isDeciding = YES;
+        
+        [NSThread sleepForTimeInterval:DELAY_AGREECHAT];
         
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_AgreeChat device:device info:nil];
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_AgreeChat device:device info:nil];
         
-        RHMessage* responseMessage = [_commModule sendMessage:businessSessionRequestMessage];
-        if (responseMessage.messageId == MessageId_BusinessSessionResponse)
-        {
-            NSDictionary* messageBody = responseMessage.body;
-            NSDictionary* businessSessionDic = messageBody;
-            
-            @try
-            {
-                NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
-                BusinessSessionOperationValue operationValue = oOperationValue.intValue;
-                
-                if (operationValue == BusinessSessionOperationValue_Success)
+        [_commModule businessSessionRequest:requestMessage
+            successCompletionBlock:^(){
+                _selfAgreeChatFlag = YES;
+                [_statusModule recordAppMessage:AppMessageIdentifier_AgreeChat];
+
+                if (_partnerAgreeChatFlag)
                 {
-                    _selfAgreeChatFlag = YES;
-                    [_statusModule recordAppMessage:AppMessageIdentifier_AgreeChat];
-                    
-                    if (_partnerAgreeChatFlag)
-                    {
-                        [self _moveToChatVideoView];
-                    }
-                }
-                else
-                {
-                    _selfAgreeChatFlag = NO;
+                  [self _moveToChatVideoView];
                 }
             }
-            @catch (NSException *exception)
-            {
-                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+            failureCompletionBlock:^(){
+                _selfAgreeChatFlag = NO;
             }
-            @finally
-            {
-                
+            afterCompletionBlock:^(){
+                _isDeciding = NO;
             }
-        }
-        else if (responseMessage.messageId == MessageId_ServerErrorResponse)
-        {
-            
-        }
-        else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
-        {
-            
-        }
-        else
-        {
-            
-        }
-        
-        _isDeciding = NO;
+         ];
     }];
 }
 
@@ -530,59 +495,29 @@
     _rejectChatButton.hidden = YES;
     _selfStatusLabel.text = NSLocalizedString(@"ChatConfirm_SelfStatus_Rejected", nil);
     
+    _isDeciding = YES;
+    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
-        _isDeciding = YES;
+    
+        [NSThread sleepForTimeInterval:DELAY_REJECTCHAT];
         
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_RejectChat device:device info:nil];
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_RejectChat device:device info:nil];
         
-        RHMessage* responseMessage = [_commModule sendMessage:businessSessionRequestMessage];
-        if (responseMessage.messageId == MessageId_BusinessSessionResponse)
-        {
-            NSDictionary* messageBody = responseMessage.body;
-            NSDictionary* businessSessionDic = messageBody;
-            
-            @try
-            {
-                NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
-                BusinessSessionOperationValue operationValue = oOperationValue.intValue;
-                
-                if (operationValue == BusinessSessionOperationValue_Success)
-                {
-                    _selfRejectChatFlag = YES;
-                    [_statusModule recordAppMessage:AppMessageIdentifier_RejectChat];
-                    
-                    [self _moveToChatWaitView];
-                }
-                else
-                {
-                    _selfRejectChatFlag = NO;
-                }
+        [_commModule businessSessionRequest:requestMessage
+            successCompletionBlock:^(){
+                _selfRejectChatFlag = YES;
+                [_statusModule recordAppMessage:AppMessageIdentifier_RejectChat];
+                [self _moveToChatWaitView];
             }
-            @catch (NSException *exception)
-            {
-                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+            failureCompletionBlock:^(){
+                _selfRejectChatFlag = NO;
             }
-            @finally
-            {
-                
+            afterCompletionBlock:^(){
+                _isDeciding = NO;
             }
-        }
-        else if (responseMessage.messageId == MessageId_ServerErrorResponse)
-        {
-            
-        }
-        else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
-        {
-            
-        }
-        else
-        {
-            
-        }
-        
-        _isDeciding = NO;
+         ];
     }];
 }
 
@@ -594,59 +529,27 @@
         {
             [NSThread sleepForTimeInterval:DELAY_DECIDE];
         }
+        
         if (!_selfRejectChatFlag)
         {
+            [NSThread sleepForTimeInterval:DELAY_UNBINDSESSION];
+            
             RHDevice* device = _userDataModule.device;
             
-            RHMessage* businessSessionRequestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_UnbindSession device:device info:nil];
+            RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_UnbindSession device:device info:nil];
             
-            RHMessage* responseMessage = [_commModule sendMessage:businessSessionRequestMessage];
-            if (responseMessage.messageId == MessageId_BusinessSessionResponse)
-            {
-                NSDictionary* messageBody = responseMessage.body;
-                NSDictionary* businessSessionDic = messageBody;
-                
-                @try
-                {
-                    NSNumber* oOperationValue = [businessSessionDic objectForKey:MESSAGE_KEY_OPERATIONVALUE];
-                    BusinessSessionOperationValue operationValue = oOperationValue.intValue;
-                    
-                    if (operationValue == BusinessSessionOperationValue_Success)
-                    {
-                        _selfUnbindSessionFlag = YES;
-                        [_statusModule recordAppMessage:AppMessageIdentifier_UnbindSession];
-                        
-                        [self _moveToChatWaitView];
-                    }
-                    else
-                    {
-                        _selfUnbindSessionFlag = NO;
-                    }
+            [_commModule businessSessionRequest:requestMessage
+                successCompletionBlock:^(){
+                    _selfUnbindSessionFlag = YES;
+                    [_statusModule recordAppMessage:AppMessageIdentifier_UnbindSession];
+                    [self _moveToChatWaitView];
                 }
-                @catch (NSException *exception)
-                {
-                    DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+                failureCompletionBlock:^(){
+                    _selfUnbindSessionFlag = NO;
                 }
-                @finally
-                {
-                    
-                }
-            }
-            else if (responseMessage.messageId == MessageId_ServerErrorResponse)
-            {
-                
-            }
-            else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
-            {
-                
-            }
-            else
-            {
-                
-            }
-            
+                afterCompletionBlock:nil
+             ];
         }
-        
     }];
 }
 
