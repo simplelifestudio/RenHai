@@ -13,7 +13,6 @@ import org.apache.jmeter.samplers.SampleResult;
 import org.apache.jmeter.testelement.TestElement;
 import org.apache.jmeter.testelement.TestStateListener;
 import org.apache.jmeter.testelement.property.*;
-import org.apache.jmeter.threads.JMeterContextService;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.jorphan.util.JOrphanUtils;
 import org.apache.log.Logger;
@@ -30,9 +29,6 @@ import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeoutException;
-import java.util.regex.Pattern;
 
 /**
  * The sampler for WebSocket.
@@ -125,7 +121,6 @@ public class WebSocketSampler extends AbstractSampler implements TestStateListen
         SampleResult res = new SampleResult();
         res.setSampleLabel(getName());
 
-        boolean isOK = false;
         if (!initialized) {
             try {
                 initialize();

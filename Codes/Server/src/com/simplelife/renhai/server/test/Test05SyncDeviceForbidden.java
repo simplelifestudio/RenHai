@@ -9,6 +9,7 @@
 
 package com.simplelife.renhai.server.test;
 
+import org.apache.ibatis.session.SqlSession;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,8 +17,8 @@ import org.junit.Test;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.TableColumnName;
-import com.simplelife.renhai.server.db.TableName;
+import com.simplelife.renhai.server.db.Profile;
+import com.simplelife.renhai.server.db.ProfileMapper;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -54,17 +55,17 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
 		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn());
-		deviceWrapper.getDevice().getDevicecard();
 		
 		Device device = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDevice();
-		String deviceId = String.valueOf(device.getDeviceId()); 
+		String.valueOf(device.getDeviceId()); 
 		
 		// Step_01 数据库操作：将设备A的服务状态更新为禁聊，到期日期为明年
-		String sql = "update " + TableName.Profile 
-				+ " set " + TableColumnName.ServiceStatus + " = '" + Consts.ServiceStatus.Banned.name() + "', "
-				+ TableColumnName.UnbanDate + " = " + DateUtil.getDateByDayBack(-365).getTime()
-				+ " where " + TableColumnName.DeviceId + " = " + deviceId;
-		DAOWrapper.executeSql(sql);
+		SqlSession session = DAOWrapper.getSession();
+		ProfileMapper mapper = session.getMapper(ProfileMapper.class);
+		Profile profile = deviceWrapper.getDevice().getProfile(); 
+		profile.setServiceStatus(Consts.ServiceStatus.Banned.name());
+		profile.setUnbanDate(DateUtil.getDateByDayBack(-365).getTime());
+		mapper.insert(profile);
 		
 		// Step_02 调用：OnlineDevicePool::getCount
 		//int deviceCount = pool.getElementCount();
@@ -85,10 +86,8 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 		assertTrue(deviceWrapper.getLastActivityTime() > lastActivity);
 		assertEquals(Consts.BusinessStatus.Init, deviceWrapper.getBusinessStatus());
 		
-		sql = "update " + TableName.Profile 
-				+ " set " + TableColumnName.ServiceStatus + " = '" + Consts.ServiceStatus.Normal.name() + "', "
-				+ TableColumnName.UnbanDate + " = null "
-				+ " where " + TableColumnName.DeviceId + " = " + deviceId;
-		DAOWrapper.executeSql(sql);
+		profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
+		profile.setUnbanDate(null);
+		mapper.insert(profile);
 	}
 }

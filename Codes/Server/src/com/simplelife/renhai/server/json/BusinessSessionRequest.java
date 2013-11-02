@@ -12,6 +12,7 @@ package com.simplelife.renhai.server.json;
 
 import java.util.Set;
 
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONArray;
@@ -22,7 +23,7 @@ import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.DeviceDAO;
+import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
@@ -546,8 +547,13 @@ public class BusinessSessionRequest extends AppJSONMessage
 			
 			if (targetDevice == null)
 			{
+				// Load device from DB 
+				SqlSession session = DAOWrapper.getSession();
+				DeviceMapper mapper = session.getMapper(DeviceMapper.class);
+				targetDevice = mapper.selectByDeviceSn(deviceSn);
+				
 				// Check if it's totally invalid deviceSn in DB
-				if (DBQueryUtil.isNewDevice(deviceSn))
+				if (targetDevice == null)
 				{
 					String temp = "Failed to assess Device <" + deviceSn + "> due to it's not in online pool";
 					logger.error(temp);
@@ -560,10 +566,6 @@ public class BusinessSessionRequest extends AppJSONMessage
 					OutputMessageCenter.instance.addMessage(response);
 					return;
 				}
-				
-				// Load device from DB 
-				DeviceDAO dao = new DeviceDAO();
-				targetDevice = dao.findByDeviceSn(deviceSn).get(0);
 			}
 		}
 		else
@@ -571,8 +573,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 			targetDevice = targetDeviceWrapper.getDevice();
 		}
 		
-		Impresscard targetCard = targetDevice.getProfile().getImpresscard();
-		Impresscard sourceCard = deviceWrapper.getDevice().getProfile().getImpresscard();
+		Impresscard targetCard = targetDevice.getProfile().getImpressCard();
+		Impresscard sourceCard = deviceWrapper.getDevice().getProfile().getImpressCard();
 		
 		JSONObject impressObj = body.getJSONObject(JSONKey.OperationInfo)
 				.getJSONObject(JSONKey.Device)
@@ -635,11 +637,11 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void updateOrAppendImpressLabel(Impresscard card, String labelName, boolean assessedFlag)
 	{
-		Set<Impresslabelmap> impressLabels = card.getImpresslabelmaps();
+		Set<Impresslabelmap> impressLabels = card.getImpressLabelMapSet();
 
 		for (Impresslabelmap label : impressLabels)
 		{
-			String tmpLabelName = label.getGlobalimpresslabel().getImpressLabelName();
+			String tmpLabelName = label.getGlobalLabel().getImpressLabelName();
 			if (tmpLabelName.equals(labelName))
 			{
 				synchronized(label)
@@ -684,9 +686,10 @@ public class BusinessSessionRequest extends AppJSONMessage
 			labelMap.setAssessCount(1);
 			labelMap.setAssessedCount(0);
 		}
-		labelMap.setGlobalimpresslabel(globalimpresslabel);
+		
+		labelMap.setGlobalImpressLabelId(globalimpresslabel.getGlobalImpressLabelId());
 		labelMap.setUpdateTime(System.currentTimeMillis());
-		labelMap.setImpresscard(card);
+		labelMap.setImpressCardId(card.getImpressCardId());
 		
 		synchronized (impressLabels)
 		{

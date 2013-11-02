@@ -11,18 +11,12 @@
 
 package com.simplelife.renhai.server.business.pool;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
-import org.slf4j.Logger;
-
-import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.AbstractLabel;
 import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.util.Consts;
@@ -123,7 +117,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     @Override
     public String checkDeviceEnter(IDeviceWrapper device)
     {
-    	Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
+    	Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
     	if (labelSet.isEmpty())
     	{
     		String temp = "Device <" + device.getDeviceSn() + "> has no interest label and is not allowed to enter interest business device pool.";
@@ -148,7 +142,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     
     private void addInterestIndex(IDeviceWrapper device)
     {
-    	Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
+    	Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
     	if (labelSet.isEmpty())
     	{
     		return;
@@ -156,7 +150,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	
     	for (Interestlabelmap label : labelSet)
     	{
-    		String strLabel = label.getGlobalinterestlabel().getInterestLabelName();
+    		String strLabel = label.getGlobalLabel().getInterestLabelName();
     		if (!this.interestLabelMap.containsKey(strLabel))
     		{
     			interestLabelMap.put(strLabel, new ConcurrentSkipListSet<IDeviceWrapper>());
@@ -186,8 +180,8 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	Set<Interestlabelmap> labelSet = device
     			.getDevice()
     			.getProfile()
-    			.getInterestcard()
-    			.getInterestlabelmaps();
+    			.getInterestCard()
+    			.getInterestLabelMapSet();
     	
     	if (labelSet.isEmpty())
     	{
@@ -197,7 +191,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	
     	for (Interestlabelmap label : labelSet)
     	{
-    		String strLabel = label.getGlobalinterestlabel().getInterestLabelName();
+    		String strLabel = label.getGlobalLabel().getInterestLabelName();
     		if (!this.interestLabelMap.containsKey(strLabel))
     		{
     			logger.error("Fatal error: Interest device list for label <{}> is non-existent", strLabel);
@@ -245,7 +239,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 		deviceMap.remove(deviceSn);
 		chatDeviceMap.put(deviceSn, device);
 		
-		Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
+		device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
 		this.removeInterestIndex(device);
 	}
 	

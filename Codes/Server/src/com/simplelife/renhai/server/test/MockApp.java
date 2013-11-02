@@ -248,7 +248,7 @@ public class MockApp implements IMockApp, Runnable
 
 	public void setOSVersion(String oSVersion)
 	{
-		osVersion = oSVersion;
+		this.osVersion = oSVersion;
 	}
 
 	public String getAppVersion()
@@ -258,7 +258,7 @@ public class MockApp implements IMockApp, Runnable
 
 	public void setAppVersion(String appVersion)
 	{
-		appVersion = appVersion;
+		this.appVersion = appVersion;
 	}
 
 	public String getLocation()
@@ -268,7 +268,7 @@ public class MockApp implements IMockApp, Runnable
 
 	public void setLocation(String location)
 	{
-		location = location;
+		this.location = location;
 	}
 
 	public String getDeviceModel()
@@ -278,7 +278,7 @@ public class MockApp implements IMockApp, Runnable
 
 	public void setDeviceModel(String deviceModel)
 	{
-		deviceModel = deviceModel;
+		this.deviceModel = deviceModel;
 	}
 
     public void clearLastReceivedCommand()
@@ -1104,6 +1104,8 @@ public class MockApp implements IMockApp, Runnable
 				{
 					logger.error("MockApp <" + deviceSn + "> received {} in status of AssessReqSent", messageId.name());
 				}
+				break;
+			default:
 				break;
 		}
 		

@@ -11,12 +11,10 @@
 
 package com.simplelife.renhai.server.json;
 
-import org.hibernate.Session;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
-import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
@@ -34,8 +32,6 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     
     /** */
     protected Consts.MessageId messageId;
-    protected Session hibernateSesion;
-    
     protected String messageSn;
     
     public AppJSONMessage(JSONObject jsonObject)
@@ -261,7 +257,6 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
 	
 	public void doBeforeRun()
 	{
-		hibernateSesion = HibernateSessionFactory.getSession();
 		/*
 		Device device = this.deviceWrapper.getDevice();
 		if ((device != null) && (!hibernateSesion.contains(device)))
@@ -282,10 +277,6 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
 	
 	public void doAfterRun()
 	{
-		if (hibernateSesion != null && hibernateSesion.isOpen())
-		{
-			HibernateSessionFactory.closeSession();
-		}
 	}
 	
 	public abstract void doRun();

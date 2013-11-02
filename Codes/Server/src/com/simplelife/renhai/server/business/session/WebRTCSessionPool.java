@@ -17,19 +17,20 @@ import java.util.Timer;
 
 import com.simplelife.renhai.server.business.pool.AbstractPool;
 import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.Webrtcsession;
 
 
 /** */
 public class WebRTCSessionPool extends AbstractPool
 {
     /** */
-    private List<WebRTCSession> webRTCSessionList = new ArrayList<WebRTCSession>();
+    private List<Webrtcsession> webRTCSessionList = new ArrayList<Webrtcsession>();
     
     /** */
     protected Timer timer;
     
     /** */
-    public WebRTCSession getWebRTCSession()
+    public Webrtcsession getWebRTCSession()
     {
 		if (webRTCSessionList.isEmpty())
 		{
@@ -61,7 +62,7 @@ public class WebRTCSessionPool extends AbstractPool
     /** */
     public boolean saveToDb()
     {
-    	for (WebRTCSession session : webRTCSessionList)
+    	for (Webrtcsession session : webRTCSessionList)
     	{
     		DAOWrapper.cache(session);
     	}
@@ -73,7 +74,7 @@ public class WebRTCSessionPool extends AbstractPool
     {
     	for (int i = 0; i < this.capacity; i++)
 		{
-    		webRTCSessionList.add(new WebRTCSession());
+    		webRTCSessionList.add(new Webrtcsession());
 		}
     	
         return true;

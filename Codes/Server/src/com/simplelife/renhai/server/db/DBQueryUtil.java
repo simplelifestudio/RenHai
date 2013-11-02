@@ -9,11 +9,8 @@
 
 package com.simplelife.renhai.server.db;
 
-import java.util.List;
-
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.log.FileLogger;
@@ -44,11 +41,11 @@ public class DBQueryUtil
 			return false;
 		}
 		
-		DeviceDAO dao = new DeviceDAO();
-		List<Device> list = null;
+		SqlSession session = DAOWrapper.getSession();
+		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
 		try
 		{
-			list = dao.findByDeviceSn(deviceSn);
+			device = mapper.selectByDeviceSn(deviceSn);
 		}
 		catch(RuntimeException re)
 		{
@@ -56,15 +53,19 @@ public class DBQueryUtil
 			// try again
 			try
 			{
-				list = dao.findByDeviceSn(deviceSn);
+				device = mapper.selectByDeviceSn(deviceSn);
 			}
 			catch(RuntimeException e)
 			{
 				FileLogger.printStackTrace(e);
 			}
 		}
+		finally
+		{
+			session.close();
+		}
 		
-		return (list.isEmpty());
+		return (device == null);
 	}
 	
 	/**
@@ -80,30 +81,68 @@ public class DBQueryUtil
 			return label;
 		}
 		
-		GlobalimpresslabelDAO dao = new GlobalimpresslabelDAO();
-		List<Globalimpresslabel> list = null;
+		SqlSession session = DAOWrapper.getSession();
+		GlobalimpresslabelMapper mapper = session.getMapper(GlobalimpresslabelMapper.class);
+		
 		try
 		{
-			list = dao.findByImpressLabelName(labelName);
+			label = mapper.selectByLabelName(labelName);
 		}
 		catch(Exception re)
 		{
+			FileLogger.printStackTrace(re);
 			// try again
 			try
 			{
-				list = dao.findByImpressLabelName(labelName);
+				label = mapper.selectByLabelName(labelName);
 			}
 			catch(Exception e)
 			{
 				FileLogger.printStackTrace(e);
 			}
 		}
-		
-		if (list == null || list.size() == 0)
+		finally
 		{
-			return null;
+			session.close();
 		}
-		return list.get(0);
+		
+		return label;
+	}
+	
+	public static Globalimpresslabel getGlobalimpresslabel(Integer labelId)
+	{
+		Globalimpresslabel label = DAOWrapper.getImpressLabelInCache(labelId);
+		if (label != null)
+		{
+			return label;
+		}
+		
+		SqlSession session = DAOWrapper.getSession();
+		GlobalimpresslabelMapper mapper = session.getMapper(GlobalimpresslabelMapper.class);
+		
+		try
+		{
+			label = mapper.selectByPrimaryKey(labelId);
+		}
+		catch(Exception re)
+		{
+			FileLogger.printStackTrace(re);
+			// try again
+			try
+			{
+				label = mapper.selectByPrimaryKey(labelId);
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+		}
+		finally
+		{
+			session.close();
+		}
+		
+		return label;
 	}
 	
 	/**
@@ -119,18 +158,19 @@ public class DBQueryUtil
 			return label;
 		}
 		
-		GlobalinterestlabelDAO dao = new GlobalinterestlabelDAO();
-		List<Globalinterestlabel> list = null;
+		SqlSession session = DAOWrapper.getSession();
+		GlobalinterestlabelMapper mapper = session.getMapper(GlobalinterestlabelMapper.class);
 		try
 		{
-			list = dao.findByInterestLabelName(labelName);
+			label = mapper.selectByLabelName(labelName);
 		}
 		catch(RuntimeException re)
 		{
+			FileLogger.printStackTrace(re);
 			// try again
 			try
 			{
-				list = dao.findByInterestLabelName(labelName);
+				label = mapper.selectByLabelName(labelName);
 			}
 			catch(RuntimeException e)
 			{
@@ -138,57 +178,37 @@ public class DBQueryUtil
 			}
 		}
 		
-		if (list == null || list.size() == 0)
-		{
-			return null;
-		}
-		return list.get(0);
+		return label;
 	}
 	
-	/**
-	 * Return different ID by given deviceSn
-	 * @param idColumnName: name of ID column, such as deviceId 
-	 * @param deviceSn: SN of device, it's unique for each device
-	 * @return value of ID column
-	 */
-	public static String getIDByDeviceSn(String idColumnName, String deviceSn)
+	public static Globalinterestlabel getGlobalinterestlabel(Integer labelId)
 	{
-		Logger logger = DBModule.instance.getLogger();
-		
-		DeviceDAO deviceDAO = new DeviceDAO();
-		List<Device> deviceList = deviceDAO.findByDeviceSn(deviceSn);
-		if (deviceList.size() == 0)
+		Globalinterestlabel label = DAOWrapper.getInterestLabelInCache(labelId);
+		if (label != null)
 		{
-			logger.warn("Device SN can't be found in DB: {}", deviceSn);
-			return null;
-		}
-
-		Device device = deviceList.get(0);
-		if (idColumnName.equals(TableColumnName.DeviceId))
-		{
-			return device.getDeviceId().toString();
+			return label;
 		}
 		
-		if (idColumnName.equals(TableColumnName.DeviceCardId))
+		SqlSession session = DAOWrapper.getSession();
+		GlobalinterestlabelMapper mapper = session.getMapper(GlobalinterestlabelMapper.class);
+		try
 		{
-			return device.getDevicecard().getDeviceCardId().toString();
+			label = mapper.selectByPrimaryKey(labelId);
+		}
+		catch(RuntimeException re)
+		{
+			FileLogger.printStackTrace(re);
+			// try again
+			try
+			{
+				label = mapper.selectByPrimaryKey(labelId);
+			}
+			catch(RuntimeException e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
 		
-		if (idColumnName.equals(TableColumnName.ProfileId))
-		{
-			return device.getProfile().getProfileId().toString();
-		}
-		
-		if (idColumnName.equals(TableColumnName.InterestCardId))
-		{
-			return device.getProfile().getInterestcard().getInterestCardId().toString();
-		}
-		
-		if (idColumnName.equals(TableColumnName.ImpressCardId))
-		{
-			return device.getProfile().getImpresscard().getImpressCardId().toString();
-		}
-		
-		return null;
+		return label;
 	}
 }

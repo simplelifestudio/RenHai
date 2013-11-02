@@ -9,15 +9,15 @@
 
 package com.simplelife.renhai.server.test;
 
-import java.util.List;
-
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import junit.framework.TestCase;
 
-import com.simplelife.renhai.server.db.DeviceDAO;
+import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
+import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Interestcard;
@@ -47,14 +47,9 @@ public abstract class AbstractTestCase extends TestCase
 	
 	private Device loadDevice(String deviceSn)
 	{
-		DeviceDAO deviceDAO = new DeviceDAO();
-		List<Device> cardList = deviceDAO.findByDeviceSn(deviceSn);
-		if (cardList.size() == 0 )
-		{
-			return null;
-		}
-
-		Device device = cardList.get(0);
+		SqlSession session = DAOWrapper.getSession();
+		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
+		Device device = mapper.selectByDeviceSn(deviceSn);
 		return device;
 	}
 
@@ -77,8 +72,8 @@ public abstract class AbstractTestCase extends TestCase
 		profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
 		
 		// Bind profile with cards
-		interestCard.setProfile(profile);
-		impressCard.setProfile(profile);
+		profile.setImpressCard(impressCard);
+		profile.setInterestCard(interestCard);
 		
 		// Create new deviceCard
 		Devicecard deviceCard = new Devicecard();
@@ -92,11 +87,9 @@ public abstract class AbstractTestCase extends TestCase
 		// Create Device object and bind with cards
 		Device device = new Device();
 		
-		device.setDevicecard(deviceCard);
-		deviceCard.setDevice(device);
-		
+		device.setDeviceCard(deviceCard);
 		device.setProfile(profile);
-		profile.setDevice(device);
+		
 		
 		device.setDeviceSn(deviceSn);
 		
@@ -123,7 +116,6 @@ public abstract class AbstractTestCase extends TestCase
 	protected void deleteDevice(MockApp mockApp)
 	{
 		mockApp.pingTimer.cancel();
-		OnlineDevicePool pool = OnlineDevicePool.instance;
 		mockApp.disconnect();
 	}
 	

@@ -32,12 +32,12 @@ public class UnkownRequest extends AppJSONMessage
 	@Override
 	public void doRun()
 	{
-		String messageId = Consts.MessageId.UnkownRequest.name();  
+		Consts.MessageId.UnkownRequest.name();  
 		if (header != null)
 		{
 			if (header.containsKey(JSONKey.MessageId))
 			{
-				messageId = header.getString(JSONKey.MessageId);
+				header.getString(JSONKey.MessageId);
 			}
 		}
 		responseError();

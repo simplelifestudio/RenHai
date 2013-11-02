@@ -13,26 +13,18 @@ package com.simplelife.renhai.server.db;
 
 import org.slf4j.LoggerFactory;
 
-import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.AbstractModule;
 
 
 /** */
 public class DBModule extends AbstractModule
 {
+	public final static DBModule instance = new DBModule();
 	private DBModule()
 	{
 		logger = LoggerFactory.getLogger(DBModule.class);
 	}
-	
-	
-	public void cache(Object obj)
-	{
-		DAOWrapper.cache(obj);
-	}
-	public final static DBModule instance = new DBModule();
-	
-	
+
 	@Override
 	public void startService()
     {

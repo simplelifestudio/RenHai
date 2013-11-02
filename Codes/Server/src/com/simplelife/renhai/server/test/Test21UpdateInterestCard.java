@@ -119,7 +119,7 @@ public class Test21UpdateInterestCard extends AbstractTestCase
 		// TODO: 
 		
 		// Step_03 ������DeviceWrapper::getInterestcard
-		Interestcard card = deviceWrapper1.getDevice().getProfile().getInterestcard();
+		Interestcard card = deviceWrapper1.getDevice().getProfile().getInterestCard();
 		checkLabel(card);
 		
 		// Step_04 ������DaoWrapper::flush

@@ -20,12 +20,10 @@ import java.util.Set;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
-import com.simplelife.renhai.server.business.pool.AbstractBusinessScheduler;
 import com.simplelife.renhai.server.business.pool.InputMessageCenter;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
@@ -219,7 +217,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     			break;
     			
     		case MatchCache:
-    			AbstractBusinessScheduler businessScheduler = null;
     			switch(businessStatus)
     			{
     				case Idle:
@@ -587,7 +584,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 	public JSONObject toJSONObject_DeviceCard()
 	{
 		JSONObject deviceCardObj = new JSONObject();
-		Devicecard deviceCard = device.getDevicecard();
+		Devicecard deviceCard = device.getDeviceCard();
 		deviceCardObj.put(JSONKey.DeviceCardId, deviceCard.getDeviceCardId());
 		deviceCardObj.put(JSONKey.RegisterTime, DateUtil.getDateStringByLongValue(deviceCard.getRegisterTime()));
 		deviceCardObj.put(JSONKey.DeviceModel, deviceCard.getDeviceModel());
@@ -636,7 +633,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 	
 	public JSONObject toJSONObject_InterestCard(Profile profile)
 	{
-		Interestcard interestCard = profile.getInterestcard();
+		Interestcard interestCard = profile.getInterestCard();
 		//JSONObject interestCardObj = JSONObject.(interestCard);
 		
 		JSONObject interestCardObj = new JSONObject();
@@ -645,13 +642,13 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		JSONArray interestLabelListObj = new JSONArray();
 		interestCardObj.put(JSONKey.InterestLabelList, interestLabelListObj);
 		
-		Set<Interestlabelmap> interestLabelList = interestCard.getInterestlabelmaps();
+		Set<Interestlabelmap> interestLabelList = interestCard.getInterestLabelMapSet();
 		for (Interestlabelmap map : interestLabelList)
 		{
 			JSONObject mapObj = new JSONObject();
-			mapObj.put(JSONKey.GlobalInterestLabelId, map.getGlobalinterestlabel().getGlobalInterestLabelId());
-			mapObj.put(JSONKey.InterestLabelName, map.getGlobalinterestlabel().getInterestLabelName());
-			mapObj.put(JSONKey.GlobalMatchCount, map.getGlobalinterestlabel().getGlobalMatchCount());
+			mapObj.put(JSONKey.GlobalInterestLabelId, map.getGlobalInterestLabelId());
+			mapObj.put(JSONKey.InterestLabelName, map.getGlobalLabel().getInterestLabelName());
+			mapObj.put(JSONKey.GlobalMatchCount, map.getGlobalLabel().getGlobalMatchCount());
 			mapObj.put(JSONKey.LabelOrder, map.getLabelOrder());
 			mapObj.put(JSONKey.MatchCount, map.getMatchCount());
 			mapObj.put(JSONKey.ValidFlag, Consts.ValidInvalid.Valid.getValue());
@@ -671,7 +668,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		impressCardObj.put(JSONKey.AssessLabelList, assessLabelListObj);
 		impressCardObj.put(JSONKey.ImpressLabelList, impressLabelListObj);
 		
-		Set<Impresslabelmap> labelSet = impressCard.getImpresslabelmaps();
+		Set<Impresslabelmap> labelSet = impressCard.getImpressLabelMapSet();
 		//TreeSet<ImpresslabelmapSortable> labelList = new TreeSet<ImpresslabelmapSortable>();
 		//TreeSet<ImpresslabelmapSortable> solidList = new TreeSet<ImpresslabelmapSortable>();
 		
@@ -680,7 +677,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		
 		for (Impresslabelmap labelMap : labelSet)
 		{
-			if (Consts.SolidAssessLabel.isSolidAssessLabel(labelMap.getGlobalimpresslabel().getImpressLabelName()))
+			if (Consts.SolidAssessLabel.isSolidAssessLabel(labelMap.getGlobalLabel().getImpressLabelName()))
 			{
 				//solidList.add((ImpresslabelmapSortable)labelMap);
 				solidList.add(labelMap);
@@ -696,8 +693,8 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		for (Impresslabelmap label : solidList)
 		{
 			JSONObject labelObj = new JSONObject();
-			labelObj.put(JSONKey.ImpressLabelName, label.getGlobalimpresslabel().getImpressLabelName());
-			labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalimpresslabel().getGlobalImpressLabelId());
+			labelObj.put(JSONKey.ImpressLabelName, label.getGlobalLabel().getImpressLabelName());
+			labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalLabel().getGlobalImpressLabelId());
 			labelObj.put(JSONKey.AssessedCount, label.getAssessedCount());
 			labelObj.put(JSONKey.UpdateTime, DateUtil.getDateStringByLongValue(label.getUpdateTime()));
 			labelObj.put(JSONKey.AssessCount, label.getAssessCount());
@@ -709,8 +706,8 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		for (Impresslabelmap label : labelList)
 		{
 			JSONObject labelObj = new JSONObject();
-			labelObj.put(JSONKey.ImpressLabelName, label.getGlobalimpresslabel().getImpressLabelName());
-			labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalimpresslabel().getGlobalImpressLabelId());
+			labelObj.put(JSONKey.ImpressLabelName, label.getGlobalLabel().getImpressLabelName());
+			labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalLabel().getGlobalImpressLabelId());
 			labelObj.put(JSONKey.AssessedCount, label.getAssessedCount());
 			labelObj.put(JSONKey.UpdateTime, DateUtil.getDateStringByLongValue(label.getUpdateTime()));
 			labelObj.put(JSONKey.AssessCount, label.getAssessCount());
@@ -728,7 +725,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 	public JSONObject toJSONObject_ImpressCard(Profile profile)
 	{
 		JSONObject impressCardObj = new JSONObject();
-		Impresscard impressCard = profile.getImpresscard();
+		Impresscard impressCard = profile.getImpressCard();
 		impressCardObj.put(JSONKey.ImpressCardId, impressCard.getImpressCardId());
 		impressCardObj.put(JSONKey.ChatTotalCount, impressCard.getChatTotalCount());
 		impressCardObj.put(JSONKey.ChatTotalDuration, impressCard.getChatTotalDuration());
@@ -757,7 +754,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 	{
 		Device device = this.getDevice();
 		Profile profile = device.getProfile();
-		Impresscard card = profile.getImpresscard();
+		Impresscard card = profile.getImpressCard();
 		
 		synchronized (card)
 		{
@@ -770,7 +767,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 	{
 		Device device = this.getDevice();
 		Profile profile = device.getProfile();
-		Impresscard card = profile.getImpresscard();
+		Impresscard card = profile.getImpressCard();
 		
 		synchronized (card)
 		{
@@ -783,7 +780,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 	{
 		Device device = this.getDevice();
 		Profile profile = device.getProfile();
-		Impresscard card = profile.getImpresscard();
+		Impresscard card = profile.getImpressCard();
 		
 		synchronized (card)
 		{

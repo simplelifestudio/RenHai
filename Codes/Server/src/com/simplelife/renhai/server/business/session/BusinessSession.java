@@ -11,7 +11,6 @@
 
 package com.simplelife.renhai.server.business.session;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -20,7 +19,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
@@ -30,7 +28,6 @@ import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Sessionrecord;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
-import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessProgress;
@@ -41,7 +38,6 @@ import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
-import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
@@ -287,7 +283,7 @@ public class BusinessSession implements IBusinessSession
 			}
 			else
 			{
-				if (notificationType == notificationType.SessionBound)
+				if (notificationType == NotificationType.SessionBound)
 				{
 					// Safe code, currently triggerDevice for SessionBound is null
 					notify.getBody().put(JSONKey.OperationInfo, triggerDevice.toJSONObject());
@@ -662,7 +658,7 @@ public class BusinessSession implements IBusinessSession
     @Override
     public void onAssessAndContinue(IDeviceWrapper sourceDevice)
     {
-    	BusinessType type = sourceDevice.getBusinessType();
+    	sourceDevice.getBusinessType();
     	
     	updateBusinessProgress(sourceDevice.getDeviceSn(), Consts.BusinessProgress.AssessFinished);
     	//progressMap.put(sourceDevice.getDeviceSn(), Consts.BusinessProgress.AssessFinished);
@@ -687,7 +683,7 @@ public class BusinessSession implements IBusinessSession
 	@Override
 	public void onAssessAndQuit(IDeviceWrapper sourceDevice)
 	{
-		BusinessType type = sourceDevice.getBusinessType();
+		sourceDevice.getBusinessType();
     	
 		updateBusinessProgress(sourceDevice.getDeviceSn(), Consts.BusinessProgress.AssessFinished);
    		//progressMap.put(sourceDevice.getDeviceSn(), Consts.BusinessProgress.AssessFinished);
@@ -770,6 +766,8 @@ public class BusinessSession implements IBusinessSession
 				break;
 			case AssessFinished:
 				return false;
+			default:
+				break;
 		}
 		return true;
 	}

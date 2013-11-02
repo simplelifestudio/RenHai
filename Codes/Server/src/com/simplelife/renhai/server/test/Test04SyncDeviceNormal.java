@@ -10,14 +10,16 @@
 package com.simplelife.renhai.server.test;
 
 
+import org.apache.ibatis.session.SqlSession;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.DeviceDAO;
+import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Interestcard;
@@ -73,26 +75,28 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_04 数据库检查：设备卡片信息
-		DeviceDAO deviceDAO = new DeviceDAO();
-		Device deviceInDB = deviceDAO.findByDeviceSn(deviceWrapper.getDeviceSn()).get(0);
-		Devicecard deviceCardInDB = deviceInDB.getDevicecard();
+		SqlSession session = DAOWrapper.getSession();
+		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
+		Device deviceInDB = mapper.selectByDeviceSn(deviceWrapper.getDeviceSn());
+		
+		Devicecard deviceCardInDB = deviceInDB.getDeviceCard();
 		assertEquals(mockApp.getAppVersion(), deviceCardInDB.getAppVersion());
 		assertEquals(mockApp.getDeviceModel(), deviceCardInDB.getDeviceModel());
-		assertEquals(OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceSn(), deviceCardInDB.getDevice().getDeviceSn());
+		assertEquals(OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceSn(), deviceInDB.getDeviceSn());
 		assertEquals(Consts.YesNo.No.name(), deviceCardInDB.getIsJailed());
 		assertEquals(mockApp.getLocation(), deviceCardInDB.getLocation());
 		assertEquals(mockApp.getOSVersion(), deviceCardInDB.getOsVersion());
 		
 		// Step_05 数据库检查：兴趣卡片信息
-		Interestcard interCardInDB = deviceInDB.getProfile().getInterestcard();
-		assertTrue(interCardInDB.getInterestlabelmaps().size() == 3);
+		Interestcard interCardInDB = deviceInDB.getProfile().getInterestCard();
+		assertTrue(interCardInDB.getInterestLabelMapSet().size() == 3);
 		
 		// Step_06 数据库检查：印象卡片信息
-		Impresscard impressCardInDB = deviceInDB.getProfile().getImpresscard();
+		Impresscard impressCardInDB = deviceInDB.getProfile().getImpressCard();
 		assertTrue(impressCardInDB.getChatLossCount() == 0);
 		assertTrue(impressCardInDB.getChatTotalCount() == 0);
 		assertTrue(impressCardInDB.getChatTotalDuration() == 0);
-		assertTrue(impressCardInDB.getImpresslabelmaps().size() == Consts.SolidAssessLabel.values().length - 1);
+		assertTrue(impressCardInDB.getImpressLabelMapSet().size() == Consts.SolidAssessLabel.values().length - 1);
 		
 		// Step_07 调用：DeviceWrapper::getBusinessStatus
 		businessStatus = deviceWrapper.getBusinessStatus();

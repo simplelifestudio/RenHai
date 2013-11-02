@@ -19,18 +19,13 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import org.hibernate.Session;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.db.DAOWrapper;
-import com.simplelife.renhai.server.db.HibernateSessionFactory;
-import com.simplelife.renhai.server.db.Statisticsitem;
-import com.simplelife.renhai.server.db.StatisticsitemDAO;
 import com.simplelife.renhai.server.db.Systemstatistics;
-import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessStatus;
@@ -451,47 +446,40 @@ public class OnlineDevicePool extends AbstractDevicePool
 		
 		AbstractBusinessDevicePool randomPool = OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Random);
 		InterestBusinessDevicePool interestPool = (InterestBusinessDevicePool) OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Interest);
-		StatisticsitemDAO dao = new StatisticsitemDAO();
 		
-		Statisticsitem item = dao.findByStatisticsItem(Consts.StatisticsItem.OnlineDeviceCount.getValue()).get(0);
 		Systemstatistics statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
-		statItem.setStatisticsitem(item);
+		statItem.setStatisticsItemId(Consts.StatisticsItem.OnlineDeviceCount.getValue());
 		statItem.setCount(OnlineDevicePool.instance.getElementCount());
 		DAOWrapper.cache(statItem);
 		
-		item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomDeviceCount.getValue()).get(0);
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
-		statItem.setStatisticsitem(item);
+		statItem.setStatisticsItemId(Consts.StatisticsItem.RandomDeviceCount.getValue());
 		statItem.setCount(randomPool.getElementCount());
 		DAOWrapper.cache(statItem);
 		
-		item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestDeviceCount.getValue()).get(0);
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
-		statItem.setStatisticsitem(item);
+		statItem.setStatisticsItemId(Consts.StatisticsItem.InterestDeviceCount.getValue());
 		statItem.setCount(interestPool.getElementCount());
 		DAOWrapper.cache(statItem);
 		
-		item = dao.findByStatisticsItem(Consts.StatisticsItem.ChatDeviceCount.getValue()).get(0);
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
-		statItem.setStatisticsitem(item);
+		statItem.setStatisticsItemId(Consts.StatisticsItem.ChatDeviceCount.getValue());
 		statItem.setCount(OnlineDevicePool.instance.getDeviceCountInChat());
 		DAOWrapper.cache(statItem);
 		
-		item = dao.findByStatisticsItem(Consts.StatisticsItem.RandomChatDeviceCount.getValue()).get(0);
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
-		statItem.setStatisticsitem(item);
+		statItem.setStatisticsItemId(Consts.StatisticsItem.RandomChatDeviceCount.getValue());
 		statItem.setCount(randomPool.getDeviceCountInChat());
 		DAOWrapper.cache(statItem);
 		
-		item = dao.findByStatisticsItem(Consts.StatisticsItem.InterestChatDeviceCount.getValue()).get(0);
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
-		statItem.setStatisticsitem(item);
+		statItem.setStatisticsItemId(Consts.StatisticsItem.InterestChatDeviceCount.getValue());
 		statItem.setCount(interestPool.getDeviceCountInChat());
 		DAOWrapper.cache(statItem);
 	}

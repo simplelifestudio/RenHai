@@ -14,18 +14,15 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.hibernate.Transaction;
-import org.slf4j.LoggerFactory;
-
+import org.apache.ibatis.session.SqlSession;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.mysql.jdbc.log.LogFactory;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.DeviceDAO;
+import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
@@ -33,14 +30,12 @@ import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Interestlabelmap;
-import com.simplelife.renhai.server.db.InterestlabelmapDAO;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
-import com.simplelife.renhai.server.util.Consts.MessageType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.JSONKey;
@@ -637,8 +632,9 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		try
 		{
-			DeviceDAO dao = new DeviceDAO();
-			device = dao.findByDeviceSn(deviceSn).get(0);
+			SqlSession session = DAOWrapper.getSession();
+			DeviceMapper mapper = session.getMapper(DeviceMapper.class);
+			device = mapper.selectByDeviceSn(deviceSn);
 			if (device == null)
 			{
 				logger.error("Fatal error, device load from DB by SN <{}> is null!", deviceSn);
@@ -809,7 +805,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		JSONObject impressCardResponse = new JSONObject();
 		profileResponse.put(JSONKey.ImpressCard, impressCardResponse);
 		
-		Impresscard card = deviceWrapper.getDevice().getProfile().getImpresscard();
+		Impresscard card = deviceWrapper.getDevice().getProfile().getImpressCard();
 		if (impressCardObj.containsKey(JSONKey.ImpressCardId))
 		{
 			impressCardResponse.put(JSONKey.ImpressCardId, card.getImpressCardId());
@@ -839,7 +835,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			}
 			else
 			{
-				impressLabelCount = card.getImpresslabelmaps().size();
+				impressLabelCount = card.getImpressLabelMapSet().size();
 			}
 			deviceWrapper.toJSONObject_ImpressLabels(card, impressCardResponse, impressLabelCount);
 		}
@@ -864,7 +860,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		JSONObject interestCardResponse = new JSONObject();
 		profileResponse.put(JSONKey.InterestCard, interestCardResponse);
 		
-		Interestcard card = deviceWrapper.getDevice().getProfile().getInterestcard();
+		Interestcard card = deviceWrapper.getDevice().getProfile().getInterestCard();
 		if (interestCardObj.containsKey(JSONKey.InterestCardId))
 		{
 			interestCardResponse.put(JSONKey.InterestCardId, card.getInterestCardId());
@@ -875,13 +871,12 @@ public class AppDataSyncRequest extends AppJSONMessage
 			JSONArray labels = new JSONArray();
 			interestCardResponse.put(JSONKey.InterestLabelList, labels);
 			
-			for (Interestlabelmap label : card.getInterestlabelmaps())
+			for (Interestlabelmap label : card.getInterestLabelMapSet())
 			{
 				JSONObject labelObj = new JSONObject();
-				labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalinterestlabel()
-						.getGlobalInterestLabelId());
-				labelObj.put(JSONKey.InterestLabelName, label.getGlobalinterestlabel().getInterestLabelName());
-				labelObj.put(JSONKey.GlobalMatchCount, label.getGlobalinterestlabel().getGlobalMatchCount());
+				labelObj.put(JSONKey.GlobalInterestLabelId, label.getGlobalLabel().getGlobalInterestLabelId());
+				labelObj.put(JSONKey.InterestLabelName, label.getGlobalLabel().getInterestLabelName());
+				labelObj.put(JSONKey.GlobalMatchCount, label.getGlobalLabel().getGlobalMatchCount());
 				labelObj.put(JSONKey.LabelOrder, label.getLabelOrder());
 				labelObj.put(JSONKey.MatchCount, label.getMatchCount());
 				labelObj.put(JSONKey.ValidFlag, Consts.ValidInvalid.Valid.getValue());
@@ -909,7 +904,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		JSONObject deviceCardResponse = new JSONObject();
 		deviceResponse.put(JSONKey.DeviceCard, deviceCardResponse);
 		
-		Devicecard card = deviceWrapper.getDevice().getDevicecard();
+		Devicecard card = deviceWrapper.getDevice().getDeviceCard();
 		if (deviceCardObj.containsKey(JSONKey.DeviceCardId))
 		{
 			deviceCardResponse.put(JSONKey.DeviceCardId, card.getDeviceCardId());
@@ -1075,8 +1070,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 			Impresslabelmap labelMap = new Impresslabelmap();
 			labelMap.setAssessCount(0);
 			labelMap.setAssessedCount(0);
-			labelMap.setGlobalimpresslabel(impressLabel);
-			labelMap.setImpresscard(impressCard);
+			labelMap.setGlobalImpressLabelId(impressLabel.getGlobalImpressLabelId());
+			labelMap.setImpressCardId(impressCard.getImpressCardId());
 			labelMap.setUpdateTime(System.currentTimeMillis());
 			
 			impressLabelMaps.add(labelMap);
@@ -1088,32 +1083,24 @@ public class AppDataSyncRequest extends AppJSONMessage
 		// Create Device object and bind with cards
 		Device device = new Device();
 		device.setDeviceSn(deviceSn);
-		device.setDevicecard(deviceCard);
-		deviceCard.setDevice(device);
+		device.setDeviceCard(deviceCard);
 		device.setProfile(profile);
-		profile.setDevice(device);
 		
 		impressCard.setChatLossCount(0);
 		impressCard.setChatTotalCount(0);
 		impressCard.setChatTotalDuration(0);
 		
 		// Save default solid impress label for new device
-		impressCard.setImpresslabelmaps(impressLabelMaps);
+		impressCard.setImpressLabelMapSet(impressLabelMaps);
 		
 		// Create new interest card
 		// Create new profile
-		profile.setImpresscard(impressCard);
-		profile.setInterestcard(interestCard);
+		profile.setImpressCard(impressCard);
+		profile.setInterestCard(interestCard);
 		long now = System.currentTimeMillis();
 		profile.setLastActivityTime(now);
 		profile.setCreateTime(now);
 		profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
-		
-		// Bind profile with cards
-		profile.setInterestcard(interestCard);
-		profile.setImpresscard(impressCard);
-		interestCard.setProfile(profile);
-		impressCard.setProfile(profile);
 		
 		deviceCard.setRegisterTime(now);
 		
@@ -1137,13 +1124,13 @@ public class AppDataSyncRequest extends AppJSONMessage
 		Globalinterestlabel globalInterest;
 		
 		Interestlabelmap interestLabelMap;
-		Set<Interestlabelmap> labelMapSet = card.getInterestlabelmaps();
+		Set<Interestlabelmap> labelMapSet = card.getInterestLabelMapSet();
 		
 		// Save old label in temp Map
 		HashMap<String, Interestlabelmap> tempMap = new HashMap<String, Interestlabelmap>();
 		for (Interestlabelmap label : labelMapSet)
 		{
-			tempMap.put(label.getGlobalinterestlabel().getInterestLabelName(), label);
+			tempMap.put(label.getGlobalLabel().getInterestLabelName(), label);
 		}
 		
 		labelMapSet.clear();
@@ -1193,9 +1180,9 @@ public class AppDataSyncRequest extends AppJSONMessage
 			
 			interestLabelMap.setMatchCount(0);
 			interestLabelMap.setValidFlag(Consts.ValidInvalid.Valid.name());
-			interestLabelMap.setGlobalinterestlabel(globalInterest);
+			interestLabelMap.setGlobalInterestLabelId(globalInterest.getGlobalInterestLabelId());
 			interestLabelMap.setLabelOrder(tmpJSONObj.getInteger(JSONKey.LabelOrder));
-			interestLabelMap.setInterestcard(card);
+			interestLabelMap.setInterestCardId(card.getInterestCardId());
 			labelMapSet.add(interestLabelMap);
 			
 			responseObj.put(JSONKey.InterestLabelName, tempStr);
@@ -1205,13 +1192,10 @@ public class AppDataSyncRequest extends AppJSONMessage
 		
 		// delete label that are still in tempMap
 		Set <String> keySet = tempMap.keySet();
-		InterestlabelmapDAO interestLabelDAO = new InterestlabelmapDAO();
-		
 		for (String key : keySet)
 		{
 			interestLabelMap = tempMap.get(key);
-			//interestLabelMap.setInterestcard(null);
-			interestLabelDAO.delete(interestLabelMap);
+			card.removeInterestLabelMap(interestLabelMap);
 		}
 	}
 	
@@ -1219,7 +1203,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 	{
 		for (Interestlabelmap labelMap : labelMapSet)
 		{
-			if (labelMap.getGlobalinterestlabel().getInterestLabelName().equals(label))
+			if (labelMap.getGlobalLabel().getInterestLabelName().equals(label))
 			{
 				return true;
 			}
@@ -1234,7 +1218,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			return;
 		}
 		
-		Interestcard card = deviceWrapper.getDevice().getProfile().getInterestcard();
+		Interestcard card = deviceWrapper.getDevice().getProfile().getInterestCard();
 		JSONArray interestLabelList = interestCardObj.getJSONArray(JSONKey.InterestLabelList);
 		
 		JSONArray responseArray = new JSONArray();
@@ -1269,7 +1253,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 	private void parseDevicecard(JSONObject jsonObj, JSONObject response)
 	{
 		Device device = deviceWrapper.getDevice();
-		Devicecard deviceCard = device.getDevicecard();
+		Devicecard deviceCard = device.getDeviceCard();
 		
 		String temp = jsonObj.getString(JSONKey.DeviceModel);
 		if (temp != null)

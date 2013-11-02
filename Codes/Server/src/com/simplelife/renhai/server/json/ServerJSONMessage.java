@@ -18,7 +18,6 @@ import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IJSONObject;
 import com.simplelife.renhai.server.util.JSONKey;

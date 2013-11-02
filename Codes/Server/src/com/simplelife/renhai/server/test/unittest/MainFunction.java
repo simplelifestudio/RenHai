@@ -12,54 +12,32 @@ package com.simplelife.renhai.server.test.unittest;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.ibatis.session.SqlSession;
 import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.Response;
 import org.asynchttpclient.websocket.WebSocket;
 import org.asynchttpclient.websocket.WebSocketTextListener;
 import org.asynchttpclient.websocket.WebSocketUpgradeHandler;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_17;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.InputMessageCenter;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
-import com.simplelife.renhai.server.business.pool.RandomBusinessDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.DeviceDAO;
+import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Devicecard;
-import com.simplelife.renhai.server.db.Globalimpresslabel;
-import com.simplelife.renhai.server.db.HibernateSessionFactory;
-import com.simplelife.renhai.server.db.Impresscard;
-import com.simplelife.renhai.server.db.Impresslabelmap;
-import com.simplelife.renhai.server.db.Operationcode;
-import com.simplelife.renhai.server.db.OperationcodeDAO;
 import com.simplelife.renhai.server.db.Profile;
-import com.simplelife.renhai.server.db.SqlUtil;
-import com.simplelife.renhai.server.db.Statisticsitem;
-import com.simplelife.renhai.server.db.StatisticsitemDAO;
-import com.simplelife.renhai.server.db.Systemmodule;
-import com.simplelife.renhai.server.db.SystemmoduleDAO;
-import com.simplelife.renhai.server.db.Systemoperationlog;
-import com.simplelife.renhai.server.db.SystemoperationlogDAO;
 import com.simplelife.renhai.server.json.AlohaRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.JSONFactory;
@@ -71,14 +49,10 @@ import com.simplelife.renhai.server.test.MockAppConsts;
 import com.simplelife.renhai.server.test.RenHaiWebSocketClient;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
 import com.simplelife.renhai.server.websocket.WebSocketModule;
-
-//import com.ning.http.client.*;
-import java.util.concurrent.Future;
 
 
 /**
@@ -86,92 +60,6 @@ import java.util.concurrent.Future;
  */
 public class MainFunction extends AbstractTestCase
 {
-	private class SaveDeviceThread extends Thread
-	{
-		private Device device;
-		
-		public SaveDeviceThread(Device device)
-		{
-			this.device = device;
-		}
-		
-		@Override
-		public void run()
-		{
-			Session session = HibernateSessionFactory.getSession();
-			Transaction t = session.beginTransaction();
-			session.save(device);
-			t.commit();
-			HibernateSessionFactory.closeSession();
-		}
-	}
-	private class SaveTask extends Thread
-	{
-		private Statisticsitem item;
-		private int count = 0;
-		private String name;
-		
-		public SaveTask(Statisticsitem item, String name)
-		{
-			this.item = item;
-			this.name = name;
-		}
-		
-		@Override
-		public void run()
-		{
-			while (count < 1000)
-			{
-				String now = DateUtil.getNow();
-				item.setDescription(name + ", " + now);
-				Session session = HibernateSessionFactory.getSession();
-				Transaction t = null;
-				try
-				{
-					t =  session.beginTransaction();
-					session.saveOrUpdate(session.merge(item));
-		    		session.flush();
-		    		
-		    		String temp = session.toString();
-		    		System.out.print(name + " update value to " + now + " in session: " + temp + "\n");
-		    		t.commit();
-		    		Thread.sleep(1);
-				}
-				catch(Exception e)
-				{
-					FileLogger.printStackTrace(e);
-				}
-				finally
-				{
-					HibernateSessionFactory.closeSession();
-				}
-				count++;
-			}
-		}
-	}
-	
-	@Test
-	public void testTwoSession()
-	{
-		StatisticsitemDAO dao = new StatisticsitemDAO();
-		Statisticsitem item = dao.findById(41);
-		item.setDescription("demo");
-		
-		SaveTask task1 = new SaveTask(item, "1");
-		SaveTask task2 = new SaveTask(item, "2");
-		task1.start();
-		task2.start();
-		
-		try
-		{
-			Thread.sleep(8000);
-		}
-		catch (InterruptedException e)
-		{
-			FileLogger.printStackTrace(e);
-		}
-	}
-	
 	@Test
 	public void testLeaveRandomPool()
 	{
@@ -324,123 +212,6 @@ public class MainFunction extends AbstractTestCase
 	}
 
 	@Test
-	public void testAssess()
-	{
-		String deviceSn = "demoDeviceSn";
-		DeviceDAO dao = new DeviceDAO();
-		Device target = dao.findByDeviceSn(deviceSn).get(0);
-		
-		Impresscard card = target.getProfile().getImpresscard();
-		Set<Impresslabelmap> impressLabelMap = card.getImpresslabelmaps();
-		
-		JSONArray assessLabels = new JSONArray();
-		assessLabels.add("^#Happy#^");
-		updateOrAppendImpressLabel(card, impressLabelMap, assessLabels.getString(0));
-		
-		JSONArray impressLabels = new JSONArray();
-		impressLabels.add("ÆÀ¼Û_new");
-		impressLabels.add("Ë§¸ç");
-		for (int i = 0; i < impressLabels.size(); i++)
-		{
-			updateOrAppendImpressLabel(card, impressLabelMap, impressLabels.getString(i));
-		}
-		
-		// Save to DB
-		//DBModule.instance.cache(target);
-		DAOWrapper.cache(target);
-		DAOWrapper.flushToDB();
-		
-		System.out.println("ended");
-		//session.flush();
-	}
-	
-	private void updateOrAppendImpressLabel(Impresscard card, Set<Impresslabelmap> impressLabels, String labelName)
-	{
-		synchronized (impressLabels)
-		{
-			//String labelName = impressLabel.getString(JSONKey.ImpressLabelName);
-			for (Impresslabelmap label : impressLabels)
-			{
-				String tmpLabelName = label.getGlobalimpresslabel().getImpressLabelName();
-				if (tmpLabelName.equals(labelName))
-				{
-					label.setAssessedCount(label.getAssessedCount() + 1);
-					label.setUpdateTime(System.currentTimeMillis());
-					return;
-				}
-			}
-			
-			Globalimpresslabel globalimpresslabel = new Globalimpresslabel();
-			globalimpresslabel.setGlobalAssessCount(1);
-			globalimpresslabel.setImpressLabelName(labelName);
-			//globalimpresslabel.setImpresslabelmaps(impressLabels);
-			
-			Impresslabelmap labelMap = new Impresslabelmap();
-			labelMap.setAssessCount(0);
-			labelMap.setAssessedCount(1);
-			labelMap.setGlobalimpresslabel(globalimpresslabel);
-			labelMap.setUpdateTime(System.currentTimeMillis());
-			labelMap.setImpresscard(card);
-			
-			impressLabels.add(labelMap);
-		}
-	}
-	
-	@Test
-	public void testDbOperations()
-	{
-		Systemoperationlog log = new Systemoperationlog();
-		Session session = HibernateSessionFactory.getSession();
-		
-		SystemmoduleDAO moduleDAO = new SystemmoduleDAO();
-		Systemmodule module = moduleDAO.findByModuleNo(3).get(0);
-		log.setSystemmodule(module);
-		
-		OperationcodeDAO dao = new OperationcodeDAO();
-		Operationcode operCode = dao.findByOperationCode(1003).get(0);
-		log.setOperationcode(operCode);
-	
-		long time = System.currentTimeMillis();
-		log.setLogTime(time);
-		log.setLogInfo("This is log info");
-		
-		SystemoperationlogDAO logDAO = new SystemoperationlogDAO();
-		session.beginTransaction();
-		logDAO.save(log);
-		
-		System.out.print("============Contains: " + session.contains(log) + "\n");
-		System.out.print("============Cache Mode: " + session.getCacheMode() + "\n");
-		System.out.print("============IsDirty: " + session.isDirty() + "\n");
-		System.out.print("============IsConnected: " + session.isConnected() + "\n");
-		System.out.print("============IsOpen: " + session.isOpen() + "\n");
-		
-		List<Systemoperationlog> logList = logDAO.findByLogTime(time);
-		if (logList.size() == 0)
-		{
-			System.out.print("=========Error: the saved record can't be found by query\n");
-		}
-		else
-		{
-			System.out.print("=========Correct record found by query\n");
-			System.out.print("log.getLogInfo: " + log.getLogInfo() + "\n");
-			System.out.print("log.getLogTime: " + log.getLogTime() + "\n");
-			
-			System.out.print("log.getOperationCodeId: " + log.getOperationcode().getOperationCodeId() + "\n");
-			System.out.print("log.getOperationCode: " + log.getOperationcode().getOperationCode() + "\n");
-			
-			System.out.print("log.getModuleId: " + log.getSystemmodule().getModuleId() + "\n");
-			System.out.print("log.getModuleNo: " + log.getSystemmodule().getModuleNo() + "\n");
-		}
-		
-		System.out.print("=========Entity count of session: " + HibernateSessionFactory.getSession().getStatistics().getEntityCount() + "\n");
-		
-		session.getTransaction().commit();
-		
-		//HibernateSessionFactory.getSession().flush();
-		session.close();
-	}
-	
-	@Test
 	public void testSyncDevice()
 	{
 		MockApp app = new MockApp(demoDeviceSn);
@@ -513,26 +284,6 @@ public class MainFunction extends AbstractTestCase
 		} finally {
 			e.closeConnection();
 		}
-	}
-	
-	@Test
-	public void testSqlBuilder()
-	{
-		OutputMessageCenter.instance.startThreads();
-		InputMessageCenter.instance.startThreads();
-		OnlineDevicePool.instance.startTimers();
-		
-		MockApp app1 = new MockApp(demoDeviceSn + "cccc");
-		app1.syncDevice();
-		
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(app1.getDeviceSn());
-		Device device = deviceWrapper.getDevice();
-		
-		StringBuilder strBui = new StringBuilder();
-		SqlUtil.getDeviceSaveSql(device, strBui);
-		
-		System.out.print(strBui.toString());
-		System.out.print(JSON.toJSONString(deviceWrapper.toJSONObject(), true));
 	}
 	
 	@Test
@@ -628,9 +379,11 @@ public class MainFunction extends AbstractTestCase
 	{
 		System.out.print(OnlineDevicePool.instance.getCapacity());
 		
-		DeviceDAO dao = new DeviceDAO();
-		Device device = dao.findByDeviceSn(demoDeviceSn).get(0);
-		Devicecard card = device.getDevicecard();
+		SqlSession session = DAOWrapper.getSession();
+		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
+		Device device = mapper.selectByDeviceSn(demoDeviceSn);
+		
+		Devicecard card = device.getDeviceCard();
 		card.setAppVersion("30.0");
 		
 		DAOWrapper.cache(device);
@@ -733,6 +486,7 @@ public class MainFunction extends AbstractTestCase
 			      }).build()).get();
 
 		websocket.sendTextMessage("fdsafdsaklj;");
+		asyncHttpClient.close();
 	}
 	
 	@Test
@@ -778,21 +532,6 @@ public class MainFunction extends AbstractTestCase
 		app2.assessAndQuit("^#Happy#^,»¹ÐÐ");
 		
 		app1.sendServerDataSyncRequest();
-	}
-	
-	@Test
-	public void testSaveObject() throws InterruptedException
-	{
-		DeviceDAO dao = new DeviceDAO();
-		Device device = dao.findByDeviceSn(demoDeviceSn).get(0);
-		
-		device.getDevicecard().setAppVersion("15.0123");
-		
-		Thread.sleep(1000);
-		SaveDeviceThread thread = new SaveDeviceThread(device);
-		thread.start();
-		
-		Thread.sleep(1000);
 	}
 	
 }

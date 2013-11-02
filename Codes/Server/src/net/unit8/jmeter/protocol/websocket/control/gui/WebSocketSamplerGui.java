@@ -1,14 +1,11 @@
 package net.unit8.jmeter.protocol.websocket.control.gui;
 
 import net.unit8.jmeter.protocol.websocket.sampler.WebSocketSampler;
-import org.apache.jmeter.config.Arguments;
 import org.apache.jmeter.gui.util.HorizontalPanel;
 import org.apache.jmeter.gui.util.VerticalPanel;
 import org.apache.jmeter.protocol.http.gui.HTTPArgumentsPanel;
-import org.apache.jmeter.protocol.http.util.HTTPArgument;
 import org.apache.jmeter.samplers.gui.AbstractSamplerGui;
 import org.apache.jmeter.testelement.TestElement;
-import org.apache.jmeter.testelement.property.TestElementProperty;
 import org.apache.jmeter.util.JMeterUtils;
 import org.apache.jorphan.logging.LoggingManager;
 import org.apache.log.Logger;

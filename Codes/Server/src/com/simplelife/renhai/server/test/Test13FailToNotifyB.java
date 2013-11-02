@@ -73,8 +73,7 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		// Step_02 调用：RandomBusinessDevicePool::getCount
 		int randomDeviceCount = businessPool.getElementCount();
 		
-		// Step_03 调用：BusinessSessionPool::getCount
-		int sessionCount = sessionPool.getElementCount();
+		sessionPool.getElementCount();
 		
 		// Step_04 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper1.getBusinessStatus());

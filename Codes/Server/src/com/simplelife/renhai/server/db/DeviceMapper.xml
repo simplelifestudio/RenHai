@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.simplelife.renhai.server.db.DeviceMapper">
+  
+  <resultMap id="BaseResultMap" type="com.simplelife.renhai.server.db.Device" >
+    <id column="deviceId" property="deviceId" jdbcType="INTEGER" />
+    <result column="deviceSn" property="deviceSn" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="WholeDeviceResultMap" type="com.simplelife.renhai.server.db.Device" >
+    <id column="d_deviceId" property="deviceId" jdbcType="INTEGER" />
+    <result column="d_deviceSn" property="deviceSn" jdbcType="VARCHAR" />
+    <association column="c_deviceCardId" property="deviceCard" javaType="com.simplelife.renhai.server.db.Devicecard">
+          <id column="c_deviceCardId" property="deviceCardId"/>
+          <result column="c_registerTime" property="registerTime" jdbcType="BIGINT" />
+          <result column="c_deviceModel" property="deviceModel" jdbcType="VARCHAR" />
+          <result column="c_osVersion" property="osVersion" jdbcType="VARCHAR" />
+          <result column="c_appVersion" property="appVersion" jdbcType="VARCHAR" />
+          <result column="c_location" property="location" jdbcType="VARCHAR" />
+          <result column="c_isJailed" property="isJailed" jdbcType="CHAR" />
+     </association>
+     
+     <association column="p_profileId" property="profile" javaType="com.simplelife.renhai.server.db.Profile">
+          <id column="p_profileId" property="profileId" jdbcType="INTEGER" />
+          <result column="p_deviceId" property="deviceId" jdbcType="INTEGER" />
+          <result column="p_serviceStatus" property="serviceStatus" jdbcType="CHAR" />
+          <result column="p_unbanDate" property="unbanDate" jdbcType="BIGINT" />
+          <result column="p_lastActivityTime" property="lastActivityTime" jdbcType="BIGINT" />
+          <result column="p_createTime" property="createTime" jdbcType="BIGINT" />
+          <result column="p_active" property="active" jdbcType="CHAR" />
+	 </association>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    deviceId, deviceSn
+  </sql>
+  
+  <insert id="insert" parameterType="com.simplelife.renhai.server.db.Device"
+    useGeneratedKeys="true" keyProperty="deviceId">
+    insert into device (deviceSn)
+    values (#{deviceSn,jdbcType=VARCHAR})
+  </insert>
+  
+  <select id="selectByDeviceSn" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from device
+    where deviceSn = #{deviceSn,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectWholeDeviceByDeviceSn" resultMap="WholeDeviceResultMap" parameterType="java.lang.String" >
+    select 
+    	D.deviceId as d_deviceId,
+    	D.deviceSn as d_deviceSn,
+    	C.deviceCardId as c_deviceCardId,
+    	C.deviceId as c_deviceId,
+    	C.registerTime as c_registerTime,
+    	C.deviceModel as c_deviceModel,
+    	C.osVersion as c_osVersion,
+    	C.appVersion as c_appVersion,
+    	C.location as c_location,
+    	C.isJailed as c_isJailed,
+    	P.profileId as p_profileId,
+    	P.deviceId as p_deviceId,
+    	P.serviceStatus as p_serviceStatus,
+    	P.unbanDate as p_unbanDate,
+    	P.lastActivityTime as p_lastActivityTime,
+    	P.createTime as p_createTime,
+    	P.active as p_active
+    from device D
+    	left outer join devicecard C on D.deviceId = C.deviceId
+    	left outer join profile P on D.deviceId = P.deviceId
+    where D.deviceSn = #{deviceSn,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

@@ -11,14 +11,13 @@
 
 package com.simplelife.renhai.server.business;
 
-import org.hibernate.Session;
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.LoggerFactory;
 
 import com.simplelife.renhai.server.business.pool.InputMessageCenter;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DAOWrapper;
-import com.simplelife.renhai.server.db.HibernateSessionFactory;
 import com.simplelife.renhai.server.util.AbstractModule;
 
 
@@ -36,8 +35,8 @@ public class BusinessModule extends AbstractModule
 	public void startService()
     {
 		// To initialize DB connection
-    	Session session = HibernateSessionFactory.getSession();
-    	HibernateSessionFactory.closeSession();
+    	SqlSession session = DAOWrapper.getSession();
+    	session.close();
     	
     	OnlineDevicePool.instance.startTimers();
     	InputMessageCenter.instance.startThreads();

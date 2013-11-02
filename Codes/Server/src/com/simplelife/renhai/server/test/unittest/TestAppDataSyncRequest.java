@@ -51,8 +51,6 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		//wholeObj.put(JSONKey.JsonEnvelope, envelope);
 		envelope.put(JSONKey.Header, header);
 		envelope.put(JSONKey.Body, body);
-		
-		deviceSn = deviceSn;
 	}
 	
 	@Test
@@ -343,7 +341,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
 		Device device = deviceWrapper.getDevice();
-		Devicecard deviceCard = device.getDevicecard();
+		Devicecard deviceCard = device.getDeviceCard();
 		
 		assertTrue(deviceWrapper != null);
 		assertTrue(deviceCard.getOsVersion().equals(this.osVersion));
@@ -457,7 +455,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
 		Device device = deviceWrapper.getDevice();
-		Devicecard deviceCard = device.getDevicecard();
+		Devicecard deviceCard = device.getDeviceCard();
 		
 		assertTrue(deviceWrapper != null);
 		assertTrue(deviceCard.getOsVersion().equals(this.osVersion));
@@ -514,7 +512,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		
 		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
 		Device device = deviceWrapper.getDevice();
-		Devicecard deviceCard = device.getDevicecard();
+		Devicecard deviceCard = device.getDeviceCard();
 		
 		assertTrue(deviceCard.getAppVersion().equals(appVersion));
 		assertTrue(deviceCard.getOsVersion().equals(osVersion));

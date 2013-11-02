@@ -81,7 +81,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			}
 			
 			IDeviceWrapper device = entry.getValue();
-			labelSet = device.getDevice().getProfile().getInterestcard().getInterestlabelmaps();
+			labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
 			String strLabel; 
 			ConcurrentSkipListSet<IDeviceWrapper> deviceList;
 			
@@ -96,7 +96,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 
 				selectedDevice.clear();
 				// Try to find device with same interest label
-				strLabel = label.getGlobalinterestlabel().getInterestLabelName();
+				strLabel = label.getGlobalLabel().getInterestLabelName();
 				deviceList = interestLabelMap.get(strLabel);
 				deviceListSize = deviceList.size();
 				logger.debug("Find {} devices by interest label: " + strLabel, deviceListSize);
