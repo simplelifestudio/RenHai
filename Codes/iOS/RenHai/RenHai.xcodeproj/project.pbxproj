@@ -243,6 +243,8 @@
 		CDC0519F18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC0519D18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m */; };
 		CDDA9FA8182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDA9FA7182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib */; };
 		CDDA9FA9182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDA9FA7182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib */; };
+		CDDA9FAB1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDA9FAA1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib */; };
+		CDDA9FAC1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDA9FAA1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -478,6 +480,7 @@
 		CDC0519C18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+CBUIViewControlerExtends.h"; sourceTree = "<group>"; };
 		CDC0519D18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CBUIViewControlerExtends.m"; sourceTree = "<group>"; };
 		CDDA9FA7182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InterestLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
+		CDDA9FAA1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ServerInterestLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
 		CDDF0FE017EB227700DA3E06 /* RenHai.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RenHai.entitlements; sourceTree = "<group>"; };
 		DF74808344254C64A074972F /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RenHaiGHUnitTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -834,6 +837,7 @@
 				CDDA9FA7182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib */,
 				C580526F17E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.h */,
 				C580527017E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m */,
+				CDDA9FAA1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib */,
 				C593C44917D329E100C26367 /* ConfigViewController_iPhone.h */,
 				C593C44A17D329E100C26367 /* ConfigViewController_iPhone.m */,
 				C593C44D17D329F300C26367 /* HelpViewController_iPhone.h */,
@@ -1015,6 +1019,7 @@
 				C55B43F617CF580A009BB21B /* InfoPlist.strings in Resources */,
 				C55B43FE17CF580A009BB21B /* Default.png in Resources */,
 				C55B440017CF580A009BB21B /* Default@2x.png in Resources */,
+				CDDA9FAB1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */,
 				C55B440217CF580A009BB21B /* Default-568h@2x.png in Resources */,
 				C55B445D17CF8632009BB21B /* Icon-72.png in Resources */,
 				CD736CF41817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */,
@@ -1079,6 +1084,7 @@
 				C596284017DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png in Resources */,
 				C54DC8C817DC069900BBD498 /* enterbutton_highlighted.png in Resources */,
 				C54DC8CA17DC069900BBD498 /* enterbutton_highlighted@2x.png in Resources */,
+				CDDA9FAC1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */,
 				C54DC8CC17DC069900BBD498 /* enterbutton_normal.png in Resources */,
 				C54DC8CE17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
 				C54DC8E717DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.xib in Resources */,

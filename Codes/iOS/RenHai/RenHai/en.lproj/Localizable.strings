@@ -51,6 +51,9 @@
 "Impress_ChatLossCount" = "LossCount";
 "Impress_Empty" = "Empty";
 
+"Interest_InterestLabels" = "Interest Labels";
+"Interest_CurrentHotInterestLabels" = "Current Hot Interest Labels";
+"Interest_Action_RefreshHotInterestLabels" = "Refresh";
 "Interest_Empty" = "Empty";
 
 "Config_PushNotification" = "Push Notification";

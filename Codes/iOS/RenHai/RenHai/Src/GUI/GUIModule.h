@@ -74,6 +74,9 @@
 #define NIB_IMPRESSSECTIONHEADERVIEW @"ImpressSectionHeaderView_iPhone"
 #define NIB_IMPRESSLABELSHEADERVIEW @"ImpressLabelsHeaderView_iPhone"
 
+#define NIB_INTERESTLABELSHEADERVIEW @"InterestLabelsHeaderView_iPhone"
+#define NIB_SERVERINTERESTLABELSHEADERVIEW @"ServerInterestLabelsHeaderView_iPhone"
+
 #define DELAY_UIREFRESHCONTROL_SHOW 0.75f
 #define DELAY_UIREFRESHCONTROL_RESET 0.75f
 
