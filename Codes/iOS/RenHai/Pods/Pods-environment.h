@@ -46,14 +46,13 @@
 #define COCOAPODS_POD_AVAILABLE_OpenTokSDK_WebRTC
 #define COCOAPODS_VERSION_MAJOR_OpenTokSDK_WebRTC 2
 #define COCOAPODS_VERSION_MINOR_OpenTokSDK_WebRTC 1
-#define COCOAPODS_VERSION_PATCH_OpenTokSDK_WebRTC 5
+#define COCOAPODS_VERSION_PATCH_OpenTokSDK_WebRTC 6
 
 // PKRevealController
 #define COCOAPODS_POD_AVAILABLE_PKRevealController
-// This library does not follow semantic-versioning,
-// so we were not able to define version macros.
-// Please contact the author.
-// Version: 1.0b2.
+#define COCOAPODS_VERSION_MAJOR_PKRevealController 2
+#define COCOAPODS_VERSION_MINOR_PKRevealController 0
+#define COCOAPODS_VERSION_PATCH_PKRevealController 5
 
 // Reachability
 #define COCOAPODS_POD_AVAILABLE_Reachability
