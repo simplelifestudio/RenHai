@@ -147,7 +147,8 @@
 
 /**
  * Sent when the camera device is changed.
- * @prarm publisher The publisher that signalled this event.
+ * @param publisher The publisher that signalled this event.
+ * @param position The new camera position.
  */
 -(void)publisher:(OTPublisher*)publisher didChangeCameraPosition:(AVCaptureDevicePosition)position;
 

@@ -21,11 +21,19 @@
 /**
  * The unique connection ID for this OTConnection object.
  */
-@property(readonly, strong) NSString* connectionId;
+@property(readonly) NSString* connectionId;
 
 /**
  * The time at which the Connection was created on the OpenTok server.
  */
-@property(readonly, strong) NSDate* creationTime;
-
+@property(readonly) NSDate* creationTime;
+/**
+**
+ * A string containing metadata describing the connection. When you generate a user token string,
+ * pass the connection data string to the `generate_token()` method of the OpenTok server-side
+ * library. For testing, you can also generate a token and define connection data the
+ * [OpenTok dashboard](https://dashboard.tokbox.com/projects). For more information, see the
+ * [Token Creation Overview](http://tokbox.com/opentok/tutorials/create-token/).
+ */
+@property (readonly) NSString* data;
 @end

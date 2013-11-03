@@ -157,7 +157,7 @@
  * This message is available for WebRTC only.
  *
  * @param stream The stream that changed video dimensions.
- * @param didChangeVideoDimensions The new dimensions of the encoded stream.
+ * @param dimensions The new dimensions of the encoded stream.
  */
 - (void)stream:(OTStream*)stream didChangeVideoDimensions:(CGSize)dimensions;
 

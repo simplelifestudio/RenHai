@@ -1,42 +1,27 @@
-OpenTok WebRTC on iOS SDK
-=========================
+OpenTok 2.0 iOS Client SDK
+==========================
 
-This SDK lets you use OpenTok on WebRTC video sessions in apps you build for iPad, iPhone, and iPod touch devices.
+The OpenTok 2.0 iOS SDK lets you use OpenTok on WebRTC video sessions in apps you build for iPad, iPhone, and
+iPod touch devices.
 
-To get started, [sign up for a Developer Account](https://dashboard.tokbox.com/signups/new) and get your API Key.
+To get started, [sign up for a developer account](https://dashboard.tokbox.com/signups/new) and get your API Key.
 
-You can use OpenTok video sessions across iOS devices AND web clients that use OpenTok on
-WebRTC. For details about using this SDK with web clients, see the
-[JavaScript documentation](http://www.tokbox.com/opentok/webrtc/docs/js/reference/index.html) at the TokBox website.
+You can use OpenTok video sessions across iOS devices AND web clients that use OpenTok 2.0 (OpenTok on WebRTC).
+For details about using this SDK with web clients, see the
+[JavaScript documentation](http://tokbox.com/opentok/libraries/client/js/) at the TokBox website.
 
-Using the OpenTok on WebRTC iOS SDK
------------------------------------
+Using the OpenTok 2.0 iOS SDK
+-----------------------------
 
-See the [reference documentation for the OpenTok iOS SDK](http://www.tokbox.com/opentok/ios/docs/index.html).
+See the [reference documentation](http://opentok.github.io/opentok-ios-sdk-webrtc/) for details on the API.
 
-There are important differences to keep in mind when working with the OpenTok on WebRTC iOS SDK (compared with
-the [non-WebRTC version](https://github.com/opentok/opentok-ios-sdk) of the OpenTok iOS SDK):
-
-*  With the latest release of the OpenTok on WebRTC iOS SDK, multipoint face-to-face video sessions are now possible. 
-   To enable, multipoint face-to-face video sessions please email mantis@tokbox.com and include your API key and use case. 
-   You can continue to use peer-to-peer video calling by enabling peer-to-peer sessions using your server-side library.
-
-
-*  You must use a [peer-to-peer streaming](http://www.tokbox.com/opentok/docs/concepts/peer_to_peer.html)
-   enabled OpenTok Session. You can enable p2p when creating a session using the Project Tools on your
-   [Developer Dashboard](https://dashboard.tokbox.com/projects) or enable it for any Session created with
-   our supported [server-side libraries](http://tokbox.com/opentok/docs/server/server_side_libraries.html).
-
-   Peer-to-peer streaming helps reduce latency by letting the media stream skip a hop to an external server,
-   resulting in better performance. A few limitations introduced by this technique are discussed below.
-
-*  At this time you cannot run your application in the iOS Simulator. Just run it on your device for testing. We will
-   be addressing this in a future release.
+See the [release notes](release_notes.md) for information on the latest version of the SDK and for a list of known
+issues.
 
 Supported devices
 -----------------
 
-The OpenTok on WebRTC iOS SDK is supported on the following devices:
+The OpenTok 2.0 iOS SDK is supported on the following devices:
 
 * iPhone 4S / 5
 * iPad 2 / 3 / 4 / mini
@@ -46,106 +31,12 @@ Web browsers supported:
 * Google Chrome, Google Chrome Beta
 * Mozilla Firefox 22+
 
-The OpenTok on WebRTC iOS SDK is supported on wifi connections.
-
-Release notes
--------------
-
-August 30, 2013 - Version 2.1.5
-
-* New signaling API -- This version adds support for the new OpenTok signaling API. 
-  You can now send messages and data to other clients connected to an OpenTok session. 
-  See the [OTSession signalWithType:data:completionHandler:],
-  [OTSession signalWithType:data:connections:completionHandler:], 
-  and [OTSession receiveSignalType:withHandler:] methods.
-* Dynamic traffic shaping -- [OTSubscriberDelegate subscriberVideoDisabled:] 
-  is invoked when the OpenTok media server stops sending video to a subscriber. 
-  This feature of the OpenTok media server has a subscriber drop the video stream when
-   connectivity degrades. The subscriber continues to receive the audio stream, if there is one.
-* New connection events -- [OTSessionDelegate session:didCreateConnection:] and
-  [OTSessionDelegate session:didDropConnection:] are invoked when clients connect to and disconnect from a session.
-* iOS 7 Support -- This version resolves several iOS 7 compatability issues. Note that iOS 7 introduces a system-level
-  end-user prompt for microphone access.
-
-August 7, 2013 - Version 2.1.4
-
-* Dynamic traffic shaping -- In non-peer-to peer sessions, OpenTok now dynamically
-shapes audio and video to maximize the experience for every participant in a multi-point conversation. For more information,
-see our [blog](http://www.tokbox.com/blog/quality-of-experience-and-traffic-shaping-the-next-step-with-mantis/).
-In a non-peer-to peer session, setting `[OTSubscriber subscribeToAudio]` or `[OTSubscriber subscribeToAudio]` to `NO`
-reduces the bandwidth consumed by the app. (The app does only receives audio and video streams that it subscribes to.)
-* The `[OTSubscriber subscribeToAudio]` and `[OTSubscriber subscribeToVideo]` messages are now supported. 
-* Background support improvements -- This version fixes some issues related to apps running in the background
-* Other improvements -- This version includes other fixes for performance and stability.
-
-July 3, 2013 - Version 2.1.3
-
-* Fixed an issue preventing [OTVideoView getImageWithBlock:] from working correctly
-* Added support for peer-to-peer sessions connecting with Firefox 22
-* Fixed some reported crashes
-* Fixed an issue with subscriber video quality introduced in 2.1.2
-
-May 16, 2013 - Version 2.1.2
-
-* Support for non-peer-to-peer sessions, using the OpenTok media server for WebRTC.
-* Fixed some issues that were occurring when the OpenTok library ran in the background.
-* Added native support for armv7s architecture.
-* Fixed a bug that causes inconsistent UI when manipulating media track functions (e.g. publishVideo, subscribeToAudio, etc.)
-
-April 24, 2013
-
-*  OpenTok on WebRTC now provides increased connectivity. WebRTC is a peer-to-peer protocol that does not work on some
-restricted networks. Many environments, especially cellular and corporate networks, have strict network policies that
-prevent WebRTC apps from working. OpenTok on WebRTC now overcomes these restrictions to connect clients, even in
-environments that have NAT-style firewalls. However, an app cannot use WebRTC if UDP is completely blocked on the
-network.
-
-April 9, 2013
-
-* This is version 2.1.1 of the OpenTok iOS SDK.
-* We have corrected the name of the `[OTPublisherDelegate publisher:didChangeCameraPosition:]` message. (See the notes for
-April 5, 2013.)
-
-April 5, 2013
-
-* This is version 2.1 of the OpenTok on WebRTC iOS SDK.
-* You can now specify the camera a publisher uses by setting the `[OTPublisher cameraPosition]` property. The OTPublisherDelegate sends
-the `[OTPublisherDelegate publisherDidChange:cameraPosition:]` message in response to a camera change.
-* Publishers and subscribers now continue to publish and subscribe to streams when running in the background.
-* This release improves connectivity between WebRTC clients.
-* This release includes bug fixes to improve performance and stability.
-
-
-Known issues
-------------
-
-* Some features available in the OpenTok SDK for other platforms (such as JavaScript) are not supported in the OpenTok iOS SDK. These unsupported features include peer-to-peer streaming and archiving.
-
-* The OpenTok iOS SDK supports iOS 5 and later only.
-
-* Our graphics rendering pipeline causes this error to be logged when debugging: "CGContextDrawImage: invalid context 0x0." This should not affect the performance of your app. If you experience video quality issues, please let us know.
-
-* You cannot target the iOS Simulator. Build and deploy to a supported iOS device.
-
-Peer-to-peer Streaming Limitations
-----------------------------------
-
-If you use a session that does not support peer-to-peer streaming, calling `[OTSession connectWithApiKey:token:]`
-results in the `[OTSessionDelegate session:didFailWithError:]` message. The error message is defined by the
-`OTP2PSessionRequired` enum in the OTError.h file.
-
-If a session already has two connected clients, calling `[OTSession connectWithApiKey:token:]`
-results in the `[OTSessionDelegate session:didFailWithError:]` message. The error message is defined by the
-`OTP2PSessionMaxParticipants` enum in the OTError.h file.
-
-You cannot subscribe to a stream published by your own app. If you call `[OTSubscriber initWithStream:delegate:]`
-passing in a stream you publish, the OTSubscriberDelegate sends the `[OTSubscriberDelegate subscriber:didFailWithError:]`
-message. The error message is defined by the `OTSelfSubscribeFailure` enum in the OTError.h file.
+The OpenTok 2.0 iOS SDK is supported on wifi connections.
 
 Developer and client requirements
 ---------------------------------
 
-* The OpenTok iOS SDK requires XCode 4.2 or later. XCode 4.2 requires Mac OS 10.6.8 or later.
+* The OpenTok 2.0 iOS SDK requires XCode 4.2 or later. XCode 4.2 requires Mac OS 10.6.8 or later.
 
 * You need to test OpenTok apps on an iOS device running iOS 5. The OpenTok iOS SDK supports iPhone 3GS
 (subscribing only), iPhone 4 and higher, iPod touch 4th generation and higher, and all iPad versions. 
@@ -156,11 +47,10 @@ Developer and client requirements
 Setting up your development environment
 ---------------------------------------
 
-Download the webrtc branch of the [OpenTokHelloWorld sample app](https://github.com/opentok/OpenTok-iOS-Hello-World/tree/webrtc) and the
-[OpenTok iOS SDK](https://github.com/opentok/opentok-iOS-sdk). Use `git clone --recursive -b webrtc https://github.com/opentok/OpenTok-iOS-Hello-World.git`.
+Download the [OpenTok iOS SDK](https://github.com/opentok/opentok-iOS-sdk). 
 
 The OpenTokHelloWorld app publishes to a demo session, and subscribes to its own stream
-(or any other stream in the session). Included in the OpenTok on WebRTC iOS SDK are files you will need to develop
+(or any other stream in the session). Included in the OpenTok 2.0 iOS SDK are files you will need to develop
 your own apps:
 
 * **Opentok.framework** -- Add this framework to your project. Note that to use the library you must also 
@@ -174,27 +64,24 @@ in the Opentok.framework/Versions/A/Resources subdirectory of the OpenTok iOS SD
 We cannot pre-link them in the OpenTok framework, so your project must link them. Expand the "Frameworks" directory
 of the sample application in XCode project browser. Drag and drop the contents of this directory into your own iOS project.
 
-You can connect to the same OpenTok session that the OpenTokHello sample app uses by going to http://www.tokbox.com/opentok/webrtc/docs/js/tutorials/helloworld.html. You can generate a new session ID at this URL:
+You can generate a new session ID at this URL:
 
 https://dashboard.tokbox.com/projects
-
-Be sure to create a peer-to-peer session.
 
 You can also create a web page that connects to the same session as the app.
 
 Using the sample apps
 ---------------------
 
-* The webrtc branch of the [OpenTokHello](https://github.com/opentok/OpenTok-iOS-Hello-World/tree/webrtc) sample app shows
-the most basic functionality of the OpenTok iOS SDK: connecting to sessions, publishing streams, and subscribing to streams.
+The samples directory includes the following apps:
 
-     Use `git clone --recursive -b webrtc https://github.com/opentok/OpenTok-iOS-Hello-World.git` to obtain the webrtc branch of the
-     OpenTokHello Sample App project.
+* The OpenTokHello sample app shows the most basic functionality of the OpenTok iOS SDK: connecting to sessions, publishing streams, and subscribing to streams.
 
-* The [OpenTokBasic](https://github.com/opentok/opentok-iOS-Basic-Tutorial) sample app uses more of the OpenTok iOS SDK than the OpenTokHello sample app does.
+* The OpenTokFullTutorial sample app uses more of the OpenTok iOS SDK than the OpenTokHello sample app does.
 
-Creating your own app using the OpenTok iOS SDK
------------------------------------------------
+
+Creating your own app using the OpenTok 2.0 iOS SDK
+---------------------------------------------------
 
 Here are the basic steps in creating your own app:
 
@@ -218,6 +105,9 @@ to copy them from the OpenTokHello sample app.
 	The additional frameworks and libraries include the following: AudioToolbox.framework, AVFoundation.framework, CFNetwork.framework,
 	CoreAudio.framework, CoreMedia.framework, CoreTelephony.framework, CoreVideo.framework, libz.dylib, libstdc++.dylib, MobileCoreServices.framework,
 	OpenGLES.framework, QuartzCore.framework, Security.framework, SystemConfiguration.framework.
+	
+	**Note:** If you started from a blank project template in Xcode 5, you will need to set the iOS Deployment Target (IPHONEOS_DEPLOYMENT_TARGET) build setting to 6.1.
+	Otherwise, you may have linking errors when you compile. This issue will be addressed in a future release.
 	
 6. When running in the background, the OpenTok SDK requires certain Info.pList settings to continue publishing and subscribing to
 audio video streams. In XCode, open Info tab for your app's target and add a Required Background Modes entry (if it does not already
@@ -246,3 +136,10 @@ Connect with TokBox and with other OpenTok developers
 -----------------------------------------------------
 
 Your comments and questions are welcome. Come join the conversation at the [OpenTok iOS SDK forum](http://www.tokbox.com/forums/ios).
+
+More information
+----------------
+
+See the [reference documentation](docs/reference.md).
+
+For more information on OpenTok, go to <http://www.tokbox.com/>.
