@@ -17,10 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.ibatis.session.SqlSession;
-import org.asynchttpclient.AsyncHttpClient;
-import org.asynchttpclient.websocket.WebSocket;
-import org.asynchttpclient.websocket.WebSocketTextListener;
-import org.asynchttpclient.websocket.WebSocketUpgradeHandler;
 import org.java_websocket.drafts.Draft_17;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -441,72 +437,6 @@ public class MainFunction extends AbstractTestCase
 		
 		app1.setBusinessType(Consts.BusinessType.Random);
 		app1.sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, Consts.BusinessType.Random.toString());
-	}
-	
-	@Test
-	public void testWebsocketClient2() throws InterruptedException, ExecutionException, IOException
-	{
-		AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-		/*
-		Future<Response> f;
-		Response r;
-		try
-		{
-			f = asyncHttpClient.prepareGet("http://www.ning.com/").execute();
-			r = f.get();
-		}
-		catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (InterruptedException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (ExecutionException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
-		
-		WebSocket websocket = asyncHttpClient.prepareGet("ws://127.0.0.1/renhai/websocket")
-			      .execute(new WebSocketUpgradeHandler.Builder().addWebSocketListener(
-			          new WebSocketTextListener() {
-
-			          @Override
-			          public void onMessage(String message) {
-			        	  logger.debug("onMessage: {}", message);
-			          }
-
-			          @Override
-			          public void onOpen(WebSocket websocket) {
-			        	  logger.debug("onOpen");
-			              //websocket.sendTextMessage("...");
-			          }
-
-			          @Override
-			          public void onError(Throwable t) {
-			          }
-
-					@Override
-					public void onClose(WebSocket websocket)
-					{
-						logger.debug("onClose");
-					}
-
-					@Override
-					public void onFragment(String fragment, boolean last)
-					{
-						logger.debug("onFragment: {}", fragment);
-					
-					}
-			      }).build()).get();
-
-		websocket.sendTextMessage("fdsafdsaklj;");
-		asyncHttpClient.close();
 	}
 	
 	@Test
