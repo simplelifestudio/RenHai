@@ -13,83 +13,83 @@
 
 +(UIColor*) colorWithHexCode:(NSString *)hexString;
 
-+(UIColor*) Snow;           // Snow             250 250 250 #FFFAFA
-+(UIColor*) GhostWhite;     // GhostWhite       248 248 255 #F8F8FF
-+(UIColor*) WhiteSmoke;     // WhiteSmoke       245 245 245 #F5F5F5
-+(UIColor*) Gainsboro;      // Gainsboro        220 220 220 #DCDCDC
-+(UIColor*) FloralWhite;    // FloralWhite      255 250 240 #FFFAF0
-+(UIColor*) OldLace;        // OldLace          253 245 230 #FDF5E6
-+(UIColor*) Line;           // Linen            250 240 230 #FAF0E6
-+(UIColor*) AntiqueWhite;   // AntiqueWhite     250 235 215	#FAEBD7
-+(UIColor*) PapayaWhip;     // PapayaWhip       255 239 213 #FFEFD5
-+(UIColor*) BlancedAlmond;  // BlanchedAlmond   255 235 205 #FFEBCD
-+(UIColor*) Bisque;         // Bisque           255 228 196 #FFE4C4
-+(UIColor*) PeachPuff;      // PeachPuff        255 218 185 #FFDAB9
-+(UIColor*) NavajoWhite;    // NavajoWhite      255 222 173	#FFDEAD
-+(UIColor*) Moccasin;       // Moccasin         255 228 181	#FFE4B5
-+(UIColor*) Cornsilk;       // Cornsilk         255 248 220	#FFF8DC
-+(UIColor*) Ivory;          // Ivory            255 255 240 #FFFFF0
-+(UIColor*) LemonChiffon;   // LemonChiffon     255 250 205	#FFFACD
-+(UIColor*) Seashell;       // Seashell         255 245 238	#FFF5EE
-+(UIColor*) Honeydew;       // Honeydew         240 255 240	#F0FFF0
-+(UIColor*) MintCream;      // MintCream        245 255 250 #F5FFFA
-+(UIColor*) Azure;          // Azure            240 255 255 #F0FFFF
-+(UIColor*) AliceBlue;      // AliceBlue        240 248 255	#F0F8FF
-+(UIColor*) Lavender;       // Lavender         230 230 250	#E6E6FA
-+(UIColor*) LavenderBlush;  // LavenderBlush	255 240 245	#FFF0F5
-+(UIColor*) MistyRose;      // MistyRose        255 228 225	#FFE4E1
-+(UIColor*) White;          // White            255 255 255	#FFFFFF
-+(UIColor*) Black;          // Black            0   0   0	#000000
-+(UIColor*) DarkSlateGray;  // DarkSlateGray	47  79  79	#2F4F4F
-+(UIColor*) DimGrey;        // DimGrey          105 105 105	#696969
-+(UIColor*) SlateGrey;      // SlateGrey        112 128 144	#708090
-+(UIColor*) LightSlateGray; // LightSlateGray	119 136 153	#778899
-+(UIColor*) Grey;           // Grey             190 190 190	#BEBEBE
-+(UIColor*) LightGray;      // LightGray        211 211 211	#D3D3D3
-+(UIColor*) MidnightBlue;   // MidnightBlue     25  25  112	#191970
-+(UIColor*) NavyBlue;       // NavyBlue         0   0   128	#000080
-+(UIColor*) CornflowerBlue; // CornflowerBlue	100 149 237	#6495ED
-+(UIColor*) DarkSlateBlue;  // DarkSlateBlue	72  61  139	#483D8B
-+(UIColor*) SlateBlue;      // SlateBlue        106 90  205	#6A5ACD
-+(UIColor*) MediumSlateBlue;// MediumSlateBlue	123 104 238	#7B68EE
-+(UIColor*) LightSlateBlue; // LightSlateBlue	132 112 255	#8470FF
-+(UIColor*) MediumBlue;     // MediumBlue       0   0   205	#0000CD
-+(UIColor*) RoyalBlue;      // RoyalBlue        65  105 225	#4169E1
-+(UIColor*) Blue;           // Blue             0   0   255	#0000FF
-+(UIColor*) DodgerBlue;     // DodgerBlue       30  144 255	#1E90FF
-+(UIColor*) DeepSkyBlue;    // DeepSkyBlue      0   191 255	#00BFFF
-+(UIColor*) SkyBlue;        // SkyBlue          135 206 235	#87CEEB
-+(UIColor*) LightSkyBlue;   // LightSkyBlue     135 206 250	#87CEFA
-+(UIColor*) SteelBlue;      // SteelBlue        70  130 180	#4682B4
-+(UIColor*) LightSteelBlue; // LightSteelBlue	176 196 222	#B0C4DE
-+(UIColor*) LightBlue;      // LightBlue        173 216 230	#ADD8E6
++(UIColor*) Snow;               // Snow             250 250 250 #FFFAFA
++(UIColor*) GhostWhite;         // GhostWhite       248 248 255 #F8F8FF
++(UIColor*) WhiteSmoke;         // WhiteSmoke       245 245 245 #F5F5F5
++(UIColor*) Gainsboro;          // Gainsboro        220 220 220 #DCDCDC
++(UIColor*) FloralWhite;        // FloralWhite      255 250 240 #FFFAF0
++(UIColor*) OldLace;            // OldLace          253 245 230 #FDF5E6
++(UIColor*) Line;               // Linen            250 240 230 #FAF0E6
++(UIColor*) AntiqueWhite;       // AntiqueWhite     250 235 215	#FAEBD7
++(UIColor*) PapayaWhip;         // PapayaWhip       255 239 213 #FFEFD5
++(UIColor*) BlancedAlmond;      // BlanchedAlmond   255 235 205 #FFEBCD
++(UIColor*) Bisque;             // Bisque           255 228 196 #FFE4C4
++(UIColor*) PeachPuff;          // PeachPuff        255 218 185 #FFDAB9
++(UIColor*) NavajoWhite;        // NavajoWhite      255 222 173	#FFDEAD
++(UIColor*) Moccasin;           // Moccasin         255 228 181	#FFE4B5
++(UIColor*) Cornsilk;           // Cornsilk         255 248 220	#FFF8DC
++(UIColor*) Ivory;              // Ivory            255 255 240 #FFFFF0
++(UIColor*) LemonChiffon;       // LemonChiffon     255 250 205	#FFFACD
++(UIColor*) Seashell;           // Seashell         255 245 238	#FFF5EE
++(UIColor*) Honeydew;           // Honeydew         240 255 240	#F0FFF0
++(UIColor*) MintCream;          // MintCream        245 255 250 #F5FFFA
++(UIColor*) Azure;              // Azure            240 255 255 #F0FFFF
++(UIColor*) AliceBlue;          // AliceBlue        240 248 255	#F0F8FF
++(UIColor*) Lavender;           // Lavender         230 230 250	#E6E6FA
++(UIColor*) LavenderBlush;      // LavenderBlush	255 240 245	#FFF0F5
++(UIColor*) MistyRose;          // MistyRose        255 228 225	#FFE4E1
++(UIColor*) White;              // White            255 255 255	#FFFFFF
++(UIColor*) Black;              // Black            0   0   0	#000000
++(UIColor*) DarkSlateGray;      // DarkSlateGray	47  79  79	#2F4F4F
++(UIColor*) DimGrey;            // DimGrey          105 105 105	#696969
++(UIColor*) SlateGrey;          // SlateGrey        112 128 144	#708090
++(UIColor*) LightSlateGray;     // LightSlateGray	119 136 153	#778899
++(UIColor*) Grey;               // Grey             190 190 190	#BEBEBE
++(UIColor*) LightGray;          // LightGray        211 211 211	#D3D3D3
++(UIColor*) MidnightBlue;       // MidnightBlue     25  25  112	#191970
++(UIColor*) NavyBlue;           // NavyBlue         0   0   128	#000080
++(UIColor*) CornflowerBlue;     // CornflowerBlue	100 149 237	#6495ED
++(UIColor*) DarkSlateBlue;      // DarkSlateBlue	72  61  139	#483D8B
++(UIColor*) SlateBlue;          // SlateBlue        106 90  205	#6A5ACD
++(UIColor*) MediumSlateBlue;    // MediumSlateBlue	123 104 238	#7B68EE
++(UIColor*) LightSlateBlue;     // LightSlateBlue	132 112 255	#8470FF
++(UIColor*) MediumBlue;         // MediumBlue       0   0   205	#0000CD
++(UIColor*) RoyalBlue;          // RoyalBlue        65  105 225	#4169E1
++(UIColor*) Blue;               // Blue             0   0   255	#0000FF
++(UIColor*) DodgerBlue;         // DodgerBlue       30  144 255	#1E90FF
++(UIColor*) DeepSkyBlue;        // DeepSkyBlue      0   191 255	#00BFFF
++(UIColor*) SkyBlue;            // SkyBlue          135 206 235	#87CEEB
++(UIColor*) LightSkyBlue;       // LightSkyBlue     135 206 250	#87CEFA
++(UIColor*) SteelBlue;          // SteelBlue        70  130 180	#4682B4
++(UIColor*) LightSteelBlue;     // LightSteelBlue	176 196 222	#B0C4DE
++(UIColor*) LightBlue;          // LightBlue        173 216 230	#ADD8E6
++(UIColor*) PowderBlue;         // PowderBlue       176 224 230 #B0E0E6
++(UIColor*) PaleTurquoise;      // PaleTurquoise	175 238 238	#AFEEEE
++(UIColor*) DarkTurquoise;      // DarkTurquoise	0   206 209	#00CED1
++(UIColor*) MediumTurquoise;    // MediumTurquoise	72  209 204	#48D1CC
++(UIColor*) Turquoise;          // Turquoise        64  224 208	#40E0D0
++(UIColor*) Cyan;               // Cyan             0   255 255	#00FFFF
++(UIColor*) LightCyan;          // LightCyan        224 255 255	#E0FFFF
++(UIColor*) CadetBlue;          // CadetBlue        95  158 160	#5F9EA0
++(UIColor*) MediumAquamarine;   // MediumAquamarine 102 205 170 #66CDAA
++(UIColor*) Aquamarine;         // Aquamarine       127 255 212	#7FFFD4
++(UIColor*) DarkGreen;          // DarkGreen        0   100 0	#006400
++(UIColor*) DarkOliveGreen;     // DarkOliveGreen	85  107 47	#556B2F
++(UIColor*) DarkSeaGreen;       // DarkSeaGreen     143 188 143	#8FBC8F
++(UIColor*) SeaGreen;           // SeaGreen         46  139 87	#2E8B57
++(UIColor*) MediumSeaGreen;     // MediumSeaGreen	60  179 113	#3CB371
++(UIColor*) LightSeaGreen;      // LightSeaGreen	32  178 170	#20B2AA
++(UIColor*) PaleGreen;          // PaleGreen        152 251 152	#98FB98
++(UIColor*) SpringGreen;        // SpringGreen      0   255 127	#00FF7F
++(UIColor*) LawnGreen;          // LawnGreen        124 252 0	#7CFC00
++(UIColor*) Green;              // Green            0   255 0	#00FF00
++(UIColor*) Chartreuse;         // Chartreuse       127 255 0	#7FFF00
++(UIColor*) MedSpringGreen;     // MedSpringGreen	0   250 154	#00FA9A
++(UIColor*) GreenYellow;        // GreenYellow      173 255 47	#ADFF2F
++(UIColor*) LimeGreen;          // LimeGreen        50  205 50	#32CD32
++(UIColor*) YellowGreen;        // YellowGreen      154 205 50	#9ACD32
 
 /*
- PowderBlue	176 224 230	#B0E0E6
- PaleTurquoise	175 238 238	#AFEEEE
- DarkTurquoise	0 206 209	#00CED1
- MediumTurquoise	72 209 204	#48D1CC
- Turquoise	64 224 208	#40E0D0
- Cyan	0 255 255	#00FFFF
- LightCyan	224 255 255	#E0FFFF
- CadetBlue	95 158 160	#5F9EA0
- MediumAquamarine	102 205 170	#66CDAA
- Aquamarine	127 255 212	#7FFFD4
- DarkGreen	0 100 0	#006400
- DarkOliveGreen	85 107 47	#556B2F
- DarkSeaGreen	143 188 143	#8FBC8F
- SeaGreen	46 139 87	#2E8B57
- MediumSeaGreen	60 179 113	#3CB371
- LightSeaGreen	32 178 170	#20B2AA
- PaleGreen	152 251 152	#98FB98
- SpringGreen	0 255 127	#00FF7F
- LawnGreen	124 252 0	#7CFC00
- Green	0 255 0	#00FF00
- Chartreuse	127 255 0	#7FFF00
- MedSpringGreen	0 250 154	#00FA9A
- GreenYellow	173 255 47	#ADFF2F
- LimeGreen	50 205 50	#32CD32
- YellowGreen	154 205 50	#9ACD32
  ForestGreen	34 139 34	#228B22
  OliveDrab	107 142 35	#6B8E23
  DarkKhaki	189 183 107	#BDB76B

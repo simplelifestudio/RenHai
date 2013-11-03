@@ -288,4 +288,129 @@
     return [UIColor colorWithHexCode:@"ADD8E6"];
 }
 
++(UIColor*) PowderBlue
+{
+    return [UIColor colorWithHexCode:@"B0E0E6"];
+}
+
++(UIColor*) PaleTurquoise
+{
+    return [UIColor colorWithHexCode:@"AFEEEE"];
+}
+
++(UIColor*) DarkTurquoise
+{
+    return [UIColor colorWithHexCode:@"00CED1"];
+}
+
++(UIColor*) MediumTurquoise
+{
+    return [UIColor colorWithHexCode:@"48D1CC"];
+}
+
++(UIColor*) Turquoise
+{
+    return [UIColor colorWithHexCode:@"40E0D0"];
+}
+
++(UIColor*) Cyan
+{
+    return [UIColor colorWithHexCode:@"00FFFF"];
+}
+
++(UIColor*) LightCyan
+{
+    return [UIColor colorWithHexCode:@"E0FFFF"];
+}
+
++(UIColor*) CadetBlue
+{
+    return [UIColor colorWithHexCode:@"5F9EA0"];
+}
+
++(UIColor*) MediumAquamarine
+{
+    return [UIColor colorWithHexCode:@"66CDAA"];
+}
+
++(UIColor*) Aquamarine
+{
+    return [UIColor colorWithHexCode:@"7FFFD4"];
+}
+
++(UIColor*) DarkGreen
+{
+    return [UIColor colorWithHexCode:@"006400"];
+}
+
++(UIColor*) DarkOliveGreen
+{
+    return [UIColor colorWithHexCode:@"556B2F"];
+}
+
++(UIColor*) DarkSeaGreen
+{
+    return [UIColor colorWithHexCode:@"8FBC8F"];
+}
+
++(UIColor*) SeaGreen
+{
+    return [UIColor colorWithHexCode:@"2E8B57"];
+}
+
++(UIColor*) MediumSeaGreen
+{
+    return [UIColor colorWithHexCode:@"3CB371"];
+}
+
++(UIColor*) LightSeaGreen
+{
+    return [UIColor colorWithHexCode:@"20B2AA"];
+}
+
++(UIColor*) PaleGreen
+{
+    return [UIColor colorWithHexCode:@"98FB98"];
+}
+
++(UIColor*) SpringGreen
+{
+    return [UIColor colorWithHexCode:@"00FF7F"];
+}
+
++(UIColor*) LawnGreen
+{
+    return [UIColor colorWithHexCode:@"7CFC00"];
+}
+
++(UIColor*) Green
+{
+    return [UIColor colorWithHexCode:@"00FF00"];
+}
+
++(UIColor*) Chartreuse
+{
+    return [UIColor colorWithHexCode:@"7FFF00"];
+}
+
++(UIColor*) MedSpringGreen
+{
+    return [UIColor colorWithHexCode:@"00FA9A"];
+}
+
++(UIColor*) GreenYellow
+{
+    return [UIColor colorWithHexCode:@"ADFF2F"];
+}
+
++(UIColor*) LimeGreen
+{
+    return [UIColor colorWithHexCode:@"32CD32"];
+}
+
++(UIColor*) YellowGreen
+{
+    return [UIColor colorWithHexCode:@"9ACD32"];
+}
+
 @end
