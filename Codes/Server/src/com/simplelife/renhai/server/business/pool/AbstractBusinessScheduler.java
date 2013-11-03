@@ -131,11 +131,6 @@ public abstract class AbstractBusinessScheduler extends Thread implements IBusin
     		{
     			ownerBusinessPool.endChat(device);
     		}
-    		else
-    		{
-   				logger.error("Abnormal status of Device <{}>, it can't be found in business device pool after failed to start session", deviceSn);
-   				ownerBusinessPool.onDeviceLeave(device, StatusChangeReason.FailedToStartSession);
-    		}
     	}
     }
 }

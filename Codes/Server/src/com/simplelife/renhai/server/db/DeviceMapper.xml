@@ -28,8 +28,59 @@
           <result column="p_lastActivityTime" property="lastActivityTime" jdbcType="BIGINT" />
           <result column="p_createTime" property="createTime" jdbcType="BIGINT" />
           <result column="p_active" property="active" jdbcType="CHAR" />
+          
+          <association column="inc_interestCardId" property="interestCard" javaType="com.simplelife.renhai.server.db.Interestcard">
+              <id column="inc_interestCardId" property="interestCardId" jdbcType="INTEGER" />
+              <result column="inc_profileId" property="profileId" jdbcType="INTEGER" />
+              
+              <!-- collection property="interestLabelMapSet" 
+                column="interestCardId"
+                ofType="com.simplelife.renhai.server.db.Interestlabelmap"
+                select="selectInterestLabels">
+              </collection-->
+              
+              <collection property="interestLabelMapSet" 
+                ofType="com.simplelife.renhai.server.db.Interestlabelmap">
+                  <id column="inl_interestLabelMapId" property="interestLabelMapId" jdbcType="INTEGER" />
+                  <result column="inl_interestCardId" property="interestCardId" jdbcType="INTEGER" />
+                  <result column="inl_globalInterestLabelId" property="globalInterestLabelId" jdbcType="INTEGER" />
+                  <result column="inl_labelOrder" property="labelOrder" jdbcType="INTEGER" />
+                  <result column="inl_matchCount" property="matchCount" jdbcType="INTEGER" />
+                  <result column="inl_validFlag" property="validFlag" jdbcType="CHAR" />
+                  <result column="inl_interestLabelMaplId" property="interestLabelMaplId" jdbcType="INTEGER" />
+              </collection>
+          </association>
+          
+          <association column="imc_impressCardId" property="impressCard" javaType="com.simplelife.renhai.server.db.Impresscard">
+              <id column="imc_impressCardId" property="impressCardId" jdbcType="INTEGER" />
+              <result column="imc_profileId" property="profileId" jdbcType="INTEGER" />
+              <result column="imc_chatTotalCount" property="chatTotalCount" jdbcType="INTEGER" />
+              <result column="imc_chatTotalDuration" property="chatTotalDuration" jdbcType="INTEGER" />
+              <result column="imc_chatLossCount" property="chatLossCount" jdbcType="INTEGER" />
+              
+              <collection property="impressLabelMapSet" 
+                ofType="com.simplelife.renhai.server.db.Impresslabelmap">
+                  <id column="iml_impressLabelMapId" property="impressLabelMapId" jdbcType="INTEGER" />
+                  <result column="iml_impressCardId" property="impressCardId" jdbcType="INTEGER" />
+                  <result column="iml_globalImpressLabelId" property="globalImpressLabelId" jdbcType="INTEGER" />
+                  <result column="iml_assessedCount" property="assessedCount" jdbcType="INTEGER" />
+                  <result column="iml_updateTime" property="updateTime" jdbcType="BIGINT" />
+                  <result column="iml_assessCount" property="assessCount" jdbcType="INTEGER" />
+              </collection>
+          </association>
 	 </association>
   </resultMap>
+  
+	<select id="selectInterestLabels" parameterType ="int" resultType="com.simplelife.renhai.server.db.Interestlabelmap" >
+		SELECT 
+			interestCardId,
+			globalInterestLabelId,
+			labelOrder,
+			matchCount,
+			validFlag
+		FROM interestlabelmap
+		WHERE interestCardId = #{interestCardId}
+	</select>
   
   <sql id="Base_Column_List" >
     deviceId, deviceSn
@@ -66,10 +117,33 @@
     	P.unbanDate as p_unbanDate,
     	P.lastActivityTime as p_lastActivityTime,
     	P.createTime as p_createTime,
-    	P.active as p_active
+    	P.active as p_active,
+    	INC.interestCardId as inc_interestCardId,
+    	INC.profileId as inc_profileId,
+    	INL.interestLabelMapId as inl_interestLabelMapId,
+    	INL.interestCardId as inl_interestCardId,
+    	INL.globalInterestLabelId as inl_globalInterestLabelId,
+    	INL.labelOrder as inl_labelOrder,
+    	INL.matchCount as inl_matchCount, 
+    	INL.validFlag as inl_validFlag,
+    	IMC.impressCardId as imc_impressCardId,
+    	IMC.profileId as imc_profileId,
+    	IMC.chatTotalCount as imc_chatTotalCount,
+    	IMC.chatTotalDuration as imc_chatTotalDuration,
+    	IMC.chatLossCount as imc_chatLossCount,
+    	IML.impressLabelMapId as iml_impressLabelMapId,
+    	IML.impressCardId as iml_impressCardId,
+    	IML.globalImpressLabelId as iml_globalImpressLabelId,
+    	IML.assessedCount as iml_assessedCount,
+    	IML.updateTime as iml_updateTime,
+    	IML.assessCount as iml_assessCount
     from device D
     	left outer join devicecard C on D.deviceId = C.deviceId
     	left outer join profile P on D.deviceId = P.deviceId
+    	left outer join interestcard INC on P.profileId = INC.profileId
+    	left outer join interestlabelmap INL on INC.interestCardId = INL.interestCardId
+    	left outer join impresscard IMC on P.profileId = IMC.profileId
+    	left outer join impresslabelmap IML on IMC.impressCardId = IML.impressCardId
     where D.deviceSn = #{deviceSn,jdbcType=VARCHAR}
   </select>
   

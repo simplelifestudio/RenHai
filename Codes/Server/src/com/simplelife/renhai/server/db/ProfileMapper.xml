@@ -28,7 +28,7 @@
       #{unbanDate,jdbcType=BIGINT}, #{lastActivityTime,jdbcType=BIGINT}, #{createTime,jdbcType=BIGINT}, 
       #{active,jdbcType=CHAR})
   </insert>
-    <update id="updateByPrimaryKey" parameterType="map">
+    <update id="updateByPrimaryKey" parameterType="com.simplelife.renhai.server.db.Profile">
     update profile
     set deviceId = #{deviceId,jdbcType=INTEGER},
       serviceStatus = #{serviceStatus,jdbcType=CHAR},

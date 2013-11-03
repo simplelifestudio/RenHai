@@ -287,14 +287,34 @@ public class MainFunction extends AbstractTestCase
 	}
 	
 	@Test
+	public void testOneNormalApp() throws InterruptedException
+	{
+		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit");
+		app1.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
+		app1.connect(true);
+		
+		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
+		{
+			Thread.sleep(5000);
+			
+			if (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
+			{
+				app1.sendServerDataSyncRequest();
+			}
+		}
+	}
+	
+	@Test
 	public void testBehaviorMode() throws InterruptedException
 	{
 		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit");
-		app1.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		//app1.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		app1.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
 		app1.connect(true);
 		
 		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndQuit");
-		app2.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		//app2.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		app2.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
 		app2.connect(true);
 		
 		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended
@@ -381,7 +401,7 @@ public class MainFunction extends AbstractTestCase
 		
 		SqlSession session = DAOWrapper.getSession();
 		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
-		Device device = mapper.selectByDeviceSn(demoDeviceSn);
+		Device device = mapper.selectWholeDeviceByDeviceSn(demoDeviceSn);
 		
 		Devicecard card = device.getDeviceCard();
 		card.setAppVersion("30.0");

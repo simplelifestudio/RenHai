@@ -71,16 +71,15 @@
     </set>
 	where deviceId = #{deviceId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="map" >
+  <update id="updateByPrimaryKey" parameterType="com.simplelife.renhai.server.db.Devicecard" >
     update devicecard
-    set deviceCardId = #{record.deviceCardId,jdbcType=INTEGER},
-      deviceId = #{record.deviceId,jdbcType=INTEGER},
-      registerTime = #{record.registerTime,jdbcType=BIGINT},
-      deviceModel = #{record.deviceModel,jdbcType=VARCHAR},
-      osVersion = #{record.osVersion,jdbcType=VARCHAR},
-      appVersion = #{record.appVersion,jdbcType=VARCHAR},
-      location = #{record.location,jdbcType=VARCHAR},
-      isJailed = #{record.isJailed,jdbcType=CHAR}
-	where deviceCardId = #{deviceCardId,jdbcType=INTEGER}
+    set deviceId = #{deviceId,jdbcType=INTEGER},
+      registerTime = #{registerTime,jdbcType=BIGINT},
+      deviceModel = #{deviceModel,jdbcType=VARCHAR},
+      osVersion = #{osVersion,jdbcType=VARCHAR},
+      appVersion = #{appVersion,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      isJailed = #{isJailed,jdbcType=CHAR}
+    where deviceCardId = #{deviceCardId,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -106,6 +106,13 @@ public class Globalimpresslabel implements IDbObject
 	public void save(SqlSession session)
 	{
 		GlobalimpresslabelMapper mapper = session.getMapper(GlobalimpresslabelMapper.class);
-		mapper.insert(this);
+		if (this.globalImpressLabelId != null)
+		{
+			mapper.updateByPrimaryKey(this);
+		}
+		else
+		{
+			mapper.insert(this);
+		}
 	}
 }

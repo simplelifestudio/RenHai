@@ -41,6 +41,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp = createNewMockApp(CommonFunctions.getRandomString(10));
 	}
@@ -52,6 +53,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 	public void tearDown() throws Exception
 	{
 		deleteDevice(mockApp);
+		super.tearDown();
 	}
 	
 	/**
@@ -61,7 +63,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 	public void test() throws InterruptedException
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn());
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getConnectionId());
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		long lastActivityTime = deviceWrapper.getLastActivityTime();
@@ -75,9 +77,11 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_04 数据库检查：设备卡片信息
-		SqlSession session = DAOWrapper.getSession();
-		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
-		Device deviceInDB = mapper.selectByDeviceSn(deviceWrapper.getDeviceSn());
+		// 由于使用了缓存，设备退出在线设备池之前不会保存到数据库
+		//SqlSession session = DAOWrapper.getSession();
+		//DeviceMapper mapper = session.getMapper(DeviceMapper.class);
+		//Device deviceInDB = mapper.selectByDeviceSn(deviceWrapper.getDeviceSn());
+		Device deviceInDB = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDevice();
 		
 		Devicecard deviceCardInDB = deviceInDB.getDeviceCard();
 		assertEquals(mockApp.getAppVersion(), deviceCardInDB.getAppVersion());
@@ -114,10 +118,10 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		mockApp.disconnect();
 		
 		// Step_11 调用：OnlineDevicePool::getCount
-		assertTrue(pool.getDevice(OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceSn()) == null);
+		assertTrue(OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()) == null);
 		
 		// Step_12 建立WebSocket连接
-		deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn());
+		mockApp.connect();
 		
 		// Step_13 Mock请求：设备同步
 		mockApp.enterPool(businessType);
@@ -127,28 +131,20 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertTrue(!mockApp.lastReceivedCommandIsError());
 		
 		// Step_14 调用：DeviceWrapper::getLastActivityTime
-		assertTrue(deviceWrapper.getLastActivityTime() > lastActivityTime);
+		deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn());
+		long newActivityTime = deviceWrapper.getLastActivityTime();
+		assertTrue(newActivityTime > lastActivityTime);
 		
-		// Step_15 Mock请求：进入随机聊天
+		// Step_15 Mock请求：进入业务设备池
 		mockApp.enterPool(businessType);
 		assertTrue(!mockApp.lastReceivedCommandIsError());
 		
 		// Step_16 Mock请求：设备同步
+		mockApp.clearLastReceivedCommand();
 		mockApp.syncDevice();
 		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_17 Mock事件：onClose
 		mockApp.disconnect();
-		
-		// Step_18 建立WebSocket连接
-		deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn());
-		
-		// Step_19 停止数据库服务
-		DBModule.instance.stopService();
-		
-		// Step_20 Mock请求：设备同步
-		mockApp.syncDevice();
-		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
-		// fail("需要检查此时应该收到系统故障，操作失败");
 	}
 }

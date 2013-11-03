@@ -38,6 +38,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp = createNewMockApp(demoDeviceSn);
 	}
@@ -49,6 +50,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 	public void tearDown() throws Exception
 	{
 		deleteDevice(mockApp);
+		super.tearDown();
 	}
 	
 	@Test

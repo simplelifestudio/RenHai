@@ -51,7 +51,7 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 		if (deviceWrapper.getBusinessStatus() != BusinessStatus.SessionBound)
 		{
 			setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
-			setErrorDescription("Device is not in BusinessSession anymore");
+			setErrorDescription("The business session has been released");
 			return false;
 		}
 		

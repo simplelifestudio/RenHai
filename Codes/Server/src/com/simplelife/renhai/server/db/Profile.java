@@ -263,7 +263,7 @@ public class Profile implements IDbObject
 		}
 		else
 		{
-			mapper.updateByPrimaryKey(this, profileId);
+			mapper.updateByPrimaryKey(this);
 		}
 		
 		interestCard.setProfileId(profileId);

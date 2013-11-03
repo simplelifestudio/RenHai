@@ -9,11 +9,15 @@
 
 package com.simplelife.renhai.server.test.unittest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.test.AbstractTestCase;
@@ -569,6 +573,23 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		deviceCardObj.put(JSONKey.IsJailed, isJailed);
 
 		return updateObj;
+	}
+	
+	@Test
+	public void testModifyInterestLabel() throws InterruptedException
+	{
+		MockApp app1 = new MockApp(demoDeviceSn);
+		List<String> labels = new ArrayList<String>();
+		labels.add("“Ù¿÷");
+		labels.add("Ã¯ŒË");
+		//labels.add("IntOf"+app1.getDeviceSn());
+		labels.add("≈¿…Ω");
+		
+		app1.syncDevice(labels);
+		app1.disconnect();
+		
+		DAOWrapper.flushToDB();
+		Thread.sleep(3000);
 	}
 	
 }

@@ -36,6 +36,7 @@ public class Test19MatchConfirmAReject extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp1 = createNewMockApp(demoDeviceSn);
 		mockApp2 = createNewMockApp(demoDeviceSn2);
@@ -49,6 +50,7 @@ public class Test19MatchConfirmAReject extends AbstractTestCase
 	{
 		deleteDevice(mockApp1);
 		deleteDevice(mockApp2);
+		super.tearDown();
 	}
 	
 	@Test
@@ -86,10 +88,10 @@ public class Test19MatchConfirmAReject extends AbstractTestCase
 		mockApp2.enterPool(businessType);
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper1.getBusinessStatus());
 		
 		// Step_09 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper2.getBusinessStatus());
 		
 		// Step_10 调用：RandomBusinessDevicePool::getCount
 		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
@@ -137,10 +139,10 @@ public class Test19MatchConfirmAReject extends AbstractTestCase
 		Thread.sleep(500);
 		
 		// Step_16 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper1.getBusinessStatus());
 		
 		// Step_17 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.WaitMatch, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper2.getBusinessStatus());
 		
 		// Step_18 Mock事件：A onPing
 		//mockApp1.ping();

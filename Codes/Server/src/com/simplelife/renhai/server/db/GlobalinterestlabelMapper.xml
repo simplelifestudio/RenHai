@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.simplelife.renhai.server.db.GlobalinterestlabelMapper" >
+  <!-- cache type="com.simplelife.renhai.server.db.Globalinterestlabel"/-->
   <resultMap id="BaseResultMap" type="com.simplelife.renhai.server.db.Globalinterestlabel" >
     <!--
       WARNING - @mbggenerated
@@ -29,6 +30,12 @@
     <include refid="Base_Column_List" />
     from globalinterestlabel
     where globalInterestLabelId = #{globalInterestLabelId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByLabelName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from globalinterestlabel
+    where interestLabelName = #{interestLabelName,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     <!--

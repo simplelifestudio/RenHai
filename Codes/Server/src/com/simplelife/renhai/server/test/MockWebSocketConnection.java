@@ -140,12 +140,6 @@ public class MockWebSocketConnection extends WebSocketConnection implements IMoc
 	@Override
 	public JSONObject syncSendToServer(JSONObject jsonObject)
 	{
-		if (disabled)
-    	{
-    		logger.debug("Mock IOException due to connection is disabled");
-    		return null;
-    	}
-		
 		String messageSn = jsonObject.getJSONObject(JSONKey.JsonEnvelope)
 				.getJSONObject(JSONKey.Header)
 				.getString(JSONKey.MessageSn);

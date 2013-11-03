@@ -7,5 +7,6 @@ public interface DevicecardMapper {
     int insert(Devicecard record);
     Devicecard selectByDeviceId(Integer deviceId);
     //int updateByDeviceIdSelective(@Param("record") Devicecard record, @Param("deviceId") Integer deviceId);
-    int updateByPrimaryKey(@Param("record") Devicecard record, @Param("deviceCardId") Integer deviceCardId);
+    //int updateByPrimaryKey(@Param("record") Devicecard record, @Param("deviceCardId") Integer deviceCardId);
+    int updateByPrimaryKey(Devicecard record);
 }

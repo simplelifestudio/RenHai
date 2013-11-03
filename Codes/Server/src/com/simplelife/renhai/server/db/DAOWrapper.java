@@ -41,14 +41,20 @@ public class DAOWrapper
 	{
 		if (factory == null)
 		{
-			try
+			synchronized(SqlSession.class)
 			{
-				factory = (new SqlSessionFactoryBuilder()).build(Resources.getResourceAsReader("mybatis.xml"));
-			}
-			catch (IOException e)
-			{
-				FileLogger.printStackTrace(e);
-				return null;
+				if (factory == null)
+				{
+					try
+					{
+						factory = (new SqlSessionFactoryBuilder()).build(Resources.getResourceAsReader("mybatis.xml"));
+					}
+					catch (IOException e)
+					{
+						FileLogger.printStackTrace(e);
+						return null;
+					}
+				}
 			}
 		}
 		
@@ -116,6 +122,7 @@ public class DAOWrapper
 			catch(Exception e)
 			{
 				session.rollback();
+				FileLogger.printStackTrace(e);
 				return false;
 			}
 			return true;
@@ -126,6 +133,7 @@ public class DAOWrapper
 		{
 			Thread.currentThread().setName("DBCacheTask");
 			IDbObject obj = null;
+			session = getSession();
 			while (continueFlag)
 			{
 				if (linkToBeSaved.isEmpty())

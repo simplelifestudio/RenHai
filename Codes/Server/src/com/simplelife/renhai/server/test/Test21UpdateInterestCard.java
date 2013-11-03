@@ -33,6 +33,7 @@ public class Test21UpdateInterestCard extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp1 = createNewMockApp(demoDeviceSn);
 	}
@@ -44,6 +45,7 @@ public class Test21UpdateInterestCard extends AbstractTestCase
 	public void tearDown() throws Exception
 	{
 		deleteDevice(mockApp1);
+		super.tearDown();
 	}
 	
 	private void addInterestLabels(HashMap<String, Object> labels)

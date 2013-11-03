@@ -47,6 +47,7 @@ import com.simplelife.renhai.server.util.JSONKey;
 public class AppDataSyncRequest extends AppJSONMessage
 {
 	private SyncType syncType = SyncType.Invalid;
+	private boolean isNewDevice = false;
 	
 	private enum SyncType
 	{
@@ -273,7 +274,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		}
 		
 		String deviceSn = header.getString(JSONKey.DeviceSn);
-		if (DBQueryUtil.isNewDevice(deviceSn))
+		if (isNewDevice)
 		{
 			if (!deviceCardObj.containsKey(JSONKey.DeviceModel))
 			{
@@ -352,7 +353,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 	protected boolean checkJSONRequest()
 	{
 		String deviceSn = header.getString(JSONKey.DeviceSn);
-		if (DBQueryUtil.isNewDevice(deviceSn))
+		isNewDevice = DBQueryUtil.isNewDevice(deviceSn);
+		if (isNewDevice)
 		{
 			if (!body.containsKey(JSONKey.DataUpdate))
 			{
@@ -446,7 +448,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 			deviceWrapper.bindOnlineDevicePool(OnlineDevicePool.instance);
 		}
 		*/
-		
 		if (!checkJSONRequest())
 		{
 			responseError();
@@ -464,22 +465,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		}
 		else
 		{
-			boolean newDevice = false;
-			
-			try
-			{
-				newDevice = DBQueryUtil.isNewDevice(deviceSn);
-			}
-			catch (Exception e)
-			{
-				this.setErrorCode(Consts.GlobalErrorCode.DBException_1001);
-				this.setErrorDescription("Server internal error.");
-				responseError();
-				FileLogger.printStackTrace(e);
-				return;
-			}
-			
-			if (newDevice)
+			if (isNewDevice)
 			{
 				syncType = SyncType.NewDevice;
 			}
@@ -624,17 +610,18 @@ public class AppDataSyncRequest extends AppJSONMessage
 			return;
 		}
 		
-		if (DBQueryUtil.isNewDevice(deviceSn))
+		if (isNewDevice)
 		{
 			logger.error("DeviceCard can't be found in DB with SN: " + deviceSn);
 			return;
 		}
 		
+		SqlSession session = null;
 		try
 		{
-			SqlSession session = DAOWrapper.getSession();
+			session = DAOWrapper.getSession();
 			DeviceMapper mapper = session.getMapper(DeviceMapper.class);
-			device = mapper.selectByDeviceSn(deviceSn);
+			device = mapper.selectWholeDeviceByDeviceSn(deviceSn);
 			if (device == null)
 			{
 				logger.error("Fatal error, device load from DB by SN <{}> is null!", deviceSn);
@@ -645,6 +632,10 @@ public class AppDataSyncRequest extends AppJSONMessage
 		{
 			logger.error("Fatal error when trying to load device <{}> from DB", deviceSn);
 			FileLogger.printStackTrace(e);
+		}
+		finally
+		{
+			session.close();
 		}
 	}
 	
@@ -1177,6 +1168,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 				globalInterest.setGlobalMatchCount(0);
 				DAOWrapper.cache(globalInterest);
 			}
+			
+			interestLabelMap.setGlobalLabel(globalInterest);
 			
 			interestLabelMap.setMatchCount(0);
 			interestLabelMap.setValidFlag(Consts.ValidInvalid.Valid.name());

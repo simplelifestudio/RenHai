@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.simplelife.renhai.server.db.GlobalimpresslabelMapper" >
+  <!-- cache type="com.simplelife.renhai.server.db.Globalimpresslabel"/-->
   <resultMap id="BaseResultMap" type="com.simplelife.renhai.server.db.Globalimpresslabel" >
     <!--
       WARNING - @mbggenerated
@@ -30,6 +31,14 @@
     from globalimpresslabel
     where globalImpressLabelId = #{globalImpressLabelId,jdbcType=INTEGER}
   </select>
+
+<select id="selectByLabelName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from globalimpresslabel
+    where impressLabelName = #{impressLabelName,jdbcType=VARCHAR}
+  </select>
+
   <insert id="insert" parameterType="com.simplelife.renhai.server.db.Globalimpresslabel" 
     useGeneratedKeys="true" keyProperty="globalImpressLabelId">
     insert into globalimpresslabel (impressLabelName, 

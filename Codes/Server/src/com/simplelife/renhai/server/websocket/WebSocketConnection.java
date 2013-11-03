@@ -397,6 +397,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	
     	if (exceptionOcurred)
     	{
+    		logger.debug("Exception occurred on Websocket connection");
     		controller.message = new ConnectionErrorEvent(null);
     	}
     	else

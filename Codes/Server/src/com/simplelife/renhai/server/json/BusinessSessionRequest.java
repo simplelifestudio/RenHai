@@ -550,7 +550,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 				// Load device from DB 
 				SqlSession session = DAOWrapper.getSession();
 				DeviceMapper mapper = session.getMapper(DeviceMapper.class);
-				targetDevice = mapper.selectByDeviceSn(deviceSn);
+				targetDevice = mapper.selectWholeDeviceByDeviceSn(deviceSn);
+				session.close();
 				
 				// Check if it's totally invalid deviceSn in DB
 				if (targetDevice == null)
@@ -648,13 +649,19 @@ public class BusinessSessionRequest extends AppJSONMessage
 				{
 					if (assessedFlag)
 					{
-						label.setAssessedCount(label.getAssessedCount() + 1);
+						int count = label.getAssessedCount();
+						logger.debug("Impress label<"+ labelName +"> of device <{}> was increased from " 
+								+ count + " to " + (count + 1), deviceWrapper.getDeviceSn());
+						label.setAssessedCount(count + 1);
 						label.setUpdateTime(System.currentTimeMillis());
 						//label.getGlobalimpresslabel().setGlobalAssessCount(label.getGlobalimpresslabel().getGlobalAssessCount() + 1);
 						DbLogger.increaseImpressAssessCount(tmpLabelName);
 					}
 					else
 					{
+						int count = label.getAssessCount();
+						logger.debug("Count of device <{}> using <" + labelName + "> for assess was increased from" 
+								+ count + " to " + (count + 1), deviceWrapper.getDeviceSn());
 						label.setAssessCount(label.getAssessCount() + 1);
 					}
 				}
@@ -688,6 +695,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		
 		labelMap.setGlobalImpressLabelId(globalimpresslabel.getGlobalImpressLabelId());
+		labelMap.setGlobalLabel(globalimpresslabel);
 		labelMap.setUpdateTime(System.currentTimeMillis());
 		labelMap.setImpressCardId(card.getImpressCardId());
 		

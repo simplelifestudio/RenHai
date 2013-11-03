@@ -36,6 +36,7 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp = createNewMockApp(demoDeviceSn);
 	}
@@ -47,6 +48,7 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 	public void tearDown() throws Exception
 	{
 		deleteDevice(mockApp);
+		super.tearDown();
 	}
 
 	
@@ -54,9 +56,9 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 	public void test() throws InterruptedException
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn());
+		IDeviceWrapper deviceWrapper = pool.getDevice(mockApp.getConnectionId());
 		
-		Device device = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDevice();
+		Device device = pool.getDevice(mockApp.getDeviceSn()).getDevice();
 		String.valueOf(device.getDeviceId()); 
 		
 		// Step_01 数据库操作：将设备A的服务状态更新为禁聊，到期日期为明年
@@ -65,7 +67,8 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 		Profile profile = deviceWrapper.getDevice().getProfile(); 
 		profile.setServiceStatus(Consts.ServiceStatus.Banned.name());
 		profile.setUnbanDate(DateUtil.getDateByDayBack(-365).getTime());
-		mapper.insert(profile);
+		//session.update(arg0);
+		profile.save(session);
 		
 		// Step_02 调用：OnlineDevicePool::getCount
 		//int deviceCount = pool.getElementCount();
@@ -80,7 +83,7 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 		
 		// Step_05 调用：OnlineDevicePool::getCount
 		//assertEquals(deviceCount - 1, pool.getElementCount());
-		assertTrue(pool.getDevice(OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceSn()) == null);
+		assertTrue(pool.getDevice(mockApp.getDeviceSn()) == null);
 		
 		// Step_06 调用：DeviceWrapper::getLastActivityTime
 		assertTrue(deviceWrapper.getLastActivityTime() > lastActivity);

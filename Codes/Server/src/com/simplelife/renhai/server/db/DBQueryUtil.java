@@ -177,7 +177,10 @@ public class DBQueryUtil
 				FileLogger.printStackTrace(e);
 			}
 		}
-		
+		finally
+		{
+			session.close();
+		}
 		return label;
 	}
 	
@@ -207,6 +210,10 @@ public class DBQueryUtil
 			{
 				FileLogger.printStackTrace(e);
 			}
+		}
+		finally
+		{
+			session.close();
 		}
 		
 		return label;

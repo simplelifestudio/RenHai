@@ -43,7 +43,9 @@ public class MockAppConsts
 		EndChatResReceived(13),
 		AssessReqSent(14),
 		AssessResReceived(15),
-		Ended(16);
+		SessionUnbindReqSent(16),
+		SessionUnbindResReceived(17),
+		Ended(18);
 		
 		private int value;
 		private MockAppBusinessStatus(int value)
@@ -71,7 +73,8 @@ public class MockAppConsts
 		EndChat(208),
 		AssessAndContinue(209),
 		AssessAndQuit(210),
-		BusinessSessionNotificationResponse(211);
+		BusinessSessionNotificationResponse(211),
+		SessionUnbind(212);
 		
 		private int value ;
 		

@@ -32,6 +32,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 	}
 	
@@ -43,6 +44,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 	{
 		deleteDevice(mockApp1);
 		OnlineDevicePool.instance.setCapacity(GlobalSetting.BusinessSetting.OnlinePoolCapacity);
+		super.tearDown();
 	}
 	
 	
@@ -70,7 +72,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 		
 		assertEquals(deviceCount, pool.getElementCount());
 		
-		IDeviceWrapper deviceWrapper1 = OnlineDevicePool.instance.getDevice(mockApp1.getDeviceSn());
+		IDeviceWrapper deviceWrapper1 = OnlineDevicePool.instance.getDevice(mockApp1.getConnectionId());
 		
 		// Step_03 调用：DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.BusinessStatus.Init, deviceWrapper1.getBusinessStatus());
@@ -88,7 +90,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 		assertTrue(deviceWrapper1.getLastActivityTime() > lastActivity);
 		
 		// Step_06 调用：OnlineDevicePool::getCount
-		assertTrue(pool.getDevice(deviceWrapper1.getDeviceSn()) != null);
+		assertTrue(pool.getDevice(mockApp1.getDeviceSn()) != null);
 		
 		// Step_07 Mock请求：B设备同步
 		

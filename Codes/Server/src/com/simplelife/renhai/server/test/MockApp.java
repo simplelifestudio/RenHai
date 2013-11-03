@@ -11,7 +11,9 @@
 package com.simplelife.renhai.server.test;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -124,7 +126,7 @@ public class MockApp implements IMockApp, Runnable
 					app.syncDevice();
 					break;
 				case EnterPool:
-					app.enterPool(BusinessType.Interest);
+					app.enterPool(BusinessType.Random);
 					break;
 				case LeavePool:
 					app.leavePool();
@@ -158,13 +160,16 @@ public class MockApp implements IMockApp, Runnable
 				case ServerDataSyncRequest:
 					app.sendServerDataSyncRequest();
 					break;
+				case SessionUnbind:
+					app.sessionUnbind();
+					break;
 				default:
 					logger.error("Unknown message id");
 			}
 		}
 	}
 	
-	public final static String OSVersion = "iOS 6.1.2";
+	public final static String OSVersion = "iOS 7.0.1";
 	public final static String AppVersion = "0.1";
 	public final static String Location = "22.511962,113.380301";
 	public final static String DeviceModel = "iPhone6";
@@ -675,6 +680,12 @@ public class MockApp implements IMockApp, Runnable
 	}
 	
 	@Override
+	public void sessionUnbind()
+	{
+		sendBusinessSessionRequest(Consts.OperationType.SessionUnbind, null, "");
+	}
+	
+	@Override
 	public void leavePool()
 	{
 		if (businessType != null)
@@ -828,8 +839,8 @@ public class MockApp implements IMockApp, Runnable
 							MockAppRequest.BusinessSessionNotificationResponse, 
 							lastReceivedCommand, 
 							this,
-							0,
-							MockAppConsts.MockAppBusinessStatus.Init);
+							500,
+							null);
 					task.start();
 				}
 			}
@@ -902,7 +913,14 @@ public class MockApp implements IMockApp, Runnable
 			else if (receivedOperationType == Consts.NotificationType.OthersideRejected
 					|| receivedOperationType == Consts.NotificationType.OthersideLost)
 			{
-				endBusiness();
+				//endBusiness();
+				task = new AutoReplyTask(
+						MockAppRequest.SessionUnbind, 
+						lastReceivedCommand, 
+						this, 
+						MockAppConsts.Setting.ChatConfirmDuration, 
+						MockAppConsts.MockAppBusinessStatus.SessionUnbindReqSent);
+				task.setName("SessionUnbindReqSent" + DateUtil.getCurrentMiliseconds());
 				replyNotification(lastReceivedCommand, null);
 				return;
 			}
@@ -1105,6 +1123,17 @@ public class MockApp implements IMockApp, Runnable
 					logger.error("MockApp <" + deviceSn + "> received {} in status of AssessReqSent", messageId.name());
 				}
 				break;
+				
+			case SessionUnbindReqSent:
+				if (messageId == Consts.MessageId.BusinessSessionResponse)
+				{
+					endBusiness();
+				}
+				else
+				{
+					logger.error("MockApp <" + deviceSn + "> received {} in status of SessionUnbindReqSent", messageId.name());
+				}
+				break;
 			default:
 				break;
 		}
@@ -1115,10 +1144,7 @@ public class MockApp implements IMockApp, Runnable
 		}
 	}
 	
-	/**
-	 * Mock request of AppDataSyncRequest
-	 */
-	public void syncDevice()
+	public void syncDevice(List<String> interestLabels)
 	{
 		JSONObject queryObj = new JSONObject();
 		JSONObject updateObj = new JSONObject();
@@ -1148,22 +1174,36 @@ public class MockApp implements IMockApp, Runnable
 		JSONArray interestLabelArray = new JSONArray();
 		interestCardObj.put(JSONKey.InterestLabelList, interestLabelArray);
 		
-		JSONObject interestLabelObj = new JSONObject();
-		interestLabelObj.put(JSONKey.InterestLabelName, "音乐");
-		interestLabelObj.put(JSONKey.LabelOrder, System.currentTimeMillis() % 5);
-		interestLabelArray.add(interestLabelObj);
-		
-		interestLabelObj = new JSONObject();
-		interestLabelObj.put(JSONKey.InterestLabelName, "看电影");
-		interestLabelObj.put(JSONKey.LabelOrder, System.currentTimeMillis() % 5);
-		interestLabelArray.add(interestLabelObj);
-		
-		interestLabelObj = new JSONObject();
-		interestLabelObj.put(JSONKey.InterestLabelName, "privateInterestOf " + deviceSn);
-		interestLabelObj.put(JSONKey.LabelOrder, System.currentTimeMillis() % 5);
-		interestLabelArray.add(interestLabelObj);
+		for (String label : interestLabels)
+		{
+			JSONObject interestLabelObj = new JSONObject();
+			interestLabelObj.put(JSONKey.InterestLabelName, label);
+			interestLabelObj.put(JSONKey.LabelOrder, System.currentTimeMillis() % 5);
+			interestLabelArray.add(interestLabelObj);
+			
+			try
+			{
+				Thread.sleep(1);
+			}
+			catch (InterruptedException e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+		}
 		
 		sendAppDataSyncRequest(queryObj, updateObj);
+	}
+	
+	/**
+	 * Mock request of AppDataSyncRequest
+	 */
+	public void syncDevice()
+	{
+		List<String> labels = new ArrayList<String>();
+		labels.add("音乐");
+		labels.add("看电影");
+		labels.add("InterestOf" + this.getDeviceSn());
+		syncDevice(labels);
 	}
 
 	@Override
@@ -1178,12 +1218,9 @@ public class MockApp implements IMockApp, Runnable
 		assess(impressLabelList, true);
 	}
 
-	@Override
-	public void connect(boolean realSocket)
+	private void setupConnection(boolean useRealSocket)
 	{
-		setBusinessStatus(MockAppBusinessStatus.Init);
-		useRealSocket = realSocket;
-		if (realSocket)
+		if (useRealSocket)
 		{
 			URI uri = URI.create(websocketLink);
 			
@@ -1235,8 +1272,20 @@ public class MockApp implements IMockApp, Runnable
 			OnlineDevicePool.instance.newDevice(conn);
 			connection.bindMockApp(this);
 		}
-
+	}
+	
+	public void connect()
+	{
+		setBusinessStatus(MockAppBusinessStatus.Init);
+		setupConnection(useRealSocket);
 		startTimer();
+	}
+	
+	@Override
+	public void connect(boolean realSocket)
+	{
+		useRealSocket = realSocket;
+		connect();
 	}
 	
 	public void setBusinessStatus(MockAppConsts.MockAppBusinessStatus status)

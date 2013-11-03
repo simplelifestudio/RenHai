@@ -272,7 +272,7 @@ public class Devicecard implements IDbObject
 		}
 		else
 		{
-			mapper.updateByPrimaryKey(this, deviceCardId);
+			mapper.updateByPrimaryKey(this);
 		}
 	}
 }

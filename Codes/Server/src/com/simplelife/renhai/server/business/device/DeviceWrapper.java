@@ -86,6 +86,8 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     // Instance of slf Logger
     private Logger logger = BusinessModule.instance.getLogger();
     
+    private Long lastActivityTime;
+    
     // Set service status of Device: Normal or Ban
     public void setServiceStatus(Consts.ServiceStatus serviceStatus)
     {
@@ -138,7 +140,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     		{
     			businessStatus = targetStatus;
     		}
-    		//logger.debug("But ownerOnlinePool == null, return directly");
     		return;
     	}
     	
@@ -162,6 +163,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     				case Idle:
     					ownerOnlinePool.deleteDevice(this, reason);
     					unbindOnlineDevicePool();				// No request is accepted from now on
+    					device.getProfile().setLastActivityTime(lastActivityTime);
     					DAOWrapper.cache(this.getDevice());
     					break;
     				case MatchCache:
@@ -169,6 +171,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     					businessPool.onDeviceLeave(this, reason);
     					ownerOnlinePool.deleteDevice(this, reason);
     					unbindOnlineDevicePool();				// No request is accepted from now on
+    					device.getProfile().setLastActivityTime(lastActivityTime);
     					DAOWrapper.cache(this.getDevice());
     					break;
     				case SessionBound:
@@ -177,6 +180,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     					businessPool.onDeviceLeave(this, reason);
     					ownerOnlinePool.deleteDevice(this, reason);
     					unbindOnlineDevicePool();				// No request is accepted from now on
+    					device.getProfile().setLastActivityTime(lastActivityTime);
     					DAOWrapper.cache(this.getDevice());
     					break;
     				default:
@@ -330,11 +334,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     /** */
     public long getLastActivityTime()
     {
-    	if (device == null)
-    	{
-    		return 0;
-    	}
-        return device.getProfile().getLastActivityTime();
+        return this.lastActivityTime;
     }
     
     /** */
@@ -463,13 +463,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     public void onTimeOut()
     {
     	changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.TimeoutOnSyncSending);
-    	/*
-    	if (ownerOnlinePool != null)
-    	{
-    		logger.debug("Notify online device pool about timeout of device <{}>", getDeviceSn());
-    		ownerOnlinePool.deleteDevice(this, Consts.StatusChangeReason.TimeoutOnSyncSending);
-    	}
-    	*/
     }
 
     @Override
@@ -548,11 +541,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 	public void updateActivityTime()
 	{
 		LoggerFactory.getLogger("Ping").debug("Update last activity time");
-		if (device == null)
-		{
-			return;
-		}
-		device.getProfile().setLastActivityTime(System.currentTimeMillis());
+		lastActivityTime = System.currentTimeMillis();
 	}
 	
 	@Override
@@ -758,7 +747,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		
 		synchronized (card)
 		{
-			card.setChatLossCount(card.getChatLossCount() + 1);
+			int count = card.getChatLossCount();
+			logger.debug("Chat loss count of device <{}> was increased from " + count + " to " + (count+1), getDeviceSn());
+			card.setChatLossCount(count + 1);
 		}
 	}
 	
@@ -771,7 +762,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		
 		synchronized (card)
 		{
-			card.setChatTotalCount(card.getChatTotalCount() + 1);
+			int count = card.getChatTotalCount();
+			logger.debug("Chat count of device <{}> was increased from " + count + " to " + (count+1), getDeviceSn());
+			card.setChatTotalCount(count + 1);
 		}
 	}
 
@@ -784,7 +777,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		
 		synchronized (card)
 		{
-			card.setChatTotalDuration(card.getChatTotalDuration() + duration);
+			int count = card.getChatTotalDuration() + duration;
+			logger.debug("Chat duration of device <{}> was increased to " + count, getDeviceSn());
+			card.setChatTotalDuration(count);
 		}
 	}
 

@@ -16,16 +16,20 @@ import org.slf4j.LoggerFactory;
 import junit.framework.TestCase;
 
 import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Profile;
+import com.simplelife.renhai.server.json.JSONModule;
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.websocket.WebSocketModule;
 
 /**
  * 
@@ -45,11 +49,28 @@ public abstract class AbstractTestCase extends TestCase
 		
 	}
 	
+	public void setUp() throws Exception
+	{
+		BusinessModule.instance.startService();
+		DBModule.instance.startService();
+		JSONModule.instance.startService();
+		WebSocketModule.instance.startService();
+	}
+	
+	public void tearDown() throws Exception
+	{
+		BusinessModule.instance.stopService();
+		DBModule.instance.stopService();
+		JSONModule.instance.stopService();
+		WebSocketModule.instance.stopService();
+	}
+	
 	private Device loadDevice(String deviceSn)
 	{
 		SqlSession session = DAOWrapper.getSession();
 		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
-		Device device = mapper.selectByDeviceSn(deviceSn);
+		Device device = mapper.selectWholeDeviceByDeviceSn(deviceSn);
+		session.close();
 		return device;
 	}
 
@@ -108,8 +129,6 @@ public abstract class AbstractTestCase extends TestCase
 		}
 		
 		MockApp mockApp = new MockApp(deviceSn, MockAppConsts.MockAppBehaviorMode.Slave.name(), false);
-		//mockApp.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
-		//mockApp.connect(true);
 		return mockApp;
 	}
 	

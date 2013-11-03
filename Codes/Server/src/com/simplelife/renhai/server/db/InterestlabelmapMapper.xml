@@ -13,7 +13,6 @@
     <result column="labelOrder" property="labelOrder" jdbcType="INTEGER" />
     <result column="matchCount" property="matchCount" jdbcType="INTEGER" />
     <result column="validFlag" property="validFlag" jdbcType="CHAR" />
-    <result column="interestLabelMaplId" property="interestLabelMaplId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
@@ -22,7 +21,7 @@
       This element was generated on Fri Nov 01 15:18:11 CST 2013.
     -->
     interestLabelMapId, interestCardId, globalInterestLabelId, labelOrder, matchCount, 
-    validFlag, interestLabelMaplId
+    validFlag
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     <!--
@@ -48,10 +47,10 @@
 	useGeneratedKeys="true" keyProperty="interestLabelMapId">
     insert into interestlabelmap (interestCardId, 
       globalInterestLabelId, labelOrder, matchCount, 
-      validFlag, interestLabelMaplId)
+      validFlag)
     values (#{interestCardId,jdbcType=INTEGER}, 
       #{globalInterestLabelId,jdbcType=INTEGER}, #{labelOrder,jdbcType=INTEGER}, #{matchCount,jdbcType=INTEGER}, 
-      #{validFlag,jdbcType=CHAR}, #{interestLabelMaplId,jdbcType=INTEGER})
+      #{validFlag,jdbcType=CHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.simplelife.renhai.server.db.Interestlabelmap" >
     <!--
@@ -64,8 +63,7 @@
       globalInterestLabelId = #{globalInterestLabelId,jdbcType=INTEGER},
       labelOrder = #{labelOrder,jdbcType=INTEGER},
       matchCount = #{matchCount,jdbcType=INTEGER},
-      validFlag = #{validFlag,jdbcType=CHAR},
-      interestLabelMaplId = #{interestLabelMaplId,jdbcType=INTEGER}
+      validFlag = #{validFlag,jdbcType=CHAR}
     where interestLabelMapId = #{interestLabelMapId,jdbcType=INTEGER}
   </update>
 </mapper>

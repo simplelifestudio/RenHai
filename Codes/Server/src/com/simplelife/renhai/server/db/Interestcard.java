@@ -85,23 +85,20 @@ public class Interestcard implements IDbObject
     
     public void removeInterestLabelMap(Interestlabelmap map)
     {
-    	if (!interestLabelMapSet.contains(map))
+    	if (interestLabelMapSet.contains(map))
     	{
-    		logger.warn("The Impresslabelmap <{}> which is requested to be removed is not in current impress card", map.getGlobalLabel().getInterestLabelName());
-    		return;
+    		interestLabelMapSet.remove(map);
     	}
-    	interestLabelMapSet.remove(map);
-    	removedInterestLabelMapSet.add(map);
+    	
+    	if (!removedInterestLabelMapSet.contains(map))
+    	{
+    		removedInterestLabelMapSet.add(map);
+    	}
     }
     
 	public Set<Interestlabelmap> getInterestLabelMapSet()
 	{
 		return interestLabelMapSet;
-	}
-
-	public void setInterestLabelMapSet(Set<Interestlabelmap> interestLabelMapSet)
-	{
-		this.interestLabelMapSet = interestLabelMapSet;
 	}
 
 	@Override

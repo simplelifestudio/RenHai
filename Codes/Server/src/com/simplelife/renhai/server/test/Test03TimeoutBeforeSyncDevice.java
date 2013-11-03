@@ -26,6 +26,7 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		GlobalSetting.TimeOut.OnlineDeviceConnection = 5 * 1000;
 	}
@@ -35,6 +36,7 @@ public class Test03TimeoutBeforeSyncDevice extends AbstractTestCase
 	{
 		GlobalSetting.TimeOut.OnlineDeviceConnection = 30 * 1000;
 		deleteDevice(mockApp);
+		super.tearDown();
 	}
 	
 	@Test

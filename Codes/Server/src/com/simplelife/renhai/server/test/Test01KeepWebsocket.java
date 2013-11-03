@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
 /**
@@ -27,6 +28,7 @@ public class Test01KeepWebsocket extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 	}
 	
@@ -34,6 +36,7 @@ public class Test01KeepWebsocket extends AbstractTestCase
 	public void tearDown() throws Exception
 	{
 		deleteDevice(mockApp);
+		super.tearDown();
 	}
 	
 	@Test
@@ -49,13 +52,15 @@ public class Test01KeepWebsocket extends AbstractTestCase
 		mockApp = createNewMockApp(demoDeviceSn);
 		
 		// Step_04 调用：OnlineDevicePool::getCount
-		assertEquals(pool.getElementCount(), deviceCount + 1);
+		int newCount = pool.getElementCount(); 
+		assertEquals(newCount, deviceCount + 1);
 		
 		// Step_05 Mock事件：onPing
 		mockApp.ping();
 		
 		// Step_06 调用：DeviceWrapper::getLastPingTime()
-		long lastPingTime = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getLastPingTime().getTime();
+		IDeviceWrapper device = OnlineDevicePool.instance.getDevice(mockApp.getConnectionId());
+		long lastPingTime = device.getLastPingTime().getTime();
 		
 		Thread.sleep(100);
 		
@@ -63,6 +68,6 @@ public class Test01KeepWebsocket extends AbstractTestCase
 		mockApp.ping();
 		
 		// Step_08 调用设备的getLastPingTime()
-		assertTrue(lastPingTime < OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getLastPingTime().getTime());
+		assertTrue(lastPingTime < device.getLastPingTime().getTime());
 	}
 }

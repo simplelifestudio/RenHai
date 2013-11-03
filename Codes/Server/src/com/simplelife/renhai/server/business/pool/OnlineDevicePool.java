@@ -259,7 +259,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		}
     		else
     		{
-    			logger.error("Device <{}> shall be in deviceMap but it can't be found in deviceMap!", sn);
+    			logger.error("Device <{}> shall be in deviceMap but it doesn't!", sn);
     		}
     		
     		/*
@@ -359,7 +359,8 @@ public class OnlineDevicePool extends AbstractDevicePool
 	@Override
 	public boolean isPoolFull()
 	{
-		return ((queueDeviceMap.size() + deviceMap.size()) >= capacity);
+		int count = this.getElementCount();
+		return (count >= capacity);
 	}
 	
 	@Override

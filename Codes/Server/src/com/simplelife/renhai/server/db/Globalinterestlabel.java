@@ -106,6 +106,13 @@ public class Globalinterestlabel implements IDbObject
 	public void save(SqlSession session)
 	{
 		GlobalinterestlabelMapper mapper = session.getMapper(GlobalinterestlabelMapper.class);
-		mapper.insert(this);
+		if (this.globalInterestLabelId != null)
+		{
+			mapper.updateByPrimaryKey(this);
+		}
+		else
+		{
+			mapper.insert(this);
+		}
 	}
 }

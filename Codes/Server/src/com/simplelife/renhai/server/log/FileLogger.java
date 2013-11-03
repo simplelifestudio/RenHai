@@ -67,7 +67,7 @@ public class FileLogger
 	
 	public static void printStackTrace(Exception e)
 	{
-	    logger.error(e.getMessage());
+	    logger.error(e.getLocalizedMessage());
 	    
 		StackTraceElement[] messages = e.getStackTrace();
 		int length=messages.length;

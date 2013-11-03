@@ -31,6 +31,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		super.setUp();
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp = createNewMockApp(demoDeviceSn);
 	}
@@ -42,13 +43,14 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 	public void tearDown() throws Exception
 	{
 		deleteDevice(mockApp);
+		super.tearDown();
 	}
 	
 	@Test
 	public void test() throws InterruptedException
 	{
 		OnlineDevicePool pool = OnlineDevicePool.instance;
-		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn());
+		IDeviceWrapper deviceWrapper = pool.getDevice(mockApp.getConnectionId());
 		
 		// Step_01 调用：OnlineDevicePool::getCount
 		int deviceCount = pool.getElementCount();
@@ -72,7 +74,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 		// Step_06 Mock事件：onPing
 		//mockApp.ping();
 		
-		assertTrue(OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getOwnerOnlineDevicePool() == null);
+		assertTrue(pool.getDevice(mockApp.getDeviceSn()) == null );
 		// Step_07 调用：OnlineDevicePool::getCount
 		assertEquals(deviceCount-1, pool.getElementCount());
 	}
