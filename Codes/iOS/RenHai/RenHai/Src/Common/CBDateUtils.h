@@ -31,4 +31,6 @@
 
 +(NSInteger) dayDiffBetweenTwoDays:(NSDate*) dateA dateB:(NSDate*) dateB;
 
++(NSString*) timeStringWithMilliseconds:(long long) milliseconds;
+
 @end
