@@ -28,6 +28,7 @@ import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Sessionrecord;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessProgress;
@@ -190,18 +191,20 @@ public class BusinessSession implements IBusinessSession
     		logger.debug(device);
     	}
     	
-    	logger.debug("===============before check start session");
+    	//logger.debug("===============before check start session");
     	if (!checkStartSession(deviceList))
     	{
-    		logger.debug("===============check start session failed, to be end session");
+    		//logger.debug("===============check start session failed, to be end session");
     		endSession();
     		return false;
     	}
     	
     	IDeviceWrapper device;
+    	try
+    	{
     	for (String deviceSn : deviceList)
     	{
-    		logger.debug("===============init business progress for Device <{}>", deviceSn);
+    		//logger.debug("===============init business progress for Device <{}>", deviceSn);
     		updateBusinessProgress(deviceSn, Consts.BusinessProgress.Init);
     		//progressMap.put(deviceSn, Consts.BusinessProgress.Init);
     		device = OnlineDevicePool.instance.getDevice(deviceSn);
@@ -212,12 +215,17 @@ public class BusinessSession implements IBusinessSession
     			return false;
     		}
     		device.bindBusinessSession(this);
-    		logger.debug("===============before change status of device <{}>", deviceSn);
+    		//logger.debug("===============before change status of device <{}>", deviceSn);
     		device.changeBusinessStatus(BusinessStatus.SessionBound, Consts.StatusChangeReason.BusinessSessionStarted);
-    		logger.debug("===============after status of device <{}>", deviceSn);
+    		//logger.debug("===============after status of device <{}>", deviceSn);
+    	}
+    	}
+    	catch(Exception e)
+    	{
+    		FileLogger.printStackTrace(e);
     	}
     	
-    	logger.debug("===============notify SessionBound");
+    	//logger.debug("===============notify SessionBound");
     	notifyDevices(null, Consts.NotificationType.SessionBound);
     	return true;
     }
@@ -498,9 +506,9 @@ public class BusinessSession implements IBusinessSession
     	{
     		logger.debug("[Milestone] Business progress of Device <" + deviceSn + "> is changed from {} to " + progress.name(),progressMap.get(deviceSn).name());
     	}
-    	logger.debug("=================before put device <{}> in progressMap", deviceSn);
+    	//logger.debug("=================before put device <{}> in progressMap", deviceSn);
     	progressMap.put(deviceSn, progress);
-    	logger.debug("=================after put device <{}> in progressMap", deviceSn);
+    	//logger.debug("=================after put device <{}> in progressMap", deviceSn);
     }
     
     @Override

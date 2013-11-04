@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.java_websocket.drafts.Draft_17;
 import org.junit.Test;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.InputMessageCenter;
@@ -33,6 +35,8 @@ import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Devicecard;
+import com.simplelife.renhai.server.db.Globalinterestlabel;
+import com.simplelife.renhai.server.db.GlobalinterestlabelMapper;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.json.AlohaRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
@@ -482,6 +486,35 @@ public class MainFunction extends AbstractTestCase
 		app2.assessAndQuit("^#Happy#^,ªπ––");
 		
 		app1.sendServerDataSyncRequest();
+	}
+	
+	@Test
+	public void testDuplicatedGlobalLabel()
+	{
+		SqlSession session = DAOWrapper.getSession();
+		try
+		{
+			Globalinterestlabel globalInterest = new Globalinterestlabel();
+			globalInterest.setInterestLabelName("“Ù¿÷");
+			globalInterest.setGlobalMatchCount(0);
+			
+			GlobalinterestlabelMapper mapper = session.getMapper(GlobalinterestlabelMapper.class);
+			mapper.insert(globalInterest);
+			session.commit();
+		}
+		catch(PersistenceException en)
+		{
+			System.out.print("========OK!\n");
+			en.printStackTrace();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			session.close();
+		}
 	}
 	
 }

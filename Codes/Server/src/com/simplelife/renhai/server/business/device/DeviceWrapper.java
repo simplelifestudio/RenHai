@@ -128,7 +128,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
      * Change business status of DeviceWrapper, and release/update relevant information if necessary 
      * @param targetStatus: target business status
      */
-    public synchronized void changeBusinessStatus(Consts.BusinessStatus targetStatus, StatusChangeReason reason)
+    public void changeBusinessStatus(Consts.BusinessStatus targetStatus, StatusChangeReason reason)
     {
     	logger.debug("[Milestone] Device <{}> changes status from " 
     			+ this.businessStatus.name() + " to " + targetStatus.name() 

@@ -53,7 +53,7 @@ public class GlobalSetting
 		public static int FlushCacheToDB = 30 * 1000;
 		public static int DeviceInIdle = 300 * 1000;
 		
-		public static int OnlineDeviceConnection = 300 * 1000;
+		public static int OnlineDeviceConnection = 9 * 1000;
 		public static int PingInterval = 5 * 1000;
 		
 		public static int SaveStatistics = 600 * 1000;
@@ -80,8 +80,8 @@ public class GlobalSetting
 		public static int LengthOfMessageSn = 16;
 		
 		public static int MaxImpressLabelCount = 32;
-		public static int InputMessageHandleThreads = 100;
-		public static int OutputMessageSendThreads = 300;
+		public static int InputMessageHandleThreads = 200;
+		public static int OutputMessageSendThreads = 500;
 		public static int MessageQueueTime = 3 * 1000;
 	} 
 }
