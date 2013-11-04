@@ -180,11 +180,9 @@ SINGLETON(GUIModule)
 
 -(void) _assembleMainViewController
 {
-    NSDictionary *options = @{
-                              PKRevealControllerAllowsOverdrawKey : [NSNumber numberWithBool:YES],
-                              PKRevealControllerDisablesFrontViewInteractionKey : [NSNumber numberWithBool:YES]
-                              };
-    _mainViewController = [MainViewController_iPhone revealControllerWithFrontViewController:_navigationController leftViewController:_leftbarViewController options:options];
+    _mainViewController = [MainViewController_iPhone revealControllerWithFrontViewController:_navigationController leftViewController:_leftbarViewController];
+    _mainViewController.allowsOverdraw = YES;
+    _mainViewController.disablesFrontViewInteraction = YES;
 }
 
 -(void) _registerNotifications

@@ -23,4 +23,9 @@
     return self;
 }
 
+- (IBAction)onPressedOthersButton:(id)sender
+{
+    
+}
+
 @end
