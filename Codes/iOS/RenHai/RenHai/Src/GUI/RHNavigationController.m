@@ -48,6 +48,7 @@
 -(void) viewDidAppear:(BOOL)animated
 {
     [self _arrangeConnectViewController];
+    [self setNavigationBarHidden:NO];
     
     [super viewDidAppear:animated];
 }
@@ -68,9 +69,9 @@
 
 -(void) _arrangeRootViewController
 {
-    [self setNavigationBarHidden:NO];
+    [self setNavigationBarHidden:YES];
     [self popToRootViewControllerAnimated:NO];
-    [self pushViewController:_guiModule.homeViewController animated:NO];
+//    [self pushViewController:_guiModule.homeViewController animated:NO];    
     [_guiModule.mainViewController showViewController:self animated:NO completion:nil];
 }
 

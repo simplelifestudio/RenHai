@@ -8,6 +8,8 @@
 
 #import "ChatConfirmViewController_iPhone.h"
 
+#import "CBDateUtils.h"
+
 #import "GUIModule.h"
 #import "GUIStyle.h"
 #import "UserDataModule.h"
@@ -19,16 +21,13 @@
 
 #import "ImpressSectionHeaderView_iPhone.h"
 
-#define SECTION_COUNT 3
+#define SECTION_COUNT 2
 
 #define SECTION_INDEX_ASSESSES 0
-#define SECTION_ASSESSES_ITEMCOUNT 3
+#define SECTION_ASSESSES_ITEMCOUNT 6
 
-#define SECTION_INDEX_CHATS 1
-#define SECTION_CHATS_ITEMCOUNT 3
-
-#define SECTION_INDEX_LABELS 2
-#define SECTION_IMPRESSES_ITEMCOUNT 3
+#define SECTION_INDEX_LABELS 1
+#define SECTION_IMPRESSES_ITEMCOUNT 6
 
 #define COUNTDOWN_SECONDS 30
 
@@ -138,10 +137,6 @@
         {
             return SECTION_ASSESSES_ITEMCOUNT;
         }
-        case SECTION_INDEX_CHATS:
-        {
-            return SECTION_CHATS_ITEMCOUNT;
-        }
         case SECTION_INDEX_LABELS:
         {
             //            NSArray* impressLabelList = [_impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
@@ -168,6 +163,7 @@
     
     NSString* labelName = nil;
     NSInteger labelCount = -1;
+    NSString* labelCountStr = nil;
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
     switch (section)
@@ -175,29 +171,36 @@
         case SECTION_INDEX_ASSESSES:
         {
             NSArray* assessLabelList = impressCard.assessLabelList;
-            RHImpressLabel* assessLabel = assessLabelList[row];
-            labelName = [RHImpressLabel assessLabelName:assessLabel.labelName];
-            labelCount = assessLabel.assessedCount;
-            
-            break;
-        }
-        case SECTION_INDEX_CHATS:
-        {
+         
             switch (row)
             {
                 case 0:
+                {
+                }
+                case 1:
+                {
+                }
+                case 2:
+                {
+                    RHImpressLabel* assessLabel = assessLabelList[row];
+                    labelName = [RHImpressLabel assessLabelName:assessLabel.labelName];
+                    labelCount = assessLabel.assessedCount;
+                    break;
+                }
+                case 3:
                 {
                     labelName = NSLocalizedString(@"Impress_ChatTotalCount", nil);
                     labelCount = impressCard.chatTotalCount;
                     break;
                 }
-                case 1:
+                case 4:
                 {
                     labelName = NSLocalizedString(@"Impress_ChatTotalDuration", nil);
                     labelCount = impressCard.chatTotalDuration;
+                    labelCountStr = [CBDateUtils timeStringWithMilliseconds:labelCount];
                     break;
                 }
-                case 2:
+                case 5:
                 {
                     labelName = NSLocalizedString(@"Impress_ChatLossCount", nil);
                     labelCount = impressCard.chatLossCount;
@@ -241,7 +244,12 @@
     cell.textField.text = labelName;
     if (0 <= labelCount)
     {
-        cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
+        if (nil == labelCountStr)
+        {
+            labelCountStr = [NSString stringWithFormat:@"%d", labelCount];
+        }
+        
+        cell.countLabel.text = labelCountStr;
     }
     else
     {
@@ -273,11 +281,6 @@
             case SECTION_INDEX_ASSESSES:
             {
                 sectionHeaderView.titleLabel.text = NSLocalizedString(@"Impress_Assesses", nil);
-                break;
-            }
-            case SECTION_INDEX_CHATS:
-            {
-                sectionHeaderView.titleLabel.text = NSLocalizedString(@"Impress_Chats", nil);
                 break;
             }
             case SECTION_INDEX_LABELS:
@@ -458,6 +461,8 @@
     _agreeChatButton.hidden = YES;
     _rejectChatButton.hidden = YES;
     _selfStatusLabel.text = NSLocalizedString(@"ChatConfirm_SelfStatus_Agreed", nil);
+    
+    [self _clockCancel];
     
     _isDeciding = YES;
     
