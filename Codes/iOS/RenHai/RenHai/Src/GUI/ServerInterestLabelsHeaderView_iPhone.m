@@ -11,7 +11,6 @@
 @implementation ServerInterestLabelsHeaderView_iPhone
 
 @synthesize headerTitleLabel = _headerTitleLabel;
-@synthesize othersButton = _othersButton;
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -21,11 +20,6 @@
     
     }
     return self;
-}
-
-- (IBAction)onPressedOthersButton:(id)sender
-{
-    
 }
 
 @end

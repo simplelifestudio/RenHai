@@ -11,8 +11,5 @@
 @interface ServerInterestLabelsHeaderView_iPhone : UICollectionReusableView
 
 @property (weak, nonatomic) IBOutlet UILabel *headerTitleLabel;
-@property (weak, nonatomic) IBOutlet FUIButton *othersButton;
-
-- (IBAction)onPressedOthersButton:(id)sender;
 
 @end

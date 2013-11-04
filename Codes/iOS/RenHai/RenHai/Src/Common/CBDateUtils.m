@@ -118,7 +118,7 @@
     long minutes = (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
     long seconds = (milliseconds % (1000 * 60)) / 1000;
     
-    NSString* str = [NSString stringWithFormat:@"%ld:%ld:%ld:%ld", days, hours, minutes, seconds];
+    NSString* str = [NSString stringWithFormat:@"%ld-%ld:%ld:%ld", days, hours, minutes, seconds];
     return str;
 }
 
