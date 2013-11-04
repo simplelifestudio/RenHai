@@ -88,18 +88,17 @@
 +(UIColor*) GreenYellow;        // GreenYellow      173 255 47	#ADFF2F
 +(UIColor*) LimeGreen;          // LimeGreen        50  205 50	#32CD32
 +(UIColor*) YellowGreen;        // YellowGreen      154 205 50	#9ACD32
-
++(UIColor*) ForestGreen;        // ForestGreen      34  139 34	#228B22
++(UIColor*) OliveDrab;          // OliveDrab        107 142 35	#6B8E23
++(UIColor*) DarkKhaki;          // DarkKhaki        189 183 107	#BDB76B
++(UIColor*) PaleGoldenrod;      // PaleGoldenrod	238 232 170	#EEE8AA
++(UIColor*) LtGoldenrodYello;   // LtGoldenrodYello	250 250 210	#FAFAD2
++(UIColor*) LightYellow;        // LightYellow      255 255 224	#FFFFE0
++(UIColor*) Yellow;             // Yellow           255 255 0	#FFFF00
++(UIColor*) Gold;               // Gold             255 215 0	#FFD700
++(UIColor*) LightGoldenrod;     // LightGoldenrod	238 221 130	#EEDD82
++(UIColor*) Goldenrod;          // Goldenrod        218 165 32	#DAA520
 /*
- ForestGreen	34 139 34	#228B22
- OliveDrab	107 142 35	#6B8E23
- DarkKhaki	189 183 107	#BDB76B
- PaleGoldenrod	238 232 170	#EEE8AA
- LtGoldenrodYello	250 250 210	#FAFAD2
- LightYellow	255 255 224	#FFFFE0
- Yellow	255 255 0	#FFFF00
- Gold	255 215 0	#FFD700
- LightGoldenrod	238 221 130	#EEDD82
- goldenrod	218 165 32	#DAA520
  DarkGoldenrod	184 134 11	#B8860B
  RosyBrown	188 143 143	#BC8F8F
  IndianRed	205 92 92	#CD5C5C

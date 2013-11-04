@@ -413,4 +413,54 @@
     return [UIColor colorWithHexCode:@"9ACD32"];
 }
 
++(UIColor*) ForestGreen
+{
+    return [UIColor colorWithHexCode:@"228B22"];
+}
+
++(UIColor*) OliveDrab
+{
+    return [UIColor colorWithHexCode:@"6B8E23"];
+}
+
++(UIColor*) DarkKhaki
+{
+    return [UIColor colorWithHexCode:@"BDB76B"];
+}
+
++(UIColor*) PaleGoldenrod
+{
+    return [UIColor colorWithHexCode:@"EEE8AA"];
+}
+
++(UIColor*) LtGoldenrodYello
+{
+    return [UIColor colorWithHexCode:@"FAFAD2"];
+}
+
++(UIColor*) LightYellow
+{
+    return [UIColor colorWithHexCode:@"FFFFE0"];
+}
+
++(UIColor*) Yellow
+{
+    return [UIColor colorWithHexCode:@"FFFF00"];
+}
+
++(UIColor*) Gold
+{
+    return [UIColor colorWithHexCode:@"FFD700"];
+}
+
++(UIColor*) LightGoldenrod
+{
+    return [UIColor colorWithHexCode:@"EEDD82"];
+}
+
++(UIColor*) Goldenrod
+{
+    return [UIColor colorWithHexCode:@"DAA520"];
+}
+
 @end
