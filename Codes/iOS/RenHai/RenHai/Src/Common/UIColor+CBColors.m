@@ -463,4 +463,104 @@
     return [UIColor colorWithHexCode:@"DAA520"];
 }
 
++(UIColor*) DarkGoldenrod
+{
+    return [UIColor colorWithHexCode:@"B8860B"];
+}
+
++(UIColor*) RosyBrown
+{
+    return [UIColor colorWithHexCode:@"BC8F8F"];
+}
+
++(UIColor*) IndianRed
+{
+    return [UIColor colorWithHexCode:@"CD5C5C"];
+}
+
++(UIColor*) SaddleBrown
+{
+    return [UIColor colorWithHexCode:@"8B4513"];
+}
+
++(UIColor*) Sienna
+{
+    return [UIColor colorWithHexCode:@"A0522D"];
+}
+
++(UIColor*) Peru
+{
+    return [UIColor colorWithHexCode:@"CD853F"];
+}
+
++(UIColor*) Burlywood
+{
+    return [UIColor colorWithHexCode:@"DEB887"];
+}
+
++(UIColor*) Beige
+{
+    return [UIColor colorWithHexCode:@"F5F5DC"];
+}
+
++(UIColor*) Wheat
+{
+    return [UIColor colorWithHexCode:@"F5DEB3"];
+}
+
++(UIColor*) SandyBrown
+{
+    return [UIColor colorWithHexCode:@"F4A460"];
+}
+
++(UIColor*) Tan
+{
+    return [UIColor colorWithHexCode:@"D2B48C"];
+}
+
++(UIColor*) Chocolate
+{
+    return [UIColor colorWithHexCode:@"D2691E"];
+}
+
++(UIColor*) Firebrick
+{
+    return [UIColor colorWithHexCode:@"B22222"];
+}
+
++(UIColor*) Brown
+{
+    return [UIColor colorWithHexCode:@"A52A2A"];
+}
+
++(UIColor*) DarkSalmon
+{
+    return [UIColor colorWithHexCode:@"E9967A"];
+}
+
++(UIColor*) Salmon
+{
+    return [UIColor colorWithHexCode:@"FA8072"];
+}
+
++(UIColor*) LightSalmon
+{
+    return [UIColor colorWithHexCode:@"FFA07A"];
+}
+
++(UIColor*) Orange
+{
+    return [UIColor colorWithHexCode:@"FFA500"];
+}
+
++(UIColor*) DarkOrange
+{
+    return [UIColor colorWithHexCode:@"FF8C00"];
+}
+
++(UIColor*) Coral
+{
+    return [UIColor colorWithHexCode:@"FF7F50"];
+}
+
 @end

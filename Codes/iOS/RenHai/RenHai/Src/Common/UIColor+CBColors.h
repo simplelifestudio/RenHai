@@ -98,27 +98,27 @@
 +(UIColor*) Gold;               // Gold             255 215 0	#FFD700
 +(UIColor*) LightGoldenrod;     // LightGoldenrod	238 221 130	#EEDD82
 +(UIColor*) Goldenrod;          // Goldenrod        218 165 32	#DAA520
++(UIColor*) DarkGoldenrod;      // DarkGoldenrod	184 134 11	#B8860B
++(UIColor*) RosyBrown;          // RosyBrown        188 143 143	#BC8F8F
++(UIColor*) IndianRed;          // IndianRed        205 92  92	#CD5C5C
++(UIColor*) SaddleBrown;        // SaddleBrown      139 69  19	#8B4513
++(UIColor*) Sienna;             // Sienna           160 82  45	#A0522D
++(UIColor*) Peru;               // Peru             205 133 63	#CD853F
++(UIColor*) Burlywood;          // Burlywood        222 184 135	#DEB887
++(UIColor*) Beige;              // Beige            245 245 220	#F5F5DC
++(UIColor*) Wheat;              // Wheat            245 222 179	#F5DEB3
++(UIColor*) SandyBrown;         // SandyBrown       244 164 96	#F4A460
++(UIColor*) Tan;                // Tan              210 180 140	#D2B48C
++(UIColor*) Chocolate;          // Chocolate        210 105 30	#D2691E
++(UIColor*) Firebrick;          // Firebrick        178 34  34	#B22222
++(UIColor*) Brown;              // Brown            165 42  42	#A52A2A
++(UIColor*) DarkSalmon;         // DarkSalmon       233 150 122	#E9967A
++(UIColor*) Salmon;             // Salmon           250 128 114	#FA8072
++(UIColor*) LightSalmon;        // LightSalmon      255 160 122	#FFA07A
++(UIColor*) Orange;             // Orange           255 165 0	#FFA500
++(UIColor*) DarkOrange;         // DarkOrange       255 140 0	#FF8C00
++(UIColor*) Coral;              // Coral            255 127 80	#FF7F50
 /*
- DarkGoldenrod	184 134 11	#B8860B
- RosyBrown	188 143 143	#BC8F8F
- IndianRed	205 92 92	#CD5C5C
- SaddleBrown	139 69 19	#8B4513
- Sienna	160 82 45	#A0522D
- Peru	205 133 63	#CD853F
- Burlywood	222 184 135	#DEB887
- Beige	245 245 220	#F5F5DC
- Wheat	245 222 179	#F5DEB3
- SandyBrown	244 164 96	#F4A460
- Tan	210 180 140	#D2B48C
- Chocolate	210 105 30	#D2691E
- Firebrick	178 34 34	#B22222
- Brown	165 42 42	#A52A2A
- DarkSalmon	233 150 122	#E9967A
- Salmon	250 128 114	#FA8072
- LightSalmon	255 160 122	#FFA07A
- Orange	255 165 0	#FFA500
- DarkOrange	255 140 0	#FF8C00
- Coral	255 127 80	#FF7F50
  LightCoral	240 128 128	#F08080
  Tomato	255 99 71	#FF6347
  OrangeRed	255 69 0	#FF4500
