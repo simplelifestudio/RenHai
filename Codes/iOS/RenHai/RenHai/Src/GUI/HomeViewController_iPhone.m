@@ -135,7 +135,7 @@ EnterOperationStatus;
     UIImage* sidebarMenuIcon_portrait = [GUIStyle sidebarMenuIconPortrait];
     UIImage* sidebarMenuIcon_landscape = [GUIStyle sidebarMenuIconLandscape];
     
-    if (self.navigationController.revealController.type & PKRevealControllerTypeLeft)
+    if ([self.navigationController.revealController hasLeftViewController])
     {
         UIBarButtonItem* leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:sidebarMenuIcon_portrait landscapeImagePhone:sidebarMenuIcon_landscape style:UIBarButtonItemStylePlain target:self action:@selector(_leftBarButtonItemClicked:)];
         
