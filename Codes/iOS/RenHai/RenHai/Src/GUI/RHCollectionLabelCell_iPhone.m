@@ -33,6 +33,12 @@
 {
     [self _formatFlatUI];
     
+    self.layer.borderWidth=2.0f;
+    self.layer.borderColor=[UIColor blueColor].CGColor;
+    
+    self.layer.cornerRadius = 10.0;
+    
+    
     [super awakeFromNib];
 }
 
@@ -42,27 +48,17 @@
     [self setNeedsDisplay];
 }
 
-//-(void) setHighlighted:(BOOL)highlighted
-//{
-//    [super setHighlighted:highlighted];
-//    [self setNeedsDisplay];
-//}
-//
 -(void) drawRect:(CGRect)rect
 {
     [super drawRect:rect];
     
-//    if (self.highlighted)
-//    {
-//        CGContextRef context = UIGraphicsGetCurrentContext();
-//        CGContextSetRGBFillColor(context, 1, 0, 0, 1);
-//        CGContextFillRect(context, self.bounds);
-//    }
     if (self.selected)
     {
-        CGContextRef context = UIGraphicsGetCurrentContext();
-        CGContextSetRGBFillColor(context, 1, 0, 0, 1);
-        CGContextFillRect(context, self.bounds);
+        self.layer.borderColor = [UIColor redColor].CGColor;
+    }
+    else
+    {
+        self.layer.borderColor = [UIColor DodgerBlue].CGColor;
     }
 }
 

@@ -13,7 +13,7 @@
 // UI Style Definitions based on FlatUIKit
 
 #define MAJOR_COLOR_DEEP [UIColor colorFromHexCode:@"1C1C1C"]
-#define MAJOR_COLOR_MID [UIColor colorWithRed:78.0/255.0 green:156.0/255.0 blue:206.0/255.0 alpha:1.0]
+#define MAJOR_COLOR_MID [UIColor DodgerBlue]
 #define MAJOR_COLOR_LIGHT [UIColor colorFromHexCode:@"DCDCDC"]
 
 #define SECONARDY_COLOR_DEEP [UIColor colorFromHexCode:@"4F4F4F"]

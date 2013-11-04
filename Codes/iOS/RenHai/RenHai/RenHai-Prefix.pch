@@ -15,6 +15,7 @@
     #import "CBAppUtils.h"
 
     #import "FlatUIKit.h"
+    #import "UIColor+CBColors.h"
 
     #import "DDLog.h"
     #import "DDASLLogger.h"
