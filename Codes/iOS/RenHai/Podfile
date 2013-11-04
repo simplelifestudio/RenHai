@@ -2,10 +2,9 @@ platform :ios, '6.0'
 pod 'SSKeychain', '~> 1.2.1'
 pod 'SocketRocket', '~> 0.3.1-beta2'
 pod 'Reachability', '~> 3.1.1'
-pod 'AFNetworking', '~> 1.3.2'
+pod 'AFNetworking', '~> 1.3.3'
 pod 'MBProgressHUD', '~> 0.8'
-pod 'OpenTokSDK-WebRTC', '~> 2.1.6’
-#pod 'FlatUIKit', '~> 1.2'
+pod 'OpenTokSDK-WebRTC', '~> 2.1.6'
 pod "FlatUIKit", :git => "https://github.com/Grouper/FlatUIKit.git"
 pod 'PKRevealController', '~> 2.0.5'
 pod 'CocoaLumberjack', '~> 1.6.2'
@@ -13,5 +12,5 @@ pod 'OBShapedButton', '~> 1.0.2'
 pod 'DraggableCollectionView', '~> 0.1'
 
 target :RenHaiGHUnitTest do
-	pod 'GHUnitIOS', '~> 0.5.8’
+        pod 'GHUnitIOS', '~> 0.5.8'
 end

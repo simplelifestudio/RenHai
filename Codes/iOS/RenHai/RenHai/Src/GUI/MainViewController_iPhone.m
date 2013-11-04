@@ -49,11 +49,15 @@
 -(void) switchToMainScene
 {
     RHNavigationController* navigationVC = _guiModule.navigationController;
+    
+    navigationVC.navigationBar.translucent = NO;
+    navigationVC.navigationBar.backgroundColor = [UIColor DodgerBlue];
+    
     HomeViewController_iPhone* homeVC = _guiModule.homeViewController;
 
     [self setLeftViewController:_guiModule.leftbarViewController];
     [self setRightViewController:nil];
-    [self setFrontViewController:navigationVC focusAfterChange:YES completion:nil];
+    [self setFrontViewController:navigationVC];
 
     UIViewController* topVC = navigationVC.topViewController;
     if (topVC != homeVC)
@@ -75,7 +79,7 @@
     
     [self setLeftViewController:nil];
     [self setRightViewController:nil];
-    [self setFrontViewController:chatWizard focusAfterChange:YES completion:nil];
+    [self setFrontViewController:chatWizard];
     
     [chatWizard wizardProcess:ChatWizardStatus_ChatWait];
 }

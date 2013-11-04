@@ -288,4 +288,279 @@
     return [UIColor colorWithHexCode:@"ADD8E6"];
 }
 
++(UIColor*) PowderBlue
+{
+    return [UIColor colorWithHexCode:@"B0E0E6"];
+}
+
++(UIColor*) PaleTurquoise
+{
+    return [UIColor colorWithHexCode:@"AFEEEE"];
+}
+
++(UIColor*) DarkTurquoise
+{
+    return [UIColor colorWithHexCode:@"00CED1"];
+}
+
++(UIColor*) MediumTurquoise
+{
+    return [UIColor colorWithHexCode:@"48D1CC"];
+}
+
++(UIColor*) Turquoise
+{
+    return [UIColor colorWithHexCode:@"40E0D0"];
+}
+
++(UIColor*) Cyan
+{
+    return [UIColor colorWithHexCode:@"00FFFF"];
+}
+
++(UIColor*) LightCyan
+{
+    return [UIColor colorWithHexCode:@"E0FFFF"];
+}
+
++(UIColor*) CadetBlue
+{
+    return [UIColor colorWithHexCode:@"5F9EA0"];
+}
+
++(UIColor*) MediumAquamarine
+{
+    return [UIColor colorWithHexCode:@"66CDAA"];
+}
+
++(UIColor*) Aquamarine
+{
+    return [UIColor colorWithHexCode:@"7FFFD4"];
+}
+
++(UIColor*) DarkGreen
+{
+    return [UIColor colorWithHexCode:@"006400"];
+}
+
++(UIColor*) DarkOliveGreen
+{
+    return [UIColor colorWithHexCode:@"556B2F"];
+}
+
++(UIColor*) DarkSeaGreen
+{
+    return [UIColor colorWithHexCode:@"8FBC8F"];
+}
+
++(UIColor*) SeaGreen
+{
+    return [UIColor colorWithHexCode:@"2E8B57"];
+}
+
++(UIColor*) MediumSeaGreen
+{
+    return [UIColor colorWithHexCode:@"3CB371"];
+}
+
++(UIColor*) LightSeaGreen
+{
+    return [UIColor colorWithHexCode:@"20B2AA"];
+}
+
++(UIColor*) PaleGreen
+{
+    return [UIColor colorWithHexCode:@"98FB98"];
+}
+
++(UIColor*) SpringGreen
+{
+    return [UIColor colorWithHexCode:@"00FF7F"];
+}
+
++(UIColor*) LawnGreen
+{
+    return [UIColor colorWithHexCode:@"7CFC00"];
+}
+
++(UIColor*) Green
+{
+    return [UIColor colorWithHexCode:@"00FF00"];
+}
+
++(UIColor*) Chartreuse
+{
+    return [UIColor colorWithHexCode:@"7FFF00"];
+}
+
++(UIColor*) MedSpringGreen
+{
+    return [UIColor colorWithHexCode:@"00FA9A"];
+}
+
++(UIColor*) GreenYellow
+{
+    return [UIColor colorWithHexCode:@"ADFF2F"];
+}
+
++(UIColor*) LimeGreen
+{
+    return [UIColor colorWithHexCode:@"32CD32"];
+}
+
++(UIColor*) YellowGreen
+{
+    return [UIColor colorWithHexCode:@"9ACD32"];
+}
+
++(UIColor*) ForestGreen
+{
+    return [UIColor colorWithHexCode:@"228B22"];
+}
+
++(UIColor*) OliveDrab
+{
+    return [UIColor colorWithHexCode:@"6B8E23"];
+}
+
++(UIColor*) DarkKhaki
+{
+    return [UIColor colorWithHexCode:@"BDB76B"];
+}
+
++(UIColor*) PaleGoldenrod
+{
+    return [UIColor colorWithHexCode:@"EEE8AA"];
+}
+
++(UIColor*) LtGoldenrodYello
+{
+    return [UIColor colorWithHexCode:@"FAFAD2"];
+}
+
++(UIColor*) LightYellow
+{
+    return [UIColor colorWithHexCode:@"FFFFE0"];
+}
+
++(UIColor*) Yellow
+{
+    return [UIColor colorWithHexCode:@"FFFF00"];
+}
+
++(UIColor*) Gold
+{
+    return [UIColor colorWithHexCode:@"FFD700"];
+}
+
++(UIColor*) LightGoldenrod
+{
+    return [UIColor colorWithHexCode:@"EEDD82"];
+}
+
++(UIColor*) Goldenrod
+{
+    return [UIColor colorWithHexCode:@"DAA520"];
+}
+
++(UIColor*) DarkGoldenrod
+{
+    return [UIColor colorWithHexCode:@"B8860B"];
+}
+
++(UIColor*) RosyBrown
+{
+    return [UIColor colorWithHexCode:@"BC8F8F"];
+}
+
++(UIColor*) IndianRed
+{
+    return [UIColor colorWithHexCode:@"CD5C5C"];
+}
+
++(UIColor*) SaddleBrown
+{
+    return [UIColor colorWithHexCode:@"8B4513"];
+}
+
++(UIColor*) Sienna
+{
+    return [UIColor colorWithHexCode:@"A0522D"];
+}
+
++(UIColor*) Peru
+{
+    return [UIColor colorWithHexCode:@"CD853F"];
+}
+
++(UIColor*) Burlywood
+{
+    return [UIColor colorWithHexCode:@"DEB887"];
+}
+
++(UIColor*) Beige
+{
+    return [UIColor colorWithHexCode:@"F5F5DC"];
+}
+
++(UIColor*) Wheat
+{
+    return [UIColor colorWithHexCode:@"F5DEB3"];
+}
+
++(UIColor*) SandyBrown
+{
+    return [UIColor colorWithHexCode:@"F4A460"];
+}
+
++(UIColor*) Tan
+{
+    return [UIColor colorWithHexCode:@"D2B48C"];
+}
+
++(UIColor*) Chocolate
+{
+    return [UIColor colorWithHexCode:@"D2691E"];
+}
+
++(UIColor*) Firebrick
+{
+    return [UIColor colorWithHexCode:@"B22222"];
+}
+
++(UIColor*) Brown
+{
+    return [UIColor colorWithHexCode:@"A52A2A"];
+}
+
++(UIColor*) DarkSalmon
+{
+    return [UIColor colorWithHexCode:@"E9967A"];
+}
+
++(UIColor*) Salmon
+{
+    return [UIColor colorWithHexCode:@"FA8072"];
+}
+
++(UIColor*) LightSalmon
+{
+    return [UIColor colorWithHexCode:@"FFA07A"];
+}
+
++(UIColor*) Orange
+{
+    return [UIColor colorWithHexCode:@"FFA500"];
+}
+
++(UIColor*) DarkOrange
+{
+    return [UIColor colorWithHexCode:@"FF8C00"];
+}
+
++(UIColor*) Coral
+{
+    return [UIColor colorWithHexCode:@"FF7F50"];
+}
+
 @end

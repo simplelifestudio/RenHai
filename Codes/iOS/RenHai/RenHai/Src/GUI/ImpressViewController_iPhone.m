@@ -246,9 +246,10 @@
 
 -(void)_setupRefresher
 {
-    [self _resetRefresher];
-    [_refresher addTarget:self action:@selector(_onPullToRefresh) forControlEvents:UIControlEventValueChanged];
+    _refresher = [[UIRefreshControl alloc] init];
     [self.collectionView addSubview:_refresher];
+    [_refresher addTarget:self action:@selector(_onPullToRefresh) forControlEvents:UIControlEventValueChanged];
+    [self _resetRefresherTitle];
 }
 
 -(void)_onPullToRefresh
@@ -260,11 +261,6 @@
 
 -(void)_resetRefresher
 {
-    if (nil == _refresher)
-    {
-        _refresher = [[UIRefreshControl alloc] init];
-    }
-    
     [self performSelector:@selector(_resetRefresherTitle) withObject:nil afterDelay:DELAY_UIREFRESHCONTROL_RESET];
 }
 
@@ -329,7 +325,7 @@
     UIImage* sidebarMenuIcon_portrait = [GUIStyle sidebarMenuIconPortrait];
     UIImage* sidebarMenuIcon_landscape = [GUIStyle sidebarMenuIconLandscape];
     
-    if (self.navigationController.revealController.type & PKRevealControllerTypeLeft)
+    if ([self.navigationController.revealController hasLeftViewController])
     {
         UIBarButtonItem* leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:sidebarMenuIcon_portrait landscapeImagePhone:sidebarMenuIcon_landscape style:UIBarButtonItemStylePlain target:self action:@selector(_leftBarButtonItemClicked:)];
         

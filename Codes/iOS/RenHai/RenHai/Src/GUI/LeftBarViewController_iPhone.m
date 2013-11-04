@@ -61,10 +61,10 @@
     {
         _selectedRow = LEFTBAR_CELL_HOME;
     }
-    else if (presentingVC == _guiModule.deviceViewController)
-    {
-        _selectedRow = LEFTBAR_CELL_DEVICE;
-    }
+//    else if (presentingVC == _guiModule.deviceViewController)
+//    {
+//        _selectedRow = LEFTBAR_CELL_DEVICE;
+//    }
     else if (presentingVC == _guiModule.impressViewController)
     {
         _selectedRow = LEFTBAR_CELL_IMPRESS;
@@ -73,10 +73,10 @@
     {
         _selectedRow = LEFTBAR_CELL_INTEREST;
     }
-    else if (presentingVC == _guiModule.configViewController)
-    {
-        _selectedRow = LEFTBAR_CELL_CONFIG;
-    }
+//    else if (presentingVC == _guiModule.configViewController)
+//    {
+//        _selectedRow = LEFTBAR_CELL_CONFIG;
+//    }
     
     [self.tableView reloadData];
     
@@ -113,11 +113,11 @@
             cellText = NAVIGATIONBAR_TITLE_HOME;
             break;
         }
-        case LEFTBAR_CELL_DEVICE:
-        {
-            cellText = NAVIGATIONBAR_TITLE_DEVICE;
-            break;
-        }
+//        case LEFTBAR_CELL_DEVICE:
+//        {
+//            cellText = NAVIGATIONBAR_TITLE_DEVICE;
+//            break;
+//        }
         case LEFTBAR_CELL_IMPRESS:
         {
             cellText = NAVIGATIONBAR_TITLE_IMPRESS;
@@ -128,11 +128,11 @@
             cellText = NAVIGATIONBAR_TITLE_INTEREST;
             break;
         }
-        case LEFTBAR_CELL_CONFIG:
-        {
-            cellText = NAVIGATIONBAR_TITLE_CONFIG;
-            break;
-        }
+//        case LEFTBAR_CELL_CONFIG:
+//        {
+//            cellText = NAVIGATIONBAR_TITLE_CONFIG;
+//            break;
+//        }
         default:
         {
             cellText = @"";
@@ -180,14 +180,14 @@
             
             break;
         }
-        case LEFTBAR_CELL_DEVICE:
-        {
-            [navigationVC popToRootViewControllerAnimated:NO];
-            [navigationVC pushViewController:_guiModule.deviceViewController animated:NO];
-            [mainVC showViewController:navigationVC animated:YES completion:nil];
-            
-            break;
-        }
+//        case LEFTBAR_CELL_DEVICE:
+//        {
+//            [navigationVC popToRootViewControllerAnimated:NO];
+//            [navigationVC pushViewController:_guiModule.deviceViewController animated:NO];
+//            [mainVC showViewController:navigationVC animated:YES completion:nil];
+//            
+//            break;
+//        }
         case LEFTBAR_CELL_IMPRESS:
         {
             [navigationVC popToRootViewControllerAnimated:NO];
@@ -204,14 +204,14 @@
             
             break;
         }
-        case LEFTBAR_CELL_CONFIG:
-        {
-            [navigationVC popToRootViewControllerAnimated:NO];
-            [navigationVC pushViewController:_guiModule.configViewController animated:NO];
-            [mainVC showViewController:navigationVC animated:YES completion:nil];
-            
-            break;
-        }
+//        case LEFTBAR_CELL_CONFIG:
+//        {
+//            [navigationVC popToRootViewControllerAnimated:NO];
+//            [navigationVC pushViewController:_guiModule.configViewController animated:NO];
+//            [mainVC showViewController:navigationVC animated:YES completion:nil];
+//            
+//            break;
+//        }
         default:
         {
             
