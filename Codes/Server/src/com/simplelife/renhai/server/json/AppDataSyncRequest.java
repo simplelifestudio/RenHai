@@ -475,7 +475,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			}
 		}
 		
-		if (syncType == SyncType.ExistentNotLoaded || syncType == SyncType.ExistentLoaded)
+		if (syncType == SyncType.ExistentNotLoaded)
 		{
 			logger.debug("Device is Existent in DB, try to load it from DB.");
 			loadDevice(deviceSn);

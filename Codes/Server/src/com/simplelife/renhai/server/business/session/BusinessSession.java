@@ -184,6 +184,9 @@ public class BusinessSession implements IBusinessSession
     public boolean startSession(List<String> deviceList)
     {
     	sessionStartTime = System.currentTimeMillis();
+    	chatStartTime = 0;
+    	chatEndTime = 0;
+    	sessionEndTime = 0;
     	
     	logger.debug("Enter startSession, deviceList:" );
     	for (String device : deviceList)
@@ -593,8 +596,11 @@ public class BusinessSession implements IBusinessSession
 				|| reason == Consts.StatusChangeReason.WebsocketClosedByApp)
 		{
 			device.increaseChatLoss();
-			int duration = (int) (System.currentTimeMillis() - chatStartTime);
-			device.increaseChatDuration(duration);
+			if (chatStartTime > 0)
+			{
+				int duration = (int) (System.currentTimeMillis() - chatStartTime);
+				device.increaseChatDuration(duration);
+			}
 			notifyDevices(device, NotificationType.OthersideLost);
 			
 			/*

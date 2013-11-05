@@ -22,6 +22,7 @@ import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.CommonFunctions;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 
 /**
@@ -177,12 +178,12 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		}
 	}
 	
-	private void queryDeviceDetail(ServerJSONMessage response, 
+	private void queryDeviceSummary(ServerJSONMessage response, 
 			AbstractBusinessDevicePool randomPool, 
 			InterestBusinessDevicePool interestPool)
 	{
 		JSONObject responseObj = new JSONObject();
-		response.addToBody(JSONKey.DetailedDeviceInfo, responseObj);
+		response.addToBody(JSONKey.DeviceSummary, responseObj);
 		
 		OnlineDevicePool.instance.reportDeviceDetails(responseObj);
 	}
@@ -265,9 +266,19 @@ public class ServerDataSyncRequest extends AppJSONMessage
 			queryHotLabels(response, randomPool, interestPool);
 		}
 		
-		if (body.containsKey(JSONKey.DetailedDeviceInfo))
+		if (body.containsKey(JSONKey.DeviceSummary))
 		{
-			queryDeviceDetail(response, randomPool, interestPool);
+			queryDeviceSummary(response, randomPool, interestPool);
+		}
+		
+		if (body.containsKey(JSONKey.DeviceDetailedInfo))
+		{
+			String deviceSn = body.getString(JSONKey.DeviceDetailedInfo);
+			IDeviceWrapper device = OnlineDevicePool.instance.getDevice(deviceSn);
+			if (device != null)
+			{
+				response.addToBody(JSONKey.DeviceDetailedInfo, device.toJSONObject());
+			}
 		}
 				
 		//DbLogger.saveProfileLog(Consts.OperationCode.ServerDataSyncResponse_1009
