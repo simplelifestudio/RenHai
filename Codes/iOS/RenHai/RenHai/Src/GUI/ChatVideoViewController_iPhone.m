@@ -116,11 +116,15 @@
 {
     [self _checkIsOthersideLost];
     
-    [NSThread detachNewThreadSelector:@selector(_activateAlohaTimer) toTarget:self withObject:nil];
+    [self _activateAlohaTimer];
+    
+    [self _registerNotifications];
 }
 
 -(void) pageWillUnload
 {
+    [self _unregisterNotifications];
+    
     [self _deactivateAlohaTimer];
 }
 
@@ -220,12 +224,15 @@
 
 -(void)_activateAlohaTimer
 {
-    [self _deactivateAlohaTimer];
-    
-    _alohaTimer = [NSTimer timerWithTimeInterval:INTERVAL_ALOHA target:self selector:@selector(_aloha) userInfo:nil repeats:YES];
-    NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
-    [currentRunLoop addTimer:_alohaTimer forMode:NSRunLoopCommonModes];
-    [currentRunLoop run];
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
+        [self _deactivateAlohaTimer];
+        
+        _alohaTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_ALOHA target:self selector:@selector(_aloha) userInfo:nil repeats:YES];
+        
+        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+        [currentRunLoop addTimer:_alohaTimer forMode:NSRunLoopCommonModes];
+        [currentRunLoop run];
+    }];
 }
 
 -(void)_deactivateAlohaTimer
@@ -240,6 +247,21 @@
 -(void) _aloha
 {
     [_commModule alohaRequest:_userDataModule.device];
+}
+
+-(void)_registerNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_deactivateAlohaTimer)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_activateAlohaTimer) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+-(void)_unregisterNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - IBActions

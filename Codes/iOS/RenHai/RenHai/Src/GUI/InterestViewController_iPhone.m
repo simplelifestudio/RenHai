@@ -577,7 +577,7 @@
         {
             [interestCard removeLabelByIndex:item];
             
-            if (nil == labelName || 0 == labelName.length || [labelName isEqualToString:NSLocalizedString(@"Interest_Empty", nil)])
+            if (nil == labelName || 0 == labelName.length)
             {
                 
             }
@@ -588,7 +588,7 @@
         }
         else
         {
-            if (nil == labelName || 0 == labelName.length || [labelName isEqualToString:NSLocalizedString(@"Interest_Empty", nil)])
+            if (nil == labelName || 0 == labelName.length)
             {
                 
             }

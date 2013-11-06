@@ -206,7 +206,7 @@
         {
             [_impressLabelNames removeObjectAtIndex:item];
             
-            if (nil == labelName || 0 == labelName.length || [labelName isEqualToString:NSLocalizedString(@"ChatAssess_Empty", nil)])
+            if (nil == labelName || 0 == labelName.length)
             {
                 
             }
@@ -217,7 +217,7 @@
         }
         else
         {
-            if (nil == labelName || 0 == labelName.length || [labelName isEqualToString:NSLocalizedString(@"ChatAssess_Empty", nil)])
+            if (nil == labelName || 0 == labelName.length)
             {
                 
             }

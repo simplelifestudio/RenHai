@@ -30,13 +30,15 @@
 
 #define DELAY_REFRESH 0.5f
 
+#define INTERVAL_DATASYNC 0
+
 @interface ImpressViewController_iPhone ()
 {
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
     
-    UIRefreshControl* _refresher;
+    NSTimer* _dataSyncTimer;
 }
 
 @end
@@ -54,6 +56,24 @@
     [super viewDidLoad];
 	
     [self _setupInstance];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [self _activateDataSyncTimer];
+    
+    [self _registerNotifications];
+}
+
+-(void) viewWillDisappear:(BOOL)animated
+{
+    [self _deactivateDataSyncTimer];
+    
+    [self _unregisterNotifications];
+    
+    [super viewWillDisappear:animated];
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -109,8 +129,6 @@
     RHDevice* device = _userDataModule.device;
     RHProfile* profile = device.profile;
     RHImpressCard* impressCard = profile.impressCard;
-    
-    BOOL isEmptyCell = NO;
     
     NSString* labelName = nil;
     NSInteger labelCount = -1;
@@ -322,6 +340,28 @@
     [_impressLabelsView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_IMPRESSLABELSHEADERVIEW];
 }
 
+-(void)_activateDataSyncTimer
+{
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
+        [self _deactivateDataSyncTimer];
+        
+        _dataSyncTimer = [NSTimer timerWithTimeInterval:INTERVAL_DATASYNC target:self selector:@selector(_refreshImpressData) userInfo:nil repeats:NO];
+        
+        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+        [currentRunLoop addTimer:_dataSyncTimer forMode:NSDefaultRunLoopMode];
+        [currentRunLoop run];
+    }];
+}
+
+-(void)_deactivateDataSyncTimer
+{
+    if (nil != _dataSyncTimer)
+    {
+        [_dataSyncTimer invalidate];
+        _dataSyncTimer = nil;
+    }
+}
+
 -(void)_refreshImpressData
 {
     [NSThread sleepForTimeInterval:DELAY_REFRESH];
@@ -360,6 +400,21 @@
             }
          ];
     }];
+}
+
+-(void)_registerNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_deactivateDataSyncTimer)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_activateDataSyncTimer) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+-(void)_unregisterNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void)_setupNavigationBar
