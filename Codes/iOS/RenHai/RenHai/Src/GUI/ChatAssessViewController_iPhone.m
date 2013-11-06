@@ -56,6 +56,8 @@
     NSArray* _assessLabelNames;
     NSMutableArray* _impressLabelNames;
     
+    NSMutableArray* _addImpressLabels;
+    
     volatile BOOL _selfAssessedFlag;
     
     volatile BOOL _isDeciding;
@@ -137,6 +139,8 @@
     
     _isDeciding = NO;
     
+    [_addImpressLabels removeAllObjects];
+    
     [self _setCountdownSeconds:COUNTDOWN_SECONDS];
 }
 
@@ -159,6 +163,8 @@
     _appDataModule = [AppDataModule sharedInstance];
     _guiModule = [GUIModule sharedInstance];
     _statusModule = [BusinessStatusModule sharedInstance];
+    
+    _addImpressLabels = [NSMutableArray array];
     
     [self _setupCollectionView];
 }
@@ -411,17 +417,23 @@
 {
     NSInteger itemsCount = 0;
     
+    RHBusinessSession* businessSession = _userDataModule.businessSession;
+    RHDevice* partnerDevice = [businessSession getPartner];
+    RHProfile* partnerProfile = partnerDevice.profile;
+    RHImpressCard* partnerImpressCard = partnerProfile.impressCard;
+    NSArray* impressLabels = partnerImpressCard.impressLabelList;
+    
     if (cv == _assessLabelsView)
     {
         itemsCount = ASSESSLABELSVIEW_SECTION_ITEMCOUNT_ASSESSLABELS;
     }
     else if (cv == _addImpressLabelsView)
     {
-        itemsCount = ADDIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_ADDIMPRESSLABELS;
+        itemsCount = (_addImpressLabels.count <= ADDIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_ADDIMPRESSLABELS) ? _addImpressLabels.count : ADDIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_ADDIMPRESSLABELS;
     }
     else if (cv == _existImpressLabelsView)
     {
-        itemsCount = EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS;
+        itemsCount = (impressLabels.count <= EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS) ? impressLabels.count : EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS;
     }
     
     return itemsCount;
@@ -431,8 +443,6 @@
 {
     RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[cv dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL forIndexPath:indexPath];
     cell.editingDelegate = self;
-    
-    BOOL isEmptyCell = NO;
     
     NSUInteger position = indexPath.item;
     
@@ -514,8 +524,6 @@
             cell.countLabel.text = @"";
         }
     }
-    
-    cell.isEmptyCell = isEmptyCell;
     
     return cell;
 }

@@ -216,8 +216,6 @@
         cell.countLabel.text = @"";
     }
     
-    cell.isEmptyCell = isEmptyCell;
-    
     return cell;
 }
 

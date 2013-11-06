@@ -31,8 +31,6 @@ static UIImage* orderIconImage;
 
 @synthesize editingDelegate = _editingDelegate;
 
-@synthesize isEmptyCell = _isEmptyCell;
-
 + (void)initialize
 {
     delIconImage = [UIImage imageNamed:@"close.png"];

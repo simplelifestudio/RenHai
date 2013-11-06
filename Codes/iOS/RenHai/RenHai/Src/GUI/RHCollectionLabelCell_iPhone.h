@@ -35,8 +35,6 @@ CellMode;
 
 @property (strong, nonatomic) id<RHCollectionLabelCellEditingDelegate> editingDelegate;
 
-@property (nonatomic) BOOL isEmptyCell;
-
 @property (nonatomic) CellMode cellMode;
 @property (nonatomic) BOOL shakeCell;
 

@@ -131,6 +131,11 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
+    RHBusinessSession* businessSession = _userDataModule.businessSession;
+    RHDevice* device = [businessSession getPartner];
+    RHProfile* profile = device.profile;
+    RHImpressCard* impressCard = profile.impressCard;
+    
     switch (section)
     {
         case SECTION_INDEX_ASSESSES:
@@ -139,9 +144,8 @@
         }
         case SECTION_INDEX_LABELS:
         {
-            //            NSArray* impressLabelList = [_impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
-            //            return impressLabelList.count;
-            return SECTION_IMPRESSES_ITEMCOUNT;
+            NSArray* impressLabelList = [impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
+            return  impressLabelList.count;
         }
         default:
         {
@@ -158,8 +162,6 @@
     RHDevice* device = [businessSession getPartner];
     RHProfile* profile = device.profile;
     RHImpressCard* impressCard = profile.impressCard;
-    
-    BOOL isEmptyCell = NO;
     
     NSString* labelName = nil;
     NSInteger labelCount = -1;
@@ -226,11 +228,6 @@
                 labelName = impressLabel.labelName;
                 labelCount = impressLabel.assessedCount;
             }
-            else
-            {
-                labelName = NSLocalizedString(@"Impress_Empty", nil);
-                isEmptyCell = YES;
-            }
             
             break;
         }
@@ -255,8 +252,6 @@
     {
         cell.countLabel.text = @"";
     }
-    
-    cell.isEmptyCell = isEmptyCell;
     
     return cell;
 }
