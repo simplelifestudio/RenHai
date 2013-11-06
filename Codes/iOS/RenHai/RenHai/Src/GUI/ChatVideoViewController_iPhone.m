@@ -222,8 +222,6 @@
 {
     [self _deactivateAlohaTimer];
     
-    _alohaTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_ALOHA target:self selector:@selector(_aloha) userInfo:nil repeats:YES];
-    
     _alohaTimer = [NSTimer timerWithTimeInterval:INTERVAL_ALOHA target:self selector:@selector(_aloha) userInfo:nil repeats:YES];
     NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
     [currentRunLoop addTimer:_alohaTimer forMode:NSRunLoopCommonModes];
