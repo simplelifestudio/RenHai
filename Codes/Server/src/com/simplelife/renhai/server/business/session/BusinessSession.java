@@ -267,6 +267,13 @@ public class BusinessSession implements IBusinessSession
 				continue;
 			}
 
+			Consts.BusinessProgress progress = progressMap.get(device.getDeviceSn()); 
+			if (progress.getValue() >= Consts.BusinessProgress.ChatEnded.getValue())
+			{
+				// Ignore devices who has entered phase of Assess
+				continue;
+			}
+
 			// create notification for each device, to avoid conflict of multi-thread on devices
 			notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
 			temp = "Notify device <"+ device.getDeviceSn() +"> about " + notificationType.name();
