@@ -13,6 +13,10 @@
 #import "InterestLabelsHeaderView_iPhone.h"
 #import "ServerInterestLabelsHeaderView_iPhone.h"
 
-@interface InterestViewController_iPhone : UICollectionViewController <UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDataSource_Draggable>
+@interface InterestViewController_iPhone : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate, UICollectionViewDataSource_Draggable>
+
+@property (weak, nonatomic) IBOutlet UICollectionView *interestLabelsView;
+@property (weak, nonatomic) IBOutlet UICollectionView *serverInterestLabelsView;
+@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
 
 @end
