@@ -216,7 +216,7 @@ public class Impresslabelmap implements IDbObject, Comparable<Impresslabelmap>
 				
 				if (id == null)
 				{
-					Globalimpresslabel tmpLabel = DBQueryUtil.getGlobalimpresslabel(globalLabel.getImpressLabelName());
+					Globalimpresslabel tmpLabel = DBModule.instance.impressLabelCache.getObject(globalLabel.getImpressLabelName());
 					id = tmpLabel.getGlobalImpressLabelId();
 				}
 				this.globalImpressLabelId = id;
@@ -236,10 +236,12 @@ public class Impresslabelmap implements IDbObject, Comparable<Impresslabelmap>
 	
 	public Globalimpresslabel getGlobalLabel()
 	{
+		/*
 		if (globalLabel == null)
 		{
 			globalLabel = DBQueryUtil.getGlobalimpresslabel(globalImpressLabelId);
 		}
+		*/
 		return globalLabel;
 	}
 	

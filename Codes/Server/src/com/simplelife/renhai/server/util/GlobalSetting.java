@@ -64,6 +64,10 @@ public class GlobalSetting
 		public static int MaxRecordCountForFlush = 30;
 		public static int MaxRecordCountForDiscard = 1000;
 		public static boolean CacheEnabled = false;
+		
+		public static int GlobalImpressLabelCacheCount = 500;
+		public static int GlobalInterestLabelCacheCount = 500;
+		public static int DeviceCacheCount = 500;
 	}
 	
 	public static class BusinessSetting

@@ -92,7 +92,6 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	public void onOpen(ServerHandshake arg0)
 	{
 		Thread.currentThread().setName("WebSocketClient" + DateUtil.getCurrentMiliseconds());
-		logger.debug("==================onOpen");
 	}
 
 	@Override

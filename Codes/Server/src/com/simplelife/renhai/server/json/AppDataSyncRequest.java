@@ -14,15 +14,14 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.ibatis.session.SqlSession;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
@@ -32,7 +31,6 @@ import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.log.DbLogger;
-import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -47,7 +45,7 @@ import com.simplelife.renhai.server.util.JSONKey;
  */
 public class AppDataSyncRequest extends AppJSONMessage
 {
-	private SyncType syncType = SyncType.Invalid;
+	//private SyncType syncType = SyncType.Invalid;
 	private boolean isNewDevice = false;
 	
 	private enum SyncType
@@ -274,7 +272,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			return false;
 		}
 		
-		String deviceSn = header.getString(JSONKey.DeviceSn);
+		//String deviceSn = header.getString(JSONKey.DeviceSn);
 		if (isNewDevice)
 		{
 			if (!deviceCardObj.containsKey(JSONKey.DeviceModel))
@@ -614,35 +612,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 			return device;
 		}
 		
-		SqlSession session = null;
-		try
-		{
-			session = DAOWrapper.getSession();
-			DeviceMapper mapper = session.getMapper(DeviceMapper.class);
-			device = mapper.selectWholeDeviceByDeviceSn(deviceSn);
-			if (device == null)
-			{
-				logger.error("Fatal error, device load from DB by SN <{}> is null!", deviceSn);
-			}
-			return device;
-		}
-		catch(Exception e)
-		{
-			if (session != null)
-			{
-				session.rollback();
-			}
-			logger.error("Fatal error when trying to load device <{}> from DB", deviceSn);
-			FileLogger.printStackTrace(e);
-		}
-		finally
-		{
-			if (session != null)
-			{
-				session.close();
-			}
-		}
-		return null;
+		device = DBModule.instance.deviceCache.getObject(deviceSn);
+		return device;
 	}
 	
 	private void query(JSONObject queryObj, JSONObject response)
@@ -1055,7 +1026,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			}
 			
 			String strValue = label.getValue();
-			Globalimpresslabel impressLabel = DBQueryUtil.getGlobalimpresslabel(strValue);
+			Globalimpresslabel impressLabel = DBModule.instance.impressLabelCache.getObject(strValue);
 			if (impressLabel == null)
 			{
 				impressLabel = new Globalimpresslabel();
@@ -1158,7 +1129,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			
 			interestLabelMap = new Interestlabelmap();
 			
-			globalInterest = DBQueryUtil.getGlobalinterestlabel(tempStr);
+			globalInterest = DBModule.instance.interestLabelCache.getObject(tempStr);
 			
 			// Check if it's new interest label for this device but existent global interest label
 			if (globalInterest == null)

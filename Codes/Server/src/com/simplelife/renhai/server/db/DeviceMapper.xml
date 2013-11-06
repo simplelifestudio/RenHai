@@ -44,10 +44,15 @@
                   <id column="inl_interestLabelMapId" property="interestLabelMapId" jdbcType="INTEGER" />
                   <result column="inl_interestCardId" property="interestCardId" jdbcType="INTEGER" />
                   <result column="inl_globalInterestLabelId" property="globalInterestLabelId" jdbcType="INTEGER" />
-                  <result column="inl_labelOrder" property="labelOrder" jdbcType="INTEGER" />
+				  <result column="inl_labelOrder" property="labelOrder" jdbcType="INTEGER" />
                   <result column="inl_matchCount" property="matchCount" jdbcType="INTEGER" />
                   <result column="inl_validFlag" property="validFlag" jdbcType="CHAR" />
                   <result column="inl_interestLabelMaplId" property="interestLabelMaplId" jdbcType="INTEGER" />
+				  <association column="inl_globalInterestLabelId" property="globalLabel" javaType="com.simplelife.renhai.server.db.Globalinterestlabel">
+				    <id column="gin_globalInterestLabelId" property="globalInterestLabelId" jdbcType="INTEGER" />
+					<result column="gin_interestLabelName" property="interestLabelName" jdbcType="VARCHAR" />
+					<result column="gin_globalMatchCount" property="globalMatchCount" jdbcType="INTEGER" />
+				  </association>
               </collection>
           </association>
           
@@ -66,12 +71,18 @@
                   <result column="iml_assessedCount" property="assessedCount" jdbcType="INTEGER" />
                   <result column="iml_updateTime" property="updateTime" jdbcType="BIGINT" />
                   <result column="iml_assessCount" property="assessCount" jdbcType="INTEGER" />
+				  
+				  <association column="iml_globalImpressLabelId" property="globalLabel" javaType="com.simplelife.renhai.server.db.Globalimpresslabel">
+					<id column="gim_globalImpressLabelId" property="globalImpressLabelId" jdbcType="INTEGER" />
+					<result column="gim_impressLabelName" property="impressLabelName" jdbcType="VARCHAR" />
+					<result column="gim_globalAssessCount" property="globalAssessCount" jdbcType="INTEGER" />
+				  </association>
               </collection>
           </association>
 	 </association>
   </resultMap>
   
-	<select id="selectInterestLabels" parameterType ="int" resultType="com.simplelife.renhai.server.db.Interestlabelmap" >
+	<!--select id="selectInterestLabels" parameterType ="int" resultType="com.simplelife.renhai.server.db.Interestlabelmap" >
 		SELECT 
 			interestCardId,
 			globalInterestLabelId,
@@ -80,7 +91,7 @@
 			validFlag
 		FROM interestlabelmap
 		WHERE interestCardId = #{interestCardId}
-	</select>
+	</select-->
   
   <sql id="Base_Column_List" >
     deviceId, deviceSn
@@ -92,14 +103,14 @@
     values (#{deviceSn,jdbcType=VARCHAR})
   </insert>
   
-  <select id="selectByDeviceSn" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  <!--select id="selectByStringKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
     from device
     where deviceSn = #{deviceSn,jdbcType=VARCHAR}
-  </select>
+  </select-->
   
-  <select id="selectWholeDeviceByDeviceSn" resultMap="WholeDeviceResultMap" parameterType="java.lang.String" >
+  <select id="selectByStringKey" resultMap="WholeDeviceResultMap" parameterType="java.lang.String" >
     select 
     	D.deviceId as d_deviceId,
     	D.deviceSn as d_deviceSn,
@@ -136,14 +147,23 @@
     	IML.globalImpressLabelId as iml_globalImpressLabelId,
     	IML.assessedCount as iml_assessedCount,
     	IML.updateTime as iml_updateTime,
-    	IML.assessCount as iml_assessCount
+    	IML.assessCount as iml_assessCount,
+		GIN.globalInterestLabelId as gin_globalInterestLabelId,
+		GIN.interestLabelName as gin_interestLabelName,
+		GIN.globalMatchCount as gin_globalMatchCount,
+		GIM.globalImpressLabelId as gim_globalImpressLabelId,
+		GIM.impressLabelName as gim_impressLabelName,
+		GIM.globalAssessCount as gim_globalAssessCount
     from device D
     	left outer join devicecard C on D.deviceId = C.deviceId
     	left outer join profile P on D.deviceId = P.deviceId
     	left outer join interestcard INC on P.profileId = INC.profileId
     	left outer join interestlabelmap INL on INC.interestCardId = INL.interestCardId
+		left outer join globalinterestlabel GIN on INL.globalInterestLabelId = GIN.globalInterestLabelId
     	left outer join impresscard IMC on P.profileId = IMC.profileId
     	left outer join impresslabelmap IML on IMC.impressCardId = IML.impressCardId
+		left outer join globalimpresslabel GIM on IML.globalImpressLabelId = GIM.globalImpressLabelId
+		
     where D.deviceSn = #{deviceSn,jdbcType=VARCHAR}
   </select>
   

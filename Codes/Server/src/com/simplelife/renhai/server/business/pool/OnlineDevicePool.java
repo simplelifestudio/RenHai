@@ -106,7 +106,6 @@ public class OnlineDevicePool extends AbstractDevicePool
     
     public final static OnlineDevicePool instance = new OnlineDevicePool();
     
-    
     private OnlineDevicePool()
     {
     	this.addBusinessPool(Consts.BusinessType.Random, new RandomBusinessDevicePool());

@@ -14,7 +14,6 @@ package com.simplelife.renhai.server.log;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
-import com.simplelife.renhai.server.db.DBQueryUtil;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.db.Profile;
@@ -25,27 +24,28 @@ import com.simplelife.renhai.server.util.Consts;
 public class DbLogger
 {
 	//public final static DbLogger instance = new DbLogger();
-	private static Object increaseInterestFlag = new Object();
-	private static Object increaseImpressFlag = new Object();
+	//private static Object increaseInterestFlag = new Object();
+	//private static Object increaseImpressFlag = new Object();
 	
 	public static void increaseImpressAssessCount(String labelName)
 	{
-		synchronized (increaseImpressFlag)
+		Globalimpresslabel label = DBModule.instance.impressLabelCache.getObject(labelName);
+		if (label == null)
 		{
-			Globalimpresslabel label = DBQueryUtil.getGlobalimpresslabel(labelName);
-			if (label == null)
-			{
-				DBModule.instance.getLogger().error("Target label can't be found in DB: ", labelName);
-				return;
-			}
-		
+			DBModule.instance.getLogger().error("Target label can't be found in DB: ", labelName);
+			return;
+		}
+	
+		synchronized(label)
+		{
 			int count = label.getGlobalAssessCount();
 			label.setGlobalAssessCount(label.getGlobalAssessCount() + 1);
 			BusinessModule.instance.getLogger().debug("Assess count of global impress label <" 
-					+ labelName + "> was increased from " + count 
-					+ " to " + label.getGlobalAssessCount());
-			DAOWrapper.cache(label);
+				+ labelName + "> was increased from " + count 
+				+ " to " + label.getGlobalAssessCount());
 		}
+		DAOWrapper.cache(label);
+		
 	}
 	
 	public static void increaseInterestMatchCount(String labelName)
@@ -55,21 +55,23 @@ public class DbLogger
 			return;
 		}
 		
-		synchronized (increaseInterestFlag)
+		Globalinterestlabel label = DBModule.instance.interestLabelCache.getObject(labelName);
+		if (label == null)
 		{
-			Globalinterestlabel label = DBQueryUtil.getGlobalinterestlabel(labelName);
-			if (label == null)
-			{
-				DBModule.instance.getLogger().error("Target label can't be found in DB: ", labelName);
-				return;
-			}
+			DBModule.instance.getLogger().error("Target label can't be found in DB: ", labelName);
+			return;
+		}
+		
+		synchronized(label)
+		{
 			int count = label.getGlobalMatchCount();
 			label.setGlobalMatchCount(label.getGlobalMatchCount()+1);
 			BusinessModule.instance.getLogger().debug("Match count of global interest label <" 
-					+ labelName + "> was increased from " + count 
-					+ " to " + label.getGlobalMatchCount());
-			DAOWrapper.cache(label);
+				+ labelName + "> was increased from " + count 
+				+ " to " + label.getGlobalMatchCount());
 		}
+		DAOWrapper.cache(label);
+		
 	}
 	
 	public static void saveProfileLog(Consts.OperationCode code, Profile profile, String logInfo)
@@ -94,6 +96,7 @@ public class DbLogger
 	public static void saveSystemLog(Consts.OperationCode code
 			, Consts.SystemModule module
 			, String logInfo)
+	
 	{
 		return;
 		/*

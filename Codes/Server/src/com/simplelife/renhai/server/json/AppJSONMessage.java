@@ -237,7 +237,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
     		logger.debug("Start to execute " + this.messageId.name() + " with MessageSN: " + this.getMessageSn() + " which was queued " + duration + "ms ago");
     		if (duration >= GlobalSetting.BusinessSetting.MessageQueueTime)
     		{
-    			logger.warn("Queue duration is too long, consider increasing size of input message execution thread pool.");
+    			logger.warn("Queue duration is {}ms, consider increasing size of input message execution thread pool.", duration);
     		}
 			
 			if (deviceWrapper == null || !deviceWrapper.getConnection().isOpen())

@@ -209,7 +209,7 @@ public class Interestlabelmap implements IDbObject, Comparable<Interestlabelmap>
 				Integer id = globalLabel.getGlobalInterestLabelId(); 
 				if (id == null)
 				{
-					Globalinterestlabel tmpLabel = DBQueryUtil.getGlobalinterestlabel(globalLabel.getInterestLabelName());
+					Globalinterestlabel tmpLabel = DBModule.instance.interestLabelCache.getObject(globalLabel.getInterestLabelName());
 					id = tmpLabel.getGlobalInterestLabelId();
 				}
 				this.globalInterestLabelId = id;
@@ -235,10 +235,12 @@ public class Interestlabelmap implements IDbObject, Comparable<Interestlabelmap>
 	
 	public Globalinterestlabel getGlobalLabel()
 	{
+		/*
 		if (globalLabel == null)
 		{
 			globalLabel = DBQueryUtil.getGlobalinterestlabel(globalInterestLabelId);
 		}
+		*/
 		return globalLabel;
 	}
 	

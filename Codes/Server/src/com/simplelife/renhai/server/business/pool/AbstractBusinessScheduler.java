@@ -21,7 +21,6 @@ import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.log.FileLogger;
-import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.IBusinessScheduler;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 

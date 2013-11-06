@@ -32,7 +32,7 @@
     where globalImpressLabelId = #{globalImpressLabelId,jdbcType=INTEGER}
   </select>
 
-  <select id="selectByLabelName" resultMap="BaseResultMap" parameterType="java.lang.String"  useCache="true">
+  <select id="selectByStringKey" resultMap="BaseResultMap" parameterType="java.lang.String"  useCache="true">
     select 
     <include refid="Base_Column_List" />
     from globalimpresslabel

@@ -115,4 +115,14 @@ public class Globalinterestlabel implements IDbObject
 			mapper.insert(this);
 		}
 	}
+	
+	@Override
+	public Globalinterestlabel clone()
+	{
+		Globalinterestlabel label = new Globalinterestlabel();
+		label.setGlobalInterestLabelId(globalInterestLabelId);
+		label.setGlobalMatchCount(globalMatchCount);
+		label.setInterestLabelName(interestLabelName);
+		return label;
+	}
 }

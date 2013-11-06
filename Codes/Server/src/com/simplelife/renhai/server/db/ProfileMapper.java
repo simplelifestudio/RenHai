@@ -1,7 +1,6 @@
 package com.simplelife.renhai.server.db;
 
 import com.simplelife.renhai.server.db.Profile;
-import org.apache.ibatis.annotations.Param;
 
 public interface ProfileMapper {
     int insert(Profile record);

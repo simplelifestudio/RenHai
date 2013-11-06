@@ -115,4 +115,14 @@ public class Globalimpresslabel implements IDbObject
 			mapper.insert(this);
 		}
 	}
+	
+	@Override
+	public Globalimpresslabel clone()
+	{
+		Globalimpresslabel label = new Globalimpresslabel();
+		label.setGlobalAssessCount(globalAssessCount);
+		label.setGlobalImpressLabelId(globalImpressLabelId);
+		label.setImpressLabelName(impressLabelName);
+		return label;
+	}
 }

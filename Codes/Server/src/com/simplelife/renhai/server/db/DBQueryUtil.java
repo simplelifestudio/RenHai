@@ -41,72 +41,16 @@ public class DBQueryUtil
 			return false;
 		}
 		
-		SqlSession session = DAOWrapper.getSession();
-		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
 		try
 		{
-			device = mapper.selectByDeviceSn(deviceSn);
+			device = DBModule.instance.deviceCache.getObject(deviceSn);
 		}
 		catch(RuntimeException re)
 		{
 			FileLogger.printStackTrace(re);
-			// try again
-			try
-			{
-				device = mapper.selectByDeviceSn(deviceSn);
-			}
-			catch(RuntimeException e)
-			{
-				FileLogger.printStackTrace(e);
-			}
-		}
-		finally
-		{
-			session.close();
 		}
 		
 		return (device == null);
-	}
-	
-	/**
-	 * Get object of globalimpresslabel by given impress label
-	 * @param label: impress label, such as ¡°Ë§¸ç¡±
-	 * @return Return Object of globalimpresslabel if label existed, else return null 
-	 */
-	public static Globalimpresslabel getGlobalimpresslabel(String labelName)
-	{
-		Globalimpresslabel label = DAOWrapper.getImpressLabelInCache(labelName);
-		if (label != null)
-		{
-			return label;
-		}
-		
-		SqlSession session = DAOWrapper.getSession();
-		GlobalimpresslabelMapper mapper = session.getMapper(GlobalimpresslabelMapper.class);
-		
-		try
-		{
-			label = mapper.selectByLabelName(labelName);
-		}
-		catch(Exception re)
-		{
-			FileLogger.printStackTrace(re);
-			// try again
-			try
-			{
-				label = mapper.selectByLabelName(labelName);
-			}
-			catch(Exception e)
-			{
-				FileLogger.printStackTrace(e);
-			}
-		}
-		finally
-		{
-			session.close();
-		}
-		
-		return label;
 	}
 	
 	public static Globalimpresslabel getGlobalimpresslabel(Integer labelId)
@@ -142,45 +86,6 @@ public class DBQueryUtil
 			session.close();
 		}
 		
-		return label;
-	}
-	
-	/**
-	 * Get object of globainterestlabel by given interest label
-	 * @param label: interest label, such as "×ãÇò"
-	 * @return Return Object of globainterestlabel if label existed, else return null
-	 */
-	public static Globalinterestlabel getGlobalinterestlabel(String labelName)
-	{
-		Globalinterestlabel label = DAOWrapper.getInterestLabelInCache(labelName);
-		if (label != null)
-		{
-			return label;
-		}
-		
-		SqlSession session = DAOWrapper.getSession();
-		GlobalinterestlabelMapper mapper = session.getMapper(GlobalinterestlabelMapper.class);
-		try
-		{
-			label = mapper.selectByLabelName(labelName);
-		}
-		catch(RuntimeException re)
-		{
-			FileLogger.printStackTrace(re);
-			// try again
-			try
-			{
-				label = mapper.selectByLabelName(labelName);
-			}
-			catch(RuntimeException e)
-			{
-				FileLogger.printStackTrace(e);
-			}
-		}
-		finally
-		{
-			session.close();
-		}
 		return label;
 	}
 	

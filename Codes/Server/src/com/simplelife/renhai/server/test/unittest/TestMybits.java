@@ -19,9 +19,12 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.Test;
 
+import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Devicecard;
+import com.simplelife.renhai.server.db.Globalimpresslabel;
+import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.db.Profile;
@@ -74,17 +77,19 @@ public class TestMybits
 	    
 	    DeviceMapper mapper = session.getMapper(DeviceMapper.class);
 	    
-		Device device = mapper.selectWholeDeviceByDeviceSn("chen");
+		Device device = DBModule.instance.deviceCache.getObject("demoDeviceSn");
 		Set<Interestlabelmap> labels = device.getProfile().getInterestCard().getInterestLabelMapSet();
 		for (Interestlabelmap label : labels)
 		{
-			System.out.print("===========interest label: " + label.getGlobalLabel().getInterestLabelName() + "\n");
+			Globalinterestlabel insLabel = DBModule.instance.interestLabelCache.getObject(label.getGlobalLabel().getInterestLabelName());
+			System.out.print("===========interest label: " + insLabel.getInterestLabelName() + "\n");
 		}
 		
 		Set<Impresslabelmap> impresslabels = device.getProfile().getImpressCard().getImpressLabelMapSet();
 		for (Impresslabelmap label : impresslabels)
 		{
-			System.out.print("===========impress label: " + label.getGlobalLabel().getImpressLabelName() + "\n");
+			Globalimpresslabel impLabel = DBModule.instance.impressLabelCache.getObject(label.getGlobalLabel().getImpressLabelName());
+			System.out.print("===========impress label: " + impLabel.getImpressLabelName() + "\n");
 		}
 		
 		
@@ -111,7 +116,7 @@ public class TestMybits
 		    SqlSession session = factory.openSession();
 		    
 		    DeviceMapper mapper = session.getMapper(DeviceMapper.class);
-		    Device device = mapper.selectWholeDeviceByDeviceSn("chen");
+		    Device device = mapper.selectByStringKey("chen");
 		    
 		    Devicecard card = new Devicecard();
 		    device.setDeviceCard(card);

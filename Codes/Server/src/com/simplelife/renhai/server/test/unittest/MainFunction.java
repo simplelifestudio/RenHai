@@ -9,13 +9,10 @@
 
 package com.simplelife.renhai.server.test.unittest;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.java_websocket.drafts.Draft_17;
@@ -24,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.InputMessageCenter;
@@ -33,7 +29,6 @@ import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.db.GlobalinterestlabelMapper;
@@ -49,6 +44,8 @@ import com.simplelife.renhai.server.test.MockAppConsts;
 import com.simplelife.renhai.server.test.RenHaiWebSocketClient;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
+import com.simplelife.renhai.server.util.DbObjectCache;
+import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
@@ -316,13 +313,13 @@ public class MainFunction extends AbstractTestCase
 	public void testBehaviorMode() throws InterruptedException
 	{
 		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit");
-		//app1.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
-		app1.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
+		app1.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		//app1.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
 		app1.connect(true);
 		
 		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndQuit");
-		//app2.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
-		app2.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
+		app2.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		//app2.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
 		app2.connect(true);
 		
 		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended
@@ -403,13 +400,24 @@ public class MainFunction extends AbstractTestCase
 	}
 	
 	@Test
+	public void testDbCache2()
+	{
+		DbObjectCache<String> cache = new DbObjectCache<>(null);
+		
+		String temp;
+		for (int i = 0; i < GlobalSetting.DBSetting.DeviceCacheCount + 50; i++)
+		{
+			temp = Integer.toString(i);
+			cache.putObject(temp, temp);
+		}
+	}
+	
+	@Test
 	public void testDBCache()
 	{
-		System.out.print(OnlineDevicePool.instance.getCapacity());
+		Device device = DBModule.instance.deviceCache.getObject(demoDeviceSn);
 		
-		SqlSession session = DAOWrapper.getSession();
-		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
-		Device device = mapper.selectWholeDeviceByDeviceSn(demoDeviceSn);
+		device = DBModule.instance.deviceCache.getObject(demoDeviceSn2);
 		
 		Devicecard card = device.getDeviceCard();
 		card.setAppVersion("30.0");

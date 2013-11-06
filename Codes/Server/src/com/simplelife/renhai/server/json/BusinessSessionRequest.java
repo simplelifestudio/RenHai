@@ -12,7 +12,6 @@ package com.simplelife.renhai.server.json;
 
 import java.util.Set;
 
-import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONArray;
@@ -21,9 +20,8 @@ import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DAOWrapper;
-import com.simplelife.renhai.server.db.DBQueryUtil;
+import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
@@ -542,10 +540,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			if (targetDevice == null)
 			{
 				// Load device from DB 
-				SqlSession session = DAOWrapper.getSession();
-				DeviceMapper mapper = session.getMapper(DeviceMapper.class);
-				targetDevice = mapper.selectWholeDeviceByDeviceSn(deviceSn);
-				session.close();
+				targetDevice = DBModule.instance.deviceCache.getObject(deviceSn);
 				
 				// Check if it's totally invalid deviceSn in DB
 				if (targetDevice == null)
@@ -664,7 +659,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 			
 		// Check if it's existent global impress label
-		Globalimpresslabel globalimpresslabel = DBQueryUtil.getGlobalimpresslabel(labelName);
+		Globalimpresslabel globalimpresslabel = DBModule.instance.impressLabelCache.getObject(labelName);
 		if (globalimpresslabel == null)
 		{
 			logger.debug("New impress label {} from device <" + deviceWrapper.getDeviceSn() + ">", labelName);
