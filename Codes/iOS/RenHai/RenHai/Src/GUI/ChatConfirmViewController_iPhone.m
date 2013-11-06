@@ -19,7 +19,7 @@
 
 #import "RHCollectionLabelCell_iPhone.h"
 
-#import "ImpressSectionHeaderView_iPhone.h"
+#import "ImpressLabelsHeaderView_iPhone.h"
 
 #define SECTION_COUNT 2
 
@@ -274,18 +274,18 @@
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader])
     {
-        ImpressSectionHeaderView_iPhone* sectionHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_IMPRESSSECTIONHEADERVIEW forIndexPath:indexPath];
+        ImpressLabelsHeaderView_iPhone* headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_IMPRESSLABELSHEADERVIEW forIndexPath:indexPath];
         
         switch (section)
         {
             case SECTION_INDEX_ASSESSES:
             {
-                sectionHeaderView.titleLabel.text = NSLocalizedString(@"Impress_Assesses", nil);
+                headerView.titleLabel.text = NSLocalizedString(@"Impress_Assesses", nil);
                 break;
             }
             case SECTION_INDEX_LABELS:
             {
-                sectionHeaderView.titleLabel.text = NSLocalizedString(@"Impress_Labels", nil);
+                headerView.titleLabel.text = NSLocalizedString(@"Impress_Labels", nil);
                 break;
             }
             default:
@@ -294,7 +294,7 @@
             }
         }
         
-        reusableView = sectionHeaderView;
+        reusableView = headerView;
     }
     
     
@@ -401,8 +401,8 @@
     UINib* nib = [UINib nibWithNibName:NIB_COLLECTIONCELL_LABEL bundle:nil];
     [_collectionView registerNib:nib forCellWithReuseIdentifier:COLLECTIONCELL_ID_IMPRESSLABEL];
     
-    nib = [UINib nibWithNibName:NIB_IMPRESSSECTIONHEADERVIEW bundle:nil];
-    [_collectionView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_IMPRESSSECTIONHEADERVIEW];
+    nib = [UINib nibWithNibName:NIB_IMPRESSLABELSHEADERVIEW bundle:nil];
+    [_collectionView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_IMPRESSLABELSHEADERVIEW];
 }
 
 - (void) _clockStart

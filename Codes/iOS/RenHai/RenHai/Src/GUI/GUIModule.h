@@ -68,10 +68,8 @@
 
 #define REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW @"InterestLabelsHeaderView"
 #define REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW @"ServerInterestLabelsHeaderView"
-#define REUSABLEVIEW_ID_IMPRESSSECTIONHEADERVIEW @"ImpressSectionHeaderView"
 #define REUSABLEVIEW_ID_IMPRESSLABELSHEADERVIEW @"ImpressLabelsHeaderView"
 
-#define NIB_IMPRESSSECTIONHEADERVIEW @"ImpressSectionHeaderView_iPhone"
 #define NIB_IMPRESSLABELSHEADERVIEW @"ImpressLabelsHeaderView_iPhone"
 
 #define NIB_INTERESTLABELSHEADERVIEW @"InterestLabelsHeaderView_iPhone"

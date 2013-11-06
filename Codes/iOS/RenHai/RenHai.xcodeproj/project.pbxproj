@@ -235,10 +235,6 @@
 		CD5633B71827FBD300D2A9A6 /* ChatAssessImpressLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5633B51827FBD300D2A9A6 /* ChatAssessImpressLabelsHeaderView_iPhone.m */; };
 		CD5633B91827FC0400D2A9A6 /* ChatAssessImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD5633B81827FC0400D2A9A6 /* ChatAssessImpressLabelsHeaderView_iPhone.xib */; };
 		CD5633BA1827FC0400D2A9A6 /* ChatAssessImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD5633B81827FC0400D2A9A6 /* ChatAssessImpressLabelsHeaderView_iPhone.xib */; };
-		CD5F065117E8810900D08426 /* ImpressSectionHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5F065017E8810900D08426 /* ImpressSectionHeaderView_iPhone.m */; };
-		CD5F065217E8810900D08426 /* ImpressSectionHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5F065017E8810900D08426 /* ImpressSectionHeaderView_iPhone.m */; };
-		CD5F065417E8813300D08426 /* ImpressSectionHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD5F065317E8813200D08426 /* ImpressSectionHeaderView_iPhone.xib */; };
-		CD5F065517E8813300D08426 /* ImpressSectionHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD5F065317E8813200D08426 /* ImpressSectionHeaderView_iPhone.xib */; };
 		CD734AA617E83E3000EF6CD4 /* help_01.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA017E83E3000EF6CD4 /* help_01.JPG */; };
 		CD734AA717E83E3000EF6CD4 /* help_02.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA117E83E3000EF6CD4 /* help_02.JPG */; };
 		CD734AA817E83E3000EF6CD4 /* help_03.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA217E83E3000EF6CD4 /* help_03.JPG */; };
@@ -494,9 +490,6 @@
 		CD5633B41827FBD300D2A9A6 /* ChatAssessImpressLabelsHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatAssessImpressLabelsHeaderView_iPhone.h; sourceTree = "<group>"; };
 		CD5633B51827FBD300D2A9A6 /* ChatAssessImpressLabelsHeaderView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatAssessImpressLabelsHeaderView_iPhone.m; sourceTree = "<group>"; };
 		CD5633B81827FC0400D2A9A6 /* ChatAssessImpressLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatAssessImpressLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
-		CD5F064F17E8810900D08426 /* ImpressSectionHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpressSectionHeaderView_iPhone.h; sourceTree = "<group>"; };
-		CD5F065017E8810900D08426 /* ImpressSectionHeaderView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImpressSectionHeaderView_iPhone.m; sourceTree = "<group>"; };
-		CD5F065317E8813200D08426 /* ImpressSectionHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImpressSectionHeaderView_iPhone.xib; sourceTree = "<group>"; };
 		CD734AA017E83E3000EF6CD4 /* help_01.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_01.JPG; sourceTree = "<group>"; };
 		CD734AA117E83E3000EF6CD4 /* help_02.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_02.JPG; sourceTree = "<group>"; };
 		CD734AA217E83E3000EF6CD4 /* help_03.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_03.JPG; sourceTree = "<group>"; };
@@ -869,9 +862,9 @@
 				C593C42E17D3296700C26367 /* DeviceViewController_iPhone.m */,
 				C593C44117D329BF00C26367 /* ImpressViewController_iPhone.h */,
 				C593C44217D329BF00C26367 /* ImpressViewController_iPhone.m */,
-				CD5F064F17E8810900D08426 /* ImpressSectionHeaderView_iPhone.h */,
-				CD5F065017E8810900D08426 /* ImpressSectionHeaderView_iPhone.m */,
-				CD5F065317E8813200D08426 /* ImpressSectionHeaderView_iPhone.xib */,
+				CD736CEC1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.h */,
+				CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */,
+				CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */,
 				C593C44517D329D200C26367 /* InterestViewController_iPhone.h */,
 				C593C44617D329D200C26367 /* InterestViewController_iPhone.m */,
 				C580526B17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.h */,
@@ -906,9 +899,6 @@
 				C53A7F0F17DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.h */,
 				C53A7F1017DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m */,
 				C53A7F1317DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib */,
-				CD736CEC1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.h */,
-				CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */,
-				CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */,
 				CD5633A41827590100D2A9A6 /* RHLabelCell_iPhone.h */,
 				CD5633A51827590100D2A9A6 /* RHLabelCell_iPhone.m */,
 				CD5633AB18275F8500D2A9A6 /* RHLabelCell_iPhone.xib */,
@@ -1121,7 +1111,6 @@
 				CD734AA917E83E3000EF6CD4 /* help_04.JPG in Resources */,
 				CD734AAA17E83E3000EF6CD4 /* help_05.JPG in Resources */,
 				CD734AAB17E83E3000EF6CD4 /* help_06.JPG in Resources */,
-				CD5F065417E8813300D08426 /* ImpressSectionHeaderView_iPhone.xib in Resources */,
 				CD5633AC18275F8500D2A9A6 /* RHLabelCell_iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1164,7 +1153,6 @@
 				C53A7F1517DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib in Resources */,
 				CD32013D17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */,
 				CD5633B11827631600D2A9A6 /* close.png in Resources */,
-				CD5F065517E8813300D08426 /* ImpressSectionHeaderView_iPhone.xib in Resources */,
 				CD5633BA1827FC0400D2A9A6 /* ChatAssessImpressLabelsHeaderView_iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1346,7 +1334,6 @@
 				CD43667417F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */,
 				CD5633A21827479900D2A9A6 /* HMLauncherView.m in Sources */,
 				CDC0519A1805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m in Sources */,
-				CD5F065117E8810900D08426 /* ImpressSectionHeaderView_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1439,7 +1426,6 @@
 				C580527217E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m in Sources */,
 				CD56339F1827479900D2A9A6 /* HMLauncherIcon.m in Sources */,
 				CD32013B17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */,
-				CD5F065217E8810900D08426 /* ImpressSectionHeaderView_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

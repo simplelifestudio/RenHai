@@ -17,15 +17,16 @@
 
 #import "RHCollectionLabelCell_iPhone.h"
 
-#import "ImpressSectionHeaderView_iPhone.h"
+#import "ImpressLabelsHeaderView_iPhone.h"
 
-#define SECTION_COUNT 2
+#define ASSESSLABELSVIEW_SECTION_COUNT 1
+#define IMPRESSLABELSVIEW_SECTION_COUNT 1
 
-#define SECTION_INDEX_ASSESSES 0
-#define SECTION_ASSESSES_ITEMCOUNT 6
+#define ASSESSLABELSVIEW_SECTION_ASSESSLABELS_INDEX 0
+#define ASSESSLABELSVIEW_SECTION_ASSESSLABELS_ITEMCOUNT 6
 
-#define SECTION_INDEX_LABELS 1
-#define SECTION_IMPRESSES_ITEMCOUNT 12
+#define IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_INDEX 0
+#define IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT 12
 
 #define DELAY_REFRESH 0.5f
 
@@ -42,6 +43,10 @@
 
 @implementation ImpressViewController_iPhone
 
+@synthesize assessLabelsView = _assessLabelsView;
+@synthesize impressLabelsView = _impressLabelsView;
+@synthesize pageControl = _pageControl;
+
 #pragma mark - Public Methods
 
 - (void)viewDidLoad
@@ -51,34 +56,46 @@
     [self _setupInstance];
 }
 
-#pragma mark - UICollectionViewDataDelegate
+#pragma mark - UICollectionViewDelegate
+
+#pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     NSInteger itemCount = 0;
     
-    switch (section)
+    if (collectionView == _assessLabelsView)
     {
-        case SECTION_INDEX_ASSESSES:
+        switch (section)
         {
-            return SECTION_ASSESSES_ITEMCOUNT;
+            case ASSESSLABELSVIEW_SECTION_ASSESSLABELS_INDEX:
+            {
+                return ASSESSLABELSVIEW_SECTION_ASSESSLABELS_ITEMCOUNT;
+            }
+            default:
+            {
+                itemCount = 0;
+                break;
+            }
         }
-        case SECTION_INDEX_LABELS:
+    }
+    else if (collectionView == _impressLabelsView)
+    {
+        switch (section)
         {
-            RHDevice* device = _userDataModule.device;
-            RHProfile* profile = device.profile;
-            RHImpressCard* impressCard = profile.impressCard;
-            
-            NSArray* impressLabelList = [impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
-            
-            itemCount = (impressLabelList.count <= SECTION_IMPRESSES_ITEMCOUNT) ? impressLabelList.count : SECTION_IMPRESSES_ITEMCOUNT;
-            
-            break;
-        }
-        default:
-        {
-            itemCount = 0;
-            break;
+            case IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_INDEX:
+            {
+                RHDevice* device = _userDataModule.device;
+                RHProfile* profile = device.profile;
+                RHImpressCard* impressCard = profile.impressCard;
+                NSArray* impressLabels = impressCard.impressLabelList;
+                itemCount = (impressLabels.count <= IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT) ? impressLabels.count : IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT;
+            }
+            default:
+            {
+                itemCount = 0;
+                break;
+            }
         }
     }
     
@@ -100,72 +117,86 @@
     NSString* labelCountStr = nil;
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
-    switch (section)
+    
+    if (collectionView == _assessLabelsView)
     {
-        case SECTION_INDEX_ASSESSES:
+        switch (section)
         {
-            NSArray* assessLabelList = impressCard.assessLabelList;
-            
-            switch (row)
+            case ASSESSLABELSVIEW_SECTION_ASSESSLABELS_INDEX:
             {
-                case 0:
+                NSArray* assessLabelList = impressCard.assessLabelList;
+                
+                switch (row)
                 {
+                    case 0:
+                    {
+                    }
+                    case 1:
+                    {
+                    }
+                    case 2:
+                    {
+                        RHImpressLabel* assessLabel = assessLabelList[row];
+                        labelName = [RHImpressLabel assessLabelName:assessLabel.labelName];
+                        labelCount = assessLabel.assessedCount;
+                        break;
+                    }
+                    case 3:
+                    {
+                        labelName = NSLocalizedString(@"Impress_ChatTotalCount", nil);
+                        labelCount = impressCard.chatTotalCount;
+                        break;
+                    }
+                    case 4:
+                    {
+                        labelName = NSLocalizedString(@"Impress_ChatTotalDuration", nil);
+                        labelCount = impressCard.chatTotalDuration;
+                        labelCountStr = [CBDateUtils timeStringWithMilliseconds:labelCount];
+                        break;
+                    }
+                    case 5:
+                    {
+                        labelName = NSLocalizedString(@"Impress_ChatLossCount", nil);
+                        labelCount = impressCard.chatLossCount;
+                        break;
+                    }
+                    default:
+                    {
+                        break;
+                    }
                 }
-                case 1:
-                {
-                }
-                case 2:
-                {
-                    RHImpressLabel* assessLabel = assessLabelList[row];
-                    labelName = [RHImpressLabel assessLabelName:assessLabel.labelName];
-                    labelCount = assessLabel.assessedCount;
-                    break;
-                }
-                case 3:
-                {
-                    labelName = NSLocalizedString(@"Impress_ChatTotalCount", nil);
-                    labelCount = impressCard.chatTotalCount;
-                    break;
-                }
-                case 4:
-                {
-                    labelName = NSLocalizedString(@"Impress_ChatTotalDuration", nil);
-                    labelCount = impressCard.chatTotalDuration;
-                    labelCountStr = [CBDateUtils timeStringWithMilliseconds:labelCount];
-                    break;
-                }
-                case 5:
-                {
-                    labelName = NSLocalizedString(@"Impress_ChatLossCount", nil);
-                    labelCount = impressCard.chatLossCount;
-                    break;
-                }
-                default:
-                {
-                    break;
-                }
+                
+                break;
             }
-            
-            break;
-        }
-        case SECTION_INDEX_LABELS:
-        {
-            NSArray* impressLabelList = [impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
-            
-            RHImpressLabel* impressLabel = nil;
-            if (0 < impressLabelList.count && row < impressLabelList.count)
+            default:
             {
-                impressLabel = impressLabelList[row];
-
-                labelName = impressLabel.labelName;
-                labelCount = impressLabel.assessedCount;
+                break;
             }
-
-            break;
         }
-        default:
+    }
+    else if (collectionView == _impressLabelsView)
+    {
+        switch (section)
         {
-            break;
+            case IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_INDEX:
+            {
+                NSArray* impressLabelList = [impressCard topImpressLabelList:IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT];
+                
+                RHImpressLabel* impressLabel = nil;
+                if (0 < impressLabelList.count && row < impressLabelList.count)
+                {
+                    impressLabel = impressLabelList[row];
+                    
+                    labelName = impressLabel.labelName;
+                    labelCount = impressLabel.assessedCount;
+                }
+                
+                break;
+            }
+            default:
+            {
+                break;
+            }
         }
     }
     
@@ -192,7 +223,18 @@
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return SECTION_COUNT;
+    NSInteger sectionsCount = 0;
+    
+    if (collectionView == _assessLabelsView)
+    {
+        sectionsCount = ASSESSLABELSVIEW_SECTION_COUNT;
+    }
+    else if (collectionView == _impressLabelsView)
+    {
+        sectionsCount = IMPRESSLABELSVIEW_SECTION_COUNT;
+    }
+    
+    return sectionsCount;
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
@@ -203,31 +245,54 @@
     
     if ([kind isEqualToString:UICollectionElementKindSectionHeader])
     {
-        ImpressSectionHeaderView_iPhone* sectionHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_IMPRESSSECTIONHEADERVIEW forIndexPath:indexPath];
+        ImpressLabelsHeaderView_iPhone* headerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_IMPRESSLABELSHEADERVIEW forIndexPath:indexPath];
 
-        switch (section)
+        if (collectionView == _assessLabelsView)
         {
-            case SECTION_INDEX_ASSESSES:
+            switch (section)
             {
-                sectionHeaderView.titleLabel.text = NSLocalizedString(@"Impress_Chats", nil);
-                break;
+                case ASSESSLABELSVIEW_SECTION_ASSESSLABELS_INDEX:
+                {
+                    headerView.titleLabel.text = NSLocalizedString(@"Impress_Chats", nil);
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
             }
-            case SECTION_INDEX_LABELS:
+        }
+        else if (collectionView == _impressLabelsView)
+        {
+            switch (section)
             {
-                sectionHeaderView.titleLabel.text = NSLocalizedString(@"Impress_Labels", nil);                
-                break;
-            }
-            default:
-            {
-                break;
+                case IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_INDEX:
+                {
+                    headerView.titleLabel.text = NSLocalizedString(@"Impress_Labels", nil);
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
             }
         }
         
-        reusableView = sectionHeaderView;        
+        reusableView = headerView;        
     }
     
     
     return reusableView;
+}
+
+#pragma mark - UIScrollViewDelegate
+
+-(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (scrollView == _impressLabelsView)
+    {
+        
+    }
 }
 
 #pragma mark - Private Methods
@@ -244,38 +309,19 @@
 
 -(void)_setupCollectionView
 {
+    _assessLabelsView.delegate = self;
+    _assessLabelsView.dataSource = self;
+    
+    _impressLabelsView.delegate = self;
+    _impressLabelsView.dataSource = self;
+    
     UINib* nib = [UINib nibWithNibName:NIB_COLLECTIONCELL_LABEL bundle:nil];
-    [self.collectionView registerNib:nib forCellWithReuseIdentifier:COLLECTIONCELL_ID_IMPRESSLABEL];
+    [_assessLabelsView registerNib:nib forCellWithReuseIdentifier:COLLECTIONCELL_ID_IMPRESSLABEL];
+    [_impressLabelsView registerNib:nib forCellWithReuseIdentifier:COLLECTIONCELL_ID_IMPRESSLABEL];
     
-    nib = [UINib nibWithNibName:NIB_IMPRESSSECTIONHEADERVIEW bundle:nil];
-    [self.collectionView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_IMPRESSSECTIONHEADERVIEW];
-    
-    [self _setupRefresher];
-}
-
--(void)_setupRefresher
-{
-    _refresher = [[UIRefreshControl alloc] init];
-    [self.collectionView addSubview:_refresher];
-    [_refresher addTarget:self action:@selector(_onPullToRefresh) forControlEvents:UIControlEventValueChanged];
-    [self _resetRefresherTitle];
-}
-
--(void)_onPullToRefresh
-{
-    _refresher.attributedTitle = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"Common_Refreshing", nil)];
-    
-    [self performSelector:@selector(_refreshImpressData) withObject:nil afterDelay:DELAY_UIREFRESHCONTROL_SHOW];
-}
-
--(void)_resetRefresher
-{
-    [self performSelector:@selector(_resetRefresherTitle) withObject:nil afterDelay:DELAY_UIREFRESHCONTROL_RESET];
-}
-
--(void)_resetRefresherTitle
-{
-//    _refresher.attributedTitle = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"Common_PullToRefresh", nil)];
+    nib = [UINib nibWithNibName:NIB_IMPRESSLABELSHEADERVIEW bundle:nil];
+    [_assessLabelsView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_IMPRESSLABELSHEADERVIEW];
+    [_impressLabelsView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_IMPRESSLABELSHEADERVIEW];
 }
 
 -(void)_refreshImpressData
@@ -297,7 +343,8 @@
                     [_userDataModule saveUserData];
 
                     [CBAppUtils asyncProcessInMainThread:^(){
-                        [self.collectionView reloadData];
+                        [_assessLabelsView reloadData];
+                        [_impressLabelsView reloadData];
                     }];
                 }
                 @catch (NSException *exception)
@@ -312,11 +359,8 @@
             failureCompletionBlock:^(){
             }
             afterCompletionBlock:^(){
-                [CBAppUtils asyncProcessInMainThread:^(){
-                [_refresher endRefreshing];
-                [self _resetRefresher];
-            }];
-        }];
+            }
+         ];
     }];
 }
 
