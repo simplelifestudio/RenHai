@@ -111,6 +111,10 @@
 
 "ChatAssess_Action_Continue" = "Continue";
 "ChatAssess_Action_Finish" = "Finish";
+"ChatAssess_Action_AddImpressLabel" = "Add";
+"ChatAssess_Action_DelImpressLabel" = "Del";
+"ChatAssess_Action_CopyImpressLabel" = "Copy";
 "ChatAssess_AssessLabels" = "Chat Impress";
-"ChatAssess_ImpressLabels" = "Impress Labels";
+"ChatAssess_AddImpressLabels" = "Add Impress Labels";
+"ChatAssess_ExistImpressLabels" = "Exist Impress Labels";
 "ChatAssess_Empty" = "Empty";

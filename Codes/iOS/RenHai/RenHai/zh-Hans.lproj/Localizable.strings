@@ -111,6 +111,10 @@
 
 "ChatAssess_Action_Continue" = "继续";
 "ChatAssess_Action_Finish" = "结束";
-"ChatAssess_AssessLabels" = "聊天印象";
-"ChatAssess_ImpressLabels" = "评价标签";
+"ChatAssess_Action_AddImpressLabel" = "新增";
+"ChatAssess_Action_DelImpressLabel" = "删除";
+"ChatAssess_Action_CopyImpressLabel" = "复制";
+"ChatAssess_AssessLabels" = "本次聊天印象";
+"ChatAssess_AddImpressLabels" = "本次新增印象标签";
+"ChatAssess_ExistImpressLabels" = "对方已有印象标签";
 "ChatAssess_Empty" = "空缺";

@@ -7,7 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="MpF-he-oVX" customClass="ImpressLabelsHeaderView_iPhone">
+        <view contentMode="scaleToFill" id="MpF-he-oVX" customClass="ChatAssessExistImpressLabelsHeaderView_iPhone">
             <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -18,25 +18,33 @@
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="rft-sW-0XC" userLabel="delButton" customClass="FUIButton">
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="rft-sW-0XC" userLabel="refreshButton" customClass="FUIButton">
                     <rect key="frame" x="220" y="5" width="50" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="删除">
+                    <state key="normal" title="刷新">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="didPressRefreshButton:" destination="MpF-he-oVX" eventType="touchUpInside" id="u7S-1z-kNn"/>
+                    </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Xt6-Ah-4Ln" userLabel="orderButton" customClass="FUIButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Xt6-Ah-4Ln" userLabel="cloneButton" customClass="FUIButton">
                     <rect key="frame" x="270" y="5" width="50" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="排序">
+                    <state key="normal" title="复制">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="didPressCloneButton:" destination="MpF-he-oVX" eventType="touchUpInside" id="zed-j7-hZN"/>
+                    </connections>
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="titleLabel" destination="1ge-I9-RMY" id="h6f-sh-70b"/>
+                <outlet property="cloneButton" destination="Xt6-Ah-4Ln" id="h35-nF-mVa"/>
+                <outlet property="refreshButton" destination="rft-sW-0XC" id="YK5-aU-LGz"/>
+                <outlet property="titleLabel" destination="1ge-I9-RMY" id="Csu-0L-i7e"/>
             </connections>
         </view>
     </objects>
