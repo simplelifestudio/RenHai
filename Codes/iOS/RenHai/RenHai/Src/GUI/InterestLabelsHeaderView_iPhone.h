@@ -12,4 +12,12 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *headerTitleLabel;
 
+@property (weak, nonatomic) IBOutlet FUIButton *createButton;
+@property (weak, nonatomic) IBOutlet FUIButton *delButton;
+@property (weak, nonatomic) IBOutlet FUIButton *orderButton;
+
+- (IBAction)didPressCreateButton:(id)sender;
+- (IBAction)didPressDelButton:(id)sender;
+- (IBAction)didPressOrderButton:(id)sender;
+
 @end

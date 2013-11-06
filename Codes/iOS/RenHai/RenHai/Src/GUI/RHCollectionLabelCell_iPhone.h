@@ -15,7 +15,18 @@
 @required
 -(void) onTextFieldDoneEditing:(RHCollectionLabelCell_iPhone*)cell labelName:(NSString*) labelName;
 
+@optional
+-(void) didDelete;
+
 @end
+
+typedef enum
+{
+    CellMode_Normal = 0,
+    CellMode_Delete,
+    CellMode_Order
+}
+CellMode;
 
 @interface RHCollectionLabelCell_iPhone : UICollectionViewCell
 
@@ -25,6 +36,9 @@
 @property (strong, nonatomic) id<RHCollectionLabelCellEditingDelegate> editingDelegate;
 
 @property (nonatomic) BOOL isEmptyCell;
+
+@property (nonatomic) CellMode cellMode;
+@property (nonatomic) BOOL shakeCell;
 
 - (IBAction)textFieldDoneEditing:(id)sender;
 

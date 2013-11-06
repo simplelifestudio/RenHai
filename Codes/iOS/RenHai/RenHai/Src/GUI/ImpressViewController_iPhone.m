@@ -55,6 +55,8 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
+    NSInteger itemCount = 0;
+    
     switch (section)
     {
         case SECTION_INDEX_ASSESSES:
@@ -63,15 +65,24 @@
         }
         case SECTION_INDEX_LABELS:
         {
-//            NSArray* impressLabelList = [_impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
-//            return impressLabelList.count;
-            return SECTION_IMPRESSES_ITEMCOUNT;
+            RHDevice* device = _userDataModule.device;
+            RHProfile* profile = device.profile;
+            RHImpressCard* impressCard = profile.impressCard;
+            
+            NSArray* impressLabelList = [impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
+            
+            itemCount = (impressLabelList.count <= SECTION_IMPRESSES_ITEMCOUNT) ? impressLabelList.count : SECTION_IMPRESSES_ITEMCOUNT;
+            
+            break;
         }
         default:
         {
-            return 0;
+            itemCount = 0;
+            break;
         }
     }
+    
+    return itemCount;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -148,11 +159,6 @@
 
                 labelName = impressLabel.labelName;
                 labelCount = impressLabel.assessedCount;
-            }
-            else
-            {
-                labelName = NSLocalizedString(@"Impress_Empty", nil);
-                isEmptyCell = YES;
             }
 
             break;
@@ -269,7 +275,7 @@
 
 -(void)_resetRefresherTitle
 {
-    _refresher.attributedTitle = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"Common_PullToRefresh", nil)];
+//    _refresher.attributedTitle = [[NSAttributedString alloc] initWithString:NSLocalizedString(@"Common_PullToRefresh", nil)];
 }
 
 -(void)_refreshImpressData
