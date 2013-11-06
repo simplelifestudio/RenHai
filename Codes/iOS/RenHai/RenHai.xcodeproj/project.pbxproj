@@ -215,18 +215,6 @@
 		CD3C04E8181FD1C0002B19A3 /* BusinessStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = CD3C04E6181FD1C0002B19A3 /* BusinessStatus.m */; };
 		CD43667417F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */; };
 		CD43667517F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */; };
-		CD56339C1827479900D2A9A6 /* HMLauncherData.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5633921827479900D2A9A6 /* HMLauncherData.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		CD56339D1827479900D2A9A6 /* HMLauncherData.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5633921827479900D2A9A6 /* HMLauncherData.m */; };
-		CD56339E1827479900D2A9A6 /* HMLauncherIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5633951827479900D2A9A6 /* HMLauncherIcon.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		CD56339F1827479900D2A9A6 /* HMLauncherIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5633951827479900D2A9A6 /* HMLauncherIcon.m */; };
-		CD5633A01827479900D2A9A6 /* HMLauncherItem.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5633971827479900D2A9A6 /* HMLauncherItem.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		CD5633A11827479900D2A9A6 /* HMLauncherItem.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5633971827479900D2A9A6 /* HMLauncherItem.m */; };
-		CD5633A21827479900D2A9A6 /* HMLauncherView.m in Sources */ = {isa = PBXBuildFile; fileRef = CD56339A1827479900D2A9A6 /* HMLauncherView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		CD5633A31827479900D2A9A6 /* HMLauncherView.m in Sources */ = {isa = PBXBuildFile; fileRef = CD56339A1827479900D2A9A6 /* HMLauncherView.m */; };
-		CD5633A61827590100D2A9A6 /* RHLabelCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5633A51827590100D2A9A6 /* RHLabelCell_iPhone.m */; };
-		CD5633A71827590100D2A9A6 /* RHLabelCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5633A51827590100D2A9A6 /* RHLabelCell_iPhone.m */; };
-		CD5633AC18275F8500D2A9A6 /* RHLabelCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD5633AB18275F8500D2A9A6 /* RHLabelCell_iPhone.xib */; };
-		CD5633AD18275F8500D2A9A6 /* RHLabelCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD5633AB18275F8500D2A9A6 /* RHLabelCell_iPhone.xib */; };
 		CD5633B01827631600D2A9A6 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = CD5633AE1827631600D2A9A6 /* close.png */; };
 		CD5633B11827631600D2A9A6 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = CD5633AE1827631600D2A9A6 /* close.png */; };
 		CD5633B21827631600D2A9A6 /* close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD5633AF1827631600D2A9A6 /* close@2x.png */; };
@@ -477,20 +465,6 @@
 		CD3C04E6181FD1C0002B19A3 /* BusinessStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusinessStatus.m; sourceTree = "<group>"; };
 		CD43667217F97C2E00586443 /* NSDictionary+MutableDeepCopy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+MutableDeepCopy.h"; sourceTree = "<group>"; };
 		CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MutableDeepCopy.m"; sourceTree = "<group>"; };
-		CD5633911827479900D2A9A6 /* HMLauncherData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMLauncherData.h; sourceTree = "<group>"; };
-		CD5633921827479900D2A9A6 /* HMLauncherData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMLauncherData.m; sourceTree = "<group>"; };
-		CD5633931827479900D2A9A6 /* HMLauncherDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMLauncherDataSource.h; sourceTree = "<group>"; };
-		CD5633941827479900D2A9A6 /* HMLauncherIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMLauncherIcon.h; sourceTree = "<group>"; };
-		CD5633951827479900D2A9A6 /* HMLauncherIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMLauncherIcon.m; sourceTree = "<group>"; };
-		CD5633961827479900D2A9A6 /* HMLauncherItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMLauncherItem.h; sourceTree = "<group>"; };
-		CD5633971827479900D2A9A6 /* HMLauncherItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMLauncherItem.m; sourceTree = "<group>"; };
-		CD5633981827479900D2A9A6 /* HMLauncherView-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "HMLauncherView-Prefix.pch"; sourceTree = "<group>"; };
-		CD5633991827479900D2A9A6 /* HMLauncherView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMLauncherView.h; sourceTree = "<group>"; };
-		CD56339A1827479900D2A9A6 /* HMLauncherView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HMLauncherView.m; sourceTree = "<group>"; };
-		CD56339B1827479900D2A9A6 /* HMLauncherViewDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HMLauncherViewDelegate.h; sourceTree = "<group>"; };
-		CD5633A41827590100D2A9A6 /* RHLabelCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLabelCell_iPhone.h; sourceTree = "<group>"; };
-		CD5633A51827590100D2A9A6 /* RHLabelCell_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLabelCell_iPhone.m; sourceTree = "<group>"; };
-		CD5633AB18275F8500D2A9A6 /* RHLabelCell_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHLabelCell_iPhone.xib; sourceTree = "<group>"; };
 		CD5633AE1827631600D2A9A6 /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
 		CD5633AF1827631600D2A9A6 /* close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close@2x.png"; sourceTree = "<group>"; };
 		CD5633B41827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatAssessAddImpressLabelsHeaderView_iPhone.h; sourceTree = "<group>"; };
@@ -628,7 +602,6 @@
 		C55B441117CF587A009BB21B /* Lib */ = {
 			isa = PBXGroup;
 			children = (
-				CD5633901827479900D2A9A6 /* HMLauncherView */,
 				C55B444D17CF5C14009BB21B /* GTMBase64 */,
 			);
 			path = Lib;
@@ -915,9 +888,6 @@
 				C53A7F0F17DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.h */,
 				C53A7F1017DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m */,
 				C53A7F1317DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib */,
-				CD5633A41827590100D2A9A6 /* RHLabelCell_iPhone.h */,
-				CD5633A51827590100D2A9A6 /* RHLabelCell_iPhone.m */,
-				CD5633AB18275F8500D2A9A6 /* RHLabelCell_iPhone.xib */,
 			);
 			path = GUI;
 			sourceTree = "<group>";
@@ -982,24 +952,6 @@
 				CD3C04E6181FD1C0002B19A3 /* BusinessStatus.m */,
 			);
 			path = BusinessStatus;
-			sourceTree = "<group>";
-		};
-		CD5633901827479900D2A9A6 /* HMLauncherView */ = {
-			isa = PBXGroup;
-			children = (
-				CD5633911827479900D2A9A6 /* HMLauncherData.h */,
-				CD5633921827479900D2A9A6 /* HMLauncherData.m */,
-				CD5633931827479900D2A9A6 /* HMLauncherDataSource.h */,
-				CD5633941827479900D2A9A6 /* HMLauncherIcon.h */,
-				CD5633951827479900D2A9A6 /* HMLauncherIcon.m */,
-				CD5633961827479900D2A9A6 /* HMLauncherItem.h */,
-				CD5633971827479900D2A9A6 /* HMLauncherItem.m */,
-				CD5633981827479900D2A9A6 /* HMLauncherView-Prefix.pch */,
-				CD5633991827479900D2A9A6 /* HMLauncherView.h */,
-				CD56339A1827479900D2A9A6 /* HMLauncherView.m */,
-				CD56339B1827479900D2A9A6 /* HMLauncherViewDelegate.h */,
-			);
-			path = HMLauncherView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1130,7 +1082,6 @@
 				CD734AA917E83E3000EF6CD4 /* help_04.JPG in Resources */,
 				CD734AAA17E83E3000EF6CD4 /* help_05.JPG in Resources */,
 				CD734AAB17E83E3000EF6CD4 /* help_06.JPG in Resources */,
-				CD5633AC18275F8500D2A9A6 /* RHLabelCell_iPhone.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1164,7 +1115,6 @@
 				C596284017DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png in Resources */,
 				C54DC8C817DC069900BBD498 /* enterbutton_highlighted.png in Resources */,
 				C54DC8CA17DC069900BBD498 /* enterbutton_highlighted@2x.png in Resources */,
-				CD5633AD18275F8500D2A9A6 /* RHLabelCell_iPhone.xib in Resources */,
 				CDDA9FAC1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */,
 				C54DC8CC17DC069900BBD498 /* enterbutton_normal.png in Resources */,
 				C54DC8CE17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
@@ -1292,7 +1242,6 @@
 				C50505D417D2BD4800DB6589 /* CBSecurityUtils.m in Sources */,
 				C50505D617D2BD4800DB6589 /* CBStringUtils.m in Sources */,
 				C50505D817D2BD4800DB6589 /* CBUIUtils.m in Sources */,
-				CD5633A61827590100D2A9A6 /* RHLabelCell_iPhone.m in Sources */,
 				CD1DFB0918001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */,
 				C50505DA17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
 				C50505DC17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */,
@@ -1302,10 +1251,8 @@
 				C50505EA17D2D26C00DB6589 /* GUIStyle.m in Sources */,
 				C50505EE17D2D28600DB6589 /* CommunicationModule.m in Sources */,
 				C593C41817D2F5BF00C26367 /* HomeViewController_iPhone.m in Sources */,
-				CD56339C1827479900D2A9A6 /* HMLauncherData.m in Sources */,
 				CDC051921802E33D006158B8 /* RHServerDeviceCount.m in Sources */,
 				C593C41B17D3244000C26367 /* AppDataModule.m in Sources */,
-				CD56339E1827479900D2A9A6 /* HMLauncherIcon.m in Sources */,
 				C593C41F17D3258600C26367 /* UserDataModule.m in Sources */,
 				C593C42317D3259600C26367 /* WebRTCModule.m in Sources */,
 				CDFEA324182A1E5C00F0351D /* ChatAssessExistImpressLabelsHeaderView_iPhone.m in Sources */,
@@ -1341,7 +1288,6 @@
 				C59E2C1817D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */,
 				C596284317DA1C8B009127E6 /* RHNavigationController.m in Sources */,
 				C54DC8D517DC11A000BBD498 /* CEPlayer.m in Sources */,
-				CD5633A01827479900D2A9A6 /* HMLauncherItem.m in Sources */,
 				C54DC8D717DC11A000BBD498 /* CBRoundProgressLayer.m in Sources */,
 				C54DC8D917DC11A000BBD498 /* CBRoundProgressView.m in Sources */,
 				CD3C04DF181F906B002B19A3 /* BusinessStatusModule.m in Sources */,
@@ -1353,7 +1299,6 @@
 				CD32013A17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */,
 				CD34DCB3180A8F4F003BBE06 /* RHBusinessSession.m in Sources */,
 				CD43667417F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */,
-				CD5633A21827479900D2A9A6 /* HMLauncherView.m in Sources */,
 				CDC0519A1805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1392,12 +1337,10 @@
 				C50505EF17D2D28600DB6589 /* CommunicationModule.m in Sources */,
 				CD34DCB0180A7BC5003BBE06 /* ChatWizardController.m in Sources */,
 				C593C41C17D3244000C26367 /* AppDataModule.m in Sources */,
-				CD5633A11827479900D2A9A6 /* HMLauncherItem.m in Sources */,
 				C593C42017D3258600C26367 /* UserDataModule.m in Sources */,
 				C593C42417D3259600C26367 /* WebRTCModule.m in Sources */,
 				C593C42C17D3284600C26367 /* SplashViewController_iPhone.m in Sources */,
 				C593C43017D3296800C26367 /* DeviceViewController_iPhone.m in Sources */,
-				CD56339D1827479900D2A9A6 /* HMLauncherData.m in Sources */,
 				C593C44417D329BF00C26367 /* ImpressViewController_iPhone.m in Sources */,
 				C593C44817D329D200C26367 /* InterestViewController_iPhone.m in Sources */,
 				C593C44C17D329E100C26367 /* ConfigViewController_iPhone.m in Sources */,
@@ -1406,7 +1349,6 @@
 				C593C45817D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */,
 				C593C46017D32AC800C26367 /* ChatAssessViewController_iPhone.m in Sources */,
 				C593C46417D32ADE00C26367 /* ChatVideoViewController_iPhone.m in Sources */,
-				CD5633A71827590100D2A9A6 /* RHLabelCell_iPhone.m in Sources */,
 				C593C46817D32AF600C26367 /* WarningViewController_iPhone.m in Sources */,
 				C593C46C17D4224B00C26367 /* LeftBarViewController_iPhone.m in Sources */,
 				C593C47017D4235A00C26367 /* LeftBarHeaderView_iPhone.m in Sources */,
@@ -1421,7 +1363,6 @@
 				C593C49617D46CC400C26367 /* RHInterestLabel.m in Sources */,
 				C5945F5C17D56DDF0084BB10 /* CBJSONUtils.m in Sources */,
 				CDC051931802E33D006158B8 /* RHServerDeviceCount.m in Sources */,
-				CD5633A31827479900D2A9A6 /* HMLauncherView.m in Sources */,
 				C5945F5F17D56F5D0084BB10 /* CommonModuleTest.m in Sources */,
 				CD3C04E0181F906B002B19A3 /* BusinessStatusModule.m in Sources */,
 				C594602B17D6C7C90084BB10 /* HTTPAgent.m in Sources */,
@@ -1446,7 +1387,6 @@
 				C53A7F1217DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m in Sources */,
 				C580526E17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m in Sources */,
 				C580527217E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m in Sources */,
-				CD56339F1827479900D2A9A6 /* HMLauncherIcon.m in Sources */,
 				CD32013B17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
