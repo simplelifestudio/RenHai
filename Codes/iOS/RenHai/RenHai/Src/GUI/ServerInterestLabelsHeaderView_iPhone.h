@@ -12,4 +12,10 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *headerTitleLabel;
 
+@property (weak, nonatomic) IBOutlet FUIButton *refreshButton;
+@property (weak, nonatomic) IBOutlet FUIButton *cloneButton;
+
+- (IBAction)didPressRefreshButton:(id)sender;
+- (IBAction)didPressCloneButton:(id)sender;
+
 @end

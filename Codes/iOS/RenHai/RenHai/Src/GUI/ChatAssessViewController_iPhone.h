@@ -14,8 +14,9 @@
 
 @interface ChatAssessViewController_iPhone : UIViewController <ChatWizardPage, UICollectionViewDataSource, UICollectionViewDelegate>
 
-@property (weak, nonatomic) IBOutlet UICollectionView *partnerAssessLabelsView;
-@property (weak, nonatomic) IBOutlet UICollectionView *partnerImpressLabelsView;
+@property (weak, nonatomic) IBOutlet UICollectionView *assessLabelsView;
+@property (weak, nonatomic) IBOutlet UICollectionView *addImpressLabelsView;
+@property (weak, nonatomic) IBOutlet UICollectionView *existImpressLabelsView;
 
 @property (weak, nonatomic) IBOutlet UILabel *countLabel;
 

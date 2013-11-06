@@ -49,12 +49,10 @@
 "Impress_ChatTotalCount" = "聊天次数";
 "Impress_ChatTotalDuration" = "聊天时长";
 "Impress_ChatLossCount" = "断线次数";
-"Impress_Empty" = "空缺";
 
 "Interest_InterestLabels" = "兴趣标签";
 "Interest_CurrentHotInterestLabels" = "当前热门兴趣标签";
 "Interest_Action_RefreshHotInterestLabels" = "换一批";
-"Interest_Empty" = "空缺";
 
 "Config_PushNotification" = "推送通知";
 "Config_Broadcast" = "广播信息";
@@ -111,6 +109,9 @@
 
 "ChatAssess_Action_Continue" = "继续";
 "ChatAssess_Action_Finish" = "结束";
-"ChatAssess_AssessLabels" = "聊天印象";
-"ChatAssess_ImpressLabels" = "评价标签";
-"ChatAssess_Empty" = "空缺";
+"ChatAssess_Action_AddImpressLabel" = "新增";
+"ChatAssess_Action_DelImpressLabel" = "删除";
+"ChatAssess_Action_CopyImpressLabel" = "复制";
+"ChatAssess_AssessLabels" = "本次聊天印象";
+"ChatAssess_AddImpressLabels" = "本次新增印象标签";
+"ChatAssess_ExistImpressLabels" = "对方已有印象标签";

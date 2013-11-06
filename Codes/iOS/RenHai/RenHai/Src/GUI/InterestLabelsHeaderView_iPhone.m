@@ -10,6 +10,12 @@
 
 @implementation InterestLabelsHeaderView_iPhone
 
+@synthesize createButton = _createButton;
+@synthesize delButton = _delButton;
+@synthesize orderButton = _orderButton;
+
+#pragma mark - Public Methods
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
@@ -18,6 +24,23 @@
     
     }
     return self;
+}
+
+#pragma mark - IBActions
+
+- (IBAction)didPressCreateButton:(id)sender
+{
+    
+}
+
+- (IBAction)didPressDelButton:(id)sender
+{
+    
+}
+
+- (IBAction)didPressOrderButton:(id)sender
+{
+    
 }
 
 @end

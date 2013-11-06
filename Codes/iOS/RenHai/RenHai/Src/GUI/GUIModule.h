@@ -68,17 +68,19 @@
 
 #define REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW @"InterestLabelsHeaderView"
 #define REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW @"ServerInterestLabelsHeaderView"
-#define REUSABLEVIEW_ID_IMPRESSSECTIONHEADERVIEW @"ImpressSectionHeaderView"
 #define REUSABLEVIEW_ID_IMPRESSLABELSHEADERVIEW @"ImpressLabelsHeaderView"
+#define REUSABLEVIEW_ID_ADDIMPRESSLABELSHEADERVIEW @"AddImpressLabelsHeaderView"
+#define REUSABLEVIEW_ID_EXISTIMPRESSLABELSHEADERVIEW @"ExistImpressLabelsHeaderView"
 
-#define NIB_IMPRESSSECTIONHEADERVIEW @"ImpressSectionHeaderView_iPhone"
 #define NIB_IMPRESSLABELSHEADERVIEW @"ImpressLabelsHeaderView_iPhone"
+#define NIB_ADDIMPRESSLABELSHEADERVIEW @"ChatAssessAddImpressLabelsHeaderView_iPhone"
+#define NIB_EXISTIMPRESSLABELSHEADERVIEW @"ChatAssessExistImpressLabelsHeaderView_iPhone"
 
 #define NIB_INTERESTLABELSHEADERVIEW @"InterestLabelsHeaderView_iPhone"
 #define NIB_SERVERINTERESTLABELSHEADERVIEW @"ServerInterestLabelsHeaderView_iPhone"
 
-#define DELAY_UIREFRESHCONTROL_SHOW 0.75f
-#define DELAY_UIREFRESHCONTROL_RESET 0.75f
+#define DELAY_UIREFRESHCONTROL_SHOW 0
+#define DELAY_UIREFRESHCONTROL_RESET 0
 
 #define TABLECELL_ID_LABELER @"RHTableViewLabelCell_iPhone"
 #define NIB_TABLECELL_LABELER @"RHTableViewLabelCell_iPhone"

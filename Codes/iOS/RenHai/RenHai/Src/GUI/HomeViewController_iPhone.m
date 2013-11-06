@@ -20,7 +20,7 @@
 #import "BusinessStatusModule.h"
 
 #define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
-#define INTERVAL_DATASYNC 10
+#define INTERVAL_DATASYNC 10.0f
 
 typedef enum
 {
@@ -83,7 +83,7 @@ EnterOperationStatus;
     [self _updateUIWithServerData];
     [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Ready];
     
-    [NSThread detachNewThreadSelector:@selector(_activateDataSyncTimer) toTarget:self withObject:nil];
+    [self _activateDataSyncTimer];
     
     [self _registerNotifications];
 }
@@ -206,13 +206,14 @@ static float progress = 0.0;
 
 -(void)_activateDataSyncTimer
 {
-    [self _deactivateDataSyncTimer];
-    
-    _dataSyncTimer = [NSTimer timerWithTimeInterval:INTERVAL_DATASYNC target:self selector:@selector(_serverDataSync) userInfo:nil repeats:YES];
-    
-    NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
-    [currentRunLoop addTimer:_dataSyncTimer forMode:NSDefaultRunLoopMode];
-    [currentRunLoop run];
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
+        [self _deactivateDataSyncTimer];
+        
+        _dataSyncTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_DATASYNC target:self selector:@selector(_serverDataSync) userInfo:nil repeats:YES];
+        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+        [currentRunLoop addTimer:_dataSyncTimer forMode:NSDefaultRunLoopMode];
+        [currentRunLoop run];
+    }];
 }
 
 -(void)_deactivateDataSyncTimer
@@ -369,6 +370,8 @@ static float progress = 0.0;
                                              selector:@selector(_deactivateDataSyncTimer)
                                                  name:UIApplicationDidEnterBackgroundNotification
                                                object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_activateDataSyncTimer) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 -(void)_unregisterNotifications

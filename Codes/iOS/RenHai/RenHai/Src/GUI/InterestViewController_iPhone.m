@@ -17,11 +17,14 @@
 
 #import "RHCollectionLabelCell_iPhone.h"
 
-#define SECTION_COUNT 2
-#define SECTION_INDEX_INTERESTLABELS 0
-#define ITEM_COUNT_INTERESTLABELS 9
-#define SECTION_INDEX_SERVERINTERESTLABELS 1
-#define ITEM_COUNT_SERVERINTERESTLABELS 9
+#define INTERESTLABELS_SECTION_COUNT 1
+#define SERVERINTERESTLABELS_SECTION_COUNT 1
+
+#define INTERESTLABELS_SECTION_INDEX_INTERESTLABELS 0
+#define INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS 6
+
+#define SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS 0
+#define SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS 12
 
 @interface InterestViewController_iPhone () <RHCollectionLabelCellEditingDelegate>
 {
@@ -39,6 +42,10 @@
 @end
 
 @implementation InterestViewController_iPhone
+
+@synthesize interestLabelsView = _interestLabelsView;
+@synthesize serverInterestLabelsView = _serverInterestLabelsView;
+@synthesize pageControl = _pageControl;
 
 #pragma mark - Public Methods
 
@@ -102,16 +109,21 @@
 
 -(void)_setupCollectionView
 {
-    UINib* nib = [UINib nibWithNibName:NIB_COLLECTIONCELL_LABEL bundle:nil];
-    [self.collectionView registerNib:nib forCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL];
+    _interestLabelsView.delegate = self;
+    _interestLabelsView.dataSource = self;
     
-    [self.collectionView registerClass:[InterestLabelsHeaderView_iPhone class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW];
+    _serverInterestLabelsView.delegate = self;
+    _serverInterestLabelsView.dataSource = self;
+    
+    UINib* nib = [UINib nibWithNibName:NIB_COLLECTIONCELL_LABEL bundle:nil];
+    [_interestLabelsView registerNib:nib forCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL];
+    [_serverInterestLabelsView registerNib:nib forCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL];
     
     nib = [UINib nibWithNibName:NIB_INTERESTLABELSHEADERVIEW bundle:nil];
-    [self.collectionView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW];
+    [_interestLabelsView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW];
     
     nib = [UINib nibWithNibName:NIB_SERVERINTERESTLABELSHEADERVIEW bundle:nil];
-    [self.collectionView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW];
+    [_serverInterestLabelsView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW];
 }
 
 -(void)_updateInterestCard
@@ -146,7 +158,7 @@
             }
             afterCompletionBlock:^(){
                 [CBAppUtils asyncProcessInMainThread:^(){
-                    [self.collectionView reloadData];
+                    [_interestLabelsView reloadData];
                 }];
             }
          ];
@@ -167,7 +179,7 @@
                 [server fromJSONObject:serverDic];
                 
                 [CBAppUtils asyncProcessInMainThread:^(){
-                    [self.collectionView reloadData];
+                    [_serverInterestLabelsView reloadData];
                 }];
             }
             @catch (NSException *exception)
@@ -192,39 +204,74 @@
 
 #pragma mark - UICollectionViewDataSource
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)cv
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return SECTION_COUNT;
+    NSInteger sectionCount = 0;
+    
+    if (collectionView == _interestLabelsView)
+    {
+        sectionCount = INTERESTLABELS_SECTION_COUNT;
+    }
+    else if (collectionView == _serverInterestLabelsView)
+    {
+        sectionCount = SERVERINTERESTLABELS_SECTION_COUNT;
+    }
+    
+    return sectionCount;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)cv numberOfItemsInSection:(NSInteger)section
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     NSInteger itemsCount = 0;
     
-    switch (section)
+    if (collectionView == _interestLabelsView)
     {
-        case SECTION_INDEX_INTERESTLABELS:
+        switch (section)
         {
-            itemsCount = ITEM_COUNT_INTERESTLABELS;
-            break;
+            case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
+            {
+                RHDevice* device = _userDataModule.device;
+                RHProfile* profile = device.profile;
+                RHInterestCard* interestCard = profile.interestCard;
+                NSArray* interestLabels = interestCard.labelList;
+                
+                itemsCount = (interestLabels.count <= INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS) ? interestLabels.count : INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS;
+                
+                break;
+            }
+            default:
+            {
+                break;
+            }
         }
-        case SECTION_INDEX_SERVERINTERESTLABELS:
+    }
+    else if (collectionView == _serverInterestLabelsView)
+    {
+        switch (section)
         {
-            itemsCount = ITEM_COUNT_SERVERINTERESTLABELS;
-            break;
-        }
-        default:
-        {
-            break;
+            case SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS:
+            {
+                RHServer* server = _userDataModule.server;
+                RHServerInterestLabelList* interestLabelList = server.interestLabelList;
+                NSArray* currentInterestLabels = interestLabelList.current;
+                
+                itemsCount = (currentInterestLabels.count <= SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS) ? currentInterestLabels.count : SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS;
+                
+                break;
+            }
+            default:
+            {
+                break;
+            }
         }
     }
     
     return itemsCount;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[cv dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL forIndexPath:indexPath];
+    RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL forIndexPath:indexPath];
     cell.editingDelegate = self;
     
     RHDevice* device = _userDataModule.device;
@@ -235,122 +282,182 @@
     NSUInteger section = indexPath.section;
     NSUInteger position = indexPath.item;
     
-    switch (section)
+    if (collectionView == _interestLabelsView)
     {
-        case SECTION_INDEX_INTERESTLABELS:
+        switch (section)
         {
-            NSString* labelName = nil;
-            NSInteger labelCount = -1;
-            
-            NSArray* labelList = interestCard.labelList;
-            if (0 < labelList.count && position < labelList.count)
+            case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
             {
+                NSString* labelName = nil;
+                NSInteger labelCount = 0;
+                
+                NSArray* labelList = interestCard.labelList;
+                
                 RHInterestLabel* label = labelList[position];
                 labelName = label.labelName;
                 labelCount = label.matchCount;
-            }
-            else
-            {
-                labelName = NSLocalizedString(@"Interest_Empty", nil);
-            }
-            
-            cell.textField.text = labelName;
-            if (0 <= labelCount)
-            {
+                
+                cell.textField.text = labelName;
                 cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
+                
+                break;
             }
-            else
+            default:
             {
-                cell.countLabel.text = @"";
+                break;
             }
-            
-            break;
         }
-        case SECTION_INDEX_SERVERINTERESTLABELS:
+    }
+    else if (collectionView == _serverInterestLabelsView)
+    {
+        switch (section)
         {
-            NSString* labelName = nil;
-            NSInteger labelCount = -1;
-            
-            RHServerInterestLabelList* olabelList = server.interestLabelList;
-            NSArray* labelList = olabelList.current;
-            
-            if (0 < labelList.count && position < labelList.count)
+            case SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS:
             {
+                NSString* labelName = nil;
+                NSInteger labelCount = 0;
+                
+                RHServerInterestLabelList* olabelList = server.interestLabelList;
+                NSArray* labelList = olabelList.current;
+                
                 RHInterestLabel* label = labelList[position];
                 labelName = label.labelName;
                 labelCount = label.matchCount;
-            }
-            else
-            {
-                labelName = NSLocalizedString(@"Interest_Empty", nil);
-            }
-            
-            cell.textField.text = labelName;
-            if (0 <= labelCount)
-            {
+                
+                cell.textField.text = labelName;
                 cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
+                
+                break;
             }
-            else
+            default:
             {
-                cell.countLabel.text = @"";
+                break;
             }
-            
-            cell.userInteractionEnabled = NO;
-            
-            break;
-        }
-        default:
-        {
-            break;
         }
     }
     
     return cell;
 }
 
-- (BOOL)collectionView:(UICollectionView *)cv canMoveItemAtIndexPath:(NSIndexPath *)indexPath
+-(UICollectionReusableView *) collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView* reusableView = nil;
+    
+    NSUInteger section = indexPath.section;
+    
+    if (collectionView == _interestLabelsView)
+    {
+        switch (section)
+        {
+            case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
+            {
+                if (nil == _interestLabelsHeaderView)
+                {
+                    _interestLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW forIndexPath:indexPath];
+                    _interestLabelsHeaderView.headerTitleLabel.text = NSLocalizedString(@"Interest_InterestLabels", nil);
+                }
+                
+                reusableView = _interestLabelsHeaderView;
+                
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+    else if (collectionView == _serverInterestLabelsView)
+    {
+        switch (section)
+        {
+            case SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS:
+            {
+                if (nil == _serverInterestLabelsHeaderView)
+                {
+                    _serverInterestLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW forIndexPath:indexPath];
+                    _serverInterestLabelsHeaderView.headerTitleLabel.text = NSLocalizedString(@"Interest_CurrentHotInterestLabels", nil);
+                }
+                
+                reusableView = _serverInterestLabelsHeaderView;
+                
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+    
+    return reusableView;
+}
+
+#pragma mark - UICollectionViewDataSource_Draggable
+
+- (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath
 {
     BOOL flag = NO;
     
     NSUInteger section = indexPath.section;
-
-    switch (section)
+    
+    if (collectionView == _interestLabelsView)
     {
-        case SECTION_INDEX_INTERESTLABELS:
+        switch (section)
         {
-            flag = YES;
-            break;
-        }
-        case SECTION_INDEX_SERVERINTERESTLABELS:
-        {
-            flag = NO;
-            break;
-        }
-        default:
-        {
-            break;
+            case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
+            {
+                flag = YES;
+                break;
+            }
+            default:
+            {
+                break;
+            }
         }
     }
-
+    else if (collectionView == _serverInterestLabelsView)
+    {
+        switch (section)
+        {
+            case SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS:
+            {
+                flag = NO;
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+    
     return flag;
 }
 
-- (BOOL)collectionView:(UICollectionView *)cv canMoveItemAtIndexPath:(NSIndexPath *)indexPath toIndexPath:(NSIndexPath *)toIndexPath
+- (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
     BOOL flag = NO;
     
     NSUInteger fromSection = indexPath.section;
     NSUInteger toSection = toIndexPath.section;
     
-    if (fromSection != SECTION_INDEX_INTERESTLABELS || fromSection != toSection)
+    if (collectionView == _interestLabelsView)
+    {
+        if (fromSection != INTERESTLABELS_SECTION_INDEX_INTERESTLABELS || fromSection != toSection)
+        {
+            flag = NO;
+        }
+        else
+        {
+            flag = YES;
+        }
+    }
+    else if (collectionView == _serverInterestLabelsView)
     {
         flag = NO;
     }
-    else
-    {
-        flag = YES;
-    }
-
+    
     return flag;
 }
 
@@ -366,71 +473,91 @@
     NSUInteger toSection = toIndexPath.section;
     NSUInteger toPosition = toIndexPath.item;
     
-    if (fromSection != toSection)
-    {
-        return;
-    }
+    UICollectionView* collectionView = (UICollectionView*)cv;
     
-    switch (fromSection)
+    if (collectionView == _interestLabelsView)
     {
-        case SECTION_INDEX_INTERESTLABELS:
+        if (fromSection != toSection)
         {
-            [interestCard reorderLabel:fromPosition toIndex:toPosition];
-            //        [_interestLabelCollectionView reloadItemsAtIndexPaths:@[fromIndexPath, toIndexPath]];
-            //        [_interestLabelCollectionView reloadData];
-            [self performSelector:@selector(_updateInterestCard) withObject:nil];
-            break;
+            return;
         }
-        case SECTION_INDEX_SERVERINTERESTLABELS:
+        
+        switch (fromSection)
         {
-            break;
+            case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
+            {
+                [interestCard reorderLabel:fromPosition toIndex:toPosition];
+                //        [_interestLabelCollectionView reloadItemsAtIndexPaths:@[fromIndexPath, toIndexPath]];
+                //        [_interestLabelCollectionView reloadData];
+                [self performSelector:@selector(_updateInterestCard) withObject:nil];
+                break;
+            }
+            default:
+            {
+                break;
+            }
         }
-        default:
-        {
-            break;
-        }
+    }
+    else if (collectionView == _serverInterestLabelsView)
+    {
+        
     }
 }
 
--(UICollectionReusableView *) collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+#pragma mark - UICollectionViewDelegate
+
+-(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionReusableView* reusableView = nil;
-    
     NSUInteger section = indexPath.section;
+    NSUInteger position = indexPath.item;
     
-    switch (section)
+    RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView cellForItemAtIndexPath:indexPath];
+    
+    if (collectionView == _interestLabelsView)
     {
-        case SECTION_INDEX_INTERESTLABELS:
+        switch (section)
         {
-            if (nil == _interestLabelsHeaderView)
+            case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
             {
-                _interestLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW forIndexPath:indexPath];
-                _interestLabelsHeaderView.headerTitleLabel.text = NSLocalizedString(@"Interest_InterestLabels", nil);
+                break;
             }
-            
-            reusableView = _interestLabelsHeaderView;
-            
-            break;
-        }
-        case SECTION_INDEX_SERVERINTERESTLABELS:
-        {
-            if (nil == _serverInterestLabelsHeaderView)
+            default:
             {
-                _serverInterestLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW forIndexPath:indexPath];
-                _serverInterestLabelsHeaderView.headerTitleLabel.text = NSLocalizedString(@"Interest_CurrentHotInterestLabels", nil);
+                break;
             }
-            
-            reusableView = _serverInterestLabelsHeaderView;
-            
-            break;
-        }
-        default:
-        {
-            break;
         }
     }
+    else if (collectionView == _serverInterestLabelsView)
+    {
+        
+    }
+}
 
-    return reusableView;
+-(void) collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSUInteger section = indexPath.section;
+    NSUInteger position = indexPath.item;
+    
+    RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView cellForItemAtIndexPath:indexPath];
+    
+    if (collectionView == _interestLabelsView)
+    {
+        switch (section)
+        {
+            case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
+            {
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+    else if (collectionView == _serverInterestLabelsView)
+    {
+        
+    }
 }
 
 #pragma mark - RHCollectionLabelCellEditingDelegate
@@ -443,14 +570,14 @@
         RHProfile* profile = device.profile;
         RHInterestCard* interestCard = profile.interestCard;
         
-        NSIndexPath* indexPath = [self.collectionView indexPathForCell:cell];
+        NSIndexPath* indexPath = [_interestLabelsView indexPathForCell:cell];
         NSUInteger item = indexPath.item;
         
         if (item < interestCard.labelList.count)
         {
             [interestCard removeLabelByIndex:item];
             
-            if (nil == labelName || 0 == labelName.length || [labelName isEqualToString:NSLocalizedString(@"Interest_Empty", nil)])
+            if (nil == labelName || 0 == labelName.length)
             {
                 
             }
@@ -461,7 +588,7 @@
         }
         else
         {
-            if (nil == labelName || 0 == labelName.length || [labelName isEqualToString:NSLocalizedString(@"Interest_Empty", nil)])
+            if (nil == labelName || 0 == labelName.length)
             {
                 
             }

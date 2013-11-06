@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "7125B37DD7A4446AB263A2C8"
+               BlueprintIdentifier = "E393A6E037FB474CB9A7D273"
                BuildableName = "libPods-RenHaiGHUnitTest-DraggableCollectionView.a"
                BlueprintName = "Pods-RenHaiGHUnitTest-DraggableCollectionView"
                ReferencedContainer = "container:Pods.xcodeproj">

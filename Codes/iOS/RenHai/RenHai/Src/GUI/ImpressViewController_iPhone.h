@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ImpressViewController_iPhone : UICollectionViewController <UICollectionViewDataSource>
+@interface ImpressViewController_iPhone : UIViewController <UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UICollectionView *assessLabelsView;
+@property (weak, nonatomic) IBOutlet UICollectionView *impressLabelsView;
+@property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
 
 @end

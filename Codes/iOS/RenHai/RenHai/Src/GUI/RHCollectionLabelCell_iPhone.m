@@ -10,6 +10,20 @@
 
 #import "GUIStyle.h"
 
+static UIImage* delIconImage;
+static UIImage* orderIconImage;
+
+@interface RHCollectionLabelCell_iPhone()
+{
+
+}
+
+@property (weak, nonatomic) IBOutlet FUIButton *delIconButton;
+
+- (IBAction)didPressDelIconButton:(id)sender;
+
+@end
+
 @implementation RHCollectionLabelCell_iPhone
 
 @synthesize textField = _textField;
@@ -17,7 +31,11 @@
 
 @synthesize editingDelegate = _editingDelegate;
 
-@synthesize isEmptyCell = _isEmptyCell;
++ (void)initialize
+{
+    delIconImage = [UIImage imageNamed:@"close.png"];
+    orderIconImage = nil;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -33,11 +51,11 @@
 {
     [self _formatFlatUI];
     
-    self.layer.borderWidth=2.0f;
-    self.layer.borderColor=[UIColor blueColor].CGColor;
+    self.cellMode = CellMode_Normal;
     
-    self.layer.cornerRadius = 10.0;
-    
+    self.layer.borderWidth = 1.5f;
+    self.layer.borderColor = MAJOR_COLOR_MID.CGColor;
+    self.layer.cornerRadius = 4.0f;
     
     [super awakeFromNib];
 }
@@ -54,12 +72,60 @@
     
     if (self.selected)
     {
-        self.layer.borderColor = [UIColor redColor].CGColor;
+        self.layer.borderColor = SPECIAL_COLOR_WARNING.CGColor;
     }
     else
     {
-        self.layer.borderColor = [UIColor DodgerBlue].CGColor;
+        self.layer.borderColor = MAJOR_COLOR_MID.CGColor;
     }
+}
+
+-(void) setCellMode:(CellMode)cellMode
+{
+    _cellMode = cellMode;
+    
+    switch (_cellMode)
+    {
+        case CellMode_Normal:
+        {
+            _delIconButton.hidden = YES;
+            self.shakeCell = NO;
+            
+            break;
+        }
+        case CellMode_Delete:
+        {
+            _delIconButton.hidden = NO;
+            self.shakeCell = YES;
+            
+            break;
+        }
+        case CellMode_Order:
+        {
+            _delIconButton.hidden = YES;
+            self.shakeCell = YES;
+            
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+}
+
+-(void) setShakeCell:(BOOL)shakeCell
+{
+    _shakeCell = shakeCell;
+    
+//    if (_shakeCell)
+//    {
+//        [self _startQuivering];
+//    }
+//    else
+//    {
+//        [self _stopQuivering];
+//    }
 }
 
 #pragma mark - Private Methods
@@ -68,6 +134,31 @@
 {
 
 }
+
+-(void) _startQuivering
+{
+    CABasicAnimation *quiverAnim = [CABasicAnimation animationWithKeyPath:@"transform.rotation"];
+    float startAngle = (-2) * M_PI/180.0;
+    float stopAngle = -startAngle;
+    quiverAnim.fromValue = [NSNumber numberWithFloat:startAngle];
+    quiverAnim.toValue = [NSNumber numberWithFloat:3 * stopAngle];
+    quiverAnim.autoreverses = YES;
+    quiverAnim.duration = 0.2;
+    quiverAnim.repeatCount = HUGE_VALF;
+    float timeOffset = (float)(arc4random() % 100)/100 - 0.50;
+    quiverAnim.timeOffset = timeOffset;
+    CALayer *layer = self.layer;
+    [layer addAnimation:quiverAnim forKey:@"quivering"];
+}
+
+-(void) _stopQuivering
+{
+    CALayer *layer = self.layer;
+    [layer removeAnimationForKey:@"quivering"];
+}
+
+
+#pragma mark - IBActions
 
 - (IBAction)textFieldDoneEditing:(id)sender
 {
@@ -83,6 +174,14 @@
     if (nil != _editingDelegate)
     {
         [_editingDelegate onTextFieldDoneEditing:self labelName:labelName];
+    }
+}
+
+- (IBAction)didPressDelIconButton:(id)sender
+{
+    if (nil != _editingDelegate && [_editingDelegate respondsToSelector:@selector(didDelete)])
+    {
+        [_editingDelegate didDelete];
     }
 }
 

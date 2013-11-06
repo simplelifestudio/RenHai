@@ -49,12 +49,10 @@
 "Impress_ChatTotalCount" = "ChatCount";
 "Impress_ChatTotalDuration" = "ChatDuration";
 "Impress_ChatLossCount" = "LossCount";
-"Impress_Empty" = "Empty";
 
 "Interest_InterestLabels" = "Interest Labels";
 "Interest_CurrentHotInterestLabels" = "Current Hot Interest Labels";
 "Interest_Action_RefreshHotInterestLabels" = "Refresh";
-"Interest_Empty" = "Empty";
 
 "Config_PushNotification" = "Push Notification";
 "Config_Broadcast" = "Broadcast";
@@ -111,6 +109,9 @@
 
 "ChatAssess_Action_Continue" = "Continue";
 "ChatAssess_Action_Finish" = "Finish";
+"ChatAssess_Action_AddImpressLabel" = "Add";
+"ChatAssess_Action_DelImpressLabel" = "Del";
+"ChatAssess_Action_CopyImpressLabel" = "Copy";
 "ChatAssess_AssessLabels" = "Chat Impress";
-"ChatAssess_ImpressLabels" = "Impress Labels";
-"ChatAssess_Empty" = "Empty";
+"ChatAssess_AddImpressLabels" = "Add Impress Labels";
+"ChatAssess_ExistImpressLabels" = "Exist Impress Labels";

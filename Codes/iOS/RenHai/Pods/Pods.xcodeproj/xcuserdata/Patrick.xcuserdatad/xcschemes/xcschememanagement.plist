@@ -9,6 +9,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Pods-CWPopup.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-CocoaLumberjack.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -50,6 +55,11 @@
 			<false/>
 		</dict>
 		<key>Pods-RenHaiGHUnitTest-AFNetworking.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-RenHaiGHUnitTest-CWPopup.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -132,127 +142,137 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>0B7F5E176C354FF3B226E3B4</key>
+		<key>001146F257C344D080F8FE0E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0D50E60CB9634DD98AFB698C</key>
+		<key>10084F60C48B4C8E8C27138F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>0F959462499A4CEAB7250426</key>
+		<key>1402CCAD26F441679B62827D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3E51F9B897324F15A15CE9B0</key>
+		<key>1975D48041B24F508332003A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3F05842DC72B4BF6B341E1A7</key>
+		<key>1A3CCBD2AC464C1FA7242DFE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4E1051A2E5D64D4DB3015BE4</key>
+		<key>1C838A1B4D00430489E94D67</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6C28E107E70B44CABBC55579</key>
+		<key>22646EB3EDC74626B49DC803</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6CC9241ECD5A4FEAA0A2BD63</key>
+		<key>552DF415870741B382CF082F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7125B37DD7A4446AB263A2C8</key>
+		<key>60B3965F9DBF429D89F9A22B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7B029475B5134B1483DA4055</key>
+		<key>6E43D3CDB3064079BE9D9AC8</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8114A1D90BCF42589014464A</key>
+		<key>6FCF7421613F4E9391D178CE</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8A04699922C54465BAA0B253</key>
+		<key>7358F56D366B45F78B5B6CC1</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8A8CFD46E0354916829A9631</key>
+		<key>76E1D519948541C5BCF6A55D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8D7123BC25A44D3B8985981F</key>
+		<key>8892AA33A9834BF7BAE8FBDD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>95328052E79E48B392E184E9</key>
+		<key>91D7A6E4CC9C46ADB09BF196</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>961E857544CC43B9A996911E</key>
+		<key>9DE63D50971F452198E05738</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A181A3F766C84F2891851422</key>
+		<key>A9981B75D29746BA8BBA9398</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C040609362BD44119865EC76</key>
+		<key>B2BBD5A28BF04CC2A1B4E185</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>C2E0B47404824FEABAAA3FC6</key>
+		<key>B41E9EB2BBA0448598E3C881</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>D145093E32E4406884AEC9C1</key>
+		<key>C8515667B2CF446398DF6B7A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>DC11B45B6FE54A5A96DCEAB4</key>
+		<key>D374A41C76AF41C1AA920389</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E0A5CF268ACD4679BCA95D67</key>
+		<key>D45542ABB1C54E738A6D4857</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E0B8CE513D394BDF92BA7ED7</key>
+		<key>E393A6E037FB474CB9A7D273</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E8BAF284539A46A186166A44</key>
+		<key>E7EF639164D9414797915A1B</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EC8F633A1D834B1F8A6AC54F</key>
+		<key>F1DFC369C7B040228B9CA90B</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FA8EA28609FD484CA9665434</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FE8E0F186FB14E6BB1D35068</key>
 		<dict>
 			<key>primary</key>
 			<true/>
