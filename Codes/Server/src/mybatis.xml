@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 			<dataSource type="POOLED">
 				<property name="driver" value="com.mysql.jdbc.Driver"/>
 				<property name="url" value="jdbc:mysql://127.0.0.1:3306/renhai?useUnicode=true&amp;characterEncoding=UTF-8"/>
-				<property name="username" value="root"/>
+				<property name="username" value="simplelifeadmin"/>
 				<property name="password" value="1qazZSE$4rfv"/>
 				<property name="poolMaximumActiveConnections" value="50"/>
 				<property name="poolMaximumIdleConnections" value="20"/>
