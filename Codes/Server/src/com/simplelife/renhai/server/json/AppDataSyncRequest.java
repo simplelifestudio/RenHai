@@ -35,6 +35,7 @@ import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -459,52 +460,55 @@ public class AppDataSyncRequest extends AppJSONMessage
     			, header.getString(JSONKey.DeviceSn));
 		
 		String deviceSn = header.getString(JSONKey.DeviceSn);
-		if (OnlineDevicePool.instance.isDeviceInPool(deviceSn))
-		{
-			syncType = SyncType.ExistentLoaded;
-		}
-		else
+		Device device = null;
+		
+		IDeviceWrapper tempdeviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn);
+		if (tempdeviceWrapper == null)
 		{
 			if (isNewDevice)
 			{
-				syncType = SyncType.NewDevice;
+				device = newDevice(deviceSn);
+				//syncType = SyncType.NewDevice;
 			}
 			else
 			{
-				syncType = SyncType.ExistentNotLoaded;
+				//syncType = SyncType.ExistentNotLoaded;
+				device = loadDevice(deviceSn);
+			}
+			deviceWrapper.setDevice(device);
+		}
+		else
+		{
+			device = tempdeviceWrapper.getDevice();
+			
+			if (!tempdeviceWrapper.getConnection().getConnectionId().equals(deviceWrapper.getConnection().getConnectionId()))
+			{
+				// The previous deviceWrapper will be released, bind current deviceWrapper with loaded Device 
+				deviceWrapper.setDevice(device);
 			}
 		}
 		
-		if (syncType == SyncType.ExistentNotLoaded || syncType == SyncType.ExistentLoaded)
+		if (device == null)
 		{
-			logger.debug("Device is Existent in DB, try to load it from DB.");
-			loadDevice(deviceSn);
-		}
-		else if (syncType == SyncType.NewDevice)
-		{
-			logger.debug("AppDataSyncRequest from new device.");
-			if (body.containsKey(JSONKey.DataUpdate))
-			{
-				newDevice(deviceSn);
-			}
-			else
-			{
-				this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-				this.setErrorDescription("It's not allowed to query a new device without update.");
-				responseError();
-				return;
-			}
+			String error = "Fatal error, device enclosed by <" + deviceSn + "> in server is null";
+			logger.error(error);
+			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+			this.setErrorDescription(error);
+			responseError();
+			return;
 		}
 		
-		Device device = deviceWrapper.getDevice();
-		Profile profile = device.getProfile();
+		deviceWrapper.updateActivityTime();
+		deviceWrapper.updatePingTime();
 		
 		// Check if profile is banned
+		Profile profile = device.getProfile();
 		if (!checkBanDate(profile))
 		{
 			return;
 		}
 		
+		deviceWrapper.setServiceStatus(Consts.ServiceStatus.Normal);
 		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle, StatusChangeReason.AppDataSynchronize);
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.AppDataSyncResponse);
@@ -594,26 +598,20 @@ public class AppDataSyncRequest extends AppJSONMessage
 		}
 	}
 	
-	private void loadDevice(String deviceSn)
+	private Device loadDevice(String deviceSn)
 	{
-		if (OnlineDevicePool.instance.getDevice(deviceSn) != null)
+		IDeviceWrapper deviceWrapper = OnlineDevicePool.instance.getDevice(deviceSn); 
+		if (deviceWrapper != null)
 		{
 			logger.debug("Device is in OnlineDevicePool, reuse it directly");
-			return;
+			return deviceWrapper.getDevice();
 		}
 		
 		Device device = DAOWrapper.getDeviceInCache(deviceSn, false);
 		if (device != null)
 		{
 			logger.debug("Find Device object in DB cache, reuse it directly");
-			deviceWrapper.setDevice(device);
-			return;
-		}
-		
-		if (isNewDevice)
-		{
-			logger.error("DeviceCard can't be found in DB with SN: " + deviceSn);
-			return;
+			return device;
 		}
 		
 		SqlSession session = null;
@@ -626,17 +624,25 @@ public class AppDataSyncRequest extends AppJSONMessage
 			{
 				logger.error("Fatal error, device load from DB by SN <{}> is null!", deviceSn);
 			}
-			deviceWrapper.setDevice(device);
+			return device;
 		}
 		catch(Exception e)
 		{
+			if (session != null)
+			{
+				session.rollback();
+			}
 			logger.error("Fatal error when trying to load device <{}> from DB", deviceSn);
 			FileLogger.printStackTrace(e);
 		}
 		finally
 		{
-			session.close();
+			if (session != null)
+			{
+				session.close();
+			}
 		}
+		return null;
 	}
 	
 	private void query(JSONObject queryObj, JSONObject response)
@@ -1034,7 +1040,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		deviceResponse.put(JSONKey.DeviceCard, deviceCardResponse);
 	}
 	
-	private void newDevice(String deviceSn)
+	private Device newDevice(String deviceSn)
 	{
 		// Create new impress card
 		Impresscard impressCard = new Impresscard();
@@ -1094,12 +1100,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
 		
 		deviceCard.setRegisterTime(now);
-		
-		// Bind DeviceWrapper with Device
-		deviceWrapper.setDevice(device);
-		deviceWrapper.updateActivityTime();
-		deviceWrapper.updatePingTime();
-		deviceWrapper.setServiceStatus(Consts.ServiceStatus.Normal);
+		return device;
 	}
 	
 	private void parseInterestLabels(

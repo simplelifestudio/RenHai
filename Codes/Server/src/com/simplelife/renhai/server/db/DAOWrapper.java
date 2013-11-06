@@ -329,6 +329,32 @@ public class DAOWrapper
 	 * */
     public static void flushToDB()
     {
-    	signalForFlush();
+    	Thread.currentThread().setName("DBCacheTask");
+		IDbObject obj = null;
+		SqlSession session = getSession();
+		while (!linkToBeSaved.isEmpty())
+		{
+			obj = linkToBeSaved.remove();
+			try
+			{
+				obj.save(session);
+				session.commit();
+			}
+			catch(Exception e)
+			{
+				session.rollback();
+				FileLogger.printStackTrace(e);
+				try
+				{
+					obj.save(session);
+					session.commit();
+				}
+				catch(Exception e2)
+				{
+					session.rollback();
+					FileLogger.printStackTrace(e2);
+				}
+			}
+		}
     }
 }

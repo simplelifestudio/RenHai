@@ -560,7 +560,8 @@ public class MockApp implements IMockApp, Runnable
 		body.put(JSONKey.DeviceCount, deviceCountObj);
 		body.put(JSONKey.DeviceCapacity, deviceCapacityObj);
 		body.put(JSONKey.InterestLabelList, interestObj);
-		body.put(JSONKey.DetailedDeviceInfo, null);
+		body.put(JSONKey.DeviceSummary, null);
+		body.put(JSONKey.DeviceDetailedInfo, this.getDeviceSn());
 		
 		lastSentMessageSn = header.getString(JSONKey.MessageSn);
 		sendRawJSONMessage(jsonObject, true);

@@ -46,6 +46,7 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 		cacheDeviceMap.remove(deviceSn);
 		deviceMap.put(deviceSn, device);
 		businessScheduler.resumeSchedule();
+		logger.debug("device <{}> is ready for match", deviceSn);
     }
 
 	@Override

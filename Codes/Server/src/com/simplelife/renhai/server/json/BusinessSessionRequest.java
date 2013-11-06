@@ -309,16 +309,13 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		String operationInfo = null;
 		
-		synchronized (deviceWrapper)
+		operationInfo = businessPool.checkDeviceEnter(deviceWrapper); 
+		if (operationInfo != null)
 		{
-			operationInfo = businessPool.checkDeviceEnter(deviceWrapper); 
-			if (operationInfo != null)
-			{
-				setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
-				setErrorDescription(operationInfo);
-				responseError();
-				return;
-			}
+			setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
+			setErrorDescription(operationInfo);
+			responseError();
+			return;
 		}
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
@@ -342,11 +339,8 @@ public class BusinessSessionRequest extends AppJSONMessage
     			, body.getString(JSONKey.BusinessType) + ", " + deviceWrapper.getDeviceSn());
 		OutputMessageCenter.instance.addMessage(response);
 		
-		synchronized (deviceWrapper)
-		{
-			deviceWrapper.setBusinessType(businessType);
-			deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.MatchCache, StatusChangeReason.AppEnterBusiness);
-		}
+		deviceWrapper.setBusinessType(businessType);
+		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.MatchCache, StatusChangeReason.AppEnterBusiness);
 	}
 	
 	private void leavePool()
@@ -699,10 +693,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		labelMap.setUpdateTime(System.currentTimeMillis());
 		labelMap.setImpressCardId(card.getImpressCardId());
 		
-		synchronized (impressLabels)
-		{
-			impressLabels.add(labelMap);
-		}
+		impressLabels.add(labelMap);
 	}
 	
 	private void assessAndQuit()

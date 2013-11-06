@@ -10,16 +10,12 @@
 package com.simplelife.renhai.server.test;
 
 
-import org.apache.ibatis.session.SqlSession;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.db.DAOWrapper;
-import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Interestcard;

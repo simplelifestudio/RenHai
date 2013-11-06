@@ -128,7 +128,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
      * Change business status of DeviceWrapper, and release/update relevant information if necessary 
      * @param targetStatus: target business status
      */
-    public synchronized void changeBusinessStatus(Consts.BusinessStatus targetStatus, StatusChangeReason reason)
+    public void changeBusinessStatus(Consts.BusinessStatus targetStatus, StatusChangeReason reason)
     {
     	logger.debug("[Milestone] Device <{}> changes status from " 
     			+ this.businessStatus.name() + " to " + targetStatus.name() 
@@ -750,6 +750,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 			int count = card.getChatLossCount();
 			logger.debug("Chat loss count of device <{}> was increased from " + count + " to " + (count+1), getDeviceSn());
 			card.setChatLossCount(count + 1);
+			
+			count = card.getChatTotalCount();
+			logger.debug("Chat total count of device <{}> was increased from " + count + " to " + (count+1), getDeviceSn());
+			card.setChatTotalCount(count + 1);
 		}
 	}
 	
@@ -763,7 +767,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		synchronized (card)
 		{
 			int count = card.getChatTotalCount();
-			logger.debug("Chat count of device <{}> was increased from " + count + " to " + (count+1), getDeviceSn());
+			logger.debug("Chat total count of device <{}> was increased from " + count + " to " + (count+1), getDeviceSn());
 			card.setChatTotalCount(count + 1);
 		}
 	}

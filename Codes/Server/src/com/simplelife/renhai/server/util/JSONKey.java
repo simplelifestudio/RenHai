@@ -102,6 +102,7 @@ public class JSONKey
 	public final static String InterestLabelName			= "interestLabelName";
 	public final static String ImpressLabelName				= "impressLabelName";
 	public final static String DeviceCapacity				= "deviceCapacity";
-	public final static String DetailedDeviceInfo			= "detailedDeviceInfo";
+	public final static String DeviceSummary				= "deviceSummary";
 	public final static String BusinessStatus				= "businessStatus";
+	public final static String DeviceDetailedInfo			= "deviceDetailedInfo";
 }

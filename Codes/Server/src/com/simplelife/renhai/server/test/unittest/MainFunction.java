@@ -16,6 +16,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.java_websocket.drafts.Draft_17;
 import org.junit.Test;
@@ -23,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONObject;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.InputMessageCenter;
@@ -33,6 +35,8 @@ import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Devicecard;
+import com.simplelife.renhai.server.db.Globalinterestlabel;
+import com.simplelife.renhai.server.db.GlobalinterestlabelMapper;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.json.AlohaRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
@@ -120,12 +124,20 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testRawCommand_AppDataSync()
 	{
-		String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{\"device\":null},\"dataUpdate\":{\"device\":{\"deviceCard\":{\"appVersion\":\"0.1\",\"deviceModel\":\"iPhone6\",\"deviceSn\":\"线程组 1-2\",\"isJailed\":0,\"location\":\"22.511962,113.380301\",\"osVersion\":\"iOS 6.1.2\"},\"deviceSn\":\"线程组 1-2\",\"profile\":{\"interestCard\":{\"interestLabelList\":[{\"interestLabelName\":\"音乐\",\"labelOrder\":0},{\"interestLabelName\":\"看电影\",\"labelOrder\":0},{\"interestLabelName\":\"privateInterestOf 线程组 1-2\",\"labelOrder\":0}]}}}}},\"header\":{\"deviceId\":0,\"deviceSn\":\"线程组 1-2\",\"messageId\":101,\"messageSn\":\"R3RLJ67G4WBNM34V\",\"messageType\":1,\"timeStamp\":\"2013-10-19 13:50:24.250\"}}}";
+		String jsonString = "{\"jsonEnvelope\":{\"body\":{\"dataQuery\":{},\"dataUpdate\":{\"device\":{\"deviceCard\":{\"appVersion\":\"0.1\",\"deviceModel\":\"iPhone 5\",\"isJailed\":1,\"osVersion\":\"6.1.2\"},\"deviceSn\":\"24237ACE-7F7F-4656-A47C-11CF0473D7BB\"}}},\"header\":{\"deviceId\":3,\"deviceSn\":\"24237ACE-7F7F-4656-A47C-11CF0473D7BB\",\"messageId\":101,\"messageSn\":\"IX5IT4CTLZC03A68\",\"messageType\":1,\"timeStamp\":\"2013-11-05 07:37:50.960\"}}}";
 		JSONObject wholeObj = JSONObject.parseObject(jsonString);
 		JSONObject obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope);
 
-		MockApp app = createNewMockApp("线程组 1-2");
+		MockApp app = new MockApp(demoDeviceSn, "Slave");
+		app.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
+		app.connect(false);
 		app.sendRawJSONMessage(obj, true);
+		
+		app.sendServerDataSyncRequest();
+		
+		app.sendRawJSONMessage(obj, true);
+		
+		app.sendServerDataSyncRequest();
 	}
 	
 	@Test
@@ -440,6 +452,20 @@ public class MainFunction extends AbstractTestCase
 	}
 	
 	@Test
+	public void testAppDataSync() throws InterruptedException
+	{
+		MockApp app1 = new MockApp(demoDeviceSn, "Slave");
+		app1.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
+		app1.connect(true);
+		
+		app1.syncDevice();
+		
+		Thread.sleep(1000);
+		
+		app1.syncDevice();
+	}
+	
+	@Test
 	public void testServerDataSync()
 	{
 		//MockApp app1 = new MockApp(demoDeviceSn,"Slave");
@@ -482,6 +508,35 @@ public class MainFunction extends AbstractTestCase
 		app2.assessAndQuit("^#Happy#^,还行");
 		
 		app1.sendServerDataSyncRequest();
+	}
+	
+	@Test
+	public void testDuplicatedGlobalLabel()
+	{
+		SqlSession session = DAOWrapper.getSession();
+		try
+		{
+			Globalinterestlabel globalInterest = new Globalinterestlabel();
+			globalInterest.setInterestLabelName("音乐");
+			globalInterest.setGlobalMatchCount(0);
+			
+			GlobalinterestlabelMapper mapper = session.getMapper(GlobalinterestlabelMapper.class);
+			mapper.insert(globalInterest);
+			session.commit();
+		}
+		catch(PersistenceException en)
+		{
+			System.out.print("========OK!\n");
+			en.printStackTrace();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			session.close();
+		}
 	}
 	
 }

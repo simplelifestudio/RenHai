@@ -146,24 +146,6 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	    	logger.debug("Device <{}> was removed from cacheDeviceMap of " + this.businessType.name() + " Device Pool caused by " + reason.name(), sn);
 	    	return;
     	}
-
-    	/*
-    	if (device.getBusinessType() == this.getBusinessType())
-    	{
-	    	if (device.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
-	    	{
-	    		IBusinessSession session = device.getOwnerBusinessSession();
-	    		if (session != null)
-				{
-					synchronized (session)
-					{
-						logger.debug("Device <{}> has bound session, notify session to notify other devices.", sn);
-						session.onDeviceLeave(device, reason);
-					}
-				}
-	    	}
-    	}
-    	*/
     }
     
     
