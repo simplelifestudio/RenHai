@@ -45,7 +45,7 @@ public class OutputMessageCenter
 			while (!queue.isEmpty())
 			{
 				message = queue.remove();
-				String temp = "Start to send " + message.getMessageId().name() + " to App <" + message.getDeviceWrapper().getDeviceSn() + "> which was queued " + message.getQueueDuration() + "ms ago";
+				String temp = "Start to send " + message.getMessageId().name() + " to App <" + message.getDeviceWrapper().getDeviceSn() + "> which was queued " + message.getQueueDuration() + "ms ago, message Sn: " + message.getMessageSn();
 				BusinessModule.instance.getLogger().debug(temp);
 				message.response();
 			}

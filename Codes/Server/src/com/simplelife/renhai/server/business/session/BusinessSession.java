@@ -358,7 +358,7 @@ public class BusinessSession implements IBusinessSession
     		}
     		return;
     	}
-    	logger.debug("[Milestone] Business session changes status from {} to " + targetStatus.name(), status.name());
+    	logger.debug("[Milestone] Business session " + sessionId + " changes status from {} to " + targetStatus.name(), status.name());
     	switch(targetStatus)
     	{
     		case Idle:

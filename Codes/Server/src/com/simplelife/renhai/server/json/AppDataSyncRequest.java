@@ -466,6 +466,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			if (isNewDevice)
 			{
 				device = newDevice(deviceSn);
+				DBModule.instance.deviceCache.putObject(deviceSn, device);
 				//syncType = SyncType.NewDevice;
 			}
 			else

@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -65,6 +66,48 @@ public class MockApp implements IMockApp, Runnable
 			catch(Exception e)
 			{
 				FileLogger.printStackTrace(e);
+			}
+		}
+	}
+	
+	protected class ExecutionTask extends Thread
+	{
+		private MockApp mockApp;
+		private boolean continueFlag = true;
+		
+
+		public ExecutionTask(MockApp mockApp)
+		{
+			this.mockApp = mockApp;
+		}
+		
+		public void stopExecution()
+		{
+			continueFlag = false;
+		}
+		
+		@Override
+		public void run()
+		{
+			ConcurrentLinkedQueue<JSONObject> messageQueue = mockApp.getMessageQueue();
+			while(continueFlag)
+			{
+				if (messageQueue.isEmpty())
+				{
+					try
+					{
+						Thread.sleep(500);
+					}
+					catch (InterruptedException e)
+					{
+						FileLogger.printStackTrace(e);
+					}
+				}
+				else
+				{
+					JSONObject obj = messageQueue.remove();
+					mockApp.execute(obj);
+				}
 			}
 		}
 	}
@@ -179,6 +222,7 @@ public class MockApp implements IMockApp, Runnable
 
     protected int sessionId;
     protected Timer pingTimer = new Timer();
+    protected ExecutionTask executionTask = new ExecutionTask(this);
     protected String lastSentMessageSn;
     
     protected String peerDeviceId;
@@ -210,6 +254,13 @@ public class MockApp implements IMockApp, Runnable
 	
 	protected int chatCount = 0;
 	protected boolean useRealSocket;
+	
+	protected ConcurrentLinkedQueue<JSONObject> messageQueue = new ConcurrentLinkedQueue<>();
+	
+	public ConcurrentLinkedQueue<JSONObject> getMessageQueue()
+	{
+		return messageQueue;
+	}
 	
 	public boolean isUseRealSocket()
 	{
@@ -392,12 +443,14 @@ public class MockApp implements IMockApp, Runnable
     public void startTimer()
     {
     	this.pingTimer.scheduleAtFixedRate(new PingTask(this), new Date(System.currentTimeMillis() + 5000), GlobalSetting.TimeOut.PingInterval);
+    	executionTask.start();
     }
     
     public void stopTimer()
     {
     	this.pingTimer.cancel();
     	logger.debug("Ping timer of MockApp <{}> was stopped", deviceSn);
+    	executionTask.stopExecution();
     }
     
     /**
@@ -792,6 +845,11 @@ public class MockApp implements IMockApp, Runnable
 		condition.signal();
 		lock.unlock();
 		
+		messageQueue.add(obj);
+	}
+	
+	public void execute(JSONObject obj)
+	{
 		if (obj == null)
 		{
 			return;

@@ -105,7 +105,30 @@ public class DAOWrapper
 	    {
 	    	condition.signal();
 	    }
-		
+
+		private void printLog(Object obj)
+		{
+			Logger logger = DBModule.instance.getLogger();
+			if (obj instanceof Globalinterestlabel)
+			{
+				Globalinterestlabel label = (Globalinterestlabel) obj;
+				logger.debug("Saving Globalinterestlabel: " + label.getInterestLabelName());
+			}
+			else if (obj instanceof Globalimpresslabel)
+			{
+				Globalimpresslabel label = (Globalimpresslabel) obj;
+				logger.debug("Saving Globalimpresslabel: " + label.getImpressLabelName());
+			}
+			else if (obj instanceof Device)
+			{
+				Device device = (Device) obj;
+				logger.debug("Saving Device: " + device.getDeviceSn());
+			}
+			else
+			{
+				logger.debug("Saving " + obj.getClass().getName());
+			}
+		}
 		private boolean saveObjectToDB(IDbObject obj)
 		{
 			if (session == null)
@@ -116,6 +139,7 @@ public class DAOWrapper
 			
 			try
 			{
+				//printLog(obj);
 				obj.save(session);
 				session.commit();
 			}
@@ -356,6 +380,11 @@ public class DAOWrapper
         	return false;
     	}
     	return false;
+    }
+    
+    public static void remove(IDbObject obj)
+    {
+    	linkToBeSaved.remove(obj);
     }
     
     /**

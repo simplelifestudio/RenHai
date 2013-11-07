@@ -537,6 +537,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			isDeviceInPool = false;
 			// Load device from DB 
 			targetDevice = DBModule.instance.deviceCache.getObject(deviceSn);
+			DAOWrapper.remove(targetDevice);
 			
 			// Check if it's totally invalid deviceSn in DB
 			if (targetDevice == null)
