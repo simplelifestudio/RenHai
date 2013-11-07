@@ -34,4 +34,6 @@
 
 +(NSString*) randomString:(NSUInteger) length;
 
++(NSUInteger)calculateTextNumber:(NSString *) text;
+
 @end

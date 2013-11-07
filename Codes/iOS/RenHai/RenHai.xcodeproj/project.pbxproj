@@ -215,6 +215,10 @@
 		CD3C04E8181FD1C0002B19A3 /* BusinessStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = CD3C04E6181FD1C0002B19A3 /* BusinessStatus.m */; };
 		CD43667417F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */; };
 		CD43667517F97C2E00586443 /* NSDictionary+MutableDeepCopy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */; };
+		CD5101A1182A856600E188A3 /* RHLabelManageViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD51019F182A856600E188A3 /* RHLabelManageViewController_iPhone.m */; };
+		CD5101A2182A856600E188A3 /* RHLabelManageViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD51019F182A856600E188A3 /* RHLabelManageViewController_iPhone.m */; };
+		CD5101A3182A856600E188A3 /* RHLabelManageViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD5101A0182A856600E188A3 /* RHLabelManageViewController_iPhone.xib */; };
+		CD5101A4182A856600E188A3 /* RHLabelManageViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD5101A0182A856600E188A3 /* RHLabelManageViewController_iPhone.xib */; };
 		CD5633B01827631600D2A9A6 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = CD5633AE1827631600D2A9A6 /* close.png */; };
 		CD5633B11827631600D2A9A6 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = CD5633AE1827631600D2A9A6 /* close.png */; };
 		CD5633B21827631600D2A9A6 /* close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD5633AF1827631600D2A9A6 /* close@2x.png */; };
@@ -465,6 +469,9 @@
 		CD3C04E6181FD1C0002B19A3 /* BusinessStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusinessStatus.m; sourceTree = "<group>"; };
 		CD43667217F97C2E00586443 /* NSDictionary+MutableDeepCopy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+MutableDeepCopy.h"; sourceTree = "<group>"; };
 		CD43667317F97C2E00586443 /* NSDictionary+MutableDeepCopy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+MutableDeepCopy.m"; sourceTree = "<group>"; };
+		CD51019E182A856600E188A3 /* RHLabelManageViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHLabelManageViewController_iPhone.h; sourceTree = "<group>"; };
+		CD51019F182A856600E188A3 /* RHLabelManageViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHLabelManageViewController_iPhone.m; sourceTree = "<group>"; };
+		CD5101A0182A856600E188A3 /* RHLabelManageViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHLabelManageViewController_iPhone.xib; sourceTree = "<group>"; };
 		CD5633AE1827631600D2A9A6 /* close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = close.png; sourceTree = "<group>"; };
 		CD5633AF1827631600D2A9A6 /* close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close@2x.png"; sourceTree = "<group>"; };
 		CD5633B41827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatAssessAddImpressLabelsHeaderView_iPhone.h; sourceTree = "<group>"; };
@@ -888,6 +895,9 @@
 				C53A7F0F17DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.h */,
 				C53A7F1017DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m */,
 				C53A7F1317DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib */,
+				CD51019E182A856600E188A3 /* RHLabelManageViewController_iPhone.h */,
+				CD51019F182A856600E188A3 /* RHLabelManageViewController_iPhone.m */,
+				CD5101A0182A856600E188A3 /* RHLabelManageViewController_iPhone.xib */,
 			);
 			path = GUI;
 			sourceTree = "<group>";
@@ -1061,6 +1071,7 @@
 				C596283917DA08AA009127E6 /* sidebar_menu_icon_landscape.png in Resources */,
 				CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */,
 				C596283B17DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png in Resources */,
+				CD5101A3182A856600E188A3 /* RHLabelManageViewController_iPhone.xib in Resources */,
 				C596283D17DA08AA009127E6 /* sidebar_menu_icon_portrait.png in Resources */,
 				CDFEA31C182A175600F0351D /* order.png in Resources */,
 				CDDA9FA8182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib in Resources */,
@@ -1099,6 +1110,7 @@
 				C55B445E17CF8632009BB21B /* Icon-72.png in Resources */,
 				C55B446017CF8632009BB21B /* Icon-Small-50.png in Resources */,
 				C55B446217CF8632009BB21B /* Icon-Small.png in Resources */,
+				CD5101A4182A856600E188A3 /* RHLabelManageViewController_iPhone.xib in Resources */,
 				C55B446417CF8632009BB21B /* Icon-Small@2x.png in Resources */,
 				C55B446617CF8632009BB21B /* Icon.png in Resources */,
 				C55B446817CF8632009BB21B /* Icon@2x.png in Resources */,
@@ -1265,6 +1277,7 @@
 				C593C44F17D329F300C26367 /* HelpViewController_iPhone.m in Sources */,
 				C593C45317D32A8300C26367 /* ChatWaitViewController_iPhone.m in Sources */,
 				C593C45717D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */,
+				CD5101A1182A856600E188A3 /* RHLabelManageViewController_iPhone.m in Sources */,
 				CD34DCAF180A7BC5003BBE06 /* ChatWizardController.m in Sources */,
 				C593C45F17D32AC800C26367 /* ChatAssessViewController_iPhone.m in Sources */,
 				C593C46317D32ADE00C26367 /* ChatVideoViewController_iPhone.m in Sources */,
@@ -1329,6 +1342,7 @@
 				C50505D717D2BD4800DB6589 /* CBStringUtils.m in Sources */,
 				C50505D917D2BD4800DB6589 /* CBUIUtils.m in Sources */,
 				C50505DB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
+				CD5101A2182A856600E188A3 /* RHLabelManageViewController_iPhone.m in Sources */,
 				CD26650D17F41DD20070934F /* UserDataModuleTest.m in Sources */,
 				C50505DD17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */,
 				C50505E317D2C53A00DB6589 /* LoggerModule.m in Sources */,

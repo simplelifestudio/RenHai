@@ -9,13 +9,19 @@
 #import "RHCollectionLabelCell_iPhone.h"
 
 #import "GUIStyle.h"
+#import "GUIModule.h"
+
+#import "RHLabelManageViewController_iPhone.h"
+
+#define BORDER_WIDTH 1.5f
+#define CORNER_RADIUS 3.0f
 
 static UIImage* delIconImage;
 static UIImage* orderIconImage;
 
 @interface RHCollectionLabelCell_iPhone()
 {
-
+    GUIModule* _guiModule;
 }
 
 @property (weak, nonatomic) IBOutlet FUIButton *delIconButton;
@@ -31,6 +37,8 @@ static UIImage* orderIconImage;
 
 @synthesize editingDelegate = _editingDelegate;
 
+@synthesize shakeCell = _shakeCell;
+
 + (void)initialize
 {
     delIconImage = [UIImage imageNamed:@"close.png"];
@@ -42,20 +50,14 @@ static UIImage* orderIconImage;
     self = [super initWithFrame:frame];
     if (self)
     {
-        [self _formatFlatUI];
+
     }
     return self;
 }
 
 - (void)awakeFromNib
 {
-    [self _formatFlatUI];
-    
-    self.cellMode = CellMode_Normal;
-    
-    self.layer.borderWidth = 1.5f;
-    self.layer.borderColor = MAJOR_COLOR_MID.CGColor;
-    self.layer.cornerRadius = 4.0f;
+    [self _setupInstance];
     
     [super awakeFromNib];
 }
@@ -157,6 +159,18 @@ static UIImage* orderIconImage;
     [layer removeAnimationForKey:@"quivering"];
 }
 
+-(void) _setupInstance
+{
+    _guiModule = [GUIModule sharedInstance];
+    
+    [self _formatFlatUI];
+    
+    self.cellMode = CellMode_Normal;
+    
+    self.layer.borderWidth = BORDER_WIDTH;
+    self.layer.borderColor = MAJOR_COLOR_MID.CGColor;
+    self.layer.cornerRadius = CORNER_RADIUS;
+}
 
 #pragma mark - IBActions
 
