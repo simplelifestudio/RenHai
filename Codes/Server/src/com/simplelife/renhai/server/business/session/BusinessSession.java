@@ -489,7 +489,7 @@ public class BusinessSession implements IBusinessSession
     	if (this.status != Consts.BusinessSessionStatus.VideoChat
     			&& this.status != Consts.BusinessSessionStatus.Assess)
     	{
-    		logger.error("EndChat received from <{}> but current session status is: " + status.name(), device.getDeviceSn());
+    		logger.error("EndChat received from <{}> but status of session "+ sessionId +" is: " + status.name(), device.getDeviceSn());
     		return;
     	}
     	

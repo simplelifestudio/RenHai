@@ -896,7 +896,7 @@ public class MockApp implements IMockApp, Runnable
 				{
 					AutoReplyTask task = new AutoReplyTask(
 							MockAppRequest.BusinessSessionNotificationResponse, 
-							lastReceivedCommand, 
+							obj, 
 							this,
 							500,
 							null);
@@ -966,7 +966,7 @@ public class MockApp implements IMockApp, Runnable
 			if (receivedOperationType == Consts.NotificationType.OthersideAgreed
 					|| receivedOperationType == Consts.NotificationType.OthersideEndChat)
 			{
-				replyNotification(lastReceivedCommand, null);
+				replyNotification(obj, null);
 				return;
 			}
 			else if (receivedOperationType == Consts.NotificationType.OthersideRejected
@@ -975,12 +975,12 @@ public class MockApp implements IMockApp, Runnable
 				//endBusiness();
 				task = new AutoReplyTask(
 						MockAppRequest.SessionUnbind, 
-						lastReceivedCommand, 
+						obj, 
 						this, 
 						MockAppConsts.Setting.ChatConfirmDuration, 
 						MockAppConsts.MockAppBusinessStatus.SessionUnbindReqSent);
 				task.setName("SessionUnbindReqSent" + DateUtil.getCurrentMiliseconds());
-				replyNotification(lastReceivedCommand, null);
+				replyNotification(obj, null);
 				return;
 			}
 		}
@@ -1002,9 +1002,9 @@ public class MockApp implements IMockApp, Runnable
 					{
 						task = new AutoReplyTask(
 								MockAppRequest.EnterPool, 
-								lastReceivedCommand, 
+								obj, 
 								this, 
-								0, 
+								300, 
 								MockAppConsts.MockAppBusinessStatus.EnterPoolReqSent);
 						task.setName("EnterPoolRequest" + DateUtil.getCurrentMiliseconds());
 					}
@@ -1018,7 +1018,7 @@ public class MockApp implements IMockApp, Runnable
 					
 					task = new AutoReplyTask(
 							MockAppRequest.MatchStart, 
-							lastReceivedCommand, 
+							obj, 
 							this, 
 							MockAppConsts.Setting.ChatConfirmDuration,
 							MockAppConsts.MockAppBusinessStatus.MatchStartReqSent);
@@ -1050,7 +1050,7 @@ public class MockApp implements IMockApp, Runnable
 			    	else
 			    	{
 			    		setBusinessStatus(MockAppBusinessStatus.SessionBoundReceived);
-			    		replyNotification(lastReceivedCommand, MockAppBusinessStatus.SessionBoundReplied);
+			    		replyNotification(obj, MockAppBusinessStatus.SessionBoundReplied);
 			    		if (behaviorMode == MockAppConsts.MockAppBehaviorMode.RejectChat)
 						{
 							AutoReplyTask chatConfirmTask = new AutoReplyTask(
@@ -1093,8 +1093,8 @@ public class MockApp implements IMockApp, Runnable
 			case AgreeChatReqSent:
 				if (messageId == Consts.MessageId.BusinessSessionResponse)
 				{
-					JSONObject body = lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
-					lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
+					JSONObject body = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
+					//lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
 					if (body.getInteger(JSONKey.OperationType) == Consts.NotificationType.OthersideRejected.getValue())
 					{
 						setBusinessStatus(MockAppConsts.MockAppBusinessStatus.EnterPoolResReceived);
@@ -1126,7 +1126,7 @@ public class MockApp implements IMockApp, Runnable
 				}
 				else if (messageId == Consts.MessageId.BusinessSessionNotification)
 				{
-					replyNotification(lastReceivedCommand, null);
+					replyNotification(obj, null);
 				}
 				else
 				{
@@ -1160,7 +1160,7 @@ public class MockApp implements IMockApp, Runnable
 				}
 				else if (messageId == Consts.MessageId.BusinessSessionNotification)
 				{
-					replyNotification(lastReceivedCommand, null);
+					replyNotification(obj, null);
 				}
 				else
 				{
@@ -1175,7 +1175,7 @@ public class MockApp implements IMockApp, Runnable
 				}
 				else if (messageId == Consts.MessageId.BusinessSessionNotification)
 				{
-					replyNotification(lastReceivedCommand, null);
+					replyNotification(obj, null);
 				}
 				else
 				{

@@ -233,6 +233,10 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     public void signalForSyncSend(String messageSn, AppJSONMessage appMessage)
     {
     	SyncController controller = syncMap.get(messageSn);
+    	if (controller == null)
+    	{
+    		return;
+    	}
 		controller.lock.lock();
 		controller.message = appMessage;
 		controller.condition.signal();

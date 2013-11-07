@@ -537,11 +537,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 			isDeviceInPool = false;
 			// Load device from DB 
 			targetDevice = DBModule.instance.deviceCache.getObject(deviceSn);
-			DAOWrapper.remove(targetDevice);
-			
-			// Check if it's totally invalid deviceSn in DB
 			if (targetDevice == null)
 			{
+				// Check if it's totally invalid deviceSn in DB
 				String temp = "Failed to assess Device <" + deviceSn + "> due to it's not in online pool";
 				logger.error(temp);
 				ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
@@ -553,6 +551,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 				OutputMessageCenter.instance.addMessage(response);
 				return;
 			}
+			
+			DAOWrapper.remove(targetDevice);
+			logger.debug("Device <{}> was released before Device <" + deviceWrapper.getDeviceSn() + "> trying to assess it, load it from DB again", targetDevice.getDeviceSn());
 		}
 		else
 		{
@@ -615,7 +616,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		if (!isDeviceInPool)
 		{
 			// If device has leaved OnlineDevicePool before assess, save to DB after assess
-			logger.debug("Device <{}> was released before Device <" + deviceWrapper.getDeviceSn() + "> trying to assess it", targetDevice.getDeviceSn());
+			logger.debug("Add device <{}> to DAOWrapper again after Device <{" + deviceWrapper.getDeviceSn() +"}> assessed it.", targetDevice.getDeviceSn());
 			DAOWrapper.cache(targetDevice);
 		}
 		OutputMessageCenter.instance.addMessage(response);

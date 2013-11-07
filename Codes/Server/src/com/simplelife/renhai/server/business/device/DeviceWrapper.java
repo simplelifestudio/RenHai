@@ -75,7 +75,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     protected Consts.ServiceStatus serviceStatus;
     
     // Business session
-    protected Consts.BusinessStatus businessStatus;
+    protected volatile Consts.BusinessStatus businessStatus;
     
     // Business type of device, Random or Interest, effective after app selects business device pool 
     protected Consts.BusinessType businessType;
@@ -130,7 +130,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
      */
     public void changeBusinessStatus(Consts.BusinessStatus targetStatus, StatusChangeReason reason)
     {
-    	logger.debug("[Milestone] Device <{}> changes status from " 
+    	logger.debug("[Milestone] Device <{}> will change status from " 
     			+ this.businessStatus.name() + " to " + targetStatus.name() 
     			+ ", caused by " + reason.name(), this.getDeviceSn());
     	
@@ -139,6 +139,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     		if (targetStatus == BusinessStatus.Offline)
     		{
     			businessStatus = targetStatus;
+    		}
+    		else
+    		{
+    			logger.error("ownerOnlinePool of Device <{}> is null in status of " + businessStatus.name(), getDeviceSn());
     		}
     		return;
     	}
@@ -243,8 +247,12 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     				case MatchCache:
     					businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
     					businessStatus = targetStatus;				// To ensure that status of device is WaitMatch before enter business pool
+    					logger.debug("Device <{}> changed status to " + targetStatus.name(), getDeviceSn());
     					businessPool.startMatch(this);
-    					break;
+    					
+    					// Important, return directly here to avoid status is overwritten to WaitMatch again 
+    					// if response of SessionBound is fast enough
+    					return;					  
     				default:
     					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
     					break;
@@ -276,6 +284,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     	}
     	
     	businessStatus = targetStatus;
+    	logger.debug("Device <{}> changed status to " + targetStatus.name(), getDeviceSn());
     }
     
     /**
