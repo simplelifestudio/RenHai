@@ -535,27 +535,22 @@ public class BusinessSessionRequest extends AppJSONMessage
 		if (targetDeviceWrapper == null)
 		{
 			isDeviceInPool = false;
-			targetDevice = DAOWrapper.getDeviceInCache(deviceSn, true);
+			// Load device from DB 
+			targetDevice = DBModule.instance.deviceCache.getObject(deviceSn);
 			
+			// Check if it's totally invalid deviceSn in DB
 			if (targetDevice == null)
 			{
-				// Load device from DB 
-				targetDevice = DBModule.instance.deviceCache.getObject(deviceSn);
-				
-				// Check if it's totally invalid deviceSn in DB
-				if (targetDevice == null)
-				{
-					String temp = "Failed to assess Device <" + deviceSn + "> due to it's not in online pool";
-					logger.error(temp);
-					ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
-							Consts.MessageId.BusinessSessionResponse);
-					response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession().getSessionId());
-					response.addToBody(JSONKey.BusinessType, deviceWrapper.getBusinessType().getValue());
-					response.addToBody(JSONKey.OperationInfo, temp);
-					response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Fail.getValue());
-					OutputMessageCenter.instance.addMessage(response);
-					return;
-				}
+				String temp = "Failed to assess Device <" + deviceSn + "> due to it's not in online pool";
+				logger.error(temp);
+				ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
+						Consts.MessageId.BusinessSessionResponse);
+				response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession().getSessionId());
+				response.addToBody(JSONKey.BusinessType, deviceWrapper.getBusinessType().getValue());
+				response.addToBody(JSONKey.OperationInfo, temp);
+				response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Fail.getValue());
+				OutputMessageCenter.instance.addMessage(response);
+				return;
 			}
 		}
 		else
@@ -666,8 +661,18 @@ public class BusinessSessionRequest extends AppJSONMessage
 			globalimpresslabel = new Globalimpresslabel();
 			globalimpresslabel.setGlobalAssessCount(1);
 			globalimpresslabel.setImpressLabelName(labelName);
-			DBModule.instance.impressLabelCache.putObject(labelName, globalimpresslabel);
-			DAOWrapper.cache(globalimpresslabel);
+			
+			// If there is global label object with same label name in cache
+			// replace global label by existent global label object  
+			boolean isNewObject = DBModule.instance.impressLabelCache.putObject(labelName, globalimpresslabel);
+			if (isNewObject)
+			{
+				DAOWrapper.cache(globalimpresslabel);
+			}
+			else
+			{
+				globalimpresslabel = DBModule.instance.impressLabelCache.getObject(labelName);
+			}
 			//globalimpresslabel.setImpresslabelmaps(impressLabels);
 		}
 		

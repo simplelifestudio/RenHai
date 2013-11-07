@@ -144,7 +144,7 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-    	logger.debug("Enter endSession.");
+    	logger.debug("Enter endSession with id {}.", sessionId);
     	sessionEndTime = System.currentTimeMillis();
 
     	deviceList.clear();
@@ -188,7 +188,7 @@ public class BusinessSession implements IBusinessSession
     	chatEndTime = 0;
     	sessionEndTime = 0;
     	
-    	logger.debug("Enter startSession, deviceList:" );
+    	logger.debug("Enter startSession with id {}, deviceList:" , sessionId);
     	for (String device : deviceList)
     	{
     		logger.debug(device);

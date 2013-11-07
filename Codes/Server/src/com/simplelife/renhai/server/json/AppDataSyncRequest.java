@@ -605,14 +605,16 @@ public class AppDataSyncRequest extends AppJSONMessage
 			return deviceWrapper.getDevice();
 		}
 		
+		/*
 		Device device = DAOWrapper.getDeviceInCache(deviceSn, false);
 		if (device != null)
 		{
 			logger.debug("Find Device object in DB cache, reuse it directly");
 			return device;
 		}
+		*/
 		
-		device = DBModule.instance.deviceCache.getObject(deviceSn);
+		Device device = DBModule.instance.deviceCache.getObject(deviceSn);
 		return device;
 	}
 	
@@ -1029,17 +1031,14 @@ public class AppDataSyncRequest extends AppJSONMessage
 			Globalimpresslabel impressLabel = DBModule.instance.impressLabelCache.getObject(strValue);
 			if (impressLabel == null)
 			{
-				impressLabel = new Globalimpresslabel();
-				impressLabel.setGlobalAssessCount(0);
-				impressLabel.setImpressLabelName(strValue);
-				DBModule.instance.impressLabelCache.putObject(strValue, impressLabel);
-				DAOWrapper.cache(impressLabel);
+				logger.error("Fatal error: the solid impress labels are not initilized in DB correctly");
 			}
 			
 			Impresslabelmap labelMap = new Impresslabelmap();
 			labelMap.setAssessCount(0);
 			labelMap.setAssessedCount(0);
 			labelMap.setGlobalImpressLabelId(impressLabel.getGlobalImpressLabelId());
+			labelMap.setGlobalLabel(impressLabel);
 			labelMap.setImpressCardId(impressCard.getImpressCardId());
 			labelMap.setUpdateTime(System.currentTimeMillis());
 			
@@ -1139,8 +1138,18 @@ public class AppDataSyncRequest extends AppJSONMessage
 				globalInterest = new Globalinterestlabel();
 				globalInterest.setInterestLabelName(tempStr);
 				globalInterest.setGlobalMatchCount(0);
-				DBModule.instance.interestLabelCache.putObject(tempStr, globalInterest);
-				DAOWrapper.cache(globalInterest);
+				
+				// If there is global label object with same label name in cache
+				// replace global label by existent global label object  
+				boolean isNewObject = DBModule.instance.interestLabelCache.putObject(tempStr, globalInterest);
+				if (isNewObject)
+				{
+					DAOWrapper.cache(globalInterest);
+				}
+				else
+				{
+					globalInterest = DBModule.instance.interestLabelCache.getObject(tempStr);
+				}
 			}
 			
 			interestLabelMap.setGlobalLabel(globalInterest);

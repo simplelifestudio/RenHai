@@ -28,12 +28,15 @@ public class DBQueryUtil
 	 */
 	public static boolean isNewDevice(String deviceSn)
 	{
+		Device device = null;
+		/*
 		Device device = DAOWrapper.getDeviceInCache(deviceSn, false);
 		if (device != null)
 		{
 			logger.debug("Device is in DB cache");
 			return false;
 		}
+		*/
 		
 		if (null != OnlineDevicePool.instance.getDevice(deviceSn))
 		{
@@ -53,6 +56,7 @@ public class DBQueryUtil
 		return (device == null);
 	}
 	
+	/*
 	public static Globalimpresslabel getGlobalimpresslabel(Integer labelId)
 	{
 		Globalimpresslabel label = DAOWrapper.getImpressLabelInCache(labelId);
@@ -88,7 +92,9 @@ public class DBQueryUtil
 		
 		return label;
 	}
+	*/
 	
+	/*
 	public static Globalinterestlabel getGlobalinterestlabel(Integer labelId)
 	{
 		Globalinterestlabel label = DAOWrapper.getInterestLabelInCache(labelId);
@@ -123,4 +129,5 @@ public class DBQueryUtil
 		
 		return label;
 	}
+	*/
 }

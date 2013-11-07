@@ -78,7 +78,7 @@ public class DbObjectCache<T>
 		return capacity;
 	}
 
-	public void putObject(String key, T obj)
+	public boolean putObject(String key, T obj)
 	{
 		if (hashMap.containsKey(key))
 		{
@@ -86,7 +86,11 @@ public class DbObjectCache<T>
 			if (existObj != obj)
 			{
 				//logger.error("There is different object with same key <{}> in DB loading cache.", key);
-				return;
+				return false;
+			}
+			else
+			{
+				return true;
 			}
 		}
 		hashMap.put(key, obj);
@@ -96,6 +100,7 @@ public class DbObjectCache<T>
 		{
 			compressCache();
 		}
+		return true;
 	}
 	
 	private void compressCache()
@@ -160,7 +165,15 @@ public class DbObjectCache<T>
 		for (Impresslabelmap map : impressMaps)
 		{
 			impressLabel = map.getGlobalLabel();
-			DBModule.instance.impressLabelCache.putObject(impressLabel.getImpressLabelName(), impressLabel);
+			
+			// If there is global label object with same label name in cache
+			// replace global label by existent global label object  
+			boolean isNewObject = DBModule.instance.impressLabelCache.putObject(impressLabel.getImpressLabelName(), impressLabel);
+			if (!isNewObject)
+			{
+				Globalimpresslabel oldLabel = DBModule.instance.impressLabelCache.getObject(impressLabel.getImpressLabelName());
+				map.setGlobalLabel(oldLabel);
+			}
 		}
 		
 		Set<Interestlabelmap> interestMaps = device.getProfile().getInterestCard().getInterestLabelMapSet();
@@ -168,7 +181,14 @@ public class DbObjectCache<T>
 		for (Interestlabelmap map : interestMaps)
 		{
 			interestLabel = map.getGlobalLabel();
-			DBModule.instance.interestLabelCache.putObject(interestLabel.getInterestLabelName(), interestLabel);
+			// If there is global label object with same label name in cache
+			// replace global label by existent global label object  
+			boolean isNewObject = DBModule.instance.interestLabelCache.putObject(interestLabel.getInterestLabelName(), interestLabel);
+			if (!isNewObject)
+			{
+				Globalinterestlabel oldLabel = DBModule.instance.interestLabelCache.getObject(interestLabel.getInterestLabelName());
+				map.setGlobalLabel(oldLabel);
+			}
 		}
 	}
 }

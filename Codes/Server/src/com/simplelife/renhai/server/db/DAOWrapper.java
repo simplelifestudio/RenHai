@@ -183,7 +183,7 @@ public class DAOWrapper
     protected static Timer timer = new Timer();
     protected static FlushTask flushTask = new FlushTask(linkToBeSaved);
     
-    
+    /*
     public static Device getDeviceInCache(String deviceSn, boolean removeFlag)
     {
     	Iterator<IDbObject> it = linkToBeSaved.iterator();
@@ -282,6 +282,7 @@ public class DAOWrapper
     	}
     	return null;
     }
+    */
     
     public static void startTimers()
     {
@@ -299,6 +300,62 @@ public class DAOWrapper
     	flushTask.getLock().lock();
     	flushTask.signal();
     	flushTask.getLock().unlock();
+    }
+    
+    
+    /**
+     * Check if an object is in DB saving cache
+     * @param obj: object to be saved
+     * @return Return true if obj is existent in cache, else return false;
+     */
+    private boolean isObjectInCache(Object obj)
+    {
+    	// Use string field to check existence of object, as ID of objects may be null before save
+    	if (obj instanceof Globalinterestlabel)
+    	{
+    		Globalinterestlabel newLabel = (Globalinterestlabel) obj;
+    		Iterator<IDbObject> it = linkToBeSaved.iterator();
+        	while (it.hasNext())
+        	{
+        		Globalinterestlabel label = (Globalinterestlabel) it.next();
+    			if (label.getInterestLabelName().equals(newLabel.getInterestLabelName()))
+    			{
+    				return true;
+    			}
+        	}
+        	return false;
+    	}
+    	
+    	if (obj instanceof Globalimpresslabel)
+    	{
+    		Globalimpresslabel newLabel = (Globalimpresslabel) obj;
+    		Iterator<IDbObject> it = linkToBeSaved.iterator();
+        	while (it.hasNext())
+        	{
+        		Globalimpresslabel label = (Globalimpresslabel) it.next();
+    			if (label.getImpressLabelName().equals(newLabel.getImpressLabelName()))
+    			{
+    				return true;
+    			}
+        	}
+        	return false;
+    	}
+    	
+    	if (obj instanceof Device)
+    	{
+    		Device newDevice = (Device) obj;
+    		Iterator<IDbObject> it = linkToBeSaved.iterator();
+        	while (it.hasNext())
+        	{
+        		Device device = (Device) it.next();
+    			if (device.getDeviceSn().equals(newDevice.getDeviceSn()))
+    			{
+    				return true;
+    			}
+        	}
+        	return false;
+    	}
+    	return false;
     }
     
     /**

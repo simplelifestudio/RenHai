@@ -58,7 +58,7 @@ public class DbLogger
 		Globalinterestlabel label = DBModule.instance.interestLabelCache.getObject(labelName);
 		if (label == null)
 		{
-			DBModule.instance.getLogger().error("Target label can't be found in DB: ", labelName);
+			DBModule.instance.getLogger().error("Fatal error: target label {} can't be found in DB: ", labelName);
 			return;
 		}
 		
