@@ -401,6 +401,32 @@ public class MainFunction extends AbstractTestCase
 	}
 	
 	@Test
+	public void testDbCache3()
+	{
+		Globalinterestlabel globalInterest;
+		String tempStr = "“Ù¿÷";
+		globalInterest = DBModule.instance.interestLabelCache.getObject(tempStr);
+		
+		if (globalInterest == null)
+		{
+			globalInterest = new Globalinterestlabel();
+			globalInterest.setInterestLabelName(tempStr);
+			globalInterest.setGlobalMatchCount(0);
+			
+			DBModule.instance.interestLabelCache.putObject(tempStr, globalInterest);
+			
+			Globalinterestlabel globalInterest2 = DBModule.instance.interestLabelCache.getObject(tempStr);
+			System.out.print("=========id before save:" + globalInterest2.getGlobalInterestLabelId() + "\n");
+			
+			DAOWrapper.cache(globalInterest);
+			DAOWrapper.flushToDB();
+		}
+		
+		Globalinterestlabel globalInterest2 = DBModule.instance.interestLabelCache.getObject(tempStr);
+		System.out.print("=========id after save:" + globalInterest2.getGlobalInterestLabelId() + "\n");
+	}
+	
+	@Test
 	public void testDbCache2()
 	{
 		DbObjectCache<String> cache = new DbObjectCache<>(null);

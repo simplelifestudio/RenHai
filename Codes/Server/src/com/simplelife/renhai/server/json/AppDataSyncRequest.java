@@ -1032,6 +1032,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 				impressLabel = new Globalimpresslabel();
 				impressLabel.setGlobalAssessCount(0);
 				impressLabel.setImpressLabelName(strValue);
+				DBModule.instance.impressLabelCache.putObject(strValue, impressLabel);
 				DAOWrapper.cache(impressLabel);
 			}
 			
@@ -1138,6 +1139,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 				globalInterest = new Globalinterestlabel();
 				globalInterest.setInterestLabelName(tempStr);
 				globalInterest.setGlobalMatchCount(0);
+				DBModule.instance.interestLabelCache.putObject(tempStr, globalInterest);
 				DAOWrapper.cache(globalInterest);
 			}
 			

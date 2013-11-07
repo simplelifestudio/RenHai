@@ -208,16 +208,18 @@ public class Impresslabelmap implements IDbObject, Comparable<Impresslabelmap>
 		{
 			if (this.globalImpressLabelId == null)
 			{
-				Integer id = null;
-				if (globalLabel != null)
+				if (globalLabel == null)
 				{
-					id = globalLabel.getGlobalImpressLabelId();
+					DBModule.instance.getLogger().error("Fatal error: globalLabel == null when trying to save ImpresslabelmapMapper");
+					return;
 				}
 				
+				Integer id = globalLabel.getGlobalImpressLabelId();
 				if (id == null)
 				{
-					Globalimpresslabel tmpLabel = DBModule.instance.impressLabelCache.getObject(globalLabel.getImpressLabelName());
-					id = tmpLabel.getGlobalImpressLabelId();
+					// The global label shall be ahead of labelMap in queue of DAOWrapper
+					DBModule.instance.getLogger().error("Fatal error: id of globalLabel is still null when trying to save ImpresslabelmapMapper");
+					return;
 				}
 				this.globalImpressLabelId = id;
 			}

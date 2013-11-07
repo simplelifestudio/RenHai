@@ -666,6 +666,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			globalimpresslabel = new Globalimpresslabel();
 			globalimpresslabel.setGlobalAssessCount(1);
 			globalimpresslabel.setImpressLabelName(labelName);
+			DBModule.instance.impressLabelCache.putObject(labelName, globalimpresslabel);
 			DAOWrapper.cache(globalimpresslabel);
 			//globalimpresslabel.setImpresslabelmaps(impressLabels);
 		}

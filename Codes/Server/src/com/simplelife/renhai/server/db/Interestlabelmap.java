@@ -206,11 +206,18 @@ public class Interestlabelmap implements IDbObject, Comparable<Interestlabelmap>
 		{
  			if (this.globalInterestLabelId == null)
 			{
+ 				if (globalLabel == null)
+				{
+					DBModule.instance.getLogger().error("Fatal error: globalLabel == null when trying to save InterestlabelmapMapper");
+					return;
+				}
+ 				
 				Integer id = globalLabel.getGlobalInterestLabelId(); 
 				if (id == null)
 				{
-					Globalinterestlabel tmpLabel = DBModule.instance.interestLabelCache.getObject(globalLabel.getInterestLabelName());
-					id = tmpLabel.getGlobalInterestLabelId();
+					// The global label shall be ahead of labelMap in queue of DAOWrapper
+					DBModule.instance.getLogger().error("Fatal error: id of globalLabel is still null when trying to save InterestlabelmapMapper");
+					return;
 				}
 				this.globalInterestLabelId = id;
 			}
