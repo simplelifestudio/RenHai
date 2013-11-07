@@ -12,6 +12,7 @@ package com.simplelife.renhai.server.test.unittest;
 import java.net.URI;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
@@ -403,12 +404,20 @@ public class MainFunction extends AbstractTestCase
 	public void testDbCache2()
 	{
 		DbObjectCache<String> cache = new DbObjectCache<>(null);
+		cache.setCapacity(GlobalSetting.DBSetting.DeviceCacheCount);
 		
 		String temp;
+		Random random = new Random();
 		for (int i = 0; i < GlobalSetting.DBSetting.DeviceCacheCount + 50; i++)
 		{
 			temp = Integer.toString(i);
 			cache.putObject(temp, temp);
+			
+			int k = random.nextInt(20);
+			for (int j = 0; j < k; j++)
+			{
+				cache.getObject(temp);
+			}
 		}
 	}
 	

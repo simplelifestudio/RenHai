@@ -37,6 +37,11 @@ public class DbObjectCache<T>
 		public String key;
 		public int referCount = 1;
 		
+		public Counter(String key)
+		{
+			this.key = key;
+		}
+		
 		public void increaseCount()
 		{
 			referCount++;
@@ -85,7 +90,7 @@ public class DbObjectCache<T>
 			}
 		}
 		hashMap.put(key, obj);
-		countMap.put(key, new Counter());
+		countMap.put(key, new Counter(key));
 		
 		if (hashMap.size() > capacity + capacityBuffer)
 		{
@@ -95,19 +100,15 @@ public class DbObjectCache<T>
 	
 	private void compressCache()
 	{
-		/*
-		Counter[] counters = new Counter[countMap.values().size()];
-		countMap.values().toArray(counters);
-		Arrays.sort(counters);z
-		
+		Object[] counters = countMap.values().toArray();
+		Arrays.sort(counters);
 		Counter counter;
 		for (int i = 0; i < capacity; i++)
 		{
-			counter = counters[i];
+			counter = (Counter) counters[i];
 			countMap.remove(counter.key);
 			hashMap.remove(counter.key);
 		}
-		*/
 	}
 	
 	public T getObject(String key)
@@ -130,7 +131,7 @@ public class DbObjectCache<T>
 			if (obj != null)
 			{
 				hashMap.put(key, obj);
-				countMap.put(key, new Counter());
+				countMap.put(key, new Counter(key));
 				
 				if (obj instanceof Device)
 				{
