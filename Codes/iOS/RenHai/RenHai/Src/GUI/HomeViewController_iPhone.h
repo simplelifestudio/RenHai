@@ -11,7 +11,7 @@
 #import "CBRoundProgressView.h"
 #import "OBShapedButton.h"
 
-#define CURRENT_BUSINESSPOOL BusinessType_Random
+#define CURRENT_BUSINESSPOOL BusinessType_Interest
 
 @interface HomeViewController_iPhone : UIViewController
 
