@@ -13,9 +13,11 @@
 #import "GUIModule.h"
 #import "GUIStyle.h"
 
-#import "RHInterestLabel.h"
+#import "UIViewController+CWPopup.h"
 
+#import "RHInterestLabel.h"
 #import "RHCollectionLabelCell_iPhone.h"
+#import "RHLabelManageViewController_iPhone.h"
 
 #define INTERESTLABELS_SECTION_COUNT 1
 #define SERVERINTERESTLABELS_SECTION_COUNT 1
@@ -26,7 +28,7 @@
 #define SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS 0
 #define SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS 12
 
-@interface InterestViewController_iPhone () <RHCollectionLabelCellEditingDelegate>
+@interface InterestViewController_iPhone () <RHCollectionLabelCellEditingDelegate, InterestLabelsHeaderViewDelegate, RHLabelManageDelegate, UIGestureRecognizerDelegate>
 {
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
@@ -71,6 +73,11 @@
     
     [self _setupNavigationBar];
     [self _setupCollectionView];
+    
+    UITapGestureRecognizer* doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
+    doubleTapGesturer.delegate = self;
+    doubleTapGesturer.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer:doubleTapGesturer];
 }
 
 -(void)_setupNavigationBar
@@ -200,6 +207,42 @@
 -(void)_showOtherLabels
 {
     [self _refreshServerInterestLabelList];
+}
+
+-(void)_didDoubleTapped:(UITapGestureRecognizer *) recognizer
+{
+    CGPoint locationTouch = [recognizer locationInView:self.view];
+    
+    if (CGRectContainsPoint(_interestLabelsView.frame, locationTouch))
+    {
+        NSIndexPath* indexPath = [_interestLabelsView indexPathForItemAtPoint:locationTouch];
+        if (nil != indexPath)
+        {
+            NSUInteger section = indexPath.section;
+            NSUInteger position = indexPath.item;
+            
+            switch (section)
+            {
+                case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
+                {
+                    RHDevice* device = _userDataModule.device;
+                    RHProfile* profile = device.profile;
+                    RHInterestCard* interestCard = profile.interestCard;
+                    
+                    RHInterestLabel* oLabel = [interestCard getLabelByIndex:position];
+                    
+                    RHLabelManageViewController_iPhone* labelManagerViewController = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:oLabel.labelName];
+                    [_guiModule.mainViewController presentPopupViewController:labelManagerViewController animated:YES completion:nil];
+                    
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+        }
+    }
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -355,6 +398,8 @@
                 {
                     _interestLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW forIndexPath:indexPath];
                     _interestLabelsHeaderView.headerTitleLabel.text = NSLocalizedString(@"Interest_InterestLabels", nil);
+                    
+                    _interestLabelsHeaderView.operationDelegate = self;
                 }
                 
                 reusableView = _interestLabelsHeaderView;
@@ -377,6 +422,8 @@
                 {
                     _serverInterestLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW forIndexPath:indexPath];
                     _serverInterestLabelsHeaderView.headerTitleLabel.text = NSLocalizedString(@"Interest_CurrentHotInterestLabels", nil);
+                    
+
                 }
                 
                 reusableView = _serverInterestLabelsHeaderView;
@@ -600,6 +647,64 @@
         
         [self _updateInterestCard];
     }
+}
+
+#pragma mark - InterestLabelsHeaderViewDelegate
+
+-(void) didCreateInterestLabel
+{
+    RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
+    [_guiModule.mainViewController presentPopupViewController:labelManageVC animated:YES completion:nil];
+}
+
+-(void) didDeleteInterestLabel
+{
+    
+}
+
+-(void) didOrderInterestLabels
+{
+    
+}
+
+#pragma mark - RHLabelManageDelegate
+
+-(void) didLabelManageDone:(ManageMode) mode newLabel:(NSString*) newLabel oldLabel:(NSString*) oldLabel
+{
+    RHDevice* device = _userDataModule.device;
+    RHProfile* profile = device.profile;
+    RHInterestCard* interestCard = profile.interestCard;
+    
+    switch (mode)
+    {
+        case ManageMode_NewLabel:
+        {
+            [interestCard addLabel:newLabel];
+            
+            break;
+        }
+        case ManageMode_ModifyLabel:
+        {
+            NSUInteger labelIndex = [interestCard getLabelIndex:oldLabel];
+            [interestCard removeLabelByIndex:labelIndex];
+            [interestCard insertLabelByName:newLabel index:labelIndex];
+            
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    
+    [_interestLabelsView reloadData];
+    
+    [_guiModule.mainViewController dismissPopupViewControllerAnimated:YES completion:nil];
+}
+
+-(void) didLabelManageCancel
+{
+    [_guiModule.mainViewController dismissPopupViewControllerAnimated:YES completion:nil];
 }
 
 @end

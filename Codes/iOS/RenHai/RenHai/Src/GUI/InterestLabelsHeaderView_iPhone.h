@@ -8,6 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol InterestLabelsHeaderViewDelegate
+
+@required
+-(void) didCreateInterestLabel;
+-(void) didDeleteInterestLabel;
+-(void) didOrderInterestLabels;
+
+@end
+
 @interface InterestLabelsHeaderView_iPhone : UICollectionReusableView
 
 @property (weak, nonatomic) IBOutlet UILabel *headerTitleLabel;
@@ -15,6 +24,8 @@
 @property (weak, nonatomic) IBOutlet FUIButton *createButton;
 @property (weak, nonatomic) IBOutlet FUIButton *delButton;
 @property (weak, nonatomic) IBOutlet FUIButton *orderButton;
+
+@property (strong, nonatomic) id<InterestLabelsHeaderViewDelegate> operationDelegate;
 
 - (IBAction)didPressCreateButton:(id)sender;
 - (IBAction)didPressDelButton:(id)sender;

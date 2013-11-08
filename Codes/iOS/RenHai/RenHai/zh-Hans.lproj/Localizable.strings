@@ -115,3 +115,9 @@
 "ChatAssess_AssessLabels" = "本次聊天印象";
 "ChatAssess_AddImpressLabels" = "本次新增印象标签";
 "ChatAssess_ExistImpressLabels" = "对方已有印象标签";
+
+"LabelManage_NewLabel" = "新建标签";
+"LabelManage_ModifyLabel" = "编辑标签";
+"LabelManage_Action_Save" = "保存";
+"LabelManage_Action_Cancel" = "取消";
+"LabelManage_LengthLimit" = "长度：1-5个汉字";

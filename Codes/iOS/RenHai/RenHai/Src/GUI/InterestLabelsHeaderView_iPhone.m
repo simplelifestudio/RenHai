@@ -14,6 +14,8 @@
 @synthesize delButton = _delButton;
 @synthesize orderButton = _orderButton;
 
+@synthesize operationDelegate = _operationDelegate;
+
 #pragma mark - Public Methods
 
 - (id)initWithFrame:(CGRect)frame
@@ -30,17 +32,26 @@
 
 - (IBAction)didPressCreateButton:(id)sender
 {
-    
+    if (nil != _operationDelegate)
+    {
+        [_operationDelegate didCreateInterestLabel];
+    }
 }
 
 - (IBAction)didPressDelButton:(id)sender
 {
-    
+    if (nil != _operationDelegate)
+    {
+        [_operationDelegate didDeleteInterestLabel];
+    }
 }
 
 - (IBAction)didPressOrderButton:(id)sender
 {
-    
+    if (nil != _operationDelegate)
+    {
+        [_operationDelegate didOrderInterestLabels];
+    }
 }
 
 @end

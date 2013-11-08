@@ -10,6 +10,7 @@
 
 #import "CBUIUtils.h"
 #import "UINavigationController+CBNavigationControllerExtends.h"
+#import "UIViewController+CWPopup.h"
 
 #import "GUIModule.h"
 #import "CommunicationModule.h"
@@ -154,6 +155,7 @@ ConnectStatus;
         {
             UIViewController* rootVC = [CBUIUtils getRootController];
             MainViewController_iPhone* mainVC = _guiModule.mainViewController;
+            [mainVC dismissPopupViewControllerAnimated:NO completion:nil];
             
             [self _clockCancel];
             

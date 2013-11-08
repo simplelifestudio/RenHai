@@ -44,6 +44,7 @@
 #define STORYBOARD_ID_CONFIG_IPHONE @"config_iphone"
 #define STORYBOARD_ID_HELP_IPHONE @"help_iphone"
 #define STORYBOARD_ID_WARNING_IPHONE @"warning_iphone"
+
 #define STORYBOARD_ID_CHATWIZARD @"chatwizard"
 #define STORYBOARD_ID_CHATWAIT_IPHONE @"chatwait_iphone"
 #define STORYBOARD_ID_CHATCONFIRM_IPHONE @"chatconfirm_iphone"
@@ -78,6 +79,8 @@
 
 #define NIB_INTERESTLABELSHEADERVIEW @"InterestLabelsHeaderView_iPhone"
 #define NIB_SERVERINTERESTLABELSHEADERVIEW @"ServerInterestLabelsHeaderView_iPhone"
+
+#define NIB_LABELMANAGEVIEWCONTROLLER @"RHLabelManageViewController_iPhone"
 
 #define DELAY_UIREFRESHCONTROL_SHOW 0
 #define DELAY_UIREFRESHCONTROL_RESET 0
@@ -116,7 +119,6 @@ LEFTBAR_CELL_ID;
 @property (nonatomic, strong) ConfigViewController_iPhone* configViewController;
 @property (nonatomic, strong) HelpViewController_iPhone* helpViewController;
 @property (nonatomic, strong) WarningViewController_iPhone* warningViewController;
-
 @property (nonatomic, strong) ChatWizardController* chatWizardController;
 
 

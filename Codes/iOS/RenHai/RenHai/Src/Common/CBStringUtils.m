@@ -152,4 +152,25 @@
     return randomStr;
 }
 
++(NSUInteger)calculateTextNumber:(NSString *) text
+{
+    float number = 0.0;
+    int index;
+    for (index = 0; index < text.length; index++)
+    {
+        NSString *character = [text substringWithRange:NSMakeRange(index, 1)];
+        
+        if ([character lengthOfBytesUsingEncoding:NSUTF8StringEncoding] == 3)
+        {
+            number++;
+        }
+        else
+        {
+            number = number + 0.5;
+        }
+    }
+    
+    return ceil(number);
+}
+
 @end

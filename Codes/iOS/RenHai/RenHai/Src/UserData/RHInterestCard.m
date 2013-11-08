@@ -120,7 +120,7 @@
 {
     BOOL flag = NO;
     
-    if (nil != labelName && 0 < labelName.length && index < _labelList.count)
+    if (nil != labelName && 0 < labelName.length && index <= _labelList.count)
     {
         NSInteger labelIndex = [self getLabelIndex:labelName];
         

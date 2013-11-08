@@ -115,3 +115,9 @@
 "ChatAssess_AssessLabels" = "Chat Impress";
 "ChatAssess_AddImpressLabels" = "Add Impress Labels";
 "ChatAssess_ExistImpressLabels" = "Exist Impress Labels";
+
+"LabelManage_NewLabel" = "New Label";
+"LabelManage_ModifyLabel" = "Modify Label";
+"LabelManage_Action_Save" = "Save";
+"LabelManage_Action_Cancel" = "Cancel";
+"LabelManage_LengthLimit" = "Length:1-10 characters";
