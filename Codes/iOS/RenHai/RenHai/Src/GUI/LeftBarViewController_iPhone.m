@@ -77,6 +77,10 @@
 //    {
 //        _selectedRow = LEFTBAR_CELL_CONFIG;
 //    }
+    else
+    {
+        _selectedRow = LEFTBAR_CELL_HOME;
+    }
     
     [self.tableView reloadData];
     
@@ -199,10 +203,8 @@
         case LEFTBAR_CELL_INTEREST:
         {
             InterestViewController_iPhone* interestVC = _guiModule.interestViewController;
-            
             [navigationVC popToRootViewControllerAnimated:NO];
             [navigationVC pushViewController:interestVC animated:NO];
-            [interestVC setupIBOutlets];
             [mainVC showViewController:navigationVC animated:YES completion:nil];
             
             break;
