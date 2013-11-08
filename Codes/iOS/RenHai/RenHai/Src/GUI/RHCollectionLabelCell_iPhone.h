@@ -8,18 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@class RHCollectionLabelCell_iPhone;
-
-@protocol RHCollectionLabelCellEditingDelegate <NSObject>
-
-@required
--(void) onTextFieldDoneEditing:(RHCollectionLabelCell_iPhone*)cell labelName:(NSString*) labelName;
-
-@optional
--(void) didDelete;
-
-@end
-
 typedef enum
 {
     CellMode_Normal = 0,
@@ -33,11 +21,11 @@ CellMode;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UILabel *countLabel;
 
-@property (strong, nonatomic) id<RHCollectionLabelCellEditingDelegate> editingDelegate;
-
 @property (nonatomic) CellMode cellMode;
 @property (nonatomic) BOOL shakeCell;
 
 - (IBAction)textFieldDoneEditing:(id)sender;
+
+- (NSString*) labelName;
 
 @end

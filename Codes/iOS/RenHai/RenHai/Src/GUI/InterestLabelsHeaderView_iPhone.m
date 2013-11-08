@@ -12,7 +12,6 @@
 
 @synthesize createButton = _createButton;
 @synthesize delButton = _delButton;
-@synthesize orderButton = _orderButton;
 
 @synthesize operationDelegate = _operationDelegate;
 
@@ -43,14 +42,6 @@
     if (nil != _operationDelegate)
     {
         [_operationDelegate didDeleteInterestLabel];
-    }
-}
-
-- (IBAction)didPressOrderButton:(id)sender
-{
-    if (nil != _operationDelegate)
-    {
-        [_operationDelegate didOrderInterestLabels];
     }
 }
 

@@ -19,7 +19,7 @@
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1va-0z-7GX" userLabel="createButton" customClass="FUIButton">
-                    <rect key="frame" x="170" y="7" width="50" height="30"/>
+                    <rect key="frame" x="270" y="7" width="50" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" title="新建">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -38,16 +38,6 @@
                         <action selector="didPressDelButton:" destination="1" eventType="touchUpInside" id="XXF-gw-Ei0"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wNg-ya-ClB" userLabel="orderButton" customClass="FUIButton">
-                    <rect key="frame" x="270" y="7" width="50" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <state key="normal" title="排序">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="didPressOrderButton:" destination="1" eventType="touchUpInside" id="hB3-T2-F7Y"/>
-                    </connections>
-                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -55,7 +45,6 @@
                 <outlet property="createButton" destination="1va-0z-7GX" id="d9K-Bf-K8f"/>
                 <outlet property="delButton" destination="4bw-HV-lIy" id="tJX-16-8vy"/>
                 <outlet property="headerTitleLabel" destination="8zx-dS-xfK" id="5Aa-ka-oVn"/>
-                <outlet property="orderButton" destination="wNg-ya-ClB" id="osi-fE-uqd"/>
             </connections>
         </view>
     </objects>
