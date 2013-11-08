@@ -146,8 +146,8 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     
     public abstract Consts.MessageId getMessageId();
     
-    
-    public void response()
+    @Override
+    public void run()
     {
     	Logger logger = JSONModule.instance.getLogger();
     	if (deviceWrapper == null)

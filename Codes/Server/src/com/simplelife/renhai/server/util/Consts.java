@@ -15,11 +15,11 @@ package com.simplelife.renhai.server.util;
  */
 public class Consts
 {
-	public enum SolidAssessLabel
+	public enum SolidInterestLabel
 	{
-		Invalid(""), Good("^#Happy#^"), Normal("^#SoSo#^"), Bad("^#Disgusting#^");
+		Invalid(""), RenHai("»À∫£");
 		private String value;
-		private SolidAssessLabel(String value)
+		private SolidInterestLabel(String value)
 		{
 			this.value = value;
 		}
@@ -35,9 +35,42 @@ public class Consts
 			return value;
 		}
 		
-		public static boolean isSolidAssessLabel(String label)
+		public static boolean isSolidInterestLabel(String label)
 		{
-			for (SolidAssessLabel tmpValue : values())
+			for (SolidInterestLabel tmpValue : values())
+			{
+				if (tmpValue.value.equals(label))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	
+	public enum SolidImpressLabel
+	{
+		Invalid(""), Good("^#Happy#^"), Normal("^#SoSo#^"), Bad("^#Disgusting#^");
+		private String value;
+		private SolidImpressLabel(String value)
+		{
+			this.value = value;
+		}
+		
+		public String getValue()
+		{
+			return value;
+		}
+		
+		@Override
+		public String toString()
+		{
+			return value;
+		}
+		
+		public static boolean isSolidImpressLabel(String label)
+		{
+			for (SolidImpressLabel tmpValue : values())
 			{
 				if (tmpValue.value.equals(label))
 				{

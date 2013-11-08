@@ -93,8 +93,8 @@ public class DbObjectCache<T>
 				return true;
 			}
 		}
-		hashMap.put(key, obj);
 		countMap.put(key, new Counter(key));
+		hashMap.put(key, obj);
 		
 		if (hashMap.size() > capacity + capacityBuffer)
 		{
@@ -135,8 +135,8 @@ public class DbObjectCache<T>
 			obj = (T) mapper.selectByStringKey(key);
 			if (obj != null)
 			{
-				hashMap.put(key, obj);
 				countMap.put(key, new Counter(key));
+				hashMap.put(key, obj);
 				
 				if (obj instanceof Device)
 				{

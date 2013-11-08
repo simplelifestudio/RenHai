@@ -25,7 +25,7 @@ import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */
-public abstract class AppJSONMessage extends AbstractJSONMessage implements Runnable, IAppJSONMessage
+public abstract class AppJSONMessage extends AbstractJSONMessage implements IAppJSONMessage
 {
     private String errorDescription;
     private Consts.GlobalErrorCode errorCode;
@@ -234,15 +234,14 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements Runn
 		{
 			//Thread.currentThread().setName(messageId.name() + DateUtil.getCurrentMiliseconds());
     		int duration = getQueueDuration();
-    		logger.debug("Start to execute " + this.messageId.name() + " with MessageSN: " + this.getMessageSn() + " which was queued " + duration + "ms ago");
     		if (duration >= GlobalSetting.BusinessSetting.MessageQueueTime)
     		{
-    			logger.warn("Queue duration is {}ms, consider increasing size of input message execution thread pool.", duration);
+    			logger.warn("Queue duration of message {} is " + duration +"ms, consider increasing size of input message execution thread pool.", getMessageSn());
     		}
 			
 			if (deviceWrapper == null || !deviceWrapper.getConnection().isOpen())
 	    	{
-	    		logger.warn("deviceWrapper of message with SN: {} is released, execution of message is given up", this.getMessageSn());
+	    		logger.warn("deviceWrapper of message with SN: {} is released, execution of message " + this.messageId.name() + " is given up", this.getMessageSn());
 	    		return;
 	    	}
 			doBeforeRun();
