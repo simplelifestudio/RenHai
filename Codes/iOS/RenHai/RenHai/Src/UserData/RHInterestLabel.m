@@ -99,11 +99,11 @@
         id oGlobalMatchCount = [dic objectForKey:MESSAGE_KEY_GLOBALMATCHCOUNT];
         if (nil != oGlobalMatchCount)
         {
-            _globalMatchCount = ([NSNull null] != oLabelId) ? ((NSNumber*)oLabelId).integerValue : 0;
+            _globalMatchCount = ([NSNull null] != oGlobalMatchCount) ? ((NSNumber*)oGlobalMatchCount).integerValue : 0;
         }
         
         id oLabelOrder = [dic objectForKey:MESSAGE_KEY_INTERESTLABELORDER];
-        if (nil != oGlobalMatchCount)
+        if (nil != oLabelOrder)
         {
             _labelOrder = ([NSNull null] != oLabelOrder) ? ((NSNumber*)oLabelOrder).integerValue : 0;
         }
