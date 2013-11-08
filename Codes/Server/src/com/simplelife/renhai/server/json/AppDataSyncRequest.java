@@ -1014,16 +1014,41 @@ public class AppDataSyncRequest extends AppJSONMessage
 		deviceResponse.put(JSONKey.DeviceCard, deviceCardResponse);
 	}
 	
-	private Device newDevice(String deviceSn)
+	private void initSolidInterestLabels(Interestcard interestCard)
 	{
-		// Create new impress card
-		Impresscard impressCard = new Impresscard();
-		Interestcard interestCard = new Interestcard();
-		
-		Set<Impresslabelmap> impressLabelMaps = new HashSet<Impresslabelmap>();
-		for (Consts.SolidAssessLabel label : Consts.SolidAssessLabel.values())
+		Set<Interestlabelmap> interestLabelMaps = interestCard.getInterestLabelMapSet();
+		for (Consts.SolidInterestLabel label : Consts.SolidInterestLabel.values())
 		{
-			if (label == Consts.SolidAssessLabel.Invalid)
+			if (label == Consts.SolidInterestLabel.Invalid)
+			{
+				continue;
+			}
+			
+			String strValue = label.getValue();
+			Globalinterestlabel interestLabel = DBModule.instance.interestLabelCache.getObject(strValue);
+			if (interestLabel == null)
+			{
+				logger.error("Fatal error: the solid interest labels are not initilized in DB correctly");
+			}
+			
+			Interestlabelmap labelMap = new Interestlabelmap();
+			labelMap.setInterestCardId(interestCard.getInterestCardId());
+			labelMap.setGlobalInterestLabelId(interestLabel.getGlobalInterestLabelId());
+			labelMap.setLabelOrder(0);
+			labelMap.setMatchCount(0);
+			labelMap.setValidFlag(Consts.ValidInvalid.Valid.name());
+			labelMap.setGlobalLabel(interestLabel);
+			
+			interestLabelMaps.add(labelMap);
+		}
+	}
+	
+	private void initSolidImpressLabels(Impresscard impressCard)
+	{
+		Set<Impresslabelmap> impressLabelMaps = impressCard.getImpressLabelMapSet();
+		for (Consts.SolidImpressLabel label : Consts.SolidImpressLabel.values())
+		{
+			if (label == Consts.SolidImpressLabel.Invalid)
 			{
 				continue;
 			}
@@ -1045,6 +1070,16 @@ public class AppDataSyncRequest extends AppJSONMessage
 			
 			impressLabelMaps.add(labelMap);
 		}
+	}
+	
+	private Device newDevice(String deviceSn)
+	{
+		// Create new impress card
+		Impresscard impressCard = new Impresscard();
+		initSolidImpressLabels(impressCard);
+		
+		Interestcard interestCard = new Interestcard();
+		initSolidInterestLabels(interestCard);
 		
 		Profile profile = new Profile();
 		Devicecard deviceCard = new Devicecard();
@@ -1058,9 +1093,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 		impressCard.setChatLossCount(0);
 		impressCard.setChatTotalCount(0);
 		impressCard.setChatTotalDuration(0);
-		
-		// Save default solid impress label for new device
-		impressCard.setImpressLabelMapSet(impressLabelMaps);
 		
 		// Create new interest card
 		// Create new profile
@@ -1201,23 +1233,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 		JSONArray responseArray = new JSONArray();
 		response.put(JSONKey.InterestLabelList, responseArray);
 		parseInterestLabels(interestLabelList, card, responseArray);
-		
-		//card.setInterestlabelmaps(labelMapList);
-		
-		/*
-		if (labelMapList.size() > 0)
-		{
-			String interestCardId = DBQueryUtil.getIDByDeviceSn(TableColumnName.InterestCardId,
-					deviceWrapper.getDeviceSn());
-			
-			if (interestCardId != null)
-			{
-				String sql = "delete from " + TableName.InterestLabelMap + " where "
-						+ TableColumnName.InterestCardId + " = " + interestCardId;
-				DAOWrapper.executeSql(sql);
-			}
-		}
-		*/
 	}
 	
 	private void parseProfile(JSONObject profileObj, JSONObject profileResponse)

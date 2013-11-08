@@ -13,6 +13,10 @@ File Encoding         : 65001
 Date: 2013-09-13 07:59:46
 */
 
+CREATE SCHEMA `renhai` DEFAULT CHARACTER SET utf8 ;
+
+use renhai;
+
 SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
@@ -60,7 +64,7 @@ CREATE TABLE `globalimpresslabel` (
   `impressLabelName` varchar(256) NOT NULL,
   `globalAssessCount` int(11) NOT NULL,
   PRIMARY KEY (`globalImpressLabelId`),
-  KEY `index_impressLabel` (`impressLabelName`(255))
+  UNIQUE KEY `index_impressLabel` (`impressLabelName`(255)) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -79,8 +83,9 @@ CREATE TABLE `globalinterestlabel` (
   `interestLabelName` varchar(256) NOT NULL,
   `globalMatchCount` int(11) NOT NULL,
   PRIMARY KEY (`globalInterestLabelId`),
-  KEY `index_interestLabel` (`interestLabelName`(255))
+  UNIQUE KEY `index_interestLabel` (`interestLabelName`(255)) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `globalinterestlabel` VALUES ('1', '人海', '0');
 
 -- ----------------------------
 -- Records of globalinterestlabel
@@ -128,13 +133,13 @@ CREATE TABLE `impresscard` (
 -- ----------------------------
 DROP TABLE IF EXISTS `impresslabelmap`;
 CREATE TABLE `impresslabelmap` (
-  `impressLabelMaplId` int(11) NOT NULL AUTO_INCREMENT,
+  `impressLabelMapId` int(11) NOT NULL AUTO_INCREMENT,
   `impressCardId` int(11) NOT NULL,
   `globalImpressLabelId` int(11) NOT NULL,
   `assessedCount` int(11) NOT NULL,
   `updateTime` bigint(20) NOT NULL,
   `assessCount` int(11) NOT NULL,
-  PRIMARY KEY (`impressLabelMaplId`),
+  PRIMARY KEY (`impressLabelMapId`),
   KEY `fk_impressCardId_idx` (`impressCardId`),
   KEY `fk_globalImpressLabelId_idx` (`globalImpressLabelId`),
   CONSTRAINT `fk_globalImpressLabelId` FOREIGN KEY (`globalImpressLabelId`) REFERENCES `globalimpresslabel` (`globalImpressLabelId`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -166,13 +171,13 @@ CREATE TABLE `interestcard` (
 -- ----------------------------
 DROP TABLE IF EXISTS `interestlabelmap`;
 CREATE TABLE `interestlabelmap` (
-  `interestLabelMaplId` int(11) NOT NULL AUTO_INCREMENT,
+  `interestLabelMapId` int(11) NOT NULL AUTO_INCREMENT,
   `interestCardId` int(11) NOT NULL,
   `globalInterestLabelId` int(11) NOT NULL,
   `labelOrder` int(11) NOT NULL,
   `matchCount` int(11) NOT NULL,
   `validFlag` enum('Valid','Invalid') NOT NULL,
-  PRIMARY KEY (`interestLabelMaplId`),
+  PRIMARY KEY (`interestLabelMapId`),
   KEY `interestCardId_idx` (`interestCardId`),
   KEY `fk_globalInterestLabelId_idx` (`globalInterestLabelId`),
   CONSTRAINT `fk_globalInterestLabelId` FOREIGN KEY (`globalInterestLabelId`) REFERENCES `globalinterestlabel` (`globalInterestLabelId`) ON DELETE CASCADE ON UPDATE CASCADE,
