@@ -106,16 +106,23 @@
 
 - (void) _startShowingStudioLabel
 {
-	[UIView beginAnimations:nil context:nil];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
-	[UIView setAnimationDuration:STUDIOLABEL_DURATION];
-	[UIView setAnimationDelegate:self];
-    
-    _studioLabel.alpha = 0.0;
-    
-	[UIView setAnimationDidStopSelector:@selector(_finishShowingStudioLabel)];
-    
-    [UIView commitAnimations];
+    if (SPLASHVIEW_HIDE)
+    {
+        [self _enterInApp];
+    }
+    else
+    {
+        [UIView beginAnimations:nil context:nil];
+        [UIView setAnimationCurve:UIViewAnimationCurveEaseIn];
+        [UIView setAnimationDuration:STUDIOLABEL_DURATION];
+        [UIView setAnimationDelegate:self];
+        
+        _studioLabel.alpha = 0.0;
+        
+        [UIView setAnimationDidStopSelector:@selector(_finishShowingStudioLabel)];
+        
+        [UIView commitAnimations];
+    }
 }
 
 - (void) _finishShowingStudioLabel

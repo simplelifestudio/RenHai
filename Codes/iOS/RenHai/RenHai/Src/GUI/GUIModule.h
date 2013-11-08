@@ -95,6 +95,8 @@
 
 #define HELPSCREEN_DISPLAY_SECONDS 9.0f
 
+#define SPLASHVIEW_HIDE 1
+
 typedef enum
 {
     LEFTBAR_CELL_HOME = 0,
