@@ -13,7 +13,6 @@
 @required
 -(void) didCreateInterestLabel;
 -(void) didDeleteInterestLabel;
--(void) didOrderInterestLabels;
 
 @end
 
@@ -23,12 +22,10 @@
 
 @property (weak, nonatomic) IBOutlet FUIButton *createButton;
 @property (weak, nonatomic) IBOutlet FUIButton *delButton;
-@property (weak, nonatomic) IBOutlet FUIButton *orderButton;
 
 @property (strong, nonatomic) id<InterestLabelsHeaderViewDelegate> operationDelegate;
 
 - (IBAction)didPressCreateButton:(id)sender;
 - (IBAction)didPressDelButton:(id)sender;
-- (IBAction)didPressOrderButton:(id)sender;
 
 @end

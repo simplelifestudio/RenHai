@@ -19,4 +19,6 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *serverInterestLabelsView;
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
 
+-(void) setupIBOutlets;
+
 @end

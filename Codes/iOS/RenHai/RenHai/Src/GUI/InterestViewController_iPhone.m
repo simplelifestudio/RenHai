@@ -28,7 +28,7 @@
 #define SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS 0
 #define SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS 12
 
-@interface InterestViewController_iPhone () <RHCollectionLabelCellEditingDelegate, InterestLabelsHeaderViewDelegate, RHLabelManageDelegate, UIGestureRecognizerDelegate>
+@interface InterestViewController_iPhone () <InterestLabelsHeaderViewDelegate, RHLabelManageDelegate, UIGestureRecognizerDelegate>
 {
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
@@ -58,9 +58,20 @@
     [self _setupInstance];
 }
 
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
 -(void) viewDidAppear:(BOOL)animated
 {    
     [super viewDidAppear:animated];
+}
+
+-(void) setupIBOutlets
+{
+    [self _refreshInterestLabelsHeaderViewActions];
+    [self _refreshServerInterestLabelsHeaderViewActions];
 }
 
 #pragma mark - Private Methods
@@ -74,6 +85,11 @@
     [self _setupNavigationBar];
     [self _setupCollectionView];
     
+//    UITapGestureRecognizer* singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
+//    singleTapGesturer.delegate = self;
+//    singleTapGesturer.numberOfTapsRequired = 1;
+//    [self.view addGestureRecognizer:singleTapGesturer];
+
     UITapGestureRecognizer* doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
     doubleTapGesturer.delegate = self;
     doubleTapGesturer.numberOfTapsRequired = 2;
@@ -135,6 +151,8 @@
 
 -(void)_updateInterestCard
 {
+//    [self _refreshInterestLabelsView];
+    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         RHProfile* profile = device.profile;
@@ -165,7 +183,7 @@
             }
             afterCompletionBlock:^(){
                 [CBAppUtils asyncProcessInMainThread:^(){
-                    [_interestLabelsView reloadData];
+                    [self _refreshInterestLabelsView];
                 }];
             }
          ];
@@ -186,7 +204,7 @@
                 [server fromJSONObject:serverDic];
                 
                 [CBAppUtils asyncProcessInMainThread:^(){
-                    [_serverInterestLabelsView reloadData];
+                    [self _refreshServerInterestLabelsView];
                 }];
             }
             @catch (NSException *exception)
@@ -209,7 +227,33 @@
     [self _refreshServerInterestLabelList];
 }
 
--(void)_didDoubleTapped:(UITapGestureRecognizer *) recognizer
+-(void)_didSingleTapped:(UITapGestureRecognizer*) recognizer
+{
+    CGPoint locationTouch = [recognizer locationInView:self.view];
+    
+    if (CGRectContainsPoint(_interestLabelsView.frame, locationTouch))
+    {
+        NSIndexPath* indexPath = [_interestLabelsView indexPathForItemAtPoint:locationTouch];
+        if (nil != indexPath)
+        {
+            NSUInteger section = indexPath.section;
+            switch (section)
+            {
+                case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
+                {
+
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+        }
+    }
+}
+
+-(void)_didDoubleTapped:(UITapGestureRecognizer*) recognizer
 {
     CGPoint locationTouch = [recognizer locationInView:self.view];
     
@@ -243,6 +287,50 @@
             }
         }
     }
+}
+
+-(void)_refreshInterestLabelsHeaderViewActions
+{
+    BOOL allowCreateLabel = YES;
+    BOOL allowDeleteLabel = NO;
+    
+    RHDevice* device = _userDataModule.device;
+    RHProfile* profile = device.profile;
+    RHInterestCard* interestCard = profile.interestCard;
+    NSArray* labelList = interestCard.labelList;
+    
+    NSArray* selectedCells = [_interestLabelsView indexPathsForSelectedItems];
+    if (0 < selectedCells.count && 1 < labelList.count)
+    {
+        allowDeleteLabel = YES;
+    }
+    
+    if (INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS <= labelList.count)
+    {
+        allowCreateLabel = NO;
+    }
+    
+    _interestLabelsHeaderView.createButton.enabled = allowCreateLabel;
+    _interestLabelsHeaderView.delButton.enabled = allowDeleteLabel;
+}
+
+-(void)_refreshServerInterestLabelsHeaderViewActions
+{
+    
+}
+
+-(void)_refreshInterestLabelsView
+{
+    [_interestLabelsView reloadData];
+    
+    [self _refreshInterestLabelsHeaderViewActions];
+}
+
+-(void)_refreshServerInterestLabelsView
+{
+    [_serverInterestLabelsView reloadData];
+    
+    [self _refreshServerInterestLabelsHeaderViewActions];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -315,7 +403,6 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL forIndexPath:indexPath];
-    cell.editingDelegate = self;
     
     RHDevice* device = _userDataModule.device;
     RHProfile* profile = device.profile;
@@ -534,9 +621,9 @@
             case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
             {
                 [interestCard reorderLabel:fromPosition toIndex:toPosition];
-                //        [_interestLabelCollectionView reloadItemsAtIndexPaths:@[fromIndexPath, toIndexPath]];
-                //        [_interestLabelCollectionView reloadData];
-                [self performSelector:@selector(_updateInterestCard) withObject:nil];
+                
+                [self _updateInterestCard];
+                
                 break;
             }
             default:
@@ -556,9 +643,6 @@
 -(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger section = indexPath.section;
-    NSUInteger position = indexPath.item;
-    
-    RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView cellForItemAtIndexPath:indexPath];
     
     if (collectionView == _interestLabelsView)
     {
@@ -566,6 +650,8 @@
         {
             case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
             {
+                [self _refreshInterestLabelsHeaderViewActions];
+                
                 break;
             }
             default:
@@ -583,9 +669,6 @@
 -(void) collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSUInteger section = indexPath.section;
-    NSUInteger position = indexPath.item;
-    
-    RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView cellForItemAtIndexPath:indexPath];
     
     if (collectionView == _interestLabelsView)
     {
@@ -593,6 +676,8 @@
         {
             case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
             {
+                [self _refreshInterestLabelsHeaderViewActions];
+                
                 break;
             }
             default:
@@ -607,48 +692,6 @@
     }
 }
 
-#pragma mark - RHCollectionLabelCellEditingDelegate
-
--(void) onTextFieldDoneEditing:(RHCollectionLabelCell_iPhone*) cell labelName:(NSString*) labelName
-{
-    if (nil != cell)
-    {
-        RHDevice* device = _userDataModule.device;
-        RHProfile* profile = device.profile;
-        RHInterestCard* interestCard = profile.interestCard;
-        
-        NSIndexPath* indexPath = [_interestLabelsView indexPathForCell:cell];
-        NSUInteger item = indexPath.item;
-        
-        if (item < interestCard.labelList.count)
-        {
-            [interestCard removeLabelByIndex:item];
-            
-            if (nil == labelName || 0 == labelName.length)
-            {
-                
-            }
-            else
-            {
-                [interestCard insertLabelByName:labelName index:item];
-            }
-        }
-        else
-        {
-            if (nil == labelName || 0 == labelName.length)
-            {
-                
-            }
-            else
-            {
-                [interestCard addLabel:labelName];
-            }
-        }
-        
-        [self _updateInterestCard];
-    }
-}
-
 #pragma mark - InterestLabelsHeaderViewDelegate
 
 -(void) didCreateInterestLabel
@@ -659,12 +702,32 @@
 
 -(void) didDeleteInterestLabel
 {
+    RHDevice* device = _userDataModule.device;
+    RHProfile* profile = device.profile;
+    RHInterestCard* interestCard = profile.interestCard;
     
-}
-
--(void) didOrderInterestLabels
-{
+    NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
+    for (NSIndexPath* indexPath in selectedIndexPathes)
+    {
+        NSUInteger section = indexPath.section;
+        
+        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_interestLabelsView cellForItemAtIndexPath:indexPath];
+        NSString* labelName = cell.labelName;
+        switch (section)
+        {
+            case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
+            {
+                [interestCard removeLabelByName:labelName];
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
     
+    [self _updateInterestCard];
 }
 
 #pragma mark - RHLabelManageDelegate
@@ -697,7 +760,7 @@
         }
     }
     
-    [_interestLabelsView reloadData];
+    [self _updateInterestCard];
     
     [_guiModule.mainViewController dismissPopupViewControllerAnimated:YES completion:nil];
 }

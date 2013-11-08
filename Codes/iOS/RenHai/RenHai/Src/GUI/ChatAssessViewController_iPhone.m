@@ -38,7 +38,7 @@
 
 #define COLOR_ASSESSLABEL_SELECTED [UIColor redColor]
 
-@interface ChatAssessViewController_iPhone () <RHCollectionLabelCellEditingDelegate>
+@interface ChatAssessViewController_iPhone ()
 {
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
@@ -442,7 +442,6 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)cv cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[cv dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL forIndexPath:indexPath];
-    cell.editingDelegate = self;
     
     NSUInteger position = indexPath.item;
     
@@ -498,8 +497,6 @@
         {
             cell.countLabel.text = @"";
         }
-        
-        cell.editingDelegate = self;
     }
     else if (cv == _existImpressLabelsView)
     {

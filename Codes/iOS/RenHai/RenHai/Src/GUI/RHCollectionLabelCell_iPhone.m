@@ -35,8 +35,6 @@ static UIImage* orderIconImage;
 @synthesize textField = _textField;
 @synthesize countLabel = _countLabel;
 
-@synthesize editingDelegate = _editingDelegate;
-
 @synthesize shakeCell = _shakeCell;
 
 + (void)initialize
@@ -71,7 +69,6 @@ static UIImage* orderIconImage;
 -(void) drawRect:(CGRect)rect
 {
     [super drawRect:rect];
-    
     if (self.selected)
     {
         self.layer.borderColor = SPECIAL_COLOR_WARNING.CGColor;
@@ -130,6 +127,11 @@ static UIImage* orderIconImage;
 //    }
 }
 
+- (NSString*) labelName
+{
+    return _textField.text;
+}
+
 #pragma mark - Private Methods
 
 -(void) _formatFlatUI
@@ -184,19 +186,11 @@ static UIImage* orderIconImage;
         labelName = NSLocalizedString(@"Interest_Empty", nil);
         _textField.text = labelName;
     }
-    
-    if (nil != _editingDelegate)
-    {
-        [_editingDelegate onTextFieldDoneEditing:self labelName:labelName];
-    }
 }
 
 - (IBAction)didPressDelIconButton:(id)sender
 {
-    if (nil != _editingDelegate && [_editingDelegate respondsToSelector:@selector(didDelete)])
-    {
-        [_editingDelegate didDelete];
-    }
+
 }
 
 @end
