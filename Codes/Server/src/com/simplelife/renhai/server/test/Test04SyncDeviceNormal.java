@@ -96,7 +96,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertTrue(impressCardInDB.getChatLossCount() == 0);
 		assertTrue(impressCardInDB.getChatTotalCount() == 0);
 		assertTrue(impressCardInDB.getChatTotalDuration() == 0);
-		assertTrue(impressCardInDB.getImpressLabelMapSet().size() == Consts.SolidImpressLabel.values().length - 1);
+		assertTrue(impressCardInDB.getImpressLabelMapSet().size() == Consts.SolidAssessLabel.values().length - 1);
 		
 		// Step_07 µ÷ÓÃ£ºDeviceWrapper::getBusinessStatus
 		businessStatus = deviceWrapper.getBusinessStatus();

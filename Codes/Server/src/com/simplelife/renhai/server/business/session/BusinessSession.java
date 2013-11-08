@@ -17,7 +17,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.catalina.Globals;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
@@ -299,15 +298,13 @@ public class BusinessSession implements IBusinessSession
 			if (triggerDevice == null)
 			{
 				notify.getBody().put(JSONKey.OperationInfo, getOperationInfoOfOtherDevices(device));
-				notify.setDelayOfHandle(GlobalSetting.BusinessSetting.DelayOfSessionBound);
 			}
 			else
 			{
 				if (notificationType == NotificationType.SessionBound)
 				{
 					// Safe code, currently triggerDevice for SessionBound is null
-					notify.getBody().put(JSONKey.OperationInfo, getOperationInfoOfOtherDevices(device));
-					notify.setDelayOfHandle(GlobalSetting.BusinessSetting.DelayOfSessionBound);
+					notify.getBody().put(JSONKey.OperationInfo, triggerDevice.toJSONObject());
 				}
 				else
 				{
@@ -517,14 +514,7 @@ public class BusinessSession implements IBusinessSession
     {
     	if (progress != BusinessProgress.Init)
     	{
-    		String sTemp = "[Milestone] Business progress of Device <" + deviceSn + "> is changed to " + progress.name();
-    		
-    		BusinessProgress tmpProgress = progressMap.get(deviceSn);
-    		if (tmpProgress != null)
-    		{
-    			sTemp += ", but its progress is not saved in BusinessSesion currently";
-    		}
-    		logger.debug(sTemp);
+    		logger.debug("[Milestone] Business progress of Device <" + deviceSn + "> is changed from {} to " + progress.name(),progressMap.get(deviceSn).name());
     	}
     	//logger.debug("=================before put device <{}> in progressMap", deviceSn);
     	progressMap.put(deviceSn, progress);

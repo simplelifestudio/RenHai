@@ -17,14 +17,44 @@ import java.util.concurrent.Executors;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.GlobalSetting;
-import com.simplelife.renhai.server.util.IMessageCenter;
 
 /**
  * 
  */
-public class OutputMessageCenter implements IMessageCenter
+public class OutputMessageCenter
 {
-	private ConcurrentHashMap<String, MessageHandler> messageMap = new ConcurrentHashMap<String, MessageHandler>();
+	private class OutputMessageSender implements Runnable
+	{
+		private String deviceSn;
+		public OutputMessageSender(String deviceSn)
+		{
+			this.deviceSn = deviceSn;
+		}
+		
+		private ConcurrentLinkedQueue<ServerJSONMessage> queue = new ConcurrentLinkedQueue<ServerJSONMessage>();
+		
+		public void add(ServerJSONMessage message)
+		{
+			queue.add(message);
+		}
+
+		@Override
+		public void run()
+		{
+			ServerJSONMessage message;
+			while (!queue.isEmpty())
+			{
+				message = queue.remove();
+				String temp = "Start to send " + message.getMessageId().name() + " to App <" + message.getDeviceWrapper().getDeviceSn() + "> which was queued " + message.getQueueDuration() + "ms ago, message Sn: " + message.getMessageSn();
+				BusinessModule.instance.getLogger().debug(temp);
+				message.response();
+			}
+			
+			OutputMessageCenter.instance.removeMessageSender(deviceSn);
+		}
+	}
+	
+	private ConcurrentHashMap<String, OutputMessageSender> messageMap = new ConcurrentHashMap<String, OutputMessageSender>();
 	public final static OutputMessageCenter instance = new OutputMessageCenter();
 	private ExecutorService executeThreadPool;
 	
@@ -39,19 +69,19 @@ public class OutputMessageCenter implements IMessageCenter
 		message.setQueueTime(System.currentTimeMillis());
 		if (messageMap.containsKey(deviceSn))
 		{
-			MessageHandler sender = messageMap.get(deviceSn);
+			OutputMessageSender sender = messageMap.get(deviceSn);
 			sender.add(message);
 			return;
 		}
 		
-		MessageHandler sender = new MessageHandler(deviceSn, this);
+		OutputMessageSender sender = new OutputMessageSender(deviceSn);
 		sender.add(message);
 		
 		messageMap.put(deviceSn, sender);
 		executeThreadPool.execute(sender);
 	}
 	
-	public void removeMessageHandler(String deviceSn)
+	public void removeMessageSender(String deviceSn)
 	{
 		messageMap.remove(deviceSn);
 	}

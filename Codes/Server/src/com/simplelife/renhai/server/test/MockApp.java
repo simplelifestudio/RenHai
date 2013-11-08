@@ -813,7 +813,7 @@ public class MockApp implements IMockApp, Runnable
 		String[] labelArray =  impressLabelList.split(",");
 		for (String label : labelArray)
 		{
-			if (Consts.SolidImpressLabel.isSolidImpressLabel(label))
+			if (Consts.SolidAssessLabel.isSolidAssessLabel(label))
 			{
 				JSONObject obj = new JSONObject();
 				obj.put(JSONKey.ImpressLabelName, label);
@@ -1262,11 +1262,6 @@ public class MockApp implements IMockApp, Runnable
 		labels.add("“Ù¿÷");
 		labels.add("ø¥µÁ”∞");
 		labels.add("InterestOf" + this.getDeviceSn());
-		
-		if (System.currentTimeMillis() % 2 == 0)
-		{
-			labels.add(Consts.SolidInterestLabel.RenHai.getValue());
-		}
 		syncDevice(labels);
 	}
 

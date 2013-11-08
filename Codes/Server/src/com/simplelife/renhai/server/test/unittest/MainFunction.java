@@ -222,9 +222,6 @@ public class MainFunction extends AbstractTestCase
 	{
 		MockApp app = new MockApp(demoDeviceSn);
 		app.syncDevice();
-		app.disconnect();
-		
-		System.out.print("1");
 	}
 	
 	@Test

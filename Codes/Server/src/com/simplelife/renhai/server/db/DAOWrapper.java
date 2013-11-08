@@ -67,17 +67,19 @@ public class DAOWrapper
 	
 	private static class FlushTimer extends TimerTask
 	{
-		//FlushTask flushTask;
+		FlushTask flushTask;
 		
 		public FlushTimer(FlushTask flushTask)
 		{
-			//this.flushTask = flushTask; 
+			this.flushTask = flushTask; 
 		}
 		
 		@Override
 		public void run()
 		{
-			DAOWrapper.signalForFlush();
+			flushTask.getLock().lock();
+	    	flushTask.signal();
+	    	flushTask.getLock().unlock();
 		}
 	}
 	
@@ -88,17 +90,10 @@ public class DAOWrapper
 		private final Condition condition = lock.newCondition();
 		private boolean continueFlag = true;
 		private SqlSession session = null;
-		private boolean runningFlag = false;
 		
 		public FlushTask(ConcurrentLinkedQueue<IDbObject> linkToBeSaved)
 		{
 			this.linkToBeSaved = linkToBeSaved;
-		}
-		
-		
-		public boolean isRunning()
-		{
-			return runningFlag;
 		}
 		
 		public Lock getLock()
@@ -111,6 +106,29 @@ public class DAOWrapper
 	    	condition.signal();
 	    }
 
+		private void printLog(Object obj)
+		{
+			Logger logger = DBModule.instance.getLogger();
+			if (obj instanceof Globalinterestlabel)
+			{
+				Globalinterestlabel label = (Globalinterestlabel) obj;
+				logger.debug("Saving Globalinterestlabel: " + label.getInterestLabelName());
+			}
+			else if (obj instanceof Globalimpresslabel)
+			{
+				Globalimpresslabel label = (Globalimpresslabel) obj;
+				logger.debug("Saving Globalimpresslabel: " + label.getImpressLabelName());
+			}
+			else if (obj instanceof Device)
+			{
+				Device device = (Device) obj;
+				logger.debug("Saving Device: " + device.getDeviceSn());
+			}
+			else
+			{
+				logger.debug("Saving " + obj.getClass().getName());
+			}
+		}
 		private boolean saveObjectToDB(IDbObject obj)
 		{
 			if (session == null)
@@ -153,12 +171,10 @@ public class DAOWrapper
 							session = null;
 						}
 						logger.debug("Await due to no data in cache queue");
-						runningFlag = false;
 						condition.await();
 						
 						if (!linkToBeSaved.isEmpty())
 						{
-							runningFlag = true;
 							logger.debug("Resume saving data in cache queue, cache queue size: {}", linkToBeSaved.size());
 							session = getSession();
 						}
@@ -305,11 +321,6 @@ public class DAOWrapper
     
     public static void signalForFlush()
     {
-    	if (flushTask.isRunning())
-    	{
-    		return;
-    	}
-    	
     	flushTask.getLock().lock();
     	flushTask.signal();
     	flushTask.getLock().unlock();
@@ -371,54 +382,10 @@ public class DAOWrapper
     	return false;
     }
     
-    public static void removeDeviceForAssess(Device device)
+    public static void remove(IDbObject obj)
     {
-    	if (!linkToBeSaved.contains(device))
-    	{
-    		String deviceSn = device.getDeviceSn();
-    		logger.error("Object of given Device object with DeviceSn {} is not in linkToBeSaved.", deviceSn);
-    		
-    		for (Object obj : linkToBeSaved)
-    		{
-    			if (obj instanceof Device)
-    			{
-    				if (((Device)obj).getDeviceSn().equals(deviceSn))
-    				{
-    					logger.error("But device with same DeviceSn exists!");
-    					break;
-    				}
-    			}
-    		}
-    		return;
-    	}
-    	
-    	logger.debug("Remove device <{}> from cache of DAOWrapper", device.getDeviceSn());
-    	linkToBeSaved.remove(device);
+    	linkToBeSaved.remove(obj);
     }
-    
-    private static void printLog(Object obj)
-	{
-		Logger logger = DBModule.instance.getLogger();
-		if (obj instanceof Globalinterestlabel)
-		{
-			Globalinterestlabel label = (Globalinterestlabel) obj;
-			logger.debug("=============Cache Globalinterestlabel: " + label.getInterestLabelName());
-		}
-		else if (obj instanceof Globalimpresslabel)
-		{
-			Globalimpresslabel label = (Globalimpresslabel) obj;
-			logger.debug("=============Cache Globalimpresslabel: " + label.getImpressLabelName());
-		}
-		else if (obj instanceof Device)
-		{
-			Device device = (Device) obj;
-			logger.debug("=============Cache Device: " + device.getDeviceSn());
-		}
-		else
-		{
-			logger.debug("=============Cache " + obj.getClass().getName());
-		}
-	}
     
     /**
      * Save object in cache or to DB 
@@ -437,7 +404,6 @@ public class DAOWrapper
     	}
     	
     	linkToBeSaved.add(obj);
-    	printLog(obj);
     	if (linkToBeSaved.size() >= GlobalSetting.DBSetting.MaxRecordCountForFlush)
 		{
     		signalForFlush();

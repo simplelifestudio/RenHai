@@ -500,7 +500,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void assess(boolean quitAfterAssess)
 	{
-		logger.debug("Device <{}> provides assess.", deviceWrapper.getDeviceSn());
+		logger.debug("Device <{}> provided assess.", deviceWrapper.getDeviceSn());
 		if (quitAfterAssess)
 		{
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessQuit_1020
@@ -540,7 +540,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			if (targetDevice == null)
 			{
 				// Check if it's totally invalid deviceSn in DB
-				String temp = "Failed to assess Device <" + deviceSn + "> due to it's not in DB";
+				String temp = "Failed to assess Device <" + deviceSn + "> due to it's not in online pool";
 				logger.error(temp);
 				ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 						Consts.MessageId.BusinessSessionResponse);
@@ -552,8 +552,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 				return;
 			}
 			
+			DAOWrapper.remove(targetDevice);
 			logger.debug("Device <{}> was released before Device <" + deviceWrapper.getDeviceSn() + "> trying to assess it, load it from DB again", targetDevice.getDeviceSn());
-			DAOWrapper.removeDeviceForAssess(targetDevice);
 		}
 		else
 		{
@@ -646,7 +646,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 					else
 					{
 						int count = label.getAssessCount();
-						logger.debug("Assessing count of <" + labelName + "> by device <{}> was increased from " 
+						logger.debug("Count of device <{}> using <" + labelName + "> for assess was increased from" 
 								+ count + " to " + (count + 1), deviceWrapper.getDeviceSn());
 						label.setAssessCount(label.getAssessCount() + 1);
 					}
@@ -669,12 +669,10 @@ public class BusinessSessionRequest extends AppJSONMessage
 			boolean isNewObject = DBModule.instance.impressLabelCache.putObject(labelName, globalimpresslabel);
 			if (isNewObject)
 			{
-				logger.debug("============new object, save in DAOWrapper");
 				DAOWrapper.cache(globalimpresslabel);
 			}
 			else
 			{
-				logger.debug("============old object, replace globalimpresslabel with old object");
 				globalimpresslabel = DBModule.instance.impressLabelCache.getObject(labelName);
 			}
 			//globalimpresslabel.setImpresslabelmaps(impressLabels);

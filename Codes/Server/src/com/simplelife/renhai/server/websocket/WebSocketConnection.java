@@ -324,7 +324,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     {
     	if (getWsOutbound().isClosed())
     	{
-    		logger.error("The websocket connection with id {} has been closed, sending of "+ message.getMessageId().name() +" is given up.", this.getConnectionId());
+    		logger.error("The websocket connection with id {} has been closed, sending is given up.", this.getConnectionId());
     		return;
     	}
     	

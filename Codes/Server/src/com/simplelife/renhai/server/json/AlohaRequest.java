@@ -70,7 +70,7 @@ public class AlohaRequest extends AppJSONMessage
     			, header.getString(JSONKey.DeviceSn));
     	
     	response.addToBody(JSONKey.Content, helloApp);
-    	response.run();
+    	response.response();
     	DbLogger.saveSystemLog(Consts.OperationCode.AlohaResponse_1003
     			, Consts.SystemModule.business
     			, header.getString(JSONKey.DeviceSn));

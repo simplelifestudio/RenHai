@@ -87,7 +87,5 @@ public class GlobalSetting
 		public static int InputMessageHandleThreads = 200;
 		public static int OutputMessageSendThreads = 500;
 		public static int MessageQueueTime = 3 * 1000;
-		
-		public static int DelayOfSessionBound = 1000;
 	} 
 }
