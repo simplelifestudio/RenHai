@@ -200,6 +200,19 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 		return true;
     }
     
+    private void increaseMatchCount(List<String> selectedDevice, String label)
+    {
+    	IDeviceWrapper device;
+    	for (String deviceSn : selectedDevice)
+    	{
+    		device = ownerBusinessPool.getDevice(deviceSn); 
+    		if (device != null)
+    		{
+    			device.increaseMatchCount(label);
+    		}
+    	}
+    }
+    
     private void startSession(List<String> selectedDevice, String deviceFoundInterest)
     {
     	IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
@@ -213,6 +226,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 		if (session.startSession(selectedDevice))
 		{
 			DbLogger.increaseInterestMatchCount(deviceFoundInterest);
+			increaseMatchCount(selectedDevice, deviceFoundInterest);
 		}
 		else
 		{
