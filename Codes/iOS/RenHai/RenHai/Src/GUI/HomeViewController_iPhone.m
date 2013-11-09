@@ -67,6 +67,11 @@ EnterOperationStatus;
 @synthesize chatDeviceCountUnit4 = _chatDeviceCountUnit4;
 @synthesize chatDeviceCountUnit5 = _chatDeviceCountUnit5;
 
+@synthesize versionLabel = _versionLabel;
+
+@synthesize onlineDeviceCountLabel = _onlineDeviceCountLabel;
+@synthesize chatDeviceCountLabel = _chatDeviceCountLabel;
+
 #pragma mark - Public Methods
 
 - (void)viewDidLoad
@@ -115,10 +120,15 @@ EnterOperationStatus;
 
 -(void)_setupView
 {
+    _onlineDeviceCountLabel.text = NSLocalizedString(@"Home_OnlineCount", nil);
+    _chatDeviceCountLabel.text = NSLocalizedString(@"Home_ChatCount", nil);
+    
     _enterButtonProgressView.startAngle = - M_PI_2;
     _enterButtonProgressView.tintColor = FLATUI_COLOR_PROGRESS;
 //    _enterButtonProgressView.trackColor = FLATUI_COLOR_PROGRESS_TRACK;
     _enterButtonProgressView.roundProgressViewDelegate = self;
+    
+    _versionLabel.text = _appDataModule.appVersion;
 }
 
 -(void)_setupNavigationBar

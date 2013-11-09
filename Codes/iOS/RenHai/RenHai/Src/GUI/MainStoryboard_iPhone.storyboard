@@ -179,7 +179,7 @@
                                 </collectionReusableView>
                             </collectionView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8FZ-VA-DGB" userLabel="countLabel">
-                                <rect key="frame" x="80" y="445.00000207777146" width="160" height="60"/>
+                                <rect key="frame" x="80" y="445.00000331486723" width="160" height="60"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="50"/>
                                 <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -193,7 +193,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceHorizontal="YES" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="igl-Ug-PXI" userLabel="existImpressLabelsView">
-                                <rect key="frame" x="0.0" y="291.00000207777146" width="320" height="214"/>
+                                <rect key="frame" x="0.0" y="291.00000331486723" width="320" height="214"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="cJV-9u-841">
@@ -517,11 +517,11 @@
                                 <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <view contentMode="scaleToFill" id="9xF-ar-PLg" userLabel="othersideVideoView">
-                                <rect key="frame" x="5" y="265.00000097788882" width="310" height="240"/>
+                                <rect key="frame" x="5" y="265" width="310" height="240.00000207777157"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="对方视频" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="owI-oH-NmH" userLabel="partnerStatusLabel">
-                                        <rect key="frame" x="71" y="109" width="160" height="21"/>
+                                        <rect key="frame" x="71" y="109.00000207777157" width="160" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="highlightedColor"/>
@@ -562,69 +562,70 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="jnU-fI-8d8" userLabel="progressView" customClass="CBRoundProgressView">
-                                <rect key="frame" x="100" y="360" width="120" height="120"/>
+                                <rect key="frame" x="110" y="387" width="100" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Wmn-PD-PdJ" userLabel="enterButton" customClass="OBShapedButton">
+                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" title="Button" image="enterbutton_normal.png">
+                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onPressEnterButton:" destination="KTb-47-hxa" eventType="touchUpInside" id="ksw-4J-9Ka"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="0.11764705882352941" green="0.56470588235294117" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Wmn-PD-PdJ" userLabel="enterButton" customClass="OBShapedButton">
-                                <rect key="frame" x="100" y="360" width="120" height="120"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Button" image="enterbutton_normal.png">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <state key="highlighted">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="onPressEnterButton:" destination="KTb-47-hxa" eventType="touchUpInside" id="ksw-4J-9Ka"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RoM-5d-5RC" userLabel="onlineDeviceCountUnit5">
-                                <rect key="frame" x="40" y="89" width="40" height="50"/>
+                                <rect key="frame" x="40" y="74" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" red="0.11764705882352941" green="0.56470588235294117" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="gEw-sh-86p" userLabel="onlineDeviceCountUnit4">
-                                <rect key="frame" x="90" y="89" width="40" height="50"/>
+                                <rect key="frame" x="90" y="74" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" red="0.11764705882352941" green="0.56470588235294117" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="JKn-0q-G7t" userLabel="onlineDeviceCountUnit3">
-                                <rect key="frame" x="140" y="89" width="40" height="50"/>
+                                <rect key="frame" x="140" y="74" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" red="0.11764705882352941" green="0.56470588235294117" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ncg-rv-Jtn" userLabel="onlineDeviceCountUnit2">
-                                <rect key="frame" x="189" y="89" width="40" height="50"/>
+                                <rect key="frame" x="189" y="74" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" red="0.11764705882352941" green="0.56470588235294117" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="H7v-a7-UBI" userLabel="onlineDeviceCountUnit1">
-                                <rect key="frame" x="240" y="89" width="40" height="50"/>
+                                <rect key="frame" x="240" y="74" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" red="0.11764705882352941" green="0.56470588235294117" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="在线人数" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RbL-l7-KkM" userLabel="onlineDeviceCountLabel">
-                                <rect key="frame" x="30" y="40" width="260" height="60"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="在线人数" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="RbL-l7-KkM" userLabel="onlineDeviceCountLabel">
+                                <rect key="frame" x="40" y="40" width="240" height="40"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="点击进入" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ttM-mN-h2w" userLabel="enterLabel">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="EnterTip" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ttM-mN-h2w" userLabel="enterLabel">
                                 <rect key="frame" x="40" y="495" width="240" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
@@ -632,14 +633,14 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label hidden="YES" opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="信息栏" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xAC-9J-OUo" userLabel="infoScreen">
-                                <rect key="frame" x="70" y="196" width="180" height="140"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
+                                <rect key="frame" x="70" y="240" width="180" height="100"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoDark" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="nCy-mU-nrv" userLabel="helpButton" customClass="FUIButton">
-                                <rect key="frame" x="280" y="523" width="22" height="22"/>
+                                <rect key="frame" x="20" y="526" width="22" height="22"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                 <state key="normal">
@@ -654,44 +655,51 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Rn4-UZ-8Oz" userLabel="chatDeviceCountUnit5">
-                                <rect key="frame" x="40" y="191" width="40" height="50"/>
+                                <rect key="frame" x="40" y="176" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" red="0.11764705882352941" green="0.56470588235294117" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="I5d-2O-sZZ" userLabel="chatDeviceCountUnit4">
-                                <rect key="frame" x="90" y="191" width="40" height="50"/>
+                                <rect key="frame" x="90" y="176" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" red="0.11764705882352941" green="0.56470588235294117" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Z5f-zO-rE6" userLabel="chatDeviceCountUnit3">
-                                <rect key="frame" x="140" y="191" width="40" height="50"/>
+                                <rect key="frame" x="140" y="176" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" red="0.11764705882352941" green="0.56470588235294117" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="7NG-0j-PP6" userLabel="chatDeviceCountUnit2">
-                                <rect key="frame" x="189" y="191" width="40" height="50"/>
+                                <rect key="frame" x="189" y="176" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" red="0.11764705882352941" green="0.56470588235294117" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pkA-c2-3vk" userLabel="chatDeviceCountUnit1">
-                                <rect key="frame" x="240" y="191" width="40" height="50"/>
+                                <rect key="frame" x="240" y="176" width="40" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                 <color key="textColor" red="0.11764705882352941" green="0.56470588235294117" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="聊天人数" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0JB-lh-lj5" userLabel="chatDeviceCountLabel">
-                                <rect key="frame" x="30" y="142" width="260" height="60"/>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="聊天人数" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0JB-lh-lj5" userLabel="chatDeviceCountLabel">
+                                <rect key="frame" x="40" y="142" width="240" height="40"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WaR-mf-WcD">
+                                <rect key="frame" x="240" y="527" width="60" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -700,6 +708,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="DUg-hB-ZNt"/>
                     <connections>
+                        <outlet property="chatDeviceCountLabel" destination="0JB-lh-lj5" id="XwK-hp-eXP"/>
                         <outlet property="chatDeviceCountUnit1" destination="pkA-c2-3vk" id="UfR-IU-MDU"/>
                         <outlet property="chatDeviceCountUnit2" destination="7NG-0j-PP6" id="OB2-2I-13C"/>
                         <outlet property="chatDeviceCountUnit3" destination="Z5f-zO-rE6" id="c41-s8-qi8"/>
@@ -709,11 +718,13 @@
                         <outlet property="enterButtonProgressView" destination="jnU-fI-8d8" id="wYr-7G-hqY"/>
                         <outlet property="enterLabel" destination="ttM-mN-h2w" id="E6X-5v-V7A"/>
                         <outlet property="helpButton" destination="nCy-mU-nrv" id="5n0-VK-jjN"/>
+                        <outlet property="onlineDeviceCountLabel" destination="RbL-l7-KkM" id="HGo-I9-JKm"/>
                         <outlet property="onlineDeviceCountUnit1" destination="H7v-a7-UBI" id="xIr-XR-gVc"/>
                         <outlet property="onlineDeviceCountUnit2" destination="Ncg-rv-Jtn" id="10d-yW-jyl"/>
                         <outlet property="onlineDeviceCountUnit3" destination="JKn-0q-G7t" id="Qfw-tb-Ofp"/>
                         <outlet property="onlineDeviceCountUnit4" destination="gEw-sh-86p" id="ibc-pu-wYi"/>
                         <outlet property="onlineDeviceCountUnit5" destination="RoM-5d-5RC" id="qJG-TV-rhL"/>
+                        <outlet property="versionLabel" destination="WaR-mf-WcD" id="D7Z-9e-EiT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3NT-bM-sTE" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -932,7 +943,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="19" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Oxe-TB-TP1" userLabel="countLabel">
-                                <rect key="frame" x="80" y="363.99999787509432" width="160" height="80"/>
+                                <rect key="frame" x="80" y="363.99999515674654" width="160" height="80"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="60"/>
                                 <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>

@@ -32,6 +32,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *chatDeviceCountUnit2;
 @property (weak, nonatomic) IBOutlet UILabel *chatDeviceCountUnit1;
 
+@property (weak, nonatomic) IBOutlet UILabel *versionLabel;
+
+@property (weak, nonatomic) IBOutlet UILabel *onlineDeviceCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *chatDeviceCountLabel;
+
 
 - (IBAction)onPressEnterButton:(id)sender;
 - (IBAction)onPressHelpButton:(id)sender;

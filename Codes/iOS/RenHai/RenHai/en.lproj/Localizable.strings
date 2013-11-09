@@ -81,12 +81,12 @@
 "Connect_ServerDataSynced_Detail" = "Synchronized server data";
 "Connect_ServerDataSyncFailed" = "Synchronize";
 "Connect_ServerDataSyncFailed_Detail" = "Can not synchronize server data";
-"Connect_Updating" = "Update";
-"Connect_Updating_Detail" = "Updating app data...";
-"Connect_Updated" = "Updated";
-"Connect_Updated_Detail" = "Updated app data";
-"Connect_UpdatedFailed" = "Update";
-"Connect_UpdatedFailed_Detail" = "Can not update app data";
+"Connect_AppDataUpdating" = "Update";
+"Connect_AppDataUpdating_Detail" = "Updating app data...";
+"Connect_AppDataUpdated" = "Updated";
+"Connect_AppDataUpdated_Detail" = "Updated app data";
+"Connect_AppDataUpdatedFailed" = "Update";
+"Connect_AppDataUpdatedFailed_Detail" = "Can not update app data";
 "Connect_Action_Retry" = "Retry";
 "Connect_DefaultFirstImpressLabel" = "RenHai";
 
