@@ -1076,10 +1076,10 @@ public class AppDataSyncRequest extends AppJSONMessage
 	{
 		// Create new impress card
 		Impresscard impressCard = new Impresscard();
-		//initSolidImpressLabels(impressCard);
+		initSolidImpressLabels(impressCard);
 		
 		Interestcard interestCard = new Interestcard();
-		initSolidInterestLabels(interestCard);
+		//initSolidInterestLabels(interestCard);
 		
 		Profile profile = new Profile();
 		Devicecard deviceCard = new Devicecard();
