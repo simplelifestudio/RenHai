@@ -21,7 +21,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 /**
  * 
  */
-public abstract class AbstractJSONMessage
+public abstract class AbstractJSONMessage implements Runnable
 {
 	protected Logger logger = BusinessModule.instance.getLogger();
 	
@@ -38,6 +38,19 @@ public abstract class AbstractJSONMessage
     public abstract Consts.MessageId getMessageId();
     
     protected long queueTime;
+    protected int delayOfHandle;
+    
+    
+	public int getDelayOfHandle()
+	{
+		return delayOfHandle;
+	}
+
+	public void setDelayOfHandle(int delayOfHandle)
+	{
+		this.delayOfHandle = delayOfHandle;
+	}
+
 	public long getQueueTime()
 	{
 		return queueTime;
@@ -47,6 +60,8 @@ public abstract class AbstractJSONMessage
 	{
 		return (int) (System.currentTimeMillis() - queueTime);
 	}
+	
+	public abstract void run();
 	
 	public void setQueueTime(long queueTime)
 	{

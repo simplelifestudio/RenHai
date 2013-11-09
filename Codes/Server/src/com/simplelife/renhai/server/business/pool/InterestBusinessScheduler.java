@@ -12,6 +12,7 @@
 package com.simplelife.renhai.server.business.pool;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
@@ -54,6 +55,13 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 		return ((deviceMap.size() >= deviceCountPerSession));
 	}
 	
+	private LinkedList<String> getRandomLabelSet(Set<Interestlabelmap> labelSet)
+	{
+		LinkedList<String> labels = new LinkedList<>();
+		String[] orgLabels = new String[labelSet.size()]; 
+		return labels;
+	}
+	
     /** */
     public void schedule()
     {
@@ -69,8 +77,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
     	boolean deviceFoundFlag = false;
     	String deviceFoundInterest = null;
     	
-    	Random random = new Random();
-		// Loop all device from deviceMap
+    	// Loop all device from deviceMap
 		Set<Entry<String, IDeviceWrapper>> entrySet = deviceMap.entrySet();
 		Set<Interestlabelmap> labelSet;
 		for (Entry<String, IDeviceWrapper> entry : entrySet)
@@ -81,11 +88,15 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			}
 			
 			IDeviceWrapper device = entry.getValue();
-			labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
+			labelSet = device.getDevice()
+					.getProfile()
+					.getInterestCard()
+					.getInterestLabelMapSet();
 			String strLabel; 
 			ConcurrentSkipListSet<IDeviceWrapper> deviceList;
 			
 			int deviceListSize = 0;
+			
 			// Loop all interest labels of device 
 			for (Interestlabelmap label : labelSet)
 			{
@@ -120,34 +131,14 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 						tempSn = tmpDevice.getDeviceSn();
 						selectedDevice.add(tempSn);
 					}
+					deviceFoundFlag = true;
 				}
 				else
 				{
 					// More devices than expected 
-					Object[] deviceArray = deviceList.toArray();
-					IDeviceWrapper tempDevice;
-    				String deviceSn;
-    				for (int i = 0; i < deviceCountPerSession; i++)
-    				{
-    					int tempCount = 0;
-    					
-    					do
-    					{
-    						tempCount ++;
-    						tempDevice = (IDeviceWrapper) deviceArray[random.nextInt(deviceArray.length)]; 
-    						deviceSn = tempDevice.getDeviceSn();
-    					} while (selectedDevice.contains(deviceSn) && tempCount < 100);
-    					
-    					if (tempCount >= 100)
-    					{
-    						logger.error("Fatal error: failed to matching device for 100 times, given up");
-    						deadMatchFlag = true;
-    						return;
-    					}
-    					selectedDevice.add(deviceSn);
-    				}
+					deviceFoundFlag = selectDevice(deviceList, selectedDevice);
 				}
-				deviceFoundFlag = true;
+				
 				deviceFoundInterest = strLabel;
 			}
 			
@@ -167,6 +158,36 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			return;
 		}
 		startSession(selectedDevice, deviceFoundInterest);
+    }
+    
+    private boolean selectDevice(
+    		ConcurrentSkipListSet<IDeviceWrapper> deviceList,
+    		List<String> selectedDevice)
+    {
+    	Random random = new Random();
+    	Object[] deviceArray = deviceList.toArray();
+		IDeviceWrapper tempDevice;
+		String deviceSn;
+		for (int i = 0; i < deviceCountPerSession; i++)
+		{
+			int tempCount = 0;
+			
+			do
+			{
+				tempCount ++;
+				tempDevice = (IDeviceWrapper) deviceArray[random.nextInt(deviceArray.length)]; 
+				deviceSn = tempDevice.getDeviceSn();
+			} while (selectedDevice.contains(deviceSn) && tempCount < 100);
+			
+			if (tempCount >= 100)
+			{
+				logger.error("Fatal error: failed to matching device for 100 times, given up");
+				deadMatchFlag = true;
+				return false;
+			}
+			selectedDevice.add(deviceSn);
+		}
+		return true;
     }
     
     private void startSession(List<String> selectedDevice, String deviceFoundInterest)

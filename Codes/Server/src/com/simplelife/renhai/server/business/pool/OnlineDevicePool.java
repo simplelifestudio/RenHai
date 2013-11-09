@@ -258,7 +258,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		}
     		else
     		{
-    			logger.error("Device <{}> shall be in deviceMap but it doesn't!", sn);
+    			logger.warn("Device <{}> may have been removed from OnlineDevicePool when trying to remove it", sn);
     		}
     		
     		/*

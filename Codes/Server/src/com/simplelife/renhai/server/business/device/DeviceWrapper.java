@@ -75,7 +75,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     protected Consts.ServiceStatus serviceStatus;
     
     // Business session
-    protected volatile Consts.BusinessStatus businessStatus;
+    protected Consts.BusinessStatus businessStatus;
     
     // Business type of device, Random or Interest, effective after app selects business device pool 
     protected Consts.BusinessType businessType;
@@ -140,7 +140,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     		{
     			businessStatus = targetStatus;
     		}
-    		else
+    		else if (businessStatus != BusinessStatus.Offline)
     		{
     			logger.error("ownerOnlinePool of Device <{}> is null in status of " + businessStatus.name(), getDeviceSn());
     		}
@@ -675,7 +675,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		
 		for (Impresslabelmap labelMap : labelSet)
 		{
-			if (Consts.SolidAssessLabel.isSolidAssessLabel(labelMap.getGlobalLabel().getImpressLabelName()))
+			if (Consts.SolidImpressLabel.isSolidImpressLabel(labelMap.getGlobalLabel().getImpressLabelName()))
 			{
 				//solidList.add((ImpresslabelmapSortable)labelMap);
 				solidList.add(labelMap);
