@@ -350,15 +350,7 @@ static BOOL s_messageEncrypted;
             break;
         }
         case AppDataSyncRequestType_InterestCardSync:
-        {
-//            if (nil != info)
-//            {
-//                [info enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
-//                    NSString* labelName = (NSString*)key;
-//                    [device.profile.interestCard addLabel:labelName];
-//                }];
-//            }
-            
+        {   
             NSDictionary* dataSource = [NSDictionary dictionaryWithDictionary:device.toJSONObject];
 
             // dataUpdate

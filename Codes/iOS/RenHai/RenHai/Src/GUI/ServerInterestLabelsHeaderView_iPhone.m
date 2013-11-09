@@ -15,6 +15,8 @@
 @synthesize refreshButton = _refreshButton;
 @synthesize cloneButton = _cloneButton;
 
+@synthesize operationDelegate = _operationDelegate;
+
 #pragma mark - Public Methods
 
 - (id)initWithFrame:(CGRect)frame
@@ -31,12 +33,18 @@
 
 - (IBAction)didPressRefreshButton:(id)sender
 {
-    
+    if (nil != _operationDelegate)
+    {
+        [_operationDelegate didRefreshInterestLabels];
+    }
 }
 
 - (IBAction)didPressCloneButton:(id)sender
 {
-    
+    if (nil != _operationDelegate)
+    {
+        [_operationDelegate didCloneInterestLabel];
+    }
 }
 
 @end

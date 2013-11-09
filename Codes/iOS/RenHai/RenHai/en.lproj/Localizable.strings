@@ -52,7 +52,10 @@
 
 "Interest_InterestLabels" = "Interest Labels";
 "Interest_CurrentHotInterestLabels" = "Current Hot Interest Labels";
-"Interest_Action_RefreshHotInterestLabels" = "Refresh";
+"Interest_Action_CloneServerInterestLabel" = "Copy";
+"Interest_Action_RefreshServerInterestLabels" = "Refresh";
+"Interest_Action_CreateInterestLabel" = "Create";
+"Interest_Action_DeleteInterestLabel" = "Delete";
 
 "Config_PushNotification" = "Push Notification";
 "Config_Broadcast" = "Broadcast";
@@ -69,16 +72,23 @@
 "Connect_AppDataSyncing" = "Synchronize";
 "Connect_AppDataSyncing_Detail" = "Synchronizing app data...";
 "Connect_AppDataSynced" = "Synchronize";
-"Connect_AppDataSynced_Detail" = "Synchronized app data...";
+"Connect_AppDataSynced_Detail" = "Synchronized app data";
 "Connect_AppDataSyncFailed" = "Failure";
 "Connect_AppDataSyncFailed_Detail" = "Can not synchronize app data...";
 "Connect_ServerDataSyncing" = "Synchronize";
 "Connect_ServerDataSyncing_Detail" = "Synchronizing server data...";
 "Connect_ServerDataSynced" = "Synchronize";
-"Connect_ServerDataSynced_Detail" = "Synchronized server data...";
+"Connect_ServerDataSynced_Detail" = "Synchronized server data";
 "Connect_ServerDataSyncFailed" = "Synchronize";
-"Connect_ServerDataSyncFailed_Detail" = "Can not synchronize server data...";
+"Connect_ServerDataSyncFailed_Detail" = "Can not synchronize server data";
+"Connect_Updating" = "Update";
+"Connect_Updating_Detail" = "Updating app data...";
+"Connect_Updated" = "Updated";
+"Connect_Updated_Detail" = "Updated app data";
+"Connect_UpdatedFailed" = "Update";
+"Connect_UpdatedFailed_Detail" = "Can not update app data";
 "Connect_Action_Retry" = "Retry";
+"Connect_DefaultFirstImpressLabel" = "RenHai";
 
 "ChatWait_WaitForMatch" = "Wait Matching";
 "ChatWait_WaitForMatch_Detail" = "Matching strangers with similar interests...";

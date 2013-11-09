@@ -31,6 +31,9 @@ typedef enum
     ConnectStatus_AppDataSyncing,
     ConnectStatus_AppDataSynced,
     ConnectStatus_AppDataSyncFailed,
+    ConnectStatus_AppDataUpdating,
+    ConnectStatus_AppDataUpdated,
+    ConnectStatus_AppDataUpdateFailed,
     ConnectStatus_ServerDataSyncing,
     ConnectStatus_ServerDataSynced,
     ConnectStatus_ServerDataSyncFailed
@@ -55,10 +58,13 @@ ConnectStatus;
     NSOperationQueue* _operationQueue;
     volatile BOOL _isConnectServerSuccess;
     volatile BOOL _isAppDataSyncSuccess;
+    volatile BOOL _isAppDataUpdateNecessary;
+    volatile BOOL _isAppDataUpdateSuccess;
     volatile BOOL _isServerDataSyncSuccess;
     NSInvocationOperation* _connectOperaton;
-    NSInvocationOperation* _appSyncOperation;
+    NSInvocationOperation* _appDataSyncOperation;
     NSInvocationOperation* _serverSyncOperation;
+    NSInvocationOperation* _appDataUpdateOperation;
     
     NSMutableString* _consoleInfo;
 }
@@ -310,6 +316,27 @@ ConnectStatus;
                 isActionButtonHide = NO;
                 break;
             }
+            case ConnectStatus_AppDataUpdating:
+            {
+                infoText = NSLocalizedString(@"Connect_AppDataUpdating", nil);
+                infoDetailText = NSLocalizedString(@"Connect_AppDataUpdating_Detail", nil);
+                isActionButtonHide = YES;
+                break;
+            }
+            case ConnectStatus_AppDataUpdated:
+            {
+                infoText = NSLocalizedString(@"Connect_AppDataUpdated", nil);
+                infoDetailText = NSLocalizedString(@"Connect_AppDataUpdated_Detail", nil);
+                isActionButtonHide = YES;
+                break;
+            }
+            case ConnectStatus_AppDataUpdateFailed:
+            {
+                infoText = NSLocalizedString(@"Connect_AppDataUpdateFailed", nil);
+                infoDetailText = NSLocalizedString(@"Connect_AppDataUpdateFailed_Detail", nil);
+                isActionButtonHide = NO;
+                break;
+            }
             case ConnectStatus_ServerDataSyncing:
             {
                 infoText = NSLocalizedString(@"Connect_ServerDataSyncing", nil);
@@ -415,6 +442,10 @@ ConnectStatus;
                 
                 _isAppDataSyncSuccess = YES;
                 
+                RHProfile* profile = device.profile;
+                RHInterestCard* interestCard = profile.interestCard;
+                _isAppDataUpdateNecessary = (0 == interestCard.labelList.count) ? YES : NO;
+                
                 [_statusModule recordAppMessage:AppMessageIdentifier_AppDataSync];
             }
             @catch (NSException *exception)
@@ -432,16 +463,73 @@ ConnectStatus;
         }
         failureCompletionBlock:^(){
             [self _updateUIWithConnectStatus:ConnectStatus_AppDataSyncFailed];
-            
             [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
         }
         afterCompletionBlock:nil
      ];
 }
 
-- (void)_serverDataSync
+- (void)_appDataUpdate
 {
     if (!_isAppDataSyncSuccess)
+    {
+        return;
+    }
+    
+    if (!_isAppDataUpdateNecessary)
+    {
+        _isAppDataUpdateSuccess = YES;
+        return;
+    }
+    
+    [self _updateUIWithConnectStatus:ConnectStatus_AppDataUpdating];
+    
+    RHDevice* device = _userDataModule.device;
+    RHProfile* profile = device.profile;
+    RHInterestCard* interestCard = profile.interestCard;
+    [interestCard addLabel:NSLocalizedString(@"Connect_DefaultFirstImpressLabel", nil)];
+    
+    RHMessage* requestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:device info:nil];
+    
+    [_commModule appDataSyncRequest:requestMessage
+             successCompletionBlock:^(NSDictionary* deviceDic){
+                 deviceDic = [deviceDic objectForKey:MESSAGE_KEY_DEVICE];
+                 NSDictionary* profileDic = [deviceDic objectForKey:MESSAGE_KEY_PROFILE];
+                 NSDictionary* interestCardDic = [profileDic objectForKey:MESSAGE_KEY_INTERESTCARD];
+                 @try
+                 {
+                     [interestCard fromJSONObject:interestCardDic];
+                     
+                     [_userDataModule saveUserData];
+                     
+                     [self _updateUIWithConnectStatus:ConnectStatus_AppDataUpdated];
+                     
+                     _isAppDataUpdateSuccess = YES;
+                 }
+                 @catch (NSException *exception)
+                 {
+                     DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+                     
+                     [self _updateUIWithConnectStatus:ConnectStatus_AppDataUpdateFailed];
+                     
+                     _isAppDataUpdateSuccess = NO;
+                 }
+                 @finally
+                 {
+                     
+                 }
+             }
+             failureCompletionBlock:^(){
+                 [self _updateUIWithConnectStatus:ConnectStatus_AppDataUpdateFailed];
+                 [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
+             }
+             afterCompletionBlock:nil
+     ];
+}
+
+- (void)_serverDataSync
+{
+    if (!_isAppDataUpdateSuccess)
     {
         return;
     }
@@ -492,24 +580,29 @@ ConnectStatus;
     
     _isConnectServerSuccess = NO;
     _isAppDataSyncSuccess = NO;
+    _isAppDataUpdateNecessary = NO;
+    _isAppDataSyncSuccess = NO;
     _isServerDataSyncSuccess = NO;
     
     _timerStartOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_timerStart) object:nil];
     _connectOperaton = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_connectServer) object:nil];
-    _appSyncOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_appDataSync) object:nil];
+    _appDataSyncOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_appDataSync) object:nil];
+    _appDataUpdateOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_appDataUpdate) object:nil];
     _serverSyncOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_serverDataSync) object:nil];
     _timerStopOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_timerStop) object:nil];
     
     [_timerStopOperation addDependency:_serverSyncOperation];
-    [_serverSyncOperation addDependency:_appSyncOperation];
-    [_appSyncOperation addDependency:_connectOperaton];
+    [_serverSyncOperation addDependency:_appDataUpdateOperation];
+    [_appDataUpdateOperation addDependency:_appDataSyncOperation];
+    [_appDataSyncOperation addDependency:_connectOperaton];
     [_connectOperaton addDependency:_timerStartOperation];
     
     _operationQueue = [[NSOperationQueue alloc] init];
     _operationQueue.maxConcurrentOperationCount = 1;
     [_operationQueue addOperation:_timerStopOperation];
     [_operationQueue addOperation:_serverSyncOperation];
-    [_operationQueue addOperation:_appSyncOperation];
+    [_operationQueue addOperation:_appDataUpdateOperation];
+    [_operationQueue addOperation:_appDataSyncOperation];
     [_operationQueue addOperation:_connectOperaton];
     [_operationQueue addOperation:_timerStartOperation];
 }

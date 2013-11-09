@@ -26,19 +26,18 @@
 #define INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS 6
 
 #define SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS 0
-#define SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS 12
+#define SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS 60
 
-@interface InterestViewController_iPhone () <InterestLabelsHeaderViewDelegate, RHLabelManageDelegate, UIGestureRecognizerDelegate>
+@interface InterestViewController_iPhone () <InterestLabelsHeaderViewDelegate, ServerInterestLabelsHeaderViewDelegate, RHLabelManageDelegate, UIGestureRecognizerDelegate>
 {
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
     
-    UIRefreshControl* _interestRefresher;
-    UIRefreshControl* _serverInterestRefresher;
-    
     InterestLabelsHeaderView_iPhone* _interestLabelsHeaderView;
     ServerInterestLabelsHeaderView_iPhone* _serverInterestLabelsHeaderView;
+    
+    BOOL _allowCloneLabel;
 }
 
 @end
@@ -51,10 +50,15 @@
 
 #pragma mark - Public Methods
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
+    
     [self _setupInstance];
 }
 
@@ -68,12 +72,6 @@
     [super viewDidAppear:animated];
 }
 
--(void) setupIBOutlets
-{
-    [self _refreshInterestLabelsHeaderViewActions];
-    [self _refreshServerInterestLabelsHeaderViewActions];
-}
-
 #pragma mark - Private Methods
 
 -(void)_setupInstance
@@ -85,10 +83,10 @@
     [self _setupNavigationBar];
     [self _setupCollectionView];
     
-//    UITapGestureRecognizer* singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
-//    singleTapGesturer.delegate = self;
-//    singleTapGesturer.numberOfTapsRequired = 1;
-//    [self.view addGestureRecognizer:singleTapGesturer];
+    UITapGestureRecognizer* singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
+    singleTapGesturer.delegate = self;
+    singleTapGesturer.numberOfTapsRequired = 1;
+    [self.view addGestureRecognizer:singleTapGesturer];
 
     UITapGestureRecognizer* doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
     doubleTapGesturer.delegate = self;
@@ -149,82 +147,32 @@
     [_serverInterestLabelsView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW];
 }
 
--(void)_updateInterestCard
+-(void)_setupInterestLabelsHeaderView:(UICollectionView*) collectionView kind:(NSString*) kind atIndexPath:(NSIndexPath*) indexPath
 {
-//    [self _refreshInterestLabelsView];
-    
-    [CBAppUtils asyncProcessInBackgroundThread:^(){
-        RHDevice* device = _userDataModule.device;
-        RHProfile* profile = device.profile;
-        RHInterestCard* interestCard = profile.interestCard;
-        RHMessage* requestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:device info:nil];
-    
-        [_commModule appDataSyncRequest:requestMessage
-            successCompletionBlock:^(NSDictionary* deviceDic){
-                deviceDic = [deviceDic objectForKey:MESSAGE_KEY_DEVICE];
-                NSDictionary* profileDic = [deviceDic objectForKey:MESSAGE_KEY_PROFILE];
-                NSDictionary* interestCardDic = [profileDic objectForKey:MESSAGE_KEY_INTERESTCARD];
-                @try
-                {
-                    [interestCard fromJSONObject:interestCardDic];
-                    
-                    [_userDataModule saveUserData];
-                }
-                @catch (NSException *exception)
-                {
-                    DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
-                }
-                @finally
-                {
-                    
-                }
-            }
-            failureCompletionBlock:^(){
-            }
-            afterCompletionBlock:^(){
-                [CBAppUtils asyncProcessInMainThread:^(){
-                    [self _refreshInterestLabelsView];
-                }];
-            }
-         ];
-    }];
+    if (nil == _interestLabelsHeaderView)
+    {
+        _interestLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW forIndexPath:indexPath];
+        _interestLabelsHeaderView.headerTitleLabel.text = NSLocalizedString(@"Interest_InterestLabels", nil);
+        [_interestLabelsHeaderView.createButton setTitle:NSLocalizedString(@"Interest_Action_CreateInterestLabel", nil) forState:UIControlStateNormal];
+        [_interestLabelsHeaderView.delButton setTitle:NSLocalizedString(@"Interest_Action_DeleteInterestLabel", nil) forState:UIControlStateNormal];
+        _interestLabelsHeaderView.operationDelegate = self;
+        
+        [self _refreshInterestLabelsHeaderViewActions];
+    }
 }
 
--(void)_refreshServerInterestLabelList
+-(void)_setupServerInterestLabelsHeaderView:(UICollectionView*) collectionView kind:(NSString*) kind atIndexPath:(NSIndexPath*) indexPath
 {
-    RHDevice* device = _userDataModule.device;
-    RHServer* server = _userDataModule.server;
-    
-    RHMessage* requestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
-    
-    [_commModule serverDataSyncRequest:requestMessage
-        successCompletionBlock:^(NSDictionary* serverDic){
-            @try
-            {
-                [server fromJSONObject:serverDic];
-                
-                [CBAppUtils asyncProcessInMainThread:^(){
-                    [self _refreshServerInterestLabelsView];
-                }];
-            }
-            @catch (NSException *exception)
-            {
-                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
-            }
-            @finally
-            {
-                
-            }
-        }
-        failureCompletionBlock:^(){
-        }
-        afterCompletionBlock:nil
-     ];
-}
-
--(void)_showOtherLabels
-{
-    [self _refreshServerInterestLabelList];
+    if (nil == _serverInterestLabelsHeaderView)
+    {
+        _serverInterestLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW forIndexPath:indexPath];
+        _serverInterestLabelsHeaderView.headerTitleLabel.text = NSLocalizedString(@"Interest_CurrentHotInterestLabels", nil);
+        [_serverInterestLabelsHeaderView.cloneButton setTitle:NSLocalizedString(@"Interest_Action_CloneServerInterestLabel", nil) forState:UIControlStateNormal];
+        [_serverInterestLabelsHeaderView.refreshButton setTitle:NSLocalizedString(@"Interest_Action_RefreshServerInterestLabels", nil) forState:UIControlStateNormal];
+        _serverInterestLabelsHeaderView.operationDelegate = self;
+        
+        [self _refreshServerInterestLabelsHeaderViewActions];
+    }
 }
 
 -(void)_didSingleTapped:(UITapGestureRecognizer*) recognizer
@@ -233,23 +181,81 @@
     
     if (CGRectContainsPoint(_interestLabelsView.frame, locationTouch))
     {
+        locationTouch = [_interestLabelsView convertPoint:locationTouch fromView:self.view];
+        
         NSIndexPath* indexPath = [_interestLabelsView indexPathForItemAtPoint:locationTouch];
-        if (nil != indexPath)
+        if (nil == indexPath)
         {
-            NSUInteger section = indexPath.section;
-            switch (section)
-            {
-                case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
-                {
-
-                    break;
-                }
-                default:
-                {
-                    break;
-                }
+            NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {      
+                [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
             }
         }
+        else
+        {
+            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_interestLabelsView cellForItemAtIndexPath:indexPath];
+            if (!cell.isSelected)
+            {
+                [_interestLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            }
+            else
+            {
+                [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+            
+            NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {
+                [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+        }
+        
+        [self _refreshInterestLabelsHeaderViewActions];
+    }
+    else if (CGRectContainsPoint(_serverInterestLabelsView.frame, locationTouch))
+    {
+        locationTouch = [_serverInterestLabelsView convertPoint:locationTouch fromView:self.view];
+        
+        NSIndexPath* indexPath = [_serverInterestLabelsView indexPathForItemAtPoint:locationTouch];
+        if (nil == indexPath)
+        {
+            NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {
+                [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+        }
+        else
+        {
+            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_serverInterestLabelsView cellForItemAtIndexPath:indexPath];
+            if (!cell.isSelected)
+            {
+                [_serverInterestLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+                
+                NSString* labelName = cell.labelName;
+                
+                RHDevice* device = _userDataModule.device;
+                RHProfile* profile = device.profile;
+                RHInterestCard* interestCard = profile.interestCard;
+                BOOL hasLabel = [interestCard isLabelExists:labelName];
+    
+                _allowCloneLabel = (hasLabel) ? NO : YES;
+            }
+            else
+            {
+                [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+                _allowCloneLabel = NO;
+            }
+            
+            NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {
+                [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+        }
+        
+        [self _refreshServerInterestLabelsHeaderViewActions];
     }
 }
 
@@ -316,7 +322,11 @@
 
 -(void)_refreshServerInterestLabelsHeaderViewActions
 {
+    BOOL allowRefreshLabels = YES;
+    BOOL allowCloneLabel = _allowCloneLabel;
     
+    _serverInterestLabelsHeaderView.cloneButton.enabled = allowCloneLabel;
+    _serverInterestLabelsHeaderView.refreshButton.enabled = allowRefreshLabels;
 }
 
 -(void)_refreshInterestLabelsView
@@ -329,7 +339,7 @@
 -(void)_refreshServerInterestLabelsView
 {
     [_serverInterestLabelsView reloadData];
-    
+
     [self _refreshServerInterestLabelsHeaderViewActions];
 }
 
@@ -481,14 +491,7 @@
         {
             case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
             {
-                if (nil == _interestLabelsHeaderView)
-                {
-                    _interestLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_INTERESTLABELSHEADVIEW forIndexPath:indexPath];
-                    _interestLabelsHeaderView.headerTitleLabel.text = NSLocalizedString(@"Interest_InterestLabels", nil);
-                    
-                    _interestLabelsHeaderView.operationDelegate = self;
-                }
-                
+                [self _setupInterestLabelsHeaderView:_interestLabelsView kind:kind atIndexPath:indexPath];
                 reusableView = _interestLabelsHeaderView;
                 
                 break;
@@ -505,14 +508,7 @@
         {
             case SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS:
             {
-                if (nil == _serverInterestLabelsHeaderView)
-                {
-                    _serverInterestLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_SERVERINTERESTLABELSHEADVIEW forIndexPath:indexPath];
-                    _serverInterestLabelsHeaderView.headerTitleLabel.text = NSLocalizedString(@"Interest_CurrentHotInterestLabels", nil);
-                    
-
-                }
-                
+                [self _setupServerInterestLabelsHeaderView:_serverInterestLabelsView kind:kind atIndexPath:indexPath];
                 reusableView = _serverInterestLabelsHeaderView;
                 
                 break;
@@ -597,6 +593,11 @@
 
 - (void)collectionView:(LSCollectionViewHelper *)cv moveItemAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
+    if (fromIndexPath == toIndexPath)
+    {
+        return;
+    }
+    
     RHDevice* device = _userDataModule.device;
     RHProfile* profile = device.profile;
     RHInterestCard* interestCard = profile.interestCard;
@@ -622,7 +623,7 @@
             {
                 [interestCard reorderLabel:fromPosition toIndex:toPosition];
                 
-                [self _updateInterestCard];
+                [self _remoteUpdateInterestCard];
                 
                 break;
             }
@@ -662,7 +663,19 @@
     }
     else if (collectionView == _serverInterestLabelsView)
     {
-        
+        switch (section)
+        {
+            case SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS:
+            {
+                [self _refreshServerInterestLabelsHeaderViewActions];
+                
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
     }
 }
 
@@ -688,7 +701,19 @@
     }
     else if (collectionView == _serverInterestLabelsView)
     {
-        
+        switch (section)
+        {
+            case SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS:
+            {
+                [self _refreshServerInterestLabelsHeaderViewActions];
+                
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
     }
 }
 
@@ -727,7 +752,34 @@
         }
     }
     
-    [self _updateInterestCard];
+    [self _remoteUpdateInterestCard];
+}
+
+#pragma mark - ServerInterestLabelsHeaderViewDelegate
+
+-(void) didRefreshInterestLabels
+{
+    [self _remoteQueryServerInterestLabelList];
+}
+
+-(void) didCloneInterestLabel
+{
+    RHDevice* device = _userDataModule.device;
+    RHProfile* profile = device.profile;
+    RHInterestCard* interestCard = profile.interestCard;
+    
+    NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
+    for (NSIndexPath* indexPath in selectedIndexPathes)
+    {
+        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_serverInterestLabelsView cellForItemAtIndexPath:indexPath];
+        NSString* labelName = cell.labelName;
+        
+        [interestCard addLabel:labelName];
+    }
+    
+    [self _remoteUpdateInterestCard];
+    
+    [self _refreshServerInterestLabelsView];
 }
 
 #pragma mark - RHLabelManageDelegate
@@ -760,7 +812,7 @@
         }
     }
     
-    [self _updateInterestCard];
+    [self _remoteUpdateInterestCard];
     
     [_guiModule.mainViewController dismissPopupViewControllerAnimated:YES completion:nil];
 }
@@ -768,6 +820,85 @@
 -(void) didLabelManageCancel
 {
     [_guiModule.mainViewController dismissPopupViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - Remote Operations
+
+-(void)_remoteUpdateInterestCard
+{
+    //    [self _refreshInterestLabelsView];
+    
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
+        RHDevice* device = _userDataModule.device;
+        RHProfile* profile = device.profile;
+        RHInterestCard* interestCard = profile.interestCard;
+        RHMessage* requestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:device info:nil];
+        
+        [_commModule appDataSyncRequest:requestMessage
+                 successCompletionBlock:^(NSDictionary* deviceDic){
+                     deviceDic = [deviceDic objectForKey:MESSAGE_KEY_DEVICE];
+                     NSDictionary* profileDic = [deviceDic objectForKey:MESSAGE_KEY_PROFILE];
+                     NSDictionary* interestCardDic = [profileDic objectForKey:MESSAGE_KEY_INTERESTCARD];
+                     @try
+                     {
+                         [interestCard fromJSONObject:interestCardDic];
+                         
+                         [_userDataModule saveUserData];
+                     }
+                     @catch (NSException *exception)
+                     {
+                         DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+                     }
+                     @finally
+                     {
+                         
+                     }
+                 }
+                 failureCompletionBlock:^(){
+                 }
+                   afterCompletionBlock:^(){
+                       [CBAppUtils asyncProcessInMainThread:^(){
+                           [self _refreshInterestLabelsView];
+                       }];
+                   }
+         ];
+    }];
+}
+
+-(void)_remoteQueryServerInterestLabelList
+{
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
+        RHDevice* device = _userDataModule.device;
+        RHServer* server = _userDataModule.server;
+        
+        RHMessage* requestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_InterestLabelListSync device:device info:nil];
+        
+        [_commModule serverDataSyncRequest:requestMessage
+                    successCompletionBlock:^(NSDictionary* serverDic){
+                        @try
+                        {
+                            [server fromJSONObject:serverDic];
+                            
+                            [CBAppUtils asyncProcessInMainThread:^(){
+                                _allowCloneLabel = NO;
+                                [self _refreshServerInterestLabelsView];
+                            }];
+                        }
+                        @catch (NSException *exception)
+                        {
+                            DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+                        }
+                        @finally
+                        {
+                            
+                        }
+                    }
+                    failureCompletionBlock:^(){
+                    }
+                      afterCompletionBlock:^(){
+                      }
+         ];
+    }];
 }
 
 @end

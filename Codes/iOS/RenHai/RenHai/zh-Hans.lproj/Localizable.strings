@@ -52,7 +52,10 @@
 
 "Interest_InterestLabels" = "兴趣标签";
 "Interest_CurrentHotInterestLabels" = "当前热门兴趣标签";
-"Interest_Action_RefreshHotInterestLabels" = "换一批";
+"Interest_Action_CloneServerInterestLabel" = "复制";
+"Interest_Action_RefreshServerInterestLabels" = "刷新";
+"Interest_Action_CreateInterestLabel" = "新建";
+"Interest_Action_DeleteInterestLabel" = "删除";
 
 "Config_PushNotification" = "推送通知";
 "Config_Broadcast" = "广播信息";
@@ -78,7 +81,14 @@
 "Connect_ServerDataSynced_Detail" = "成功同步服务器数据";
 "Connect_ServerDataSyncFailed" = "同步";
 "Connect_ServerDataSyncFailed_Detail" = "无法同步服务器数据";
+"Connect_Updating" = "更新";
+"Connect_Updating_Detail" = "正在更新设备数据...";
+"Connect_Updated" = "更新";
+"Connect_Updated_Detail" = "成功更新设备数据";
+"Connect_UpdatedFailed" = "更新";
+"Connect_UpdatedFailed_Detail" = "无法更新设备数据";
 "Connect_Action_Retry" = "重试";
+"Connect_DefaultFirstImpressLabel" = "人海";
 
 "ChatWait_WaitForMatch" = "正在匹配";
 "ChatWait_WaitForMatch_Detail" = "茫茫人海，知音何在...";
