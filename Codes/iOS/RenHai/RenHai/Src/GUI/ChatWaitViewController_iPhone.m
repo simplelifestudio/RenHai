@@ -19,7 +19,7 @@
 
 #define DELAY CIRCLE_ANIMATION_DISPLAY
 
-#define DELAY_MATCHSTART 2.0f
+#define DELAY_MATCHSTART 10.0f
 
 typedef enum
 {
