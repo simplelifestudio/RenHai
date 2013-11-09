@@ -48,7 +48,6 @@
 -(void) viewDidAppear:(BOOL)animated
 {
     [self _arrangeConnectViewController];
-    [self setNavigationBarHidden:NO];
     
     [super viewDidAppear:animated];
 }

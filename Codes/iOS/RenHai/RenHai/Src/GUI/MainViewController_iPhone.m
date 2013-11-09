@@ -49,7 +49,7 @@
 -(void) switchToMainScene
 {
     RHNavigationController* navigationVC = _guiModule.navigationController;
-    
+    navigationVC.navigationBarHidden = NO;
     navigationVC.navigationBar.translucent = NO;
     navigationVC.navigationBar.backgroundColor = [UIColor DodgerBlue];
     

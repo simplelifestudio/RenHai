@@ -235,6 +235,8 @@
 		CD736CEF1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */; };
 		CD736CF41817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */; };
 		CD736CF51817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */; };
+		CDBC5CC8182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CDBC5CC7182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.m */; };
+		CDBC5CC9182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CDBC5CC7182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.m */; };
 		CDC0518A1802E055006158B8 /* RHServer.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051891802E055006158B8 /* RHServer.m */; };
 		CDC0518B1802E055006158B8 /* RHServer.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051891802E055006158B8 /* RHServer.m */; };
 		CDC0518E1802E311006158B8 /* RHServerDeviceCapacity.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC0518D1802E311006158B8 /* RHServerDeviceCapacity.m */; };
@@ -485,6 +487,8 @@
 		CD736CEC1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpressLabelsHeaderView_iPhone.h; sourceTree = "<group>"; };
 		CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImpressLabelsHeaderView_iPhone.m; sourceTree = "<group>"; };
 		CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImpressLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
+		CDBC5CC6182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerInterestLabelsViewLayout.h; sourceTree = "<group>"; };
+		CDBC5CC7182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerInterestLabelsViewLayout.m; sourceTree = "<group>"; };
 		CDC051881802E055006158B8 /* RHServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServer.h; sourceTree = "<group>"; };
 		CDC051891802E055006158B8 /* RHServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServer.m; sourceTree = "<group>"; };
 		CDC0518C1802E311006158B8 /* RHServerDeviceCapacity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServerDeviceCapacity.h; sourceTree = "<group>"; };
@@ -866,6 +870,8 @@
 				C580526F17E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.h */,
 				C580527017E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m */,
 				CDDA9FAA1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib */,
+				CDBC5CC6182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.h */,
+				CDBC5CC7182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.m */,
 				C593C44917D329E100C26367 /* ConfigViewController_iPhone.h */,
 				C593C44A17D329E100C26367 /* ConfigViewController_iPhone.m */,
 				C593C44D17D329F300C26367 /* HelpViewController_iPhone.h */,
@@ -1266,6 +1272,7 @@
 				CDC051921802E33D006158B8 /* RHServerDeviceCount.m in Sources */,
 				C593C41B17D3244000C26367 /* AppDataModule.m in Sources */,
 				C593C41F17D3258600C26367 /* UserDataModule.m in Sources */,
+				CDBC5CC8182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.m in Sources */,
 				C593C42317D3259600C26367 /* WebRTCModule.m in Sources */,
 				CDFEA324182A1E5C00F0351D /* ChatAssessExistImpressLabelsHeaderView_iPhone.m in Sources */,
 				C593C42B17D3284600C26367 /* SplashViewController_iPhone.m in Sources */,
@@ -1359,6 +1366,7 @@
 				C593C44817D329D200C26367 /* InterestViewController_iPhone.m in Sources */,
 				C593C44C17D329E100C26367 /* ConfigViewController_iPhone.m in Sources */,
 				C593C45017D329F300C26367 /* HelpViewController_iPhone.m in Sources */,
+				CDBC5CC9182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.m in Sources */,
 				C593C45417D32A8300C26367 /* ChatWaitViewController_iPhone.m in Sources */,
 				C593C45817D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */,
 				C593C46017D32AC800C26367 /* ChatAssessViewController_iPhone.m in Sources */,
