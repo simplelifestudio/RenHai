@@ -11,8 +11,10 @@ package com.simplelife.renhai.server.test.unittest;
 
 import java.net.URI;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
@@ -33,6 +35,8 @@ import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.db.GlobalinterestlabelMapper;
+import com.simplelife.renhai.server.db.Impresslabelmap;
+import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.json.AlohaRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
@@ -593,5 +597,28 @@ public class MainFunction extends AbstractTestCase
 			session.close();
 		}
 	}
-	
+
+	@Test
+	public void testRandomInterestLabel()
+	{
+		Device device = DBModule.instance.deviceCache.getObject(demoDeviceSn);
+		Set<Interestlabelmap> labelSet = device.getProfile().getInterestCard().getInterestLabelMapSet();
+		LinkedList<String> orgLabels = new LinkedList<>();
+		for (Interestlabelmap map : labelSet)
+		{
+			orgLabels.add(map.getGlobalLabel().getInterestLabelName());
+		}
+		
+		Random random = new Random();
+		LinkedList<String> labels = new LinkedList<>();
+		while (orgLabels.size() > 0)
+		{
+			labels.add(orgLabels.remove(random.nextInt(orgLabels.size())));
+		}
+		
+		for (String label : labels)
+		{
+			logger.debug(label);
+		}
+	}
 }
