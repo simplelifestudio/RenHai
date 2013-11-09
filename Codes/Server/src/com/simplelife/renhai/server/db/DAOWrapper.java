@@ -376,7 +376,7 @@ public class DAOWrapper
     	if (!linkToBeSaved.contains(device))
     	{
     		String deviceSn = device.getDeviceSn();
-    		logger.error("Object of given Device object with DeviceSn {} is not in linkToBeSaved.", deviceSn);
+    		logger.debug("Object of given Device object with DeviceSn {} is not in linkToBeSaved.", deviceSn);
     		
     		for (Object obj : linkToBeSaved)
     		{
