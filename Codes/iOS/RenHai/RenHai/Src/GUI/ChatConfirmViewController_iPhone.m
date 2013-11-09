@@ -127,7 +127,9 @@
     [super didReceiveMemoryWarning];
 }
 
-#pragma mark - UICollectionViewDataDelegate
+#pragma mark - UICollectionViewDelegate
+
+#pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
@@ -392,6 +394,8 @@
 -(void)_setupCollectionView
 {
     _collectionView.dataSource = self;
+    
+    _collectionView.delegate = self;
     
     UINib* nib = [UINib nibWithNibName:NIB_COLLECTIONCELL_LABEL bundle:nil];
     [_collectionView registerNib:nib forCellWithReuseIdentifier:COLLECTIONCELL_ID_IMPRESSLABEL];

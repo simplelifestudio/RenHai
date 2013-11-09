@@ -19,6 +19,10 @@
 
 #define INTERVAL_ALOHA 30
 
+#define BORDERWIDTH_VIDEOVIEW 2.0f;
+#define CORNERRADIUS_VIDEOVIEW 2.0f;
+#define BORDERCOLOR_VIDEOVIEW MAJOR_COLOR_MID
+
 @interface ChatVideoViewController_iPhone ()
 {
     GUIModule* _guiModule;
@@ -44,6 +48,9 @@
 
 @synthesize selfStatusLabel = _selfStatusLabel;
 @synthesize partnerStatusLabel = _partnerStatusLabel;
+
+@synthesize selfVideoView = _selfVideoView;
+@synthesize parterVideoView = _parterVideoView;
 
 @synthesize endChatButton = _endChatButton;
 
@@ -154,6 +161,14 @@
     
     _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoOpened", nil);
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_VideoOpened", nil);
+    
+    _selfVideoView.layer.borderColor = BORDERCOLOR_VIDEOVIEW.CGColor;
+    _selfVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
+    _selfVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
+    
+    _parterVideoView.layer.borderColor = BORDERCOLOR_VIDEOVIEW.CGColor;
+    _parterVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
+    _parterVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
     
     [_endChatButton setTitle:NSLocalizedString(@"ChatVideo_Action_End", nil) forState:UIControlStateNormal];
 }
