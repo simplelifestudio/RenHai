@@ -18,6 +18,7 @@
 #import "RHInterestLabel.h"
 #import "RHCollectionLabelCell_iPhone.h"
 #import "RHLabelManageViewController_iPhone.h"
+#import "ServerInterestLabelsViewLayout.h"
 
 #define INTERESTLABELS_SECTION_COUNT 1
 #define SERVERINTERESTLABELS_SECTION_COUNT 1
@@ -239,8 +240,8 @@
                 RHProfile* profile = device.profile;
                 RHInterestCard* interestCard = profile.interestCard;
                 BOOL hasLabel = [interestCard isLabelExists:labelName];
-    
-                _allowCloneLabel = (hasLabel) ? NO : YES;
+                BOOL isFull = (interestCard.labelList.count >= INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS);
+                _allowCloneLabel = (hasLabel || isFull) ? NO : YES;
             }
             else
             {
@@ -397,7 +398,7 @@
                 NSArray* currentInterestLabels = interestLabelList.current;
                 
                 itemsCount = (currentInterestLabels.count <= SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS) ? currentInterestLabels.count : SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS;
-                
+
                 break;
             }
             default:
@@ -459,7 +460,7 @@
                 
                 RHServerInterestLabelList* olabelList = server.interestLabelList;
                 NSArray* labelList = olabelList.current;
-                
+
                 RHInterestLabel* label = labelList[position];
                 labelName = label.labelName;
                 labelCount = label.matchCount;
@@ -651,8 +652,6 @@
         {
             case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
             {
-                [self _refreshInterestLabelsHeaderViewActions];
-                
                 break;
             }
             default:
@@ -667,8 +666,6 @@
         {
             case SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS:
             {
-                [self _refreshServerInterestLabelsHeaderViewActions];
-                
                 break;
             }
             default:
@@ -689,8 +686,6 @@
         {
             case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
             {
-                [self _refreshInterestLabelsHeaderViewActions];
-                
                 break;
             }
             default:
@@ -705,8 +700,6 @@
         {
             case SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS:
             {
-                [self _refreshServerInterestLabelsHeaderViewActions];
-                
                 break;
             }
             default:
