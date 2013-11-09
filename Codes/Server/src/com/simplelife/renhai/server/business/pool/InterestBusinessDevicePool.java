@@ -206,6 +206,11 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		}
     		
     		deviceList.remove(device);
+    		
+    		if (deviceList.isEmpty())
+    		{
+    			interestLabelMap.remove(strLabel);
+    		}
     	}
     }
     
@@ -271,7 +276,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 			cacheDeviceMap.put(sn, device);
 			//device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
 			//device.unbindBusinessSession();
-			addInterestIndex(device);
+			//addInterestIndex(device);
 		}
 	}
 }

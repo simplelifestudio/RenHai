@@ -479,19 +479,28 @@ public class MainFunction extends AbstractTestCase
 		//app1.sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, Consts.BusinessType.Random.toString());
 		
 		app1.enterPool(BusinessType.Interest);
+		app1.sendServerDataSyncRequest();
 		
 		app1.enterPool(BusinessType.Interest);
 		
 		app1.enterPool(BusinessType.Random);
 		
+		app1.matchStart();
+		
 		app1.setBusinessType(Consts.BusinessType.Random);
 		app1.sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, Consts.BusinessType.Random.toString());
+		
+		app1.sendServerDataSyncRequest();
 		
 		app1.setBusinessType(Consts.BusinessType.Interest);
 		app1.sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, Consts.BusinessType.Interest.toString());
+		app1.sendServerDataSyncRequest();
 		
 		app1.setBusinessType(Consts.BusinessType.Random);
 		app1.sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, Consts.BusinessType.Random.toString());
+		app1.sendServerDataSyncRequest();
+		
+		app1.sendServerDataSyncRequest();
 	}
 	
 	@Test

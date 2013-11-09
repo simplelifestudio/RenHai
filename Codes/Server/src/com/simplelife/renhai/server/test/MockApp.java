@@ -169,7 +169,7 @@ public class MockApp implements IMockApp, Runnable
 					app.syncDevice();
 					break;
 				case EnterPool:
-					app.enterPool(BusinessType.Random);
+					app.enterPool(BusinessType.Interest);
 					break;
 				case LeavePool:
 					app.leavePool();
