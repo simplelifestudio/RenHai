@@ -17,7 +17,7 @@
 #define CORNER_RADIUS 3.0f
 
 static UIImage* delIconImage;
-static UIImage* orderIconImage;
+static UIImage* sortIconImage;
 
 @interface RHCollectionLabelCell_iPhone()
 {
@@ -25,8 +25,10 @@ static UIImage* orderIconImage;
 }
 
 @property (weak, nonatomic) IBOutlet FUIButton *delIconButton;
+@property (weak, nonatomic) IBOutlet FUIButton *sortIconButton;
 
 - (IBAction)didPressDelIconButton:(id)sender;
+- (IBAction)didPressSortIconButton:(id)sender;
 
 @end
 
@@ -40,7 +42,7 @@ static UIImage* orderIconImage;
 + (void)initialize
 {
     delIconImage = [UIImage imageNamed:@"close.png"];
-    orderIconImage = nil;
+    sortIconImage = [UIImage imageNamed:@"order.png"];
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -88,6 +90,7 @@ static UIImage* orderIconImage;
         case CellMode_Normal:
         {
             _delIconButton.hidden = YES;
+            _sortIconButton.hidden = YES;
             self.shakeCell = NO;
             
             break;
@@ -95,13 +98,15 @@ static UIImage* orderIconImage;
         case CellMode_Delete:
         {
             _delIconButton.hidden = NO;
+            _sortIconButton.hidden = YES;
             self.shakeCell = YES;
             
             break;
         }
-        case CellMode_Order:
+        case CellMode_Sort:
         {
             _delIconButton.hidden = YES;
+            _sortIconButton.hidden = NO;
             self.shakeCell = YES;
             
             break;
@@ -191,6 +196,11 @@ static UIImage* orderIconImage;
 - (IBAction)didPressDelIconButton:(id)sender
 {
 
+}
+
+- (IBAction)didPressSortIconButton:(id)sender
+{
+    
 }
 
 @end

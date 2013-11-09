@@ -12,7 +12,7 @@ typedef enum
 {
     CellMode_Normal = 0,
     CellMode_Delete,
-    CellMode_Order
+    CellMode_Sort
 }
 CellMode;
 
