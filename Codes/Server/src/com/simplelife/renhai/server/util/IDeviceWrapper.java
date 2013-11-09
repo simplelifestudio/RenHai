@@ -104,4 +104,6 @@ public interface IDeviceWrapper
     public void increaseChatDuration(int duration);
     
     public void increaseChatLoss();
+    
+    public void increaseMatchCount(String interestLabel);
 }

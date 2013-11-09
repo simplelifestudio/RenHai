@@ -57,8 +57,18 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 	
 	private LinkedList<String> getRandomLabelSet(Set<Interestlabelmap> labelSet)
 	{
+		LinkedList<String> orgLabels = new LinkedList<>();
+		for (Interestlabelmap map : labelSet)
+		{
+			orgLabels.add(map.getGlobalLabel().getInterestLabelName());
+		}
+		
+		Random random = new Random();
 		LinkedList<String> labels = new LinkedList<>();
-		String[] orgLabels = new String[labelSet.size()]; 
+		while (orgLabels.size() > 0)
+		{
+			labels.add(orgLabels.remove(random.nextInt(orgLabels.size())));
+		}
 		return labels;
 	}
 	
@@ -92,13 +102,14 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 					.getProfile()
 					.getInterestCard()
 					.getInterestLabelMapSet();
-			String strLabel; 
 			ConcurrentSkipListSet<IDeviceWrapper> deviceList;
 			
 			int deviceListSize = 0;
 			
 			// Loop all interest labels of device 
-			for (Interestlabelmap label : labelSet)
+			LinkedList<String> labels = getRandomLabelSet(labelSet);
+			
+			for (String strLabel : labels)
 			{
 				if (deviceFoundFlag)
     			{
@@ -107,7 +118,6 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 
 				selectedDevice.clear();
 				// Try to find device with same interest label
-				strLabel = label.getGlobalLabel().getInterestLabelName();
 				deviceList = interestLabelMap.get(strLabel);
 				deviceListSize = deviceList.size();
 				logger.debug("Find {} devices by interest label: " + strLabel, deviceListSize);
@@ -190,6 +200,19 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 		return true;
     }
     
+    private void increaseMatchCount(List<String> selectedDevice, String label)
+    {
+    	IDeviceWrapper device;
+    	for (String deviceSn : selectedDevice)
+    	{
+    		device = ownerBusinessPool.getDevice(deviceSn); 
+    		if (device != null)
+    		{
+    			device.increaseMatchCount(label);
+    		}
+    	}
+    }
+    
     private void startSession(List<String> selectedDevice, String deviceFoundInterest)
     {
     	IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
@@ -203,6 +226,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 		if (session.startSession(selectedDevice))
 		{
 			DbLogger.increaseInterestMatchCount(deviceFoundInterest);
+			increaseMatchCount(selectedDevice, deviceFoundInterest);
 		}
 		else
 		{

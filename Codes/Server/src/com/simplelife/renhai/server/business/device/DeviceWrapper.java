@@ -748,6 +748,29 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 	}
 
 	@Override
+	public void increaseMatchCount(String interestLabel)
+	{
+		Device device = this.getDevice();
+		Profile profile = device.getProfile();
+		Interestcard card = profile.getInterestCard();
+		Set<Interestlabelmap> maps = card.getInterestLabelMapSet();
+		
+		for (Interestlabelmap map : maps)
+		{
+			if (interestLabel.equals(map.getGlobalLabel().getInterestLabelName()))
+			{
+				synchronized (map)
+				{
+					int count = map.getMatchCount();
+					logger.debug("Match count of device <{}> by label " + interestLabel + " is increased from " + count + " to " + (count+1), getDeviceSn());
+					map.setMatchCount(count + 1);
+				}
+				return;
+			}
+		}
+	}
+	
+	@Override
 	public void increaseChatLoss()
 	{
 		Device device = this.getDevice();

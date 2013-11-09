@@ -14,6 +14,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -941,6 +942,13 @@ public class MockApp implements IMockApp, Runnable
 		}
 	}
 	
+	private int getRandomVideoChatDuration()
+	{
+		Random random = new Random();
+		int result = random.nextInt(MockAppConsts.Setting.VideoChatDurationMax);
+		return result + MockAppConsts.Setting.VideoChatDurationMin;
+	}
+	
 	private void prepareSending(Consts.MessageId messageId, JSONObject obj)
 	{
 		int intOperationType = 0;
@@ -1105,7 +1113,7 @@ public class MockApp implements IMockApp, Runnable
 						{
 							try
 							{
-								Thread.sleep(MockAppConsts.Setting.VideoChatDuration);
+								Thread.sleep(getRandomVideoChatDuration());
 							}
 							catch (InterruptedException e)
 							{
@@ -1118,7 +1126,8 @@ public class MockApp implements IMockApp, Runnable
 							task = new AutoReplyTask(
 									MockAppRequest.EndChat, 
 									null, 
-									this, MockAppConsts.Setting.VideoChatDuration,
+									this,
+									getRandomVideoChatDuration(),
 									MockAppConsts.MockAppBusinessStatus.EndChatReqSent);
 							task.setName("EndChatRequest" + DateUtil.getCurrentMiliseconds());
 						}

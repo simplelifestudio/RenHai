@@ -1187,7 +1187,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			
 			interestLabelMap.setGlobalLabel(globalInterest);
 			
-			interestLabelMap.setMatchCount(0);
+			//interestLabelMap.setMatchCount(0);
 			interestLabelMap.setValidFlag(Consts.ValidInvalid.Valid.name());
 			interestLabelMap.setGlobalInterestLabelId(globalInterest.getGlobalInterestLabelId());
 			interestLabelMap.setLabelOrder(tmpJSONObj.getInteger(JSONKey.LabelOrder));
