@@ -11,7 +11,6 @@ package com.simplelife.renhai.server.json;
 
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 
 import com.alibaba.fastjson.JSONArray;
@@ -33,10 +32,10 @@ import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.DateUtil;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 
 
@@ -1160,8 +1159,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 				continue;
 			}
 			
-			interestLabelMap = new Interestlabelmap();
-			
 			globalInterest = DBModule.instance.interestLabelCache.getObject(tempStr);
 			
 			// Check if it's new interest label for this device but existent global interest label
@@ -1185,9 +1182,10 @@ public class AppDataSyncRequest extends AppJSONMessage
 				}
 			}
 			
+			interestLabelMap = new Interestlabelmap();
 			interestLabelMap.setGlobalLabel(globalInterest);
 			
-			//interestLabelMap.setMatchCount(0);
+			interestLabelMap.setMatchCount(0);
 			interestLabelMap.setValidFlag(Consts.ValidInvalid.Valid.name());
 			interestLabelMap.setGlobalInterestLabelId(globalInterest.getGlobalInterestLabelId());
 			interestLabelMap.setLabelOrder(tmpJSONObj.getInteger(JSONKey.LabelOrder));
