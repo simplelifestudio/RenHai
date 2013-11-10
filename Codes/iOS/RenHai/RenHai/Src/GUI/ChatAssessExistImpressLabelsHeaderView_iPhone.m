@@ -11,7 +11,7 @@
 @implementation ChatAssessExistImpressLabelsHeaderView_iPhone
 
 @synthesize titleLabel = _titleLabel;
-@synthesize refreshButton = _refreshButton;
+
 @synthesize cloneButton = _cloneButton;
 
 #pragma mark - Public Methods
