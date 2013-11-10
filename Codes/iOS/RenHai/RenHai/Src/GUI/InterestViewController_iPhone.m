@@ -467,7 +467,7 @@
 
                 RHInterestLabel* label = labelList[position];
                 labelName = label.labelName;
-                labelCount = label.globalMatchCount;
+                labelCount = label.currentProfileCount;
                 
                 cell.textField.text = labelName;
                 cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
