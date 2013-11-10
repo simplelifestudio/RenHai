@@ -897,7 +897,8 @@ SINGLETON(BusinessStatusModule)
                       // M13
                       case AppMessageIdentifier_LeavePool:
                       {
-                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          [self _updateBusinessStatus:BusinessStatusIdentifier_AppSyncCompleted];
+                          
                           break;
                       }
                       default:
