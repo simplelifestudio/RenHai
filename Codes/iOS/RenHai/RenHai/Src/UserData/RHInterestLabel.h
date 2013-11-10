@@ -24,6 +24,7 @@ RHInterestLabelValidFlag;
 @property (nonatomic) NSUInteger globalMatchCount;
 @property (nonatomic) NSUInteger labelOrder;
 @property (nonatomic) NSUInteger matchCount;
+@property (nonatomic) NSUInteger currentProfileCount;
 @property (nonatomic, readonly) RHInterestLabelValidFlag validFlag;
 
 @end
