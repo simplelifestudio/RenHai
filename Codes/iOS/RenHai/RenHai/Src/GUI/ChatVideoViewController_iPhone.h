@@ -19,5 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *selfStatusLabel;
 @property (weak, nonatomic) IBOutlet UILabel *partnerStatusLabel;
 
+@property (weak, nonatomic) IBOutlet UIView *selfVideoView;
+@property (weak, nonatomic) IBOutlet UIView *parterVideoView;
 
 @end

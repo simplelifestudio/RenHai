@@ -88,6 +88,7 @@
 #define MESSAGE_KEY_GLOBALMATCHCOUNT @"globalMatchCount"
 #define MESSAGE_KEY_INTERESTLABELORDER @"labelOrder"
 #define MESSAGE_KEY_MATCHCOUNT @"matchCount"
+#define MESSAGE_KEY_CURRENTPROFILECOUNT @"currentProfileCount"
 #define MESSAGE_KEY_VALIDFLAG @"validFlag"
 
 /*

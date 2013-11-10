@@ -20,7 +20,7 @@
 #import "BusinessStatusModule.h"
 
 #define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
-#define INTERVAL_DATASYNC 10.0f
+#define INTERVAL_DATASYNC 5.0f
 
 typedef enum
 {

@@ -34,7 +34,7 @@
 
 #define DELAY_REFRESH 0.5f
 
-#define COUNTDOWN_SECONDS 180
+#define COUNTDOWN_SECONDS 300
 
 #define COLOR_ASSESSLABEL_SELECTED [UIColor redColor]
 
@@ -57,6 +57,8 @@
     NSMutableArray* _impressLabelNames;
     
     NSMutableArray* _addImpressLabels;
+    
+    NSUInteger _assessLabelPosition;
     
     volatile BOOL _selfAssessedFlag;
     
@@ -132,12 +134,14 @@
 
 -(void) resetPage
 {
-    [_continueButton setTitle:NSLocalizedString(@"ChatAssess_Action_Continue", nil) forState:UIControlStateNormal];
-    [_finishButton setTitle:NSLocalizedString(@"ChatAssess_Action_Finish", nil) forState:UIControlStateNormal];
+    _continueButton.hidden = NO;
+    _finishButton.hidden = NO;
     
     _selfAssessedFlag = NO;
     
     _isDeciding = NO;
+    
+    _assessLabelPosition = 0;
     
     [_addImpressLabels removeAllObjects];
     
@@ -166,6 +170,11 @@
     
     _addImpressLabels = [NSMutableArray array];
     
+    _assessLabelPosition = 0;
+    
+    [_continueButton setTitle:NSLocalizedString(@"ChatAssess_Action_Continue", nil) forState:UIControlStateNormal];
+    [_finishButton setTitle:NSLocalizedString(@"ChatAssess_Action_Finish", nil) forState:UIControlStateNormal];
+    
     [self _setupCollectionView];
 }
 
@@ -191,42 +200,6 @@
     _existImpressLabelsView.delegate = self;
     
     _assessLabelNames = @[MESSAGE_KEY_ASSESS_HAPPY, MESSAGE_KEY_ASSESS_SOSO, MESSAGE_KEY_ASSESS_DISGUSTING];
-}
-
-#pragma mark - RHCollectionLabelCellEditingDelegate
-
--(void) onTextFieldDoneEditing:(RHCollectionLabelCell_iPhone*) cell labelName:(NSString*) labelName
-{
-    if (nil != cell)
-    {
-        NSIndexPath* indexPath = [_addImpressLabelsView indexPathForCell:cell];
-        NSUInteger item = indexPath.item;
-        
-        if (item < _impressLabelNames.count)
-        {
-            [_impressLabelNames removeObjectAtIndex:item];
-            
-            if (nil == labelName || 0 == labelName.length)
-            {
-                
-            }
-            else
-            {
-                [_impressLabelNames insertObject:labelName atIndex:item];
-            }
-        }
-        else
-        {
-            if (nil == labelName || 0 == labelName.length)
-            {
-                
-            }
-            else
-            {
-                [_impressLabelNames insertObject:labelName atIndex:item];
-            }
-        }
-    }
 }
 
 -(void)_moveToChatWaitView
@@ -260,6 +233,9 @@
 
 -(void)_updatePartnerImpressCardWithType:(BusinessSessionRequestType) requestType
 {
+    _continueButton.hidden = YES;
+    _finishButton.hidden = YES;
+    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         
         @synchronized(self)
@@ -358,7 +334,7 @@
 {
     if (!_selfAssessedFlag)
     {
-        [self _updatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndContinue];
+        [self _updatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndQuit];
     }
 }
 
@@ -375,11 +351,11 @@
 
 -(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSUInteger position = indexPath.item;
+    
     if (collectionView == _assessLabelsView)
     {
-        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView cellForItemAtIndexPath:indexPath];
-        
-        [cell setSelected:YES];
+        _assessLabelPosition = position;
     }
     else if (collectionView == _addImpressLabelsView)
     {
@@ -466,7 +442,7 @@
             cell.countLabel.text = @"";
         }
         
-        if (position == 0)
+        if (position == _assessLabelPosition)
         {
             [_assessLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
             cell.selected = YES;

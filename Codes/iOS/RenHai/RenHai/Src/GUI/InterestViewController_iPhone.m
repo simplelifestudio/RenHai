@@ -71,6 +71,10 @@
 -(void) viewDidAppear:(BOOL)animated
 {    
     [super viewDidAppear:animated];
+    
+    [self _refreshInterestLabelsView];
+    
+    [self _refreshServerInterestLabelsView];
 }
 
 #pragma mark - Private Methods
@@ -436,10 +440,10 @@
                 
                 RHInterestLabel* label = labelList[position];
                 labelName = label.labelName;
-                labelCount = label.matchCount;
+                labelCount = label.globalMatchCount;
                 
                 cell.textField.text = labelName;
-                cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
+//                cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
                 
                 break;
             }
@@ -463,7 +467,7 @@
 
                 RHInterestLabel* label = labelList[position];
                 labelName = label.labelName;
-                labelCount = label.matchCount;
+                labelCount = label.currentProfileCount;
                 
                 cell.textField.text = labelName;
                 cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];

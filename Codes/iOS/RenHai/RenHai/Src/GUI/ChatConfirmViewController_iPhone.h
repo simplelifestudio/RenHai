@@ -10,7 +10,7 @@
 
 #import "ChatWizardController.h"
 
-@interface ChatConfirmViewController_iPhone : UIViewController <UICollectionViewDataSource, ChatWizardPage>
+@interface ChatConfirmViewController_iPhone : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource, ChatWizardPage>
 
 @property (weak, nonatomic) IBOutlet UILabel *viewTitleLabel;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;

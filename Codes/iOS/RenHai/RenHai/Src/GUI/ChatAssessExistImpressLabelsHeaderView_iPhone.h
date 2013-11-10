@@ -11,10 +11,9 @@
 @interface ChatAssessExistImpressLabelsHeaderView_iPhone : UICollectionReusableView
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
-@property (weak, nonatomic) IBOutlet FUIButton *refreshButton;
+
 @property (weak, nonatomic) IBOutlet FUIButton *cloneButton;
 
-- (IBAction)didPressRefreshButton:(id)sender;
 - (IBAction)didPressCloneButton:(id)sender;
 
 @end

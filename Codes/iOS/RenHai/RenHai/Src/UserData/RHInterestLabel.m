@@ -17,6 +17,7 @@
 #define SERIALIZE_KEY_GLOBALMATCHCOUNT @"interestLabel.globalMatchCount"
 #define SERIALIZE_KEY_ORDER @"interestLabel.labelOrder"
 #define SERIALIZE_KEY_MATCHCOUNT @"interestLabel.matchCount"
+#define SERIALIZE_KEY_CURRENTPROFILECOUNT @"interestLabel.currentProfileCount"
 #define SERIALIZE_KEY_VALIDFLAG @"interestLabel.validFlag"
 
 @implementation RHInterestLabel
@@ -26,6 +27,7 @@
 @synthesize globalMatchCount = _globalMatchCount;
 @synthesize labelOrder = _labelOrder;
 @synthesize matchCount = _matchCount;
+@synthesize currentProfileCount = _currentProfileCount;
 @synthesize validFlag = _validFlag;
 
 #pragma mark - Public Methods
@@ -73,6 +75,11 @@
     return [NSNumber numberWithInteger:_matchCount];
 }
 
+-(NSNumber*) _getOCurrentProfileCount
+{
+    return [NSNumber numberWithInteger:_currentProfileCount];
+}
+
 -(NSNumber*) _getOValidFlag
 {
     return [NSNumber numberWithInt:_validFlag];
@@ -114,6 +121,12 @@
             _matchCount = ([NSNull null] != oMatchCount) ? ((NSNumber*)oMatchCount).integerValue : 0;
         }
         
+        id oCurrentProfileCount = [dic objectForKey:MESSAGE_KEY_CURRENTPROFILECOUNT];
+        if (nil != oCurrentProfileCount)
+        {
+            _currentProfileCount = ([NSNull null] != oCurrentProfileCount) ? ((NSNumber*)oCurrentProfileCount).integerValue : 0;
+        }
+        
         id oValidFlag = [dic objectForKey:MESSAGE_KEY_VALIDFLAG];
         if (nil != oValidFlag)
         {
@@ -140,6 +153,9 @@
     id oMatchCount = [self _getOMatchCount];
     [dic setObject:oMatchCount forKey:MESSAGE_KEY_MATCHCOUNT];
     
+    id oCurrentProfileCount = [self _getOCurrentProfileCount];
+    [dic setObject:oCurrentProfileCount forKey:MESSAGE_KEY_CURRENTPROFILECOUNT];
+    
     id oValidFlag = [self _getOValidFlag];
     [dic setObject:oValidFlag forKey:MESSAGE_KEY_VALIDFLAG];
     
@@ -165,6 +181,7 @@
         _globalMatchCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_GLOBALMATCHCOUNT];
         _labelOrder = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_ORDER];
         _matchCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_MATCHCOUNT];
+        _currentProfileCount = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CURRENTPROFILECOUNT];
         _validFlag = [aDecoder decodeIntForKey:SERIALIZE_KEY_VALIDFLAG];
     }
     
@@ -178,6 +195,7 @@
     [aCoder encodeInteger:_globalMatchCount forKey:SERIALIZE_KEY_GLOBALMATCHCOUNT];
     [aCoder encodeInteger:_labelOrder forKey:SERIALIZE_KEY_ORDER];
     [aCoder encodeInteger:_matchCount forKey:SERIALIZE_KEY_MATCHCOUNT];
+    [aCoder encodeInteger:_currentProfileCount forKey:SERIALIZE_KEY_CURRENTPROFILECOUNT];
     [aCoder encodeInt:_validFlag forKey:SERIALIZE_KEY_VALIDFLAG];
 }
 
