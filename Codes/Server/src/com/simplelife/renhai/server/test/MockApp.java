@@ -627,8 +627,8 @@ public class MockApp implements IMockApp, Runnable
 		JSONObject envelopeObj = new JSONObject();
 		envelopeObj.put(JSONKey.JsonEnvelope, obj);
 		
-		String message = JSON.toJSONString(envelopeObj, SerializerFeature.WriteMapNullValue);
-		logger.debug("MockApp <{}> sends message: \n" + message, deviceSn);
+		//String message = JSON.toJSONString(envelopeObj, SerializerFeature.WriteMapNullValue);
+		logger.debug("MockApp <" + deviceSn + "> sends message: \n{}", JSON.toJSONString(envelopeObj, true));
 		
 		if (syncSend)
 		{
@@ -857,7 +857,7 @@ public class MockApp implements IMockApp, Runnable
 		}
 		else
 		{
-			logger.debug("MockApp <{}> received command: \n" + JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue), deviceSn);
+			logger.debug("MockApp <"+ deviceSn +"> received command: \n{}", JSON.toJSONString(obj, true));
 		}
 		
 		int intMessageId = 0;

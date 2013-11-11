@@ -12,19 +12,19 @@ package com.simplelife.renhai.server.business.pool;
 /**
  * 
  */
-public class HotLabel
+public class HotLabel implements Comparable<HotLabel>
 {
-	private int labelCount;
+	private int profileCount;
 	private String labelName;
 
-	public int getLabelCount()
+	public int getProfileCount()
 	{
-		return labelCount;
+		return profileCount;
 	}
 	
-	public void setLabelCount(int labelOrder)
+	public void setProfileCount(int labelOrder)
 	{
-		this.labelCount = labelOrder;
+		this.profileCount = labelOrder;
 	}
 	
 	public String getLabelName()
@@ -37,8 +37,9 @@ public class HotLabel
 		this.labelName = labelName;
 	}
 	
+	@Override
 	public int compareTo(HotLabel label)
 	{
-		return (labelCount - label.getLabelCount());
+		return (profileCount - label.getProfileCount());
 	}
 }

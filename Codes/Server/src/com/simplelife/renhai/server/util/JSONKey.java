@@ -104,5 +104,7 @@ public class JSONKey
 	public final static String DeviceCapacity				= "deviceCapacity";
 	public final static String DeviceSummary				= "deviceSummary";
 	public final static String BusinessStatus				= "businessStatus";
+	
 	public final static String DeviceDetailedInfo			= "deviceDetailedInfo";
+	public final static String CurrentProfileCount			= "currentProfileCount";
 }
