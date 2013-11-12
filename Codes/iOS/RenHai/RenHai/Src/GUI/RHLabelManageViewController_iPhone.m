@@ -104,28 +104,44 @@
 
 -(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    BOOL flag = NO;
+//    BOOL flag = NO;
+//    
+//    @try
+//    {
+//        NSMutableString* text = [_textField.text mutableCopy];
+//        NSInteger oldTextNumber = [CBStringUtils calculateTextNumber:text];
+//        
+//        [text replaceCharactersInRange:range withString:string];
+//        NSInteger newTextNumber = [CBStringUtils calculateTextNumber:text];
+//        
+//        flag = (newTextNumber <= LENGTH_LIMIT || newTextNumber < oldTextNumber);
+//        
+//        flag = YES;
+//    }
+//    @catch (NSException *exception)
+//    {
+//        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+//        
+//        flag = NO;
+//    }
+//    @finally
+//    {
+//
+//    }
+//    
+//    return flag;
     
-    NSMutableString* text = [_textField.text mutableCopy];
-    NSInteger oldTextNumber = [CBStringUtils calculateTextNumber:text];
-    
-    [text replaceCharactersInRange:range withString:string];
-    NSInteger newTextNumber = [CBStringUtils calculateTextNumber:text];
-    
-    flag = (newTextNumber <= LENGTH_LIMIT || newTextNumber < oldTextNumber);
-    
-    return flag;
+    return YES;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     BOOL flag = NO;
-    
+
     NSString* text = _textField.text;
-    NSInteger textNumber = [CBStringUtils calculateTextNumber:text];
-    if (nil != text && 0 < text.length && textNumber <= LENGTH_LIMIT)
+//    NSInteger textNumber = [CBStringUtils calculateTextNumber:text];
+    if (nil != text && 0 < text.length)// && textNumber <= LENGTH_LIMIT)
     {
-        _managedLabel = _textField.text;
         [_textField resignFirstResponder];
         flag = YES;
     }
@@ -151,9 +167,11 @@
 {
     NSString* text = _textField.text;
     NSInteger textNumber = [CBStringUtils calculateTextNumber:text];
-    if (nil != text && 0 < text.length && textNumber <= LENGTH_LIMIT)
+    if (nil != text && 0 < text.length)// && textNumber <= LENGTH_LIMIT)
     {
-        _managedLabel = _textField.text;
+        text = (textNumber <= LENGTH_LIMIT) ? text : ([text substringToIndex:LENGTH_LIMIT]);
+        
+        _managedLabel = text;
         [_textField resignFirstResponder];
         
         if (nil != _manageDelegate)
@@ -195,15 +213,27 @@
     
     _textField.delegate = self;
     _textField.placeholder = NSLocalizedString(@"LabelManage_LengthLimit", nil);
-    _textField.clearButtonMode = UITextFieldViewModeAlways;
+    _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     _textField.returnKeyType = UIReturnKeyDone;
     if (nil != _oldLabel && 0 < _oldLabel.length)
     {
         _textField.text = _oldLabel;
     }
+//    [_textField addTarget:self action:@selector(_textEditingChanged:) forControlEvents:UIControlEventEditingChanged];
     
     [_saveButton setTitle:NSLocalizedString(@"LabelManage_Action_Save", nil) forState:UIControlStateNormal];
     [_cancelButton setTitle:NSLocalizedString(@"LabelManage_Action_Cancel", nil) forState:UIControlStateNormal];
+}
+
+-(void) _textEditingChanged:(UITextField*) textField
+{
+    NSString* text = textField.text;
+    NSInteger textNumber = [CBStringUtils calculateTextNumber:text];
+    if (textNumber > LENGTH_LIMIT)
+    {
+        text = [text substringToIndex:LENGTH_LIMIT];
+//        textField.text = text;        
+    }
 }
 
 @end

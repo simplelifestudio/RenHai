@@ -270,6 +270,8 @@
     
     if (CGRectContainsPoint(_interestLabelsView.frame, locationTouch))
     {
+        locationTouch = [_interestLabelsView convertPoint:locationTouch fromView:self.view];
+        
         NSIndexPath* indexPath = [_interestLabelsView indexPathForItemAtPoint:locationTouch];
         if (nil != indexPath)
         {
@@ -797,9 +799,12 @@
         }
         case ManageMode_ModifyLabel:
         {
-            NSUInteger labelIndex = [interestCard getLabelIndex:oldLabel];
-            [interestCard removeLabelByIndex:labelIndex];
-            [interestCard insertLabelByName:newLabel index:labelIndex];
+            if (![oldLabel isEqualToString:newLabel])
+            {
+                NSUInteger labelIndex = [interestCard getLabelIndex:oldLabel];
+                [interestCard removeLabelByIndex:labelIndex];
+                [interestCard insertLabelByName:newLabel index:labelIndex];
+            }
             
             break;
         }

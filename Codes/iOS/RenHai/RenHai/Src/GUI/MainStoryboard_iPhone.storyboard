@@ -173,7 +173,7 @@
                                         </view>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImpressLabelsHeaderView" id="D4q-GS-BDN" customClass="ImpressLabelsHeaderView_iPhone">
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImpressLabelsHeaderView" id="D4q-GS-BDN" customClass="ChatAssessAddImpressLabelsHeaderView_iPhone">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 </collectionReusableView>
@@ -213,7 +213,7 @@
                                         </view>
                                     </collectionViewCell>
                                 </cells>
-                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImpressLabelsHeaderView" id="Nt3-OT-cz8" customClass="ImpressLabelsHeaderView_iPhone">
+                                <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ImpressLabelsHeaderView" id="Nt3-OT-cz8" customClass="ChatAssessExistImpressLabelsHeaderView_iPhone">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="30"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </collectionReusableView>

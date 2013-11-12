@@ -8,11 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol ChatAssessAddImpressLabelsHeaderViewDelegate
+
+@required
+-(void) didCreateImpressLabel;
+-(void) didDeleteImpressLabel;
+
+@end
+
 @interface ChatAssessAddImpressLabelsHeaderView_iPhone : UICollectionReusableView
 
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 @property (weak, nonatomic) IBOutlet FUIButton *addButton;
 @property (weak, nonatomic) IBOutlet FUIButton *delButton;
+
+@property (strong, nonatomic) id<ChatAssessAddImpressLabelsHeaderViewDelegate> operationDelegate;
 
 - (IBAction)didPressAddButton:(id)sender;
 - (IBAction)didPressDelButton:(id)sender;
