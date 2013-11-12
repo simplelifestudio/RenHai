@@ -483,6 +483,9 @@ public class MainFunction extends AbstractTestCase
 		//app1.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
 		//app1.connect(false);
 		app1.syncDevice();
+		
+		MockApp app2 = new MockApp(demoDeviceSn2);
+		app2.syncDevice();
 		//app1.sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, Consts.BusinessType.Random.toString());
 		
 		app1.enterPool(BusinessType.Interest);
@@ -495,18 +498,19 @@ public class MainFunction extends AbstractTestCase
 		app1.matchStart();
 		
 		app1.setBusinessType(Consts.BusinessType.Random);
-		app1.sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, Consts.BusinessType.Random.toString());
+		app1.sendServerDataSyncRequest();
 		
+		app2.enterPool(BusinessType.Interest);
+		app1.sendServerDataSyncRequest();
+		
+		app1.leavePool();
 		app1.sendServerDataSyncRequest();
 		
 		app1.setBusinessType(Consts.BusinessType.Interest);
-		app1.sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, Consts.BusinessType.Interest.toString());
+		app1.leavePool();
 		app1.sendServerDataSyncRequest();
 		
-		app1.setBusinessType(Consts.BusinessType.Random);
-		app1.sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, Consts.BusinessType.Random.toString());
-		app1.sendServerDataSyncRequest();
-		
+		app2.leavePool();
 		app1.sendServerDataSyncRequest();
 	}
 	

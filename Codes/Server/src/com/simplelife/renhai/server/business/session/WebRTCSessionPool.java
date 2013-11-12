@@ -14,6 +14,7 @@ package com.simplelife.renhai.server.business.session;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.simplelife.renhai.server.business.pool.AbstractPool;
 import com.simplelife.renhai.server.db.DAOWrapper;
@@ -24,7 +25,7 @@ import com.simplelife.renhai.server.db.Webrtcsession;
 public class WebRTCSessionPool extends AbstractPool
 {
     /** */
-    private List<Webrtcsession> webRTCSessionList = new ArrayList<Webrtcsession>();
+    private ConcurrentLinkedQueue<Webrtcsession> webRTCSessionList = new ConcurrentLinkedQueue<>();
     
     /** */
     protected Timer timer;
@@ -36,7 +37,7 @@ public class WebRTCSessionPool extends AbstractPool
 		{
 			return null;
 		}
-		return webRTCSessionList.remove(0);
+		return webRTCSessionList.remove();
     }
 
     

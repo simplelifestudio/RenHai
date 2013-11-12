@@ -19,6 +19,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
+import com.simplelife.renhai.server.business.session.BusinessSession;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
@@ -587,7 +588,15 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
-		response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession().getSessionId());
+		IBusinessSession session = deviceWrapper.getOwnerBusinessSession();
+		if (session != null)
+		{
+			response.addToBody(JSONKey.BusinessSessionId, session.getSessionId());
+		}
+		else
+		{
+			logger.error("Fatal error: abnormal business status in device <{}>, it's assessing others but business session is null!", deviceWrapper.getDeviceSn());
+		}
 		response.addToBody(JSONKey.BusinessType, deviceWrapper.getBusinessType().getValue());
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());

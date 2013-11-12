@@ -206,16 +206,19 @@ public class ServerDataSyncRequest extends AppJSONMessage
 			
 			JSONObject tempLabelObj;
 			Globalinterestlabel globalLabel;
-			for (HotLabel label : labels)
+			HotLabel label;
+			while(!labels.isEmpty())
 			{
+				label = labels.removeLast();
 				globalLabel = DBModule.instance.interestLabelCache.getObject(label.getLabelName());
 				tempLabelObj = new JSONObject();
 				tempLabelObj.put(JSONKey.GlobalInterestLabelId, globalLabel.getGlobalInterestLabelId());
 				tempLabelObj.put(JSONKey.InterestLabelName, label.getLabelName());
 				tempLabelObj.put(JSONKey.GlobalMatchCount, globalLabel.getGlobalMatchCount());
-				tempLabelObj.put(JSONKey.LabelOrder, null);
-				tempLabelObj.put(JSONKey.MatchCount, null);
-				tempLabelObj.put(JSONKey.ValidFlag, null);
+				tempLabelObj.put(JSONKey.CurrentProfileCount, label.getProfileCount());
+				//tempLabelObj.put(JSONKey.LabelOrder, null);
+				//tempLabelObj.put(JSONKey.MatchCount, null);
+				//tempLabelObj.put(JSONKey.ValidFlag, null);
 				
 				hotLabelObj.add(tempLabelObj);
 			}

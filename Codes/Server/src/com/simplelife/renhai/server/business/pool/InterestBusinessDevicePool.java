@@ -11,6 +11,8 @@
 
 package com.simplelife.renhai.server.business.pool;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -29,6 +31,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 {
     /** */
     private ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>> interestLabelMap = new ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>>();
+    private ConcurrentHashMap<String, Integer> labelDeviceCount = new ConcurrentHashMap<>();
     public ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>> getInterestLabelMap()
     {
     	return interestLabelMap;
@@ -59,15 +62,22 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		return labelList;
     	}
     	
-    	Set<Entry<String, ConcurrentSkipListSet<IDeviceWrapper>>> entrySet = interestLabelMap.entrySet();
-    	for (Entry<String, ConcurrentSkipListSet<IDeviceWrapper>> entry : entrySet)
+    	Set<Entry<String, Integer>> entrySet = labelDeviceCount.entrySet();
+    	for (Entry<String, Integer> entry : entrySet)
     	{
     		HotLabel hotLabel = new HotLabel();
     		hotLabel.setLabelName(entry.getKey());
-    		hotLabel.setLabelCount(entry.getValue().size());
+    		hotLabel.setProfileCount(entry.getValue());
     		
-    		addToSortedLink(labelList, hotLabel, count);
+    		labelList.add(hotLabel);
     	}
+    	
+    	Collections.sort(labelList);
+    	while(labelList.size() > count)
+    	{
+    		labelList.remove();
+    	}
+    	//addToSortedLink(labelList, hotLabel, count);
         return labelList;
     }
     
@@ -138,6 +148,71 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     public void onDeviceEnter(IDeviceWrapper device)
     {
     	super.onDeviceEnter(device);
+    	increaseLabelDeviceCount(device);
+    }
+    
+    private void decreaseLabelDeviceCount(IDeviceWrapper device)
+    {
+    	Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
+    	if (labelSet.isEmpty())
+    	{
+    		return;
+    	}
+    	
+    	for (Interestlabelmap label : labelSet)
+    	{
+    		String strLabel = label.getGlobalLabel().getInterestLabelName();
+    		if (this.labelDeviceCount.containsKey(strLabel))
+    		{
+    			Integer count = labelDeviceCount.get(strLabel);
+    			synchronized (count)
+				{
+    				if (count == null)
+    				{
+    					// Protect of multi-accessing
+    					continue;
+    				}
+    				
+					count--;
+					if (count <= 0)
+	    			{
+						labelDeviceCount.remove(strLabel);
+	    			}
+					else
+					{
+						labelDeviceCount.put(strLabel, count);
+					}
+				}
+    			
+    			
+    		}
+    		else
+    		{
+    			labelDeviceCount.put(strLabel, 0);
+    		}
+    	}
+    }
+    
+    private void increaseLabelDeviceCount(IDeviceWrapper device)
+    {
+    	Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
+    	if (labelSet.isEmpty())
+    	{
+    		return;
+    	}
+    	
+    	for (Interestlabelmap label : labelSet)
+    	{
+    		String strLabel = label.getGlobalLabel().getInterestLabelName();
+    		if (this.labelDeviceCount.containsKey(strLabel))
+    		{
+    			labelDeviceCount.put(strLabel, labelDeviceCount.get(strLabel) + 1);
+    		}
+    		else
+    		{
+    			labelDeviceCount.put(strLabel, 1);
+    		}
+    	}
     }
     
     private void addInterestIndex(IDeviceWrapper device)
@@ -228,6 +303,8 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		}
     		super.onDeviceLeave(device, reason);
     	}
+    	
+    	decreaseLabelDeviceCount(device);
     }
 
 	@Override
