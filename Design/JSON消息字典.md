@@ -260,6 +260,23 @@ App与Server通过消息交互完成的数据操作
 }
 </code></pre>
 
+###3. BusinessSession数据结构体
+<pre><code>
+{
+	"session":
+	{
+		"device":null,
+		"matchedCondition":null,
+		"webrtc":
+		{
+			"apiKey":null,
+			"sessionId":null,
+			"token":null
+		}
+	}
+}
+</code></pre>
+
 #消息列表
 以下消息均略去header部分
 ###100. 测试请求 AlohaRequest
