@@ -922,23 +922,24 @@ public class MockApp implements IMockApp, Runnable
 		task.start();
 	}
 	
-	private void endBusiness()
+	private boolean endBusiness()
 	{
-		if (behaviorMode ==  MockAppConsts.MockAppBehaviorMode.NormalAndContinue)
-		{
-			chatCount++;
-			if (chatCount > MockAppConsts.Setting.MaxChatCount)
-			{
-				setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
-			}
-			else
-			{
-				setBusinessStatus(MockAppConsts.MockAppBusinessStatus.EnterPoolResReceived);
-			}
-		}
-		else if (behaviorMode ==  MockAppConsts.MockAppBehaviorMode.NormalAndQuit)
+		if (behaviorMode !=  MockAppConsts.MockAppBehaviorMode.NormalAndContinue)
 		{
 			setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
+			return true;
+		}
+
+		chatCount++;
+		if (chatCount > MockAppConsts.Setting.MaxChatCount)
+		{
+			setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
+			return true;
+		}
+		else
+		{
+			setBusinessStatus(MockAppConsts.MockAppBusinessStatus.EnterPoolResReceived);
+			return false;
 		}
 	}
 	
@@ -1053,7 +1054,7 @@ public class MockApp implements IMockApp, Runnable
 				{
 					if (receivedOperationType != Consts.NotificationType.SessionBound)
 			    	{
-			    		logger.error("MockApp <" + deviceSn + "> received {} in status of EnterPoolResReceived", receivedOperationType.name());
+			    		logger.error("MockApp <" + deviceSn + "> received {} in status of MatchStartResReceived", receivedOperationType.name());
 			    	}
 			    	else
 			    	{
@@ -1087,7 +1088,7 @@ public class MockApp implements IMockApp, Runnable
 				}
 				else
 				{
-					logger.error("MockApp <" + deviceSn + "> received {} in status of EnterPoolResReceived", messageId.name());
+					logger.error("MockApp <" + deviceSn + "> received {} in status of MatchStartResReceived", messageId.name());
 				}
 				break;
 
@@ -1105,7 +1106,8 @@ public class MockApp implements IMockApp, Runnable
 					//lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
 					if (body.getInteger(JSONKey.OperationType) == Consts.NotificationType.OthersideRejected.getValue())
 					{
-						setBusinessStatus(MockAppConsts.MockAppBusinessStatus.EnterPoolResReceived);
+						//setBusinessStatus(MockAppConsts.MockAppBusinessStatus.EnterPoolResReceived);
+						endBusiness();
 					}
 					else if (body.getInteger(JSONKey.OperationType) == Consts.NotificationType.OthersideAgreed.getValue())
 					{
@@ -1180,7 +1182,17 @@ public class MockApp implements IMockApp, Runnable
 			case AssessReqSent:
 				if (messageId == Consts.MessageId.BusinessSessionResponse)
 				{
-					endBusiness();
+					if (!endBusiness())
+					{
+						task = new AutoReplyTask(
+								MockAppRequest.MatchStart, 
+								obj, 
+								this, 
+								MockAppConsts.Setting.ChatConfirmDuration,
+								MockAppConsts.MockAppBusinessStatus.MatchStartReqSent);
+						task.setName("MatchStart" + DateUtil.getCurrentMiliseconds());
+					}
+					
 				}
 				else if (messageId == Consts.MessageId.BusinessSessionNotification)
 				{

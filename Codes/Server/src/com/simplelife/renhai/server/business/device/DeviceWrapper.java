@@ -336,6 +336,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     	}
     	
     	logger.debug("Unbind device <{}> from business session", getDeviceSn());
+    	if (ownerBusinessSession == null)
+    	{
+    		return;
+    	}
     	ownerBusinessSession.onDeviceLeave(this, reason);
     	ownerBusinessSession = null;
     }

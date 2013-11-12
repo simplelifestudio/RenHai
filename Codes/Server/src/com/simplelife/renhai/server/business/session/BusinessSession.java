@@ -619,14 +619,11 @@ public class BusinessSession implements IBusinessSession
 				device.increaseChatDuration(duration);
 			}
 			notifyDevices(device, NotificationType.OthersideLost);
-			
-			/*
-			if (status == Consts.BusinessSessionStatus.VideoChat
-	    			|| status == Consts.BusinessSessionStatus.Assess)
-	    	{
-	    	}
-	    	*/
     	}
+		else if (reason == Consts.StatusChangeReason.AppLeaveBusiness)
+		{
+			notifyDevices(device, NotificationType.OthersideRejected);
+		}
     
     	if (deviceList.isEmpty())
     	{
@@ -642,48 +639,6 @@ public class BusinessSession implements IBusinessSession
     		changeStatus(Consts.BusinessSessionStatus.Idle);
     		return;
     	}
-    	
-    	/*
-    	List<IDeviceWrapper> tmpList = new ArrayList<IDeviceWrapper>(deviceList);
-    	if (reason == StatusChangeReason.AppRejectChat)
-    	{
-    		notifyDevices(tmpList, device, Consts.NotificationType.OthersideRejected);
-    	}
-    	*/
-    	
-    	/*
-    	switch(status)
-    	{
-    		case Idle:
-    			changeStatus(Consts.BusinessSessionStatus.Idle);
-    			break;
-    			
-    		case ChatConfirm:
-    			logger.debug("Business session will be released due to device leave, current status: ChatConfirm");
-    			endReason = Consts.SessionEndReason.ConnectionLoss;
-    			changeStatus(Consts.BusinessSessionStatus.Idle);
-    			break;
-    			
-    		case VideoChat:
-    			// Do nothing if
-    			//changeStatus(Consts.BusinessSessionStatus.VideoChat);
-    			endReason = Consts.SessionEndReason.ConnectionLoss;
-    			break;
-			
-    		case Assess:
-    			// If not all devices finished assess
-    			if (checkAllDevicesReach(Consts.BusinessProgress.AssessFinished))
-    	    	{
-    	    		logger.debug("All devices assessed, trying to close BusinessSession");
-    	    		//changeStatus(Consts.BusinessSessionStatus.Idle);
-    	    	}
-    			break;
-    			
-    		default:
-				logger.error("Invalid status of BusinessSession: {}", status.name());
-				break;
-    	}
-    	*/
     }
 
     @Override
