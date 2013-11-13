@@ -23,6 +23,8 @@
 -(BOOL) removeLabelByName:(NSString*) labelName;
 -(BOOL) removeLabelByIndex:(NSUInteger) index;
 
+-(void) removeAllLabels;
+
 -(BOOL) isLabelExists:(NSString*) labelName;
 
 -(BOOL) insertLabelByName:(NSString*) labelName index:(NSInteger) index;

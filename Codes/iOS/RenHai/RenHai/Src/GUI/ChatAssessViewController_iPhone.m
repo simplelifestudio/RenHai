@@ -15,7 +15,10 @@
 #import "GUIStyle.h"
 #import "BusinessStatusModule.h"
 
+#import "UIViewController+CWPopup.h"
+
 #import "RHCollectionLabelCell_iPhone.h"
+#import "RHLabelManageViewController_iPhone.h"
 #import "ChatAssessAddImpressLabelsHeaderView_iPhone.h"
 #import "ChatAssessExistImpressLabelsHeaderView_iPhone.h"
 
@@ -38,7 +41,7 @@
 
 #define COLOR_ASSESSLABEL_SELECTED [UIColor redColor]
 
-@interface ChatAssessViewController_iPhone ()
+@interface ChatAssessViewController_iPhone () <ChatAssessAddImpressLabelsHeaderViewDelegate, ChatAssessExistImpressLabelsHeaderViewDelegate, RHLabelManageDelegate, UIGestureRecognizerDelegate>
 {
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
@@ -54,15 +57,16 @@
     NSTimer* _timer;
     
     NSArray* _assessLabelNames;
-    NSMutableArray* _impressLabelNames;
-    
-    NSMutableArray* _addImpressLabels;
+
+    NSMutableArray* _addImpressLabelNames;
     
     NSUInteger _assessLabelPosition;
     
     volatile BOOL _selfAssessedFlag;
     
     volatile BOOL _isDeciding;
+    
+    BOOL _allowCloneLabel;
 }
 
 @end
@@ -143,7 +147,13 @@
     
     _assessLabelPosition = 0;
     
-    [_addImpressLabels removeAllObjects];
+    _allowCloneLabel = NO;    
+    
+    [_addImpressLabelNames removeAllObjects];
+    
+    [self _refreshAssessLabelsView];
+    [self _refershAddImpressLabelsView];
+    [self _refreshExistImpressLabelsView];
     
     [self _setCountdownSeconds:COUNTDOWN_SECONDS];
 }
@@ -168,7 +178,7 @@
     _guiModule = [GUIModule sharedInstance];
     _statusModule = [BusinessStatusModule sharedInstance];
     
-    _addImpressLabels = [NSMutableArray array];
+    _addImpressLabelNames = [NSMutableArray array];
     
     _assessLabelPosition = 0;
     
@@ -176,6 +186,16 @@
     [_finishButton setTitle:NSLocalizedString(@"ChatAssess_Action_Finish", nil) forState:UIControlStateNormal];
     
     [self _setupCollectionView];
+    
+    UITapGestureRecognizer* singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
+    singleTapGesturer.delegate = self;
+    singleTapGesturer.numberOfTapsRequired = 1;
+    [self.view addGestureRecognizer:singleTapGesturer];
+    
+    UITapGestureRecognizer* doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
+    doubleTapGesturer.delegate = self;
+    doubleTapGesturer.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer:doubleTapGesturer];
 }
 
 -(void)_setupCollectionView
@@ -188,7 +208,11 @@
     
     nib = [UINib nibWithNibName:NIB_IMPRESSLABELSHEADERVIEW bundle:nil];
     [_assessLabelsView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_IMPRESSLABELSHEADERVIEW];
+    
+    nib = [UINib nibWithNibName:NIB_ADDIMPRESSLABELSHEADERVIEW bundle:nil];
     [_addImpressLabelsView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_ADDIMPRESSLABELSHEADERVIEW];
+    
+    nib = [UINib nibWithNibName:NIB_EXISTIMPRESSLABELSHEADERVIEW bundle:nil];
     [_existImpressLabelsView registerNib:nib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:REUSABLEVIEW_ID_EXISTIMPRESSLABELSHEADERVIEW];
     
     _assessLabelsView.dataSource = self;
@@ -200,6 +224,33 @@
     _existImpressLabelsView.delegate = self;
     
     _assessLabelNames = @[MESSAGE_KEY_ASSESS_HAPPY, MESSAGE_KEY_ASSESS_SOSO, MESSAGE_KEY_ASSESS_DISGUSTING];
+}
+
+-(void) _setupAddImpressLabelsHeaderView:(UICollectionView*) collectionView kind:(NSString*) kind atIndexPath:(NSIndexPath*) indexPath
+{
+    if (nil == _addImpressLabelsHeaderView)
+    {
+        _addImpressLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_ADDIMPRESSLABELSHEADERVIEW forIndexPath:indexPath];
+        _addImpressLabelsHeaderView.titleLabel.text = NSLocalizedString(@"ChatAssess_AddImpressLabels", nil);
+        [_addImpressLabelsHeaderView.addButton setTitle:NSLocalizedString(@"ChatAssess_Action_AddImpressLabel", nil) forState:UIControlStateNormal];
+        [_addImpressLabelsHeaderView.delButton setTitle:NSLocalizedString(@"ChatAssess_Action_DelImpressLabel", nil) forState:UIControlStateNormal];
+        _addImpressLabelsHeaderView.operationDelegate = self;
+    }
+    
+    [self _refershAddImpressLabelsViewActions];
+}
+
+-(void) _setupExistImpressLabelsHeaderView:(UICollectionView*) collectionView kind:(NSString*) kind atIndexPath:(NSIndexPath*) indexPath
+{
+    if (nil == _existImpressLabelsHeaderView)
+    {
+        _existImpressLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_EXISTIMPRESSLABELSHEADERVIEW forIndexPath:indexPath];
+        _existImpressLabelsHeaderView.titleLabel.text = NSLocalizedString(@"ChatAssess_ExistImpressLabels", nil);
+        [_existImpressLabelsHeaderView.cloneButton setTitle:NSLocalizedString(@"ChatAssess_Action_CopyImpressLabel", nil) forState:UIControlStateNormal];
+        _existImpressLabelsHeaderView.operationDelegate = self;
+    }
+    
+    [self _refreshExistImpressLabelsViewActions];
 }
 
 -(void)_moveToChatWaitView
@@ -226,12 +277,29 @@
         assessLabelIndex = indexPath.item;
     }
     
-    RHImpressCard* card = [RHImpressCard newImpressCard:_assessLabelNames[assessLabelIndex] impressLabels:@[]];
+    NSArray* impressLabels = [self _getAddImpressLabels];
+    
+    RHImpressCard* card = [RHImpressCard newImpressCard:_assessLabelNames[assessLabelIndex] impressLabels:impressLabels];
     
     return card;
 }
 
--(void)_updatePartnerImpressCardWithType:(BusinessSessionRequestType) requestType
+-(NSArray*) _getAddImpressLabels
+{
+    NSMutableArray* labels = [NSMutableArray arrayWithCapacity:_addImpressLabelNames.count];
+    
+    for (NSString* labelName in _addImpressLabelNames)
+    {
+        RHImpressLabel* label = [[RHImpressLabel alloc] init];
+        label.labelName = labelName;
+        
+        [labels addObject:label];
+    }
+    
+    return labels;
+}
+
+-(void)_remoteUpdatePartnerImpressCardWithType:(BusinessSessionRequestType) requestType
 {
     _continueButton.hidden = YES;
     _finishButton.hidden = YES;
@@ -334,7 +402,7 @@
 {
     if (!_selfAssessedFlag)
     {
-        [self _updatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndQuit];
+//        [self _remoteUpdatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndQuit];
     }
 }
 
@@ -345,6 +413,202 @@
         _countdownSeconds = seconds;
         [_countLabel setText:[NSString stringWithFormat:@"%d", _countdownSeconds]];
     }
+}
+
+-(void)_didSingleTapped:(UITapGestureRecognizer*) recognizer
+{
+    CGPoint locationTouch = [recognizer locationInView:self.view];
+    
+    if (CGRectContainsPoint(_assessLabelsView.frame, locationTouch))
+    {
+        locationTouch = [_assessLabelsView convertPoint:locationTouch fromView:self.view];
+        
+        NSIndexPath* indexPath = [_assessLabelsView indexPathForItemAtPoint:locationTouch];
+        if (nil == indexPath)
+        {
+            NSArray* selectedIndexPathes = _assessLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {
+                [_assessLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+        }
+        else
+        {
+            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_assessLabelsView cellForItemAtIndexPath:indexPath];
+            if (!cell.isSelected)
+            {
+                [_assessLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            }
+            else
+            {
+                [_assessLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+        }
+        
+        [self _refreshAssessLabelsViewActions];
+    }
+    else if (CGRectContainsPoint(_addImpressLabelsView.frame, locationTouch))
+    {
+        locationTouch = [_addImpressLabelsView convertPoint:locationTouch fromView:self.view];
+        
+        NSIndexPath* indexPath = [_addImpressLabelsView indexPathForItemAtPoint:locationTouch];
+        if (nil == indexPath)
+        {
+            NSArray* selectedIndexPathes = _addImpressLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {
+                [_addImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+        }
+        else
+        {
+            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_addImpressLabelsView cellForItemAtIndexPath:indexPath];
+            if (!cell.isSelected)
+            {
+                [_addImpressLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            }
+            else
+            {
+                [_addImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+            
+            NSArray* selectedIndexPathes = _existImpressLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {
+                [_existImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+        }
+        
+        [self _refershAddImpressLabelsViewActions];
+    }
+    else if (CGRectContainsPoint(_existImpressLabelsView.frame, locationTouch))
+    {
+        locationTouch = [_existImpressLabelsView convertPoint:locationTouch fromView:self.view];
+        
+        NSIndexPath* indexPath = [_existImpressLabelsView indexPathForItemAtPoint:locationTouch];
+        if (nil == indexPath)
+        {
+            NSArray* selectedIndexPathes = _existImpressLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {
+                [_existImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+        }
+        else
+        {
+            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_addImpressLabelsView cellForItemAtIndexPath:indexPath];
+            if (!cell.isSelected)
+            {
+                [_existImpressLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+                
+                NSString* labelName = cell.labelName;
+                
+                BOOL hasLabel = [_addImpressLabelNames containsObject:labelName];
+                BOOL isFull = (_addImpressLabelNames.count >= EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS);
+                _allowCloneLabel = (hasLabel || isFull) ? NO : YES;
+            }
+            else
+            {
+                [_existImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+                _allowCloneLabel = NO;
+            }
+            
+            NSArray* selectedIndexPathes = _addImpressLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {
+                [_addImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+        }
+        
+        [self _refreshExistImpressLabelsViewActions];
+    }
+}
+
+-(void)_didDoubleTapped:(UITapGestureRecognizer*) recognizer
+{
+    CGPoint locationTouch = [recognizer locationInView:self.view];
+    
+    if (CGRectContainsPoint(_addImpressLabelsView.frame, locationTouch))
+    {
+        locationTouch = [_addImpressLabelsView convertPoint:locationTouch fromView:self.view];
+        
+        NSIndexPath* indexPath = [_addImpressLabelsView indexPathForItemAtPoint:locationTouch];
+        if (nil != indexPath)
+        {
+            NSUInteger section = indexPath.section;
+            NSUInteger position = indexPath.item;
+            
+            switch (section)
+            {
+                case ADDIMPRESSLABELSVIEW_SECTION_INDEX_ADDIMPRESSLABELS:
+                {
+                    NSString* labeName = _addImpressLabelNames[position];
+                    
+                    RHLabelManageViewController_iPhone* labelManagerViewController = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:labeName];
+                    [_guiModule.mainViewController presentPopupViewController:labelManagerViewController animated:YES completion:nil];
+                    
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+        }
+    }
+}
+
+- (void) _refreshAssessLabelsView
+{
+    [_assessLabelsView reloadData];
+    
+    [self _refreshAssessLabelsViewActions];
+}
+
+- (void) _refreshAssessLabelsViewActions
+{
+    
+}
+
+- (void) _refershAddImpressLabelsView
+{
+    [_addImpressLabelsView reloadData];
+    
+    [self _refershAddImpressLabelsViewActions];
+}
+
+- (void) _refershAddImpressLabelsViewActions
+{
+    BOOL allowCreateLabel = YES;
+    BOOL allowDeleteLabel = NO;
+    
+    NSArray* selectedCells = [_addImpressLabelsView indexPathsForSelectedItems];
+    if (0 < selectedCells.count && 1 < _addImpressLabelNames.count)
+    {
+        allowDeleteLabel = YES;
+    }
+    
+    if (ADDIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_ADDIMPRESSLABELS <= _addImpressLabelNames.count)
+    {
+        allowCreateLabel = NO;
+    }
+    
+    _addImpressLabelsHeaderView.addButton.enabled = allowCreateLabel;
+    _addImpressLabelsHeaderView.delButton.enabled = allowDeleteLabel;
+}
+
+- (void) _refreshExistImpressLabelsView
+{
+    [_existImpressLabelsView reloadData];
+    
+    [self _refreshExistImpressLabelsViewActions];
+}
+
+- (void) _refreshExistImpressLabelsViewActions
+{
+    BOOL allowCloneLabel = _allowCloneLabel;
+    
+    _existImpressLabelsHeaderView.cloneButton.enabled = allowCloneLabel;
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -405,7 +669,9 @@
     }
     else if (cv == _addImpressLabelsView)
     {
-        itemsCount = (_addImpressLabels.count <= ADDIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_ADDIMPRESSLABELS) ? _addImpressLabels.count : ADDIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_ADDIMPRESSLABELS;
+        NSArray* addLabelList = _addImpressLabelNames;
+        
+        itemsCount = (addLabelList.count <= ADDIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_ADDIMPRESSLABELS) ? addLabelList.count : ADDIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_ADDIMPRESSLABELS;
     }
     else if (cv == _existImpressLabelsView)
     {
@@ -456,12 +722,11 @@
         NSString* labelName = nil;
         NSInteger labelCount = -1;
         
-        NSArray* labelList = _impressLabelNames;
+        NSArray* labelList = _addImpressLabelNames;
         
         if (0 < labelList.count && position < labelList.count)
         {
-            RHImpressLabel* label = labelList[position];
-            labelName = label.labelName;
+            labelName = labelList[position];
         }
         
         cell.textField.text = labelName;
@@ -479,7 +744,11 @@
         NSString* labelName = nil;
         NSInteger labelCount = -1;
         
-        NSArray* labelList = _impressLabelNames;
+        RHBusinessSession* businessSession = _userDataModule.businessSession;
+        RHDevice* partnerDevice = [businessSession getPartner];
+        RHProfile* partnerProfile = partnerDevice.profile;
+        RHImpressCard* partnerImpressCard = partnerProfile.impressCard;
+        NSArray* labelList = partnerImpressCard.impressLabelList;
         
         if (0 < labelList.count && position < labelList.count)
         {
@@ -538,21 +807,13 @@
         }
         else if (collectionView == _addImpressLabelsView)
         {
-            if (nil == _addImpressLabelsHeaderView)
-            {
-                _addImpressLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_ADDIMPRESSLABELSHEADERVIEW forIndexPath:indexPath];
-                _addImpressLabelsHeaderView.titleLabel.text = NSLocalizedString(@"ChatAssess_AddImpressLabels", nil);
-            }
+            [self _setupAddImpressLabelsHeaderView:collectionView kind:kind atIndexPath:indexPath];
             
             reusableView = _addImpressLabelsHeaderView;
         }
         else if (collectionView == _existImpressLabelsView)
         {
-            if (nil == _existImpressLabelsHeaderView)
-            {
-                _existImpressLabelsHeaderView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:REUSABLEVIEW_ID_EXISTIMPRESSLABELSHEADERVIEW forIndexPath:indexPath];
-                _existImpressLabelsHeaderView.titleLabel.text = NSLocalizedString(@"ChatAssess_ExistImpressLabels", nil);
-            }
+            [self _setupExistImpressLabelsHeaderView:collectionView kind:kind atIndexPath:indexPath];
             
             reusableView = _existImpressLabelsHeaderView;
         }
@@ -565,12 +826,104 @@
 
 - (IBAction)didPressContinueButton:(id)sender
 {
-    [self _updatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndContinue];
+    [self _remoteUpdatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndContinue];
 }
 
 - (IBAction)didPressFinishButton:(id)sender
 {
-    [self _updatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndQuit];
+    [self _remoteUpdatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndQuit];
+}
+
+#pragma mark - RHLabelManageDelegate
+
+-(void) didLabelManageDone:(ManageMode) mode newLabel:(NSString*) newLabel oldLabel:(NSString*) oldLabel
+{
+    switch (mode)
+    {
+        case ManageMode_NewLabel:
+        {
+            [_addImpressLabelNames addObject:newLabel];
+            
+            break;
+        }
+        case ManageMode_ModifyLabel:
+        {
+            if (![oldLabel isEqualToString:newLabel])
+            {
+                NSUInteger labelIndex = [_addImpressLabelNames indexOfObject:oldLabel];
+                [_addImpressLabelNames removeObjectAtIndex:labelIndex];
+                [_addImpressLabelNames insertObject:newLabel atIndex:labelIndex];
+            }
+            
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    
+    [self _refershAddImpressLabelsView];
+    
+    [_guiModule.mainViewController dismissPopupViewControllerAnimated:YES completion:nil];
+}
+
+-(void) didLabelManageCancel
+{
+    [_guiModule.mainViewController dismissPopupViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - ChatAssessAddImpressLabelsHeaderViewDelegate
+
+-(void) didCreateImpressLabel
+{
+    RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
+    [_guiModule.mainViewController presentPopupViewController:labelManageVC animated:YES completion:nil];
+}
+
+-(void) didDeleteImpressLabel
+{
+    NSArray* selectedIndexPathes = _addImpressLabelsView.indexPathsForSelectedItems;
+    for (NSIndexPath* indexPath in selectedIndexPathes)
+    {
+        NSUInteger section = indexPath.section;
+        
+        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_addImpressLabelsView cellForItemAtIndexPath:indexPath];
+        NSString* labelName = cell.labelName;
+        switch (section)
+        {
+            case ASSESSLABELSVIEW_SECTION_INDEX_ASSESSLABELS:
+            {
+                [_addImpressLabelNames removeObject:labelName];
+                break;
+            }
+            default:
+            {
+                break;
+            }
+        }
+    }
+    
+    [self _refershAddImpressLabelsView];
+}
+
+#pragma mark - ChatAssessExistImpressLabelsHeaderViewDelegate
+
+-(void) didCloneImpressLabel
+{
+    NSArray* selectedIndexPathes = _existImpressLabelsView.indexPathsForSelectedItems;
+    for (NSIndexPath* indexPath in selectedIndexPathes)
+    {
+        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_existImpressLabelsView cellForItemAtIndexPath:indexPath];
+        NSString* labelName = cell.labelName;
+        
+        [_addImpressLabelNames addObject:labelName];
+    }
+    
+    _allowCloneLabel = NO;
+    
+    [self _refershAddImpressLabelsView];
+    [self _refreshExistImpressLabelsView];
 }
 
 @end

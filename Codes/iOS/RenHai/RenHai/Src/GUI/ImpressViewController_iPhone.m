@@ -110,6 +110,7 @@
                 RHImpressCard* impressCard = profile.impressCard;
                 NSArray* impressLabels = impressCard.impressLabelList;
                 itemCount = (impressLabels.count <= IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT) ? impressLabels.count : IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT;
+                break;
             }
             default:
             {
@@ -345,7 +346,7 @@
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         [self _deactivateDataSyncTimer];
         
-        _dataSyncTimer = [NSTimer timerWithTimeInterval:INTERVAL_DATASYNC target:self selector:@selector(_refreshImpressData) userInfo:nil repeats:NO];
+        _dataSyncTimer = [NSTimer timerWithTimeInterval:INTERVAL_DATASYNC target:self selector:@selector(_remoteRefreshImpressData) userInfo:nil repeats:NO];
         
         NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
         [currentRunLoop addTimer:_dataSyncTimer forMode:NSDefaultRunLoopMode];
@@ -362,7 +363,7 @@
     }
 }
 
--(void)_refreshImpressData
+-(void)_remoteRefreshImpressData
 {
     [NSThread sleepForTimeInterval:DELAY_REFRESH];
     

@@ -107,6 +107,11 @@
     return flag;
 }
 
+-(void) removeAllLabels
+{
+    [_labelList removeAllObjects];
+}
+
 -(BOOL) isLabelExists:(NSString*) labelName
 {
     BOOL flag = NO;

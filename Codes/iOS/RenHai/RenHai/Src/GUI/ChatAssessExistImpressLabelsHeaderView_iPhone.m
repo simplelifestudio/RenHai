@@ -11,8 +11,9 @@
 @implementation ChatAssessExistImpressLabelsHeaderView_iPhone
 
 @synthesize titleLabel = _titleLabel;
-
 @synthesize cloneButton = _cloneButton;
+
+@synthesize operationDelegate = _operationDelegate;
 
 #pragma mark - Public Methods
 
@@ -30,12 +31,15 @@
 
 - (IBAction)didPressRefreshButton:(id)sender
 {
-    
+
 }
 
 - (IBAction)didPressCloneButton:(id)sender
 {
-    
+    if (nil != _operationDelegate)
+    {
+        [_operationDelegate didCloneImpressLabel];
+    }
 }
 
 @end

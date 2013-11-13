@@ -14,6 +14,8 @@
 @synthesize addButton = _addButton;
 @synthesize delButton = _delButton;
 
+@synthesize operationDelegate = _operationDelegate;
+
 #pragma mark - Public Methods
 
 - (id)initWithFrame:(CGRect)frame
@@ -30,12 +32,18 @@
 
 - (IBAction)didPressAddButton:(id)sender
 {
-    
+    if (nil != _operationDelegate)
+    {
+        [_operationDelegate didCreateImpressLabel];
+    }
 }
 
 - (IBAction)didPressDelButton:(id)sender
 {
-    
+    if (nil != _operationDelegate)
+    {
+        [_operationDelegate didDeleteImpressLabel];
+    }
 }
 
 @end
