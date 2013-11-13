@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.simplelife.renhai.server.business.pool.InputMessageCenter;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
+import com.simplelife.renhai.server.business.session.WebRTCSessionPool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.util.AbstractModule;
 
@@ -38,18 +39,20 @@ public class BusinessModule extends AbstractModule
     	SqlSession session = DAOWrapper.getSession();
     	session.close();
     	
-    	OnlineDevicePool.instance.startTimers();
-    	InputMessageCenter.instance.startThreads();
-    	OutputMessageCenter.instance.startThreads();
+    	OnlineDevicePool.instance.startService();
+    	InputMessageCenter.instance.startService();
+    	OutputMessageCenter.instance.startService();
+    	WebRTCSessionPool.instance.startService();
     	moduleAvailable = true;
     }
 	
 	@Override
 	public void stopService()
 	{
-		OnlineDevicePool.instance.stopTimers();
-		InputMessageCenter.instance.stopThreads();
-		OutputMessageCenter.instance.stopThreads();
+		OnlineDevicePool.instance.stopService();
+		InputMessageCenter.instance.stopService();
+		OutputMessageCenter.instance.stopService();
+		WebRTCSessionPool.instance.stopService();
 		moduleAvailable = false;
 	}
 }

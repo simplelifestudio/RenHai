@@ -20,11 +20,13 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
+import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.session.BusinessSessionPool;
 import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */
@@ -223,7 +225,9 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 		}
 		
 		session.bindBusinessDevicePool(this.ownerBusinessPool);
-		if (session.startSession(selectedDevice))
+		JSONObject obj = new JSONObject();
+		obj.put(JSONKey.InterestLabel, deviceFoundInterest);
+		if (session.startSession(selectedDevice, obj))
 		{
 			DbLogger.increaseInterestMatchCount(deviceFoundInterest);
 			increaseMatchCount(selectedDevice, deviceFoundInterest);

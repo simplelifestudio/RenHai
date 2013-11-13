@@ -68,7 +68,7 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
 		}
 		
 		session.bindBusinessDevicePool(this.ownerBusinessPool);
-		if (!session.startSession(selectedDevice))
+		if (!session.startSession(selectedDevice, null))
 		{
 			recycleDevice(selectedDevice);
 		}

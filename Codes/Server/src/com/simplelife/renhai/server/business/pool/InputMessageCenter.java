@@ -72,12 +72,12 @@ public class InputMessageCenter implements IMessageCenter
 		executeThreadPool.execute(handler);
 	}
 	
-	public void startThreads()
+	public void startService()
 	{
 		executeThreadPool = Executors.newFixedThreadPool(GlobalSetting.BusinessSetting.InputMessageHandleThreads);
 	}
 	
-	public void stopThreads()
+	public void stopService()
 	{
 		executeThreadPool.shutdown();
 	}

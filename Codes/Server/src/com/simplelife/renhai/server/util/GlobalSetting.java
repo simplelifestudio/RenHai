@@ -89,5 +89,10 @@ public class GlobalSetting
 		public static int MessageQueueTime = 3 * 1000;
 		
 		public static int DelayOfSessionBound = 1000;
+		
+		public static int OpenTokKey = 34556802;
+		public static String OpenTokSecret = "7a94109e525016628a92a1dcc392e5bdc0f27e7e";
+		public static long OpenTokTokenExpiration = 2505600;			// Opentok has changed the expiration time to second instead of millisecond!
+		public static long OpenTokTokenDuration = 7200000;				// Longest duration for using token (video chat)
 	} 
 }

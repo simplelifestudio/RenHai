@@ -279,7 +279,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	}
     }
     
-    public void startTimers()
+    public void startService()
     {
     	inactiveTimer.scheduleAtFixedRate(new InactiveCheckTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.OnlineDeviceConnection);
     	bannedTimer.scheduleAtFixedRate(new BannedCheckTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.OnlineDeviceConnection);
@@ -287,7 +287,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	logger.debug("Timers of online device pool started.");
     }
     
-    public void stopTimers()
+    public void stopService()
     {
     	inactiveTimer.cancel();
     	bannedTimer.cancel();

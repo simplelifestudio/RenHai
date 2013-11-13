@@ -17,7 +17,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.apache.catalina.Globals;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
@@ -27,21 +26,22 @@ import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Sessionrecord;
+import com.simplelife.renhai.server.db.Webrtcsession;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessProgress;
+import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
 import com.simplelife.renhai.server.util.Consts.BusinessStatus;
 import com.simplelife.renhai.server.util.Consts.NotificationType;
 import com.simplelife.renhai.server.util.Consts.OperationType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.GlobalSetting;
-import com.simplelife.renhai.server.util.JSONKey;
-import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */
@@ -55,6 +55,8 @@ public class BusinessSession implements IBusinessSession
 	private long chatStartTime;
 	private long chatEndTime;
 	private long sessionEndTime;
+	private Webrtcsession webRTCSession;
+	private JSONObject matchCondition;
 	
 	private Consts.SessionEndReason endReason = Consts.SessionEndReason.Invalid;
 	
@@ -113,6 +115,13 @@ public class BusinessSession implements IBusinessSession
     		return false;
     	}
     	
+    	webRTCSession = WebRTCSessionPool.instance.getWebRTCSession();
+    	if (webRTCSession == null)
+    	{
+    		logger.error("Fatal error: no available WebRTC session for starting business session");
+    		return false;
+    	}
+    	
     	IDeviceWrapper device;
     	Consts.BusinessStatus status;
     	for (String deviceSn : deviceList)
@@ -150,6 +159,9 @@ public class BusinessSession implements IBusinessSession
 
     	deviceList.clear();
    		progressMap.clear();
+   		
+   		WebRTCSessionPool.instance.recycleWetRTCSession(webRTCSession);
+   		matchCondition = null;
     	
     	saveSessionRecord();
     	unbindBusinessDevicePool();
@@ -182,12 +194,13 @@ public class BusinessSession implements IBusinessSession
     }
     
     @Override
-    public boolean startSession(List<String> deviceList)
+    public boolean startSession(List<String> deviceList, JSONObject matchCondition)
     {
     	sessionStartTime = System.currentTimeMillis();
     	chatStartTime = 0;
     	chatEndTime = 0;
     	sessionEndTime = 0;
+    	this.matchCondition = matchCondition;
     	
     	logger.debug("Enter startSession with id {}, deviceList:" , sessionId);
     	for (String device : deviceList)
@@ -206,23 +219,23 @@ public class BusinessSession implements IBusinessSession
     	IDeviceWrapper device;
     	try
     	{
-    	for (String deviceSn : deviceList)
-    	{
-    		//logger.debug("===============init business progress for Device <{}>", deviceSn);
-    		updateBusinessProgress(deviceSn, Consts.BusinessProgress.Init);
-    		//progressMap.put(deviceSn, Consts.BusinessProgress.Init);
-    		device = OnlineDevicePool.instance.getDevice(deviceSn);
-    		if (device == null)
-    		{
-    			logger.error("Device <{}> is not in online device pool anymore, to be end business session", deviceSn);
-    			this.endSession();
-    			return false;
-    		}
-    		device.bindBusinessSession(this);
-    		//logger.debug("===============before change status of device <{}>", deviceSn);
-    		device.changeBusinessStatus(BusinessStatus.SessionBound, Consts.StatusChangeReason.BusinessSessionStarted);
-    		//logger.debug("===============after status of device <{}>", deviceSn);
-    	}
+	    	for (String deviceSn : deviceList)
+	    	{
+	    		//logger.debug("===============init business progress for Device <{}>", deviceSn);
+	    		updateBusinessProgress(deviceSn, Consts.BusinessProgress.Init);
+	    		//progressMap.put(deviceSn, Consts.BusinessProgress.Init);
+	    		device = OnlineDevicePool.instance.getDevice(deviceSn);
+	    		if (device == null)
+	    		{
+	    			logger.error("Device <{}> is not in online device pool anymore, to be end business session", deviceSn);
+	    			this.endSession();
+	    			return false;
+	    		}
+	    		device.bindBusinessSession(this);
+	    		//logger.debug("===============before change status of device <{}>", deviceSn);
+	    		device.changeBusinessStatus(BusinessStatus.SessionBound, Consts.StatusChangeReason.BusinessSessionStarted);
+	    		//logger.debug("===============after status of device <{}>", deviceSn);
+	    	}
     	}
     	catch(Exception e)
     	{
@@ -295,10 +308,21 @@ public class BusinessSession implements IBusinessSession
 	    	body.put(JSONKey.OperationValue, null);
 	    	body.put(JSONKey.BusinessType, device.getBusinessType().getValue());
 	    	
-			
+	    	
 			if (triggerDevice == null)
 			{
-				notify.getBody().put(JSONKey.OperationInfo, getOperationInfoOfOtherDevices(device));
+				JSONObject infoObj = new JSONObject();
+				infoObj.put(JSONKey.Device, getOperationInfoOfOtherDevices(device));
+				
+				JSONObject rtcObj = new JSONObject();
+				rtcObj.put(JSONKey.ApiKey, GlobalSetting.BusinessSetting.OpenTokKey);
+				rtcObj.put(JSONKey.SessionId, this.webRTCSession.getWebrtcsession());
+				rtcObj.put(JSONKey.Token, this.webRTCSession.getToken());
+				infoObj.put(JSONKey.Webrtc, rtcObj);
+			
+				infoObj.put(JSONKey.MatchedCondition, this.matchCondition);
+				
+				notify.getBody().put(JSONKey.OperationInfo, infoObj);
 				notify.setDelayOfHandle(GlobalSetting.BusinessSetting.DelayOfSessionBound);
 			}
 			else

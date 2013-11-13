@@ -740,9 +740,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 	@Override
 	public JSONObject toJSONObject()
 	{
-		JSONObject wholeObj = new JSONObject();
-		wholeObj.put(JSONKey.Device, toJSONObject_Device());
-		return wholeObj;
+		//JSONObject wholeObj = new JSONObject();
+		//wholeObj.put(JSONKey.Device, toJSONObject_Device());
+		return toJSONObject_Device();
 	}
 
 	@Override

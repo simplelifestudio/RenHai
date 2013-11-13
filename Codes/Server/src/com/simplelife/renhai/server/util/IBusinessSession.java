@@ -13,6 +13,7 @@ package com.simplelife.renhai.server.util;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
 
@@ -28,7 +29,7 @@ public interface IBusinessSession
     /** */
     //public void startSession(LinkedList<IDeviceWrapper> deviceList);
     
-    public boolean startSession(List<String> deviceList);
+    public boolean startSession(List<String> deviceList, JSONObject matchCondition);
     
     public void endSession();
     

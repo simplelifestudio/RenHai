@@ -107,4 +107,8 @@ public class JSONKey
 	
 	public final static String DeviceDetailedInfo			= "deviceDetailedInfo";
 	public final static String CurrentProfileCount			= "currentProfileCount";
+	public final static String MatchedCondition				= "matchedCondition";
+	public final static String Webrtc						= "webrtc";
+	public final static String ApiKey						= "apiKey";
+	public final static String Token						= "token";
 }

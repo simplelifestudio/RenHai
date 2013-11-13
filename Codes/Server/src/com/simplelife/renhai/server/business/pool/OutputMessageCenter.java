@@ -10,11 +10,9 @@
 package com.simplelife.renhai.server.business.pool;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IMessageCenter;
@@ -56,12 +54,12 @@ public class OutputMessageCenter implements IMessageCenter
 		messageMap.remove(deviceSn);
 	}
 	
-	public void startThreads()
+	public void startService()
 	{
 		executeThreadPool = Executors.newFixedThreadPool(GlobalSetting.BusinessSetting.OutputMessageSendThreads);
 	}
 	
-	public void stopThreads()
+	public void stopService()
 	{
 		executeThreadPool.shutdown();
 	}

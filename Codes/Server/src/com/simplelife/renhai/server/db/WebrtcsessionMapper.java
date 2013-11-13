@@ -1,5 +1,7 @@
 package com.simplelife.renhai.server.db;
 
+import java.util.List;
+
 import com.simplelife.renhai.server.db.Webrtcsession;
 
 public interface WebrtcsessionMapper {
@@ -7,4 +9,5 @@ public interface WebrtcsessionMapper {
     int insert(Webrtcsession record);
     Webrtcsession selectByPrimaryKey(Integer webRtcSessionId);
     int updateByPrimaryKey(Webrtcsession record);
+    List<Webrtcsession> selectAll();
 }

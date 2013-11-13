@@ -12,6 +12,7 @@ package com.simplelife.renhai.server.test.unittest;
 import java.net.URI;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
@@ -35,9 +36,10 @@ import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.db.GlobalinterestlabelMapper;
-import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.db.Profile;
+import com.simplelife.renhai.server.db.Webrtcsession;
+import com.simplelife.renhai.server.db.WebrtcsessionMapper;
 import com.simplelife.renhai.server.json.AlohaRequest;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.JSONFactory;
@@ -345,9 +347,9 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testOutputMessageCenter() throws InterruptedException
 	{
-		OutputMessageCenter.instance.startThreads();
-		InputMessageCenter.instance.startThreads();
-		OnlineDevicePool.instance.startTimers();
+		OutputMessageCenter.instance.startService();
+		InputMessageCenter.instance.startService();
+		OnlineDevicePool.instance.startService();
 		
 		MockApp app1 = new MockApp(demoDeviceSn);
 		app1.stopAutoReply();
@@ -623,6 +625,21 @@ public class MainFunction extends AbstractTestCase
 		for (String label : labels)
 		{
 			logger.debug(label);
+		}
+	}
+	
+	@Test
+	public void testSelectWebrtcsession()
+	{
+		//Webrtcsession rtc = WebRTCSessionPool.instance.createWebRTCSession();
+		//DAOWrapper.flushToDB();
+		
+		SqlSession session = DAOWrapper.getSession();
+		WebrtcsessionMapper mapper = session.getMapper(WebrtcsessionMapper.class);
+		List<Webrtcsession> list = mapper.selectAll();
+		for (Webrtcsession rtcSession : list)
+		{
+			System.out.println(rtcSession.getWebrtcsession());
 		}
 	}
 }

@@ -11,7 +11,6 @@
 
 package com.simplelife.renhai.server.business.pool;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Map.Entry;
