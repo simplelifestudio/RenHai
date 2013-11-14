@@ -309,7 +309,7 @@ public class BusinessSession implements IBusinessSession
 	    	body.put(JSONKey.BusinessType, device.getBusinessType().getValue());
 	    	
 	    	
-			if (triggerDevice == null)
+			if (triggerDevice == null || notificationType == NotificationType.SessionBound)
 			{
 				JSONObject infoObj = new JSONObject();
 				infoObj.put(JSONKey.Device, getOperationInfoOfOtherDevices(device));
@@ -327,20 +327,11 @@ public class BusinessSession implements IBusinessSession
 			}
 			else
 			{
-				if (notificationType == NotificationType.SessionBound)
-				{
-					// Safe code, currently triggerDevice for SessionBound is null
-					notify.getBody().put(JSONKey.OperationInfo, getOperationInfoOfOtherDevices(device));
-					notify.setDelayOfHandle(GlobalSetting.BusinessSetting.DelayOfSessionBound);
-				}
-				else
-				{
-					JSONObject obj = new JSONObject();
-					JSONObject deviceObj = new JSONObject();
-					obj.put(JSONKey.Device, deviceObj);
-					deviceObj.put(JSONKey.DeviceSn, triggerDevice.getDeviceSn());
-					notify.getBody().put(JSONKey.OperationInfo, obj);
-				}
+				JSONObject obj = new JSONObject();
+				JSONObject deviceObj = new JSONObject();
+				obj.put(JSONKey.Device, deviceObj);
+				deviceObj.put(JSONKey.DeviceSn, triggerDevice.getDeviceSn());
+				notify.getBody().put(JSONKey.OperationInfo, obj);
 			}
     		notify.setDeviceWrapper(device);
     		//logger.debug("Send notify for device <" + device.getDeviceSn() +">");
