@@ -206,8 +206,7 @@ SINGLETON(UserDataModule)
         {
             case BusinessSessionNotificationType_SessionBound:
             {
-                NSDictionary* deviceDic = [messageBody objectForKey:MESSAGE_KEY_OPERATIONINFO];
-                NSDictionary* sessionDic = [messageBody objectForKey:MESSAGE_KEY_SESSION];
+                NSDictionary* sessionDic = [messageBody objectForKey:MESSAGE_KEY_OPERATIONINFO];
                 [_businessSession fromJSONObject:sessionDic];
             
                 [_statusModule recordServerNotification:ServerNotificationIdentifier_SessionBound];

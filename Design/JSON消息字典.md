@@ -263,16 +263,13 @@ App与Server通过消息交互完成的数据操作
 ###3. BusinessSession数据结构体
 <pre><code>
 {
-	"session":
+	"device":null,
+	"matchedCondition":null,
+	"webrtc":
 	{
-		"device":null,
-		"matchedCondition":null,
-		"webrtc":
-		{
-			"apiKey":null,
-			"sessionId":null,
-			"token":null
-		}
+		"apiKey":null,
+		"sessionId":null,
+		"token":null
 	}
 }
 </code></pre>
