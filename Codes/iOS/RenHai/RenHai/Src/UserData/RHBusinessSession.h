@@ -17,6 +17,7 @@
 
 @property (nonatomic, strong) NSString* businessSessionId;
 @property (nonatomic) RHBusinessType businessType;
+@property (nonatomic) BusinessSessionOperationType operationType;
 
 @property (nonatomic, strong, readonly) RHDevice* device;
 @property (nonatomic, strong, readonly) RHMatchedCondition* matchedCondition;

@@ -212,6 +212,8 @@ typedef enum
 }
 BusinessSessionNotificationType;
 
+typedef int BusinessSessionOperationType;
+
 typedef enum
 {
     BusinessSessionOperationValue_Failed = 0,

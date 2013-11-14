@@ -25,6 +25,7 @@
 
 @synthesize businessSessionId = _businessSessionId;
 @synthesize businessType = _businessType;
+@synthesize operationType = _operationType;
 
 @synthesize device = _device;
 @synthesize matchedCondition = _matchedCondition;
@@ -51,8 +52,9 @@
         id oDevice = [dic objectForKey:MESSAGE_KEY_DEVICE];
         if (nil != oDevice)
         {
+            NSDictionary* deviceDic = [NSDictionary dictionaryWithObject:oDevice forKey:MESSAGE_KEY_DEVICE];
             _device = [[RHDevice alloc] init];
-            [_device fromJSONObject:oDevice];
+            [_device fromJSONObject:deviceDic];
         }
         
         id oMatchedCondition = [dic objectForKey:MESSAGE_KEY_MATCHEDCONDITION];
