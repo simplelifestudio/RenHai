@@ -322,7 +322,7 @@
         
         RHBusinessSession* businessSession = _userDataModule.businessSession;
         NSString* businessSessionId = businessSession.businessSessionId;
-        RHDevice* partnerDevice = [businessSession getPartner];
+        RHDevice* partnerDevice = businessSession.device;
         RHProfile* profile = partnerDevice.profile;
         
         RHImpressCard* impressCard = [self _getPartnerAssessedImpressCard];
@@ -658,7 +658,7 @@
     NSInteger itemsCount = 0;
     
     RHBusinessSession* businessSession = _userDataModule.businessSession;
-    RHDevice* partnerDevice = [businessSession getPartner];
+    RHDevice* partnerDevice = businessSession.device;
     RHProfile* partnerProfile = partnerDevice.profile;
     RHImpressCard* partnerImpressCard = partnerProfile.impressCard;
     NSArray* impressLabels = partnerImpressCard.impressLabelList;
@@ -745,7 +745,7 @@
         NSInteger labelCount = -1;
         
         RHBusinessSession* businessSession = _userDataModule.businessSession;
-        RHDevice* partnerDevice = [businessSession getPartner];
+        RHDevice* partnerDevice = businessSession.device;
         RHProfile* partnerProfile = partnerDevice.profile;
         RHImpressCard* partnerImpressCard = partnerProfile.impressCard;
         NSArray* labelList = partnerImpressCard.impressLabelList;

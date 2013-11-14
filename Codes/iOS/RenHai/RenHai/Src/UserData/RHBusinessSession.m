@@ -8,11 +8,28 @@
 
 #import "RHBusinessSession.h"
 
+#import "CBJSONUtils.h"
+
+@interface RHBusinessSession()
+{
+    
+}
+
+@property (nonatomic, strong) RHDevice* device;
+@property (nonatomic, strong) RHMatchedCondition* matchedCondition;
+@property (nonatomic, strong) RHWebRTC* webrtc;
+
+@end
+
 @implementation RHBusinessSession
 
 @synthesize businessSessionId = _businessSessionId;
 @synthesize businessType = _businessType;
-@synthesize chatParters = _chatParters;
+@synthesize operationType = _operationType;
+
+@synthesize device = _device;
+@synthesize matchedCondition = _matchedCondition;
+@synthesize webrtc = _webrtc;
 
 #pragma mark - Public Methods
 
@@ -26,36 +43,74 @@
     return self;
 }
 
--(void) addParter:(RHDevice*) device
+#pragma mark - CBJSONable
+
+-(void) fromJSONObject:(NSDictionary *)dic
 {
-    if (nil != device)
+    if (nil != dic)
     {
-        if (0 < _chatParters.count)
+        id oDevice = [dic objectForKey:MESSAGE_KEY_DEVICE];
+        if (nil != oDevice)
         {
-            [_chatParters removeObjectAtIndex:0];
+            NSDictionary* deviceDic = [NSDictionary dictionaryWithObject:oDevice forKey:MESSAGE_KEY_DEVICE];
+            _device = [[RHDevice alloc] init];
+            [_device fromJSONObject:deviceDic];
         }
-    
-        [_chatParters addObject:device];
+        
+        id oMatchedCondition = [dic objectForKey:MESSAGE_KEY_MATCHEDCONDITION];
+        if (nil != oMatchedCondition)
+        {
+            _matchedCondition = [[RHMatchedCondition alloc] init];
+            [_matchedCondition fromJSONObject:oMatchedCondition];
+        }
+        
+        id oWebRTC = [dic objectForKey:MESSAGE_KEY_WEBRTC];
+        if (nil != oWebRTC)
+        {
+            _webrtc = [[RHWebRTC alloc] init];
+            [_webrtc fromJSONObject:oWebRTC];
+        }
     }
 }
 
--(RHDevice*) getPartner
+-(NSDictionary*) toJSONObject
 {
-    RHDevice* device = nil;
+    NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
-    if (0 < _chatParters.count)
+    if (nil != _device)
     {
-        device = [_chatParters objectAtIndex:0];
+        NSDictionary* deviceDic = [_device toJSONObject];
+        [dic setObject:deviceDic forKey:MESSAGE_KEY_DEVICE];
     }
     
-    return device;
+    if (nil != _matchedCondition)
+    {
+        NSDictionary* matchedConditionDic = [_matchedCondition toJSONObject];
+        [dic setObject:matchedConditionDic forKey:MESSAGE_KEY_MATCHEDCONDITION];
+    }
+    
+    if (nil != _webrtc)
+    {
+        NSDictionary* webrtcDic = [_webrtc toJSONObject];
+        [dic setObject:webrtcDic forKey:MESSAGE_KEY_WEBRTC];
+    }
+    
+    return dic;
+}
+
+-(NSString*) toJSONString
+{
+    NSDictionary* dic = [self toJSONObject];
+    NSString* str = [CBJSONUtils toJSONString:dic];
+    
+    return str;
 }
 
 #pragma mark - Private Methods
 
 -(void) _setupInstance
 {
-    _chatParters = [NSMutableArray array];
+
 }
 
 @end

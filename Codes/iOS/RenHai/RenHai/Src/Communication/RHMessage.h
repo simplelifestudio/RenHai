@@ -122,6 +122,11 @@
 #define MESSAGE_KEY_OPERATIONTYPE @"operationType"
 #define MESSAGE_KEY_OPERATIONINFO @"operationInfo"
 #define MESSAGE_KEY_OPERATIONVALUE @"operationValue"
+#define MESSAGE_KEY_MATCHEDCONDITION @"matchedCondition"
+#define MESSAGE_KEY_WEBRTC @"webrtc"
+#define MESSAGE_KEY_APIKEY @"apiKey"
+#define MESSAGE_KEY_SESSIONID @"sessionId"
+#define MESSAGE_KEY_TOKEN @"token"
 
 /*
  Others
@@ -206,6 +211,8 @@ typedef enum
     BusinessSessionNotificationType_OthersideEndChat = 5 // 临时使用
 }
 BusinessSessionNotificationType;
+
+typedef int BusinessSessionOperationType;
 
 typedef enum
 {

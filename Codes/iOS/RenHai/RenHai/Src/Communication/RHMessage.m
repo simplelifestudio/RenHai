@@ -526,6 +526,7 @@ static BOOL s_messageEncrypted;
 
 +(RHMessage*) newBusinessSessionRequestMessage:(NSString*) businessSessionId businessType:(RHBusinessType) businessType operationType:(BusinessSessionRequestType) operationType device:(RHDevice*) device info:(NSDictionary*) info
 {
+#warning This method need to updated with given specific RHBusinessSession object.
     NSAssert(nil != device, @"Device can not be null!");
     
     NSString* messageSn = [RHMessage generateMessageSn];

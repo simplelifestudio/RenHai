@@ -134,7 +134,7 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     RHBusinessSession* businessSession = _userDataModule.businessSession;
-    RHDevice* device = [businessSession getPartner];
+    RHDevice* device = businessSession.device;
     RHProfile* profile = device.profile;
     RHImpressCard* impressCard = profile.impressCard;
     
@@ -161,7 +161,7 @@
     RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_IMPRESSLABEL forIndexPath:indexPath];
     
     RHBusinessSession* businessSession = _userDataModule.businessSession;
-    RHDevice* device = [businessSession getPartner];
+    RHDevice* device = businessSession.device;
     RHProfile* profile = device.profile;
     RHImpressCard* impressCard = profile.impressCard;
     
@@ -442,7 +442,7 @@
 {
     if (!_selfAgreeChatFlag)
     {
-        [self _agreeChat];
+        [self _remoteAgreeChat];
     }
 }
 
@@ -455,7 +455,7 @@
     }
 }
 
--(void)_agreeChat
+-(void)_remoteAgreeChat
 {
     _agreeChatButton.hidden = YES;
     _rejectChatButton.hidden = YES;
@@ -493,7 +493,7 @@
     }];
 }
 
-- (void) _rejectChat
+- (void) _remoteRejectChat
 {
     _agreeChatButton.hidden = YES;
     _rejectChatButton.hidden = YES;
@@ -596,12 +596,12 @@
 
 - (IBAction)didPressAgreeChatButton:(id)sender
 {
-    [self _agreeChat];
+    [self _remoteAgreeChat];
 }
 
 - (IBAction)didPressRejectChatButton:(id)sender
 {
-    [self _rejectChat];
+    [self _remoteRejectChat];
 }
 
 @end

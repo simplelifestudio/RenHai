@@ -199,18 +199,24 @@ SINGLETON(UserDataModule)
     if (nil != message)
     {
         NSDictionary* messageBody = message.body;
+        
+        NSString* businessSessionId = [messageBody objectForKey:MESSAGE_KEY_BUSINESSSESSIONID];
+        NSNumber* oBusinessType = [messageBody objectForKey:MESSAGE_KEY_BUSINESSTYPE];
         NSNumber* oOperationType = [messageBody objectForKey:MESSAGE_KEY_OPERATIONTYPE];
+        
+        RHBusinessType businessType = oBusinessType.intValue;
         BusinessSessionNotificationType notificationType = oOperationType.intValue;
 
         switch (notificationType)
         {
             case BusinessSessionNotificationType_SessionBound:
             {
-                NSDictionary* deviceDic = [messageBody objectForKey:MESSAGE_KEY_OPERATIONINFO];
-                RHDevice* device = [[RHDevice alloc] init];
-                [device fromJSONObject:deviceDic];
+                NSDictionary* sessionDic = [messageBody objectForKey:MESSAGE_KEY_OPERATIONINFO];
+                _businessSession.businessSessionId = businessSessionId;
+                _businessSession.businessType = businessType;
+                _businessSession.operationType = notificationType;
                 
-                [_businessSession addParter:device];
+                [_businessSession fromJSONObject:sessionDic];
             
                 [_statusModule recordServerNotification:ServerNotificationIdentifier_SessionBound];
                 
