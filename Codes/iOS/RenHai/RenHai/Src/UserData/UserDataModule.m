@@ -207,10 +207,8 @@ SINGLETON(UserDataModule)
             case BusinessSessionNotificationType_SessionBound:
             {
                 NSDictionary* deviceDic = [messageBody objectForKey:MESSAGE_KEY_OPERATIONINFO];
-                RHDevice* device = [[RHDevice alloc] init];
-                [device fromJSONObject:deviceDic];
-                
-                [_businessSession addParter:device];
+                NSDictionary* sessionDic = [messageBody objectForKey:MESSAGE_KEY_SESSION];
+                [_businessSession fromJSONObject:sessionDic];
             
                 [_statusModule recordServerNotification:ServerNotificationIdentifier_SessionBound];
                 

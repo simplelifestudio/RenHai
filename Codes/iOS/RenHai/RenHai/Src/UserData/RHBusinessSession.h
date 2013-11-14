@@ -10,13 +10,16 @@
 
 #import "RHMessage.h"
 
-@interface RHBusinessSession : NSObject
+#import "RHMatchedCondition.h"
+#import "RHWebRTC.h"
+
+@interface RHBusinessSession : NSObject <CBJSONable>
 
 @property (nonatomic, strong) NSString* businessSessionId;
 @property (nonatomic) RHBusinessType businessType;
-@property (nonatomic, strong) NSMutableArray* chatParters;
 
--(void) addParter:(RHDevice*) device;
--(RHDevice*) getPartner;
+@property (nonatomic, strong, readonly) RHDevice* device;
+@property (nonatomic, strong, readonly) RHMatchedCondition* matchedCondition;
+@property (nonatomic, strong, readonly) RHWebRTC* webrtc;
 
 @end

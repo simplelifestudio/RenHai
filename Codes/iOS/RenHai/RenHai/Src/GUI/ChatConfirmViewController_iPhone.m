@@ -134,7 +134,7 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     RHBusinessSession* businessSession = _userDataModule.businessSession;
-    RHDevice* device = [businessSession getPartner];
+    RHDevice* device = businessSession.device;
     RHProfile* profile = device.profile;
     RHImpressCard* impressCard = profile.impressCard;
     
@@ -161,7 +161,7 @@
     RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView dequeueReusableCellWithReuseIdentifier:COLLECTIONCELL_ID_IMPRESSLABEL forIndexPath:indexPath];
     
     RHBusinessSession* businessSession = _userDataModule.businessSession;
-    RHDevice* device = [businessSession getPartner];
+    RHDevice* device = businessSession.device;
     RHProfile* profile = device.profile;
     RHImpressCard* impressCard = profile.impressCard;
     
