@@ -241,6 +241,8 @@
 		CDBE9E261834547500005405 /* RHWebRTC.m in Sources */ = {isa = PBXBuildFile; fileRef = CDBE9E241834547500005405 /* RHWebRTC.m */; };
 		CDBE9E29183457D700005405 /* RHMatchedCondition.m in Sources */ = {isa = PBXBuildFile; fileRef = CDBE9E28183457D700005405 /* RHMatchedCondition.m */; };
 		CDBE9E2A183457D700005405 /* RHMatchedCondition.m in Sources */ = {isa = PBXBuildFile; fileRef = CDBE9E28183457D700005405 /* RHMatchedCondition.m */; };
+		CDBE9E2F1834D74800005405 /* OpenTokAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = CDBE9E2E1834D74800005405 /* OpenTokAgent.m */; };
+		CDBE9E301834D74800005405 /* OpenTokAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = CDBE9E2E1834D74800005405 /* OpenTokAgent.m */; };
 		CDC0518A1802E055006158B8 /* RHServer.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051891802E055006158B8 /* RHServer.m */; };
 		CDC0518B1802E055006158B8 /* RHServer.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051891802E055006158B8 /* RHServer.m */; };
 		CDC0518E1802E311006158B8 /* RHServerDeviceCapacity.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC0518D1802E311006158B8 /* RHServerDeviceCapacity.m */; };
@@ -497,6 +499,8 @@
 		CDBE9E241834547500005405 /* RHWebRTC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHWebRTC.m; sourceTree = "<group>"; };
 		CDBE9E27183457D700005405 /* RHMatchedCondition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHMatchedCondition.h; sourceTree = "<group>"; };
 		CDBE9E28183457D700005405 /* RHMatchedCondition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHMatchedCondition.m; sourceTree = "<group>"; };
+		CDBE9E2D1834D74800005405 /* OpenTokAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenTokAgent.h; sourceTree = "<group>"; };
+		CDBE9E2E1834D74800005405 /* OpenTokAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenTokAgent.m; sourceTree = "<group>"; };
 		CDC051881802E055006158B8 /* RHServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServer.h; sourceTree = "<group>"; };
 		CDC051891802E055006158B8 /* RHServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServer.m; sourceTree = "<group>"; };
 		CDC0518C1802E311006158B8 /* RHServerDeviceCapacity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServerDeviceCapacity.h; sourceTree = "<group>"; };
@@ -967,6 +971,8 @@
 			children = (
 				C593C42117D3259600C26367 /* WebRTCModule.h */,
 				C593C42217D3259600C26367 /* WebRTCModule.m */,
+				CDBE9E2D1834D74800005405 /* OpenTokAgent.h */,
+				CDBE9E2E1834D74800005405 /* OpenTokAgent.m */,
 			);
 			path = WebRTC;
 			sourceTree = "<group>";
@@ -1257,6 +1263,7 @@
 				C55B445117CF5C14009BB21B /* GTMBase64.m in Sources */,
 				C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */,
 				C50505C017D2BD4800DB6589 /* CBAppUtils.m in Sources */,
+				CDBE9E2F1834D74800005405 /* OpenTokAgent.m in Sources */,
 				C50505C217D2BD4800DB6589 /* CBDateUtils.m in Sources */,
 				C50505C417D2BD4800DB6589 /* CBFileUtils.m in Sources */,
 				CD736CEE1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */,
@@ -1365,6 +1372,7 @@
 				C50505DB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
 				CD5101A2182A856600E188A3 /* RHLabelManageViewController_iPhone.m in Sources */,
 				CD26650D17F41DD20070934F /* UserDataModuleTest.m in Sources */,
+				CDBE9E301834D74800005405 /* OpenTokAgent.m in Sources */,
 				C50505DD17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */,
 				C50505E317D2C53A00DB6589 /* LoggerModule.m in Sources */,
 				C50505E917D2D26C00DB6589 /* GUIModule.m in Sources */,
@@ -1550,6 +1558,7 @@
 				INFOPLIST_FILE = "RenHai/RenHai-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1577,6 +1586,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1590,6 +1600,7 @@
 				GCC_PREFIX_HEADER = "RenHaiGHUnitTest/RenHaiGHUnitTest-Prefix.pch";
 				INFOPLIST_FILE = "RenHaiGHUnitTest/RenHaiGHUnitTest-Info.plist";
 				PRODUCT_NAME = RenHaiTest;
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1603,6 +1614,7 @@
 				GCC_PREFIX_HEADER = "RenHaiGHUnitTest/RenHaiGHUnitTest-Prefix.pch";
 				INFOPLIST_FILE = "RenHaiGHUnitTest/RenHaiGHUnitTest-Info.plist";
 				PRODUCT_NAME = RenHaiTest;
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

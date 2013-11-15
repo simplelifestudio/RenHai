@@ -322,6 +322,7 @@
         
         RHBusinessSession* businessSession = _userDataModule.businessSession;
         NSString* businessSessionId = businessSession.businessSessionId;
+        RHBusinessType businessType = businessSession.businessType;
         RHDevice* partnerDevice = businessSession.device;
         RHProfile* profile = partnerDevice.profile;
         
@@ -330,7 +331,7 @@
         
         NSDictionary* info = partnerDevice.toJSONObject;
         
-        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:CURRENT_BUSINESSPOOL operationType:requestType device:selfDevice info:info];
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:requestType device:selfDevice info:info];
         
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){

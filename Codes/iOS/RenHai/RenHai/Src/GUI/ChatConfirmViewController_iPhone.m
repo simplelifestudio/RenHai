@@ -469,9 +469,13 @@
         
         [NSThread sleepForTimeInterval:DELAY_AGREECHAT];
         
+        RHBusinessSession* businessSession = _userDataModule.businessSession;
+        NSString* businessSessionId = businessSession.businessSessionId;
+        RHBusinessType businessType = businessSession.businessType;
+        
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_AgreeChat device:device info:nil];
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:BusinessSessionRequestType_AgreeChat device:device info:nil];
         
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
@@ -505,9 +509,13 @@
     
         [NSThread sleepForTimeInterval:DELAY_REJECTCHAT];
         
+        RHBusinessSession* businessSession = _userDataModule.businessSession;
+        NSString* businessSessionId = businessSession.businessSessionId;
+        RHBusinessType businessType = businessSession.businessType;
+        
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_RejectChat device:device info:nil];
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:BusinessSessionRequestType_RejectChat device:device info:nil];
         
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
@@ -538,9 +546,13 @@
         {
             [NSThread sleepForTimeInterval:DELAY_UNBINDSESSION];
             
+            RHBusinessSession* businessSession = _userDataModule.businessSession;
+            NSString* businessSessionId = businessSession.businessSessionId;
+            RHBusinessType businessType = businessSession.businessType;
+            
             RHDevice* device = _userDataModule.device;
             
-            RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_UnbindSession device:device info:nil];
+            RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:BusinessSessionRequestType_UnbindSession device:device info:nil];
             
             [_commModule businessSessionRequest:requestMessage
                 successCompletionBlock:^(){
