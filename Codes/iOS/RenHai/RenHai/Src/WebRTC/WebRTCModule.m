@@ -8,15 +8,30 @@
 
 #import "WebRTCModule.h"
 
+@interface WebRTCModule()
+{
+    
+}
+
+@property (strong, nonatomic) OpenTokAgent *openTokAgent;
+
+@end
+
 @implementation WebRTCModule
 
+@synthesize openTokAgent = _openTokAgent;
+
 SINGLETON(WebRTCModule)
+
+#pragma mark - Public Methods
 
 -(void) initModule
 {
     [self setModuleIdentity:NSLocalizedString(@"WebRTC Module", nil)];
     [self.serviceThread setName:NSLocalizedString(@"WebRTC Module Thread", nil)];
     [self setKeepAlive:FALSE];
+    
+    _openTokAgent = [[OpenTokAgent alloc] init];
 }
 
 -(void) releaseModule
@@ -34,6 +49,21 @@ SINGLETON(WebRTCModule)
 -(void) processService
 {
     MODULE_DELAY
+}
+
+-(void) connectAndPublishOnWebRTC:(NSString*) apiKey sessionId:(NSString*) sessionId token:(NSString*) token
+{
+    [_openTokAgent connectWithAPIKey:apiKey sessionId:sessionId token:token];
+}
+
+-(void) unpublishAndDisconnectOnWebRTC
+{
+    [_openTokAgent disconnect];
+}
+
+-(void) registerWebRTCDelegate:(id<OpenTokDelegate>) delegate
+{
+    _openTokAgent.openTokDelegate = delegate;
 }
 
 #pragma mark - UIApplicationDelegate

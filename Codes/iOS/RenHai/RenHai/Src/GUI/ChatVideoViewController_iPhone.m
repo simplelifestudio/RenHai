@@ -14,6 +14,8 @@
 #import "CommunicationModule.h"
 #import "AppDataModule.h"
 #import "BusinessStatusModule.h"
+#import "WebRTCModule.h"
+#import "OpenTokAgent.h"
 
 #define DELAY_ENDCHAT 1.0f
 
@@ -23,13 +25,18 @@
 #define CORNERRADIUS_VIDEOVIEW 2.0f;
 #define BORDERCOLOR_VIDEOVIEW MAJOR_COLOR_MID
 
-@interface ChatVideoViewController_iPhone ()
+static NSString* const kApiKey = @"34650792";    // Replace with your OpenTok API key
+static NSString* const kSessionId = @"1_MX4zNDU2NjU2Mn5-V2VkIE5vdiAxMyAyMzowMTo1MCBQU1QgMjAxM34wLjcwNzM1MTE1fg"; // Replace with your generated session ID
+static NSString* const kToken = @"T1==cGFydG5lcl9pZD0zNDU2NjU2MiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz1jNzE5MzE3NGZiOTVjZjZmMGNiM2FjNjQ5OGM4ZjdlMGM2YmM2NjNkOnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9MV9NWDR6TkRVMk5qVTJNbjUtVjJWa0lFNXZkaUF4TXlBeU16b3dNVG8xTUNCUVUxUWdNakF4TTM0d0xqY3dOek0xTVRFMWZnJmNyZWF0ZV90aW1lPTEzODQ0MTI1MTYmbm9uY2U9MC4wMjE0MjM4ODcwODEyMzY0MzcmZXhwaXJlX3RpbWU9MTM4NzAwNDUxNyZjb25uZWN0aW9uX2RhdGE9";     // Replace with your generated token (use the Dashboard or an OpenTok server-side library)
+
+@interface ChatVideoViewController_iPhone () <OpenTokDelegate>
 {
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
     AppDataModule* _appDataModule;
     BusinessStatusModule* _statusModule;
+    WebRTCModule* _webRTCModule;
     
     NSUInteger _countdownSeconds;
     NSTimer* _timer;
@@ -40,6 +47,8 @@
     volatile BOOL _partnerEndChatFlag;
     
     volatile BOOL _isDeciding;
+    
+    BOOL _isInitialized;
 }
 
 @end
@@ -85,6 +94,8 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    [self _disconnectWebRTC];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -92,6 +103,8 @@
     [super viewDidAppear:animated];
     
 //    [self _checkIsOthersideLost];
+    
+    [self _connectWebRTC];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -108,8 +121,8 @@
 
 -(void) resetPage
 {
-    _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoOpened", nil);
-    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_VideoOpened", nil);
+    _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Prepairing", nil);
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Prepairing", nil);
     
     _selfEndChatFlag = NO;
     _partnerEndChatFlag = NO;
@@ -126,6 +139,8 @@
     [self _activateAlohaTimer];
     
     [self _registerNotifications];
+    
+//    [self _connectWebRTC];
 }
 
 -(void) pageWillUnload
@@ -133,11 +148,13 @@
     [self _unregisterNotifications];
     
     [self _deactivateAlohaTimer];
+    
+//    [self _disconnectWebRTC];
 }
 
 -(void) onOthersideEndChat
 {
-    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_VideoClosed", nil);
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Disconnected", nil);
     
     [self _endChat];
 }
@@ -153,14 +170,18 @@
 
 -(void) _setupInstance
 {
+    _isInitialized = YES;
+    
     _guiModule = [GUIModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
     _statusModule = [BusinessStatusModule sharedInstance];
+    _webRTCModule = [WebRTCModule sharedInstance];
+    [_webRTCModule registerWebRTCDelegate:self];
     
-    _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoOpened", nil);
-    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_VideoOpened", nil);
+    _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Prepairing", nil);
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Prepairing", nil);
     
     _selfVideoView.layer.borderColor = BORDERCOLOR_VIDEOVIEW.CGColor;
     _selfVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
@@ -184,7 +205,7 @@
 -(void) _endChat
 {
     [CBAppUtils asyncProcessInMainThread:^(){
-        _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_VideoClosed", nil);
+        _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Disconnected", nil);
         _endChatButton.hidden = YES;
     }];
     
@@ -204,9 +225,13 @@
         
         [NSThread sleepForTimeInterval:DELAY_ENDCHAT];
         
+        RHBusinessSession* businessSession = _userDataModule.businessSession;
+        NSString* businessSessionId = businessSession.businessSessionId;
+        RHBusinessType businessType = businessSession.businessType;
+        
         RHDevice* device = _userDataModule.device;
         
-        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_EndChat device:device info:nil];
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:BusinessSessionRequestType_EndChat device:device info:nil];
         
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
@@ -279,11 +304,123 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+-(void)_connectWebRTC
+{
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
+        RHBusinessSession* businessSession = _userDataModule.businessSession;
+        RHWebRTC* webrtc = businessSession.webrtc;
+        
+        NSString* apiKey = [NSString stringWithFormat:@"%@", webrtc.apiKey];
+        NSString* sessionId = webrtc.sessionId;
+        NSString* token = webrtc.token;
+        
+//        apiKey = kApiKey;
+//        sessionId = kSessionId;
+//        token = kToken;
+    
+        [_webRTCModule connectAndPublishOnWebRTC:apiKey sessionId:sessionId token:token];
+    }];
+}
+
+-(void)_disconnectWebRTC
+{
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
+        [_webRTCModule unpublishAndDisconnectOnWebRTC];
+    }];
+}
+
 #pragma mark - IBActions
 
 - (IBAction)didPressEndChatButton:(id)sender
 {
     [self _endChat];
+}
+
+#pragma mark - OpenTokDelegate
+
+-(void) sessionDidConnect
+{
+
+}
+
+-(void) sessionDidDisconnect
+{
+
+}
+
+-(void) sessionDidFailWithError
+{
+
+}
+
+-(void) sessionDidReceiveSelfStream
+{
+    OpenTokAgent* agent = _webRTCModule.openTokAgent;
+    OTVideoView* publisherView = agent.publisherView;
+    if (nil != publisherView)
+    {
+        CGRect superFrame = _selfVideoView.frame;
+        CGRect selfFrame = CGRectMake(0, 0, superFrame.size.width, superFrame.size.height);
+        
+        [publisherView setFrame:selfFrame];
+        [_selfVideoView addSubview:publisherView];
+        
+        UIView* maskView = [[UIView alloc] initWithFrame:selfFrame];
+        maskView.alpha = 0.1;
+        [_selfVideoView addSubview:maskView];
+        
+        [_selfVideoView setNeedsDisplay];
+    }
+}
+
+-(void) sessionDidReceivePartnerStream
+{
+
+}
+
+-(void) sessionDidDropPartnerStream;
+{
+
+}
+
+-(void) sessionDidPartnerConnected
+{
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Connected", nil);
+}
+
+-(void) sessionDidPartnerDisConnected
+{
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Disconnected", nil);
+}
+
+-(void) publisherDidFailWithError;
+{
+    _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Failed", nil);
+}
+
+-(void) subscriberDidConnectToStream
+{
+    OpenTokAgent* agent = _webRTCModule.openTokAgent;
+    OTVideoView* subscriberView = agent.subscriberView;
+    if (nil != subscriberView)
+    {
+        CGRect superFrame = _parterVideoView.frame;
+        CGRect selfFrame = CGRectMake(0, 0, superFrame.size.width, superFrame.size.height);
+        
+        [subscriberView setFrame:selfFrame];
+        [_parterVideoView addSubview:subscriberView];
+        
+        UIView* maskView = [[UIView alloc] initWithFrame:selfFrame];
+        maskView.alpha = 0.1;
+        [_parterVideoView addSubview:maskView];
+        
+        [_parterVideoView setNeedsDisplay];
+    }
+}
+
+-(void) subscriberDidFailWithError
+{
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Failed", nil);
 }
 
 @end
