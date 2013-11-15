@@ -8,9 +8,6 @@
 
 #import "OpenTokAgent.h"
 
-#define NAME_PUBLISHER NSLocalizedString(@"ChatVideo_SelfVideo",nil)
-#define NAME_SUBSCRIBER NSLocalizedString(@"ChatVideo_PartnerVideo",nil)
-
 @interface OpenTokAgent()
 {
     OTSession* _session;
@@ -252,7 +249,7 @@
 
 -(void) _publish
 {
-    _publisher = [[OTPublisher alloc] initWithDelegate:self name:NAME_PUBLISHER];
+    _publisher = [[OTPublisher alloc] initWithDelegate:self name:UIDevice.currentDevice.name];
     _publisher.publishAudio = YES;
     _publisher.publishVideo = YES;
     [_session publish:_publisher];

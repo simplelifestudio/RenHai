@@ -364,6 +364,11 @@ static NSString* const kToken = @"T1==cGFydG5lcl9pZD0zNDU2NjU2MiZzZGtfdmVyc2lvbj
         
         [publisherView setFrame:selfFrame];
         [_selfVideoView addSubview:publisherView];
+        
+        UIView* maskView = [[UIView alloc] initWithFrame:selfFrame];
+        maskView.alpha = 0.1;
+        [_selfVideoView addSubview:maskView];
+        
         [_selfVideoView setNeedsDisplay];
     }
 }
@@ -405,6 +410,11 @@ static NSString* const kToken = @"T1==cGFydG5lcl9pZD0zNDU2NjU2MiZzZGtfdmVyc2lvbj
         [subscriberView setFrame:selfFrame];
         [_parterVideoView addSubview:subscriberView];
         
+        UIView* maskView = [[UIView alloc] initWithFrame:selfFrame];
+        maskView.alpha = 0.1;
+        [_parterVideoView addSubview:maskView];
+        
+        [_parterVideoView setNeedsDisplay];
     }
 }
 
