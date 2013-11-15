@@ -165,7 +165,6 @@
 		left outer join globalimpresslabel GIM on IML.globalImpressLabelId = GIM.globalImpressLabelId
 		
     where D.deviceSn = #{deviceSn,jdbcType=VARCHAR}
-        and IML.assessedCount > 0
   </select>
   
 </mapper>

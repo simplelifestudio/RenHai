@@ -681,13 +681,14 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		{
 			if (Consts.SolidImpressLabel.isSolidImpressLabel(labelMap.getGlobalLabel().getImpressLabelName()))
 			{
-				//solidList.add((ImpresslabelmapSortable)labelMap);
 				solidList.add(labelMap);
 			}
 			else
 			{
-				//labelList.add((ImpresslabelmapSortable)labelMap);
-				labelList.add(labelMap);
+				if (labelMap.getAssessedCount() > 0)
+				{
+					labelList.add(labelMap);
+				}
 			}
 			labelMap.getAssessedCount();
 		}
