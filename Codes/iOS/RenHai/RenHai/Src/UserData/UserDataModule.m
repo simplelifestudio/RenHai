@@ -32,12 +32,18 @@
     BusinessStatusModule* _statusModule;
 }
 
+@property (atomic, strong) RHProxy* proxy;
+@property (atomic, strong) RHDevice* device;
+@property (atomic, strong) RHServer* server;
+@property (atomic, strong) RHBusinessSession* businessSession;
+
 @end
 
 @implementation UserDataModule
 
 SINGLETON(UserDataModule)
 
+@synthesize proxy = _proxy;
 @synthesize device = _device;
 @synthesize server = _server;
 @synthesize businessSession = _businessSession;
@@ -74,8 +80,9 @@ SINGLETON(UserDataModule)
         [self initUserData];
     }
     
-    [self _initBusinessSessionData];
+    [self _initProxyData];
     [self _initServerData];
+    [self _initBusinessSessionData];
     
     [self _registerNotifications];
 }
@@ -149,14 +156,19 @@ SINGLETON(UserDataModule)
     _device = [[RHDevice alloc] init];
 }
 
--(void) _initBusinessSessionData
+-(void) _initProxyData
 {
-    _businessSession = [[RHBusinessSession alloc] init];
+    _proxy = [[RHProxy alloc] init];
 }
 
 -(void) _initServerData
 {
     _server = [[RHServer alloc] init];
+}
+
+-(void) _initBusinessSessionData
+{
+    _businessSession = [[RHBusinessSession alloc] init];
 }
 
 -(void) _registerNotifications

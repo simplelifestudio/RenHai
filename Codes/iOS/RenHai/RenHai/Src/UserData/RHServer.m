@@ -21,6 +21,10 @@
     
 }
 
+@property (nonatomic, strong) RHServerDeviceCount* deviceCount;
+@property (nonatomic, strong) RHServerDeviceCapacity* deviceCapacity;
+@property (nonatomic, strong) RHServerInterestLabelList* interestLabelList;
+
 @end
 
 @implementation RHServer

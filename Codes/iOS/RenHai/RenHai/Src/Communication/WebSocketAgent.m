@@ -55,7 +55,11 @@
 {
     [self closeWebSocket];
     
-    NSString* remotePath = [BASEURL_WEBSOCKET_SERVER stringByAppendingString:REMOTEPATH_SERVICE_WEBSOCKET];
+    RHProxy* proxy = _userDataModule.proxy;
+    RHServiceAddress* address = proxy.serviceAddress;
+    NSString* remotePath = address.fullAddress;
+    
+//    NSString* remotePath = [BASEURL_WEBSOCKET_SERVER stringByAppendingString:REMOTEPATH_SERVICE_WEBSOCKET];
     
     _webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:remotePath]]];
     _webSocket.delegate = self;

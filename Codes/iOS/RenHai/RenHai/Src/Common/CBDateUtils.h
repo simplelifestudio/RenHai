@@ -33,4 +33,6 @@
 
 +(NSString*) timeStringWithMilliseconds:(long long) milliseconds;
 
++(NSDate*) targetDateFromDate:(NSDate*) sourceDate sourceTimeZone:(NSTimeZone*) sourceTimeZone targetTimeZone:(NSTimeZone*) targetTimeZone;
+
 @end

@@ -122,6 +122,18 @@
     return str;
 }
 
++(NSDate*) targetDateFromDate:(NSDate*) sourceDate sourceTimeZone:(NSTimeZone*) sourceTimeZone targetTimeZone:(NSTimeZone*) targetTimeZone;
+{
+    NSInteger sourceIntervalFromGMT = [sourceTimeZone secondsFromGMT];
+    NSInteger targetIntervalFromGMT = [targetTimeZone secondsFromGMT];
+    
+    NSInteger diff = targetIntervalFromGMT - sourceIntervalFromGMT;
+    
+    NSDate* targetDate = [sourceDate dateByAddingTimeInterval:diff];
+    
+    return targetDate;
+}
+
 - (id)init
 {
     return nil;

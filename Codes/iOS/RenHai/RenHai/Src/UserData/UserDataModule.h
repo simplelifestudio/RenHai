@@ -11,12 +11,14 @@
 #import "CBModuleAbstractImpl.h"
 #import "CBSharedInstance.h"
 
+#import "RHProxy.h"
 #import "RHDevice.h"
 #import "RHServer.h"
 #import "RHBusinessSession.h"
 
 @interface UserDataModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 
+@property (atomic, strong, readonly) RHProxy* proxy;
 @property (atomic, strong, readonly) RHDevice* device;
 @property (atomic, strong, readonly) RHServer* server;
 @property (atomic, strong, readonly) RHBusinessSession* businessSession;

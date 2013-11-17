@@ -63,6 +63,12 @@
 
 "Connect_Ready" = "准备";
 "Connect_Ready_Detail" = "连接准备中...";
+"Connect_Checking" = "检测";
+"Connect_Checking_Detail" = "正在检测服务器...";
+"Connect_Checked" = "检查";
+"Connect_Checked_Detail" = "成功检测服务器";
+"Connect_CheckFailed" = "失败";
+"Connect_CheckFailed_Detail" = "无法检测服务器";
 "Connect_Connecting" = "连接";
 "Connect_Connecting_Detail" = "正在连接服务器...";
 "Connect_Connected" = "连接";
@@ -91,11 +97,11 @@
 "Connect_DefaultFirstImpressLabel" = "人海";
 
 "ChatWait_WaitForMatch" = "正在匹配";
-"ChatWait_WaitForMatch_Detail" = "茫茫人海，知音何在...";
+"ChatWait_WaitForMatch_Detail" = "茫茫人海，知音何在";
 "ChatWait_Matched" = "匹配成功";
 "ChatWait_Matched_Detail" = "发现兴趣相投的陌生人";
 "ChatWait_Cancel" = "取消匹配";
-"ChatWait_Cancel_Detail" = "取消匹配，离开人海...";
+"ChatWait_Cancel_Detail" = "取消匹配，离开人海";
 "ChatWait_Action_Cancel" = "取消";
 
 "ChatConfirm_Title" = "对方的印象卡片";

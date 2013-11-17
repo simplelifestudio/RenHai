@@ -157,7 +157,7 @@ SINGLETON(CommunicationModule)
     return flag;
 }
 
--(RHMessage*) syncSendMessage:(RHMessage*) requestMessage
+-(RHMessage*) syncSendWebSocketMessage:(RHMessage*) requestMessage
 {
     RHMessage* responseMessagge = nil;
     
@@ -170,25 +170,82 @@ SINGLETON(CommunicationModule)
     return responseMessagge;
 }
 
--(void) asyncSendMessage:(RHMessage*) message
+-(void) asyncSendWebSocketMessage:(RHMessage*) message
 {
     BOOL isConnected = [self isWebSocketConnected];
     if (isConnected)
     {
         [_webSocketCommAgent asyncMessage:message];
-    }}
+    }
+}
+
+-(RHMessage*) syncSendHttpMessage:(RHMessage *)message
+{
+    RHMessage* responseMessage = [_httpCommAgent syncMessage:message];
+    
+    return responseMessage;
+}
+
+-(void)proxyDataSyncRequest:(RHMessage*) requestMessage successCompletionBlock:(void(^)(NSDictionary* dic)) successCompletionBlock failureCompletionBlock:(void(^)()) failureCompletionBlock afterCompletionBlock:(void(^)()) afterCompletionBlock
+{
+    BOOL isSuccess = NO;
+    
+    RHMessage* responseMessage = [self syncSendHttpMessage:requestMessage];
+    
+    NSDictionary* proxyDic = nil;
+    
+    if (responseMessage.messageId == MessageId_AppDataSyncResponse)
+    {
+        NSDictionary* messageBody = responseMessage.body;
+        proxyDic = messageBody;
+        
+        isSuccess = YES;
+    }
+    else if (responseMessage.messageId == MessageId_ServerErrorResponse)
+    {
+        
+    }
+    else if (responseMessage.messageId == MessageId_ServerTimeoutResponse)
+    {
+        
+    }
+    else
+    {
+        
+    }
+    
+    if (isSuccess)
+    {
+        if (nil != successCompletionBlock)
+        {
+            successCompletionBlock(proxyDic);
+        }
+    }
+    else
+    {
+        if (nil != failureCompletionBlock)
+        {
+            failureCompletionBlock();
+        }
+    }
+    
+    if (nil != afterCompletionBlock)
+    {
+        afterCompletionBlock();
+    }
+}
 
 -(void)alohaRequest:(RHDevice*) device
 {
     RHMessage* requestMessage = [RHMessage newAlohaRequestMessage:device];
-    [self asyncSendMessage:requestMessage];
+    [self asyncSendWebSocketMessage:requestMessage];
 }
 
--(void)appDataSyncRequest:(RHMessage*) requestMessage successCompletionBlock:(void(^)(NSDictionary* deviceDic)) successCompletionBlock failureCompletionBlock:(void(^)()) failureCompletionBlock afterCompletionBlock:(void(^)()) afterCompletionBlock
+-(void)appDataSyncRequest:(RHMessage*) requestMessage successCompletionBlock:(void(^)(NSDictionary* dic)) successCompletionBlock failureCompletionBlock:(void(^)()) failureCompletionBlock afterCompletionBlock:(void(^)()) afterCompletionBlock
 {
     BOOL isSuccess = NO;
     
-    RHMessage* responseMessage = [self syncSendMessage:requestMessage];
+    RHMessage* responseMessage = [self syncSendWebSocketMessage:requestMessage];
     
     NSDictionary* deviceDic = nil;
     
@@ -233,11 +290,11 @@ SINGLETON(CommunicationModule)
     }
 }
 
--(void)serverDataSyncRequest:(RHMessage*) requestMessage successCompletionBlock:(void(^)(NSDictionary* serverDic)) successCompletionBlock failureCompletionBlock:(void(^)()) failureCompletionBlock afterCompletionBlock:(void(^)()) afterCompletionBlock
+-(void)serverDataSyncRequest:(RHMessage*) requestMessage successCompletionBlock:(void(^)(NSDictionary* dic)) successCompletionBlock failureCompletionBlock:(void(^)()) failureCompletionBlock afterCompletionBlock:(void(^)()) afterCompletionBlock
 {
     BOOL isSuccess = NO;
     
-    RHMessage* responseMessage = [self syncSendMessage:requestMessage];
+    RHMessage* responseMessage = [self syncSendWebSocketMessage:requestMessage];
     
     NSDictionary* serverDic = nil;
     
@@ -286,7 +343,7 @@ SINGLETON(CommunicationModule)
 {
     BOOL isSuccess = NO;
     
-    RHMessage* responseMessage = [self syncSendMessage:requestMessage];
+    RHMessage* responseMessage = [self syncSendWebSocketMessage:requestMessage];
     
     if (responseMessage.messageId == MessageId_BusinessSessionResponse)
     {
