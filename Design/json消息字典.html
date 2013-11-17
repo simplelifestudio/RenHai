@@ -115,6 +115,10 @@ sup {
 
 <h3>4. ServerResponse类</h3>
 
+<h3>5. ProxyRequest类</h3>
+
+<h3>6. ProxyResponse类</h3>
+
 <h1>消息列表 MessageId</h1>
 
 <p>消息编号即代码枚举值，且编号的第一位映射了消息分类编号</p>
@@ -165,6 +169,18 @@ sup {
 
 <h3>405. 业务会话响应 BusinessSessionResponse</h3>
 
+<h2>ProxyRequest类消息</h2>
+
+<p>App主动发往Proxy的消息</p>
+
+<h3>500. ProxyDataSyncRequest</h3>
+
+<h2>ProxyResponse类消息</h2>
+
+<p>Proxy接收到App消息后，向App回应的消息</p>
+
+<h3>600. ProxyDataSyncResponse</h3>
+
 <h1>消息配对</h1>
 
 <h2>100. 测试请求 AlohaRequest &lt;--> 402. 测试响应 AlohaResponse</h2>
@@ -176,6 +192,8 @@ sup {
 <h2>103. 业务会话请求 BusinessSessionRequest &lt;--> 405. 业务会话响应 BusinessSessionResponse</h2>
 
 <h2>300. 业务会话通知 BusinessSessionNotification &lt;--> 202. 业务会话通知响应 BusinessSessionNotificationResponse</h2>
+
+<h2>500. 代理数据同步请求 ProxyDataSyncRequest &lt;--> 600. 代理数据同步响应 ProxyDataSyncRequest</h2>
 
 <h1>数据格式</h1>
 
@@ -224,6 +242,12 @@ sup {
 <p>正常:1/禁聊:0</p>
 
 <h2>7. 日期时间格式 2013-09-11 16:05:38</h2>
+
+<h2>8. Server服务状态</h2>
+
+<h3>Maintenance: 0</h3>
+
+<h3>Normal: 1</h3>
 
 <h1>数据类型</h1>
 
@@ -437,6 +461,27 @@ sup {
         "apiKey":null,
         "sessionId":null,
         "token":null
+    }
+}
+</code></pre>
+
+
+<h3>4. Proxy数据结构体</h3>
+
+<pre><code>
+{
+    "serviceStatus":null,
+    "serviceAddress":
+    {
+        "ip":null,
+        "port":null,
+        "path":null 
+    },
+    "statusPeriod":
+    {
+        "timeZone":null,
+        "beginTime":null,
+        "endTime":null
     }
 }
 </code></pre>

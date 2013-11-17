@@ -8,6 +8,8 @@
 ###2. AppResponse类
 ###3. ServerNotification类
 ###4. ServerResponse类
+###5. ProxyRequest类
+###6. ProxyResponse类
 
 #消息列表 MessageId
 消息编号即代码枚举值，且编号的第一位映射了消息分类编号
@@ -39,12 +41,21 @@ Server接收到App消息后，向App回应的消息
 ###404. Server数据同步响应 ServerDataSyncResponse
 ###405. 业务会话响应 BusinessSessionResponse
 
+##ProxyRequest类消息
+App主动发往Proxy的消息
+###500. ProxyDataSyncRequest
+
+##ProxyResponse类消息
+Proxy接收到App消息后，向App回应的消息
+###600. ProxyDataSyncResponse
+
 #消息配对
 ##100. 测试请求 AlohaRequest <--> 402. 测试响应 AlohaResponse
 ##101. App数据同步请求 AppDataSyncRequest <--> 403. App数据同步响应
 ##102. Server数据同步请求 ServerDataSyncRequest <--> 404. Server数据同步响应 ServerDataSyncResponse
 ##103. 业务会话请求 BusinessSessionRequest <--> 405. 业务会话响应 BusinessSessionResponse
 ##300. 业务会话通知 BusinessSessionNotification <--> 202. 业务会话通知响应 BusinessSessionNotificationResponse
+##500. 代理数据同步请求 ProxyDataSyncRequest <--> 600. 代理数据同步响应 ProxyDataSyncRequest
 
 #数据格式
 ##1. 成功:1/失败:0
@@ -72,6 +83,10 @@ Random:1, Interest:2
 ##6. Profile服务状态 
 正常:1/禁聊:0
 ##7. 日期时间格式 2013-09-11 16:05:38
+
+##8. Server服务状态
+###Maintenance: 0
+###Normal: 1
 
 #数据类型
 ##1. null用来指代所有数据类型的空值
@@ -270,6 +285,25 @@ App与Server通过消息交互完成的数据操作
 		"apiKey":null,
 		"sessionId":null,
 		"token":null
+	}
+}
+</code></pre>
+
+###4. Proxy数据结构体
+<pre><code>
+{
+	"serviceStatus":null,
+	"serviceAddress":
+	{
+		"ip":null,
+		"port":null,
+		"path":null	
+	},
+	"statusPeriod":
+	{
+		"timeZone":null,
+		"beginTime":null,
+		"endTime":null
 	}
 }
 </code></pre>
