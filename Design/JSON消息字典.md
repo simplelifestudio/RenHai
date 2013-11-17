@@ -88,6 +88,8 @@ Random:1, Interest:2
 ###Maintenance: 0
 ###Normal: 1
 
+##9. 时区格式 GMT+0800
+
 #数据类型
 ##1. null用来指代所有数据类型的空值
 ##2. 数字用Integer(Java)/NSInteger(Objective-C)来表示
