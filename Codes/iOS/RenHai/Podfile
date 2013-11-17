@@ -11,6 +11,7 @@ pod 'CocoaLumberjack', '~> 1.6.2'
 pod 'OBShapedButton', '~> 1.0.2'
 pod 'DraggableCollectionView', '~> 0.1'
 pod 'CWPopup', '~> 1.2.5'
+pod 'AutoScrollLabel', '~> 0.2.1'
 
 target :RenHaiGHUnitTest do
         pod 'GHUnitIOS', '~> 0.5.8'
