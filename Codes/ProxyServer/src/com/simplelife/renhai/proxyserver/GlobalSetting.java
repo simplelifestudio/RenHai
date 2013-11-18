@@ -29,7 +29,7 @@ import com.simplelife.renhai.proxyserver.Consts.ServiceStatus;
 public class GlobalSetting
 {
 	public final static GlobalSetting instance = new GlobalSetting();
-	public final static String EncryptKey = "20120801";
+	public final static String EncryptKey = "20130801";
 	
 	private final String settingFileName = "setting.json";
 	private long lastFileDate = 0;
