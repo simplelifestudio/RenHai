@@ -330,7 +330,24 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	
     	JSONObject obj = new JSONObject();
     	message.addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
-    	obj.put(JSONKey.JsonEnvelope, message.toJSONObject());
+    	
+    	if (!GlobalSetting.BusinessSetting.Encrypt)
+    	{
+    		obj.put(JSONKey.JsonEnvelope, message.toJSONObject());
+    	}
+    	else
+    	{
+    		String tmpStr = JSON.toJSONString(message.toJSONObject(), true);
+    		try
+			{
+				tmpStr = SecurityUtils.encryptByDESAndEncodeByBase64(tmpStr, GlobalSetting.BusinessSetting.EncryptKey);
+				obj.put(JSONKey.JsonEnvelope, tmpStr);
+			}
+			catch (Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+    	}
     	
     	message.addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
     	String strMessage = JSON.toJSONString(obj, SerializerFeature.WriteMapNullValue);
