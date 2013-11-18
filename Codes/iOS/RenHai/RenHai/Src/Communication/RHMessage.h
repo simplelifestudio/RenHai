@@ -95,6 +95,17 @@
  Server Data Struct
  */
 
+// Proxy
+#define MESSAGE_KEY_SERVICESTATUS @"serviceStatus"
+#define MESSAGE_KEY_SERVICEADDRESS @"serviceAddress"
+#define MESSAGE_KEY_IP @"ip"
+#define MESSAGE_KEY_PORT @"port"
+#define MESSAGE_KEY_PATH @"path"
+#define MESSAGE_KEY_STATUSPERIOD @"statusPeriod"
+#define MESSAGE_KEY_TIMEZONE @"timeZone"
+#define MESSAGE_KEY_BEGINTIME @"beginTime"
+#define MESSAGE_KEY_ENDTIME @"endTime"
+
 // DeviceCount
 #define MESSAGE_KEY_DEVICECOUNT @"deviceCount"
 #define MESSAGE_KEY_ONLINE @"online"
@@ -141,7 +152,9 @@ typedef enum
     MessageType_AppRequest = 1,
     MessageType_AppResponse = 2,
     MessageType_ServerNotification = 3,
-    MessageType_ServerResponse = 4
+    MessageType_ServerResponse = 4,
+    MessageType_ProxyRequest = 5,
+    MessageType_ProxyResponse = 6
 }
 RHMessageType;
 
@@ -168,6 +181,10 @@ typedef enum
     MessageId_AppDataSyncResponse = 403,
     MessageId_ServerDataSyncResponse = 404,
     MessageId_BusinessSessionResponse = 405,
+    // Message_Type_ProxyRequest
+    MessageId_ProxyDataSyncRequest = 500,
+    // Message_Type_ProxyResponse
+    MessageId_ProxyDataSyncResponse = 600
 }
 RHMessageId;
 
@@ -239,6 +256,13 @@ typedef enum
 }
 ServerDataSyncRequestType;
 
+typedef enum
+{
+    ServerServiceStatus_Maintenance = 0,
+    ServerServiceStatus_Normal = 1
+}
+ServerServiceStatus;
+
 @interface RHMessage : NSObject <CBJSONable>
 
 // MessageNeedEncrypt flag should be same with server side
@@ -255,6 +279,8 @@ ServerDataSyncRequestType;
 +(BOOL) isLegalMessage:(RHMessage*) message;
 
 +(NSDictionary*) constructMessageHeader:(RHMessageType) messageType messageId:(RHMessageId) messageId messageSn:(NSString*) messageSn deviceId:(NSInteger) deviceId deviceSn:(NSString*) deviceSn;
+
++(RHMessage*) newProxyDataSyncRequest;
 
 +(RHMessage*) newAlohaRequestMessage:(RHDevice*) device;
 

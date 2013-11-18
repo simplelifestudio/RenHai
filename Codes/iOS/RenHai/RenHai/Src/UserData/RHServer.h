@@ -16,8 +16,8 @@
 
 @interface RHServer : NSObject <CBJSONable, NSCopying, NSMutableCopying>
 
-@property (nonatomic, strong) RHServerDeviceCount* deviceCount;
-@property (nonatomic, strong) RHServerDeviceCapacity* deviceCapacity;
-@property (nonatomic, strong) RHServerInterestLabelList* interestLabelList;
+@property (nonatomic, strong, readonly) RHServerDeviceCount* deviceCount;
+@property (nonatomic, strong, readonly) RHServerDeviceCapacity* deviceCapacity;
+@property (nonatomic, strong, readonly) RHServerInterestLabelList* interestLabelList;
 
 @end

@@ -25,6 +25,9 @@
 typedef enum
 {
     ConnectStatus_Ready = 0,
+    ConnectStatus_ProxySyncing,
+    ConnectStatus_ProxySynced,
+    ConnectStatus_ProxySyncFailed,
     ConnectStatus_Connecting,
     ConnectStatus_Connected,
     ConnectStatus_ConnectFailed,
@@ -56,11 +59,13 @@ ConnectStatus;
     BOOL _isViewControllerVisible;
  
     NSOperationQueue* _operationQueue;
+    volatile BOOL _isProxyDataSyncSuccess;
     volatile BOOL _isConnectServerSuccess;
     volatile BOOL _isAppDataSyncSuccess;
     volatile BOOL _isAppDataUpdateNecessary;
     volatile BOOL _isAppDataUpdateSuccess;
     volatile BOOL _isServerDataSyncSuccess;
+    NSInvocationOperation* _proxyDataSyncOperation;
     NSInvocationOperation* _connectOperaton;
     NSInvocationOperation* _appDataSyncOperation;
     NSInvocationOperation* _serverSyncOperation;
@@ -274,6 +279,27 @@ ConnectStatus;
                 isTextClear = YES;
                 break;
             }
+            case ConnectStatus_ProxySyncing:
+            {
+                infoText = NSLocalizedString(@"Connect_Checking", nil);
+                infoDetailText = NSLocalizedString(@"Connect_Checking_Detail", nil);
+                isActionButtonHide = YES;
+                break;
+            }
+            case ConnectStatus_ProxySynced:
+            {
+                infoText = NSLocalizedString(@"Connect_Checked", nil);
+                infoDetailText = NSLocalizedString(@"Connect_Checked_Detail", nil);
+                isActionButtonHide = YES;
+                break;
+            }
+            case ConnectStatus_ProxySyncFailed:
+            {
+                infoText = NSLocalizedString(@"Connect_CheckFailed", nil);
+                infoDetailText = NSLocalizedString(@"Connect_CheckFailed_Detail", nil);
+                isActionButtonHide = YES;
+                break;
+            }
             case ConnectStatus_Connecting:
             {
                 infoText = NSLocalizedString(@"Connect_Connecting", nil);
@@ -398,10 +424,47 @@ ConnectStatus;
     }
 }
 
-- (void)_connectServer
+- (void)_remoteProxyDataSync
 {
     [self _resetInstance];
     
+    [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncing];
+    
+    RHMessage* requestMessage = [RHMessage newProxyDataSyncRequest];
+    [_commModule proxyDataSyncRequest:requestMessage
+               successCompletionBlock:^(NSDictionary* proxyDic){
+                   RHProxy* proxy = _userDataModule.proxy;
+                   
+                   @try
+                   {
+                       [proxy fromJSONObject:proxyDic];
+                       
+                       [self _updateUIWithConnectStatus:ConnectStatus_ProxySynced];
+                       
+                       _isProxyDataSyncSuccess = YES;
+                   }
+                   @catch (NSException *exception)
+                   {
+                       DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+                       
+                       [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
+                       
+                       _isProxyDataSyncSuccess = NO;
+                   }
+                   @finally
+                   {
+                       
+                   }
+               }
+               failureCompletionBlock:^(){
+                   [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
+               }
+               afterCompletionBlock:nil
+     ];
+}
+
+- (void)_remoteConnectServer
+{
     [self _updateUIWithConnectStatus:ConnectStatus_Connecting];
     
     _isConnectServerSuccess = [_commModule connectWebSocket];
@@ -417,7 +480,7 @@ ConnectStatus;
     }
 }
 
-- (void)_appDataSync
+- (void)_remoteAppDataSync
 {
     if (!_isConnectServerSuccess)
     {
@@ -469,7 +532,7 @@ ConnectStatus;
      ];
 }
 
-- (void)_appDataUpdate
+- (void)_remoteAppDataUpdate
 {
     if (!_isAppDataSyncSuccess)
     {
@@ -527,7 +590,7 @@ ConnectStatus;
      ];
 }
 
-- (void)_serverDataSync
+- (void)_remoteServerDataSync
 {
     if (!_isAppDataUpdateSuccess)
     {
@@ -578,6 +641,7 @@ ConnectStatus;
 {
     [self _clearInfoTextView];
     
+    _isProxyDataSyncSuccess = NO;
     _isConnectServerSuccess = NO;
     _isAppDataSyncSuccess = NO;
     _isAppDataUpdateNecessary = NO;
@@ -585,17 +649,19 @@ ConnectStatus;
     _isServerDataSyncSuccess = NO;
     
     _timerStartOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_timerStart) object:nil];
-    _connectOperaton = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_connectServer) object:nil];
-    _appDataSyncOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_appDataSync) object:nil];
-    _appDataUpdateOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_appDataUpdate) object:nil];
-    _serverSyncOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_serverDataSync) object:nil];
+    _proxyDataSyncOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_remoteProxyDataSync) object:nil];
+    _connectOperaton = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_remoteConnectServer) object:nil];
+    _appDataSyncOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_remoteAppDataSync) object:nil];
+    _appDataUpdateOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_remoteAppDataUpdate) object:nil];
+    _serverSyncOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_remoteServerDataSync) object:nil];
     _timerStopOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_timerStop) object:nil];
     
     [_timerStopOperation addDependency:_serverSyncOperation];
     [_serverSyncOperation addDependency:_appDataUpdateOperation];
     [_appDataUpdateOperation addDependency:_appDataSyncOperation];
     [_appDataSyncOperation addDependency:_connectOperaton];
-    [_connectOperaton addDependency:_timerStartOperation];
+    [_connectOperaton addDependency:_proxyDataSyncOperation];
+    [_proxyDataSyncOperation addDependency:_timerStartOperation];
     
     _operationQueue = [[NSOperationQueue alloc] init];
     _operationQueue.maxConcurrentOperationCount = 1;
@@ -604,6 +670,7 @@ ConnectStatus;
     [_operationQueue addOperation:_appDataUpdateOperation];
     [_operationQueue addOperation:_appDataSyncOperation];
     [_operationQueue addOperation:_connectOperaton];
+    [_operationQueue addOperation:_proxyDataSyncOperation];
     [_operationQueue addOperation:_timerStartOperation];
 }
 

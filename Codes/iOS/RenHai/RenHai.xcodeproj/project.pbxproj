@@ -195,7 +195,6 @@
 		C59E2C1817D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
-		CD1C4A9A17FAB763009642D3 /* libPods-RenHaiGHUnitTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD1C4A9917FAB763009642D3 /* libPods-RenHaiGHUnitTest.a */; };
 		CD1DFB0918001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0A18001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */; };
@@ -225,6 +224,14 @@
 		CD5633B31827631600D2A9A6 /* close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD5633AF1827631600D2A9A6 /* close@2x.png */; };
 		CD5633B61827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5633B51827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.m */; };
 		CD5633B71827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5633B51827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.m */; };
+		CD5D6CF318388A94002DEDAF /* RHProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CF218388A94002DEDAF /* RHProxy.m */; };
+		CD5D6CF418388A94002DEDAF /* RHProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CF218388A94002DEDAF /* RHProxy.m */; };
+		CD5D6CF718389224002DEDAF /* RHServiceAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CF618389224002DEDAF /* RHServiceAddress.m */; };
+		CD5D6CF818389224002DEDAF /* RHServiceAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CF618389224002DEDAF /* RHServiceAddress.m */; };
+		CD5D6CFB1838923D002DEDAF /* RHStatusPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CFA1838923D002DEDAF /* RHStatusPeriod.m */; };
+		CD5D6CFC1838923D002DEDAF /* RHStatusPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CFA1838923D002DEDAF /* RHStatusPeriod.m */; };
+		CD5D6CFF18389382002DEDAF /* OCBasicTest.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CFE18389382002DEDAF /* OCBasicTest.m */; };
+		CD5D6D031838949B002DEDAF /* libPods-RenHaiGHUnitTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD5D6D021838949B002DEDAF /* libPods-RenHaiGHUnitTest.a */; };
 		CD734AA617E83E3000EF6CD4 /* help_01.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA017E83E3000EF6CD4 /* help_01.JPG */; };
 		CD734AA717E83E3000EF6CD4 /* help_02.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA117E83E3000EF6CD4 /* help_02.JPG */; };
 		CD734AA817E83E3000EF6CD4 /* help_03.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA217E83E3000EF6CD4 /* help_03.JPG */; };
@@ -484,6 +491,17 @@
 		CD5633AF1827631600D2A9A6 /* close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "close@2x.png"; sourceTree = "<group>"; };
 		CD5633B41827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatAssessAddImpressLabelsHeaderView_iPhone.h; sourceTree = "<group>"; };
 		CD5633B51827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatAssessAddImpressLabelsHeaderView_iPhone.m; sourceTree = "<group>"; };
+		CD5D6CF118388A94002DEDAF /* RHProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHProxy.h; sourceTree = "<group>"; };
+		CD5D6CF218388A94002DEDAF /* RHProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHProxy.m; sourceTree = "<group>"; };
+		CD5D6CF518389224002DEDAF /* RHServiceAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServiceAddress.h; sourceTree = "<group>"; };
+		CD5D6CF618389224002DEDAF /* RHServiceAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServiceAddress.m; sourceTree = "<group>"; };
+		CD5D6CF91838923D002DEDAF /* RHStatusPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHStatusPeriod.h; sourceTree = "<group>"; };
+		CD5D6CFA1838923D002DEDAF /* RHStatusPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHStatusPeriod.m; sourceTree = "<group>"; };
+		CD5D6CFD18389382002DEDAF /* OCBasicTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCBasicTest.h; sourceTree = "<group>"; };
+		CD5D6CFE18389382002DEDAF /* OCBasicTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCBasicTest.m; sourceTree = "<group>"; };
+		CD5D6D0018389471002DEDAF /* libPods.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libPods.a; path = "Pods/build/Debug-iphoneos/libPods.a"; sourceTree = "<group>"; };
+		CD5D6D021838949B002DEDAF /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "libPods-RenHaiGHUnitTest.a"; path = "Pods/build/Debug-iphoneos/libPods-RenHaiGHUnitTest.a"; sourceTree = "<group>"; };
+		CD5D6D04183894A8002DEDAF /* libPods-RenHaiGHUnitTest-OpenTokSDK-WebRTC.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "libPods-RenHaiGHUnitTest-OpenTokSDK-WebRTC.a"; path = "Pods/build/Release-iphoneos/libPods-RenHaiGHUnitTest-OpenTokSDK-WebRTC.a"; sourceTree = "<group>"; };
 		CD734AA017E83E3000EF6CD4 /* help_01.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_01.JPG; sourceTree = "<group>"; };
 		CD734AA117E83E3000EF6CD4 /* help_02.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_02.JPG; sourceTree = "<group>"; };
 		CD734AA217E83E3000EF6CD4 /* help_03.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = help_03.JPG; sourceTree = "<group>"; };
@@ -544,7 +562,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CD1C4A9A17FAB763009642D3 /* libPods-RenHaiGHUnitTest.a in Frameworks */,
+				CD5D6D031838949B002DEDAF /* libPods-RenHaiGHUnitTest.a in Frameworks */,
 				C593C4A217D4831200C26367 /* CoreLocation.framework in Frameworks */,
 				C593C4A117D4830B00C26367 /* MapKit.framework in Frameworks */,
 				C55B442217CF5992009BB21B /* UIKit.framework in Frameworks */,
@@ -580,6 +598,9 @@
 		C55B43EA17CF580A009BB21B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CD5D6D04183894A8002DEDAF /* libPods-RenHaiGHUnitTest-OpenTokSDK-WebRTC.a */,
+				CD5D6D021838949B002DEDAF /* libPods-RenHaiGHUnitTest.a */,
+				CD5D6D0018389471002DEDAF /* libPods.a */,
 				CD1C4A9917FAB763009642D3 /* libPods-RenHaiGHUnitTest.a */,
 				C593C49D17D482C400C26367 /* CoreLocation.framework */,
 				C593C49B17D482B300C26367 /* MapKit.framework */,
@@ -726,6 +747,8 @@
 				C54DC8DC17DC497000BBD498 /* TestTitle.m */,
 				C54DC8DE17DC4A4500BBD498 /* TestObj.h */,
 				C54DC8DF17DC4A4500BBD498 /* TestObj.m */,
+				CD5D6CFD18389382002DEDAF /* OCBasicTest.h */,
+				CD5D6CFE18389382002DEDAF /* OCBasicTest.m */,
 			);
 			path = TestCases;
 			sourceTree = "<group>";
@@ -934,6 +957,12 @@
 			children = (
 				C593C41D17D3258600C26367 /* UserDataModule.h */,
 				C593C41E17D3258600C26367 /* UserDataModule.m */,
+				CD5D6CF118388A94002DEDAF /* RHProxy.h */,
+				CD5D6CF218388A94002DEDAF /* RHProxy.m */,
+				CD5D6CF518389224002DEDAF /* RHServiceAddress.h */,
+				CD5D6CF618389224002DEDAF /* RHServiceAddress.m */,
+				CD5D6CF91838923D002DEDAF /* RHStatusPeriod.h */,
+				CD5D6CFA1838923D002DEDAF /* RHStatusPeriod.m */,
 				C593C47B17D46C1D00C26367 /* RHDevice.h */,
 				C593C47C17D46C1D00C26367 /* RHDevice.m */,
 				C593C47F17D46C2700C26367 /* RHDeviceCard.h */,
@@ -1262,6 +1291,7 @@
 				C55B43F817CF580A009BB21B /* main.m in Sources */,
 				C55B445117CF5C14009BB21B /* GTMBase64.m in Sources */,
 				C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */,
+				CD5D6CFB1838923D002DEDAF /* RHStatusPeriod.m in Sources */,
 				C50505C017D2BD4800DB6589 /* CBAppUtils.m in Sources */,
 				CDBE9E2F1834D74800005405 /* OpenTokAgent.m in Sources */,
 				C50505C217D2BD4800DB6589 /* CBDateUtils.m in Sources */,
@@ -1273,6 +1303,7 @@
 				C50505CC17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */,
 				CDC0518A1802E055006158B8 /* RHServer.m in Sources */,
 				C50505CE17D2BD4800DB6589 /* CBModuleManager.m in Sources */,
+				CD5D6CF718389224002DEDAF /* RHServiceAddress.m in Sources */,
 				C50505D017D2BD4800DB6589 /* CBNetworkUtils.m in Sources */,
 				C50505D217D2BD4800DB6589 /* CBPathUtils.m in Sources */,
 				CDC0518E1802E311006158B8 /* RHServerDeviceCapacity.m in Sources */,
@@ -1304,6 +1335,7 @@
 				C593C45317D32A8300C26367 /* ChatWaitViewController_iPhone.m in Sources */,
 				C593C45717D32A9700C26367 /* ChatConfirmViewController_iPhone.m in Sources */,
 				CD5101A1182A856600E188A3 /* RHLabelManageViewController_iPhone.m in Sources */,
+				CD5D6CF318388A94002DEDAF /* RHProxy.m in Sources */,
 				CD34DCAF180A7BC5003BBE06 /* ChatWizardController.m in Sources */,
 				C593C45F17D32AC800C26367 /* ChatAssessViewController_iPhone.m in Sources */,
 				C593C46317D32ADE00C26367 /* ChatVideoViewController_iPhone.m in Sources */,
@@ -1360,6 +1392,8 @@
 				C50505C917D2BD4800DB6589 /* CBHUDAgent.m in Sources */,
 				C50505CB17D2BD4800DB6589 /* CBMathUtils.m in Sources */,
 				CD3C04E8181FD1C0002B19A3 /* BusinessStatus.m in Sources */,
+				CD5D6CF418388A94002DEDAF /* RHProxy.m in Sources */,
+				CD5D6CFC1838923D002DEDAF /* RHStatusPeriod.m in Sources */,
 				C50505CD17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */,
 				CD736CEF1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */,
 				C50505CF17D2BD4800DB6589 /* CBModuleManager.m in Sources */,
@@ -1369,6 +1403,7 @@
 				CDC0518F1802E311006158B8 /* RHServerDeviceCapacity.m in Sources */,
 				C50505D717D2BD4800DB6589 /* CBStringUtils.m in Sources */,
 				C50505D917D2BD4800DB6589 /* CBUIUtils.m in Sources */,
+				CD5D6CF818389224002DEDAF /* RHServiceAddress.m in Sources */,
 				C50505DB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
 				CD5101A2182A856600E188A3 /* RHLabelManageViewController_iPhone.m in Sources */,
 				CD26650D17F41DD20070934F /* UserDataModuleTest.m in Sources */,
@@ -1381,6 +1416,7 @@
 				CD34DCB0180A7BC5003BBE06 /* ChatWizardController.m in Sources */,
 				CDBE9E261834547500005405 /* RHWebRTC.m in Sources */,
 				C593C41C17D3244000C26367 /* AppDataModule.m in Sources */,
+				CD5D6CFF18389382002DEDAF /* OCBasicTest.m in Sources */,
 				C593C42017D3258600C26367 /* UserDataModule.m in Sources */,
 				C593C42417D3259600C26367 /* WebRTCModule.m in Sources */,
 				C593C42C17D3284600C26367 /* SplashViewController_iPhone.m in Sources */,

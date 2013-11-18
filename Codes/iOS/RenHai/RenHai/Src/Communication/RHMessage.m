@@ -215,6 +215,16 @@ static BOOL s_messageEncrypted;
     return header;
 }
 
++(RHMessage*) newProxyDataSyncRequest
+{
+    NSString* messageSn = [RHMessage generateMessageSn];
+    NSDictionary* messageHeader = [RHMessage constructMessageHeader:MessageType_ProxyRequest messageId:MessageId_ProxyDataSyncRequest messageSn:messageSn deviceId:0 deviceSn:nil];
+    
+    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:nil enveloped:YES];
+    
+    return message;
+}
+
 +(RHMessage*) newAlohaRequestMessage:(RHDevice*) device;
 {
     NSAssert(nil != device, @"Device can not be null!");
