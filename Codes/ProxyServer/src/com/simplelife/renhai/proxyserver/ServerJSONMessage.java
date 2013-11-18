@@ -64,6 +64,7 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage
     	}
     	else
     	{
+    		//logger.debug("request.getMessageSn():" + request.getMessageSn());
     		addToHeader(JSONKey.MessageSn, request.getMessageSn());
     	}
     }
@@ -114,7 +115,11 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage
     @Override
     public void run()
     {
-    	out.write(JSON.toJSONString(jsonObject, true));
+    	JSONObject whole = new JSONObject();
+    	whole.put(JSONKey.JsonEnvelope, jsonObject);
+    	String response = JSON.toJSONString(whole, true);
+    	logger.debug("Send to client:\n" + response);
+    	out.write(response);
     }
 
     @Override

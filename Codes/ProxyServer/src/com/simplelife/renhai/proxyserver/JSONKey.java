@@ -37,4 +37,6 @@ public class JSONKey
 	public final static String EndTime						= "endTime";
 	
 	public final static String JsonEnvelope					= "jsonEnvelope";
+	public final static String Encrypt						= "encrypt";
+	public final static String Protocol						= "protocol";
 }

@@ -31,81 +31,86 @@ public class ProxyDataSyncRequest extends AppJSONMessage
 	@Override
 	public MessageType getMessageType()
 	{
-		return null;
-	}
-	
-	@Override
-	public String getMessageSn()
-	{
-		return null;
+		return MessageType.AppRequest;
 	}
 	
 	@Override
 	public MessageId getMessageId()
 	{
-		return null;
+		return MessageId.ProxyDataSyncRequest;
 	}
 	
 	@Override
 	public boolean checkJSONRequest()
 	{
-		return false;
+		return true;
 	}
 
+	private JSONObject getAddressJSON()
+	{
+		JSONObject addrObj = new JSONObject();
+		addrObj.put(JSONKey.Ip, GlobalSetting.instance.getIpAddress());
+		addrObj.put(JSONKey.Port, GlobalSetting.instance.getPort());
+		addrObj.put(JSONKey.Path, GlobalSetting.instance.getPath());
+		addrObj.put(JSONKey.Protocol, GlobalSetting.instance.getProtocol());
+		return addrObj;
+	}
+	
+	private JSONObject getServiceStatus()
+	{
+		JSONObject statusObj = new JSONObject();
+		statusObj.put(JSONKey.TimeZone, GlobalSetting.instance.getTimeZone());
+		statusObj.put(JSONKey.BeginTime, GlobalSetting.instance.getBeginTime());
+		statusObj.put(JSONKey.EndTime, GlobalSetting.instance.getEndTime());
+		return statusObj;
+	}
+	
 	@Override
 	public void doRun()
 	{
-		ServiceStatus status = GlobalSetting.instance.getServiceStatus();
+		logger.debug("Start to execute ProxyDataSyncRequest");
 		
-		ProxyDataSyncResponse response = new ProxyDataSyncResponse(this, this.out);
-		
-		Date begin = DateUtil.getDateByTimeZoneDateString(GlobalSetting.instance.getBeginTime());
-		Date end = DateUtil.getDateByTimeZoneDateString(GlobalSetting.instance.getEndTime());
-		
-		if (status == ServiceStatus.Normal || System.currentTimeMillis() > end.getTime())
+		try
 		{
-			// Normal status, only provide serviceAddress
-			response.addToBody(JSONKey.ServiceStatus, ServiceStatus.Normal.getValue());
+			ServiceStatus status = GlobalSetting.instance.getServiceStatus();
 			
-			JSONObject addrObj = new JSONObject();
-			addrObj.put(JSONKey.Ip, GlobalSetting.instance.getIpAddress());
-			addrObj.put(JSONKey.Port, GlobalSetting.instance.getPort());
-			addrObj.put(JSONKey.Path, GlobalSetting.instance.getPath());
-			response.addToBody(JSONKey.ServiceAddress, addrObj);
+			ProxyDataSyncResponse response = new ProxyDataSyncResponse(this, this.out);
+			String zone = GlobalSetting.instance.getTimeZone();
+			Date begin = DateUtil.getDateByTimeZoneDateString(GlobalSetting.instance.getBeginTime(), zone);
+			Date end = DateUtil.getDateByTimeZoneDateString(GlobalSetting.instance.getEndTime(), zone);
 			
-			response.addToBody(JSONKey.StatusPeriod, null);
-		}
-		else
-		{
-			if (System.currentTimeMillis() < begin.getTime())
+			if (status == ServiceStatus.Normal || System.currentTimeMillis() > end.getTime())
 			{
-				// to be maintained
-				response.addToBody(JSONKey.ServiceStatus, ServiceStatus.Maintenance.getValue());
-				JSONObject addrObj = new JSONObject();
-				addrObj.put(JSONKey.Ip, GlobalSetting.instance.getIpAddress());
-				addrObj.put(JSONKey.Port, GlobalSetting.instance.getPort());
-				addrObj.put(JSONKey.Path, GlobalSetting.instance.getPath());
-				response.addToBody(JSONKey.ServiceAddress, addrObj);
-				
-				JSONObject statusObj = new JSONObject();
-				statusObj.put(JSONKey.BeginTime, GlobalSetting.instance.getBeginTime());
-				statusObj.put(JSONKey.EndTime, GlobalSetting.instance.getEndTime());
-				response.addToBody(JSONKey.StatusPeriod, statusObj);
+				// Normal status, only provide serviceAddress
+				response.addToBody(JSONKey.ServiceStatus, ServiceStatus.Normal.getValue());
+				response.addToBody(JSONKey.ServiceAddress, getAddressJSON());
+				response.addToBody(JSONKey.StatusPeriod, null);
 			}
 			else
 			{
-				// under maintenance
-				response.addToBody(JSONKey.ServiceStatus, ServiceStatus.Maintenance.getValue());
-				response.addToBody(JSONKey.ServiceAddress, null);
-				
-				JSONObject statusObj = new JSONObject();
-				statusObj.put(JSONKey.BeginTime, GlobalSetting.instance.getBeginTime());
-				statusObj.put(JSONKey.EndTime, GlobalSetting.instance.getEndTime());
-				response.addToBody(JSONKey.StatusPeriod, statusObj);
+				if (System.currentTimeMillis() < begin.getTime())
+				{
+					// to be maintained
+					response.addToBody(JSONKey.ServiceStatus, ServiceStatus.Maintenance.getValue());
+					response.addToBody(JSONKey.ServiceAddress, getAddressJSON());
+					response.addToBody(JSONKey.StatusPeriod, getServiceStatus());
+				}
+				else
+				{
+					// under maintenance
+					response.addToBody(JSONKey.ServiceStatus, ServiceStatus.Maintenance.getValue());
+					response.addToBody(JSONKey.ServiceAddress, null);
+					response.addToBody(JSONKey.StatusPeriod, getServiceStatus());
+				}
 			}
+			
+			response.run();
 		}
-		
-		response.run();
+		catch(Exception e)
+		{
+			FileLogger.printStackTrace(e);
+			return;
+		}
 	}
 	
 }

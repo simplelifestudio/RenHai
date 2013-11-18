@@ -33,19 +33,22 @@ public class DateUtil
 		return (int) (System.currentTimeMillis() % 1000);
 	}
 	
-	public static Date getDateByTimeZoneDateString(String dateString)
+	public static Date getDateByTimeZoneDateString(String dateString, String timeZone)
 	{
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
-		Date date = null;
+		
 		try
 		{
-			date = sdf.parse(dateString);
+			TimeZone zone = TimeZone.getTimeZone(timeZone);
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			sdf.setTimeZone(zone);
+			Date date = sdf.parse(dateString);
+			return date;
 		}
 		catch(Exception e)
 		{
 			FileLogger.printStackTrace(e);
 		}
-		return date;
+		return null;
 	}
 	
 	public static String getDateStringByLongValue(long dateInMilliSeconds)

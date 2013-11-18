@@ -29,6 +29,8 @@ import com.simplelife.renhai.proxyserver.Consts.ServiceStatus;
 public class GlobalSetting
 {
 	public final static GlobalSetting instance = new GlobalSetting();
+	public final static String EncryptKey = "20120801";
+	
 	private final String settingFileName = "setting.json";
 	private long lastFileDate = 0;
 	private Logger logger = LoggerFactory.getLogger(GlobalSetting.class);
@@ -37,11 +39,44 @@ public class GlobalSetting
 	private String ipAddress;
 	private int port;
 	private String path;
+	private String protocol;
 	
+	private String timeZone;
 	private String beginTime;
 	private String endTime;
+	private int encrypt;
 	
 	private Timer timer = new Timer();
+	
+	public String getProtocol()
+	{
+		return protocol;
+	}
+	
+	public void setProtocol(String protocol)
+	{
+		this.protocol = protocol;
+	}
+	
+	public int getEncrypt()
+	{
+		return encrypt;
+	}
+	
+	public void setEncrypt(int encrypt)
+	{
+		this.encrypt = encrypt;
+	}
+	
+	public String getTimeZone()
+	{
+		return timeZone;
+	}
+	
+	public void setTimeZone(String timeZone)
+	{
+		this.timeZone = timeZone;
+	}
 	
 	/**
 	 * @return the serviceStatus
@@ -142,15 +177,16 @@ public class GlobalSetting
 	
 	private GlobalSetting()
 	{
-		logger.debug("beginning of GlobalSetting()");
 		serviceStatus = ServiceStatus.Normal;
 		ipAddress = "192.81.135.31";
 		port = 80;
 		path = "/renhai/websocket";
-		beginTime = "2013-01-01 00:00:00 +0800";
-		endTime = "2013-01-01 00:00:00 +0800";
+		beginTime = "2013-01-01 00:00:00";
+		endTime = "2013-01-01 00:00:00";
+		timeZone = "GMT+0800";
+		protocol = "ws";
 		
-		timer.scheduleAtFixedRate(new SettingCheckTask(), DateUtil.getNowDate(), 5000);
+		timer.scheduleAtFixedRate(new SettingCheckTask(), DateUtil.getNowDate(), 10000);
 		logger.debug("timer of globalsetting started");
 	}
 	
@@ -162,7 +198,7 @@ public class GlobalSetting
 			String fileName = CommonFunctions.getWebAppPath(settingFileName); 
 			file = new File(fileName);
 			long modifyDate = file.lastModified();
-			//logger.debug("filename: "+fileName+", modifyDate: " + modifyDate + ", lastFileDate" + lastFileDate);
+			//logger.debug("=============filename: "+fileName+", modifyDate: " + modifyDate + ", lastFileDate" + lastFileDate);
 			if (lastFileDate != modifyDate)
 			{
 				logger.debug("Try to load modified setting file");
@@ -207,6 +243,13 @@ public class GlobalSetting
 		int intValue = obj.getIntValue(JSONKey.ServiceStatus);
 		setServiceStatus(ServiceStatus.parseValue(intValue));
 		
+		if (obj.containsKey(JSONKey.Encrypt))
+		{
+			intValue = obj.getIntValue(JSONKey.Encrypt);
+			setEncrypt(intValue);
+			//logger.debug("=============set encrypt as: " + intValue);
+		}
+		
 		JSONObject tmpObj = obj.getJSONObject(JSONKey.ServiceAddress);
 		String strValue = tmpObj.getString(JSONKey.Ip);
 		setIpAddress(strValue);
@@ -217,7 +260,13 @@ public class GlobalSetting
 		strValue = tmpObj.getString(JSONKey.Path);
 		setPath(strValue);
 		
+		strValue = tmpObj.getString(JSONKey.Protocol);
+		setProtocol(strValue);
+		
 		tmpObj = obj.getJSONObject(JSONKey.StatusPeriod);
+		strValue = tmpObj.getString(JSONKey.TimeZone);
+		setTimeZone(strValue);
+		
 		strValue = tmpObj.getString(JSONKey.BeginTime);
 		setBeginTime(strValue);
 		
@@ -261,6 +310,11 @@ public class GlobalSetting
 		}
 		
 		JSONObject addressObj = obj.getJSONObject(JSONKey.ServiceAddress);
+		if (!addressObj.containsKey(JSONKey.Protocol))
+		{
+			logger.error("Field {} is missed", JSONKey.Protocol);
+			return false;
+		}
 		if (!addressObj.containsKey(JSONKey.Ip))
 		{
 			logger.error("Field {} is missed", JSONKey.Ip);
@@ -289,6 +343,12 @@ public class GlobalSetting
 		}
 		
 		JSONObject statusObj = obj.getJSONObject(JSONKey.StatusPeriod);
+		if (!statusObj.containsKey(JSONKey.TimeZone))
+		{
+			logger.error("Field {} is missed", JSONKey.TimeZone);
+			return false;
+		}
+		
 		if (!statusObj.containsKey(JSONKey.BeginTime))
 		{
 			logger.error("Field {} is missed", JSONKey.BeginTime);

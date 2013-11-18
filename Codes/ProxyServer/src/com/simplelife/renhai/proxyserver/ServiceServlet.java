@@ -42,6 +42,7 @@ public class ServiceServlet extends HttpServlet {
 	 */
 	public ServiceServlet() {
 		super();
+		GlobalSetting.instance.checkSettingFile();
 	}
 
 	/**
@@ -61,72 +62,95 @@ public class ServiceServlet extends HttpServlet {
 		doPost(request, response);
 	}
 
+	private void reportError(String errMsg, PrintWriter out)
+	{
+		logger.error(errMsg);
+		ServerErrorResponse errRes = new ServerErrorResponse(null, out);
+		errRes.addToBody(JSONKey.ErrorCode, 1001);
+		errRes.addToBody(JSONKey.ErrorDescription, errMsg);
+		errRes.run();
+	}
+	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.debug("Beginning of doPost, proceed request from client");
-		response.setCharacterEncoding("UTF-8");
-		response.setContentType(jsonMIME);
-
-		String clientContentType = request.getContentType(); 
-		if (clientContentType == null || !clientContentType.contains(jsonMIME)) 
-		{
-			logger.warn("Invalid MIME found from client: " + clientContentType);
-		}
-
-		String command = readCommand(request);
-
-		logger.debug("JSON command received: " + command);
-		
-		JSONObject jsonObj = null;
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+	{
 		try
 		{
+			logger.debug("Beginning of doPost, proceed request from client");
+			response.setCharacterEncoding("UTF-8");
+			response.setContentType(jsonMIME);
+	
+			/*
+			String clientContentType = request.getContentType(); 
+			if (clientContentType == null || !clientContentType.contains(jsonMIME)) 
+			{
+				logger.warn("Invalid MIME found from client: " + clientContentType);
+			}
+			*/
+	
+			String command = readCommand(request);
+	
+			logger.debug("JSON command received: " + command);
+			
+			JSONObject jsonObj = null;
 			jsonObj = JSON.parseObject(command);
+			
+			PrintWriter out = response.getWriter();
+			if (jsonObj == null)
+			{
+				String temp = "Invalid command received: \n" + command; 
+				reportError(temp, out);
+				return;
+			}
+	
+			if (!jsonObj.containsKey(JSONKey.JsonEnvelope))
+			{
+				String temp = "Invalid command, JsonEnvelope can't be found: \n" + command; 
+				reportError(temp, out);
+				return;
+			}
+			
+			JSONObject envObj = null;
+			
+			if (GlobalSetting.instance.getEncrypt() == 0)
+			{
+				envObj = jsonObj.getJSONObject(JSONKey.JsonEnvelope);
+			}
+			else
+	    	{
+				logger.debug("Try to decrypt message");
+				String message = jsonObj.getString(JSONKey.JsonEnvelope);
+	    		try
+				{
+					message = SecurityUtils.decryptByDESAndDecodeByBase64(message, GlobalSetting.EncryptKey);
+					envObj = JSON.parseObject(message);
+				}
+				catch (Exception e)
+				{
+					String temp = "Failed to parse JSON String after decryption:\n" + message;
+					reportError(temp, out);
+					FileLogger.printStackTrace(e);
+				}
+	    	}
+			
+			
+			AbstractJSONMessage appRequest = JSONFactory.createAppJSONMessage(envObj, out);
+			if (appRequest == null)
+			{
+				String temp = "Invalid command received: \n" + JSON.toJSONString(jsonObj,true);
+				reportError(temp, out);
+				return;
+			}
+			appRequest.run();
 		}
 		catch(Exception e)
 		{
-			
-		}
-		
-		PrintWriter out = response.getWriter();
-		if (jsonObj == null)
-		{
-			String temp = "Invalid command received: \n" + command; 
-			logger.error(temp);
-			ServerErrorResponse errRes = new ServerErrorResponse(null, out);
-			errRes.addToBody(JSONKey.ErrorCode, 1001);
-			errRes.addToBody(JSONKey.ErrorDescription, temp);
-			errRes.run();
+			FileLogger.printStackTrace(e);
 			return;
 		}
-
-		if (!jsonObj.containsKey(JSONKey.JsonEnvelope))
-		{
-			String temp = "Invalid command, JsonEnvelope can't be found: \n" + command; 
-			logger.error(temp);
-			ServerErrorResponse errRes = new ServerErrorResponse(null, out);
-			errRes.addToBody(JSONKey.ErrorCode, 1001);
-			errRes.addToBody(JSONKey.ErrorDescription, temp);
-			errRes.run();
-			return;
-		}
-		
-		JSONObject envObj = jsonObj.getJSONObject(JSONKey.JsonEnvelope);
-		AbstractJSONMessage appRequest = JSONFactory.createAppJSONMessage(envObj, out);
-		if (appRequest == null)
-		{
-			String temp = "Invalid command received: \n" + JSON.toJSONString(jsonObj,true);
-			logger.error(temp);
-			ServerErrorResponse errRes = new ServerErrorResponse(null, out);
-			errRes.addToBody(JSONKey.ErrorCode, 1001);
-			errRes.addToBody(JSONKey.ErrorDescription, temp);
-			errRes.run();
-			return;
-		}
-		
-		appRequest.run();
 	}
 
 

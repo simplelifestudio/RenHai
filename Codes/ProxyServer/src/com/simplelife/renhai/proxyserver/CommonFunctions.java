@@ -77,7 +77,7 @@ public class CommonFunctions
 	        absPath = webappsRoot;
 	    }
 	    
-	    absPath += "/proxyserver";
+	    absPath += "/renhaiproxy";
 
 	    if (relativePath == null || relativePath.length() == 0)
         {
