@@ -12,6 +12,8 @@
 
 @protocol CBJSONMessageComm <NSObject>
 
+-(BOOL) isMessageNeedEncrypt;
+
 // Warning: This method CAN NOT be invoked in Main Thread!
 -(RHMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHMessage*) requestMessage;
 -(RHMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHMessage*) requestMessage syncInMainThread:(BOOL) syncInMainThread;

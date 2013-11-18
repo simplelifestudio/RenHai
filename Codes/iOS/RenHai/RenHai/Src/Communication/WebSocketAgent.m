@@ -23,6 +23,8 @@
 #define MESSAGE_LOG 0
 #define SERVERNOTIFICATION_LOG 0
 
+#define MESSAGE_ENCRYPT_NECESSARY 1
+
 @interface WebSocketAgent()
 {
     SRWebSocket* _webSocket;
@@ -58,8 +60,6 @@
     RHProxy* proxy = _userDataModule.proxy;
     RHServiceAddress* address = proxy.serviceAddress;
     NSString* remotePath = address.fullAddress;
-    
-//    NSString* remotePath = [BASEURL_WEBSOCKET_SERVER stringByAppendingString:REMOTEPATH_SERVICE_WEBSOCKET];
     
     _webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:remotePath]]];
     _webSocket.delegate = self;
@@ -127,11 +127,18 @@
     NSDate* timeStamp = [NSDate date];
     [requestMessage setTimeStamp:timeStamp];
     
-    NSString* jsonString = requestMessage.toJSONString;
-    [self _sendJSONStringToWebSocket:jsonString];
+//    NSString* jsonString = requestMessage.toJSONString;
+//    [self _sendJSONStringToWebSocket:jsonString];
+    
+    [self _sendRHMessageToWebSocket:requestMessage];
 }
 
 #pragma mark - CBJSONMessageComm
+
+-(BOOL) isMessageNeedEncrypt
+{
+    return MESSAGE_ENCRYPT_NECESSARY;
+}
 
 // Warning: This method CAN NOT be invoked in Main Thread!
 -(RHMessage*) requestSync:(NSString*) serviceTarget requestMessage:(RHMessage*) requestMessage
@@ -163,9 +170,11 @@
     NSCondition* _messageLock = [self _newMessageLock:messageSn];
     
     [requestMessage setTimeStamp:startTimeStamp];
-    requestMessage.enveloped = YES;
-    NSString* jsonString = requestMessage.toJSONString;
-    [self _sendJSONStringToWebSocket:jsonString];
+
+//    NSString* jsonString = requestMessage.toJSONString;
+//    [self _sendJSONStringToWebSocket:jsonString];
+
+    [self _sendRHMessageToWebSocket:requestMessage];
     
     [_messageLock lock];
     BOOL flag = [_messageLock waitUntilDate:endTimeStamp];
@@ -216,12 +225,22 @@
     DDLogInfo(@"WebSocket Received Message Uncrypted: \"%@\"", message);
 #endif
     
+    RHMessage* jsonMessage = nil;
     NSDictionary* dic = [CBJSONUtils toJSONObject:message];
-    RHMessage* jsonMessage = [RHMessage constructWithContent:dic enveloped:YES];
-
+    if ([self isMessageNeedEncrypt])
+    {
+        NSString* encryptedString = (NSString*)[dic objectForKey:MESSAGE_KEY_ENVELOPE];
+        NSString* decryptedString = [CBSecurityUtils decryptByDESAndDecodeByBase64:encryptedString key:MESSAGE_SECURITY_KEY];
 #if MESSAGE_LOG
-    DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", jsonMessage.toJSONString);
+        DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", decryptedString);
 #endif
+        dic = [CBJSONUtils toJSONObject:decryptedString];
+    }
+    else
+    {
+        dic = (NSDictionary*)[dic objectForKey:MESSAGE_KEY_ENVELOPE];
+    }
+    jsonMessage = [RHMessage constructWithContent:dic];
     
     BOOL isLegalMessage = [RHMessage isLegalMessage:jsonMessage];
     if (isLegalMessage)
@@ -297,15 +316,37 @@
 
 #pragma mark - Private Methods
 
--(void) _sendJSONStringToWebSocket:(NSString*) jsonString
+-(void) _sendRHMessageToWebSocket:(RHMessage*) message
 {
-    if ([RHMessage isMessageNeedEncrypt])
+    NSDictionary* jsonObject = message.toJSONObject;
+    NSString* jsonString = message.toJSONString;
+    if ([self isMessageNeedEncrypt])
     {
         jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:MESSAGE_SECURITY_KEY];
+        jsonObject = [NSDictionary dictionaryWithObject:jsonString forKey:MESSAGE_KEY_ENVELOPE];
     }
-    
+    else
+    {
+        jsonObject = [NSDictionary dictionaryWithObject:jsonObject forKey:MESSAGE_KEY_ENVELOPE];
+    }
+
+    jsonString = [CBJSONUtils toJSONString:jsonObject];
     [_webSocket send:jsonString];
 }
+
+//-(void) _sendJSONStringToWebSocket:(NSString*) jsonString
+//{
+//    NSDictionary* content = nil;
+//    if ([self isMessageNeedEncrypt])
+//    {
+//        jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:MESSAGE_SECURITY_KEY];
+//    }
+//
+//    NSDictionary* dic = [NSDictionary dictionaryWithObject:jsonString forKey:MESSAGE_KEY_ENVELOPE];
+//    jsonString = [CBJSONUtils toJSONString:dic];
+//    
+//    [_webSocket send:jsonString];
+//}
 
 -(void) _initInstance
 {

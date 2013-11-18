@@ -298,8 +298,8 @@ ConnectStatus;
             case ConnectStatus_ProxySyncedMaintenance:
             {
                 infoText = NSLocalizedString(@"Connect_CheckedMaintenance", nil);
-                infoDetailText = NSLocalizedString(@"Connect_CheckedMaintenance_Detail", nil);
-                isActionButtonHide = YES;
+//                infoDetailText = NSLocalizedString(@"Connect_CheckedMaintenance_Detail", nil);
+                isActionButtonHide = NO;
                 break;
             }
             case ConnectStatus_ProxySyncFailed:
