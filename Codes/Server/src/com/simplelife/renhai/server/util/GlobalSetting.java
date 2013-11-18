@@ -78,8 +78,8 @@ public class GlobalSetting
 		public static int DefaultImpressLabelCount = 10;
 		public static int HotInterestLabelCount = 10;
 		
-		public static boolean Encrypt = false;
-		public static String EncryptKey = "20120801";
+		public static boolean Encrypt = true;
+		public static String EncryptKey = "20130801";
 		public static int LengthOfSessionId = 16;
 		public static int LengthOfMessageSn = 16;
 		

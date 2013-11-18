@@ -197,19 +197,26 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		else
 		{
 			logger.debug("Received message: \n{}", JSON.toJSONString(obj, true));
-			JSONObject messageObj = obj.getJSONObject(JSONKey.JsonEnvelope);
+			JSONObject messageObj = null;
 	    	if (GlobalSetting.BusinessSetting.Encrypt)
 	    	{
 	    		logger.debug("Try to decrypt message");
 	    		try
 				{
-					message = SecurityUtils.decryptByDESAndDecodeByBase64(message, GlobalSetting.BusinessSetting.EncryptKey);
+	    			String tmpStr = obj.getString(JSONKey.JsonEnvelope);
+	    			tmpStr = SecurityUtils.decryptByDESAndDecodeByBase64(tmpStr, GlobalSetting.BusinessSetting.EncryptKey);
+	    			logger.debug("Message after decrypt:\n{}", tmpStr);
+	    			messageObj = JSON.parseObject(tmpStr);
 				}
 				catch (Exception e)
 				{
 					WebSocketModule.instance.getLogger().error(e.getMessage());
 					FileLogger.printStackTrace(e);
 				}
+	    	}
+	    	else
+	    	{
+	    		messageObj = obj.getJSONObject(JSONKey.JsonEnvelope);
 	    	}
 	    	
 	    	appMessage = JSONFactory.createAppJSONMessage(messageObj);
