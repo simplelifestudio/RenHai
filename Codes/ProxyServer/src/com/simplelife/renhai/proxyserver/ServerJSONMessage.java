@@ -116,7 +116,24 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage
     public void run()
     {
     	JSONObject whole = new JSONObject();
-    	whole.put(JSONKey.JsonEnvelope, jsonObject);
+    	if (GlobalSetting.instance.getEncrypt() == 0)
+    	{
+    		whole.put(JSONKey.JsonEnvelope, jsonObject);
+    	}
+    	else
+    	{
+    		String message = JSON.toJSONString(jsonObject, true);
+    		try
+			{
+				message = SecurityUtils.encryptByDESAndEncodeByBase64(message, GlobalSetting.EncryptKey);
+				whole.put(JSONKey.JsonEnvelope, message);
+			}
+			catch (Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+    	}
+    	
     	String response = JSON.toJSONString(whole, true);
     	logger.debug("Send to client:\n" + response);
     	out.write(response);

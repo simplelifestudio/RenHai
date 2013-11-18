@@ -1,9 +1,9 @@
 {
-	"encrypt":0,
+    "encrypt":0,
     "serviceStatus":1,
     "serviceAddress":
     {
-	    "protocol":"ws",
+        "protocol":"ws",
         "ip":"192.81.135.31",
         "port":80,
         "path":"/renhai/websocket"
