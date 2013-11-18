@@ -696,12 +696,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		for (Impresslabelmap label : solidList)
 		{
 			JSONObject labelObj = new JSONObject();
-			labelObj.put(JSONKey.ImpressLabelName, label.getGlobalLabel().getImpressLabelName());
-			labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalLabel().getGlobalImpressLabelId());
-			labelObj.put(JSONKey.AssessedCount, label.getAssessedCount());
-			labelObj.put(JSONKey.UpdateTime, DateUtil.getDateStringByLongValue(label.getUpdateTime()));
-			labelObj.put(JSONKey.AssessCount, label.getAssessCount());
-
+			putLabelDetails(labelObj, label);
 			assessLabelListObj.add(labelObj);
 		}
 		
@@ -709,12 +704,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		for (Impresslabelmap label : labelList)
 		{
 			JSONObject labelObj = new JSONObject();
-			labelObj.put(JSONKey.ImpressLabelName, label.getGlobalLabel().getImpressLabelName());
-			labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalLabel().getGlobalImpressLabelId());
-			labelObj.put(JSONKey.AssessedCount, label.getAssessedCount());
-			labelObj.put(JSONKey.UpdateTime, DateUtil.getDateStringByLongValue(label.getUpdateTime()));
-			labelObj.put(JSONKey.AssessCount, label.getAssessCount());
-
+			putLabelDetails(labelObj, label);
 			impressLabelListObj.add(labelObj);
 			tmpCount ++;
 			if (tmpCount >= labelCount)
@@ -722,7 +712,15 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 				break;
 			}
 		}
-
+	}
+	
+	private void putLabelDetails(JSONObject labelObj, Impresslabelmap label)
+	{
+		labelObj.put(JSONKey.ImpressLabelName, label.getGlobalLabel().getImpressLabelName());
+		labelObj.put(JSONKey.GlobalImpressLabelId, label.getGlobalLabel().getGlobalImpressLabelId());
+		labelObj.put(JSONKey.AssessedCount, label.getAssessedCount());
+		labelObj.put(JSONKey.UpdateTime, DateUtil.getDateStringByLongValue(label.getUpdateTime()));
+		labelObj.put(JSONKey.AssessCount, label.getAssessCount());
 	}
 	
 	public JSONObject toJSONObject_ImpressCard(Profile profile)
