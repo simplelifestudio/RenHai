@@ -15,8 +15,6 @@
 
 #import "NSDictionary+MutableDeepCopy.h"
 
-static BOOL s_messageEncrypted;
-
 @interface RHMessage()
 {
     
@@ -29,73 +27,45 @@ static BOOL s_messageEncrypted;
 
 @implementation RHMessage
 
-+(void) setMessageNeedEncrypt:(BOOL) encrypt
-{
-    s_messageEncrypted = encrypt;
-}
-
-+(BOOL) isMessageNeedEncrypt
-{
-    return s_messageEncrypted;
-}
-
 +(NSString*) generateMessageSn
 {
     return [CBStringUtils randomString:MESSAGE_MESSAGESN_LENGTH];
 }
 
-+(RHMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body enveloped:(BOOL) enveloped;
++(RHMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body
 {
     RHMessage* message = [[RHMessage alloc] init];
     
     message.header = header;
     message.body = body;
     
-    message.enveloped = enveloped;
-    
     return message;
 }
 
-+(RHMessage*) constructWithContent:(NSDictionary*) content enveloped:(BOOL) enveloped;
++(RHMessage*) constructWithContent:(NSDictionary*) content
 {
     RHMessage* message = nil;
     
     if (nil != content)
     {
-        if (enveloped)
-        {
-            content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
-        }
-        
         NSDictionary* header = [content objectForKey:MESSAGE_KEY_HEADER];
         NSDictionary* body = [content objectForKey:MESSAGE_KEY_BODY];
         
-        message = [RHMessage constructWithMessageHeader:header messageBody:body enveloped:enveloped];
+        message = [RHMessage constructWithMessageHeader:header messageBody:body];
     }
     
     return message;
 }
 
-+(RHMessage*) constructWithString:(NSString*) jsonString enveloped:(BOOL)enveloped
++(RHMessage*) constructWithString:(NSString*) jsonString
 {
     NSDictionary* content = [CBJSONUtils toJSONObject:jsonString];
-    
-    if (enveloped)
-    {
-        content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
-    }
     
     RHMessage* message = nil;
     
     if (nil != jsonString && 0 < jsonString.length)
     {
-        if ([RHMessage isMessageNeedEncrypt])
-        {
-            jsonString = [CBSecurityUtils decryptByDESAndDecodeByBase64:jsonString key:MESSAGE_SECURITY_KEY];
-        }
-        
-        NSDictionary* dic = [CBJSONUtils toJSONObject:jsonString];
-        message = [RHMessage constructWithContent:dic enveloped:NO];
+        message = [RHMessage constructWithContent:content];
     }
     
     return message;
@@ -222,7 +192,7 @@ static BOOL s_messageEncrypted;
     
     NSDictionary* messageBody = [NSDictionary dictionary];
     
-    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody];
     
     return message;
 }
@@ -239,7 +209,7 @@ static BOOL s_messageEncrypted;
     NSMutableDictionary* messageBody = [NSMutableDictionary dictionary];
     [messageBody setObject:@"Hello Server!" forKey:MESSAGE_KEY_CONTENT];
     
-    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody];
 
     return message;
 }
@@ -254,7 +224,7 @@ static BOOL s_messageEncrypted;
     
     NSDictionary* messageBody = [NSDictionary dictionary];
     
-    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody];
     
     return message;
 }
@@ -270,7 +240,7 @@ static BOOL s_messageEncrypted;
     NSString* errorDescription = @"Illegal message which can not be recoganized by app.";
     NSDictionary* messageBody = [NSDictionary dictionaryWithObjects:@[oErrorCode, receivedMessage.toJSONString, errorDescription] forKeys:@[MESSAGE_KEY_ERRORCODE, MESSAGE_KEY_RECEIVEDMESSAGE, MESSAGE_KEY_ERRORDESCRIPTION]];
     
-    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody];
     
     return message;
 }
@@ -414,7 +384,7 @@ static BOOL s_messageEncrypted;
         [messageBody setObject:dataQuery forKey:MESSAGE_KEY_DATAQUERY];
     }
     
-    appDataSyncRequestMessage = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    appDataSyncRequestMessage = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody];
     
     return appDataSyncRequestMessage;
 }
@@ -531,7 +501,7 @@ static BOOL s_messageEncrypted;
         }
     }
     
-    RHMessage* serverDataSyncRequestMessage = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    RHMessage* serverDataSyncRequestMessage = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody];
     
     return serverDataSyncRequestMessage;
 }
@@ -562,7 +532,7 @@ static BOOL s_messageEncrypted;
     
     [messageBody setObject:oNull forKey:MESSAGE_KEY_OPERATIONVALUE];
     
-    RHMessage* businessSessionRequestMessage = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    RHMessage* businessSessionRequestMessage = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody];
     
     return businessSessionRequestMessage;
 }
@@ -594,7 +564,7 @@ static BOOL s_messageEncrypted;
     NSNumber* oOperationValue = [NSNumber numberWithInt:operationValue];
     [messageBody setObject:oOperationValue forKey:MESSAGE_KEY_OPERATIONVALUE];
     
-    RHMessage* businessSessionNotificationResponseMessage = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
+    RHMessage* businessSessionNotificationResponseMessage = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody];
     
     return businessSessionNotificationResponseMessage;
 }
@@ -618,7 +588,7 @@ static BOOL s_messageEncrypted;
         NSNumber* oOperationValue = [NSNumber numberWithInt:operationValue];
         [body setValue:oOperationValue forKey:MESSAGE_KEY_OPERATIONVALUE];
         
-        response = [RHMessage constructWithMessageHeader:header messageBody:body enveloped:YES];
+        response = [RHMessage constructWithMessageHeader:header messageBody:body];
     }
     
     return response;
@@ -648,8 +618,6 @@ static BOOL s_messageEncrypted;
     return flag;
 }
 
-
-@synthesize enveloped = _enveloped;
 @synthesize header = _header;
 @synthesize body = _body;
 
@@ -719,11 +687,6 @@ static BOOL s_messageEncrypted;
     NSAssert(nil != _body, @"Body part of message can not be null!");
     
     NSDictionary* content = [NSDictionary dictionaryWithObjects:@[_header, _body] forKeys:@[MESSAGE_KEY_HEADER, MESSAGE_KEY_BODY]];
-    
-    if (_enveloped)
-    {
-        content = [NSDictionary dictionaryWithObject:content forKey:MESSAGE_KEY_ENVELOPE];
-    }
     
     return content;
 }

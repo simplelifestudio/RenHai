@@ -37,8 +37,6 @@ SINGLETON(CommunicationModule)
     [self.serviceThread setName:NSLocalizedString(@"Communication Module Thread", nil)];
     [self setKeepAlive:FALSE];
     
-    [RHMessage setMessageNeedEncrypt:MESSAGE_NEED_ENCRYPT];
-    
     _httpCommAgent = [[HTTPAgent alloc] init];
     _webSocketCommAgent = [[WebSocketAgent alloc] init];
 }

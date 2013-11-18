@@ -32,25 +32,28 @@
 {
     NSDictionary* dic = nil;
     
-    @try
+    if (nil != jsonString)
     {
-        NSData* jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
-        
-        NSError* error = nil;
-        dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
-        
-        if(nil == dic)
+        @try
         {
-            DDLogWarn(@"JSON error: %@", error.localizedDescription);
+            NSData* jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+            
+            NSError* error = nil;
+            dic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:&error];
+            
+            if(nil == dic)
+            {
+                DDLogWarn(@"JSON error: %@", error.localizedDescription);
+            }
         }
-    }
-    @catch (NSException *exception)
-    {
-        DDLogWarn(@"Caught Exception: %@", exception.callStackSymbols);
-    }
-    @finally
-    {
-        
+        @catch (NSException *exception)
+        {
+            DDLogWarn(@"Caught Exception: %@", exception.callStackSymbols);
+        }
+        @finally
+        {
+            
+        }
     }
 
     return dic;

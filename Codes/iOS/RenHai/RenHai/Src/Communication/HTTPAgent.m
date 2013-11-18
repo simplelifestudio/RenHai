@@ -17,6 +17,8 @@
 #import "CommunicationModule.h"
 #import "UserDataModule.h"
 
+#define MESSAGE_ENCRYPT_NECESSARY 1
+
 @interface HTTPAgent()
 {
     UserDataModule* _userDataModule;
@@ -26,7 +28,7 @@
 
 @implementation HTTPAgent
 
-+(NSMutableURLRequest*) constructURLRequest:(RHMessage*) message serviceTarget:(NSString*) serviceTarget
+-(NSMutableURLRequest*) constructURLRequest:(RHMessage*) message serviceTarget:(NSString*) serviceTarget
 {
     NSAssert(nil != message, @"Nil JSON Message");
     
@@ -39,20 +41,15 @@
     {
         NSDictionary* params = nil;
         NSString* jsonString = message.toJSONString;
-        if ([RHMessage isMessageNeedEncrypt])
+        if ([self isMessageNeedEncrypt])
         {
-            BOOL isEnveloped = message.enveloped;
-            if (isEnveloped)
-            {
-                message.enveloped = NO;
-            }
-            
             jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:MESSAGE_SECURITY_KEY];
             params = [NSDictionary dictionaryWithObject:jsonString forKey:MESSAGE_KEY_ENVELOPE];
         }
         else
         {
-            params = message.toJSONObject;
+            NSDictionary* jsonObject = message.toJSONObject;
+            params = [NSDictionary dictionaryWithObject:jsonObject forKey:MESSAGE_KEY_ENVELOPE];
         }
         
         request = [httpClient
@@ -92,13 +89,18 @@
 
 #pragma mark - CBJSONMessageComm
 
+-(BOOL) isMessageNeedEncrypt
+{
+    return MESSAGE_ENCRYPT_NECESSARY;
+}
+
 -(void) requestAsync:(NSString*) serviceTarget
       requestMessage:(RHMessage*) requestMessage
              success:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, id JSON))success
              failure:(void (^)(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON))failure
 {
-    NSMutableURLRequest* request = [HTTPAgent constructURLRequest:requestMessage serviceTarget:serviceTarget];
-    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:success failure:failure];
+    NSMutableURLRequest* request = [self constructURLRequest:requestMessage serviceTarget:serviceTarget];
+    AFJSONRequestOperation* operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:success failure:failure];
     [operation start];
 }
 
@@ -128,20 +130,19 @@
     
     id syncSuccessBlock = ^(NSURLRequest* request, NSHTTPURLResponse* response, id JSON)
     {
-        if ([RHMessage isMessageNeedEncrypt])
+        NSDictionary* content = (NSDictionary*)JSON;
+        if ([self isMessageNeedEncrypt])
         {
-            NSDictionary* content = (NSDictionary*)JSON;
             NSString* encryptedString = [content objectForKey:MESSAGE_KEY_ENVELOPE];
             NSString* decryptedString = [CBSecurityUtils decryptByDESAndDecodeByBase64:encryptedString key:MESSAGE_SECURITY_KEY];
             content = [CBJSONUtils toJSONObject:decryptedString];
-            responseMessage = [RHMessage constructWithContent:content enveloped:NO];
         }
         else
         {
-            NSDictionary* content = (NSDictionary*)JSON;
             content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
-            responseMessage = [RHMessage constructWithContent:content enveloped:NO];
         }
+        
+        responseMessage = [RHMessage constructWithContent:content];
         
         [lock lock];
         [lock signal];
@@ -152,14 +153,14 @@
     {
         NSDictionary* content = (NSDictionary*)JSON;
         content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
-        responseMessage = [RHMessage constructWithContent:content enveloped:NO];
+        responseMessage = [RHMessage constructWithContent:content];
         
         [lock lock];
         [lock signal];
         [lock unlock];
     };
     
-    NSMutableURLRequest* request = [HTTPAgent constructURLRequest:requestMessage serviceTarget:serviceTarget];
+    NSMutableURLRequest* request = [self constructURLRequest:requestMessage serviceTarget:serviceTarget];
     AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request success:syncSuccessBlock failure:syncFailureBlock];
     [operation start];
     

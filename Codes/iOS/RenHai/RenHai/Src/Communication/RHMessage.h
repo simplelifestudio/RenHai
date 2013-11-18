@@ -12,7 +12,7 @@
 
 #import "RHDevice.h"
 
-#define MESSAGE_SECURITY_KEY @"19890604"
+#define MESSAGE_SECURITY_KEY @"20130801"
 
 #define MESSAGE_MESSAGESN_LENGTH 16
 
@@ -265,15 +265,11 @@ ServerServiceStatus;
 
 @interface RHMessage : NSObject <CBJSONable>
 
-// MessageNeedEncrypt flag should be same with server side
-+(void) setMessageNeedEncrypt:(BOOL) encrypt;
-+(BOOL) isMessageNeedEncrypt;
-
 +(NSString*) generateMessageSn;
 
-+(RHMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body enveloped:(BOOL) enveloped;
-+(RHMessage*) constructWithContent:(NSDictionary*) content enveloped:(BOOL) enveloped;
-+(RHMessage*) constructWithString:(NSString*) jsonString enveloped:(BOOL) enveloped;;
++(RHMessage*) constructWithMessageHeader:(NSDictionary*) header messageBody:(NSDictionary*) body;
++(RHMessage*) constructWithContent:(NSDictionary*) content;
++(RHMessage*) constructWithString:(NSString*) jsonString;
 
 //+(RHMessageErrorCode) verify:(RHMessage*) message;
 +(BOOL) isLegalMessage:(RHMessage*) message;
@@ -299,7 +295,6 @@ ServerServiceStatus;
 +(BOOL) isServerTimeoutResponseMessage:(RHMessage*) message;
 +(BOOL) isServerErrorResponseMessage:(RHMessage*) message;
 
-@property (nonatomic) BOOL enveloped;
 @property (nonatomic, strong, readonly) NSDictionary* header;
 @property (nonatomic, strong, readonly) NSDictionary* body;
 
