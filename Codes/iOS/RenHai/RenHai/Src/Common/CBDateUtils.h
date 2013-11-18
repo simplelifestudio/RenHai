@@ -12,6 +12,7 @@
 #define STANDARD_DATE_TIME_FORMAT @"yyyy-MM-dd HH:mm:ss"
 #define STANDARD_DATE_FORMAT @"yyyy-MM-dd"
 #define SHORT_DATE_FORMAT @"M-dd"
+#define SHORT_DATE_TIME_FORMAT @"MM-dd HH:mm"
 
 @interface CBDateUtils : NSObject
 

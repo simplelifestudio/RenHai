@@ -65,8 +65,10 @@
 "Connect_Ready_Detail" = "连接准备中...";
 "Connect_Checking" = "检测";
 "Connect_Checking_Detail" = "正在检测服务器...";
-"Connect_Checked" = "检查";
-"Connect_Checked_Detail" = "成功检测服务器";
+"Connect_CheckedNormal" = "检测";
+"Connect_CheckedNormal_Detail" = "成功检测服务器";
+"Connect_CheckedMaintenance" = "维护";
+"Connect_CheckedMaintenance_Detail" = "服务器维护中：\n自%@ \n至 %@）";
 "Connect_CheckFailed" = "失败";
 "Connect_CheckFailed_Detail" = "无法检测服务器";
 "Connect_Connecting" = "连接";

@@ -65,8 +65,10 @@
 "Connect_Ready_Detail" = "Prepraing connect...";
 "Connect_Checking" = "Checking";
 "Connect_Checking_Detail" = "Trying to check server...";
-"Connect_Checked" = "Checked";
-"Connect_Checked_Detail" = "Checked server...";
+"Connect_CheckedNormal" = "Check";
+"Connect_CheckedNormal_Detail" = "Checked server";
+"Connect_CheckedMaintenance" = "Maintenance";
+"Connect_CheckedMaintenance_Detail" = "Server is in maintenance:\n from %@ \n to %@）";
 "Connect_CheckFailed" = "Failure";
 "Connect_CheckFailed_Detail" = "Can not check server...";
 "Connect_Connecting" = "Connecting";

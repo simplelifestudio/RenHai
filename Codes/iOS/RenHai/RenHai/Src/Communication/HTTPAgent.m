@@ -12,6 +12,7 @@
 #import "AFJSONRequestOperation.h"
 
 #import "CBSecurityUtils.h"
+#import "CBJSONUtils.h"
 
 #import "CommunicationModule.h"
 #import "UserDataModule.h"
@@ -36,13 +37,23 @@
     
     if ([serviceTarget isEqualToString:REMOTEPATH_SERVICE_HTTP])
     {
+        NSDictionary* params = nil;
         NSString* jsonString = message.toJSONString;
         if ([RHMessage isMessageNeedEncrypt])
         {
+            BOOL isEnveloped = message.enveloped;
+            if (isEnveloped)
+            {
+                message.enveloped = NO;
+            }
+            
             jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:MESSAGE_SECURITY_KEY];
+            params = [NSDictionary dictionaryWithObject:jsonString forKey:MESSAGE_KEY_ENVELOPE];
         }
-        
-        NSDictionary* params = [NSDictionary dictionaryWithObject:jsonString forKey:MESSAGE_KEY_ENVELOPE];
+        else
+        {
+            params = message.toJSONObject;
+        }
         
         request = [httpClient
                    requestWithMethod:@"POST"
@@ -117,9 +128,20 @@
     
     id syncSuccessBlock = ^(NSURLRequest* request, NSHTTPURLResponse* response, id JSON)
     {
-        NSDictionary* content = (NSDictionary*)JSON;
-        content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
-        responseMessage = [RHMessage constructWithContent:content enveloped:NO];
+        if ([RHMessage isMessageNeedEncrypt])
+        {
+            NSDictionary* content = (NSDictionary*)JSON;
+            NSString* encryptedString = [content objectForKey:MESSAGE_KEY_ENVELOPE];
+            NSString* decryptedString = [CBSecurityUtils decryptByDESAndDecodeByBase64:encryptedString key:MESSAGE_SECURITY_KEY];
+            content = [CBJSONUtils toJSONObject:decryptedString];
+            responseMessage = [RHMessage constructWithContent:content enveloped:NO];
+        }
+        else
+        {
+            NSDictionary* content = (NSDictionary*)JSON;
+            content = [content objectForKey:MESSAGE_KEY_ENVELOPE];
+            responseMessage = [RHMessage constructWithContent:content enveloped:NO];
+        }
         
         [lock lock];
         [lock signal];

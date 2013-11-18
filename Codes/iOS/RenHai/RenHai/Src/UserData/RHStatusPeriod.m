@@ -73,6 +73,20 @@
     return localTime;
 }
 
+-(NSString*) localBeginTimeString
+{
+    NSDate* localBeginTime = [self localBeginTime];
+    NSString* localBeginTimeStr = [CBDateUtils dateStringInLocalTimeZoneWithFormat:SHORT_DATE_TIME_FORMAT andDate:localBeginTime];
+    return localBeginTimeStr;
+}
+
+-(NSString*) localEndTimeString
+{
+    NSDate* localEndTime = [self localEndTime];
+    NSString* localEndTimeStr = [CBDateUtils dateStringInLocalTimeZoneWithFormat:SHORT_DATE_TIME_FORMAT andDate:localEndTime];
+    return localEndTimeStr;
+}
+
 #pragma mark - CBJSONable
 
 -(void) fromJSONObject:(NSDictionary *)dic

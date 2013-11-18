@@ -194,7 +194,7 @@ SINGLETON(CommunicationModule)
     
     NSDictionary* proxyDic = nil;
     
-    if (responseMessage.messageId == MessageId_AppDataSyncResponse)
+    if (responseMessage.messageId == MessageId_ProxyDataSyncResponse)
     {
         NSDictionary* messageBody = responseMessage.body;
         proxyDic = messageBody;

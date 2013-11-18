@@ -12,6 +12,7 @@
 
 @interface RHServiceAddress : NSObject <CBJSONable>
 
+@property (strong, nonatomic, readonly) NSString* protocol;
 @property (strong, nonatomic, readonly) NSString* ip;
 @property (nonatomic, readonly) NSUInteger port;
 @property (strong, nonatomic, readonly) NSString* path;

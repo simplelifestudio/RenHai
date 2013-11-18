@@ -15,6 +15,7 @@
     
 }
 
+@property (strong, nonatomic) NSString* protocol;
 @property (strong, nonatomic) NSString* ip;
 @property (nonatomic) NSUInteger port;
 @property (strong, nonatomic) NSString* path;
@@ -23,6 +24,7 @@
 
 @implementation RHServiceAddress
 
+@synthesize protocol = _protocol;
 @synthesize ip = _ip;
 @synthesize port = _port;
 @synthesize path = _path;
@@ -43,19 +45,24 @@
 {
     NSMutableString* address = [NSMutableString string];
     
-    if (nil != _ip)
+    NSString* protocol = (nil != _protocol) ? _protocol : @"http";
+    if (nil != protocol)
     {
-        [address appendString:@"http://"];
-        [address appendString:_ip];
-        
-        if (0 < _port)
+        [address appendString:protocol];
+        [address appendString:@"://"];
+        if (nil != _ip)
         {
-            [address appendString:@":"];
-            [address appendString:[NSString stringWithFormat:@"%d", _port]];
+            [address appendString:_ip];
             
-            if (nil != _path)
+            if (0 < _port)
             {
-                [address appendString:_path];
+                [address appendString:@":"];
+                [address appendString:[NSString stringWithFormat:@"%d", _port]];
+                
+                if (nil != _path)
+                {
+                    [address appendString:_path];
+                }
             }
         }
     }

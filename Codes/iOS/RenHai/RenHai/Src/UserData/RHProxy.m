@@ -51,9 +51,19 @@
             _serviceStatus = oStatus.integerValue;
         }
         
-        _serviceAddress= (RHServiceAddress*)[dic objectForKey:MESSAGE_KEY_SERVICEADDRESS];
+        NSDictionary* serviceAddressDic = [dic objectForKey:MESSAGE_KEY_SERVICEADDRESS];
+        if (nil != serviceAddressDic)
+        {
+            _serviceAddress = [[RHServiceAddress alloc] init];
+            [_serviceAddress fromJSONObject:serviceAddressDic];
+        }
         
-        _statusPeriod = (RHStatusPeriod*)[dic objectForKey:MESSAGE_KEY_STATUSPERIOD];
+        NSDictionary* statusPeriodDic = [dic objectForKey:MESSAGE_KEY_STATUSPERIOD];
+        if (nil != statusPeriodDic)
+        {
+            _statusPeriod = [[RHStatusPeriod alloc] init];
+            [_statusPeriod fromJSONObject:statusPeriodDic];
+        }
     }
 }
 
@@ -67,7 +77,8 @@
     id oNull = [NSNull null];
     if (nil != _serviceAddress)
     {
-        [dic setObject:_serviceAddress forKey:MESSAGE_KEY_SERVICEADDRESS];
+        NSDictionary* serviceAddressDic = _serviceAddress.toJSONObject;
+        [dic setObject:serviceAddressDic forKey:MESSAGE_KEY_SERVICEADDRESS];
     }
     else
     {
@@ -76,7 +87,8 @@
     
     if (nil != _statusPeriod)
     {
-        [dic setObject:_statusPeriod forKey:MESSAGE_KEY_STATUSPERIOD];
+        NSDictionary* statusPeriodDic = _statusPeriod.toJSONObject;
+        [dic setObject:statusPeriodDic forKey:MESSAGE_KEY_STATUSPERIOD];
     }
     else
     {
