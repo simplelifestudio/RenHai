@@ -13,8 +13,8 @@
 #import "HTTPAgent.h"
 #import "WebSocketAgent.h"
 
-#define BASEURL_HTTP_SERVER @"http://192.81.135.31/RenHai/"
-#define REMOTEPATH_SERVICE_HTTP @"httpService"
+#define BASEURL_HTTP_SERVER @"http://192.81.135.31/proxyserver/"
+#define REMOTEPATH_SERVICE_HTTP @"request"
 
 #define BASEURL_WEBSOCKET_SERVER @"ws://192.81.135.31/renhai/"
 #define REMOTEPATH_SERVICE_WEBSOCKET @"websocket"

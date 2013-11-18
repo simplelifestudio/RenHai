@@ -220,7 +220,9 @@ static BOOL s_messageEncrypted;
     NSString* messageSn = [RHMessage generateMessageSn];
     NSDictionary* messageHeader = [RHMessage constructMessageHeader:MessageType_ProxyRequest messageId:MessageId_ProxyDataSyncRequest messageSn:messageSn deviceId:0 deviceSn:nil];
     
-    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:nil enveloped:YES];
+    NSDictionary* messageBody = [NSDictionary dictionary];
+    
+    RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody enveloped:YES];
     
     return message;
 }

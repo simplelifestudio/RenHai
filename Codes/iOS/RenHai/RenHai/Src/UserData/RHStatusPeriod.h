@@ -20,4 +20,7 @@
 -(NSDate*) localBeginTime;
 -(NSDate*) localEndTime;
 
+-(NSString*) localBeginTimeString;
+-(NSString*) localEndTimeString;
+
 @end

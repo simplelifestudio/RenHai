@@ -9,6 +9,7 @@
 #import "ConnectViewController_iPhone.h"
 
 #import "CBUIUtils.h"
+#import "CBDateUtils.h"
 #import "UINavigationController+CBNavigationControllerExtends.h"
 #import "UIViewController+CWPopup.h"
 
@@ -26,7 +27,8 @@ typedef enum
 {
     ConnectStatus_Ready = 0,
     ConnectStatus_ProxySyncing,
-    ConnectStatus_ProxySynced,
+    ConnectStatus_ProxySyncedNormal,
+    ConnectStatus_ProxySyncedMaintenance,
     ConnectStatus_ProxySyncFailed,
     ConnectStatus_Connecting,
     ConnectStatus_Connected,
@@ -286,10 +288,17 @@ ConnectStatus;
                 isActionButtonHide = YES;
                 break;
             }
-            case ConnectStatus_ProxySynced:
+            case ConnectStatus_ProxySyncedNormal:
             {
-                infoText = NSLocalizedString(@"Connect_Checked", nil);
-                infoDetailText = NSLocalizedString(@"Connect_Checked_Detail", nil);
+                infoText = NSLocalizedString(@"Connect_CheckedNormal", nil);
+                infoDetailText = NSLocalizedString(@"Connect_CheckedNormal_Detail", nil);
+                isActionButtonHide = YES;
+                break;
+            }
+            case ConnectStatus_ProxySyncedMaintenance:
+            {
+                infoText = NSLocalizedString(@"Connect_CheckedMaintenance", nil);
+                infoDetailText = NSLocalizedString(@"Connect_CheckedMaintenance_Detail", nil);
                 isActionButtonHide = YES;
                 break;
             }
@@ -297,7 +306,7 @@ ConnectStatus;
             {
                 infoText = NSLocalizedString(@"Connect_CheckFailed", nil);
                 infoDetailText = NSLocalizedString(@"Connect_CheckFailed_Detail", nil);
-                isActionButtonHide = YES;
+                isActionButtonHide = NO;
                 break;
             }
             case ConnectStatus_Connecting:
@@ -429,7 +438,7 @@ ConnectStatus;
     [self _resetInstance];
     
     [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncing];
-    
+
     RHMessage* requestMessage = [RHMessage newProxyDataSyncRequest];
     [_commModule proxyDataSyncRequest:requestMessage
                successCompletionBlock:^(NSDictionary* proxyDic){
@@ -439,9 +448,35 @@ ConnectStatus;
                    {
                        [proxy fromJSONObject:proxyDic];
                        
-                       [self _updateUIWithConnectStatus:ConnectStatus_ProxySynced];
-                       
-                       _isProxyDataSyncSuccess = YES;
+                       switch (proxy.serviceStatus)
+                       {
+                           case ServerServiceStatus_Normal:
+                           {
+                               [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncedNormal];
+                               _isProxyDataSyncSuccess = YES;
+                               break;
+                           }
+                           case ServerServiceStatus_Maintenance:
+                           {
+                               [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncedMaintenance];
+                               
+                               RHStatusPeriod* period = proxy.statusPeriod;
+                               
+                               NSString* localBeginTimeStr = period.localBeginTimeString;
+                               NSString* localEndTimeStr = period.localEndTimeString;
+                               
+                               NSString* periodStr = [NSString stringWithFormat:NSLocalizedString(@"Connect_CheckedMaintenance_Detail", nil), localBeginTimeStr, localEndTimeStr];
+                               [self _updateInfoTextView:periodStr];
+
+                               _isProxyDataSyncSuccess = NO;
+                               break;
+                           }
+                           default:
+                           {
+                               _isProxyDataSyncSuccess = NO;
+                               break;
+                           }
+                       }
                    }
                    @catch (NSException *exception)
                    {
@@ -465,6 +500,11 @@ ConnectStatus;
 
 - (void)_remoteConnectServer
 {
+    if (!_isProxyDataSyncSuccess)
+    {
+        return;
+    }
+    
     [self _updateUIWithConnectStatus:ConnectStatus_Connecting];
     
     _isConnectServerSuccess = [_commModule connectWebSocket];

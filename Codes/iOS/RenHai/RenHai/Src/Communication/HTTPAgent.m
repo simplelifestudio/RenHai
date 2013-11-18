@@ -42,8 +42,8 @@
             jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:MESSAGE_SECURITY_KEY];
         }
         
-        NSDictionary* params = [NSDictionary dictionaryWithObject:jsonString forKey:MESSAGE_KEY_ENVELOPE];
-        
+        NSDictionary* params = message.toJSONObject;
+
         request = [httpClient
                    requestWithMethod:@"POST"
                    path:REMOTEPATH_SERVICE_HTTP
