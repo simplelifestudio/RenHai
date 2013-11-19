@@ -1,49 +1,49 @@
 {
-	"TimeOut":
+	"timeOut":
 	{
-		"JSONMessageEcho":9,
-		"ChatConfirm":15000,
-		"Assess":60,
-		"CheckExpiredToken":3600,
-		"FlushCacheToDB":30000,
-		"DeviceInIdle":300000,
-		"OnlineDeviceConnection":300000,
-		"PingInterval":5000,
-		"SaveStatistics":600000
-	}
+		"jsonMessageEcho":9,
+		"chatConfirm":15000,
+		"assess":60,
+		"checkExpiredToken":3600,
+		"flushCacheToDB":30000,
+		"deviceInIdle":300000,
+		"onlineDeviceConnection":300000,
+		"pingInterval":5000,
+		"saveStatistics":600000
+	},
 	
-	"DBSetting":
+	"dbSetting":
 	{
-		"MaxRecordCountForFlush":30,
-		"MaxRecordCountForDiscard":1000,
-		"GlobalImpressLabelCacheCount":1000,
-		"GlobalInterestLabelCacheCount":1000,
-		"DeviceCacheCount":10000
-	}
+		"maxRecordCountForFlush":30,
+		"maxRecordCountForDiscard":1000,
+		"globalImpressLabelCacheCount":1000,
+		"globalInterestLabelCacheCount":1000,
+		"deviceCacheCount":10000
+	},
 	
-	"BusinessSetting":
+	"businessSetting":
 	{
-		"OnlinePoolCapacity":10000,
-		"RandomBusinessPoolCapacity":5000,
-		"InterestBusinessPoolCapacity":5000,
-		"DefaultImpressLabelCount":10,
-		"HotInterestLabelCount":10,
+		"onlinePoolCapacity":10000,
+		"randomBusinessPoolCapacity":5000,
+		"interestBusinessPoolCapacity":5000,
+		"defaultImpressLabelCount":10,
+		"hotInterestLabelCount":10,
 		
-		"Encrypt":1,
-		"EncryptKey":"20130801",
-		"LengthOfSessionId":16,
-		"LengthOfMessageSn":16,
+		"encrypt":1,
+		"encryptKey":"20130801",
+		"lengthOfSessionId":16,
+		"lengthOfMessageSn":16,
 		
-		"MaxImpressLabelCount":32,
-		"InputMessageHandleThreads":200,
-		"OutputMessageSendThreads":500,
-		"MessageQueueTime":3 * 1000,
+		"maxImpressLabelCount":32,
+		"inputMessageHandleThreads":200,
+		"outputMessageSendThreads":500,
+		"messageQueueTime":3000,
 		
-		"DelayOfSessionBound":1000,
+		"delayOfSessionBound":1000,
 		
-		"OpenTokKey":34556802,
-		"OpenTokSecret":"7a94109e525016628a92a1dcc392e5bdc0f27e7e",
-		"OpenTokTokenExpiration":2505600,
-		"OpenTokTokenDuration":7200000
+		"openTokKey":34556802,
+		"openTokSecret":"7a94109e525016628a92a1dcc392e5bdc0f27e7e",
+		"openTokTokenExpiration":2505600,
+		"openTokTokenDuration":7200000
 	} 
 }

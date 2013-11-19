@@ -15,7 +15,7 @@ package com.simplelife.renhai.server.util;
 public class SettingFieldName
 {
 	public final static String TimeOut                                         = "timeOut";
-	public final static String JSONMessageEcho                                 = "jSONMessageEcho";
+	public final static String JSONMessageEcho                                 = "jsonMessageEcho";
 	public final static String ChatConfirm                                     = "chatConfirm";
 	public final static String Assess                                          = "assess";
 	public final static String CheckExpiredToken                               = "checkExpiredToken";
@@ -26,7 +26,7 @@ public class SettingFieldName
 	public final static String PingInterval                                    = "pingInterval";
 	public final static String SaveStatistics                                  = "saveStatistics";
 
-	public final static String DBSetting                                       = "dBSetting";
+	public final static String DBSetting                                       = "dbSetting";
 	public final static String MaxRecordCountForFlush                          = "maxRecordCountForFlush";
 	public final static String MaxRecordCountForDiscard                        = "maxRecordCountForDiscard";
 	public final static String GlobalImpressLabelCacheCount                    = "globalImpressLabelCacheCount";

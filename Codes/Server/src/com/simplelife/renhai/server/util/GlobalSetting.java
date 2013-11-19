@@ -29,7 +29,7 @@ import com.simplelife.renhai.server.log.FileLogger;
 /** */
 public class GlobalSetting
 {
-	private static String settingFileName;
+	private static String settingFileName = "setting.json";
 	private static long lastFileDate;
 	private static Logger logger = BusinessModule.instance.getLogger();
 	private static Timer timer = new Timer();
@@ -115,7 +115,6 @@ public class GlobalSetting
 	
 	private static void updateSetting(String fileName)
 	{
-		logger.debug("Start to update setting from file {}", fileName);
 		String jsonStr = loadFromFile(fileName);
 		
 		JSONObject obj = null;
@@ -141,6 +140,7 @@ public class GlobalSetting
 			return;
 		}
 		
+		logger.debug("Start to update setting from file {}", fileName);
 		JSONObject tmpObj = obj.getJSONObject(SettingFieldName.TimeOut);
 		TimeOut.JSONMessageEcho			= getIntValue(tmpObj, SettingFieldName.JSONMessageEcho);
 		TimeOut.ChatConfirm				= getIntValue(tmpObj, SettingFieldName.ChatConfirm);
@@ -442,13 +442,21 @@ public class GlobalSetting
 		@Override
 		public void run()
 		{
-			GlobalSetting.checkSettingFile();
+			try
+			{
+				GlobalSetting.checkSettingFile();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
 	}
 	
 	public static void startService()
 	{
 		timer.scheduleAtFixedRate(new SettingCheckTask(), 10000, 10000);
+		logger.debug("Timer of GlobalSetting started");
 	}
 	
 	public static void stopService()
