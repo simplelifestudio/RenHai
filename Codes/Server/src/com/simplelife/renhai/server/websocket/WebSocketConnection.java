@@ -198,7 +198,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		{
 			logger.debug("Received message: \n{}", JSON.toJSONString(obj, true));
 			JSONObject messageObj = null;
-	    	if (GlobalSetting.BusinessSetting.Encrypt)
+	    	if (GlobalSetting.BusinessSetting.Encrypt != 0)
 	    	{
 	    		logger.debug("Try to decrypt message");
 	    		try
@@ -338,7 +338,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	JSONObject obj = new JSONObject();
     	message.addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
     	
-    	if (!GlobalSetting.BusinessSetting.Encrypt)
+    	if (GlobalSetting.BusinessSetting.Encrypt == 0)
     	{
     		obj.put(JSONKey.JsonEnvelope, message.toJSONObject());
     	}

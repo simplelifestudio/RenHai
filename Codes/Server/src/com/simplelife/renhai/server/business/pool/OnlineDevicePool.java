@@ -281,9 +281,9 @@ public class OnlineDevicePool extends AbstractDevicePool
     
     public void startService()
     {
-    	inactiveTimer.scheduleAtFixedRate(new InactiveCheckTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.OnlineDeviceConnection);
-    	bannedTimer.scheduleAtFixedRate(new BannedCheckTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.OnlineDeviceConnection);
-    	statSaveTimer.scheduleAtFixedRate(new StatSaveTask(), DateUtil.getNowDate(), GlobalSetting.TimeOut.SaveStatistics);
+    	inactiveTimer.scheduleAtFixedRate(new InactiveCheckTask(), 0, GlobalSetting.TimeOut.OnlineDeviceConnection);
+    	bannedTimer.scheduleAtFixedRate(new BannedCheckTask(), 0, GlobalSetting.TimeOut.OnlineDeviceConnection);
+    	statSaveTimer.scheduleAtFixedRate(new StatSaveTask(), 0, GlobalSetting.TimeOut.SaveStatistics);
     	logger.debug("Timers of online device pool started.");
     }
     

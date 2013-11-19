@@ -295,7 +295,7 @@ public class DAOWrapper
     public static void startTimers()
     {
     	flushTask.start();
-    	timer.scheduleAtFixedRate(new FlushTimer(flushTask), DateUtil.getNowDate(), GlobalSetting.TimeOut.FlushCacheToDB);
+    	timer.scheduleAtFixedRate(new FlushTimer(flushTask), 0, GlobalSetting.TimeOut.FlushCacheToDB);
     }
     
     public static void stopTimers()

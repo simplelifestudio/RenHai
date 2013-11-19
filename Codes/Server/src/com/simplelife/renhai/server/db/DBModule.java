@@ -39,6 +39,7 @@ public class DBModule extends AbstractModule
     {
 		super.startService();
 		DAOWrapper.startTimers();
+		GlobalSetting.startService();
     }
 	
 	@Override
@@ -47,6 +48,7 @@ public class DBModule extends AbstractModule
 		DAOWrapper.flushToDB();
 		super.stopService();
 		DAOWrapper.stopTimers();
+		GlobalSetting.stopService();
 	}
 	
 }

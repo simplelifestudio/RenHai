@@ -9,6 +9,7 @@
 
 package com.simplelife.renhai.server.util;
 
+import java.io.File;
 import java.util.Random;
 
 /**
@@ -54,4 +55,42 @@ public class CommonFunctions
     	}
     	return value;
     }
+
+	/**
+	 * Add absolute path which Tomcat locates
+	 * 
+	 * @param relativePath
+	 *            : relate path
+	 * @return Full path
+	 */
+	public static String getWebAppPath(String relativePath)
+	{
+		File file = new File(".");
+		String webappsRoot = file.getAbsolutePath().replace('\\', '/');
+		webappsRoot = webappsRoot.replaceAll("/bin/.", "/webapps");
+		
+		String absPath;
+		if (webappsRoot == null || webappsRoot.length() == 0)
+		{
+			absPath = "";
+		}
+		else
+		{
+			absPath = webappsRoot;
+		}
+		
+		absPath += "/renhai";
+		
+		if (relativePath == null || relativePath.length() == 0)
+		{
+			return absPath + "/";
+		}
+		
+		if (relativePath.charAt(0) != '/')
+		{
+			absPath += "/";
+		}
+		absPath += relativePath;
+		return absPath;
+	}
 }
