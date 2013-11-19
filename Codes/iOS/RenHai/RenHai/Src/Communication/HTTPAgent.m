@@ -119,6 +119,7 @@
     }
     
     NSTimeInterval timeout = HTTP_COMM_TIMEOUT;
+    
     NSDate* startTimeStamp = [NSDate date];
     NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
     
@@ -171,8 +172,10 @@
     if (!flag)
     {
         [operation cancel];
-        responseMessage = [RHMessage newServerTimeoutResponseMessage:requestMessage.messageSn device:_userDataModule.device];
-        [responseMessage setTimeStamp:endTimeStamp];
+        RHMessage* timeoutMessage = [RHMessage newServerTimeoutResponseMessage:requestMessage.messageSn device:_userDataModule.device];
+        [timeoutMessage setTimeStamp:endTimeStamp];
+        
+        responseMessage = timeoutMessage;
     }
     
     return responseMessage;

@@ -27,6 +27,9 @@
 
 @implementation RHMessage
 
+@synthesize header = _header;
+@synthesize body = _body;
+
 +(NSString*) generateMessageSn
 {
     return [CBStringUtils randomString:MESSAGE_MESSAGESN_LENGTH];
@@ -617,9 +620,6 @@
     
     return flag;
 }
-
-@synthesize header = _header;
-@synthesize body = _body;
 
 #pragma mark - Public Methods
 

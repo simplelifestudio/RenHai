@@ -441,60 +441,61 @@ ConnectStatus;
 
     RHMessage* requestMessage = [RHMessage newProxyDataSyncRequest];
     [_commModule proxyDataSyncRequest:requestMessage
-               successCompletionBlock:^(NSDictionary* proxyDic){
-                   RHProxy* proxy = _userDataModule.proxy;
-                   
-                   @try
+        successCompletionBlock:^(NSDictionary* proxyDic){
+           RHProxy* proxy = _userDataModule.proxy;
+           
+           @try
+           {
+               [proxy fromJSONObject:proxyDic];
+               
+               switch (proxy.serviceStatus)
+               {
+                   case ServerServiceStatus_Normal:
                    {
-                       [proxy fromJSONObject:proxyDic];
+                       [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncedNormal];
+                       _isProxyDataSyncSuccess = YES;
+                       break;
+                   }
+                   case ServerServiceStatus_Maintenance:
+                   {
+                       [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncedMaintenance];
                        
-                       switch (proxy.serviceStatus)
-                       {
-                           case ServerServiceStatus_Normal:
-                           {
-                               [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncedNormal];
-                               _isProxyDataSyncSuccess = YES;
-                               break;
-                           }
-                           case ServerServiceStatus_Maintenance:
-                           {
-                               [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncedMaintenance];
-                               
-                               RHStatusPeriod* period = proxy.statusPeriod;
-                               
-                               NSString* localBeginTimeStr = period.localBeginTimeString;
-                               NSString* localEndTimeStr = period.localEndTimeString;
-                               
-                               NSString* periodStr = [NSString stringWithFormat:NSLocalizedString(@"Connect_CheckedMaintenance_Detail", nil), localBeginTimeStr, localEndTimeStr];
-                               [self _updateInfoTextView:periodStr];
+                       RHStatusPeriod* period = proxy.statusPeriod;
+                       
+                       NSString* localBeginTimeStr = period.localBeginTimeString;
+                       NSString* localEndTimeStr = period.localEndTimeString;
+                       
+                       NSString* periodStr = [NSString stringWithFormat:NSLocalizedString(@"Connect_CheckedMaintenance_Detail", nil), localBeginTimeStr, localEndTimeStr];
+                       [self _updateInfoTextView:periodStr];
 
-                               _isProxyDataSyncSuccess = NO;
-                               break;
-                           }
-                           default:
-                           {
-                               _isProxyDataSyncSuccess = NO;
-                               break;
-                           }
-                       }
-                   }
-                   @catch (NSException *exception)
-                   {
-                       DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
-                       
-                       [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
-                       
                        _isProxyDataSyncSuccess = NO;
+                       break;
                    }
-                   @finally
+                   default:
                    {
-                       
+                       [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
+                       _isProxyDataSyncSuccess = NO;
+                       break;
                    }
                }
-               failureCompletionBlock:^(){
-                   [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
-               }
-               afterCompletionBlock:nil
+           }
+           @catch (NSException *exception)
+           {
+               DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+               
+               [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
+               _isProxyDataSyncSuccess = NO;
+           }
+           @finally
+           {
+               
+           }
+        }
+        failureCompletionBlock:^(){
+           [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
+            _isProxyDataSyncSuccess = NO;
+        }
+        afterCompletionBlock:nil
      ];
 }
 
