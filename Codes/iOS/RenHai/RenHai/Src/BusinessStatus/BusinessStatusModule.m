@@ -263,7 +263,7 @@ SINGLETON(BusinessStatusModule)
                       // M2
                       case AppMessageIdentifier_AppDataSync:
                       {
-                          [self _updateBusinessStatus:BusinessStatusIdentifier_AppSyncCompleted];
+                          [self _updateBusinessStatus:BusinessStatusIdentifier_AppDataSynced];
                           break;
                       }
                       // M3
@@ -383,7 +383,7 @@ SINGLETON(BusinessStatusModule)
     
     // S2: AppSyncCompleted
     status = [[BusinessStatus alloc]
-              initWithIdentifier:BusinessStatusIdentifier_AppSyncCompleted
+              initWithIdentifier:BusinessStatusIdentifier_AppDataSynced
               appMessageHandleBlock:^(AppMessageIdentifier appMessageId){
                   switch (appMessageId)
                   {
@@ -414,7 +414,7 @@ SINGLETON(BusinessStatusModule)
                       // M4
                       case AppMessageIdentifier_EnterPool:
                       {
-                          [self _updateBusinessStatus:BusinessStatusIdentifier_EnterPoolCompleted];
+                          [self _updateBusinessStatus:BusinessStatusIdentifier_BusinessChoosed];
                           break;
                       }
                       // M5
@@ -522,7 +522,7 @@ SINGLETON(BusinessStatusModule)
     
     // S3: EnterPoolCompleted
     status = [[BusinessStatus alloc]
-              initWithIdentifier:BusinessStatusIdentifier_EnterPoolCompleted
+              initWithIdentifier:BusinessStatusIdentifier_BusinessChoosed
               appMessageHandleBlock:^(AppMessageIdentifier appMessageId){
                   switch (appMessageId)
                   {
@@ -607,7 +607,7 @@ SINGLETON(BusinessStatusModule)
                       // M13
                       case AppMessageIdentifier_LeavePool:
                       {
-                          [self _updateBusinessStatus:BusinessStatusIdentifier_AppSyncCompleted];
+                          [self _updateBusinessStatus:BusinessStatusIdentifier_AppDataSynced];
                           break;
                       }
                       default:
@@ -746,7 +746,7 @@ SINGLETON(BusinessStatusModule)
                       // M13
                       case AppMessageIdentifier_LeavePool:
                       {
-                          [self _updateBusinessStatus:BusinessStatusIdentifier_AppSyncCompleted];
+                          [self _updateBusinessStatus:BusinessStatusIdentifier_AppDataSynced];
                           break;
                       }
                       default:
@@ -762,7 +762,7 @@ SINGLETON(BusinessStatusModule)
                       // E0
                       case ServerNotificationIdentifier_SessionBound:
                       {
-                          [self _updateBusinessStatus:BusinessStatusIdentifier_SessionBoundAcknowledged];
+                          [self _updateBusinessStatus:BusinessStatusIdentifier_SessionBoundAcked];
                           break;
                       }
                       // E1
@@ -800,7 +800,7 @@ SINGLETON(BusinessStatusModule)
     
     // S5: SessionBoundAcknowledged
     status = [[BusinessStatus alloc]
-              initWithIdentifier:BusinessStatusIdentifier_SessionBoundAcknowledged
+              initWithIdentifier:BusinessStatusIdentifier_SessionBoundAcked
               appMessageHandleBlock:^(AppMessageIdentifier appMessageId){
                   switch (appMessageId)
                   {
@@ -853,7 +853,7 @@ SINGLETON(BusinessStatusModule)
                       // M7
                       case AppMessageIdentifier_RejectChat:
                       {
-                          [self _updateBusinessStatus:BusinessStatusIdentifier_EnterPoolCompleted];
+                          [self _updateBusinessStatus:BusinessStatusIdentifier_BusinessChoosed];
                           break;
                       }
                       // M8
@@ -880,7 +880,7 @@ SINGLETON(BusinessStatusModule)
                           ServerNotificationIdentifier serverNotificationId = [_currentBusinessStatus latestServerNotificationRecord];
                           if (serverNotificationId == ServerNotificationIdentifier_OthersideRejectChat || serverNotificationId == ServerNotificationIdentifier_OthersideLost)
                           {
-                              [self _updateBusinessStatus:BusinessStatusIdentifier_EnterPoolCompleted];
+                              [self _updateBusinessStatus:BusinessStatusIdentifier_BusinessChoosed];
                           }
                           else
                           {
@@ -897,7 +897,7 @@ SINGLETON(BusinessStatusModule)
                       // M13
                       case AppMessageIdentifier_LeavePool:
                       {
-                          [self _updateBusinessStatus:BusinessStatusIdentifier_AppSyncCompleted];
+                          [self _updateBusinessStatus:BusinessStatusIdentifier_AppDataSynced];
                           
                           break;
                       }
@@ -1151,13 +1151,13 @@ SINGLETON(BusinessStatusModule)
                       // M9
                       case AppMessageIdentifier_AssessAndContinue:
                       {
-                          [self _updateBusinessStatus:BusinessStatusIdentifier_EnterPoolCompleted];
+                          [self _updateBusinessStatus:BusinessStatusIdentifier_BusinessChoosed];
                           break;
                       }
                       // M10
                       case AppMessageIdentifier_AssessAndQuit:
                       {
-                          [self _updateBusinessStatus:BusinessStatusIdentifier_AppSyncCompleted];
+                          [self _updateBusinessStatus:BusinessStatusIdentifier_AppDataSynced];
                           break;
                       }
                       // M11
