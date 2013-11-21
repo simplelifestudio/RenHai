@@ -12,10 +12,10 @@ typedef enum
 {
     BusinessStatusIdentifier_Disconnected = 0,
     BusinessStatusIdentifier_Connected,
-    BusinessStatusIdentifier_AppSyncCompleted,
-    BusinessStatusIdentifier_EnterPoolCompleted,
+    BusinessStatusIdentifier_AppDataSynced,
+    BusinessStatusIdentifier_BusinessChoosed,
     BusinessStatusIdentifier_MatchStarted,
-    BusinessStatusIdentifier_SessionBoundAcknowledged,
+    BusinessStatusIdentifier_SessionBoundAcked,
     BusinessStatusIdentifier_ChatAllAgreed,
     BusinessStatusIdentifier_ChatEnded
 }
