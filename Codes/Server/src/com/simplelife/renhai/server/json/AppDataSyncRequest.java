@@ -507,7 +507,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		}
 		
 		deviceWrapper.setServiceStatus(Consts.ServiceStatus.Normal);
-		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle, StatusChangeReason.AppDataSynchronize);
+		deviceWrapper.changeBusinessStatus(Consts.DeviceStatus.AppDataSynced, StatusChangeReason.AppDataSynchronize);
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.AppDataSyncResponse);
 		if (profile.getServiceStatus().equals(Consts.ServiceStatus.Normal.name()))

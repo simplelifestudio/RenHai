@@ -111,7 +111,7 @@ public class MockAppConsts
 	public enum MockAppBehaviorMode
 	{
 		Invalid(""),
-		Slave("Slave"),
+		Manual("Manual"),
 		SendInvalidJSONCommand("SendInvalidJSONCommand"),
 		NoAppSyncRequest("NoAppSyncRequest"),
 		// Needs to send AppDataSyncRequest from now on

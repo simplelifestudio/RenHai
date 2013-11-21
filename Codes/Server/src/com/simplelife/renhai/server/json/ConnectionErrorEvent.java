@@ -11,7 +11,7 @@ package com.simplelife.renhai.server.json;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.Consts.BusinessStatus;
+import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 
@@ -31,7 +31,7 @@ public class ConnectionErrorEvent extends AppJSONMessage
 	public void doRun()
 	{
 		//logger.debug("Start to handle connection error of device <{}>", deviceWrapper.getDeviceSn());
-		deviceWrapper.changeBusinessStatus(BusinessStatus.Offline, StatusChangeReason.ExceptionOnWebsocket);
+		deviceWrapper.changeBusinessStatus(DeviceStatus.Disconnected, StatusChangeReason.ExceptionOnWebsocket);
 	}
 	
 	@Override

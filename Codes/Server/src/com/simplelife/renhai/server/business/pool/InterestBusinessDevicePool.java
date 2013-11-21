@@ -29,11 +29,12 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 {
     /** */
-    private ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>> interestLabelMap = new ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>>();
-    private ConcurrentHashMap<String, Integer> labelDeviceCount = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>> interestLabelDeviceMap = new ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>>();
+    private ConcurrentHashMap<String, Integer> labelDeviceCountMap = new ConcurrentHashMap<>();
+    
     public ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>> getInterestLabelMap()
     {
-    	return interestLabelMap;
+    	return interestLabelDeviceMap;
     }
     
     public InterestBusinessDevicePool()
@@ -61,7 +62,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		return labelList;
     	}
     	
-    	Set<Entry<String, Integer>> entrySet = labelDeviceCount.entrySet();
+    	Set<Entry<String, Integer>> entrySet = labelDeviceCountMap.entrySet();
     	for (Entry<String, Integer> entry : entrySet)
     	{
     		HotLabel hotLabel = new HotLabel();
@@ -72,11 +73,12 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	}
     	
     	Collections.sort(labelList);
-    	while(labelList.size() > count)
+    	int removeCount = labelList.size() - count;
+    	while(removeCount > 0)
     	{
-    		labelList.remove();
+    		labelList.removeLast();
+    		removeCount--;
     	}
-    	//addToSortedLink(labelList, hotLabel, count);
         return labelList;
     }
     
@@ -161,9 +163,9 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	for (Interestlabelmap label : labelSet)
     	{
     		String strLabel = label.getGlobalLabel().getInterestLabelName();
-    		if (this.labelDeviceCount.containsKey(strLabel))
+    		if (this.labelDeviceCountMap.containsKey(strLabel))
     		{
-    			Integer count = labelDeviceCount.get(strLabel);
+    			Integer count = labelDeviceCountMap.get(strLabel);
     			synchronized (count)
 				{
     				if (count == null)
@@ -175,11 +177,11 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 					count--;
 					if (count <= 0)
 	    			{
-						labelDeviceCount.remove(strLabel);
+						labelDeviceCountMap.remove(strLabel);
 	    			}
 					else
 					{
-						labelDeviceCount.put(strLabel, count);
+						labelDeviceCountMap.put(strLabel, count);
 					}
 				}
     			
@@ -187,7 +189,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		}
     		else
     		{
-    			labelDeviceCount.put(strLabel, 0);
+    			labelDeviceCountMap.put(strLabel, 0);
     		}
     	}
     }
@@ -203,13 +205,13 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	for (Interestlabelmap label : labelSet)
     	{
     		String strLabel = label.getGlobalLabel().getInterestLabelName();
-    		if (this.labelDeviceCount.containsKey(strLabel))
+    		if (this.labelDeviceCountMap.containsKey(strLabel))
     		{
-    			labelDeviceCount.put(strLabel, labelDeviceCount.get(strLabel) + 1);
+    			labelDeviceCountMap.put(strLabel, labelDeviceCountMap.get(strLabel) + 1);
     		}
     		else
     		{
-    			labelDeviceCount.put(strLabel, 1);
+    			labelDeviceCountMap.put(strLabel, 1);
     		}
     	}
     }
@@ -225,12 +227,12 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	for (Interestlabelmap label : labelSet)
     	{
     		String strLabel = label.getGlobalLabel().getInterestLabelName();
-    		if (!this.interestLabelMap.containsKey(strLabel))
+    		if (!this.interestLabelDeviceMap.containsKey(strLabel))
     		{
-    			interestLabelMap.put(strLabel, new ConcurrentSkipListSet<IDeviceWrapper>());
+    			interestLabelDeviceMap.put(strLabel, new ConcurrentSkipListSet<IDeviceWrapper>());
     		}
     		
-    		ConcurrentSkipListSet<IDeviceWrapper> deviceList = interestLabelMap.get(strLabel);
+    		ConcurrentSkipListSet<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(strLabel);
     		if (deviceList.contains(device))
     		{
     			logger.warn("Device <{}> has been in list of interest queue: " + strLabel, device.getDeviceSn());
@@ -266,13 +268,13 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	for (Interestlabelmap label : labelSet)
     	{
     		String strLabel = label.getGlobalLabel().getInterestLabelName();
-    		if (!this.interestLabelMap.containsKey(strLabel))
+    		if (!this.interestLabelDeviceMap.containsKey(strLabel))
     		{
     			logger.error("Fatal error: Interest device list for label <{}> is non-existent", strLabel);
     			continue;
     		}
     		
-    		ConcurrentSkipListSet<IDeviceWrapper> deviceList = interestLabelMap.get(strLabel);
+    		ConcurrentSkipListSet<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(strLabel);
     		if (!deviceList.contains(device))
     		{
     			logger.warn("Device <{}> is not in list of interest queue: " + strLabel, device.getDeviceSn());
@@ -283,7 +285,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		
     		if (deviceList.isEmpty())
     		{
-    			interestLabelMap.remove(strLabel);
+    			interestLabelDeviceMap.remove(strLabel);
     		}
     	}
     }
@@ -296,7 +298,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	String deviceSn = device.getDeviceSn();
     	if (null != this.getDevice(deviceSn))
     	{
-    		if (deviceMap.containsKey(deviceSn))
+    		if (matchStartedDeviceMap.containsKey(deviceSn))
     		{
     			removeInterestIndex(device);
     		}
@@ -309,7 +311,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 	@Override
 	public void clearPool()
 	{
-		interestLabelMap.clear();
+		interestLabelDeviceMap.clear();
 		super.clearPool();
 	}
 
@@ -317,8 +319,8 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 	public void startChat(IDeviceWrapper device)
 	{
 		String deviceSn = device.getDeviceSn();
-		deviceMap.remove(deviceSn);
-		chatDeviceMap.put(deviceSn, device);
+		matchStartedDeviceMap.remove(deviceSn);
+		sessionBoundDeviceMap.put(deviceSn, device);
 		
 		device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
 		this.removeInterestIndex(device);
@@ -328,8 +330,8 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 	public void startMatch(IDeviceWrapper device)
     {
 		String deviceSn = device.getDeviceSn();
-		cacheDeviceMap.remove(deviceSn);
-		deviceMap.put(deviceSn, device);
+		businessChoosedDeviceMap.remove(deviceSn);
+		matchStartedDeviceMap.put(deviceSn, device);
 		addInterestIndex(device);
 		businessScheduler.resumeSchedule();
     }
@@ -339,17 +341,17 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 	{
 		String sn = device.getDeviceSn();
 		boolean existFlag = false;
-		if (chatDeviceMap.containsKey(sn))
+		if (sessionBoundDeviceMap.containsKey(sn))
 		{
 			existFlag = true;
-			chatDeviceMap.remove(sn);
+			sessionBoundDeviceMap.remove(sn);
 		}
 		
 		if (existFlag)
 		{
 			// Maybe device has been removed from business device pool by another thread
 			//deviceMap.put(sn, device);
-			cacheDeviceMap.put(sn, device);
+			businessChoosedDeviceMap.put(sn, device);
 			//device.changeBusinessStatus(Consts.BusinessStatus.WaitMatch);
 			//device.unbindBusinessSession();
 			//addInterestIndex(device);

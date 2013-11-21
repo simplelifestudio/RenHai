@@ -23,7 +23,7 @@ public interface IMockConnection
 	public void disableConnection();
 	public void enableConnection();
 	public void onTextMessage(String message);
-	public JSONObject syncSendToServer(JSONObject jsonObject);
+	public JSONObject syncSendToServer(JSONObject jsonObject, String messageSn);
 	public void asyncSendToServer(JSONObject jsonObject);
 	public void onTimeout();
 	public void closeConnection();

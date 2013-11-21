@@ -35,16 +35,16 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 	public void startChat(IDeviceWrapper device)
 	{
 		String deviceSn = device.getDeviceSn();
-		deviceMap.remove(deviceSn);
-		chatDeviceMap.put(deviceSn, device);
+		matchStartedDeviceMap.remove(deviceSn);
+		sessionBoundDeviceMap.put(deviceSn, device);
 	}
 	
 	@Override
 	public void startMatch(IDeviceWrapper device)
     {
 		String deviceSn = device.getDeviceSn();
-		cacheDeviceMap.remove(deviceSn);
-		deviceMap.put(deviceSn, device);
+		businessChoosedDeviceMap.remove(deviceSn);
+		matchStartedDeviceMap.put(deviceSn, device);
 		businessScheduler.resumeSchedule();
 		//logger.debug("device <{}> is ready for match", deviceSn);
     }
@@ -54,17 +54,17 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 	{
 		String sn = device.getDeviceSn();
 		boolean existFlag = false;
-		if (chatDeviceMap.containsKey(sn))
+		if (sessionBoundDeviceMap.containsKey(sn))
 		{
 			existFlag = true;
-			chatDeviceMap.remove(sn);
+			sessionBoundDeviceMap.remove(sn);
 		}
 		
 		if (existFlag)
 		{
 			// Maybe device has been removed from business device pool by another thread
 			//deviceMap.put(sn, device);
-			cacheDeviceMap.put(sn, device);
+			businessChoosedDeviceMap.put(sn, device);
 		}
 	}
 

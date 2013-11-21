@@ -73,5 +73,5 @@ public interface IBusinessSession
     
     public boolean checkProgressForRequest(IDeviceWrapper device, Consts.OperationType operationType);
     
-    public Consts.BusinessProgress getProgressOfDevice(IDeviceWrapper device);
+    public Consts.DeviceBusinessProgress getProgressOfDevice(IDeviceWrapper device);
 }

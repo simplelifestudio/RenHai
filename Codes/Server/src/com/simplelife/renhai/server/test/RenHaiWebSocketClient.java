@@ -29,11 +29,13 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IMockApp;
 import com.simplelife.renhai.server.util.IMockConnection;
 import com.simplelife.renhai.server.util.JSONKey;
+import com.simplelife.renhai.server.websocket.SecurityUtils;
 
 /** */
 public class RenHaiWebSocketClient extends WebSocketClient implements IMockConnection 
@@ -57,8 +59,6 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	{
 		this(serverURI, new Draft_17());
 	}
-
-	
 	
 	@Override
 	public void onClose(int arg0, String arg1, boolean arg2)
@@ -131,18 +131,40 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 		logger.debug("MockWebSocket received message: \n{}", message);
 		JSONObject obj = JSONObject.parseObject(message);
 		
-		JSONObject env = obj.getJSONObject(JSONKey.JsonEnvelope);
-		JSONObject header = env.getJSONObject(JSONKey.Header);
+		JSONObject envObj = null;
+		JSONObject decryptedObj = null;
+		if (GlobalSetting.BusinessSetting.Encrypt == 0)
+		{
+			envObj = obj.getJSONObject(JSONKey.JsonEnvelope);
+			decryptedObj = obj;
+		}
+		else
+		{
+			String tmpStr = obj.getString(JSONKey.JsonEnvelope);
+			try
+			{
+				tmpStr = SecurityUtils.decryptByDESAndDecodeByBase64(tmpStr, GlobalSetting.BusinessSetting.EncryptKey);
+				logger.debug("after descrypt: \n{}", tmpStr);
+			}
+			catch (Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+			envObj = JSON.parseObject(tmpStr);
+			decryptedObj = new JSONObject();
+			decryptedObj.put(JSONKey.JsonEnvelope, envObj);
+		}
+		JSONObject header = envObj.getJSONObject(JSONKey.Header);
 		String messageSn = header.getString(JSONKey.MessageSn);
 		
 		if (!syncMap.containsKey(messageSn))
     	{
-    		mockApp.onJSONCommand(obj);
+    		mockApp.onJSONCommand(decryptedObj);
     	}
     	else
     	{
     		logger.debug("MockApp <{}> received response of synchronized request, messageSn: " + messageSn, mockApp.getDeviceSn());
-    		signalForSyncSend(messageSn, obj);
+    		signalForSyncSend(messageSn, decryptedObj);
     	}
 	}
 
@@ -207,7 +229,7 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	}
 
 	@Override
-	public JSONObject syncSendToServer(JSONObject jsonObject)
+	public JSONObject syncSendToServer(JSONObject jsonObject, String messageSn)
 	{
 		if (mockApp == null)
 		{
@@ -221,9 +243,6 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
     		return null;
     	}
 		
-		String messageSn = jsonObject.getJSONObject(JSONKey.JsonEnvelope)
-				.getJSONObject(JSONKey.Header)
-				.getString(JSONKey.MessageSn);
 		MockSyncController controller = new MockSyncController();
     	synchronized(syncMap)
     	{

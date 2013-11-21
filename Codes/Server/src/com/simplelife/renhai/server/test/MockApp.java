@@ -43,6 +43,7 @@ import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IMockApp;
 import com.simplelife.renhai.server.util.IMockConnection;
 import com.simplelife.renhai.server.util.JSONKey;
+import com.simplelife.renhai.server.websocket.SecurityUtils;
 
 /** */
 public class MockApp implements IMockApp, Runnable
@@ -212,10 +213,10 @@ public class MockApp implements IMockApp, Runnable
 		}
 	}
 	
-	public final static String OSVersion = "iOS 7.0.1";
+	public final static String OSVersion = "MockOS";
 	public final static String AppVersion = "0.1";
 	public final static String Location = "22.511962,113.380301";
-	public final static String DeviceModel = "iPhone6";
+	public final static String DeviceModel = "MockDevice";
 	
 	protected IMockConnection connection;
 	protected Logger logger = LoggerFactory.getLogger(MockApp.class);
@@ -246,14 +247,14 @@ public class MockApp implements IMockApp, Runnable
 	
 	protected JSONObject targetDeviceObject;
 	
-	protected boolean autoReplyInSlaveMode = true;
+	protected boolean autoReplyInManualMode = true;
 	protected String websocketLink = "ws://192.81.135.31/renhai/websocket";
 	
-	protected MockAppConsts.MockAppBehaviorMode behaviorMode = MockAppConsts.MockAppBehaviorMode.Slave; 
+	protected MockAppConsts.MockAppBehaviorMode behaviorMode = MockAppConsts.MockAppBehaviorMode.Manual; 
 	protected MockAppConsts.MockAppBusinessStatus businessStatus = MockAppConsts.MockAppBusinessStatus.Invalid;
 	
 	protected int chatCount = 0;
-	protected boolean useRealSocket;
+	protected boolean isUsingRealSocket;
 	
 	protected ConcurrentLinkedQueue<JSONObject> messageQueue = new ConcurrentLinkedQueue<>();
 	
@@ -264,7 +265,7 @@ public class MockApp implements IMockApp, Runnable
 	
 	public boolean isUseRealSocket()
 	{
-		return useRealSocket;
+		return isUsingRealSocket;
 	}
 	
 	public void setBusinessType(Consts.BusinessType businessType)
@@ -504,26 +505,26 @@ public class MockApp implements IMockApp, Runnable
     
     public void startAutoReply()
     {
-    	autoReplyInSlaveMode = true;
+    	autoReplyInManualMode = true;
     }
     
     public void stopAutoReply()
     {
-    	autoReplyInSlaveMode = false;
+    	autoReplyInManualMode = false;
     }
     
     public MockApp(String deviceSn)
 	{
     	this.deviceSn = deviceSn;
-    	this.behaviorMode = MockAppConsts.MockAppBehaviorMode.Slave;
-    	useRealSocket = false;
-    	this.connect(useRealSocket);
+    	this.behaviorMode = MockAppConsts.MockAppBehaviorMode.Manual;
+    	isUsingRealSocket = false;
+    	this.connect(isUsingRealSocket);
 	}
     
     public MockApp(String deviceSn, String strBehaviorMode, boolean realSocket)
 	{
     	this(deviceSn, strBehaviorMode);
-    	this.useRealSocket = realSocket;
+    	this.isUsingRealSocket = realSocket;
     	this.connect(realSocket);
 	}
     
@@ -624,14 +625,34 @@ public class MockApp implements IMockApp, Runnable
 	public void sendRawJSONMessage(JSONObject obj, boolean syncSend)
 	{
 		JSONObject envelopeObj = new JSONObject();
-		envelopeObj.put(JSONKey.JsonEnvelope, obj);
+		
+		String messageSn = obj.getJSONObject(JSONKey.Header)
+				.getString(JSONKey.MessageSn);
+		
+		if (GlobalSetting.BusinessSetting.Encrypt == 0)
+		{
+			envelopeObj.put(JSONKey.JsonEnvelope, obj);
+		}
+		else
+		{
+			String message = JSON.toJSONString(obj, true);
+			try
+			{
+				message = SecurityUtils.encryptByDESAndEncodeByBase64(message, GlobalSetting.BusinessSetting.EncryptKey);
+			}
+			catch (Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+			envelopeObj.put(JSONKey.JsonEnvelope, message);
+		}
+		logger.debug("MockApp <" + deviceSn + "> sends message: \n{}", JSON.toJSONString(envelopeObj, true));
 		
 		//String message = JSON.toJSONString(envelopeObj, SerializerFeature.WriteMapNullValue);
-		logger.debug("MockApp <" + deviceSn + "> sends message: \n{}", JSON.toJSONString(envelopeObj, true));
 		
 		if (syncSend)
 		{
-			JSONObject response = connection.syncSendToServer(envelopeObj);
+			JSONObject response = connection.syncSendToServer(envelopeObj, messageSn);
 			
 			if (response == null)
 			{
@@ -860,8 +881,14 @@ public class MockApp implements IMockApp, Runnable
 		}
 		
 		int intMessageId = 0;
-		JSONObject header = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
-		JSONObject body = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
+		
+		JSONObject header = null;
+		JSONObject body = null;
+		JSONObject envObj = null;
+		envObj = obj.getJSONObject(JSONKey.JsonEnvelope);
+		
+		header = envObj.getJSONObject(JSONKey.Header);
+		body = envObj.getJSONObject(JSONKey.Body);
 		if (header.containsKey(JSONKey.MessageId))
 		{
 			intMessageId = header.getIntValue(JSONKey.MessageId);
@@ -887,10 +914,10 @@ public class MockApp implements IMockApp, Runnable
 			}
 		}
 		
-		if (this.behaviorMode == MockAppConsts.MockAppBehaviorMode.Slave)
+		if (this.behaviorMode == MockAppConsts.MockAppBehaviorMode.Manual)
 		{
 			// Check if it's notification, and response if it is
-			if (autoReplyInSlaveMode)
+			if (autoReplyInManualMode)
 			{
 				if (messageId == Consts.MessageId.BusinessSessionNotification)
 				{
@@ -1339,7 +1366,7 @@ public class MockApp implements IMockApp, Runnable
 	    	if (this.connection.isOpen())
 	    	{
 	    		connection.bindMockApp(this);
-	    		if (behaviorMode != MockAppConsts.MockAppBehaviorMode.Slave)
+	    		if (behaviorMode != MockAppConsts.MockAppBehaviorMode.Manual)
 	        	{
 	        		this.prepareSending(null, null);
 	        	}
@@ -1361,14 +1388,14 @@ public class MockApp implements IMockApp, Runnable
 	public void connect()
 	{
 		setBusinessStatus(MockAppBusinessStatus.Init);
-		setupConnection(useRealSocket);
+		setupConnection(isUsingRealSocket);
 		startTimer();
 	}
 	
 	@Override
 	public void connect(boolean realSocket)
 	{
-		useRealSocket = realSocket;
+		isUsingRealSocket = realSocket;
 		connect();
 	}
 	

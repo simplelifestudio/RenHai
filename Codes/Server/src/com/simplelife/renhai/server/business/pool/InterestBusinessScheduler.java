@@ -34,18 +34,18 @@ import com.simplelife.renhai.server.util.JSONKey;
 /** */
 public class InterestBusinessScheduler extends AbstractBusinessScheduler
 {
-	private ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>> interestLabelMap;
+	private ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>> interestLabelDeviceMap;
 	private boolean deadMatchFlag = false; 
 	
 	@Override
 	public void bind(AbstractBusinessDevicePool pool)
     {
     	this.ownerBusinessPool = pool;
-    	deviceMap = pool.getDeviceMap();
+    	matchStartedDeviceMap = pool.getDeviceMap();
     	
     	if (pool instanceof InterestBusinessDevicePool)
     	{
-    		interestLabelMap = ((InterestBusinessDevicePool)pool).getInterestLabelMap(); 
+    		interestLabelDeviceMap = ((InterestBusinessDevicePool)pool).getInterestLabelMap(); 
     	}
     	else
     	{
@@ -56,7 +56,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 	@Override
 	public boolean meetScheduleCondition()
 	{
-		return ((deviceMap.size() >= deviceCountPerSession));
+		return ((matchStartedDeviceMap.size() >= deviceCountPerSession));
 	}
 	
 	private LinkedList<String> getRandomLabelSet(Set<Interestlabelmap> labelSet)
@@ -69,9 +69,11 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 		
 		Random random = new Random();
 		LinkedList<String> labels = new LinkedList<>();
-		while (orgLabels.size() > 0)
+		int tmpSize = orgLabels.size(); 
+		while (tmpSize > 0)
 		{
-			labels.add(orgLabels.remove(random.nextInt(orgLabels.size())));
+			labels.add(orgLabels.remove(random.nextInt(tmpSize)));
+			tmpSize--;
 		}
 		return labels;
 	}
@@ -79,7 +81,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
     /** */
     public void schedule()
     {
-    	int deviceMapsize = deviceMap.size();
+    	int deviceMapsize = matchStartedDeviceMap.size();
     	logger.debug("Start to schedule devices in InterestBusinessDevicePool, devices count: " + deviceMapsize);
     	if (deviceMapsize < deviceCountPerSession)
 		{
@@ -87,16 +89,16 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			return;
 		}
     	
-    	List<String> selectedDevice = new ArrayList<String>();
-    	boolean deviceFoundFlag = false;
+    	List<String> selectedDeviceList = new ArrayList<String>();
+    	boolean isAllDeviceFound = false;
     	String deviceFoundInterest = null;
     	
     	// Loop all device from deviceMap
-		Set<Entry<String, IDeviceWrapper>> entrySet = deviceMap.entrySet();
+		Set<Entry<String, IDeviceWrapper>> entrySet = matchStartedDeviceMap.entrySet();
 		Set<Interestlabelmap> labelSet;
 		for (Entry<String, IDeviceWrapper> entry : entrySet)
 		{
-			if (deviceFoundFlag)
+			if (isAllDeviceFound)
 			{
 				break;
 			}
@@ -106,7 +108,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 					.getProfile()
 					.getInterestCard()
 					.getInterestLabelMapSet();
-			ConcurrentSkipListSet<IDeviceWrapper> deviceList;
+			ConcurrentSkipListSet<IDeviceWrapper> candidateDeviceList;
 			
 			int deviceListSize = 0;
 			
@@ -115,15 +117,15 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			
 			for (String strLabel : labels)
 			{
-				if (deviceFoundFlag)
+				if (isAllDeviceFound)
     			{
     				break;
     			}
 
-				selectedDevice.clear();
+				selectedDeviceList.clear();
 				// Try to find device with same interest label
-				deviceList = interestLabelMap.get(strLabel);
-				deviceListSize = deviceList.size();
+				candidateDeviceList = interestLabelDeviceMap.get(strLabel);
+				deviceListSize = candidateDeviceList.size();
 				logger.debug("Find {} devices by interest label: " + strLabel, deviceListSize);
 				
 				// The selected device shall be considered
@@ -140,23 +142,23 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 				{
 					String tempSn;
 					// All of devices found can be added to this business session
-					for (IDeviceWrapper tmpDevice : deviceList)
+					for (IDeviceWrapper tmpDevice : candidateDeviceList)
 					{
 						tempSn = tmpDevice.getDeviceSn();
-						selectedDevice.add(tempSn);
+						selectedDeviceList.add(tempSn);
 					}
-					deviceFoundFlag = true;
+					isAllDeviceFound = true;
 				}
 				else
 				{
 					// More devices than expected 
-					deviceFoundFlag = selectDevice(deviceList, selectedDevice);
+					isAllDeviceFound = selectDevice(candidateDeviceList, selectedDeviceList);
 				}
 				
 				deviceFoundInterest = strLabel;
 			}
 			
-			if (!deviceFoundFlag)
+			if (!isAllDeviceFound)
 			{
 				// Devices in pool can't be matched until new device entered 
 				logger.debug("Device <{}> can't be scheduled by its interest labels", device.getDeviceSn());
@@ -164,14 +166,14 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			}
 		}
     	
-		if (!deviceFoundFlag)
+		if (!isAllDeviceFound)
 		{
 			// Devices in pool can't be matched until new device entered 
 			logger.debug("Devices in pool can't be matched by interest labels");
 			deadMatchFlag = true;
 			return;
 		}
-		startSession(selectedDevice, deviceFoundInterest);
+		startSession(selectedDeviceList, deviceFoundInterest);
     }
     
     private boolean selectDevice(
@@ -236,6 +238,11 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			obj.put(JSONKey.GlobalInterestLabelId, label.getGlobalInterestLabelId());
 			obj.put(JSONKey.InterestLabelName, label.getInterestLabelName());
 			obj.put(JSONKey.GlobalMatchCount, label.getGlobalMatchCount());
+		}
+		else
+		{
+			logger.error("Fatal error, global interest label {} can not be found when trying to start session", deviceFoundInterest);
+			return;
 		}
 		
 		if (session.startSession(selectedDevice, obj))

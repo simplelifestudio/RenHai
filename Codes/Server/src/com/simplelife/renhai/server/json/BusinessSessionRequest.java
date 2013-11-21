@@ -27,7 +27,7 @@ import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.Consts.BusinessStatus;
+import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.IBusinessSession;
@@ -236,7 +236,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		{
 			if (!session.checkProgressForRequest(deviceWrapper, operationType))
 			{
-				Consts.BusinessProgress progress = session.getProgressOfDevice(deviceWrapper);
+				Consts.DeviceBusinessProgress progress = session.getProgressOfDevice(deviceWrapper);
 				logger.error("Received " + operationType.name() + " from Device <{}> but its business progress is " + progress.name());
 				this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
 				this.setErrorDescription("It's not allowed to send " + operationType.name() + " if business progress is " + progress.name());
@@ -289,8 +289,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType businessType = Consts.BusinessType.parseValue(intType);
 		
-		Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
-		if (status.getValue() >= Consts.BusinessStatus.MatchCache.getValue())
+		Consts.DeviceStatus status = deviceWrapper.getBusinessStatus();
+		if (status.getValue() >= Consts.DeviceStatus.BusinessChoosed.getValue())
 		{
 			Consts.BusinessType curBusinessType = deviceWrapper.getBusinessType();
 			if (businessType != curBusinessType)
@@ -318,7 +318,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
-		if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+		if (deviceWrapper.getBusinessStatus() == Consts.DeviceStatus.SessionBound)
 		{
 			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession().getSessionId());
 		}
@@ -338,7 +338,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		OutputMessageCenter.instance.addMessage(response);
 		
 		deviceWrapper.setBusinessType(businessType);
-		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.MatchCache, StatusChangeReason.AppEnterBusiness);
+		deviceWrapper.changeBusinessStatus(Consts.DeviceStatus.BusinessChoosed, StatusChangeReason.AppEnterBusiness);
 	}
 	
 	private void leavePool()
@@ -347,8 +347,8 @@ public class BusinessSessionRequest extends AppJSONMessage
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceSn());
 
-		Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
-		if (status.getValue() < Consts.BusinessStatus.MatchCache.getValue())
+		Consts.DeviceStatus status = deviceWrapper.getBusinessStatus();
+		if (status.getValue() < Consts.DeviceStatus.BusinessChoosed.getValue())
 		{
 			this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
 			this.setErrorDescription("Device <"+ deviceWrapper.getDeviceSn() +"> is not in business device pool.");
@@ -370,11 +370,11 @@ public class BusinessSessionRequest extends AppJSONMessage
 		//OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		//onlinePool.getBusinessPool(businessType).onDeviceLeave(deviceWrapper, Consts.StatusChangeReason.AppLeaveBusiness);
 		
-		deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Idle, Consts.StatusChangeReason.AppLeaveBusiness);
+		deviceWrapper.changeBusinessStatus(Consts.DeviceStatus.AppDataSynced, Consts.StatusChangeReason.AppLeaveBusiness);
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
 		
-		if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+		if (deviceWrapper.getBusinessStatus() == Consts.DeviceStatus.SessionBound)
 		{
 			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession()
 					.getSessionId());
@@ -408,7 +408,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		session.onAgreeChat(deviceWrapper);
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
-		if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+		if (deviceWrapper.getBusinessStatus() == Consts.DeviceStatus.SessionBound)
 		{
 			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession()
 					.getSessionId());
@@ -439,7 +439,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
 		
-		if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+		if (deviceWrapper.getBusinessStatus() == Consts.DeviceStatus.SessionBound)
 		{
 			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession()
 					.getSessionId());
@@ -450,7 +450,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		
 		deviceWrapper.getOwnerBusinessSession().onRejectChat(deviceWrapper);
-		deviceWrapper.changeBusinessStatus(BusinessStatus.MatchCache, StatusChangeReason.AppRejectChat);
+		deviceWrapper.changeBusinessStatus(DeviceStatus.BusinessChoosed, StatusChangeReason.AppRejectChat);
 		
 		response.addToBody(JSONKey.OperationType, Consts.OperationType.RejectChat.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
@@ -473,7 +473,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
 		
-		if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+		if (deviceWrapper.getBusinessStatus() == Consts.DeviceStatus.SessionBound)
 		{
 			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession()
 					.getSessionId());
@@ -604,7 +604,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		{
 			response.addToBody(JSONKey.OperationType, Consts.OperationType.AssessAndQuit.getValue());
 			deviceWrapper.getOwnerBusinessSession().onAssessAndQuit(this.deviceWrapper);
-			deviceWrapper.changeBusinessStatus(BusinessStatus.Idle, StatusChangeReason.AssessAndQuit);
+			deviceWrapper.changeBusinessStatus(DeviceStatus.AppDataSynced, StatusChangeReason.AssessAndQuit);
 			
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessQuit_1020
 	    			, deviceWrapper.getDevice().getProfile()
@@ -614,7 +614,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		{
 			response.addToBody(JSONKey.OperationType, Consts.OperationType.AssessAndContinue.getValue());
 			deviceWrapper.getOwnerBusinessSession().onAssessAndContinue(this.deviceWrapper);
-			deviceWrapper.changeBusinessStatus(BusinessStatus.MatchCache, StatusChangeReason.AssessAndContinue);
+			deviceWrapper.changeBusinessStatus(DeviceStatus.BusinessChoosed, StatusChangeReason.AssessAndContinue);
 			
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessContinue_1019
 	    			, deviceWrapper.getDevice().getProfile()
@@ -721,7 +721,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
 		
-		if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+		if (deviceWrapper.getBusinessStatus() == Consts.DeviceStatus.SessionBound)
 		{
 			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession()
 					.getSessionId());
@@ -739,7 +739,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		synchronized (deviceWrapper)
 		{
-			deviceWrapper.changeBusinessStatus(BusinessStatus.WaitMatch, StatusChangeReason.AppRequestStartMatch);
+			deviceWrapper.changeBusinessStatus(DeviceStatus.MatchStarted, StatusChangeReason.AppRequestStartMatch);
 		}
 	}
 	
@@ -750,7 +750,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
 		
-		if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+		if (deviceWrapper.getBusinessStatus() == Consts.DeviceStatus.SessionBound)
 		{
 			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession()
 					.getSessionId());
@@ -760,9 +760,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
-		if (deviceWrapper.getBusinessStatus() != BusinessStatus.MatchCache)
+		if (deviceWrapper.getBusinessStatus() != DeviceStatus.BusinessChoosed)
 		{
-			deviceWrapper.changeBusinessStatus(BusinessStatus.MatchCache, StatusChangeReason.AppUnbindSession);
+			deviceWrapper.changeBusinessStatus(DeviceStatus.BusinessChoosed, StatusChangeReason.AppUnbindSession);
 		}
 		
 		response.addToBody(JSONKey.OperationType, Consts.OperationType.SessionUnbind.getValue());

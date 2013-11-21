@@ -65,8 +65,8 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		long lastActivityTime = deviceWrapper.getLastActivityTime();
 		
 		// Step_02 调用：DeviceWrapper::getBusinessStatus
-		Consts.BusinessStatus businessStatus = deviceWrapper.getBusinessStatus();
-		assertEquals(businessStatus, Consts.BusinessStatus.Init);
+		Consts.DeviceStatus businessStatus = deviceWrapper.getBusinessStatus();
+		assertEquals(businessStatus, Consts.DeviceStatus.Connected);
 		
 		// Step_03 Mock请求：设备同步
 		mockApp.syncDevice();
@@ -100,7 +100,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		
 		// Step_07 调用：DeviceWrapper::getBusinessStatus
 		businessStatus = deviceWrapper.getBusinessStatus();
-		assertEquals(businessStatus, Consts.BusinessStatus.Idle);
+		assertEquals(businessStatus, Consts.DeviceStatus.AppDataSynced);
 		
 		// Step_08 调用：OnlineDevicePool::getCount
 		String deviceSn = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceSn();

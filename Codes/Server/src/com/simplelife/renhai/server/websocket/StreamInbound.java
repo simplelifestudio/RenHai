@@ -146,7 +146,7 @@ public abstract class StreamInbound implements UpgradeInbound {
                     return SocketState.CLOSED;
                 } else if (opCode == Constants.OPCODE_PING) {
                     //getWsOutbound().pong(frame.getPayLoad());
-                    doOnPing(frame.getPayLoad());
+                    doOnPing(frame.getPayLoad());				// Updated by Renhai
                 } else if (opCode == Constants.OPCODE_PONG) {
                     doOnPong(frame.getPayLoad());
                 } else {
@@ -246,6 +246,10 @@ public abstract class StreamInbound implements UpgradeInbound {
         }
     }
     
+    /**
+     * Updated by RenHai, to handle ping from APP
+     * @param payload
+     */
     private void doOnPing(ByteBuffer payload) {
         // Need to call onPong using the web application's class loader
         Thread t = Thread.currentThread();

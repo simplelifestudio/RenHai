@@ -138,11 +138,8 @@ public class MockWebSocketConnection extends WebSocketConnection implements IMoc
 	}
 
 	@Override
-	public JSONObject syncSendToServer(JSONObject jsonObject)
+	public JSONObject syncSendToServer(JSONObject jsonObject, String messageSn)
 	{
-		String messageSn = jsonObject.getJSONObject(JSONKey.JsonEnvelope)
-				.getJSONObject(JSONKey.Header)
-				.getString(JSONKey.MessageSn);
 		MockSyncController controller = new MockSyncController();
     	synchronized(syncMapToServer)
     	{

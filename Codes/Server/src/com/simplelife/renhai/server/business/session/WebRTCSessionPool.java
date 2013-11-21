@@ -80,7 +80,7 @@ public class WebRTCSessionPool extends AbstractPool
         return webRTCSessionList.size();
     }
     
-    /** */
+    /*
     public boolean saveToDb()
     {
     	for (Webrtcsession session : webRTCSessionList)
@@ -89,6 +89,7 @@ public class WebRTCSessionPool extends AbstractPool
     	}
         return true;
     }
+    */
 
     
     /** */

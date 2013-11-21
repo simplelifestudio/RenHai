@@ -25,26 +25,26 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
 	public void bind(AbstractBusinessDevicePool pool)
     {
     	this.ownerBusinessPool = pool;
-    	deviceMap = pool.getDeviceMap();
+    	matchStartedDeviceMap = pool.getDeviceMap();
     }
 	
 	/** */
 	public void schedule()
 	{
-		if (deviceMap.size() < deviceCountPerSession)
+		if (matchStartedDeviceMap.size() < deviceCountPerSession)
 		{
 			return;
 		}
 		
 		List<String> selectedDevice = new ArrayList<String>();
 		
-		if (deviceCountPerSession == deviceMap.size())
+		if (deviceCountPerSession == matchStartedDeviceMap.size())
 		{
-			selectedDevice.addAll(deviceMap.keySet());
+			selectedDevice.addAll(matchStartedDeviceMap.keySet());
 		}
 		else
 		{
-			Set<String> keySet = deviceMap.keySet();
+			Set<String> keySet = matchStartedDeviceMap.keySet();
 			Object[] keyArray = keySet.toArray();
 			
 			Random random = new Random();
@@ -77,6 +77,6 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
 	@Override
 	public boolean meetScheduleCondition()
 	{
-		return (deviceMap.size() >= deviceCountPerSession);
+		return (matchStartedDeviceMap.size() >= deviceCountPerSession);
 	}
 }

@@ -75,7 +75,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 		IDeviceWrapper deviceWrapper1 = OnlineDevicePool.instance.getDevice(mockApp1.getConnectionId());
 		
 		// Step_03 调用：DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Init, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.Connected, deviceWrapper1.getBusinessStatus());
 		
 		// Step_04 Mock请求：A设备同步
 		long lastActivity = deviceWrapper1.getLastActivityTime();
@@ -86,7 +86,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_05 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper1.getBusinessStatus());
 		assertTrue(deviceWrapper1.getLastActivityTime() > lastActivity);
 		
 		// Step_06 调用：OnlineDevicePool::getCount

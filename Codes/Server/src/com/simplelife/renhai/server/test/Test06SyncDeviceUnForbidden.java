@@ -74,7 +74,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		int deviceCount = pool.getElementCount();
 		
 		// Step_03 调用：DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Init, deviceWrapper.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.Connected, deviceWrapper.getBusinessStatus());
 		
 		// Step_04 Mock请求：设备同步
 		
@@ -83,7 +83,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		assertTrue(mockApp.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_05 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper.getBusinessStatus());
 		
 		// Step_06 调用：OnlineDevicePool::getCount
 		assertEquals(deviceCount, pool.getElementCount());

@@ -283,12 +283,12 @@ public class Consts
 		}
 	}
 	
-	public enum BusinessStatus
+	public enum DeviceStatus
 	{
-		Invalid(0), Offline(1), Init(2), Idle(3), MatchCache(4), WaitMatch(5), SessionBound(6);
+		Invalid(0), Disconnected(1), Connected(2), AppDataSynced(3), BusinessChoosed(4), MatchStarted(5), SessionBound(6);
 		
 		private int value;
-		private BusinessStatus(int value)
+		private DeviceStatus(int value)
 		{
 			this.value = value;
 		}
@@ -298,9 +298,9 @@ public class Consts
 			return value;
 		}
 		
-		public static BusinessStatus parseValue(int value)
+		public static DeviceStatus parseValue(int value)
 		{
-			for (BusinessStatus item : values())
+			for (DeviceStatus item : values())
 			{
 				if (item.value == value)
 				{
@@ -317,17 +317,16 @@ public class Consts
 		}
 	}
 	
-	public enum BusinessProgress
+	public enum DeviceBusinessProgress
 	{
 		Invalid(0), 
 		Init(1), 
-		SessionBoundConfirmed(2), 
-		ChatConfirmed(3), 
-		ChatEnded(4), 
-		AssessFinished(5);
+		SessionBoundAcked(2), 
+		ChatAgreed(3), 
+		ChatEnded(4);
 		
 		private int value;
-		private BusinessProgress(int value)
+		private DeviceBusinessProgress(int value)
 		{
 			this.value = value;
 		}
@@ -338,9 +337,9 @@ public class Consts
 			
 		}
 		
-		public static BusinessProgress parseValue(int value)
+		public static DeviceBusinessProgress parseValue(int value)
 		{
-			for (BusinessProgress item : values())
+			for (DeviceBusinessProgress item : values())
 			{
 				if (item.value == value)
 				{

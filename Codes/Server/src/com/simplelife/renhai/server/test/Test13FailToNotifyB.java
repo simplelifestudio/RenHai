@@ -78,10 +78,10 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		sessionPool.getElementCount();
 		
 		// Step_04 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper1.getBusinessStatus());
 		
 		// Step_05 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.clearLastReceivedCommand();
@@ -95,10 +95,10 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper1.getBusinessStatus());
 		
 		// Step_09 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper2.getBusinessStatus());
 		
 		// Step_10 调用：RandomBusinessDevicePool::getCount
 		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
@@ -128,7 +128,7 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		// Step_15 调用：A DeviceWrapper::getBusinessStatus
 		assertTrue(OnlineDevicePool.instance.getDevice(demoDeviceSn) != null);
 		assertTrue(businessPool.getDevice(demoDeviceSn) != null);
-		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper1.getBusinessStatus());
 		assertTrue(deviceWrapper1.getOwnerBusinessSession() == null);
 		
 		// Step_16 调用：B DeviceWrapper::getBusinessStatus

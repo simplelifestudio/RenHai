@@ -30,9 +30,9 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     protected Logger logger = BusinessModule.instance.getLogger();
     
     // Map for saving devices in chat
-    protected ConcurrentHashMap<String, IDeviceWrapper> chatDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
-    protected ConcurrentHashMap<String, IDeviceWrapper> cacheDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
-    
+    protected ConcurrentHashMap<String, IDeviceWrapper> sessionBoundDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
+    protected ConcurrentHashMap<String, IDeviceWrapper> businessChoosedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
+    protected ConcurrentHashMap<String, IDeviceWrapper> matchStartedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     
     public Consts.BusinessType getBusinessType()
     {
@@ -41,7 +41,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     
     public ConcurrentHashMap<String, IDeviceWrapper> getDeviceMap()
     {
-    	return deviceMap;
+    	return matchStartedDeviceMap;
     }
     
     /**
@@ -66,7 +66,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
      */
     public int getElementCount()
     {
-        return chatDeviceMap.size() + deviceMap.size() + cacheDeviceMap.size();
+        return sessionBoundDeviceMap.size() + matchStartedDeviceMap.size() + businessChoosedDeviceMap.size();
     }
     
     public String checkDeviceEnter(IDeviceWrapper device)
@@ -84,15 +84,15 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	}
     	
     	String sn = device.getDeviceSn();
-    	if (deviceMap.containsKey(sn) || cacheDeviceMap.containsKey(sn))
+    	if (matchStartedDeviceMap.containsKey(sn) || businessChoosedDeviceMap.containsKey(sn))
     	{
     		logger.warn("Device <{}> has been in BusinessDevicePool", sn);
     		return null;
     	}
     	
-    	if (chatDeviceMap.containsKey(sn))
+    	if (sessionBoundDeviceMap.containsKey(sn))
     	{
-    		String temp = "Device ("+ sn +") has been in BusinessDevicePool and is in chat";
+    		String temp = "Device <"+ sn +"> has been in BusinessDevicePool and is in chat";
     		logger.error(temp);
     		return temp;
     	}
@@ -104,7 +104,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
      */
     public void onDeviceEnter(IDeviceWrapper device)
     {
-    	cacheDeviceMap.put(device.getDeviceSn(), device);
+    	businessChoosedDeviceMap.put(device.getDeviceSn(), device);
     	logger.debug("Device <{}> has entered " + businessType.name() + " pool, device count after enter: " + this.getElementCount(), device.getDeviceSn());
     }
     
@@ -120,29 +120,29 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	}
     	
     	String sn = device.getDeviceSn();
-    	if (!(deviceMap.containsKey(sn) || chatDeviceMap.containsKey(sn) || cacheDeviceMap.containsKey(sn)))
+    	if (!(matchStartedDeviceMap.containsKey(sn) || sessionBoundDeviceMap.containsKey(sn) || businessChoosedDeviceMap.containsKey(sn)))
     	{
     		logger.debug("Device <{}> was not in " + this.businessType.name() + " Device Pool when try to release it by reason of " + reason.name(), sn);
     		return;
     	}
     	
-    	if (deviceMap.containsKey(sn))
+    	if (matchStartedDeviceMap.containsKey(sn))
     	{
-	    	deviceMap.remove(sn);
+	    	matchStartedDeviceMap.remove(sn);
 	    	logger.debug("Device <{}> was removed from deviceMap of " + this.businessType.name() + " Device Pool caused by " + reason.name(), sn);
 	    	return;
     	}
     	
-    	if (chatDeviceMap.containsKey(sn))
+    	if (sessionBoundDeviceMap.containsKey(sn))
     	{
-	    	chatDeviceMap.remove(sn);
+	    	sessionBoundDeviceMap.remove(sn);
 	    	logger.debug("Device <{}> was removed from chatDeviceMap of " + this.businessType.name() + " Device Pool caused by " + reason.name(), sn);
 	    	return;
     	}
     	
-    	if (cacheDeviceMap.containsKey(sn))
+    	if (businessChoosedDeviceMap.containsKey(sn))
     	{
-	    	cacheDeviceMap.remove(sn);
+	    	businessChoosedDeviceMap.remove(sn);
 	    	logger.debug("Device <{}> was removed from cacheDeviceMap of " + this.businessType.name() + " Device Pool caused by " + reason.name(), sn);
 	    	return;
     	}
@@ -160,17 +160,17 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	@Override
 	public IDeviceWrapper getDevice(String deviceSn)
     {
-		if (deviceMap.containsKey(deviceSn))
+		if (matchStartedDeviceMap.containsKey(deviceSn))
 		{
-			return deviceMap.get(deviceSn);
+			return matchStartedDeviceMap.get(deviceSn);
 		}
-		if (chatDeviceMap.containsKey(deviceSn))
+		if (sessionBoundDeviceMap.containsKey(deviceSn))
 		{
-			return chatDeviceMap.get(deviceSn);
+			return sessionBoundDeviceMap.get(deviceSn);
 		}
-		if (cacheDeviceMap.containsKey(deviceSn))
+		if (businessChoosedDeviceMap.containsKey(deviceSn))
 		{
-			return cacheDeviceMap.get(deviceSn);
+			return businessChoosedDeviceMap.get(deviceSn);
 		}
    		return null;
     }
@@ -184,13 +184,13 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	@Override
 	public void clearPool()
 	{
-		deviceMap.clear();
-		chatDeviceMap.clear();
-		cacheDeviceMap.clear();
+		matchStartedDeviceMap.clear();
+		sessionBoundDeviceMap.clear();
+		businessChoosedDeviceMap.clear();
 	}
 	
 	public int getDeviceCountInChat()
 	{
-		return chatDeviceMap.size();
+		return sessionBoundDeviceMap.size();
 	}
 }

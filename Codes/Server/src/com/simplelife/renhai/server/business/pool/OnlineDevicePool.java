@@ -28,7 +28,7 @@ import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Systemstatistics;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.Consts.BusinessStatus;
+import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -41,6 +41,7 @@ import com.simplelife.renhai.server.util.JSONKey;
 public class OnlineDevicePool extends AbstractDevicePool
 {
 	private Logger logger = BusinessModule.instance.getLogger();
+	protected ConcurrentHashMap<String, IDeviceWrapper> appDataSyncedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
 	
 	private class InactiveCheckTask extends TimerTask
     {
@@ -100,7 +101,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 	private Timer inactiveTimer = new Timer();
 	private Timer bannedTimer = new Timer();
 	private Timer statSaveTimer = new Timer();
-    private ConcurrentHashMap<String, IDeviceWrapper> queueDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
+    private ConcurrentHashMap<String, IDeviceWrapper> connectedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     private HashMap<Consts.BusinessType, AbstractBusinessDevicePool> businessPoolMap = new HashMap<Consts.BusinessType, AbstractBusinessDevicePool>();
     private ConcurrentLinkedQueue<IDeviceWrapper> bannedDeviceList = new ConcurrentLinkedQueue<IDeviceWrapper> ();
     
@@ -131,7 +132,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 				logger.debug("Device with connection id {} will be removed from online device pool due to last activity time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastActivityTime())
 						, deviceWrapper.getConnection().getConnectionId());
 				
-				deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.TimeoutOfActivity);
+				deviceWrapper.changeBusinessStatus(Consts.DeviceStatus.Disconnected, Consts.StatusChangeReason.TimeoutOfActivity);
 				//deleteDevice(deviceWrapper, Consts.StatusChangeReason.TimeoutOfActivity);
 				continue;
 			}
@@ -150,7 +151,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 						+ DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime()) + ", id in map: " + e.getKey(),
 						deviceWrapper.getConnection().getConnectionId());
 				//deleteDevice(deviceWrapper, Consts.StatusChangeReason.TimeoutOfPing);
-				deviceWrapper.changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.TimeoutOfPing);
+				deviceWrapper.changeBusinessStatus(Consts.DeviceStatus.Disconnected, Consts.StatusChangeReason.TimeoutOfPing);
 				continue;
 			}
 		}
@@ -159,8 +160,8 @@ public class OnlineDevicePool extends AbstractDevicePool
     private void checkInactiveDevice()
     {
     	logger.debug("Start to check inactive connections.");
-    	checkDeviceMap(this.deviceMap);
-    	checkDeviceMap(this.queueDeviceMap);
+    	checkDeviceMap(this.appDataSyncedDeviceMap);
+    	checkDeviceMap(this.connectedDeviceMap);
 	}
     
     /** */
@@ -183,7 +184,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     /** */
     public boolean isDeviceInPool(String deviceSn)
     {
-        return deviceMap.containsKey(deviceSn);
+        return appDataSyncedDeviceMap.containsKey(deviceSn);
     }
     
     /** */
@@ -201,7 +202,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	deviceWrapper.updatePingTime();
     	
     	String id = connection.getConnectionId();
-    	queueDeviceMap.put(id, deviceWrapper);
+    	connectedDeviceMap.put(id, deviceWrapper);
     	
     	logger.debug("Save connection {} in OnlineDevicePool", id);
     	/*
@@ -231,16 +232,16 @@ public class OnlineDevicePool extends AbstractDevicePool
     		return;
     	}
     	
-    	Consts.BusinessStatus status = deviceWrapper.getBusinessStatus();
+    	Consts.DeviceStatus status = deviceWrapper.getBusinessStatus();
     	
     	logger.debug("Start to remove device <{}> from OnlineDevicePool, device status: " + status.name(), deviceWrapper.getDeviceSn());
     	
-    	if (status == Consts.BusinessStatus.Init)
+    	if (status == Consts.DeviceStatus.Connected)
     	{
     		String id = deviceWrapper.getConnection().getConnectionId();
-    		if (queueDeviceMap.containsKey(id))
+    		if (connectedDeviceMap.containsKey(id))
     		{
-	    		queueDeviceMap.remove(id);
+	    		connectedDeviceMap.remove(id);
 	    		logger.debug("Device <{}> was removed from queueDeviceMap of online device pool, device count after remove: " + getElementCount(), id);
     		}
     		else
@@ -251,9 +252,9 @@ public class OnlineDevicePool extends AbstractDevicePool
     	else
     	{
     		String sn = deviceWrapper.getDeviceSn();
-    		if (deviceMap.containsKey(sn))
+    		if (appDataSyncedDeviceMap.containsKey(sn))
     		{
-	    		deviceMap.remove(sn);
+	    		appDataSyncedDeviceMap.remove(sn);
 	    		logger.debug("Device <{}> was removed from deviceMap of online device pool, device count after remove: " + getElementCount(), sn);
     		}
     		else
@@ -305,7 +306,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     {
     	IBaseConnection connection = deviceWrapper.getConnection();
     	String connectionId = connection.getConnectionId();
-    	if (!queueDeviceMap.containsKey(connectionId))
+    	if (!connectedDeviceMap.containsKey(connectionId))
     	{
     		return;
     	}
@@ -316,10 +317,10 @@ public class OnlineDevicePool extends AbstractDevicePool
     	}
     	
     	String deviceSn = deviceWrapper.getDeviceSn();
-    	if (deviceMap.containsKey(deviceSn))
+    	if (appDataSyncedDeviceMap.containsKey(deviceSn))
     	{
     		logger.debug("Device <{}> has been in deviceMap", deviceSn);
-    		IDeviceWrapper preDevice = deviceMap.get(deviceSn);
+    		IDeviceWrapper preDevice = appDataSyncedDeviceMap.get(deviceSn);
     		String previousId = preDevice.getConnection().getConnectionId(); 
     		if (!previousId.equals(connectionId))
     		{
@@ -328,31 +329,31 @@ public class OnlineDevicePool extends AbstractDevicePool
     			//preDevice.getConnection().closeConnection();
     			// 2013-10-15, delete device due to it's hard for app to recover to status before connection loss
     			//deleteDevice(preDevice, StatusChangeReason.WebsocketClosedByServer);
-    			preDevice.changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.WebSocketReconnect);
+    			preDevice.changeBusinessStatus(Consts.DeviceStatus.Disconnected, Consts.StatusChangeReason.WebSocketReconnect);
     		}
     	}
     	
-    	queueDeviceMap.remove(connectionId);
+    	connectedDeviceMap.remove(connectionId);
     	if (deviceSn == null || deviceSn.length() == 0)
     	{
     		logger.error("Fatal error that device on connection {} has empty deviceSn", connectionId);
     		return;
     	}
-    	deviceMap.put(deviceWrapper.getDeviceSn(), deviceWrapper);
+    	appDataSyncedDeviceMap.put(deviceWrapper.getDeviceSn(), deviceWrapper);
     	logger.debug("Create device <{}> bases on connection " + connection, deviceWrapper.getDeviceSn());
     }
 
 	@Override
 	public int getElementCount()
 	{
-		return deviceMap.size() + queueDeviceMap.size();
+		return appDataSyncedDeviceMap.size() + connectedDeviceMap.size();
 	}
 
 	@Override
 	public void clearPool()
 	{
-		deviceMap.clear();
-		queueDeviceMap.clear();
+		appDataSyncedDeviceMap.clear();
+		connectedDeviceMap.clear();
 	}
 
 	@Override
@@ -365,13 +366,13 @@ public class OnlineDevicePool extends AbstractDevicePool
 	@Override
 	public IDeviceWrapper getDevice(String deviceSnOrConnectionId)
     {
-		if (deviceMap.containsKey(deviceSnOrConnectionId))
+		if (appDataSyncedDeviceMap.containsKey(deviceSnOrConnectionId))
 		{
-			return deviceMap.get(deviceSnOrConnectionId);
+			return appDataSyncedDeviceMap.get(deviceSnOrConnectionId);
 		}
-		else if (queueDeviceMap.containsKey(deviceSnOrConnectionId))
+		else if (connectedDeviceMap.containsKey(deviceSnOrConnectionId))
 		{
-			return queueDeviceMap.get(deviceSnOrConnectionId);
+			return connectedDeviceMap.get(deviceSnOrConnectionId);
 		}
 		else
 		{
@@ -386,7 +387,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 	public void IdentifyBannedDevice(IDeviceWrapper device)
 	{
 		logger.debug("Device <{}> was identified as banned device", device.getDeviceSn());
-		queueDeviceMap.remove(device.getConnection().getConnectionId());
+		connectedDeviceMap.remove(device.getConnection().getConnectionId());
 		
 		bannedDeviceList.add(device);
 	}
@@ -402,7 +403,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 		while (!bannedDeviceList.isEmpty())
 		{
 			device = bannedDeviceList.remove();
-			device.changeBusinessStatus(BusinessStatus.Offline, StatusChangeReason.BannedDevice);
+			device.changeBusinessStatus(DeviceStatus.Disconnected, StatusChangeReason.BannedDevice);
 		}
 	}
 
@@ -427,7 +428,7 @@ public class OnlineDevicePool extends AbstractDevicePool
         	}
         	deviceObj.put(JSONKey.BusinessStatus, deviceWrapper.getBusinessStatus().name());
         	
-        	if (deviceWrapper.getBusinessStatus() == Consts.BusinessStatus.SessionBound)
+        	if (deviceWrapper.getBusinessStatus() == Consts.DeviceStatus.SessionBound)
         	{
         		deviceObj.put(JSONKey.SessionId, deviceWrapper.getOwnerBusinessSession().getSessionId());
         		deviceObj.put("businessSessionStatus", deviceWrapper.getOwnerBusinessSession().getStatus().name());
@@ -436,8 +437,8 @@ public class OnlineDevicePool extends AbstractDevicePool
 	}
 	public void reportDeviceDetails(JSONObject response)
 	{
-		reportDeviceInMap(deviceMap, response);
-		reportDeviceInMap(queueDeviceMap, response);
+		reportDeviceInMap(appDataSyncedDeviceMap, response);
+		reportDeviceInMap(connectedDeviceMap, response);
 	}
 	
 	public void saveStatistics()

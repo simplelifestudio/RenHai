@@ -64,6 +64,8 @@ import com.simplelife.renhai.server.websocket.WebSocketModule;
  */
 public class MainFunction extends AbstractTestCase
 {
+	private final String manualMode = MockAppConsts.MockAppBehaviorMode.Manual.name();
+	
 	@Test
 	public void testLeaveRandomPool()
 	{
@@ -132,7 +134,7 @@ public class MainFunction extends AbstractTestCase
 		JSONObject wholeObj = JSONObject.parseObject(jsonString);
 		JSONObject obj = wholeObj.getJSONObject(JSONKey.JsonEnvelope);
 
-		MockApp app = new MockApp(demoDeviceSn, "Slave");
+		MockApp app = new MockApp(demoDeviceSn, manualMode);
 		app.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
 		app.connect(false);
 		app.sendRawJSONMessage(obj, true);
@@ -147,7 +149,7 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testReplaceWebsocket()
 	{
-		MockApp app = new MockApp(demoDeviceSn, "Slave");
+		MockApp app = new MockApp(demoDeviceSn, manualMode);
 		
 		app.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
 		
@@ -242,35 +244,35 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testEnum()
 	{
-		Consts.BusinessProgress progress1 = Consts.BusinessProgress.Init; 
-		Consts.BusinessProgress progress2 = Consts.BusinessProgress.SessionBoundConfirmed;
+		Consts.DeviceBusinessProgress progress1 = Consts.DeviceBusinessProgress.Init; 
+		Consts.DeviceBusinessProgress progress2 = Consts.DeviceBusinessProgress.SessionBoundAcked;
 		
 		System.out.print("\nSessionBoundConfirmed compareTo Init: " + progress2.compareTo(progress1));
-		System.out.print("\nChatConfirmed compareTo Init: " + Consts.BusinessProgress.ChatConfirmed.compareTo(progress1));
-		System.out.print("\nSessionBoundConfirmed compareTo progress2: " + Consts.BusinessProgress.SessionBoundConfirmed.compareTo(progress2));
-		System.out.print("\nprogress1 compareTo SessionBoundConfirmed: " + progress1.compareTo(Consts.BusinessProgress.SessionBoundConfirmed));
+		System.out.print("\nChatConfirmed compareTo Init: " + Consts.DeviceBusinessProgress.ChatAgreed.compareTo(progress1));
+		System.out.print("\nSessionBoundConfirmed compareTo progress2: " + Consts.DeviceBusinessProgress.SessionBoundAcked.compareTo(progress2));
+		System.out.print("\nprogress1 compareTo SessionBoundConfirmed: " + progress1.compareTo(Consts.DeviceBusinessProgress.SessionBoundAcked));
 	}
 	
 	public void testLossConnection()
 	{
 		/*
-		MockApp mockApp1 = new MockApp("deviceSn", "Slave", true);
+		MockApp mockApp1 = new MockApp("deviceSn", manualMode, true);
 		mockApp1.syncDevice();
 		mockApp1.disconnect();
 		*/
 		
-		MockApp mockApp1 = new MockApp("deviceSn", "Slave", true);
+		MockApp mockApp1 = new MockApp("deviceSn", manualMode, true);
 		mockApp1.syncDevice();
 
 		// 2把1踢掉
-		MockApp mockApp2 = new MockApp("deviceSn", "Slave", true);
+		MockApp mockApp2 = new MockApp("deviceSn", manualMode, true);
 		mockApp2.syncDevice();
 		
 		// 1被踢掉，重新建立连接之前无法发消息
 		mockApp1.sendServerDataSyncRequest();
 		
 		// 重新建立连接，同步，理论上应该把2踢掉
-		mockApp1 = new MockApp("deviceSn", "Slave", true);
+		mockApp1 = new MockApp("deviceSn", manualMode, true);
 		mockApp1.syncDevice();
 		
 		// 应该失败
@@ -519,7 +521,7 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testAppDataSync() throws InterruptedException
 	{
-		MockApp app1 = new MockApp(demoDeviceSn, "Slave");
+		MockApp app1 = new MockApp(demoDeviceSn, manualMode);
 		app1.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
 		app1.connect(true);
 		
@@ -533,7 +535,7 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testServerDataSync()
 	{
-		//MockApp app1 = new MockApp(demoDeviceSn,"Slave");
+		//MockApp app1 = new MockApp(demoDeviceSn,manualMode);
 		//app1.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
 		//app1.connect(true);
 		

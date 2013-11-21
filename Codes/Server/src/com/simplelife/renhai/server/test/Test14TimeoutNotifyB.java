@@ -74,10 +74,10 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		int sessionCount = sessionPool.getElementCount();
 		
 		// Step_04 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper1.getBusinessStatus());
 		
 		// Step_05 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.clearLastReceivedCommand();
@@ -91,10 +91,10 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper1.getBusinessStatus());
 		
 		// Step_09 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper2.getBusinessStatus());
 		
 		// Step_10 调用：RandomBusinessDevicePool::getCount
 		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
@@ -114,10 +114,10 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		sessionCount = sessionPool.getElementCount();
 		
 		// Step_13 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.SessionBound, deviceWrapper1.getBusinessStatus());
 		
 		// Step_14 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.SessionBound, deviceWrapper2.getBusinessStatus());
 		
 		// Step_15 调用：BusinessSession::getStatus
 		IBusinessSession session = deviceWrapper1.getOwnerBusinessSession();
@@ -144,7 +144,7 @@ public class Test14TimeoutNotifyB extends AbstractTestCase
 		//assertEquals(session.getStatus(), Consts.BusinessSessionStatus.ChatConfirm);
 		
 		// Step_19 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper1.getBusinessStatus());
 		
 		// Step_20 调用：B DeviceWrapper::getBusinessStatus
 		

@@ -40,6 +40,6 @@ public class HotLabel implements Comparable<HotLabel>
 	@Override
 	public int compareTo(HotLabel label)
 	{
-		return (profileCount - label.getProfileCount());
+		return (label.getProfileCount() - profileCount);
 	}
 }

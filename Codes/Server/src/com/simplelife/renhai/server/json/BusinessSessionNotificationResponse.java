@@ -11,7 +11,7 @@ package com.simplelife.renhai.server.json;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.Consts.BusinessStatus;
+import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.JSONKey;
 
@@ -48,7 +48,7 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 			return false;
 		}
 		
-		if (deviceWrapper.getBusinessStatus() != BusinessStatus.SessionBound)
+		if (deviceWrapper.getBusinessStatus() != DeviceStatus.SessionBound)
 		{
 			setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
 			setErrorDescription("The business session has been released");

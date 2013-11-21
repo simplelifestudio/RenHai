@@ -74,7 +74,7 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 		//int deviceCount = pool.getElementCount();
 		
 		// Step_03 调用：DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Init, deviceWrapper.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.Connected, deviceWrapper.getBusinessStatus());
 		
 		// Step_04 Mock请求：设备同步
 		long lastActivity = deviceWrapper.getLastActivityTime();
@@ -87,7 +87,7 @@ public class Test05SyncDeviceForbidden extends AbstractTestCase
 		
 		// Step_06 调用：DeviceWrapper::getLastActivityTime
 		assertTrue(deviceWrapper.getLastActivityTime() > lastActivity);
-		assertEquals(Consts.BusinessStatus.Init, deviceWrapper.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.Connected, deviceWrapper.getBusinessStatus());
 		
 		profile.setServiceStatus(Consts.ServiceStatus.Normal.name());
 		profile.setUnbanDate(null);

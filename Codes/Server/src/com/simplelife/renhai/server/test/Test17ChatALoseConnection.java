@@ -74,10 +74,10 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		int sessionCount = sessionPool.getElementCount();
 		
 		// Step_04 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper1.getBusinessStatus());
 		
 		// Step_05 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.enterPool(businessType);
@@ -89,10 +89,10 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
 
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper1.getBusinessStatus());
 		
 		// Step_09 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper2.getBusinessStatus());
 		
 		// Step_11 调用：RandomBusinessDevicePool::getCount
 		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
@@ -112,10 +112,10 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		sessionCount = sessionPool.getElementCount();
 		
 		// Step_14 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.SessionBound, deviceWrapper1.getBusinessStatus());
 		
 		// Step_15 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.SessionBound, deviceWrapper2.getBusinessStatus());
 		
 		// Step_16 调用：BusinessSession::getStatus
 		// 等待Server处理完A和B的绑定确认
@@ -151,7 +151,7 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		assertEquals(sessionCount, sessionPool.getElementCount());
 		
 		// Step_29 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.SessionBound, deviceWrapper2.getBusinessStatus());
 		
 		// Step_30 Mock事件：A onPing
 		//mockApp1.ping();
@@ -181,6 +181,6 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		assertEquals(sessionCount + 1, sessionPool.getElementCount());
 		
 		// Step_37 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper2.getBusinessStatus());
 	}
 }

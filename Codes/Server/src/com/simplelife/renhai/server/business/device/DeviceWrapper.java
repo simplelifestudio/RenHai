@@ -41,7 +41,7 @@ import com.simplelife.renhai.server.json.ServerErrorResponse;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.Consts.BusinessStatus;
+import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.DateUtil;
@@ -75,7 +75,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     protected Consts.ServiceStatus serviceStatus;
     
     // Business session
-    protected Consts.BusinessStatus businessStatus;
+    protected Consts.DeviceStatus businessStatus;
     
     // Business type of device, Random or Interest, effective after app selects business device pool 
     protected Consts.BusinessType businessType;
@@ -120,7 +120,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     public DeviceWrapper(IBaseConnection connection)
     {
     	this.webSocketConnection = connection;
-    	this.businessStatus = Consts.BusinessStatus.Init;
+    	this.businessStatus = Consts.DeviceStatus.Connected;
     	connection.bind(this);
     }
 
@@ -128,7 +128,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
      * Change business status of DeviceWrapper, and release/update relevant information if necessary 
      * @param targetStatus: target business status
      */
-    public void changeBusinessStatus(Consts.BusinessStatus targetStatus, StatusChangeReason reason)
+    public void changeBusinessStatus(Consts.DeviceStatus targetStatus, StatusChangeReason reason)
     {
     	logger.debug("[Milestone] Device <{}> will change status from " 
     			+ this.businessStatus.name() + " to " + targetStatus.name() 
@@ -136,11 +136,11 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     	
     	if (ownerOnlinePool == null)
     	{
-    		if (targetStatus == BusinessStatus.Offline)
+    		if (targetStatus == DeviceStatus.Disconnected)
     		{
     			businessStatus = targetStatus;
     		}
-    		else if (businessStatus != BusinessStatus.Offline)
+    		else if (businessStatus != DeviceStatus.Disconnected)
     		{
     			logger.error("ownerOnlinePool of Device <{}> is null in status of " + businessStatus.name(), getDeviceSn());
     		}
@@ -149,29 +149,29 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     	
     	AbstractBusinessDevicePool businessPool = null;
     	
-    	if (this.businessStatus.getValue() >= Consts.BusinessStatus.MatchCache.getValue())
+    	if (this.businessStatus.getValue() >= Consts.DeviceStatus.BusinessChoosed.getValue())
     	{
     		businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
     	}
     	 
     	switch(targetStatus)
     	{
-    		case Offline:
+    		case Disconnected:
     			switch(businessStatus)
     			{
-    				case Init:
+    				case Connected:
     					ownerOnlinePool.deleteDevice(this, reason);
     					unbindOnlineDevicePool();				// No request is accepted from now on
     					DAOWrapper.cache(this.getDevice());
     					break;
-    				case Idle:
+    				case AppDataSynced:
     					ownerOnlinePool.deleteDevice(this, reason);
     					unbindOnlineDevicePool();				// No request is accepted from now on
     					device.getProfile().setLastActivityTime(lastActivityTime);
     					DAOWrapper.cache(this.getDevice());
     					break;
-    				case MatchCache:
-    				case WaitMatch:
+    				case BusinessChoosed:
+    				case MatchStarted:
     					businessPool.onDeviceLeave(this, reason);
     					ownerOnlinePool.deleteDevice(this, reason);
     					unbindOnlineDevicePool();				// No request is accepted from now on
@@ -194,22 +194,22 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     			this.webSocketConnection.closeConnection();			// Close socket at last step
     			break;
     			
-    		case Init:
+    		case Connected:
     			logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
 				break;
 				
-    		case Idle:
+    		case AppDataSynced:
     			switch(businessStatus)
     			{
-    				case Idle:
+    				case AppDataSynced:
     					// do nothing
     					break;
-    				case Init:
+    				case Connected:
     					// Init -> Idle, typical process of AppDataSyncRequest 
     					ownerOnlinePool.synchronizeDevice(this);
     					break;
-    				case MatchCache:
-    				case WaitMatch:
+    				case BusinessChoosed:
+    				case MatchStarted:
     					// Leave business device pool
     					businessPool.onDeviceLeave(this, reason);
     					break;
@@ -224,10 +224,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     			}
     			break;
     			
-    		case MatchCache:
+    		case BusinessChoosed:
     			switch(businessStatus)
     			{
-    				case Idle:
+    				case AppDataSynced:
     					businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
     					businessPool.onDeviceEnter(this);
     					break;
@@ -241,10 +241,10 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     			}
     			break;
     			
-    		case WaitMatch:
+    		case MatchStarted:
     			switch(businessStatus)
     			{
-    				case MatchCache:
+    				case BusinessChoosed:
     					businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
     					businessStatus = targetStatus;				// To ensure that status of device is WaitMatch before enter business pool
     					logger.debug("Device <{}> changed status to " + targetStatus.name(), getDeviceSn());
@@ -268,7 +268,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     			{
     				switch(businessStatus)
         			{
-        				case WaitMatch:
+        				case MatchStarted:
         					ownerBusinessSession.onDeviceEnter(this);
         					businessPool.startChat(this);
         					break;
@@ -303,7 +303,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     }
     
     /** */
-    public Consts.BusinessStatus getBusinessStatus()
+    public Consts.DeviceStatus getBusinessStatus()
     {
         return businessStatus;
     }
@@ -330,7 +330,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     /** */
     public void unbindBusinessSession(StatusChangeReason reason)
     {
-    	if (this.businessStatus != Consts.BusinessStatus.SessionBound)
+    	if (this.businessStatus != Consts.DeviceStatus.SessionBound)
     	{
     		return;
     	}
@@ -375,7 +375,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     @Override
     public void onConnectionClose()
     {
-    	changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.WebsocketClosedByApp);
+    	changeBusinessStatus(Consts.DeviceStatus.Disconnected, Consts.StatusChangeReason.WebsocketClosedByApp);
     	/*
     	if (ownerOnlinePool != null)
     	{
@@ -392,7 +392,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     		+ command.getMessageId().name() + " at status of " 
     		+ businessStatus.name() + ", messageSn: " + command.getMessageSn(), this.getDeviceSn());
 
-    	if (this.businessStatus == Consts.BusinessStatus.Offline)
+    	if (this.businessStatus == Consts.DeviceStatus.Disconnected)
     	{
     		logger.warn("Received command from offline device <"+ getDeviceSn() +">\n{}", command.toReadableString());
     		return;
@@ -407,7 +407,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     	}
     	
     	if (this.ownerOnlinePool == null 
-    			|| this.businessStatus == Consts.BusinessStatus.Init)
+    			|| this.businessStatus == Consts.DeviceStatus.Connected)
     	{
     		if (messageId != Consts.MessageId.AlohaRequest 
     				&& messageId != Consts.MessageId.AppDataSyncRequest
@@ -475,7 +475,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     @Override
     public void onTimeOut()
     {
-    	changeBusinessStatus(Consts.BusinessStatus.Offline, Consts.StatusChangeReason.TimeoutOnSyncSending);
+    	changeBusinessStatus(Consts.DeviceStatus.Disconnected, Consts.StatusChangeReason.TimeoutOnSyncSending);
     }
 
     @Override

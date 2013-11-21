@@ -27,7 +27,7 @@ import com.simplelife.renhai.server.json.ServerJSONMessage;
 public interface IDeviceWrapper
 {
     /** */
-    public Consts.BusinessStatus getBusinessStatus();
+    public Consts.DeviceStatus getBusinessStatus();
     
     /** */
     public Consts.ServiceStatus getServiceStatus();
@@ -66,7 +66,7 @@ public interface IDeviceWrapper
     
     public void setServiceStatus(Consts.ServiceStatus serviceStatus);
     
-    public void changeBusinessStatus(Consts.BusinessStatus targetStatus, Consts.StatusChangeReason reason);
+    public void changeBusinessStatus(Consts.DeviceStatus targetStatus, Consts.StatusChangeReason reason);
     
 	public Consts.BusinessType getBusinessType();
     

@@ -19,14 +19,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 /** */
 public abstract class AbstractDevicePool extends AbstractPool
 {
-    /** */
-    protected ConcurrentHashMap<String, IDeviceWrapper> deviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
-    
-    /** */
-    public IDeviceWrapper getDevice(String deviceSn)
-    {
-   		return deviceMap.get(deviceSn);
-    }
+	public abstract IDeviceWrapper getDevice(String deviceSn);
     
     /** */
     public abstract boolean isPoolFull();

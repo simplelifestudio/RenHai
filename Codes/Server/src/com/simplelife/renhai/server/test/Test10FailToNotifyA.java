@@ -81,10 +81,10 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		int sessionCount = sessionPool.getElementCount();
 		
 		// Step_04 调用：A DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper1.getBusinessStatus());
 		
 		// Step_05 调用：B DeviceWrapper::getBusinessStatus
-		assertEquals(Consts.BusinessStatus.Idle, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
 		assertTrue(businessPool.getDevice(deviceSn1) == null);
@@ -96,7 +96,7 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		 
-		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper1.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper1.getBusinessStatus());
 		
 		// Step_07 Mock请求：B进入随机聊天
 		assertTrue(businessPool.getDevice(deviceSn2) == null);
@@ -133,12 +133,12 @@ public class Test10FailToNotifyA extends AbstractTestCase
 		logger.debug("recover from sleep");
 		assertTrue(onlinePool.getDevice(mockApp1.getDeviceSn()) == null);
 		assertTrue(onlinePool.getDevice(mockApp2.getDeviceSn()) != null);
-		assertEquals(Consts.BusinessStatus.SessionBound, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.SessionBound, deviceWrapper2.getBusinessStatus());
 		
 		mockApp2.sessionUnbind();
-		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper2.getBusinessStatus());
 		
 		mockApp2.matchStart();
-		assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper2.getBusinessStatus());
+		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper2.getBusinessStatus());
 	}
 }

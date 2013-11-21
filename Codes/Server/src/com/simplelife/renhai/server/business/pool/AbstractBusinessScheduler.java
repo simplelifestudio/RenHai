@@ -34,7 +34,7 @@ public abstract class AbstractBusinessScheduler extends Thread implements IBusin
     protected final Condition condition = lock.newCondition();
 	protected boolean runFlag = false;
     protected Logger logger = BusinessModule.instance.getLogger();
-    protected ConcurrentHashMap<String, IDeviceWrapper> deviceMap;
+    protected ConcurrentHashMap<String, IDeviceWrapper> matchStartedDeviceMap;
     protected volatile boolean isWorking = false;
     
     protected final int deviceCountPerSession = 2;
