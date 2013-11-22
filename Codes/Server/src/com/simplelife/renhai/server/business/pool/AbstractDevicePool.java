@@ -11,20 +11,19 @@
 
 package com.simplelife.renhai.server.business.pool;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
 /** */
 public abstract class AbstractDevicePool extends AbstractPool
 {
+	protected volatile int elementCount;
+	public int getElementCount()
+    {
+    	return elementCount;
+    }
+	
 	public abstract IDeviceWrapper getDevice(String deviceSn);
-    
-    /** */
     public abstract boolean isPoolFull();
-    /** */
-    public abstract int getElementCount();
-    
     public abstract void clearPool();
 }

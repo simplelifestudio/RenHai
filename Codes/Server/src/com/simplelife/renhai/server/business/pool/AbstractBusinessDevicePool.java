@@ -63,11 +63,11 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     
     /**
      * Return count of elements in current BusinessDevicePool
-     */
     public int getElementCount()
     {
         return sessionBoundDeviceMap.size() + matchStartedDeviceMap.size() + businessChoosedDeviceMap.size();
     }
+    */
     
     public String checkDeviceEnter(IDeviceWrapper device)
     {
@@ -105,6 +105,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     public void onDeviceEnter(IDeviceWrapper device)
     {
     	businessChoosedDeviceMap.put(device.getDeviceSn(), device);
+    	elementCount++;
     	logger.debug("Device <{}> has entered " + businessType.name() + " pool, device count after enter: " + this.getElementCount(), device.getDeviceSn());
     }
     
@@ -126,6 +127,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     		return;
     	}
     	
+    	elementCount--;
     	if (matchStartedDeviceMap.containsKey(sn))
     	{
 	    	matchStartedDeviceMap.remove(sn);

@@ -203,6 +203,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	
     	String id = connection.getConnectionId();
     	connectedDeviceMap.put(id, deviceWrapper);
+    	elementCount++;
     	
     	logger.debug("Save connection {} in OnlineDevicePool", id);
     	/*
@@ -242,6 +243,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		if (connectedDeviceMap.containsKey(id))
     		{
 	    		connectedDeviceMap.remove(id);
+	    		elementCount--;
 	    		logger.debug("Device <{}> was removed from queueDeviceMap of online device pool, device count after remove: " + getElementCount(), id);
     		}
     		else
@@ -255,6 +257,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		if (appDataSyncedDeviceMap.containsKey(sn))
     		{
 	    		appDataSyncedDeviceMap.remove(sn);
+	    		elementCount--;
 	    		logger.debug("Device <{}> was removed from deviceMap of online device pool, device count after remove: " + getElementCount(), sn);
     		}
     		else
@@ -343,11 +346,13 @@ public class OnlineDevicePool extends AbstractDevicePool
     	logger.debug("Create device <{}> bases on connection " + connection, deviceWrapper.getDeviceSn());
     }
 
+    /*
 	@Override
 	public int getElementCount()
 	{
 		return appDataSyncedDeviceMap.size() + connectedDeviceMap.size();
 	}
+	*/
 
 	@Override
 	public void clearPool()
@@ -388,7 +393,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 	{
 		logger.debug("Device <{}> was identified as banned device", device.getDeviceSn());
 		connectedDeviceMap.remove(device.getConnection().getConnectionId());
-		
+		elementCount--;
 		bannedDeviceList.add(device);
 	}
 	
