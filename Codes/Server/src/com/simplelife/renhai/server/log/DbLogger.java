@@ -17,6 +17,8 @@ import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Globalimpresslabel;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.db.Profile;
+import com.simplelife.renhai.server.db.Profileoperationlog;
+import com.simplelife.renhai.server.db.Systemoperationlog;
 import com.simplelife.renhai.server.util.Consts;
 
 
@@ -76,21 +78,15 @@ public class DbLogger
 	
 	public static void saveProfileLog(Consts.OperationCode code, Profile profile, String logInfo)
 	{
-		return;
-		/*
-		OperationcodeDAO dao = new OperationcodeDAO();
-		Operationcode codeObj = dao.findByOperationCode(code.getValue()).get(0);
-		
 		long now = System.currentTimeMillis();
 		
 		Profileoperationlog log = new Profileoperationlog();
-		log.setOperationcode(codeObj);
+		log.setOperationCodeId(code.getValue());
 		log.setLogInfo(logInfo);
 		log.setLogTime(now);
-		log.setProfile(profile);
-		
-		DAOWrapper.asyncSave(log);
-		*/
+		log.setProfileId(profile.getProfileId());
+
+		DAOWrapper.cache(log);
 	}
 	
 	public static void saveSystemLog(Consts.OperationCode code
@@ -98,29 +94,13 @@ public class DbLogger
 			, String logInfo)
 	
 	{
-		return;
-		/*
-		try
-		{
-			OperationcodeDAO dao = new OperationcodeDAO();
-			Operationcode codeObj = dao.findByOperationCode(code.getValue()).get(0);
-			
-			SystemmoduleDAO moduleDao = new SystemmoduleDAO();
-			Systemmodule moduleObj = moduleDao.findByModuleNo(module.getValue()).get(0); 
-			
-			long now = System.currentTimeMillis();
-			
-			Systemoperationlog log = new Systemoperationlog();
-			log.setLogTime(now);
-			log.setLogInfo(logInfo);
-			log.setOperationcode(codeObj);
-			log.setSystemmodule(moduleObj);
-			DAOWrapper.asyncSave(log);
-		}
-		catch(Exception e)
-		{
-			FileLogger.printStackTrace(e);
-		}
-		*/
+		long now = System.currentTimeMillis();
+		
+		Systemoperationlog log = new Systemoperationlog();
+		log.setLogTime(now);
+		log.setLogInfo(logInfo);
+		log.setOperationCodeId(code.getValue());
+		log.setModuleId(module.getValue());
+		DAOWrapper.cache(log);
 	}
 }
