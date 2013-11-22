@@ -25,9 +25,11 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `device`;
 CREATE TABLE `device` (
   `deviceId` int(11) NOT NULL AUTO_INCREMENT,
-  `deviceSn` varchar(256) DEFAULT NULL,
-  PRIMARY KEY (`deviceId`)
+  `deviceSn` varchar(256) NOT NULL,
+  PRIMARY KEY (`deviceId`),
+  UNIQUE KEY `index_deviceSn` (`deviceSn`(255)) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 -- ----------------------------
 -- Records of device
