@@ -63,19 +63,19 @@ public class MockAppConsts
 	
 	public enum MockAppRequest
 	{
-		AlohaRequest(200),
-		AppDataSyncRequest(201),
-		AgreeChat(202),
-		RejectChat(203),
-		ServerDataSyncRequest(204),
-		EnterPool(205),
-		MatchStart(206),
-		LeavePool(207),
-		EndChat(208),
-		AssessAndContinue(209),
-		AssessAndQuit(210),
-		BusinessSessionNotificationResponse(211),
-		SessionUnbind(212);
+		AlohaRequest(1000),
+		AppDataSyncRequest(1001),
+		AgreeChat(1002),
+		RejectChat(1003),
+		ServerDataSyncRequest(1004),
+		EnterPool(1005),
+		MatchStart(1006),
+		LeavePool(1007),
+		EndChat(1008),
+		AssessAndContinue(1009),
+		AssessAndQuit(1010),
+		BusinessSessionNotificationResponse(1011),
+		SessionUnbind(1012);
 		
 		private int value ;
 		

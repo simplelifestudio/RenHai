@@ -231,11 +231,7 @@ public class MockApp implements IMockApp, Runnable
     protected Consts.BusinessType businessType;
     protected JSONObject lastReceivedCommand;
     
-    protected JSONObject jsonObject = new JSONObject();
-    protected JSONObject header = new JSONObject();
-    protected JSONObject body = new JSONObject();
-	
-	protected Lock lock = new ReentrantLock();
+    protected Lock lock = new ReentrantLock();
 	protected Condition condition = lock.newCondition();
 	
 	protected String deviceSn;
@@ -457,11 +453,12 @@ public class MockApp implements IMockApp, Runnable
     /**
      * Clear jsonMap and add default fields
      */
-    protected void init(Consts.MessageId messageId)
+    protected JSONObject createMessage(Consts.MessageId messageId)
     {
-    	jsonObject.clear();
-    	header.clear();
-    	body.clear();
+    	JSONObject jsonObject = new JSONObject();
+        JSONObject header = new JSONObject();
+        JSONObject body = new JSONObject();
+    	
     	jsonObject.put(JSONKey.Header, header);
     	jsonObject.put(JSONKey.Body, body);
     	
@@ -482,6 +479,7 @@ public class MockApp implements IMockApp, Runnable
     	{
     		header.put(JSONKey.MessageType, Consts.MessageType.AppResponse.getValue());
     	}
+    	return jsonObject;
     }
     
     public void waitMessage()
@@ -556,7 +554,9 @@ public class MockApp implements IMockApp, Runnable
 	@Override
 	public void sendAlohaRequest()
 	{
-		init(Consts.MessageId.AlohaRequest);
+		JSONObject jsonObject = createMessage(Consts.MessageId.AlohaRequest);
+		JSONObject body = jsonObject.getJSONObject(JSONKey.Body);
+		JSONObject header = jsonObject.getJSONObject(JSONKey.Header);
 		// Add command type
 		
 		
@@ -571,7 +571,9 @@ public class MockApp implements IMockApp, Runnable
 	@Override
 	public void sendAppDataSyncRequest(JSONObject queryObj, JSONObject updateObj)
 	{
-		init(Consts.MessageId.AppDataSyncRequest);
+		JSONObject jsonObject = createMessage(Consts.MessageId.AppDataSyncRequest);
+		JSONObject body = jsonObject.getJSONObject(JSONKey.Body);
+		JSONObject header = jsonObject.getJSONObject(JSONKey.Header);
 		
 		// Add command body
 		if (queryObj != null)
@@ -592,7 +594,9 @@ public class MockApp implements IMockApp, Runnable
 	@Override
 	public void sendServerDataSyncRequest()
 	{
-		init(Consts.MessageId.ServerDataSyncRequest);
+		JSONObject jsonObject = createMessage(Consts.MessageId.ServerDataSyncRequest);
+		JSONObject body = jsonObject.getJSONObject(JSONKey.Body);
+		JSONObject header = jsonObject.getJSONObject(JSONKey.Header);
 		
 		// Add command body
 		JSONObject deviceCountObj = new JSONObject();
@@ -679,7 +683,9 @@ public class MockApp implements IMockApp, Runnable
 			String operationInfo,
 			String operationValue)
 	{
-		init(Consts.MessageId.BusinessSessionNotificationResponse);
+		JSONObject jsonObject = createMessage(Consts.MessageId.BusinessSessionNotificationResponse);
+		JSONObject body = jsonObject.getJSONObject(JSONKey.Body);
+		JSONObject header = jsonObject.getJSONObject(JSONKey.Header);
 		
 		// Add command header
 		if (messageSn == null)
@@ -709,7 +715,9 @@ public class MockApp implements IMockApp, Runnable
 			JSONObject operationInfoObj,
 			String operationValue)
 	{
-		init(Consts.MessageId.BusinessSessionRequest);
+		JSONObject jsonObject = createMessage(Consts.MessageId.BusinessSessionRequest);
+		JSONObject body = jsonObject.getJSONObject(JSONKey.Body);
+		JSONObject header = jsonObject.getJSONObject(JSONKey.Header);
 		
 		// Add command body
 		body.put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(businessSessionId));

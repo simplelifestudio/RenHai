@@ -594,7 +594,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		else
 		{
-			logger.error("Fatal error: abnormal business status in device <{}>, it's assessing others but business session is null!", deviceWrapper.getDeviceSn());
+			logger.error("Abnormal business status in device <{}>, it's assessing others but business session is null!", deviceWrapper.getDeviceSn());
+			return;
 		}
 		response.addToBody(JSONKey.BusinessType, deviceWrapper.getBusinessType().getValue());
 		response.addToBody(JSONKey.OperationInfo, null);

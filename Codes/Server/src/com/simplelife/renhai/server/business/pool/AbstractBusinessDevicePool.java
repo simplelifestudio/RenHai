@@ -129,21 +129,21 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	if (matchStartedDeviceMap.containsKey(sn))
     	{
 	    	matchStartedDeviceMap.remove(sn);
-	    	logger.debug("Device <{}> was removed from deviceMap of " + this.businessType.name() + " Device Pool caused by " + reason.name(), sn);
+	    	logger.debug("Device <{}> was removed from matchStartedDeviceMap of " + this.businessType.name() + " Device Pool caused by " + reason.name(), sn);
 	    	return;
     	}
     	
     	if (sessionBoundDeviceMap.containsKey(sn))
     	{
 	    	sessionBoundDeviceMap.remove(sn);
-	    	logger.debug("Device <{}> was removed from chatDeviceMap of " + this.businessType.name() + " Device Pool caused by " + reason.name(), sn);
+	    	logger.debug("Device <{}> was removed from sessionBoundDeviceMap of " + this.businessType.name() + " Device Pool caused by " + reason.name(), sn);
 	    	return;
     	}
     	
     	if (businessChoosedDeviceMap.containsKey(sn))
     	{
 	    	businessChoosedDeviceMap.remove(sn);
-	    	logger.debug("Device <{}> was removed from cacheDeviceMap of " + this.businessType.name() + " Device Pool caused by " + reason.name(), sn);
+	    	logger.debug("Device <{}> was removed from businessChoosedDeviceMap of " + this.businessType.name() + " Device Pool caused by " + reason.name(), sn);
 	    	return;
     	}
     }
