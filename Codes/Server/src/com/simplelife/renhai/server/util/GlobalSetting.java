@@ -58,6 +58,7 @@ public class GlobalSetting
 	public static class DBSetting
 	{
 		public static int MaxRecordCountForFlush = 30;
+		public static int CacheCompressBuffer = 30;
 		public static int MaxRecordCountForDiscard = 1000;
 		
 		public static int GlobalImpressLabelCacheCount = 1000;
@@ -154,6 +155,7 @@ public class GlobalSetting
 		
 		tmpObj = obj.getJSONObject(SettingFieldName.DBSetting);
 		DBSetting.MaxRecordCountForFlush			= getIntValue(tmpObj, SettingFieldName.MaxRecordCountForFlush);
+		DBSetting.CacheCompressBuffer				= getIntValue(tmpObj, SettingFieldName.CacheCompressBuffer);
 		DBSetting.MaxRecordCountForDiscard			= getIntValue(tmpObj, SettingFieldName.MaxRecordCountForDiscard);
 		DBSetting.GlobalImpressLabelCacheCount		= getIntValue(tmpObj, SettingFieldName.GlobalImpressLabelCacheCount);
 		DBSetting.GlobalInterestLabelCacheCount		= getIntValue(tmpObj, SettingFieldName.GlobalInterestLabelCacheCount);
@@ -273,6 +275,11 @@ public class GlobalSetting
 		
 		tmpObj = obj.getJSONObject(SettingFieldName.DBSetting);
 		if(!checkField(tmpObj, SettingFieldName.MaxRecordCountForFlush))
+		{
+			return false;
+		}
+		
+		if(!checkField(tmpObj, SettingFieldName.CacheCompressBuffer))
 		{
 			return false;
 		}

@@ -54,7 +54,6 @@ public class DbObjectCache<T>
 		}
 	}
 	private int capacity;
-	private final int capacityBuffer = 30; 
 	private ConcurrentHashMap<String, T> hashMap = new ConcurrentHashMap<>();
 	private ConcurrentHashMap<String, Counter> countMap = new ConcurrentHashMap<>();
 	//private ICachableMapper mapper;
@@ -96,7 +95,7 @@ public class DbObjectCache<T>
 		countMap.put(key, new Counter(key));
 		hashMap.put(key, obj);
 		
-		if (hashMap.size() > capacity + capacityBuffer)
+		if (hashMap.size() > capacity + GlobalSetting.DBSetting.CacheCompressBuffer)
 		{
 			compressCache();
 		}

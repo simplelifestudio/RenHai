@@ -15,6 +15,7 @@
 	"dbSetting":
 	{
 		"maxRecordCountForFlush":30,
+		"cacheCompressBuffer" : 30,
 		"maxRecordCountForDiscard":1000,
 		"globalImpressLabelCacheCount":1000,
 		"globalInterestLabelCacheCount":1000,
