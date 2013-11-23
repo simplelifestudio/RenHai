@@ -137,7 +137,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 				continue;
 			}
 			
-			lastPingTime = deviceWrapper.getLastPingTime().getTime();
+			lastPingTime = deviceWrapper.getLastPingTime();
 			//String temp = "last ping time: " + lastTime + ", now: " + now + ", diff: " + (now - lastTime) + ", setting: " + GlobalSetting.TimeOut.OnlineDeviceConnection;
 			//logger.debug(temp);
 			if ((now - lastPingTime) > GlobalSetting.TimeOut.OnlineDeviceConnection)
@@ -148,7 +148,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 					continue;
 				}
 				logger.debug("Device with connection id {} will be removed from online device pool due to last ping time is: " 
-						+ DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime().getTime()) + ", id in map: " + e.getKey(),
+						+ DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime()) + ", id in map: " + e.getKey(),
 						deviceWrapper.getConnection().getConnectionId());
 				//deleteDevice(deviceWrapper, Consts.StatusChangeReason.TimeoutOfPing);
 				deviceWrapper.changeBusinessStatus(Consts.DeviceStatus.Disconnected, Consts.StatusChangeReason.TimeoutOfPing);

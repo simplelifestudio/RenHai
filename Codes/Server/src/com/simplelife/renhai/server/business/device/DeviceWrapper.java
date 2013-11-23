@@ -61,9 +61,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 	// WebScoket connection enclosed in DeviceWrapper, all JSON messages are sent/received by this connection 
     protected IBaseConnection webSocketConnection;
     
-    // Time of last ping from APP
-    protected Date lastPingTime;
-    
     // Time of last request (including AlohaRequest and AppDataSyncRequest) from APP
     //protected Date lastActivityTime;
     // Owner business session of this device, be null if device is not in status of SessionBound
@@ -93,31 +90,19 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     private MessageHandler inputMessageHandler = new MessageHandler(this, InputMsgExecutorPool.instance);
     private MessageHandler outputMessageHandler = new MessageHandler(this, OutputMsgExecutorPool.instance);
     
+    private PingNode pingNode = new PingNode(this);
+    
     // Set service status of Device: Normal or Ban
     public void setServiceStatus(Consts.ServiceStatus serviceStatus)
     {
     	this.serviceStatus = serviceStatus;
     }
     
-    /**
-     * Save current time as lastPingTime 
-     */
     @Override
     public void updatePingTime()
     {
-    	Date now = DateUtil.getNowDate();
-    	String temp = "Update last ping time: " + now.getTime();
-    	
-    	temp += ", connection ID: " + getConnection().getConnectionId();
-    	if (device != null)
-    	{
-    		temp += " for device <" + device.getDeviceSn() + ">";
-    	}
-    	
-    	LoggerFactory.getLogger("Ping").debug(temp);
-    	lastPingTime = now;
+    	pingNode.updatePingTime();
     }
-            
     /**
      * Constructor of DeviceWrapper 
      * @param connection: connection for sending/receiving JSON messages
@@ -328,9 +313,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     }
     
     /** */
-    public Date getLastPingTime()
+    public long getLastPingTime()
     {
-        return lastPingTime;
+        return pingNode.getLastPingTime();
     }
     
      

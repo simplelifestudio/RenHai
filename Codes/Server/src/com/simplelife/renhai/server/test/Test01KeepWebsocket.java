@@ -60,7 +60,7 @@ public class Test01KeepWebsocket extends AbstractTestCase
 		
 		// Step_06 调用：DeviceWrapper::getLastPingTime()
 		IDeviceWrapper device = OnlineDevicePool.instance.getDevice(mockApp.getConnectionId());
-		long lastPingTime = device.getLastPingTime().getTime();
+		long lastPingTime = device.getLastPingTime();
 		
 		Thread.sleep(100);
 		
@@ -68,6 +68,6 @@ public class Test01KeepWebsocket extends AbstractTestCase
 		mockApp.ping();
 		
 		// Step_08 调用设备的getLastPingTime()
-		assertTrue(lastPingTime < device.getLastPingTime().getTime());
+		assertTrue(lastPingTime < device.getLastPingTime());
 	}
 }

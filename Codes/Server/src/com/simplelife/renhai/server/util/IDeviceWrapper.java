@@ -36,7 +36,7 @@ public interface IDeviceWrapper
     public boolean checkExistenceInDb();
     
     /** */
-    public Date getLastPingTime();
+    public long getLastPingTime();
     
     /** */
     public void bindBusinessSession(IBusinessSession session);
