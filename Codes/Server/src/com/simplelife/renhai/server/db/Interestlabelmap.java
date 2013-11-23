@@ -256,6 +256,12 @@ public class Interestlabelmap implements IDbObject, Comparable<Interestlabelmap>
 	@Override
 	public int compareTo(Interestlabelmap o)
 	{
+		if (o == null)
+		{
+			return 1;
+		}
+		return labelOrder.compareTo(o.getLabelOrder());
+		/*
 		Integer targetId = o.getInterestLabelMapId();
 		if (interestLabelMapId == null && targetId == null)
 		{
@@ -269,5 +275,6 @@ public class Interestlabelmap implements IDbObject, Comparable<Interestlabelmap>
 			return -1;
 		}
 		return (interestLabelMapId - targetId);
+		*/
 	}
 }

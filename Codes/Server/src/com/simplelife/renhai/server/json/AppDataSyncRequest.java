@@ -10,7 +10,11 @@
 package com.simplelife.renhai.server.json;
 
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import com.alibaba.fastjson.JSONArray;
@@ -1015,7 +1019,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 	
 	private void initSolidInterestLabels(Interestcard interestCard)
 	{
-		Set<Interestlabelmap> interestLabelMaps = interestCard.getInterestLabelMapSet();
+		Collection<Interestlabelmap> interestLabelMaps = interestCard.getInterestLabelMapSet();
 		for (Consts.SolidInterestLabel label : Consts.SolidInterestLabel.values())
 		{
 			if (label == Consts.SolidInterestLabel.Invalid)
@@ -1044,7 +1048,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 	
 	private void initSolidImpressLabels(Impresscard impressCard)
 	{
-		Set<Impresslabelmap> impressLabelMaps = impressCard.getImpressLabelMapSet();
+		Collection<Impresslabelmap> impressLabelMaps = impressCard.getImpressLabelMapSet();
 		for (Consts.SolidImpressLabel label : Consts.SolidImpressLabel.values())
 		{
 			if (label == Consts.SolidImpressLabel.Invalid)
@@ -1119,7 +1123,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		Globalinterestlabel globalInterest;
 		
 		Interestlabelmap interestLabelMap;
-		Set<Interestlabelmap> labelMapSet = card.getInterestLabelMapSet();
+		Collection<Interestlabelmap> labelMapSet = card.getInterestLabelMapSet();
 		
 		// Save old label in temp Map
 		HashMap<String, Interestlabelmap> tempMap = new HashMap<String, Interestlabelmap>();
@@ -1131,6 +1135,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		labelMapSet.clear();
 		//label.setInterestcard(null);
 		
+		List<Interestlabelmap> tmpLabelMapList = new ArrayList();
 		// Check all labels from APP
 		for (int i = 0; i < interestLabelList.size(); i++)
 		{
@@ -1150,7 +1155,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			{
 				interestLabelMap = tempMap.get(tempStr);
 				interestLabelMap.setLabelOrder(tmpJSONObj.getInteger(JSONKey.LabelOrder));
-				labelMapSet.add(interestLabelMap);
+				tmpLabelMapList.add(interestLabelMap);
 				tempMap.remove(tempStr);
 				
 				responseObj.put(JSONKey.InterestLabelName, tempStr);
@@ -1190,7 +1195,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			interestLabelMap.setGlobalInterestLabelId(globalInterest.getGlobalInterestLabelId());
 			interestLabelMap.setLabelOrder(tmpJSONObj.getInteger(JSONKey.LabelOrder));
 			interestLabelMap.setInterestCardId(card.getInterestCardId());
-			labelMapSet.add(interestLabelMap);
+			tmpLabelMapList.add(interestLabelMap);
 			
 			responseObj.put(JSONKey.InterestLabelName, tempStr);
 			responseObj.put(JSONKey.LabelOrder, Consts.SuccessOrFail.Success.getValue());
@@ -1198,15 +1203,18 @@ public class AppDataSyncRequest extends AppJSONMessage
 		}
 		
 		// delete label that are still in tempMap
-		Set <String> keySet = tempMap.keySet();
+		Set<String> keySet = tempMap.keySet();
 		for (String key : keySet)
 		{
 			interestLabelMap = tempMap.get(key);
 			card.removeInterestLabelMap(interestLabelMap);
 		}
+		
+		Collections.sort(tmpLabelMapList);
+		labelMapSet.addAll(tmpLabelMapList);
 	}
 	
-	private boolean isLabelInLabelMapSet(Set<Interestlabelmap> labelMapSet, String label)
+	private boolean isLabelInLabelMapSet(Collection<Interestlabelmap> labelMapSet, String label)
 	{
 		for (Interestlabelmap labelMap : labelMapSet)
 		{

@@ -14,6 +14,7 @@ package com.simplelife.renhai.server.business.device;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -644,7 +645,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		JSONArray interestLabelListObj = new JSONArray();
 		interestCardObj.put(JSONKey.InterestLabelList, interestLabelListObj);
 		
-		Set<Interestlabelmap> interestLabelList = interestCard.getInterestLabelMapSet();
+		Collection<Interestlabelmap> interestLabelList = interestCard.getInterestLabelMapSet();
 		for (Interestlabelmap map : interestLabelList)
 		{
 			JSONObject mapObj = new JSONObject();
@@ -670,7 +671,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		impressCardObj.put(JSONKey.AssessLabelList, assessLabelListObj);
 		impressCardObj.put(JSONKey.ImpressLabelList, impressLabelListObj);
 		
-		Set<Impresslabelmap> labelSet = impressCard.getImpressLabelMapSet();
+		Collection<Impresslabelmap> labelSet = impressCard.getImpressLabelMapSet();
 		//TreeSet<ImpresslabelmapSortable> labelList = new TreeSet<ImpresslabelmapSortable>();
 		//TreeSet<ImpresslabelmapSortable> solidList = new TreeSet<ImpresslabelmapSortable>();
 		
@@ -756,7 +757,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 		Device device = this.getDevice();
 		Profile profile = device.getProfile();
 		Interestcard card = profile.getInterestCard();
-		Set<Interestlabelmap> maps = card.getInterestLabelMapSet();
+		Collection<Interestlabelmap> maps = card.getInterestLabelMapSet();
 		
 		for (Interestlabelmap map : maps)
 		{

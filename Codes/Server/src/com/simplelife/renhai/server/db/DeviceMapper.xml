@@ -148,23 +148,23 @@
     	IML.assessedCount as iml_assessedCount,
     	IML.updateTime as iml_updateTime,
     	IML.assessCount as iml_assessCount,
-		GIN.globalInterestLabelId as gin_globalInterestLabelId,
-		GIN.interestLabelName as gin_interestLabelName,
-		GIN.globalMatchCount as gin_globalMatchCount,
-		GIM.globalImpressLabelId as gim_globalImpressLabelId,
-		GIM.impressLabelName as gim_impressLabelName,
-		GIM.globalAssessCount as gim_globalAssessCount
+    	GIN.globalInterestLabelId as gin_globalInterestLabelId,
+    	GIN.interestLabelName as gin_interestLabelName,
+    	GIN.globalMatchCount as gin_globalMatchCount,
+    	GIM.globalImpressLabelId as gim_globalImpressLabelId,
+    	GIM.impressLabelName as gim_impressLabelName,
+    	GIM.globalAssessCount as gim_globalAssessCount
     from device D
     	left outer join devicecard C on D.deviceId = C.deviceId
     	left outer join profile P on D.deviceId = P.deviceId
     	left outer join interestcard INC on P.profileId = INC.profileId
     	left outer join interestlabelmap INL on INC.interestCardId = INL.interestCardId
-		left outer join globalinterestlabel GIN on INL.globalInterestLabelId = GIN.globalInterestLabelId
+    	left outer join globalinterestlabel GIN on INL.globalInterestLabelId = GIN.globalInterestLabelId
     	left outer join impresscard IMC on P.profileId = IMC.profileId
     	left outer join impresslabelmap IML on IMC.impressCardId = IML.impressCardId
-		left outer join globalimpresslabel GIM on IML.globalImpressLabelId = GIM.globalImpressLabelId
-		
+    	left outer join globalimpresslabel GIM on IML.globalImpressLabelId = GIM.globalImpressLabelId
     where D.deviceSn = #{deviceSn,jdbcType=VARCHAR}
+    	order by INL.labelOrder, IML.assessedCount desc
   </select>
   
 </mapper>

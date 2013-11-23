@@ -10,6 +10,7 @@
 package com.simplelife.renhai.server.json;
 
 
+import java.util.Collection;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -633,7 +634,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void updateOrAppendImpressLabel(Impresscard card, String labelName, boolean assessedFlag)
 	{
-		Set<Impresslabelmap> impressLabels = card.getImpressLabelMapSet();
+		Collection<Impresslabelmap> impressLabels = card.getImpressLabelMapSet();
 
 		for (Impresslabelmap label : impressLabels)
 		{
@@ -717,6 +718,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void matchStart()
 	{
+		DbLogger.saveProfileLog(Consts.OperationCode.MatchStartRequest_1016
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceSn());
 		logger.debug("Device <{}> request to start match.", deviceWrapper.getDeviceSn());
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,

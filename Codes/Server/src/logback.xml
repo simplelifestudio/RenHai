@@ -35,7 +35,7 @@
     <logger name="Ping" level = "ERROR" />
 	<logger name="DB" level = "ERROR" />
     
-    <root level="ERROR">
+    <root level="DEBUG">
         <appender-ref ref="FILE" />
         <appender-ref ref="STDOUT" />
     </root>

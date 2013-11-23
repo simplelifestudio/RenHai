@@ -10,6 +10,7 @@
 package com.simplelife.renhai.server.util;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -159,7 +160,7 @@ public class DbObjectCache<T>
 	
 	private void cacheGlobalLabels(Device device)
 	{
-		Set<Impresslabelmap> impressMaps = device.getProfile().getImpressCard().getImpressLabelMapSet();
+		Collection<Impresslabelmap> impressMaps = device.getProfile().getImpressCard().getImpressLabelMapSet();
 		Globalimpresslabel impressLabel;
 		for (Impresslabelmap map : impressMaps)
 		{
@@ -175,7 +176,7 @@ public class DbObjectCache<T>
 			}
 		}
 		
-		Set<Interestlabelmap> interestMaps = device.getProfile().getInterestCard().getInterestLabelMapSet();
+		Collection<Interestlabelmap> interestMaps = device.getProfile().getInterestCard().getInterestLabelMapSet();
 		Globalinterestlabel interestLabel;
 		for (Interestlabelmap map : interestMaps)
 		{

@@ -1,6 +1,8 @@
 package com.simplelife.renhai.server.db;
 
+import java.util.Collection;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.apache.ibatis.session.SqlSession;
@@ -189,7 +191,7 @@ public class Impresscard implements IDbObject
     	impressLabelMapSet.remove(map);
     }
 
-    public Set<Impresslabelmap> getImpressLabelMapSet()
+    public Collection<Impresslabelmap> getImpressLabelMapSet()
 	{
 		return impressLabelMapSet;
 	}
@@ -220,5 +222,5 @@ public class Impresscard implements IDbObject
 	}
 	
 	private Logger logger = DBModule.instance.getLogger();
-	private Set<Impresslabelmap> impressLabelMapSet = new ConcurrentSkipListSet<Impresslabelmap>();
+	private Collection<Impresslabelmap> impressLabelMapSet = new ConcurrentLinkedQueue<Impresslabelmap>();
 }

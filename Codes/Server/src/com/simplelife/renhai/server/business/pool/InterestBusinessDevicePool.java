@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.business.pool;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Map.Entry;
@@ -128,7 +129,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     @Override
     public String checkDeviceEnter(IDeviceWrapper device)
     {
-    	Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
+    	Collection<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
     	if (labelSet.isEmpty())
     	{
     		String temp = "Device <" + device.getDeviceSn() + "> has no interest label and is not allowed to enter interest business device pool.";
@@ -154,7 +155,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     
     private void decreaseLabelDeviceCount(IDeviceWrapper device)
     {
-    	Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
+    	Collection<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
     	if (labelSet.isEmpty())
     	{
     		return;
@@ -196,7 +197,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     
     private void increaseLabelDeviceCount(IDeviceWrapper device)
     {
-    	Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
+    	Collection<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
     	if (labelSet.isEmpty())
     	{
     		return;
@@ -218,7 +219,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     
     private void addInterestIndex(IDeviceWrapper device)
     {
-    	Set<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
+    	Collection<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
     	if (labelSet.isEmpty())
     	{
     		return;
@@ -253,7 +254,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		return;
     	}
     	
-    	Set<Interestlabelmap> labelSet = device
+    	Collection<Interestlabelmap> labelSet = device
     			.getDevice()
     			.getProfile()
     			.getInterestCard()

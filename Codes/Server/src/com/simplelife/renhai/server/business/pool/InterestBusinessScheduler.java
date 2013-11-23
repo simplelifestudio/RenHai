@@ -12,6 +12,7 @@
 package com.simplelife.renhai.server.business.pool;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
@@ -59,7 +60,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 		return ((matchStartedDeviceMap.size() >= deviceCountPerSession));
 	}
 	
-	private LinkedList<String> getRandomLabelSet(Set<Interestlabelmap> labelSet)
+	private LinkedList<String> getRandomLabelSet(Collection<Interestlabelmap> labelSet)
 	{
 		LinkedList<String> orgLabels = new LinkedList<>();
 		for (Interestlabelmap map : labelSet)
@@ -95,7 +96,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
     	
     	// Loop all device from deviceMap
 		Set<Entry<String, IDeviceWrapper>> entrySet = matchStartedDeviceMap.entrySet();
-		Set<Interestlabelmap> labelSet;
+		Collection<Interestlabelmap> labelSet;
 		for (Entry<String, IDeviceWrapper> entry : entrySet)
 		{
 			if (isAllDeviceFound)

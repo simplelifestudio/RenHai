@@ -1,6 +1,8 @@
 package com.simplelife.renhai.server.db;
 
+import java.util.Collection;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import org.apache.ibatis.session.SqlSession;
@@ -96,7 +98,7 @@ public class Interestcard implements IDbObject
     	}
     }
     
-	public Set<Interestlabelmap> getInterestLabelMapSet()
+	public Collection<Interestlabelmap> getInterestLabelMapSet()
 	{
 		return interestLabelMapSet;
 	}
@@ -126,7 +128,7 @@ public class Interestcard implements IDbObject
 		}
 	}
 	
-	private Set<Interestlabelmap> interestLabelMapSet = new ConcurrentSkipListSet<Interestlabelmap>();
-	private Set<Interestlabelmap> removedInterestLabelMapSet = new ConcurrentSkipListSet<Interestlabelmap>();
+	private Collection<Interestlabelmap> interestLabelMapSet = new ConcurrentLinkedQueue<Interestlabelmap>();
+	private Collection<Interestlabelmap> removedInterestLabelMapSet = new ConcurrentLinkedQueue<Interestlabelmap>();
 	private Logger logger = DBModule.instance.getLogger();
 }

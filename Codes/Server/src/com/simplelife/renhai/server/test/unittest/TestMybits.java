@@ -11,6 +11,7 @@ package com.simplelife.renhai.server.test.unittest;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.util.Collection;
 import java.util.Set;
 
 import org.apache.ibatis.io.Resources;
@@ -78,14 +79,14 @@ public class TestMybits
 	    DeviceMapper mapper = session.getMapper(DeviceMapper.class);
 	    
 		Device device = DBModule.instance.deviceCache.getObject("demoDeviceSn");
-		Set<Interestlabelmap> labels = device.getProfile().getInterestCard().getInterestLabelMapSet();
+		Collection<Interestlabelmap> labels = device.getProfile().getInterestCard().getInterestLabelMapSet();
 		for (Interestlabelmap label : labels)
 		{
 			Globalinterestlabel insLabel = DBModule.instance.interestLabelCache.getObject(label.getGlobalLabel().getInterestLabelName());
 			System.out.print("===========interest label: " + insLabel.getInterestLabelName() + "\n");
 		}
 		
-		Set<Impresslabelmap> impresslabels = device.getProfile().getImpressCard().getImpressLabelMapSet();
+		Collection<Impresslabelmap> impresslabels = device.getProfile().getImpressCard().getImpressLabelMapSet();
 		for (Impresslabelmap label : impresslabels)
 		{
 			Globalimpresslabel impLabel = DBModule.instance.impressLabelCache.getObject(label.getGlobalLabel().getImpressLabelName());

@@ -10,6 +10,7 @@
 package com.simplelife.renhai.server.test.unittest;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
@@ -33,6 +35,7 @@ import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
+import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Devicecard;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.db.GlobalinterestlabelMapper;
@@ -48,11 +51,13 @@ import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.test.AbstractTestCase;
 import com.simplelife.renhai.server.test.MockApp;
 import com.simplelife.renhai.server.test.MockAppConsts;
+import com.simplelife.renhai.server.test.MockWebSocketConnection;
 import com.simplelife.renhai.server.test.RenHaiWebSocketClient;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.DbObjectCache;
 import com.simplelife.renhai.server.util.GlobalSetting;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
@@ -610,7 +615,7 @@ public class MainFunction extends AbstractTestCase
 	public void testRandomInterestLabel()
 	{
 		Device device = DBModule.instance.deviceCache.getObject(demoDeviceSn);
-		Set<Interestlabelmap> labelSet = device.getProfile().getInterestCard().getInterestLabelMapSet();
+		Collection<Interestlabelmap> labelSet = device.getProfile().getInterestCard().getInterestLabelMapSet();
 		LinkedList<String> orgLabels = new LinkedList<>();
 		for (Interestlabelmap map : labelSet)
 		{
@@ -643,5 +648,21 @@ public class MainFunction extends AbstractTestCase
 		{
 			System.out.println(rtcSession.getWebrtcsession());
 		}
+	}
+	
+	@Test
+	public void testQueryDeviceWithOrderBy()
+	{
+		SqlSession session = DAOWrapper.getSession();
+		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
+		Device device = mapper.selectByStringKey(demoDeviceSn);
+		IDeviceWrapper deviceWrapper = new DeviceWrapper(new MockWebSocketConnection());
+		deviceWrapper.setDevice(device);
+		System.out.print(JSON.toJSONString(deviceWrapper.toJSONObject(), true));
+		
+		MockApp mockApp = new MockApp(demoDeviceSn);
+		mockApp.syncDevice();
+		deviceWrapper = OnlineDevicePool.instance.getDevice(demoDeviceSn);
+		System.out.print(JSON.toJSONString(deviceWrapper.toJSONObject(), true));
 	}
 }
