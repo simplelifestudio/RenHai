@@ -106,4 +106,6 @@ public interface IDeviceWrapper
     public void increaseChatLoss();
     
     public void increaseMatchCount(String interestLabel);
+    
+    public void prepareResponse(ServerJSONMessage response);
 }

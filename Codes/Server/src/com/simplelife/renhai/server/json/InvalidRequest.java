@@ -10,7 +10,6 @@
 package com.simplelife.renhai.server.json;
 
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.JSONKey;
 
@@ -71,7 +70,7 @@ public class InvalidRequest extends AppJSONMessage
     	}
     	response.addToHeader(JSONKey.MessageSn, this.getMessageSn());
     	
-    	OutputMessageCenter.instance.addMessage(response);
+    	deviceWrapper.prepareResponse(response);
     }
 	
 	@Override

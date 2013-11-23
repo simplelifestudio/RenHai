@@ -84,8 +84,8 @@ public class DbLogger
 		log.setOperationCodeId(code.getValue());
 		log.setLogInfo(logInfo);
 		log.setLogTime(now);
-		log.setProfileId(profile.getProfileId());
-
+		log.setProfile(profile);
+		
 		DAOWrapper.cache(log);
 	}
 	

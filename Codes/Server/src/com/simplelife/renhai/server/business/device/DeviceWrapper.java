@@ -17,17 +17,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import org.slf4j.LoggerFactory;
+
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
-import com.simplelife.renhai.server.business.pool.InputMessageCenter;
+import com.simplelife.renhai.server.business.pool.InputMsgExecutorPool;
+import com.simplelife.renhai.server.business.pool.MessageHandler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
+import com.simplelife.renhai.server.business.pool.OutputMsgExecutorPool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
@@ -42,8 +43,8 @@ import com.simplelife.renhai.server.json.ServerErrorResponse;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
+import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -88,6 +89,9 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     private Logger logger = BusinessModule.instance.getLogger();
     
     private Long lastActivityTime;
+    
+    private MessageHandler inputMessageHandler = new MessageHandler(this, InputMsgExecutorPool.instance);
+    private MessageHandler outputMessageHandler = new MessageHandler(this, OutputMsgExecutorPool.instance);
     
     // Set service status of Device: Normal or Ban
     public void setServiceStatus(Consts.ServiceStatus serviceStatus)
@@ -192,6 +196,8 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
     					break;
     			}
+    			inputMessageHandler.clearMessage();
+    			outputMessageHandler.clearMessage();
     			this.webSocketConnection.closeConnection();			// Close socket at last step
     			break;
     			
@@ -437,7 +443,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     		//Thread cmdThread = new Thread(command);
     		//cmdThread.setName(command.getMessageId().name() + DateUtil.getCurrentMiliseconds());
     		//cmdThread.start();
-    		InputMessageCenter.instance.addMessage(command);
+    		inputMessageHandler.addMessage(command);
     	}
     	catch(Exception e)
     	{
@@ -447,7 +453,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
         	response.addToBody(JSONKey.ErrorDescription, "Server internal error");
         	response.addToHeader(JSONKey.MessageSn, command.getMessageSn());
         	
-        	OutputMessageCenter.instance.addMessage(response);
+        	outputMessageHandler.addMessage(response);
     		FileLogger.printStackTrace(e);
     	}
     }
@@ -828,6 +834,11 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
 	{
 		return this.getDeviceSn().compareTo(device.getDeviceSn());
 	}
-
+	
+	@Override
+	public void prepareResponse(ServerJSONMessage response)
+	{
+		outputMessageHandler.addMessage(response);
+	}
 }
 

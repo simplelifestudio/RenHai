@@ -20,7 +20,6 @@ import java.util.Set;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.DBQueryUtil;
@@ -540,7 +539,8 @@ public class AppDataSyncRequest extends AppJSONMessage
 		DbLogger.saveSystemLog(Consts.OperationCode.AppDataSyncResponse_1007
     			, Consts.SystemModule.business
     			, header.getString(JSONKey.DeviceSn));
-		OutputMessageCenter.instance.addMessage(response);
+		DAOWrapper.cache(device);
+		deviceWrapper.prepareResponse(response);
 	}
 	
 	private boolean checkBanDate(Profile profile)

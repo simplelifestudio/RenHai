@@ -14,7 +14,6 @@ package com.simplelife.renhai.server.json;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
@@ -224,7 +223,7 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements IApp
     	response.addToBody(JSONKey.ErrorDescription, this.errorDescription);
     	response.addToHeader(JSONKey.MessageSn, this.getMessageSn());
     	
-    	OutputMessageCenter.instance.addMessage(response);
+    	deviceWrapper.prepareResponse(response);
     }
 
     @Override

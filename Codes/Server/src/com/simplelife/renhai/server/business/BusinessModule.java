@@ -14,9 +14,9 @@ package com.simplelife.renhai.server.business;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.LoggerFactory;
 
-import com.simplelife.renhai.server.business.pool.InputMessageCenter;
+import com.simplelife.renhai.server.business.pool.InputMsgExecutorPool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
+import com.simplelife.renhai.server.business.pool.OutputMsgExecutorPool;
 import com.simplelife.renhai.server.business.session.WebRTCSessionPool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.util.AbstractModule;
@@ -40,8 +40,8 @@ public class BusinessModule extends AbstractModule
     	session.close();
     	
     	OnlineDevicePool.instance.startService();
-    	InputMessageCenter.instance.startService();
-    	OutputMessageCenter.instance.startService();
+    	InputMsgExecutorPool.instance.startService();
+    	OutputMsgExecutorPool.instance.startService();
     	WebRTCSessionPool.instance.startService();
     	moduleAvailable = true;
     }
@@ -50,8 +50,8 @@ public class BusinessModule extends AbstractModule
 	public void stopService()
 	{
 		OnlineDevicePool.instance.stopService();
-		InputMessageCenter.instance.stopService();
-		OutputMessageCenter.instance.stopService();
+		InputMsgExecutorPool.instance.stopService();
+		OutputMsgExecutorPool.instance.stopService();
 		WebRTCSessionPool.instance.stopService();
 		moduleAvailable = false;
 	}

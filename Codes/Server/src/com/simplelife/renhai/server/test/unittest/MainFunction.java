@@ -16,8 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 import org.java_websocket.drafts.Draft_17;
@@ -29,9 +29,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
-import com.simplelife.renhai.server.business.pool.InputMessageCenter;
+import com.simplelife.renhai.server.business.pool.InputMsgExecutorPool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
+import com.simplelife.renhai.server.business.pool.OutputMsgExecutorPool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
@@ -54,12 +54,12 @@ import com.simplelife.renhai.server.test.MockAppConsts;
 import com.simplelife.renhai.server.test.MockWebSocketConnection;
 import com.simplelife.renhai.server.test.RenHaiWebSocketClient;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.DbObjectCache;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
-import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
 import com.simplelife.renhai.server.websocket.WebSocketModule;
 
@@ -354,8 +354,8 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testOutputMessageCenter() throws InterruptedException
 	{
-		OutputMessageCenter.instance.startService();
-		InputMessageCenter.instance.startService();
+		OutputMsgExecutorPool.instance.startService();
+		InputMsgExecutorPool.instance.startService();
 		OnlineDevicePool.instance.startService();
 		
 		MockApp app1 = new MockApp(demoDeviceSn);

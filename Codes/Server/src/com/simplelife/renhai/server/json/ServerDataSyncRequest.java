@@ -16,7 +16,6 @@ import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.HotLabel;
 import com.simplelife.renhai.server.business.pool.InterestBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.business.pool.RandomBusinessDevicePool;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
@@ -230,7 +229,7 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		{
 			JSONArray hotLabelObj = new JSONArray();
 			responseObj.put(JSONKey.History, hotLabelObj);
-			// TODO: 
+			// TODO: 补充历史标签的查询功能
 		}
 	}
 	
@@ -288,7 +287,7 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		//DbLogger.saveProfileLog(Consts.OperationCode.ServerDataSyncResponse_1009
     	//		, deviceWrapper.getDevice().getProfile()
     	//		, header.getString(JSONKey.DeviceSn));
-		OutputMessageCenter.instance.addMessage(response);		
+		deviceWrapper.prepareResponse(response);		
 	}
 
 

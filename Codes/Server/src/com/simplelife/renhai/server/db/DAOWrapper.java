@@ -27,7 +27,6 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.slf4j.Logger;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.log.FileLogger;
-import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDbObject;
 

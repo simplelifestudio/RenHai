@@ -23,7 +23,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.business.pool.OutputMessageCenter;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Sessionrecord;
 import com.simplelife.renhai.server.db.Webrtcsession;
@@ -325,7 +324,7 @@ public class BusinessSession implements IBusinessSession
 			}
     		notify.setDeviceWrapper(device);
     		//logger.debug("Send notify for device <" + device.getDeviceSn() +">");
-    		OutputMessageCenter.instance.addMessage(notify);
+    		device.prepareResponse(notify);
     		
     		
     		/*
