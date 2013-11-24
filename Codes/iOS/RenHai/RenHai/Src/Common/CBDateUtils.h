@@ -36,4 +36,6 @@
 
 +(NSDate*) targetDateFromDate:(NSDate*) sourceDate sourceTimeZone:(NSTimeZone*) sourceTimeZone targetTimeZone:(NSTimeZone*) targetTimeZone;
 
++(BOOL) isDateInLocalTimeZoneDuringPeriod:(NSDate*) date beginTime:(NSDate*) beginTime endTime:(NSDate*) endTime;
+
 @end

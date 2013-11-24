@@ -27,6 +27,8 @@
 
 "Home_OnlineCount" = "Online Users";
 "Home_ChatCount" = "Chating Users";
+"Home_Banner_NoInfo" = "No information from server.\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+"Home_Banner_Maintenance" = "Server scheduled maintenance：from %@ to %@.";
 "Home_PressToEnterPool" = "Press to Enter";
 "Home_IsEnteringPool" = "Entering...";
 "Home_EnterPoolFailed" = "Enter Failed";
@@ -68,7 +70,7 @@
 "Connect_CheckedNormal" = "Check";
 "Connect_CheckedNormal_Detail" = "Checked server";
 "Connect_CheckedMaintenance" = "Maintenance";
-"Connect_CheckedMaintenance_Detail" = "Server is in maintenance:\nfrom %@ \nto %@";
+"Connect_CheckedMaintenance_Detail" = "Server scheduled in maintenance:\nfrom %@ \nto %@";
 "Connect_CheckFailed" = "Failure";
 "Connect_CheckFailed_Detail" = "Can not check server...";
 "Connect_Connecting" = "Connecting";

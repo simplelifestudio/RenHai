@@ -23,4 +23,6 @@
 -(NSString*) localBeginTimeString;
 -(NSString*) localEndTimeString;
 
+-(BOOL) isInPeriod;
+
 @end

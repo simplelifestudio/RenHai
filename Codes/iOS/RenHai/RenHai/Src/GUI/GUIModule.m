@@ -82,6 +82,8 @@ SINGLETON(GUIModule)
         
     [super startService];
     
+    [self keepScreenAlwaysOn:SCREEN_ALWAYS_ON];
+    
     [_networkActivityIndicator setEnabled:YES];
     
     [self _registerNotifications];
@@ -126,6 +128,11 @@ SINGLETON(GUIModule)
     {
         [UIApplication sharedApplication].networkActivityIndicatorVisible = flag;
     }
+}
+
+- (void) keepScreenAlwaysOn:(BOOL)on
+{
+    [[UIApplication sharedApplication] setIdleTimerDisabled:on];
 }
 
 #pragma mark - UIApplicationDelegate
