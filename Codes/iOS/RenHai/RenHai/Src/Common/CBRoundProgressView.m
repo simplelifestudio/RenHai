@@ -77,10 +77,10 @@
         progress = 0.0f;
         _progressStarted = NO;
     }
-    else if(progress > 1.0f)
-    {
-        progress = 1.0f;
-    }
+//    else if(progress > 1.0f)
+//    {
+//        progress = 1.0f;
+//    }
     
     if (progress > 0.0f && progress < 1.0f && !_progressStarted)
     {
@@ -95,7 +95,8 @@
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"progress"];
         animation.duration = CIRCLE_ANIMATION_DISPLAY;
         animation.fromValue = [NSNumber numberWithFloat:layer.progress];
-        animation.toValue = [NSNumber numberWithFloat:progress];
+        float temp = (progress >= 1.0f) ? 1.0 : progress;
+        animation.toValue = [NSNumber numberWithFloat:temp];
         [layer addAnimation:animation forKey:@"progressAnimation"];
         
         layer.progress = progress;

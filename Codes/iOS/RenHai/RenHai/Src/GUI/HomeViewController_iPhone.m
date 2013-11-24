@@ -44,10 +44,9 @@ EnterOperationStatus;
     NSTimer* _dataSyncTimer;
     
     volatile BOOL _enterPoolFlag;
-    NSCondition* _enterPoolFlagBlock;
     
     volatile BOOL _reachFlag;
-    NSCondition* _reachBlock;
+    NSCondition* _reachLock;
 }
 
 @end
@@ -126,9 +125,8 @@ EnterOperationStatus;
     _statusModule = [BusinessStatusModule sharedInstance];
     
     _enterPoolFlag = NO;
-    _enterPoolFlagBlock = [[NSCondition alloc] init];
     _reachFlag = NO;
-    _reachBlock = [[NSCondition alloc] init];
+    _reachLock = [[NSCondition alloc] init];
     
     [self _setupNavigationBar];
     [self _setupView];
@@ -408,51 +406,27 @@ static float progress = 0.0;
 
 -(void)_updateEnterPoolFlag:(BOOL) flag
 {
-    [_enterPoolFlagBlock lock];
-    
-    [self _updateReachFlag:YES];
-    
     _enterPoolFlag = flag;
-    [_enterPoolFlagBlock signal];
-    [_enterPoolFlagBlock unlock];
 }
 
 -(BOOL)_checkEnterPoolFlag
 {
-    [_enterPoolFlagBlock lock];
-    
-    if (![self _checkReachFlag])
-    {
-        [_enterPoolFlagBlock wait];
-    }
-    
-    [_enterPoolFlagBlock unlock];
-    
     return _enterPoolFlag;
 }
 
 -(void)_updateReachFlag:(BOOL) flag
 {
-    [_reachBlock lock];
     _reachFlag = flag;
-    [_reachBlock unlock];
 }
 
 -(BOOL)_checkReachFlag
 {
-    BOOL flag = NO;
-    
-    [_reachBlock lock];
-    flag = _reachFlag;
-    [_reachBlock unlock];
-    
-    return flag;
+    return _reachFlag;
 }
 
 -(void)_startEnteringPool
 {
     [CBAppUtils asyncProcessInBackgroundThread:^(){
-    
         RHDevice* device = _userDataModule.device;
         
         RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:nil businessType:CURRENT_BUSINESSPOOL operationType:BusinessSessionRequestType_EnterPool device:device info:nil];
@@ -465,7 +439,32 @@ static float progress = 0.0;
             failureCompletionBlock:^(){
                 [self _updateEnterPoolFlag:NO];
             }
-            afterCompletionBlock:nil
+            afterCompletionBlock:^(){
+                [_reachLock lock];
+                while (![self _checkReachFlag])
+                {
+                    [_reachLock wait];
+                }
+                [self _updateReachFlag:NO];
+                
+                [CBAppUtils asyncProcessInMainThread:^(){
+                    [self _enterButtonTimerFinished];
+                    [self _unlockViewController];
+
+                    if ([self _checkEnterPoolFlag])
+                    {
+                        [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Success];
+                        
+                        [self _finishEnterPool];
+                    }
+                    else
+                    {
+                        [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Fail];
+                    }
+                }];
+                
+                [_reachLock unlock];
+            }
          ];
     }];
 }
@@ -498,8 +497,9 @@ static float progress = 0.0;
 - (IBAction)onPressEnterButton:(id)sender
 {
     [self performSelector:@selector(_lockViewController) withObject:self afterDelay:0.0];
-    
     [self _enterButtonTimerStarted];
+    
+    [self performSelector:@selector(_startEnteringPool) withObject:self afterDelay:0.0];
 }
 
 - (IBAction)onPressHelpButton:(id)sender
@@ -515,27 +515,15 @@ static float progress = 0.0;
 
 - (void) progressStarted
 {
-    [self performSelector:@selector(_startEnteringPool) withObject:self afterDelay:0];
+
 }
 
 - (void) progressFinished
 {
-    [self _enterButtonTimerFinished];
-
-    [NSThread sleepForTimeInterval:INTERVAL_ENTERBUTTON_TRACK];
-    
-    [self _unlockViewController];
-    
-    if ([self _checkEnterPoolFlag])
-    {
-        [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Success];
-
-        [self _finishEnterPool];
-    }
-    else
-    {
-        [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Fail];
-    }
+    [self _updateReachFlag:YES];
+    [_reachLock lock];
+    [_reachLock signal];
+    [_reachLock unlock];
 }
 
 @end
