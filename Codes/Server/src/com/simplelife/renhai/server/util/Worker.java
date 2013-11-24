@@ -63,7 +63,23 @@ public class Worker extends Thread
 		{
 			if (productor.hasWork())
 			{
-				productor.run();
+				Runnable work = productor.getWork();
+				if (work != null)
+				{
+					work.run();
+				}
+				else
+				{
+					
+					try
+					{
+						Thread.sleep(100);
+					}
+					catch (InterruptedException e)
+					{
+						FileLogger.printStackTrace(e);
+					}
+				}
 			}
 			else
 			{

@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.business.pool;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.Condition;
@@ -119,13 +120,11 @@ public abstract class AbstractBusinessScheduler extends Thread implements IBusin
      * Recycle devices due to failure of start session 
      * @param selectedDevice
      */
-    protected void recycleDevice(List<String> selectedDevice)
+    protected void recycleDevice(Collection<IDeviceWrapper> selectedDevice)
     {
     	logger.debug("Recycle devices due to failure of starting session");
-    	IDeviceWrapper device;
-    	for (String deviceSn : selectedDevice)
+    	for (IDeviceWrapper device : selectedDevice)
     	{
-    		device = ownerBusinessPool.getDevice(deviceSn); 
     		if (device != null)
     		{
     			ownerBusinessPool.endChat(device);

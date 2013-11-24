@@ -17,23 +17,32 @@ import java.util.LinkedList;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
+import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.AbstractLabel;
+import com.simplelife.renhai.server.business.session.BusinessSessionPool;
+import com.simplelife.renhai.server.db.DBModule;
+import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.db.Interestlabelmap;
+import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
+import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.IProductor;
+import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */
-public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
+public class InterestBusinessDevicePool extends AbstractBusinessDevicePool implements IProductor
 {
     /** */
-    private ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>> interestLabelDeviceMap = new ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>>();
+    private ConcurrentHashMap<String, ConcurrentLinkedQueue<IDeviceWrapper>> interestLabelDeviceMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Integer> labelDeviceCountMap = new ConcurrentHashMap<>();
+    private ConcurrentLinkedQueue<SessionCoordinator> sessionCoordicatorQueue = new ConcurrentLinkedQueue<>();
     
-    public ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>> getInterestLabelMap()
+    public ConcurrentHashMap<String, ConcurrentLinkedQueue<IDeviceWrapper>> getInterestLabelMap()
     {
     	return interestLabelDeviceMap;
     }
@@ -45,7 +54,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 		businessScheduler = new InterestBusinessScheduler();
 		businessScheduler.bind(this);
 		businessScheduler.setName("InterestScheduler");
-		businessScheduler.startScheduler();
+		//businessScheduler.startScheduler();
 		
 		setCapacity(GlobalSetting.BusinessSetting.InterestBusinessPoolCapacity);
     }
@@ -81,36 +90,6 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		removeCount--;
     	}
         return labelList;
-    }
-    
-    /**
-     * Add hotLabel to labelList with order
-     * @param labelList: list of hot interest labels
-     * @param hotLabel: interest label to be added
-     * @param count: max length of @labelList
-     */
-    private void addToSortedLink(LinkedList<HotLabel> labelList, HotLabel hotLabel, int count)
-    {
-    	boolean addFlag = false;
-    	for (int i = 0; i < labelList.size(); i++)
-    	{
-    		if (hotLabel.compareTo(labelList.get(i)) > 0)
-    		{
-    			labelList.add(i, hotLabel);
-    			addFlag = true;
-    			break;
-    		}
-    	}
-    	
-    	if (!addFlag)
-    	{
-    		labelList.add(hotLabel);
-    	}
-    	
-    	if (labelList.size() > count)
-    	{
-    		labelList.removeLast();
-    	}
     }
     
     /** */
@@ -219,29 +198,75 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     
     private void addInterestIndex(IDeviceWrapper device)
     {
+    	logger.debug("Add interest index for device <{}>", device.getDeviceSn());
     	Collection<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
     	if (labelSet.isEmpty())
     	{
     		return;
     	}
     	
+    	String strLabel;
     	for (Interestlabelmap label : labelSet)
     	{
-    		String strLabel = label.getGlobalLabel().getInterestLabelName();
+    		strLabel = label.getGlobalLabel().getInterestLabelName();
     		if (!this.interestLabelDeviceMap.containsKey(strLabel))
     		{
-    			interestLabelDeviceMap.put(strLabel, new ConcurrentSkipListSet<IDeviceWrapper>());
+    			ConcurrentLinkedQueue<IDeviceWrapper> deviceList = new ConcurrentLinkedQueue<IDeviceWrapper>();
+    			interestLabelDeviceMap.put(strLabel, deviceList);
+    			deviceList.add(device);
     		}
-    		
-    		ConcurrentSkipListSet<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(strLabel);
-    		if (deviceList.contains(device))
+    		else
     		{
-    			logger.warn("Device <{}> has been in list of interest queue: " + strLabel, device.getDeviceSn());
-    			continue;
+    			ConcurrentLinkedQueue<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(strLabel);
+        		if (deviceList.contains(device))
+        		{
+        			logger.warn("Device <{}> has been in list of interest queue: " + strLabel, device.getDeviceSn());
+        			continue;
+        		}
+        		
+        		deviceList.add(device);
+        		
+        		if (deviceList.size() >= deviceCountPerSession)
+        		{
+        			matchDevice(strLabel);
+        		}
     		}
-    		
-    		deviceList.add(device);
     	}
+    }
+    
+    private void matchDevice(String interestLabel)
+    {
+    	logger.debug("Match devices bases on interest label: {}", interestLabel);
+    	ConcurrentLinkedQueue<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(interestLabel);
+    	int size = deviceList.size();
+    	if (size < deviceCountPerSession)
+    	{
+    		logger.warn("But there is no enough devices with label {}, it may be caused by concurrent operation");
+    		return;
+    	}
+    	
+    	ConcurrentLinkedQueue<IDeviceWrapper> tmpList = new ConcurrentLinkedQueue<>();
+    	if (size == deviceCountPerSession)
+    	{
+    		tmpList.addAll(deviceList);
+    		deviceList.clear();
+    	}
+    	else
+    	{
+    		for (int i = 0; i < deviceCountPerSession; i++)
+    		{
+    			tmpList.add(deviceList.remove());
+    		}
+    	}
+    	
+    	for (IDeviceWrapper device : tmpList)
+    	{
+    		removeInterestIndex(device);
+    	}
+    	
+    	SessionCoordinator coor = new SessionCoordinator(tmpList, this, interestLabel);
+    	sessionCoordicatorQueue.add(coor);
+    	matchWorker.resumeExecution();
     }
     
     private void removeInterestIndex(IDeviceWrapper device)
@@ -275,7 +300,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     			continue;
     		}
     		
-    		ConcurrentSkipListSet<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(strLabel);
+    		ConcurrentLinkedQueue<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(strLabel);
     		if (!deviceList.contains(device))
     		{
     			logger.warn("Device <{}> is not in list of interest queue: " + strLabel, device.getDeviceSn());
@@ -334,7 +359,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 		businessChoosedDeviceMap.remove(deviceSn);
 		matchStartedDeviceMap.put(deviceSn, device);
 		addInterestIndex(device);
-		businessScheduler.resumeSchedule();
+		//businessScheduler.resumeSchedule();
     }
 
 	@Override
@@ -357,5 +382,95 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 			//device.unbindBusinessSession();
 			//addInterestIndex(device);
 		}
+	}
+
+	@Override
+	public boolean hasWork()
+	{
+		return !sessionCoordicatorQueue.isEmpty();
+	}
+
+	@Override
+	public Runnable getWork()
+	{
+		return sessionCoordicatorQueue.remove();
+	}
+	
+	private class SessionCoordinator implements Runnable
+	{
+		private Collection<IDeviceWrapper> selectedDevice;
+		private InterestBusinessDevicePool pool;
+		private String deviceFoundInterest;
+		
+		public SessionCoordinator(
+				Collection<IDeviceWrapper> selectedDevice, 
+				InterestBusinessDevicePool pool,
+				String deviceFoundInterest)
+		{
+			this.selectedDevice = selectedDevice;
+			this.pool = pool;
+			this.deviceFoundInterest = deviceFoundInterest;
+		}
+		
+		@Override
+		public void run()
+		{
+			IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
+			if (session == null)
+			{
+				logger.debug("No availabel business session.");
+				return;
+			}
+			
+			session.bindBusinessDevicePool(pool);
+			
+			JSONObject obj = null;
+			Globalinterestlabel label = DBModule.instance.interestLabelCache.getObject(deviceFoundInterest);
+			if (label != null)
+			{
+				obj = new JSONObject();
+				obj.put(JSONKey.GlobalInterestLabelId, label.getGlobalInterestLabelId());
+				obj.put(JSONKey.InterestLabelName, label.getInterestLabelName());
+				obj.put(JSONKey.GlobalMatchCount, label.getGlobalMatchCount());
+			}
+			else
+			{
+				logger.error("Fatal error, global interest label {} can not be found when trying to start session", deviceFoundInterest);
+				return;
+			}
+			
+			if (session.prepareSession(selectedDevice, obj))
+			{
+				DbLogger.increaseInterestMatchCount(deviceFoundInterest);
+				increaseMatchCount(selectedDevice, deviceFoundInterest);
+			}
+			else
+			{
+				recycleDevice(selectedDevice);
+			}
+		}
+		
+		private void increaseMatchCount(Collection<IDeviceWrapper> selectedDevice, String label)
+	    {
+	    	for (IDeviceWrapper device : selectedDevice)
+	    	{
+	    		if (device != null)
+	    		{
+	    			device.increaseMatchCount(label);
+	    		}
+	    	}
+	    }
+		
+		private void recycleDevice(Collection<IDeviceWrapper> selectedDevice)
+	    {
+	    	logger.debug("Recycle devices due to failure of starting session");
+	    	for (IDeviceWrapper device : selectedDevice)
+	    	{
+	    		if (device != null)
+	    		{
+	    			pool.endChat(device);
+	    		}
+	    	}
+	    }
 	}
 }

@@ -72,7 +72,11 @@ public class PingLink
 			node = nextNode;
 			count++;
 		}
-		logger.debug("Check inactivity of Ping finished, removed {} devices", count);
+		
+		if (count > 0)
+		{
+			logger.debug("Check inactivity of Ping finished, removed {} devices", count);
+		}
 	}
 	
 	private void removeNode(PingNode node, boolean printLog)

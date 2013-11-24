@@ -68,4 +68,16 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 		}
 	}
 
+	@Override
+	public boolean hasWork()
+	{
+		return false;
+	}
+
+	@Override
+	public Runnable getWork()
+	{
+		return null;
+	}
+
 }

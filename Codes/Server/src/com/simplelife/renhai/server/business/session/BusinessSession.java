@@ -11,10 +11,12 @@
 
 package com.simplelife.renhai.server.business.session;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
@@ -24,10 +26,13 @@ import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.DBModule;
+import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.db.Sessionrecord;
 import com.simplelife.renhai.server.db.Webrtcsession;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
+import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
@@ -59,7 +64,7 @@ public class BusinessSession implements IBusinessSession
 	
 	private Consts.SessionEndReason endReason = Consts.SessionEndReason.Invalid;
 	
-	private CopyOnWriteArrayList<IDeviceWrapper> deviceList = new CopyOnWriteArrayList<IDeviceWrapper>(); 
+	private Collection<IDeviceWrapper> deviceList; 
 	
 	// Temp list for saving devices waiting for confirmation
 	//private List<IDeviceWrapper> tmpConfirmDeviceList = new ArrayList<IDeviceWrapper>();
@@ -102,7 +107,7 @@ public class BusinessSession implements IBusinessSession
     	return true;
     }
     
-    private boolean checkStartSession(List<String> deviceList)
+    private boolean checkStartSession(Collection<IDeviceWrapper> deviceList)
     {
     	if (deviceList == null)
     	{
@@ -121,23 +126,20 @@ public class BusinessSession implements IBusinessSession
     		return false;
     	}
     	
-    	IDeviceWrapper device;
     	Consts.DeviceStatus status;
-    	for (String deviceSn : deviceList)
+    	for (IDeviceWrapper deviceWrapper : deviceList)
     	{
-    		device = OnlineDevicePool.instance.getDevice(deviceSn);
-    		if (device == null)
+    		if (deviceWrapper == null)
     		{
-    			logger.error("Device <{}> is not in online device pool when trying to bind with session.", deviceSn);
-    			device = pool.getDevice(deviceSn);
-    			pool.onDeviceLeave(device, Consts.StatusChangeReason.UnknownBusinessException);
+    			logger.error("DeviceWrapper is null when trying to bind with session.");
+    			pool.onDeviceLeave(deviceWrapper, Consts.StatusChangeReason.UnknownBusinessException);
     			return false;
     		}
-    		status = device.getBusinessStatus();
+    		status = deviceWrapper.getBusinessStatus();
     		
     		if ( status != Consts.DeviceStatus.MatchStarted)
     		{
-    			logger.error("Abnormal business status of device <{}>: " + status.name(), deviceSn);
+    			logger.error("Abnormal business status of device <{}>: " + status.name(), deviceWrapper.getDeviceSn());
     			return false;
     		}
     	}
@@ -193,7 +195,7 @@ public class BusinessSession implements IBusinessSession
     }
     
     @Override
-    public boolean startSession(List<String> deviceList, JSONObject matchCondition)
+    public boolean prepareSession(Collection<IDeviceWrapper> deviceList, JSONObject matchCondition)
     {
     	sessionStartTime = System.currentTimeMillis();
     	chatStartTime = 0;
@@ -201,27 +203,27 @@ public class BusinessSession implements IBusinessSession
     	sessionEndTime = 0;
     	this.matchCondition = matchCondition;
     	
-    	logger.debug("Enter startSession with id {}, deviceList:" , sessionId);
-    	for (String device : deviceList)
+    	if (logger.isDebugEnabled())
     	{
-    		logger.debug(device);
+	    	logger.debug("Enter startSession with id {}, deviceList:" , sessionId);
+	    	for (IDeviceWrapper device : deviceList)
+	    	{
+	    		logger.debug(device.getDeviceSn());
+	    	}
     	}
     	
     	//logger.debug("===============before check start session");
     	if (!checkStartSession(deviceList))
     	{
-    		//logger.debug("===============check start session failed, to be end session");
     		endSession();
     		return false;
     	}
     	
-    	IDeviceWrapper device;
     	try
     	{
-	    	for (String deviceSn : deviceList)
+	    	for (IDeviceWrapper device : deviceList)
 	    	{
-	    		updateBusinessProgress(deviceSn, Consts.DeviceBusinessProgress.Init);
-	    		device = OnlineDevicePool.instance.getDevice(deviceSn);
+	    		updateBusinessProgress(device.getDeviceSn(), Consts.DeviceBusinessProgress.Init);
 	    		device.bindBusinessSession(this);
 	    		device.changeBusinessStatus(DeviceStatus.SessionBound, Consts.StatusChangeReason.BusinessSessionStarted);
 	    	}
@@ -258,7 +260,7 @@ public class BusinessSession implements IBusinessSession
     	notifyDevices(this.deviceList, triggerDevice, notificationType);
     }
     
-    public void notifyDevices(List<IDeviceWrapper> activeDeviceList, IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
+    public void notifyDevices(Collection<IDeviceWrapper> activeDeviceList, IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
     {
     	ServerJSONMessage notify;
 
@@ -506,7 +508,7 @@ public class BusinessSession implements IBusinessSession
     }
     
     /** */
-    public List<IDeviceWrapper> getDeviceList()
+    public Collection<IDeviceWrapper> getDeviceList()
     {
         return deviceList;
     }
