@@ -235,10 +235,14 @@ EnterOperationStatus;
     
     UIPanGestureRecognizer* gesturer = self.navigationController.revealController.revealPanGestureRecognizer;
     gesturer.enabled = NO;
+    
+    [self _enterButtonTimerStarted];
 }
 
 -(void)_unlockViewController
 {
+    [self _enterButtonTimerFinished];
+    
     _enterButton.highlighted = NO;
     _enterButton.enabled = YES;
 //    _enterLabel.hidden = NO;
@@ -448,9 +452,6 @@ static float progress = 0.0;
                 [self _updateReachFlag:NO];
                 
                 [CBAppUtils asyncProcessInMainThread:^(){
-                    [self _enterButtonTimerFinished];
-                    [self _unlockViewController];
-
                     if ([self _checkEnterPoolFlag])
                     {
                         [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Success];
@@ -461,6 +462,8 @@ static float progress = 0.0;
                     {
                         [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Fail];
                     }
+                    
+                    [self _unlockViewController];
                 }];
                 
                 [_reachLock unlock];
@@ -471,10 +474,8 @@ static float progress = 0.0;
 
 -(void)_finishEnterPool
 {
-    [CBAppUtils asyncProcessInMainThread:^(){
-        MainViewController_iPhone* mainVC = _guiModule.mainViewController;
-        [mainVC switchToChatScene];
-    }];
+    MainViewController_iPhone* mainVC = _guiModule.mainViewController;
+    [mainVC switchToChatScene];
 }
 
 -(void)_registerNotifications
@@ -497,7 +498,6 @@ static float progress = 0.0;
 - (IBAction)onPressEnterButton:(id)sender
 {
     [self performSelector:@selector(_lockViewController) withObject:self afterDelay:0.0];
-    [self _enterButtonTimerStarted];
     
     [self performSelector:@selector(_startEnteringPool) withObject:self afterDelay:0.0];
 }
