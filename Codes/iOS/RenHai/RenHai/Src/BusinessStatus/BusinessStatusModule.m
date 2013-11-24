@@ -133,7 +133,7 @@ SINGLETON(BusinessStatusModule)
                         break;
                     }
                     // M4
-                    case AppMessageIdentifier_EnterPool:
+                    case AppMessageIdentifier_ChooseBusiness:
                     {
                         [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                         break;
@@ -187,7 +187,7 @@ SINGLETON(BusinessStatusModule)
                         break;
                     }
                     // M13
-                    case AppMessageIdentifier_LeavePool:
+                    case AppMessageIdentifier_UnchooseBusiness:
                     {
                         [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                         break;
@@ -273,7 +273,7 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M4
-                      case AppMessageIdentifier_EnterPool:
+                      case AppMessageIdentifier_ChooseBusiness:
                       {
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                           break;
@@ -327,7 +327,7 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M13
-                      case AppMessageIdentifier_LeavePool:
+                      case AppMessageIdentifier_UnchooseBusiness:
                       {
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                           break;
@@ -412,7 +412,7 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M4
-                      case AppMessageIdentifier_EnterPool:
+                      case AppMessageIdentifier_ChooseBusiness:
                       {
                           [self _updateBusinessStatus:BusinessStatusIdentifier_BusinessChoosed];
                           break;
@@ -466,7 +466,7 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M13
-                      case AppMessageIdentifier_LeavePool:
+                      case AppMessageIdentifier_UnchooseBusiness:
                       {
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                           break;
@@ -551,7 +551,7 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M4
-                      case AppMessageIdentifier_EnterPool:
+                      case AppMessageIdentifier_ChooseBusiness:
                       {
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                           break;
@@ -605,7 +605,7 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M13
-                      case AppMessageIdentifier_LeavePool:
+                      case AppMessageIdentifier_UnchooseBusiness:
                       {
                           [self _updateBusinessStatus:BusinessStatusIdentifier_AppDataSynced];
                           break;
@@ -690,7 +690,7 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M4
-                      case AppMessageIdentifier_EnterPool:
+                      case AppMessageIdentifier_ChooseBusiness:
                       {
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                           break;
@@ -744,7 +744,7 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M13
-                      case AppMessageIdentifier_LeavePool:
+                      case AppMessageIdentifier_UnchooseBusiness:
                       {
                           [self _updateBusinessStatus:BusinessStatusIdentifier_AppDataSynced];
                           break;
@@ -829,7 +829,7 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M4
-                      case AppMessageIdentifier_EnterPool:
+                      case AppMessageIdentifier_ChooseBusiness:
                       {
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                           break;
@@ -895,10 +895,9 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M13
-                      case AppMessageIdentifier_LeavePool:
+                      case AppMessageIdentifier_UnchooseBusiness:
                       {
                           [self _updateBusinessStatus:BusinessStatusIdentifier_AppDataSynced];
-                          
                           break;
                       }
                       default:
@@ -983,7 +982,7 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M4
-                      case AppMessageIdentifier_EnterPool:
+                      case AppMessageIdentifier_ChooseBusiness:
                       {
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                           break;
@@ -1037,7 +1036,7 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M13
-                      case AppMessageIdentifier_LeavePool:
+                      case AppMessageIdentifier_UnchooseBusiness:
                       {
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                           break;
@@ -1119,7 +1118,7 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M4
-                      case AppMessageIdentifier_EnterPool:
+                      case AppMessageIdentifier_ChooseBusiness:
                       {
                           [self _updateBusinessStatus:BusinessStatusIdentifier_Disconnected];
                           break;
@@ -1173,7 +1172,7 @@ SINGLETON(BusinessStatusModule)
                           break;
                       }
                       // M13
-                      case AppMessageIdentifier_LeavePool:
+                      case AppMessageIdentifier_UnchooseBusiness:
                       {
                           [self _updateBusinessStatus:BusinessStatusIdentifier_Disconnected];
                           break;

@@ -179,7 +179,7 @@
                                 </collectionReusableView>
                             </collectionView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="8FZ-VA-DGB" userLabel="countLabel">
-                                <rect key="frame" x="80" y="445.00000207777146" width="160" height="60"/>
+                                <rect key="frame" x="80" y="445" width="160" height="60"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="50"/>
                                 <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -517,7 +517,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="9xF-ar-PLg" userLabel="othersideVideoView">
-                                <rect key="frame" x="5" y="265.00000317500792" width="310" height="240"/>
+                                <rect key="frame" x="5" y="265" width="310" height="240"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="对方视频" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="owI-oH-NmH" userLabel="partnerStatusLabel">
@@ -699,7 +699,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" id="Y9q-yq-7Al" userLabel="bannerView" customClass="CBAutoScrollLabel">
-                                <rect key="frame" x="40" y="240" width="240" height="100"/>
+                                <rect key="frame" x="40" y="240" width="240" height="60"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>

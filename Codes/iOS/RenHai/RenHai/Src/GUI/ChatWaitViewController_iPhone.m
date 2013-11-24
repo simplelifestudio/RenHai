@@ -212,7 +212,7 @@ ChatWaitStatus;
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
                 _leavePoolFlag = YES;
-                [_statusModule recordAppMessage:AppMessageIdentifier_LeavePool];
+                [_statusModule recordAppMessage:AppMessageIdentifier_UnchooseBusiness];
             }
             failureCompletionBlock:^(){
                 _leavePoolFlag = NO;

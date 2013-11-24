@@ -238,7 +238,7 @@ EnterOperationStatus;
     _enterButton.enabled = YES;
 //    _enterLabel.hidden = NO;
     _helpButton.enabled = NO;
-    _versionLabel.enabled = NO;
+    _versionLabel.enabled = YES;
     
     self.navigationItem.leftBarButtonItem.enabled = YES;
     
@@ -410,7 +410,7 @@ static float progress = 0.0;
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
                 _enterPoolFlag = YES;
-                [_statusModule recordAppMessage:AppMessageIdentifier_EnterPool];
+                [_statusModule recordAppMessage:AppMessageIdentifier_ChooseBusiness];
             }
             failureCompletionBlock:^(){
                 _enterPoolFlag = NO;
