@@ -45,6 +45,11 @@ public class MessageHandler implements Runnable
 	
 	public void clearMessage()
 	{
+		if (queue.isEmpty())
+		{
+			return;
+		}
+		
 		logger.debug("{} messages in queue of Deivce <"+ deviceWrapper.getDeviceSn() +"> is released.", queue.size());
 		queueLock.lock();
 		queue.clear();

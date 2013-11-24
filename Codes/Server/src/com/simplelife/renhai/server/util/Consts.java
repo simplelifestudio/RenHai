@@ -798,4 +798,35 @@ public class Consts
 			return value;
 		}
 	}
+	
+	public enum PingActionType
+	{
+		Invalid(0), 
+		OnPing(1),
+		CheckInactivity(2),
+		DeviceRemoved(3);
+		
+		private int value;
+		private PingActionType(int value)
+		{
+			this.value = value;
+		}
+		
+		public int getValue()
+		{
+			return value;
+		}
+		
+		public static PingActionType parseValue(int value)
+		{
+			for (PingActionType item : values())
+			{
+				if (item.value == value)
+				{
+					return item;
+				}
+			}
+			return null;
+		}
+	}
 }

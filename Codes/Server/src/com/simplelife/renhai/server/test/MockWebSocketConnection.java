@@ -193,6 +193,12 @@ public class MockWebSocketConnection extends WebSocketConnection implements IMoc
 	}
 
 	@Override
+	public void pong(ByteBuffer payload)
+	{
+		return;
+	}
+	
+	@Override
 	public void asyncSendToServer(JSONObject jsonObject)
 	{
 		lastSentMessage = jsonObject;

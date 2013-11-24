@@ -29,8 +29,8 @@ import com.simplelife.renhai.server.db.Systemstatistics;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
+import com.simplelife.renhai.server.util.Consts.PingActionType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
-import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -51,9 +51,10 @@ public class OnlineDevicePool extends AbstractDevicePool
 			try
 			{
 				//Session hibernateSesion = HibernateSessionFactory.getSession();
-				Thread.currentThread().setName("InactiveCheck");
-				OnlineDevicePool.instance.checkInactiveDevice();
+				//Thread.currentThread().setName("InactiveCheck");
+				//OnlineDevicePool.instance.checkInactiveDevice();
 				//HibernateSessionFactory.closeSession();
+				PingActionQueue.instance.newAction(PingActionType.CheckInactivity, null);
 			}
 			catch(Exception e)
 			{
@@ -114,6 +115,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	setCapacity(GlobalSetting.BusinessSetting.OnlinePoolCapacity);
     }
     
+    /*
     private void checkDeviceMap(ConcurrentHashMap<String, IDeviceWrapper> deviceMap)
     {
     	Iterator<Entry<String, IDeviceWrapper>> entryKeyIterator = deviceMap.entrySet().iterator();
@@ -156,13 +158,16 @@ public class OnlineDevicePool extends AbstractDevicePool
 			}
 		}
     }
-    /** */
+    */
+    
+    /*
     private void checkInactiveDevice()
     {
     	logger.debug("Start to check inactive connections.");
     	checkDeviceMap(this.appDataSyncedDeviceMap);
     	checkDeviceMap(this.connectedDeviceMap);
 	}
+	*/
     
     /** */
     public void addBusinessPool(Consts.BusinessType type, AbstractBusinessDevicePool pool)
@@ -285,7 +290,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     
     public void startService()
     {
-    	inactiveTimer.scheduleAtFixedRate(new InactiveCheckTask(), GlobalSetting.TimeOut.OnlineDeviceConnection, GlobalSetting.TimeOut.OnlineDeviceConnection);
+    	inactiveTimer.scheduleAtFixedRate(new InactiveCheckTask(), GlobalSetting.TimeOut.CheckPingInterval, GlobalSetting.TimeOut.CheckPingInterval);
     	bannedTimer.scheduleAtFixedRate(new BannedCheckTask(), GlobalSetting.TimeOut.OnlineDeviceConnection, GlobalSetting.TimeOut.OnlineDeviceConnection);
     	statSaveTimer.scheduleAtFixedRate(new StatSaveTask(), GlobalSetting.TimeOut.SaveStatistics, GlobalSetting.TimeOut.SaveStatistics);
     	logger.debug("Timers of online device pool started.");

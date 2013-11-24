@@ -47,10 +47,11 @@ public class GlobalSetting
 		public static int CheckExpiredToken = 3600;
 		
 		public static int FlushCacheToDB = 30 * 1000;
-		public static int DeviceInIdle = 300 * 1000;
 		
 		public static int OnlineDeviceConnection = 300 * 1000;
+		
 		public static int PingInterval = 5 * 1000;
+		public static int CheckPingInterval = 1 * 1000;
 		
 		public static int SaveStatistics = 600 * 1000;
 	}
@@ -148,7 +149,7 @@ public class GlobalSetting
 		TimeOut.Assess					= getIntValue(tmpObj, SettingFieldName.Assess);
 		TimeOut.CheckExpiredToken		= getIntValue(tmpObj, SettingFieldName.CheckExpiredToken);
 		TimeOut.FlushCacheToDB			= getIntValue(tmpObj, SettingFieldName.FlushCacheToDB);
-		TimeOut.DeviceInIdle			= getIntValue(tmpObj, SettingFieldName.DeviceInIdle);
+		TimeOut.CheckPingInterval			= getIntValue(tmpObj, SettingFieldName.DeviceInIdle);
 		TimeOut.OnlineDeviceConnection	= getIntValue(tmpObj, SettingFieldName.OnlineDeviceConnection);
 		TimeOut.PingInterval			= getIntValue(tmpObj, SettingFieldName.PingInterval);
 		TimeOut.SaveStatistics			= getIntValue(tmpObj, SettingFieldName.SaveStatistics);

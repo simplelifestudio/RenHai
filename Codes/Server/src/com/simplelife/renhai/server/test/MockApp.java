@@ -439,7 +439,7 @@ public class MockApp implements IMockApp, Runnable
 
     public void startTimer()
     {
-    	this.pingTimer.scheduleAtFixedRate(new PingTask(this), new Date(System.currentTimeMillis() + 5000), GlobalSetting.TimeOut.PingInterval);
+    	this.pingTimer.scheduleAtFixedRate(new PingTask(this), GlobalSetting.TimeOut.CheckPingInterval, GlobalSetting.TimeOut.CheckPingInterval);
     	executionTask.start();
     }
     

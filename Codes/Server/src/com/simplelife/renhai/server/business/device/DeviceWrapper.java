@@ -29,6 +29,8 @@ import com.simplelife.renhai.server.business.pool.InputMsgExecutorPool;
 import com.simplelife.renhai.server.business.pool.MessageHandler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMsgExecutorPool;
+import com.simplelife.renhai.server.business.pool.PingActionQueue;
+import com.simplelife.renhai.server.business.pool.PingLink;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
@@ -45,6 +47,7 @@ import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
+import com.simplelife.renhai.server.util.Consts.PingActionType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -56,7 +59,7 @@ import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */
-public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceWrapper>
+public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 {	
 	// WebScoket connection enclosed in DeviceWrapper, all JSON messages are sent/received by this connection 
     protected IBaseConnection webSocketConnection;
@@ -102,6 +105,18 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     public void updatePingTime()
     {
     	pingNode.updatePingTime();
+    	if (pingNode.getNextNode() == null && pingNode.getPrevNode() == null)
+    	{
+    		// which means pingNode has been removed from PingLink
+    		return;
+    	}
+    	
+    	PingActionQueue.instance.newAction(PingActionType.OnPing, pingNode);
+    }
+    
+    public PingNode getPingNode()
+    {
+    	return pingNode;
     }
     /**
      * Constructor of DeviceWrapper 
@@ -112,6 +127,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     	this.webSocketConnection = connection;
     	this.businessStatus = Consts.DeviceStatus.Connected;
     	connection.bind(this);
+    	PingLink.instance.append(this);
     }
 
     /**
@@ -147,6 +163,11 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     	switch(targetStatus)
     	{
     		case Disconnected:
+    			if (reason != StatusChangeReason.TimeoutOfPing)
+    			{
+    				PingActionQueue.instance.newAction(PingActionType.DeviceRemoved, this.pingNode);
+    			}
+    			
     			switch(businessStatus)
     			{
     				case Connected:
@@ -342,28 +363,6 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
         return this.lastActivityTime;
     }
     
-    /** */
-    public void setPreviousNode(INode node)
-    {
-    }
-    
-    /** */
-    public void setNextNode(INode node)
-    {
-    }
-    
-    /** */
-    public INode getPreviousNode()
-    {
-        return null;
-    }
-    
-    /** */
-    public INode getNextNode()
-    {
-        return null;
-    }
-    
     @Override
     public void onConnectionClose()
     {
@@ -458,8 +457,7 @@ public class DeviceWrapper implements IDeviceWrapper, INode, Comparable<IDeviceW
     		return;
     	}
     	
-    	// ��������������������������ping
-        this.updatePingTime();
+    	this.updatePingTime();
         connection.pong(payload);
     }
 

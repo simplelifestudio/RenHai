@@ -15,6 +15,7 @@ import java.nio.ByteBuffer;
 import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.business.device.PingNode;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Impresscard;
@@ -108,4 +109,6 @@ public interface IDeviceWrapper
     public void increaseMatchCount(String interestLabel);
     
     public void prepareResponse(ServerJSONMessage response);
+    
+    public PingNode getPingNode();
 }

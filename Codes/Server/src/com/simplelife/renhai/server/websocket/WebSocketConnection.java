@@ -311,7 +311,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	*/
     	
     	isConnectionOpen = false;
-    	String temp = "WebSocketConnection onClose triggered, connection id: " + getConnectionId()+ ", status: " + status;
+    	String temp = "WebSocketConnection onClose triggered, connection id: " + getConnectionId();
     	if (this.connectionOwner != null)
     	{
     		temp += ", deviceSn: " + connectionOwner.getDeviceSn(); 
