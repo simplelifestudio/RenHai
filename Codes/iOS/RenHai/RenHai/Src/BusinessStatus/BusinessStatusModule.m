@@ -381,7 +381,7 @@ SINGLETON(BusinessStatusModule)
               }];
     [_businessStatusMap setObject:status forKey:status.identifierString];
     
-    // S2: AppSyncCompleted
+    // S2: AppDataSynced
     status = [[BusinessStatus alloc]
               initWithIdentifier:BusinessStatusIdentifier_AppDataSynced
               appMessageHandleBlock:^(AppMessageIdentifier appMessageId){
@@ -420,7 +420,7 @@ SINGLETON(BusinessStatusModule)
                       // M5
                       case AppMessageIdentifier_MatchStart:
                       {
-                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          // IGNORE
                           break;
                       }
                       // M6
@@ -520,7 +520,7 @@ SINGLETON(BusinessStatusModule)
               }];
     [_businessStatusMap setObject:status forKey:status.identifierString];
     
-    // S3: EnterPoolCompleted
+    // S3: BusinessChoosed
     status = [[BusinessStatus alloc]
               initWithIdentifier:BusinessStatusIdentifier_BusinessChoosed
               appMessageHandleBlock:^(AppMessageIdentifier appMessageId){
@@ -798,7 +798,7 @@ SINGLETON(BusinessStatusModule)
               }];
     [_businessStatusMap setObject:status forKey:status.identifierString];
     
-    // S5: SessionBoundAcknowledged
+    // S5: SessionBoundAcked
     status = [[BusinessStatus alloc]
               initWithIdentifier:BusinessStatusIdentifier_SessionBoundAcked
               appMessageHandleBlock:^(AppMessageIdentifier appMessageId){
