@@ -10,6 +10,7 @@
 
 #import "CBRoundProgressView.h"
 #import "OBShapedButton.h"
+#import "CBAutoScrollLabel.h"
 
 #define CURRENT_BUSINESSPOOL BusinessType_Interest
 
@@ -37,6 +38,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *onlineDeviceCountLabel;
 @property (weak, nonatomic) IBOutlet UILabel *chatDeviceCountLabel;
 
+@property (weak, nonatomic) IBOutlet CBAutoScrollLabel *bannerView;
 
 - (IBAction)onPressEnterButton:(id)sender;
 - (IBAction)onPressHelpButton:(id)sender;

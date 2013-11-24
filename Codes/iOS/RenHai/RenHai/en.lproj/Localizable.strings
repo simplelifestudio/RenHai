@@ -27,6 +27,8 @@
 
 "Home_OnlineCount" = "Online Users";
 "Home_ChatCount" = "Chating Users";
+"Home_Banner_NoInfo" = "No information from server.\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+"Home_Banner_Maintenance" = "Server scheduled maintenance：from %@ to %@.";
 "Home_PressToEnterPool" = "Press to Enter";
 "Home_IsEnteringPool" = "Entering...";
 "Home_EnterPoolFailed" = "Enter Failed";

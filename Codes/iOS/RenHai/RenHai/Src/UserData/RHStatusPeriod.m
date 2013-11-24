@@ -91,7 +91,9 @@
 {
     BOOL flag = NO;
     
+    NSDate* date = [NSDate date];
     
+    flag = [CBDateUtils isDateInLocalTimeZoneDuringPeriod:date beginTime:_beginTime endTime:_endTime];
     
     return flag;
 }

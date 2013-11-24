@@ -72,6 +72,8 @@ EnterOperationStatus;
 @synthesize onlineDeviceCountLabel = _onlineDeviceCountLabel;
 @synthesize chatDeviceCountLabel = _chatDeviceCountLabel;
 
+@synthesize bannerView = _bannerView;
+
 #pragma mark - Public Methods
 
 - (void)viewDidLoad
@@ -79,6 +81,11 @@ EnterOperationStatus;
     [super viewDidLoad];
 	
     [self _setupInstance];
+}
+
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
 }
 
 -(void) viewDidAppear:(BOOL)animated
@@ -91,6 +98,8 @@ EnterOperationStatus;
     [self _activateDataSyncTimer];
     
     [self _registerNotifications];
+    
+    [_bannerView scrollLabelIfNeeded];
 }
 
 -(void) viewWillDisappear:(BOOL)animated
@@ -129,6 +138,8 @@ EnterOperationStatus;
     _enterButtonProgressView.roundProgressViewDelegate = self;
     
     _versionLabel.text = _appDataModule.appVersion;
+    
+    [self _setupBannerView];
 }
 
 -(void)_setupNavigationBar
@@ -138,6 +149,47 @@ EnterOperationStatus;
     [self.navigationController.navigationBar setTintColor:FLATUI_COLOR_NAVIGATIONBAR];
     
     self.navigationItem.title = NAVIGATIONBAR_TITLE_HOME;
+}
+
+-(void)_setupBannerView
+{
+    RHProxy* proxy = _userDataModule.proxy;
+    
+    NSString* text = @"";
+    
+    switch (proxy.serviceStatus)
+    {
+        case ServerServiceStatus_Normal:
+        {
+            text = NSLocalizedString(@"Home_Banner_NoInfo", nil);
+            break;
+        }
+        case ServerServiceStatus_Maintenance:
+        {
+            RHStatusPeriod* period = proxy.statusPeriod;
+            NSString* localBeginTimeStr = period.localBeginTimeString;
+            NSString* localEndTimeStr = period.localEndTimeString;
+            NSString* periodStr = [NSString stringWithFormat:NSLocalizedString(@"Home_Banner_Maintenance", nil), localBeginTimeStr, localEndTimeStr];
+            text = periodStr;
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+
+    _bannerView.text = text;
+    //    _bannerView.textColor = [UIColor blueColor];
+    _bannerView.labelSpacing = 50; // distance between start and end labels
+    _bannerView.pauseInterval = 1.5; // seconds of pause before scrolling starts again
+    _bannerView.scrollSpeed = 60; // pixels per second
+    _bannerView.textAlignment = NSTextAlignmentCenter; // centers text when no auto-scrolling is applied
+    _bannerView.fadeLength = 18.0f;
+    _bannerView.font = [UIFont systemFontOfSize:BIG_FONT];
+    _bannerView.scrollDirection = CBAutoScrollDirectionLeft;
+    
+    [_bannerView observeApplicationNotifications];
 }
 
 -(void)_setupSideBarMenuButtons
@@ -171,6 +223,7 @@ EnterOperationStatus;
     _enterButton.enabled = NO;
 //    _enterLabel.hidden = YES;
     _helpButton.enabled = NO;
+    _versionLabel.enabled = NO;
     [self _updateUIWithEnterOperationStatus:EnterOperationStatus_InProcess];
     
     self.navigationItem.leftBarButtonItem.enabled = NO;
@@ -184,7 +237,8 @@ EnterOperationStatus;
     _enterButton.highlighted = NO;
     _enterButton.enabled = YES;
 //    _enterLabel.hidden = NO;
-    _helpButton.enabled = YES;
+    _helpButton.enabled = NO;
+    _versionLabel.enabled = NO;
     
     self.navigationItem.leftBarButtonItem.enabled = YES;
     

@@ -28,7 +28,8 @@ typedef enum
     ConnectStatus_Ready = 0,
     ConnectStatus_ProxySyncing,
     ConnectStatus_ProxySyncedNormal,
-    ConnectStatus_ProxySyncedMaintenance,
+    ConnectStatus_ProxySyncedMaintenance_BeforePeriod,
+    ConnectStatus_ProxySyncedMaintenance_InPeriod,
     ConnectStatus_ProxySyncFailed,
     ConnectStatus_Connecting,
     ConnectStatus_Connected,
@@ -295,10 +296,17 @@ ConnectStatus;
                 isActionButtonHide = YES;
                 break;
             }
-            case ConnectStatus_ProxySyncedMaintenance:
+            case ConnectStatus_ProxySyncedMaintenance_BeforePeriod:
             {
                 infoText = NSLocalizedString(@"Connect_CheckedMaintenance", nil);
 //                infoDetailText = NSLocalizedString(@"Connect_CheckedMaintenance_Detail", nil);
+                isActionButtonHide = YES;
+                break;
+            }
+            case ConnectStatus_ProxySyncedMaintenance_InPeriod:
+            {
+                infoText = NSLocalizedString(@"Connect_CheckedMaintenance", nil);
+                //                infoDetailText = NSLocalizedString(@"Connect_CheckedMaintenance_Detail", nil);
                 isActionButtonHide = NO;
                 break;
             }
@@ -458,8 +466,6 @@ ConnectStatus;
                    }
                    case ServerServiceStatus_Maintenance:
                    {
-                       [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncedMaintenance];
-                       
                        RHStatusPeriod* period = proxy.statusPeriod;
                        
                        NSString* localBeginTimeStr = period.localBeginTimeString;
@@ -469,6 +475,16 @@ ConnectStatus;
                        [self _updateInfoTextView:periodStr];
                        
                        _isProxyDataSyncSuccess = ![period isInPeriod];
+                       
+                       if (_isProxyDataSyncSuccess)
+                       {
+                           [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncedMaintenance_BeforePeriod];
+                       }
+                       else
+                       {
+                           [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncedMaintenance_InPeriod];
+                       }
+                       
                        break;
                    }
                    default:
