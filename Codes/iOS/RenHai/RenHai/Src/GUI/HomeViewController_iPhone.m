@@ -44,6 +44,10 @@ EnterOperationStatus;
     NSTimer* _dataSyncTimer;
     
     volatile BOOL _enterPoolFlag;
+    NSCondition* _enterPoolFlagBlock;
+    
+    volatile BOOL _reachFlag;
+    NSCondition* _reachBlock;
 }
 
 @end
@@ -122,6 +126,9 @@ EnterOperationStatus;
     _statusModule = [BusinessStatusModule sharedInstance];
     
     _enterPoolFlag = NO;
+    _enterPoolFlagBlock = [[NSCondition alloc] init];
+    _reachFlag = NO;
+    _reachBlock = [[NSCondition alloc] init];
     
     [self _setupNavigationBar];
     [self _setupView];
@@ -273,7 +280,7 @@ static float progress = 0.0;
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         [self _deactivateDataSyncTimer];
         
-        _dataSyncTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_DATASYNC target:self selector:@selector(_serverDataSync) userInfo:nil repeats:YES];
+        _dataSyncTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_DATASYNC target:self selector:@selector(_remoteServerDataSync) userInfo:nil repeats:YES];
         NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
         [currentRunLoop addTimer:_dataSyncTimer forMode:NSDefaultRunLoopMode];
         [currentRunLoop run];
@@ -289,7 +296,7 @@ static float progress = 0.0;
     }
 }
 
-- (void)_serverDataSync
+- (void)_remoteServerDataSync
 {
     RHDevice* device = _userDataModule.device;
     
@@ -399,6 +406,49 @@ static float progress = 0.0;
     }];
 }
 
+-(void)_updateEnterPoolFlag:(BOOL) flag
+{
+    [_enterPoolFlagBlock lock];
+    
+    [self _updateReachFlag:YES];
+    
+    _enterPoolFlag = flag;
+    [_enterPoolFlagBlock signal];
+    [_enterPoolFlagBlock unlock];
+}
+
+-(BOOL)_checkEnterPoolFlag
+{
+    [_enterPoolFlagBlock lock];
+    
+    if (![self _checkReachFlag])
+    {
+        [_enterPoolFlagBlock wait];
+    }
+    
+    [_enterPoolFlagBlock unlock];
+    
+    return _enterPoolFlag;
+}
+
+-(void)_updateReachFlag:(BOOL) flag
+{
+    [_reachBlock lock];
+    _reachFlag = flag;
+    [_reachBlock unlock];
+}
+
+-(BOOL)_checkReachFlag
+{
+    BOOL flag = NO;
+    
+    [_reachBlock lock];
+    flag = _reachFlag;
+    [_reachBlock unlock];
+    
+    return flag;
+}
+
 -(void)_startEnteringPool
 {
     [CBAppUtils asyncProcessInBackgroundThread:^(){
@@ -409,11 +459,11 @@ static float progress = 0.0;
         
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
-                _enterPoolFlag = YES;
+                [self _updateEnterPoolFlag:YES];
                 [_statusModule recordAppMessage:AppMessageIdentifier_ChooseBusiness];
             }
             failureCompletionBlock:^(){
-                _enterPoolFlag = NO;
+                [self _updateEnterPoolFlag:NO];
             }
             afterCompletionBlock:nil
          ];
@@ -476,7 +526,7 @@ static float progress = 0.0;
     
     [self _unlockViewController];
     
-    if (_enterPoolFlag)
+    if ([self _checkEnterPoolFlag])
     {
         [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Success];
 
