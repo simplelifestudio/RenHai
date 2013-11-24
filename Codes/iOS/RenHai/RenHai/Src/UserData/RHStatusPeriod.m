@@ -87,6 +87,15 @@
     return localEndTimeStr;
 }
 
+-(BOOL) isInPeriod
+{
+    BOOL flag = NO;
+    
+    
+    
+    return flag;
+}
+
 #pragma mark - CBJSONable
 
 -(void) fromJSONObject:(NSDictionary *)dic

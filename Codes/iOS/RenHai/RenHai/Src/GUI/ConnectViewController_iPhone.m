@@ -467,8 +467,8 @@ ConnectStatus;
                        
                        NSString* periodStr = [NSString stringWithFormat:NSLocalizedString(@"Connect_CheckedMaintenance_Detail", nil), localBeginTimeStr, localEndTimeStr];
                        [self _updateInfoTextView:periodStr];
-
-                       _isProxyDataSyncSuccess = NO;
+                       
+                       _isProxyDataSyncSuccess = ![period isInPeriod];
                        break;
                    }
                    default:

@@ -134,6 +134,36 @@
     return targetDate;
 }
 
++(BOOL) isDateInLocalTimeZoneDuringPeriod:(NSDate*) date beginTime:(NSDate*) beginTime endTime:(NSDate*) endTime
+{
+    BOOL flag = NO;
+    
+    if (nil != date)
+    {
+        if (nil != beginTime)
+        {
+            NSComparisonResult result = [date compare:beginTime];
+            if (result == NSOrderedSame || result == NSOrderedDescending)
+            {
+                if (nil != endTime)
+                {
+                    result = [date compare:endTime];
+                    if (result == NSOrderedAscending || result == NSOrderedSame)
+                    {
+                        flag = YES;
+                    }
+                }
+                else
+                {
+                    flag = YES;
+                }
+            }
+        }
+    }
+    
+    return flag;
+}
+
 - (id)init
 {
     return nil;
