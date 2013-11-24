@@ -81,11 +81,11 @@ public class Test25TimeoutNotifyANoEcho extends AbstractTestCase
 		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
-		mockApp1.enterPool(businessType);
+		mockApp1.chooseBusiness(businessType);
 		businessPool.getBusinessScheduler().stopScheduler();
 		
 		// Step_07 Mock请求：B进入随机聊天
-		mockApp2.enterPool(businessType);
+		mockApp2.chooseBusiness(businessType);
 		
 		Thread.sleep(500);
 		

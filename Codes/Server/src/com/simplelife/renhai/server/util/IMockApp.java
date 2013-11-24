@@ -49,9 +49,9 @@ public interface IMockApp
 	public void disconnect();
 	
 	/** */
-	public void enterPool(Consts.BusinessType poolType);
+	public void chooseBusiness(Consts.BusinessType poolType);
 	
-	public void leavePool();
+	public void unchooseBusiness();
 	
 	/** */
 	public void endChat();

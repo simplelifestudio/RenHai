@@ -65,12 +65,12 @@ public class Test24MaxBusinessDevicePool extends AbstractTestCase
 		businessPool.setCapacity(businessPool.getElementCount() + 1);
 		
 		// Step_06 Mock请求：A进入随机聊天
-		mockApp1.enterPool(businessType);
-		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
+		mockApp1.chooseBusiness(businessType);
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.ChooseBusiness));
 
 		// Step_07 Mock请求：B进入随机聊天
 		mockApp2.clearLastReceivedCommand();
-		mockApp2.enterPool(businessType);
+		mockApp2.chooseBusiness(businessType);
 		assertTrue(mockApp2.lastReceivedCommandIsError());
 	}
 }

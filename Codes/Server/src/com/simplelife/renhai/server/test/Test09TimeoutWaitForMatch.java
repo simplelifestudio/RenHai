@@ -63,8 +63,8 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 		
 		// Step_03 Mock请求：进入随机聊天
 		assertTrue(businessPool.getDevice(mockApp.getDeviceSn()) == null);
-		mockApp.enterPool(businessType);
-		assertTrue(mockApp.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
+		mockApp.chooseBusiness(businessType);
+		assertTrue(mockApp.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.ChooseBusiness));
 		
 		// Step_04 调用：RandomBusinessDevicePool::getCount
 		//assertEquals(randomDeviceCount + 1.getElementCount());

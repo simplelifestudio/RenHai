@@ -674,8 +674,8 @@ public class Consts
 	public enum OperationType
     {
     	Invalid(0),
-		EnterPool(1),
-    	LeavePool(2),
+		ChooseBusiness(1),
+    	UnchooseBusiness(2),
     	AgreeChat(3),
     	RejectChat(4),
     	EndChat(5),
@@ -770,8 +770,8 @@ public class Consts
 		NotificationOthersideRejected_1011(1011),
 		NotificationOthersideAgreed_1012(1012),
 		NotificationResponse_1013(1013),
-		BusinessRequestEnterPool_1014(1014),
-		BusinessRequestLeavePool_1015(1015),
+		BusinessRequestChooseBusiness_1014(1014),
+		BusinessRequestUnchooseBusiness_1015(1015),
 		MatchStartRequest_1016(1016),
 		BusinessRequestAgreeChat_1016(1017),
 		BusinessRequestRejectChat_1017(1018),

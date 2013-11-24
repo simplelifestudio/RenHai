@@ -361,12 +361,12 @@ public class MainFunction extends AbstractTestCase
 		MockApp app1 = new MockApp(demoDeviceSn);
 		app1.stopAutoReply();
 		app1.syncDevice();
-		app1.enterPool(BusinessType.Random);
+		app1.chooseBusiness(BusinessType.Random);
 		
 		MockApp app2 = new MockApp(demoDeviceSn2);
 		app2.stopAutoReply();
 		app2.syncDevice();
-		app2.enterPool(BusinessType.Random);
+		app2.chooseBusiness(BusinessType.Random);
 		
 		Thread.sleep(1000);
 		//app1.waitMessage();
@@ -495,31 +495,30 @@ public class MainFunction extends AbstractTestCase
 		
 		MockApp app2 = new MockApp(demoDeviceSn2);
 		app2.syncDevice();
-		//app1.sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, Consts.BusinessType.Random.toString());
 		
-		app1.enterPool(BusinessType.Interest);
+		app1.chooseBusiness(BusinessType.Interest);
 		app1.sendServerDataSyncRequest();
 		
-		app1.enterPool(BusinessType.Interest);
+		app1.chooseBusiness(BusinessType.Interest);
 		
-		app1.enterPool(BusinessType.Random);
+		app1.chooseBusiness(BusinessType.Random);
 		
 		app1.matchStart();
 		
 		app1.setBusinessType(Consts.BusinessType.Random);
 		app1.sendServerDataSyncRequest();
 		
-		app2.enterPool(BusinessType.Interest);
+		app2.chooseBusiness(BusinessType.Interest);
 		app1.sendServerDataSyncRequest();
 		
-		app1.leavePool();
+		app1.unchooseBusiness();
 		app1.sendServerDataSyncRequest();
 		
 		app1.setBusinessType(Consts.BusinessType.Interest);
-		app1.leavePool();
+		app1.unchooseBusiness();
 		app1.sendServerDataSyncRequest();
 		
-		app2.leavePool();
+		app2.unchooseBusiness();
 		app1.sendServerDataSyncRequest();
 	}
 	
@@ -556,11 +555,11 @@ public class MainFunction extends AbstractTestCase
 	{
 		MockApp app1 = new MockApp(demoDeviceSn);
 		app1.syncDevice();
-		app1.enterPool(BusinessType.Random);
+		app1.chooseBusiness(BusinessType.Random);
 		
 		MockApp app2 = new MockApp(demoDeviceSn2);
 		app2.syncDevice();
-		app2.enterPool(BusinessType.Random);
+		app2.chooseBusiness(BusinessType.Random);
 		
 		app1.waitMessage();
 		app2.waitMessage();

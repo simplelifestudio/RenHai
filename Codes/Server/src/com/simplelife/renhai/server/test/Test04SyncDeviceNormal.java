@@ -120,7 +120,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		mockApp.connect();
 		
 		// Step_13 Mock请求：设备同步
-		mockApp.enterPool(businessType);
+		mockApp.chooseBusiness(businessType);
 		assertTrue(mockApp.lastReceivedCommandIsError());		//设备同步之前不能使用其他命令
 		
 		mockApp.syncDevice();
@@ -132,7 +132,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertTrue(newActivityTime > lastActivityTime);
 		
 		// Step_15 Mock请求：进入业务设备池
-		mockApp.enterPool(businessType);
+		mockApp.chooseBusiness(businessType);
 		assertTrue(!mockApp.lastReceivedCommandIsError());
 		
 		// Step_16 Mock请求：设备同步

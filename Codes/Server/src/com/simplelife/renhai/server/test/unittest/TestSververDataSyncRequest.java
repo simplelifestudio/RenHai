@@ -79,7 +79,7 @@ public class TestSververDataSyncRequest extends AbstractTestCase
 		app.syncDevice();
 		assertTrue(!app.lastReceivedCommandIsError());
 		
-		app.enterPool(businessType);
+		app.chooseBusiness(businessType);
 		
 		app.sendRawJSONMessage(envelope, true);
 		assertTrue(!app.lastReceivedCommandIsError());

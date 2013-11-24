@@ -169,11 +169,11 @@ public class MockApp implements IMockApp, Runnable
 				case AppDataSyncRequest:
 					app.syncDevice();
 					break;
-				case EnterPool:
-					app.enterPool(BusinessType.Interest);
+				case ChooseBusiness:
+					app.chooseBusiness(BusinessType.Interest);
 					break;
-				case LeavePool:
-					app.leavePool();
+				case UnchooseBusiness:
+					app.unchooseBusiness();
 					break;
 				case MatchStart:
 					app.matchStart();
@@ -750,10 +750,10 @@ public class MockApp implements IMockApp, Runnable
 	
 	/** */
 	@Override
-	public void enterPool(Consts.BusinessType businessType)
+	public void chooseBusiness(Consts.BusinessType businessType)
 	{
 		this.businessType = businessType;
-		sendBusinessSessionRequest(Consts.OperationType.EnterPool, null, businessType.toString());
+		sendBusinessSessionRequest(Consts.OperationType.ChooseBusiness, null, businessType.toString());
 	}
 	
 	@Override
@@ -769,15 +769,15 @@ public class MockApp implements IMockApp, Runnable
 	}
 	
 	@Override
-	public void leavePool()
+	public void unchooseBusiness()
 	{
 		if (businessType != null)
 		{
-			sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, businessType.toString());
+			sendBusinessSessionRequest(Consts.OperationType.UnchooseBusiness, null, businessType.toString());
 		}
 		else
 		{
-			sendBusinessSessionRequest(Consts.OperationType.LeavePool, null, null);
+			sendBusinessSessionRequest(Consts.OperationType.UnchooseBusiness, null, null);
 		}
 	}
 	
@@ -1044,7 +1044,7 @@ public class MockApp implements IMockApp, Runnable
 					if (behaviorMode.ordinal() > MockAppConsts.MockAppBehaviorMode.NoEnterPoolRequest.ordinal())
 					{
 						task = new AutoReplyTask(
-								MockAppRequest.EnterPool, 
+								MockAppRequest.ChooseBusiness, 
 								obj, 
 								this, 
 								300, 

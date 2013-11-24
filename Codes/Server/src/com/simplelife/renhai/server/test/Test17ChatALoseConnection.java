@@ -80,13 +80,13 @@ public class Test17ChatALoseConnection extends AbstractTestCase
 		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
-		mockApp1.enterPool(businessType);
-		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
+		mockApp1.chooseBusiness(businessType);
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.ChooseBusiness));
 
 		// Step_07 Mock请求：B进入随机聊天
 		businessPool.getBusinessScheduler().stopScheduler();
-		mockApp2.enterPool(businessType);
-		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
+		mockApp2.chooseBusiness(businessType);
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.ChooseBusiness));
 
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper1.getBusinessStatus());

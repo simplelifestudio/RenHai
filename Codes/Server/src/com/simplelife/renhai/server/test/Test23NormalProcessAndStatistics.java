@@ -121,16 +121,16 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		mockApp1.syncDevice();
 		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
-		mockApp1.enterPool(businessType);
-		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
+		mockApp1.chooseBusiness(businessType);
+		assertTrue(mockApp1.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.ChooseBusiness));
 		
 		// Step_03 Mock请求：B进入随机聊天
 		mockApp2.syncDevice();
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		businessPool.getBusinessScheduler().stopScheduler();
-		mockApp2.enterPool(businessType);
-		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.EnterPool));
+		mockApp2.chooseBusiness(businessType);
+		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.BusinessSessionResponse, Consts.OperationType.ChooseBusiness));
 		
 		// Step_04 Mock请求：查询所有统计项
 		mockApp1.clearLastReceivedCommand();

@@ -97,8 +97,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 			return false;
 		}
 		
-		if (operationType != Consts.OperationType.EnterPool
-				&& operationType != Consts.OperationType.LeavePool
+		if (operationType != Consts.OperationType.ChooseBusiness
+				&& operationType != Consts.OperationType.UnchooseBusiness
 				&& operationType != Consts.OperationType.MatchStart
 				&& operationType != Consts.OperationType.SessionUnbind)
 		{
@@ -246,11 +246,11 @@ public class BusinessSessionRequest extends AppJSONMessage
 		logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
 		switch (operationType)
 		{
-			case EnterPool:
-				enterPool();
+			case ChooseBusiness:
+				chooseBusiness();
 				break;
-			case LeavePool:
-				leavePool();
+			case UnchooseBusiness:
+				unchooseBusiness();
 				break;
 			case AgreeChat:
 				agreeChat();
@@ -279,9 +279,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 	}
 	
-	private void enterPool()
+	private void chooseBusiness()
 	{
-		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEnterPool_1014
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestChooseBusiness_1014
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceSn());
 		int intType = body.getIntValue(JSONKey.BusinessType);
@@ -325,12 +325,12 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
-		response.addToBody(JSONKey.OperationType, Consts.OperationType.EnterPool.getValue());
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.ChooseBusiness.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
 		response.addToBody(JSONKey.OperationInfo, operationInfo);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		
-		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEnterPool_1014
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestChooseBusiness_1014
     			, deviceWrapper.getDevice().getProfile()
     			, businessType.name() + ", " + deviceWrapper.getDeviceSn());
 		deviceWrapper.prepareResponse(response);
@@ -338,9 +338,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 		deviceWrapper.changeBusinessStatus(Consts.DeviceStatus.BusinessChoosed, StatusChangeReason.AppEnterBusiness);
 	}
 	
-	private void leavePool()
+	private void unchooseBusiness()
 	{
-		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestLeavePool_1015
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestUnchooseBusiness_1015
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceSn());
 
@@ -381,13 +381,13 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
-		response.addToBody(JSONKey.OperationType, Consts.OperationType.LeavePool.getValue());
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.UnchooseBusiness.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		deviceWrapper.prepareResponse(response);
 		
-		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestLeavePool_1015
+		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestUnchooseBusiness_1015
     			, deviceWrapper.getDevice().getProfile()
     			, body.getString(JSONKey.BusinessType) + ", " + deviceWrapper.getDeviceSn());
 	}

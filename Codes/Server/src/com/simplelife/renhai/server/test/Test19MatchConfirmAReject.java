@@ -81,11 +81,11 @@ public class Test19MatchConfirmAReject extends AbstractTestCase
 		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper2.getBusinessStatus());
 		
 		// Step_06 Mock请求：A进入随机聊天
-		mockApp1.enterPool(businessType);
+		mockApp1.chooseBusiness(businessType);
 		
 		// Step_07 Mock请求：B进入随机聊天
 		businessPool.getBusinessScheduler().stopScheduler();
-		mockApp2.enterPool(businessType);
+		mockApp2.chooseBusiness(businessType);
 		
 		// Step_08 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper1.getBusinessStatus());
