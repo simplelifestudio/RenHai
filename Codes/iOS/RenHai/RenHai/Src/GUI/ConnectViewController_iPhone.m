@@ -235,7 +235,10 @@ ConnectStatus;
     [self _clockCancel];
     
     NSTimeInterval interval = 1.0;
-    _timer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(_clockTick) userInfo:nil repeats:YES];
+    _timer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(_clockTick) userInfo:nil repeats:YES];
+    NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+    [currentRunLoop addTimer:_timer forMode:NSDefaultRunLoopMode];
+    [_timer fire];
 }
 
 - (void) _clockTick

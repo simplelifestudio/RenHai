@@ -13,4 +13,7 @@
 -(void) switchToMainScene;
 -(void) switchToChatScene;
 
+-(void) enableGesturers;
+-(void) disableGesturers;
+
 @end

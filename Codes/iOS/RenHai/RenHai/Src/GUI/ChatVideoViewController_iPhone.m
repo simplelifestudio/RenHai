@@ -391,6 +391,8 @@ static NSString* const kToken = @"T1==cGFydG5lcl9pZD0zNDU2NjU2MiZzZGtfdmVyc2lvbj
 -(void) sessionDidPartnerDisConnected
 {
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Disconnected", nil);
+    
+    [self _endChat];
 }
 
 -(void) publisherDidFailWithError;
