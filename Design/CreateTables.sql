@@ -87,7 +87,6 @@ CREATE TABLE `globalinterestlabel` (
   PRIMARY KEY (`globalInterestLabelId`),
   UNIQUE KEY `index_interestLabel` (`interestLabelName`(255)) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO `globalinterestlabel` VALUES ('1', '人海', '0');
 
 -- ----------------------------
 -- Records of globalinterestlabel
@@ -268,7 +267,7 @@ CREATE TABLE `profileoperationlog` (
   PRIMARY KEY (`profileOperationLogId`),
   KEY `fk_Pro_profileId_idx` (`profileId`),
   KEY `fk_Pro_operCode_idx` (`operationCodeId`),
-  CONSTRAINT `fk_Pro_operCode` FOREIGN KEY (`operationCodeId`) REFERENCES `operationcode` (`operationCodeId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Pro_operCode` FOREIGN KEY (`operationCodeId`) REFERENCES `operationcode` (`operationCode`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Pro_profileId` FOREIGN KEY (`profileId`) REFERENCES `profile` (`profileId`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -375,7 +374,7 @@ CREATE TABLE `systemoperationlog` (
   KEY `fk_SysOpLog_moduleId_idx` (`moduleId`),
   KEY `fk_SysOpLog_operCode_idx` (`operationCodeId`),
   CONSTRAINT `fk_SysOpLog_moduleId` FOREIGN KEY (`moduleId`) REFERENCES `systemmodule` (`moduleId`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_SysOpLog_operCode` FOREIGN KEY (`operationCodeId`) REFERENCES `operationcode` (`operationCodeId`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  CONSTRAINT `fk_SysOpLog_operCode` FOREIGN KEY (`operationCodeId`) REFERENCES `operationcode` (`operationCode`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
