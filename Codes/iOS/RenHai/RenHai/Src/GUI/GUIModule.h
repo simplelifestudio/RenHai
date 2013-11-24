@@ -97,6 +97,8 @@
 
 #define SPLASHVIEW_HIDE 0
 
+#define SCREEN_ALWAYS_ON 1
+
 typedef enum
 {
     LEFTBAR_CELL_HOME = 0,
@@ -131,5 +133,7 @@ LEFTBAR_CELL_ID;
 
 -(BOOL) isNetworkActivityIndicatorVisible;
 -(void) setNetworkActivityIndicatorVisible:(BOOL) flag;
+
+-(void) keepScreenAlwaysOn:(BOOL) on;
 
 @end
