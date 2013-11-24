@@ -29,7 +29,7 @@
 #define SECTION_INDEX_LABELS 1
 #define SECTION_IMPRESSES_ITEMCOUNT 6
 
-#define COUNTDOWN_SECONDS 30
+#define COUNTDOWN_SECONDS 600
 
 #define DELAY_DECIDE 0.5f
 #define DELAY_UNBINDSESSION 1.0f
@@ -302,6 +302,11 @@
 
 -(void) resetPage
 {
+    UserDataModule* m = [UserDataModule sharedInstance];
+    RHBusinessSession* session = m.businessSession;
+    RHMatchedCondition* matchedCondition = session.matchedCondition;
+    RHInterestLabel* interestLabel = matchedCondition.interestLabel;
+
     _viewTitleLabel.text = NSLocalizedString(@"ChatConfirm_Title", nil);
     
     _selfStatusLabel.text = NSLocalizedString(@"ChatConfirm_SelfStatus_Undecided", nil);
@@ -409,7 +414,10 @@
     [self _clockCancel];
     
     NSTimeInterval interval = 1.0;
-    _timer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(_clockClick) userInfo:nil repeats:YES];
+    _timer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(_clockTick) userInfo:nil repeats:YES];
+    NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+    [currentRunLoop addTimer:_timer forMode:NSDefaultRunLoopMode];
+    [_timer fire];
 }
 
 - (void) _clockClick
