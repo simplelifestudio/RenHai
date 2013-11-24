@@ -60,21 +60,26 @@
     RHProxy* proxy = _userDataModule.proxy;
     RHServiceAddress* address = proxy.serviceAddress;
     NSString* remotePath = address.fullAddress;
-    
-    _webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:remotePath]]];
-    _webSocket.delegate = self;
 
-    NSTimeInterval timeout = WEBSOCKET_OPEN_TIMEOUT;
-    NSDate* startTimeStamp = [NSDate date];
-    NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
+    if (nil != address && nil != remotePath)
+    {
+        _webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:remotePath]]];
+        _webSocket.delegate = self;
+        
+        NSTimeInterval timeout = WEBSOCKET_OPEN_TIMEOUT;
+        NSDate* startTimeStamp = [NSDate date];
+        NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
+        
+        [_webSocket open];
+        
+        [_openLock lock];
+        BOOL flag = [_openLock waitUntilDate:endTimeStamp];
+        [_openLock unlock];
+        
+        return flag;
+    }
     
-    [_webSocket open];
-    
-    [_openLock lock];
-    BOOL flag = [_openLock waitUntilDate:endTimeStamp];
-    [_openLock unlock];
-    
-    return flag;
+    return NO;
 }
 
 -(void) closeWebSocket
