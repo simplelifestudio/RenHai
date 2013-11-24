@@ -103,8 +103,8 @@ EnterOperationStatus;
     [self _registerNotifications];
     
     [_bannerView scrollLabelIfNeeded];
-    UIPanGestureRecognizer* gesturer = self.navigationController.revealController.revealPanGestureRecognizer;
-    gesturer.enabled = YES;
+    
+    [_guiModule.mainViewController enableGesturers];
 }
 
 -(void) viewWillDisappear:(BOOL)animated
@@ -235,8 +235,7 @@ EnterOperationStatus;
     
     self.navigationItem.leftBarButtonItem.enabled = NO;
     
-    UIPanGestureRecognizer* gesturer = self.navigationController.revealController.revealPanGestureRecognizer;
-    gesturer.enabled = NO;
+    [_guiModule.mainViewController disableGesturers];
     
     [self _enterButtonTimerStarted];
 }
@@ -252,9 +251,6 @@ EnterOperationStatus;
     _versionLabel.enabled = YES;
     
     self.navigationItem.leftBarButtonItem.enabled = YES;
-    
-//    UIPanGestureRecognizer* gesturer = self.navigationController.revealController.revealPanGestureRecognizer;
-//    gesturer.enabled = YES;
 }
 
 -(void)_enterButtonTimerStarted

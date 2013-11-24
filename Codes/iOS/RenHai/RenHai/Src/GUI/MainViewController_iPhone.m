@@ -84,6 +84,18 @@
     [chatWizard wizardProcess:ChatWizardStatus_ChatWait];
 }
 
+-(void) enableGesturers
+{
+    self.revealPanGestureRecognizer.enabled = YES;
+    self.revealResetTapGestureRecognizer.enabled = YES;
+}
+
+-(void) disableGesturers
+{
+    self.revealPanGestureRecognizer.enabled = NO;
+    self.revealResetTapGestureRecognizer.enabled = NO;
+}
+
 #pragma mark - UINavigationControllerDelegate
 
 
