@@ -38,7 +38,7 @@ typedef enum
     AppMessageIdentifier_Connect,
     AppMessageIdentifier_AppDataSync,
     AppMessageIdentifier_ServerDataSync,
-    AppMessageIdentifier_EnterPool,
+    AppMessageIdentifier_ChooseBusiness,
     AppMessageIdentifier_MatchStart,
     AppMessageIdentifier_AgreeChat,
     AppMessageIdentifier_RejectChat,
@@ -47,7 +47,7 @@ typedef enum
     AppMessageIdentifier_AssessAndQuit,
     AppMessageIdentifier_UnbindSession,
     AppMessageIdentifier_Aloha,
-    AppMessageIdentifier_LeavePool
+    AppMessageIdentifier_UnchooseBusiness
 }
 AppMessageIdentifier;
 
