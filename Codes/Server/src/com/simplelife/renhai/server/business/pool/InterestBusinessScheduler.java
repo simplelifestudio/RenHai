@@ -19,6 +19,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ConcurrentSkipListSet;
 
 import com.alibaba.fastjson.JSONObject;
@@ -35,7 +36,7 @@ import com.simplelife.renhai.server.util.JSONKey;
 /** */
 public class InterestBusinessScheduler extends AbstractBusinessScheduler
 {
-	private ConcurrentHashMap<String, ConcurrentSkipListSet<IDeviceWrapper>> interestLabelDeviceMap;
+	private ConcurrentHashMap<String, ConcurrentLinkedQueue<IDeviceWrapper>> interestLabelDeviceMap;
 	private boolean deadMatchFlag = false; 
 	
 	@Override
@@ -90,7 +91,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			return;
 		}
     	
-    	List<String> selectedDeviceList = new ArrayList<String>();
+    	Collection<IDeviceWrapper> selectedDeviceList = new ArrayList<>();
     	boolean isAllDeviceFound = false;
     	String deviceFoundInterest = null;
     	
@@ -109,7 +110,8 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 					.getProfile()
 					.getInterestCard()
 					.getInterestLabelMapSet();
-			ConcurrentSkipListSet<IDeviceWrapper> candidateDeviceList;
+			
+			Collection<IDeviceWrapper> candidateDeviceList;
 			
 			int deviceListSize = 0;
 			
@@ -141,12 +143,10 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 				
 				if ((deviceListSize == deviceCountPerSession))
 				{
-					String tempSn;
 					// All of devices found can be added to this business session
 					for (IDeviceWrapper tmpDevice : candidateDeviceList)
 					{
-						tempSn = tmpDevice.getDeviceSn();
-						selectedDeviceList.add(tempSn);
+						selectedDeviceList.add(tmpDevice);
 					}
 					isAllDeviceFound = true;
 				}
@@ -178,13 +178,12 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
     }
     
     private boolean selectDevice(
-    		ConcurrentSkipListSet<IDeviceWrapper> deviceList,
-    		List<String> selectedDevice)
+    		Collection<IDeviceWrapper> deviceList,
+    		Collection<IDeviceWrapper> selectedDevice)
     {
     	Random random = new Random();
     	Object[] deviceArray = deviceList.toArray();
 		IDeviceWrapper tempDevice;
-		String deviceSn;
 		for (int i = 0; i < deviceCountPerSession; i++)
 		{
 			int tempCount = 0;
@@ -193,8 +192,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			{
 				tempCount ++;
 				tempDevice = (IDeviceWrapper) deviceArray[random.nextInt(deviceArray.length)]; 
-				deviceSn = tempDevice.getDeviceSn();
-			} while (selectedDevice.contains(deviceSn) && tempCount < 100);
+			} while (selectedDevice.contains(tempDevice) && tempCount < 100);
 			
 			if (tempCount >= 100)
 			{
@@ -202,17 +200,15 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 				deadMatchFlag = true;
 				return false;
 			}
-			selectedDevice.add(deviceSn);
+			selectedDevice.add(tempDevice);
 		}
 		return true;
     }
     
-    private void increaseMatchCount(List<String> selectedDevice, String label)
+    private void increaseMatchCount(Collection<IDeviceWrapper> selectedDevice, String label)
     {
-    	IDeviceWrapper device;
-    	for (String deviceSn : selectedDevice)
+    	for (IDeviceWrapper device : selectedDevice)
     	{
-    		device = ownerBusinessPool.getDevice(deviceSn); 
     		if (device != null)
     		{
     			device.increaseMatchCount(label);
@@ -220,7 +216,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
     	}
     }
     
-    private void startSession(List<String> selectedDevice, String deviceFoundInterest)
+    private void startSession(Collection<IDeviceWrapper> selectedDevice, String deviceFoundInterest)
     {
     	IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
 		if (session == null)
@@ -246,7 +242,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			return;
 		}
 		
-		if (session.startSession(selectedDevice, obj))
+		if (session.prepareSession(selectedDevice, obj))
 		{
 			DbLogger.increaseInterestMatchCount(deviceFoundInterest);
 			increaseMatchCount(selectedDevice, deviceFoundInterest);

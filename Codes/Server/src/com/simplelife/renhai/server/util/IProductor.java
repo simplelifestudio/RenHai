@@ -12,7 +12,8 @@ package com.simplelife.renhai.server.util;
 /**
  * 
  */
-public interface IProductor extends Runnable
+public interface IProductor
 {
 	public boolean hasWork();
+	public Runnable getWork();
 }

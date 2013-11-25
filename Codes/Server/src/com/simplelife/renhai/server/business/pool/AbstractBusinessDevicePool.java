@@ -19,10 +19,12 @@ import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IBusinessPool;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.IProductor;
+import com.simplelife.renhai.server.util.Worker;
 
 
 /** */
-public abstract class AbstractBusinessDevicePool extends AbstractDevicePool implements IBusinessPool
+public abstract class AbstractBusinessDevicePool extends AbstractDevicePool implements IBusinessPool, IProductor
 {
     // Scheduler of current BusinessDevicePool
     protected AbstractBusinessScheduler businessScheduler;
@@ -33,6 +35,9 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     protected ConcurrentHashMap<String, IDeviceWrapper> sessionBoundDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     protected ConcurrentHashMap<String, IDeviceWrapper> businessChoosedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     protected ConcurrentHashMap<String, IDeviceWrapper> matchStartedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
+    
+    protected final int deviceCountPerSession = 2;
+    protected Worker matchWorker = new Worker(this);
     
     public Consts.BusinessType getBusinessType()
     {

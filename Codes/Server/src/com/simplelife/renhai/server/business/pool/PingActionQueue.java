@@ -46,7 +46,7 @@ public class PingActionQueue implements IProductor
 		worker.stopExecution();
 	}
 		
-	private class PingAction
+	private class PingAction implements Runnable
 	{
 		private PingActionType actionType;
 		private PingNode node;
@@ -57,7 +57,8 @@ public class PingActionQueue implements IProductor
 			this.node = node;
 		}
 		
-		public void execute()
+		@Override
+		public void run()
 		{
 			switch(actionType)
 			{
@@ -76,17 +77,15 @@ public class PingActionQueue implements IProductor
 		}
 	}
 
-
-	@Override
-	public void run()
-	{
-		PingAction action = queue.remove();
-		action.execute();
-	}
-	
 	@Override
 	public boolean hasWork()
 	{
 		return !queue.isEmpty();
+	}
+	
+	@Override
+	public Runnable getWork()
+	{
+		return queue.remove();
 	}
 }

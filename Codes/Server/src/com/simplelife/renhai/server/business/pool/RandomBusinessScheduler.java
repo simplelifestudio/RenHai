@@ -10,12 +10,16 @@
 package com.simplelife.renhai.server.business.pool;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.simplelife.renhai.server.business.session.BusinessSessionPool;
 import com.simplelife.renhai.server.util.IBusinessSession;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
 /** */
@@ -36,27 +40,27 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
 			return;
 		}
 		
-		List<String> selectedDevice = new ArrayList<String>();
+		Collection<IDeviceWrapper> selectedDevice = new ConcurrentLinkedQueue<>();
 		
 		if (deviceCountPerSession == matchStartedDeviceMap.size())
 		{
-			selectedDevice.addAll(matchStartedDeviceMap.keySet());
+			selectedDevice.addAll(matchStartedDeviceMap.values());
 		}
 		else
 		{
-			Set<String> keySet = matchStartedDeviceMap.keySet();
-			Object[] keyArray = keySet.toArray();
+			Collection<IDeviceWrapper> deviceSet = matchStartedDeviceMap.values();
+			Object[] deviceArray = deviceSet.toArray();
 			
 			Random random = new Random();
-			String key;
+			IDeviceWrapper device;
 			for (int i = 0; i < deviceCountPerSession; i++)
 			{
 				do
 				{
-					key = (String) keyArray[random.nextInt(keyArray.length)];
-				} while (selectedDevice.contains(key));
+					device = (IDeviceWrapper) deviceArray[random.nextInt(deviceArray.length)];
+				} while (selectedDevice.contains(device));
 				
-				selectedDevice.add(key);
+				selectedDevice.add(device);
 			}
 		}
 		
@@ -68,7 +72,7 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
 		}
 		
 		session.bindBusinessDevicePool(this.ownerBusinessPool);
-		if (!session.startSession(selectedDevice, null))
+		if (!session.prepareSession(selectedDevice, null))
 		{
 			recycleDevice(selectedDevice);
 		}
