@@ -33,14 +33,24 @@
 
 #pragma mark - Public Methods
 
-+(NSArray*) orderLabelList:(NSArray*) labelList
++(NSArray*) sortedLabelListByLabelOrder:(NSArray*) labelList
 {
-    NSSortDescriptor *sortDescriptor = sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"labelOrder"
-                                                                                    ascending:YES];
-    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-    NSArray *sortedArray = [labelList sortedArrayUsingDescriptors:sortDescriptors];
-    
-    return sortedArray;
+    return [RHDataUtils sortedLabelList:labelList sortKey:@"labelOrder" ascending:YES];
+}
+
++(NSArray*) sortedLabelListByMatchCount:(NSArray*) labelList
+{
+    return [RHDataUtils sortedLabelList:labelList sortKey:@"matchCount" ascending:NO];
+}
+
++(NSArray*) sortedLabelListByGlobalMatchCount:(NSArray*) labelList
+{
+    return [RHDataUtils sortedLabelList:labelList sortKey:@"globalMatchCount" ascending:NO];
+}
+
++(NSArray*) sortedLabelListByCurrentProfileCount:(NSArray*) labelList
+{
+    return [RHDataUtils sortedLabelList:labelList sortKey:@"currentProfileCount" ascending:NO];
 }
 
 -(id) init
@@ -300,7 +310,7 @@
                     [array addObject:label];
                 }
                 
-                NSArray* orderedLabelList = [RHInterestCard orderLabelList:array];
+                NSArray* orderedLabelList = [RHInterestCard sortedLabelListByLabelOrder:array];
                 _labelList = [NSMutableArray arrayWithArray:orderedLabelList];
             }
             else
@@ -340,7 +350,7 @@
     {
         _interestCardId = [aDecoder decodeIntegerForKey:SERIALIZE_KEY_CARDID];
         NSMutableArray* array = [aDecoder decodeObjectForKey:SERIALIZE_KEY_LABELLIST];
-        NSArray* orderedLabelList = [RHInterestCard orderLabelList:array];
+        NSArray* orderedLabelList = [RHInterestCard sortedLabelListByLabelOrder:array];
         _labelList = [NSMutableArray arrayWithArray:orderedLabelList];
     }
     

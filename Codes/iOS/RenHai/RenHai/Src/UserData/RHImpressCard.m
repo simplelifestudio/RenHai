@@ -54,25 +54,12 @@
 
 -(NSArray*) assessLabelList
 {
-    NSSortDescriptor *sortDescriptor = sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"labelId"
-                                                  ascending:YES];
-    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-    NSArray *sortedArray = [_assessLabelList sortedArrayUsingDescriptors:sortDescriptors];
-    
-    return sortedArray;
+    return [RHDataUtils sortedLabelList:_assessLabelList sortKey:@"labelId" ascending:YES];
 }
 
 -(NSArray*) impressLabelList
-{
-    NSSortDescriptor *sortDescriptor = sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"assessedCount"
-                                                                                    ascending:YES];
-    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
-    
-//    NSArray *sortedArray = [_impressLabelList sortedArrayUsingDescriptors:sortDescriptors];
-    
-    NSArray *sortedArray = [[NSMutableArray alloc] initWithArray:[_impressLabelList sortedArrayUsingDescriptors:sortDescriptors]];
-    
-    return sortedArray;
+{    
+    return [RHDataUtils sortedLabelList:_impressLabelList sortKey:@"assessedCount" ascending:NO];
 }
 
 -(NSArray*) topImpressLabelList:(NSUInteger) top

@@ -14,6 +14,11 @@
 
 @interface RHInterestCard : NSObject <CBJSONable, NSCopying, NSMutableCopying>
 
++(NSArray*) sortedLabelListByLabelOrder:(NSArray*) labelList;
++(NSArray*) sortedLabelListByMatchCount:(NSArray*) labelList;
++(NSArray*) sortedLabelListByGlobalMatchCount:(NSArray*) labelList;
++(NSArray*) sortedLabelListByCurrentProfileCount:(NSArray*) labelList;
+
 @property (nonatomic) NSUInteger interestCardId;
 
 -(NSArray*) labelList;

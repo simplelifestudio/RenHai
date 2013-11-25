@@ -11,6 +11,7 @@
 #import "CBJSONable.h"
 
 #import "RHDevice.h"
+#import "RHDataUtils.h"
 
 #define MESSAGE_SECURITY_KEY @"20130801"
 
