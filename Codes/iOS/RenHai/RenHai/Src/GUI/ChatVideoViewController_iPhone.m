@@ -377,7 +377,7 @@
 
 -(void) sessionDidDropPartnerStream;
 {
-
+    [self _remoteEndChat];
 }
 
 -(void) sessionDidPartnerConnected
