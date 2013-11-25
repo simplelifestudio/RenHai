@@ -55,7 +55,8 @@
     volatile BOOL _partnerRejectChatFlag;
     volatile BOOL _partnerLostFlag;
     
-    volatile BOOL _isDeciding;
+    volatile BOOL _isSelfDeciding;
+    NSCondition* _decideLock;
 }
 
 @end
@@ -94,8 +95,6 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    DDLogInfo(@"#####ChatConfirm: viewWillAppear");
-    
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES];
@@ -105,15 +104,11 @@
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-    DDLogInfo(@"#####ChatConfirm: viewWillDisappear");
-    
     [super viewWillDisappear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    DDLogInfo(@"#####ChatConfirm: viewDidAppear");
-    
     [super viewDidAppear:animated];
     
     [self pageWillLoad];
@@ -121,8 +116,6 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    DDLogInfo(@"#####ChatConfirm: viewDidDisappear");
-    
     [super viewDidDisappear:animated];
     
     [self pageWillUnload];
@@ -326,14 +319,14 @@
     _partnerRejectChatFlag = NO;
     _partnerLostFlag = NO;
     
-    _isDeciding = NO;
+    _isSelfDeciding = NO;
     
     _agreeChatButton.hidden = NO;
     _rejectChatButton.hidden = NO;
     
     [self _setCountdownSeconds:COUNTDOWN_SECONDS];
     
-    [_collectionView reloadData];
+    [self _refreshCollectionView];
 }
 
 -(void) pageWillLoad
@@ -350,42 +343,51 @@
 
 -(void) onOthersideAgreed
 {
-    _partnerAgreeChatFlag = YES;
-    
-    _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Agreed", nil);
-    
-    if (_selfAgreeChatFlag)
+    if (!_partnerAgreeChatFlag)
     {
-        [self _moveToChatVideoView];
+        _partnerAgreeChatFlag = YES;
+        
+        _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Agreed", nil);
+        
+        if (_selfAgreeChatFlag)
+        {
+            [self _moveToChatVideoView];
+        }
     }
 }
 
 -(void) onOthersideRejected
 {
-    _partnerRejectChatFlag = YES;
-    
-    _agreeChatButton.hidden = YES;
-    _rejectChatButton.hidden = YES;
-    
-    _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Rejected", nil);
-    
-    [self _clockCancel];
-    
-    [self _remoteUnbindSession];
+    if (!_partnerRejectChatFlag)
+    {
+        _partnerRejectChatFlag = YES;
+        
+        _agreeChatButton.hidden = YES;
+        _rejectChatButton.hidden = YES;
+        
+        _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Rejected", nil);
+        
+        [self _clockCancel];
+        
+        [self _remoteUnbindSession];
+    }
 }
 
 -(void) onOthersideLost
 {
-    _partnerLostFlag = YES;
-    
-    _agreeChatButton.hidden = YES;
-    _rejectChatButton.hidden = YES;
-    
-    _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Lost", nil);
-    
-    [self _clockCancel];
-    
-    [self _remoteUnbindSession];
+    if (!_partnerLostFlag)
+    {
+        _partnerLostFlag = YES;
+        
+        _agreeChatButton.hidden = YES;
+        _rejectChatButton.hidden = YES;
+        
+        _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Lost", nil);
+        
+        [self _clockCancel];
+        
+        [self _remoteUnbindSession];
+    }
 }
 
 #pragma mark - Private Methods
@@ -397,6 +399,9 @@
     _commModule = [CommunicationModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
     _statusModule = [BusinessStatusModule sharedInstance];
+    
+    _isSelfDeciding = NO;
+    _decideLock = [[NSCondition alloc] init];
     
     [self _setupCollectionView];
     
@@ -478,11 +483,17 @@
     
     [self _clockCancel];
     
-    _isDeciding = YES;
-    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         
-        [NSThread sleepForTimeInterval:DELAY_AGREECHAT];
+        [_decideLock lock];
+        if (_isSelfDeciding)
+        {
+            [_decideLock wait];
+        }
+        else
+        {
+            _isSelfDeciding = YES;
+        }
         
         RHBusinessSession* businessSession = _userDataModule.businessSession;
         NSString* businessSessionId = businessSession.businessSessionId;
@@ -506,9 +517,13 @@
                 _selfAgreeChatFlag = NO;
             }
             afterCompletionBlock:^(){
-                _isDeciding = NO;
+
             }
          ];
+        
+        _isSelfDeciding = NO;
+        [_decideLock signal];
+        [_decideLock unlock];
     }];
 }
 
@@ -518,11 +533,17 @@
     _rejectChatButton.hidden = YES;
     _selfStatusLabel.text = NSLocalizedString(@"ChatConfirm_SelfStatus_Rejected", nil);
     
-    _isDeciding = YES;
-    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
     
-        [NSThread sleepForTimeInterval:DELAY_REJECTCHAT];
+        [_decideLock lock];
+        if (_isSelfDeciding)
+        {
+            [_decideLock wait];
+        }
+        else
+        {
+            _isSelfDeciding = YES;
+        }
         
         RHBusinessSession* businessSession = _userDataModule.businessSession;
         NSString* businessSessionId = businessSession.businessSessionId;
@@ -542,9 +563,13 @@
                 _selfRejectChatFlag = NO;
             }
             afterCompletionBlock:^(){
-                _isDeciding = NO;
+
             }
          ];
+        
+        _isSelfDeciding = NO;
+        [_decideLock signal];
+        [_decideLock unlock];
     }];
 }
 
@@ -552,9 +577,14 @@
 {
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         
-        while (_isDeciding)
+        [_decideLock lock];
+        if (_isSelfDeciding)
         {
-            [NSThread sleepForTimeInterval:DELAY_DECIDE];
+            [_decideLock wait];
+        }
+        else
+        {
+            _isSelfDeciding = YES;
         }
         
         if (!_selfRejectChatFlag)
@@ -581,6 +611,10 @@
                 afterCompletionBlock:nil
              ];
         }
+        
+        _isSelfDeciding = NO;
+        [_decideLock signal];
+        [_decideLock unlock];
     }];
 }
 
@@ -617,6 +651,11 @@
     {
         [self onOthersideLost];
     }
+}
+
+-(void) _refreshCollectionView
+{
+    [_collectionView reloadData];    
 }
 
 #pragma mark - IBActions

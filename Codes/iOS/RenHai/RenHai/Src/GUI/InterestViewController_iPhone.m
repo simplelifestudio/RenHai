@@ -135,7 +135,6 @@
 //    [self.view addGestureRecognizer:_longPressGesturer];
 //    
 //    [_singleTapGesturer requireGestureRecognizerToFail:_longPressGesturer];
-    
 }
 
 -(void)_leftBarButtonItemClicked:(id)sender

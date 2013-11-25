@@ -472,6 +472,8 @@ static float progress = 0.0;
 
 -(void)_finishEnterPool
 {
+    [NSThread sleepForTimeInterval:INTERVAL_ENTERBUTTON_TRACK];
+    
     MainViewController_iPhone* mainVC = _guiModule.mainViewController;
     [mainVC switchToChatScene];
 }

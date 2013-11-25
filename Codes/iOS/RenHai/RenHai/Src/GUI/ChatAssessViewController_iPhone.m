@@ -67,6 +67,10 @@
     volatile BOOL _isDeciding;
     
     BOOL _allowCloneLabel;
+    
+    UITapGestureRecognizer* _singleTapGesturer;
+    UITapGestureRecognizer* _doubleTapGesturer;
+    UILongPressGestureRecognizer* _longPressGesturer;
 }
 
 @end
@@ -187,15 +191,27 @@
     
     [self _setupCollectionView];
     
-    UITapGestureRecognizer* singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
-    singleTapGesturer.delegate = self;
-    singleTapGesturer.numberOfTapsRequired = 1;
-    [self.view addGestureRecognizer:singleTapGesturer];
+    [self _setupGesturers];
+}
+
+-(void)_setupGesturers
+{
+    _singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
+    _singleTapGesturer.delegate = self;
+    _singleTapGesturer.numberOfTapsRequired = 1;
+    [self.view addGestureRecognizer:_singleTapGesturer];
     
-    UITapGestureRecognizer* doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
-    doubleTapGesturer.delegate = self;
-    doubleTapGesturer.numberOfTapsRequired = 2;
-    [self.view addGestureRecognizer:doubleTapGesturer];
+    _doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
+    _doubleTapGesturer.delegate = self;
+    _doubleTapGesturer.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer:_doubleTapGesturer];
+    
+//    _longPressGesturer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(_didLongPressed:)];
+//    _longPressGesturer.delegate = self;
+//    _longPressGesturer.minimumPressDuration = 1.0f;
+//    [self.view addGestureRecognizer:_longPressGesturer];
+//
+//    [_singleTapGesturer requireGestureRecognizerToFail:_longPressGesturer];
 }
 
 -(void)_setupCollectionView
@@ -419,6 +435,11 @@
     }
 }
 
+-(void)_didLongPressed:(UILongPressGestureRecognizer*) recognizer
+{
+
+}
+
 -(void)_didSingleTapped:(UITapGestureRecognizer*) recognizer
 {
     CGPoint locationTouch = [recognizer locationInView:self.view];
@@ -438,15 +459,7 @@
         }
         else
         {
-            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_assessLabelsView cellForItemAtIndexPath:indexPath];
-            if (!cell.isSelected)
-            {
-                [_assessLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-            }
-            else
-            {
-                [_assessLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
+            [_assessLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
         }
         
         [self _refreshAssessLabelsViewActions];
@@ -497,10 +510,12 @@
             {
                 [_existImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
             }
+            
+            _allowCloneLabel = NO;
         }
         else
         {
-            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_addImpressLabelsView cellForItemAtIndexPath:indexPath];
+            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_existImpressLabelsView cellForItemAtIndexPath:indexPath];
             if (!cell.isSelected)
             {
                 [_existImpressLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
@@ -516,13 +531,14 @@
                 [_existImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
                 _allowCloneLabel = NO;
             }
-            
-            NSArray* selectedIndexPathes = _addImpressLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {
-                [_addImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
         }
+        
+        NSArray* selectedIndexPathes = _addImpressLabelsView.indexPathsForSelectedItems;
+        for (NSIndexPath* indexPath in selectedIndexPathes)
+        {
+            [_addImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+        }
+        [self _refershAddImpressLabelsViewActions];
         
         [self _refreshExistImpressLabelsViewActions];
     }
@@ -587,7 +603,7 @@
     BOOL allowDeleteLabel = NO;
     
     NSArray* selectedCells = [_addImpressLabelsView indexPathsForSelectedItems];
-    if (0 < selectedCells.count && 1 < _addImpressLabelNames.count)
+    if (0 < selectedCells.count && 0 < _addImpressLabelNames.count)
     {
         allowDeleteLabel = YES;
     }
@@ -846,7 +862,10 @@
     {
         case ManageMode_NewLabel:
         {
-            [_addImpressLabelNames addObject:newLabel];
+            if (![_addImpressLabelNames containsObject:newLabel])
+            {
+                [_addImpressLabelNames addObject:newLabel];                
+            }
             
             break;
         }
@@ -855,8 +874,16 @@
             if (![oldLabel isEqualToString:newLabel])
             {
                 NSUInteger labelIndex = [_addImpressLabelNames indexOfObject:oldLabel];
-                [_addImpressLabelNames removeObjectAtIndex:labelIndex];
-                [_addImpressLabelNames insertObject:newLabel atIndex:labelIndex];
+                
+                if ([_addImpressLabelNames containsObject:newLabel])
+                {
+                    [_addImpressLabelNames removeObjectAtIndex:labelIndex];
+                }
+                else
+                {
+                    [_addImpressLabelNames removeObjectAtIndex:labelIndex];
+                    [_addImpressLabelNames insertObject:newLabel atIndex:labelIndex];
+                }
             }
             
             break;
