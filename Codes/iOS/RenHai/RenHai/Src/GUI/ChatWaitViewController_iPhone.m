@@ -19,6 +19,8 @@
 
 #define DELAY CIRCLE_ANIMATION_DISPLAY
 
+#define INTERVAL_ALOHA 60
+
 #define DELAY_MATCHSTART 2.0f
 
 typedef enum
@@ -39,6 +41,8 @@ ChatWaitStatus;
     
     NSTimer* _timer;
     NSUInteger _count;
+    
+    NSTimer* _alohaTimer;
     
     NSMutableString* _consoleInfo;
     
@@ -145,10 +149,18 @@ ChatWaitStatus;
 -(void) pageWillLoad
 {
     [self _clockStart];
+    
+    [self _activateAlohaTimer];
+    
+    [self _registerNotifications];
 }
 
 -(void) pageWillUnload
 {
+    [self _unregisterNotifications];
+    
+    [self _deactivateAlohaTimer];
+    
     [self _clockCancel];
 }
 
@@ -374,6 +386,48 @@ ChatWaitStatus;
     [self _updateInfoTextView:infoDetailText];
     _actionButton.titleLabel.text = actionButtonTitle;
     _actionButton.hidden = isActionButtonHide;
+}
+
+-(void)_activateAlohaTimer
+{
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
+        [self _deactivateAlohaTimer];
+        
+        _alohaTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_ALOHA target:self selector:@selector(_remoteAloha) userInfo:nil repeats:YES];
+        
+        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+        [currentRunLoop addTimer:_alohaTimer forMode:NSRunLoopCommonModes];
+        [currentRunLoop run];
+    }];
+}
+
+-(void)_deactivateAlohaTimer
+{
+    if (nil != _alohaTimer)
+    {
+        [_alohaTimer invalidate];
+        _alohaTimer = nil;
+    }
+}
+
+-(void) _remoteAloha
+{
+    [_commModule alohaRequest:_userDataModule.device];
+}
+
+-(void)_registerNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_deactivateAlohaTimer)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_activateAlohaTimer) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+-(void)_unregisterNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

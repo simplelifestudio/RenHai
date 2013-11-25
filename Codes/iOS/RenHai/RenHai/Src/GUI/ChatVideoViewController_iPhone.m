@@ -19,7 +19,7 @@
 
 #define DELAY_ENDCHAT 1.0f
 
-#define INTERVAL_ALOHA 30
+#define INTERVAL_ALOHA 60
 
 #define BORDERWIDTH_VIDEOVIEW 2.0f;
 #define CORNERRADIUS_VIDEOVIEW 2.0f;
@@ -150,14 +150,14 @@
 {
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Disconnected", nil);
     
-    [self _endChat];
+    [self _remoteEndChat];
 }
 
 -(void) onOthersideLost
 {
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Lost", nil);
     
-    [self _endChat];
+    [self _remoteEndChat];
 }
 
 #pragma mark - Private Methods
@@ -196,7 +196,7 @@
     }];
 }
 
--(void) _endChat
+-(void) _remoteEndChat
 {
     [CBAppUtils asyncProcessInMainThread:^(){
         _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Disconnected", nil);
@@ -261,7 +261,7 @@
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         [self _deactivateAlohaTimer];
         
-        _alohaTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_ALOHA target:self selector:@selector(_aloha) userInfo:nil repeats:YES];
+        _alohaTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_ALOHA target:self selector:@selector(_remoteAloha) userInfo:nil repeats:YES];
         
         NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
         [currentRunLoop addTimer:_alohaTimer forMode:NSRunLoopCommonModes];
@@ -278,7 +278,7 @@
     }
 }
 
--(void) _aloha
+-(void) _remoteAloha
 {
     [_commModule alohaRequest:_userDataModule.device];
 }
@@ -330,7 +330,7 @@
 
 - (IBAction)didPressEndChatButton:(id)sender
 {
-    [self _endChat];
+    [self _remoteEndChat];
 }
 
 #pragma mark - OpenTokDelegate
@@ -389,7 +389,7 @@
 {
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Disconnected", nil);
     
-    [self _endChat];
+    [self _remoteEndChat];
 }
 
 -(void) publisherDidFailWithError;
