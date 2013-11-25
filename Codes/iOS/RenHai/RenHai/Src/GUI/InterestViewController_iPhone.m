@@ -862,6 +862,7 @@
     
     [self _remoteUpdateInterestCard];
     
+    _allowCloneLabel = NO;
     [self _refreshServerInterestLabelsView];
 }
 
@@ -912,8 +913,6 @@
 
 -(void)_remoteUpdateInterestCard
 {
-    //    [self _refreshInterestLabelsView];
-    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         RHProfile* profile = device.profile;
@@ -921,32 +920,32 @@
         RHMessage* requestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:device info:nil];
         
         [_commModule appDataSyncRequest:requestMessage
-                 successCompletionBlock:^(NSDictionary* deviceDic){
-                     deviceDic = [deviceDic objectForKey:MESSAGE_KEY_DEVICE];
-                     NSDictionary* profileDic = [deviceDic objectForKey:MESSAGE_KEY_PROFILE];
-                     NSDictionary* interestCardDic = [profileDic objectForKey:MESSAGE_KEY_INTERESTCARD];
-                     @try
-                     {
-                         [interestCard fromJSONObject:interestCardDic];
-                         
-                         [_userDataModule saveUserData];
-                     }
-                     @catch (NSException *exception)
-                     {
-                         DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
-                     }
-                     @finally
-                     {
-                         
-                     }
+             successCompletionBlock:^(NSDictionary* deviceDic){
+                 deviceDic = [deviceDic objectForKey:MESSAGE_KEY_DEVICE];
+                 NSDictionary* profileDic = [deviceDic objectForKey:MESSAGE_KEY_PROFILE];
+                 NSDictionary* interestCardDic = [profileDic objectForKey:MESSAGE_KEY_INTERESTCARD];
+                 @try
+                 {
+                     [interestCard fromJSONObject:interestCardDic];
+                     
+                     [_userDataModule saveUserData];
                  }
-                 failureCompletionBlock:^(){
+                 @catch (NSException *exception)
+                 {
+                     DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
                  }
-                   afterCompletionBlock:^(){
-                       [CBAppUtils asyncProcessInMainThread:^(){
-                           [self _refreshInterestLabelsView];
-                       }];
-                   }
+                 @finally
+                 {
+                     
+                 }
+             }
+             failureCompletionBlock:^(){
+             }
+             afterCompletionBlock:^(){
+                   [CBAppUtils asyncProcessInMainThread:^(){
+                       [self _refreshInterestLabelsView];
+                   }];
+               }
          ];
     }];
 }
