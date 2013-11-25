@@ -76,32 +76,38 @@ ChatWaitStatus;
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    DDLogInfo(@"#####ChatWait: viewWillAppear");
+    
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES];
     
-//    [self resetPage];
+    [self resetPage];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    DDLogInfo(@"#####ChatWait: viewWillDisappear");
+    
     [super viewWillDisappear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    DDLogInfo(@"#####ChatWait: viewDidAppear");
+    
     [super viewDidAppear:animated];
     
-//    [self _clockStart];
-//    
-//    [self _checkIsSessionAlreadyBound];
+    [self pageWillLoad];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    DDLogInfo(@"#####ChatWait: viewDidDisappear");
+    
     [super viewDidDisappear:animated];
     
-//    [self _clockCancel];
+    [self pageWillUnload];
 }
 
 - (void)didReceiveMemoryWarning

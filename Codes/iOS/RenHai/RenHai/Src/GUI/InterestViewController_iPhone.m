@@ -39,6 +39,10 @@
     ServerInterestLabelsHeaderView_iPhone* _serverInterestLabelsHeaderView;
     
     BOOL _allowCloneLabel;
+    
+    UITapGestureRecognizer* _singleTapGesturer;
+    UITapGestureRecognizer* _doubleTapGesturer;
+    UILongPressGestureRecognizer* _longPressGesturer;
 }
 
 @end
@@ -88,15 +92,7 @@
     [self _setupNavigationBar];
     [self _setupCollectionView];
     
-    UITapGestureRecognizer* singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
-    singleTapGesturer.delegate = self;
-    singleTapGesturer.numberOfTapsRequired = 1;
-    [self.view addGestureRecognizer:singleTapGesturer];
-
-    UITapGestureRecognizer* doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
-    doubleTapGesturer.delegate = self;
-    doubleTapGesturer.numberOfTapsRequired = 2;
-    [self.view addGestureRecognizer:doubleTapGesturer];
+    [self _setupGestuers];
 }
 
 -(void)_setupNavigationBar
@@ -119,6 +115,27 @@
         
         self.navigationItem.leftBarButtonItem = leftBarButtonItem;
     }
+}
+
+-(void)_setupGestuers
+{
+    _singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
+    _singleTapGesturer.delegate = self;
+    _singleTapGesturer.numberOfTapsRequired = 1;
+    [self.view addGestureRecognizer:_singleTapGesturer];
+    
+    _doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
+    _doubleTapGesturer.delegate = self;
+    _doubleTapGesturer.numberOfTapsRequired = 2;
+    [self.view addGestureRecognizer:_doubleTapGesturer];
+    
+//    _longPressGesturer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(_didLongPressed:)];
+//    _longPressGesturer.delegate = self;
+//    _longPressGesturer.minimumPressDuration = 1.0f;
+//    [self.view addGestureRecognizer:_longPressGesturer];
+//    
+//    [_singleTapGesturer requireGestureRecognizerToFail:_longPressGesturer];
+    
 }
 
 -(void)_leftBarButtonItemClicked:(id)sender
@@ -175,6 +192,74 @@
         [_serverInterestLabelsHeaderView.cloneButton setTitle:NSLocalizedString(@"Interest_Action_CloneServerInterestLabel", nil) forState:UIControlStateNormal];
         [_serverInterestLabelsHeaderView.refreshButton setTitle:NSLocalizedString(@"Interest_Action_RefreshServerInterestLabels", nil) forState:UIControlStateNormal];
         _serverInterestLabelsHeaderView.operationDelegate = self;
+        
+        [self _refreshServerInterestLabelsHeaderViewActions];
+    }
+}
+
+-(void)_didLongPressed:(UILongPressGestureRecognizer*) recognizer
+{
+    CGPoint locationTouch = [recognizer locationInView:self.view];
+    
+    if (CGRectContainsPoint(_interestLabelsView.frame, locationTouch))
+    {
+        locationTouch = [_interestLabelsView convertPoint:locationTouch fromView:self.view];
+        
+        NSIndexPath* indexPath = [_interestLabelsView indexPathForItemAtPoint:locationTouch];
+        if (nil == indexPath)
+        {
+            NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {
+                [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+        }
+        else
+        {
+            [_interestLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            
+            NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {
+                [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+            
+            [self _refreshInterestLabelsHeaderViewActions];
+        }
+    }
+    else if (CGRectContainsPoint(_serverInterestLabelsView.frame, locationTouch))
+    {
+        locationTouch = [_serverInterestLabelsView convertPoint:locationTouch fromView:self.view];
+        
+        NSIndexPath* indexPath = [_serverInterestLabelsView indexPathForItemAtPoint:locationTouch];
+        if (nil == indexPath)
+        {
+            NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {
+                [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+        }
+        else
+        {
+            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_serverInterestLabelsView cellForItemAtIndexPath:indexPath];
+            [_serverInterestLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            
+            NSString* labelName = cell.labelName;
+            
+            RHDevice* device = _userDataModule.device;
+            RHProfile* profile = device.profile;
+            RHInterestCard* interestCard = profile.interestCard;
+            BOOL hasLabel = [interestCard isLabelExists:labelName];
+            BOOL isFull = (interestCard.labelList.count >= INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS);
+            _allowCloneLabel = (hasLabel || isFull) ? NO : YES;
+            
+            NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {
+                [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+        }
         
         [self _refreshServerInterestLabelsHeaderViewActions];
     }

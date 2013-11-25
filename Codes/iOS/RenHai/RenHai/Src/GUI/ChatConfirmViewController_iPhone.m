@@ -94,32 +94,38 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    DDLogInfo(@"#####ChatConfirm: viewWillAppear");
+    
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES];
     
-//    [self resetPage];
+    [self resetPage];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    DDLogInfo(@"#####ChatConfirm: viewWillDisappear");
+    
     [super viewWillDisappear:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    DDLogInfo(@"#####ChatConfirm: viewDidAppear");
+    
     [super viewDidAppear:animated];
     
-//    [self _clockStart];
-//    
-//    [self _checkIsOthersideAlreadyDecided];
+    [self pageWillLoad];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    DDLogInfo(@"#####ChatConfirm: viewDidDisappear");
+    
     [super viewDidDisappear:animated];
     
-//    [self _clockCancel];
+    [self pageWillUnload];
 }
 
 - (void)didReceiveMemoryWarning
@@ -306,8 +312,8 @@
     RHBusinessSession* session = m.businessSession;
     RHMatchedCondition* matchedCondition = session.matchedCondition;
     RHInterestLabel* interestLabel = matchedCondition.interestLabel;
-
-    _viewTitleLabel.text = NSLocalizedString(@"ChatConfirm_Title", nil);
+    NSString* str = [NSString stringWithFormat:NSLocalizedString(@"ChatConfirm_Title", nil), interestLabel.labelName];
+    _viewTitleLabel.text = str;
     
     _selfStatusLabel.text = NSLocalizedString(@"ChatConfirm_SelfStatus_Undecided", nil);
     _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Undecided", nil);
@@ -414,7 +420,7 @@
     [self _clockCancel];
     
     NSTimeInterval interval = 1.0;
-    _timer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(_clockTick) userInfo:nil repeats:YES];
+    _timer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(_clockClick) userInfo:nil repeats:YES];
     NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
     [currentRunLoop addTimer:_timer forMode:NSDefaultRunLoopMode];
     [_timer fire];

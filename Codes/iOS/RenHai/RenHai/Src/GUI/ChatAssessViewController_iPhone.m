@@ -107,7 +107,7 @@
     
     [self.navigationController setNavigationBarHidden:YES];
     
-//    [self resetPage];
+    [self resetPage];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -119,14 +119,14 @@
 {
     [super viewDidAppear:animated];
     
-//    [self _clockStart];
+    [self pageWillLoad];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     
-//    [self _clockCancel];
+    [self pageWillUnload];
 }
 
 - (void)didReceiveMemoryWarning
@@ -370,7 +370,7 @@
     [self _clockCancel];
     
     NSTimeInterval interval = 1.0;
-    _timer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(_clockTick) userInfo:nil repeats:YES];
+    _timer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(_clockClick) userInfo:nil repeats:YES];
     NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
     [currentRunLoop addTimer:_timer forMode:NSDefaultRunLoopMode];
     [_timer fire];

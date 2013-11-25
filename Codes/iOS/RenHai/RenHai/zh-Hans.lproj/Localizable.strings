@@ -108,7 +108,7 @@
 "ChatWait_Cancel_Detail" = "取消匹配，离开人海";
 "ChatWait_Action_Cancel" = "取消";
 
-"ChatConfirm_Title" = "对方的印象卡片";
+"ChatConfirm_Title" = "根据\"%@\"匹配到一个对象";
 "ChatConfirm_SelfStatus_Undecided" = "本方状态：未决定";
 "ChatConfirm_SelfStatus_Agreed" = "本方状态：已同意";
 "ChatConfirm_SelfStatus_Rejected" = "本方状态：已拒绝";

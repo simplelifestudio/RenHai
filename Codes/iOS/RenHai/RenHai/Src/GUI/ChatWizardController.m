@@ -109,10 +109,10 @@
     
     if (nil != presentedVC)
     {
-        if (nil != _currentPage)
-        {
-            [_currentPage pageWillUnload];
-        }
+//        if (nil != _currentPage)
+//        {
+//            [_currentPage pageWillUnload];
+//        }
         
         if ([self containsViewController:presentedVC])
         {
@@ -124,8 +124,8 @@
         }
         
         _currentPage = (id<ChatWizardPage>)presentedVC;
-        [_currentPage resetPage];
-        [_currentPage pageWillLoad];
+//        [_currentPage resetPage];
+//        [_currentPage pageWillLoad];
     }
 }
 

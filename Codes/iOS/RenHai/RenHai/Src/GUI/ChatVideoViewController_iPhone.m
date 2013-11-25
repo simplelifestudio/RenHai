@@ -25,10 +25,6 @@
 #define CORNERRADIUS_VIDEOVIEW 2.0f;
 #define BORDERCOLOR_VIDEOVIEW MAJOR_COLOR_MID
 
-static NSString* const kApiKey = @"34650792";    // Replace with your OpenTok API key
-static NSString* const kSessionId = @"1_MX4zNDU2NjU2Mn5-V2VkIE5vdiAxMyAyMzowMTo1MCBQU1QgMjAxM34wLjcwNzM1MTE1fg"; // Replace with your generated session ID
-static NSString* const kToken = @"T1==cGFydG5lcl9pZD0zNDU2NjU2MiZzZGtfdmVyc2lvbj10YnJ1YnktdGJyYi12MC45MS4yMDExLTAyLTE3JnNpZz1jNzE5MzE3NGZiOTVjZjZmMGNiM2FjNjQ5OGM4ZjdlMGM2YmM2NjNkOnJvbGU9cHVibGlzaGVyJnNlc3Npb25faWQ9MV9NWDR6TkRVMk5qVTJNbjUtVjJWa0lFNXZkaUF4TXlBeU16b3dNVG8xTUNCUVUxUWdNakF4TTM0d0xqY3dOek0xTVRFMWZnJmNyZWF0ZV90aW1lPTEzODQ0MTI1MTYmbm9uY2U9MC4wMjE0MjM4ODcwODEyMzY0MzcmZXhwaXJlX3RpbWU9MTM4NzAwNDUxNyZjb25uZWN0aW9uX2RhdGE9";     // Replace with your generated token (use the Dashboard or an OpenTok server-side library)
-
 @interface ChatVideoViewController_iPhone () <OpenTokDelegate>
 {
     GUIModule* _guiModule;
@@ -88,23 +84,21 @@ static NSString* const kToken = @"T1==cGFydG5lcl9pZD0zNDU2NjU2MiZzZGtfdmVyc2lvbj
     
     [self.navigationController setNavigationBarHidden:YES];
     
-//    [self resetPage];
+    [self resetPage];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
-    [self _disconnectWebRTC];
+    [self pageWillUnload];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-//    [self _checkIsOthersideLost];
-    
-    [self _connectWebRTC];
+    [self pageWillLoad];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -140,7 +134,7 @@ static NSString* const kToken = @"T1==cGFydG5lcl9pZD0zNDU2NjU2MiZzZGtfdmVyc2lvbj
     
     [self _registerNotifications];
     
-//    [self _connectWebRTC];
+    [self _connectWebRTC];
 }
 
 -(void) pageWillUnload
@@ -149,7 +143,7 @@ static NSString* const kToken = @"T1==cGFydG5lcl9pZD0zNDU2NjU2MiZzZGtfdmVyc2lvbj
     
     [self _deactivateAlohaTimer];
     
-//    [self _disconnectWebRTC];
+    [self _disconnectWebRTC];
 }
 
 -(void) onOthersideEndChat
@@ -314,10 +308,13 @@ static NSString* const kToken = @"T1==cGFydG5lcl9pZD0zNDU2NjU2MiZzZGtfdmVyc2lvbj
         NSString* sessionId = webrtc.sessionId;
         NSString* token = webrtc.token;
         
-//        apiKey = kApiKey;
-//        sessionId = kSessionId;
-//        token = kToken;
-    
+        if (STATIC_OPENTOK_ACCOUNT)
+        {
+            apiKey = kApiKey;
+            sessionId = kSessionId;
+            token = kToken;
+        }
+        
         [_webRTCModule connectAndPublishOnWebRTC:apiKey sessionId:sessionId token:token];
     }];
 }
