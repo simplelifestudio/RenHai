@@ -332,6 +332,8 @@
     _rejectChatButton.hidden = NO;
     
     [self _setCountdownSeconds:COUNTDOWN_SECONDS];
+    
+    [_collectionView reloadData];
 }
 
 -(void) pageWillLoad
@@ -369,7 +371,7 @@
     
     [self _clockCancel];
     
-    [self _unbindSession];
+    [self _remoteUnbindSession];
 }
 
 -(void) onOthersideLost
@@ -383,7 +385,7 @@
     
     [self _clockCancel];
     
-    [self _unbindSession];
+    [self _remoteUnbindSession];
 }
 
 #pragma mark - Private Methods
@@ -405,7 +407,6 @@
 -(void)_setupCollectionView
 {
     _collectionView.dataSource = self;
-    
     _collectionView.delegate = self;
     
     UINib* nib = [UINib nibWithNibName:NIB_COLLECTIONCELL_LABEL bundle:nil];
@@ -547,7 +548,7 @@
     }];
 }
 
-- (void) _unbindSession
+- (void) _remoteUnbindSession
 {
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         
