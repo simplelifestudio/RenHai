@@ -131,7 +131,7 @@
 "ChatVideo_PartnerStatus_Lost" = "对方已掉线";
 "ChatVideo_SelfVideo" = "本方视频";
 "ChatVideo_PartnerVideo" = "对方视频";
-"ChatVideo_Action_End" = "结束";
+"ChatVideo_Action_End" = "结束聊天";
 
 "ChatAssess_Action_Continue" = "继续";
 "ChatAssess_Action_Finish" = "结束";

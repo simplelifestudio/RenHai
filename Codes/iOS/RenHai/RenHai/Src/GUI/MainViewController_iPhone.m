@@ -8,6 +8,7 @@
 
 #import "MainViewController_iPhone.h"
 
+#import "CBUIUtils.h"
 #import "GUIModule.h"
 #import "UINavigationController+CBNavigationControllerExtends.h"
 
@@ -51,7 +52,7 @@
     RHNavigationController* navigationVC = _guiModule.navigationController;
     navigationVC.navigationBarHidden = NO;
     navigationVC.navigationBar.translucent = NO;
-    navigationVC.navigationBar.backgroundColor = [UIColor DodgerBlue];
+    navigationVC.navigationBar.backgroundColor = [UIColor whiteColor];
     
     HomeViewController_iPhone* homeVC = _guiModule.homeViewController;
 
@@ -71,15 +72,21 @@
             [navigationVC pushViewController:homeVC animated:NO];
         }
     }
+    
+    [CBUIUtils getKeyWindow].rootViewController = self;
+    [[CBUIUtils getKeyWindow] makeKeyAndVisible];
 }
 
 -(void) switchToChatScene
 {
     ChatWizardController* chatWizard = _guiModule.chatWizardController;
     
-    [self setLeftViewController:nil];
-    [self setRightViewController:nil];
-    [self setFrontViewController:chatWizard];
+//    [self setLeftViewController:nil];
+//    [self setRightViewController:nil];
+//    [self setFrontViewController:chatWizard];
+    
+    [CBUIUtils getKeyWindow].rootViewController = chatWizard;
+    [[CBUIUtils getKeyWindow] makeKeyAndVisible];
     
     [chatWizard wizardProcess:ChatWizardStatus_ChatWait];
 }
@@ -141,6 +148,22 @@
     [viewController viewWillAppear:animated];
 }
 
+#pragma mark - ScreenOrientation Methods
+
+- (BOOL) shouldAutorotate
+{
+	return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+	return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+	return UIInterfaceOrientationPortrait;
+}
 
 #pragma mark - Private Methods
 

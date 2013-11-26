@@ -245,4 +245,35 @@
     }
 }
 
+#pragma mark - ScreenOrientation Methods
+
+- (BOOL) shouldAutorotate
+{
+    BOOL flag = NO;
+    
+    if (self.topViewController == _chatVideoViewController)
+    {
+        flag = YES;
+    }
+    
+	return flag;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+    if (self.topViewController == _chatVideoViewController)
+    {
+        return UIInterfaceOrientationMaskAll;
+    }
+    else
+    {
+        return UIInterfaceOrientationMaskPortrait;
+    }
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+	return UIInterfaceOrientationPortrait;
+}
+
 @end

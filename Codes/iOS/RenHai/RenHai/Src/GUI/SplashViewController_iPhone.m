@@ -212,4 +212,21 @@ static NSTimeInterval s_labelDuration = LABELS_DURATION;
     _studioLabel.alpha = 1.0;
 }
 
+#pragma mark - ScreenOrientation Methods
+
+- (BOOL) shouldAutorotate
+{
+	return NO;
+}
+
+- (NSUInteger)supportedInterfaceOrientations
+{
+	return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+	return UIInterfaceOrientationPortrait;
+}
+
 @end

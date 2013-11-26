@@ -12,9 +12,13 @@
 
 @interface ChatVideoViewController_iPhone : UIViewController <ChatWizardPage>
 
-@property (weak, nonatomic) IBOutlet FUIButton *endChatButton;
+@property (weak, nonatomic) IBOutlet UIView *maskView;
+
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *endChatButtonItem;
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *selfVideoButtonItem;
 
 - (IBAction)didPressEndChatButton:(id)sender;
+- (IBAction)didPressSelfVideoButton:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UILabel *selfStatusLabel;
 @property (weak, nonatomic) IBOutlet UILabel *partnerStatusLabel;

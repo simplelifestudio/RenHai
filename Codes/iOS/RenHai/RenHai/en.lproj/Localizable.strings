@@ -131,7 +131,7 @@
 "ChatVideo_PartnerStatus_Lost" = "Parter Lost";
 "ChatVideo_SelfVideo" = "Your Video";
 "ChatVideo_PartnerVideo" = "Partner Video";
-"ChatVideo_Action_End" = "End";
+"ChatVideo_Action_End" = "End Chat";
 
 "ChatAssess_Action_Continue" = "Continue";
 "ChatAssess_Action_Finish" = "Finish";
