@@ -774,6 +774,7 @@
         {
             RHImpressLabel* label = labelList[position];
             labelName = label.labelName;
+            labelCount = label.assessedCount;
         }
         
         cell.textField.text = labelName;
