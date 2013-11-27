@@ -401,21 +401,21 @@ public class DAOWrapper
 		if (obj instanceof Globalinterestlabel)
 		{
 			Globalinterestlabel label = (Globalinterestlabel) obj;
-			logger.debug("=============Cache Globalinterestlabel: " + label.getInterestLabelName());
+			logger.debug("Cache Globalinterestlabel: " + label.getInterestLabelName());
 		}
 		else if (obj instanceof Globalimpresslabel)
 		{
 			Globalimpresslabel label = (Globalimpresslabel) obj;
-			logger.debug("=============Cache Globalimpresslabel: " + label.getImpressLabelName());
+			logger.debug("Cache Globalimpresslabel: " + label.getImpressLabelName());
 		}
 		else if (obj instanceof Device)
 		{
 			Device device = (Device) obj;
-			logger.debug("=============Cache Device: " + device.getDeviceSn());
+			logger.debug("Cache Device: " + device.getDeviceSn());
 		}
 		else
 		{
-			logger.debug("=============Cache " + obj.getClass().getName());
+			logger.debug("Cache " + obj.getClass().getName());
 		}
 	}
     

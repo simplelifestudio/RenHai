@@ -16,28 +16,22 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
-import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
-import com.simplelife.renhai.server.db.DBModule;
-import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.db.Sessionrecord;
 import com.simplelife.renhai.server.db.Webrtcsession;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
-import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.Consts.DeviceBusinessProgress;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
+import com.simplelife.renhai.server.util.Consts.DeviceBusinessProgress;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.NotificationType;
 import com.simplelife.renhai.server.util.Consts.OperationType;
@@ -64,7 +58,7 @@ public class BusinessSession implements IBusinessSession
 	
 	private Consts.SessionEndReason endReason = Consts.SessionEndReason.Invalid;
 	
-	private Collection<IDeviceWrapper> deviceList; 
+	private List<IDeviceWrapper> deviceList; 
 	
 	// Temp list for saving devices waiting for confirmation
 	//private List<IDeviceWrapper> tmpConfirmDeviceList = new ArrayList<IDeviceWrapper>();
@@ -159,6 +153,8 @@ public class BusinessSession implements IBusinessSession
     	sessionEndTime = System.currentTimeMillis();
 
     	deviceList.clear();
+    	deviceList = null;
+    	
    		progressMap.clear();
    		
    		WebRTCSessionPool.instance.recycleWetRTCSession(webRTCSession);
@@ -195,13 +191,15 @@ public class BusinessSession implements IBusinessSession
     }
     
     @Override
-    public boolean prepareSession(Collection<IDeviceWrapper> deviceList, JSONObject matchCondition)
+    public boolean startSession(List<IDeviceWrapper> deviceList, JSONObject matchCondition)
     {
+    	//logger.debug("===============begin of start session, size of deviceList: {}", deviceList.size());
     	sessionStartTime = System.currentTimeMillis();
     	chatStartTime = 0;
     	chatEndTime = 0;
     	sessionEndTime = 0;
     	this.matchCondition = matchCondition;
+    	this.deviceList = deviceList;
     	
     	if (logger.isDebugEnabled())
     	{
@@ -221,12 +219,26 @@ public class BusinessSession implements IBusinessSession
     	
     	try
     	{
-	    	for (IDeviceWrapper device : deviceList)
+    		//logger.debug("===============size of deviceList:{}", deviceList.size());
+    		//int count= 0;
+    		int size = deviceList.size();
+    		IDeviceWrapper device;
+    		for (int i = 0; i < size; i++)
 	    	{
+    			device = deviceList.get(i);
+    			if (device == null)
+    			{
+    				continue;
+    			}
+    			
+	    		//count++;
+	    		//logger.debug("===============count{}", count);
+	    		//logger.debug("===============change status for device <{}>", device.getDeviceSn());
 	    		updateBusinessProgress(device.getDeviceSn(), Consts.DeviceBusinessProgress.Init);
 	    		device.bindBusinessSession(this);
 	    		device.changeBusinessStatus(DeviceStatus.SessionBound, Consts.StatusChangeReason.BusinessSessionStarted);
 	    	}
+	    	//logger.debug("===============end of change status", deviceList.size());
     	}
     	catch(Exception e)
     	{
@@ -263,10 +275,13 @@ public class BusinessSession implements IBusinessSession
     public void notifyDevices(Collection<IDeviceWrapper> activeDeviceList, IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
     {
     	ServerJSONMessage notify;
-
     	String temp;
-		for (IDeviceWrapper device : activeDeviceList)
+    	//logger.debug("==============begin of notifyDevices, size of DeviceList: {}", activeDeviceList.size());
+    	//int count = 0;
+    	for (IDeviceWrapper device : activeDeviceList)
     	{
+    		//count++;
+    		//logger.debug("==============count: {}, size: {}" + activeDeviceList.size(), count);
 			if (device == triggerDevice)
 			{
 				continue;
@@ -335,6 +350,7 @@ public class BusinessSession implements IBusinessSession
         			, notificationType.name() + ", " + device.getDeviceSn());
         	*/
     	}
+		//logger.debug("==============end of notifyDevices");
 	}
     
     private JSONObject getOperationInfoOfOtherDevices(IDeviceWrapper deviceToBeExcluded)
@@ -599,7 +615,7 @@ public class BusinessSession implements IBusinessSession
     @Override
     public void onDeviceEnter(IDeviceWrapper device)
     {
-    	this.deviceList.add(device);
+    	//this.deviceList.add(device);
     }
     
     @Override
@@ -631,7 +647,7 @@ public class BusinessSession implements IBusinessSession
 			notifyDevices(device, NotificationType.OthersideRejected);
 		}
     
-    	if (deviceList.isEmpty())
+    	if (deviceList == null || deviceList.isEmpty())
     	{
     		if (reason == StatusChangeReason.AssessAndContinue
     				|| reason == StatusChangeReason.AssessAndQuit)
@@ -765,7 +781,8 @@ public class BusinessSession implements IBusinessSession
 				return false;
 			*/
 			default:
-				break;
+				logger.error("Invalid business progress:{}", progress.name());
+				return false;
 		}
 		return true;
 	}

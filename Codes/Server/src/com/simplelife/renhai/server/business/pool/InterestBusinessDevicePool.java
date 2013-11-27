@@ -11,9 +11,12 @@
 
 package com.simplelife.renhai.server.business.pool;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,11 +41,11 @@ import com.simplelife.renhai.server.util.JSONKey;
 public class InterestBusinessDevicePool extends AbstractBusinessDevicePool implements IProductor
 {
     /** */
-    private ConcurrentHashMap<String, ConcurrentLinkedQueue<IDeviceWrapper>> interestLabelDeviceMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, List<IDeviceWrapper>> interestLabelDeviceMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Integer> labelDeviceCountMap = new ConcurrentHashMap<>();
     private ConcurrentLinkedQueue<SessionCoordinator> sessionCoordicatorQueue = new ConcurrentLinkedQueue<>();
     
-    public ConcurrentHashMap<String, ConcurrentLinkedQueue<IDeviceWrapper>> getInterestLabelMap()
+    public ConcurrentHashMap<String, List<IDeviceWrapper>> getInterestLabelMap()
     {
     	return interestLabelDeviceMap;
     }
@@ -55,6 +58,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool imple
 		businessScheduler.bind(this);
 		businessScheduler.setName("InterestScheduler");
 		//businessScheduler.startScheduler();
+		matchWorker.start();
 		
 		setCapacity(GlobalSetting.BusinessSetting.InterestBusinessPoolCapacity);
     }
@@ -211,41 +215,48 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool imple
     		strLabel = label.getGlobalLabel().getInterestLabelName();
     		if (!this.interestLabelDeviceMap.containsKey(strLabel))
     		{
-    			ConcurrentLinkedQueue<IDeviceWrapper> deviceList = new ConcurrentLinkedQueue<IDeviceWrapper>();
+    			//List<IDeviceWrapper> deviceList = Collections.synchronizedList(new ArrayList<IDeviceWrapper>());
+    			List<IDeviceWrapper> deviceList = new ArrayList<IDeviceWrapper>();
     			interestLabelDeviceMap.put(strLabel, deviceList);
     			deviceList.add(device);
     		}
     		else
     		{
-    			ConcurrentLinkedQueue<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(strLabel);
-        		if (deviceList.contains(device))
+    			List<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(strLabel);
+        		synchronized(deviceList)
         		{
-        			logger.warn("Device <{}> has been in list of interest queue: " + strLabel, device.getDeviceSn());
-        			continue;
-        		}
-        		
-        		deviceList.add(device);
-        		
-        		if (deviceList.size() >= deviceCountPerSession)
-        		{
-        			matchDevice(strLabel);
+        			if (deviceList.contains(device))
+            		{
+            			logger.warn("Device <{}> has been in list of interest queue: " + strLabel, device.getDeviceSn());
+            			continue;
+            		}
+        			
+        			//logger.debug("==========before add {}", device.getDeviceSn());
+	        		deviceList.add(device);
+	        		
+	        		if (deviceList.size() >= deviceCountPerSession)
+	        		{
+	        			//logger.debug("==========match devices bases on {}", strLabel);
+	        			if (matchDevice(strLabel, deviceList))
+	        			{
+	        				break;
+	        			}
+	        		}
         		}
     		}
     	}
     }
     
-    private void matchDevice(String interestLabel)
+    private boolean matchDevice(String interestLabel, List<IDeviceWrapper> deviceList)
     {
-    	logger.debug("Match devices bases on interest label: {}", interestLabel);
-    	ConcurrentLinkedQueue<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(interestLabel);
     	int size = deviceList.size();
     	if (size < deviceCountPerSession)
     	{
     		logger.warn("But there is no enough devices with label {}, it may be caused by concurrent operation");
-    		return;
+    		return false;
     	}
     	
-    	ConcurrentLinkedQueue<IDeviceWrapper> tmpList = new ConcurrentLinkedQueue<>();
+    	List<IDeviceWrapper> tmpList = new ArrayList<>();
     	if (size == deviceCountPerSession)
     	{
     		tmpList.addAll(deviceList);
@@ -255,18 +266,22 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool imple
     	{
     		for (int i = 0; i < deviceCountPerSession; i++)
     		{
-    			tmpList.add(deviceList.remove());
+    			tmpList.add(deviceList.remove(0));
     		}
     	}
+    	
+    	logger.debug("============devicelist size after append: {}", tmpList.size());
     	
     	for (IDeviceWrapper device : tmpList)
     	{
     		removeInterestIndex(device);
     	}
     	
+    	logger.debug("============devicelist size before create SessionCoordinator: {}", tmpList.size());
     	SessionCoordinator coor = new SessionCoordinator(tmpList, this, interestLabel);
     	sessionCoordicatorQueue.add(coor);
     	matchWorker.resumeExecution();
+    	return true;
     }
     
     private void removeInterestIndex(IDeviceWrapper device)
@@ -294,20 +309,29 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool imple
     	for (Interestlabelmap label : labelSet)
     	{
     		String strLabel = label.getGlobalLabel().getInterestLabelName();
+    		
     		if (!this.interestLabelDeviceMap.containsKey(strLabel))
     		{
-    			logger.error("Fatal error: Interest device list for label <{}> is non-existent", strLabel);
+    			//logger.error("Fatal error: Interest device list for label <{}> is non-existent", strLabel);
     			continue;
     		}
     		
-    		ConcurrentLinkedQueue<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(strLabel);
-    		if (!deviceList.contains(device))
+    		if (logger.isDebugEnabled())
     		{
-    			logger.warn("Device <{}> is not in list of interest queue: " + strLabel, device.getDeviceSn());
+    			logger.debug("Remove interest label <" + strLabel + "> for device <{}>", device.getDeviceSn());
+    		}
+    		
+    		List<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(strLabel);
+    		if (deviceList == null || !deviceList.contains(device))
+    		{
+    			//logger.warn("Device <{}> is not in list of interest queue: " + strLabel, device.getDeviceSn());
     			continue;
     		}
     		
-    		deviceList.remove(device);
+    		synchronized(deviceList)
+    		{
+    			deviceList.remove(device);
+    		}
     		
     		if (deviceList.isEmpty())
     		{
@@ -348,8 +372,8 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool imple
 		matchStartedDeviceMap.remove(deviceSn);
 		sessionBoundDeviceMap.put(deviceSn, device);
 		
-		device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
-		this.removeInterestIndex(device);
+		//device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
+		//this.removeInterestIndex(device);
 	}
 	
 	@Override
@@ -398,12 +422,12 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool imple
 	
 	private class SessionCoordinator implements Runnable
 	{
-		private Collection<IDeviceWrapper> selectedDevice;
+		private List<IDeviceWrapper> selectedDevice;
 		private InterestBusinessDevicePool pool;
 		private String deviceFoundInterest;
 		
 		public SessionCoordinator(
-				Collection<IDeviceWrapper> selectedDevice, 
+				List<IDeviceWrapper> selectedDevice, 
 				InterestBusinessDevicePool pool,
 				String deviceFoundInterest)
 		{
@@ -415,6 +439,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool imple
 		@Override
 		public void run()
 		{
+			//logger.debug("=============begin of SessionCoordinator.run(), size of deviceList: {}", selectedDevice.size());
 			IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
 			if (session == null)
 			{
@@ -439,7 +464,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool imple
 				return;
 			}
 			
-			if (session.prepareSession(selectedDevice, obj))
+			if (session.startSession(selectedDevice, obj))
 			{
 				DbLogger.increaseInterestMatchCount(deviceFoundInterest);
 				increaseMatchCount(selectedDevice, deviceFoundInterest);

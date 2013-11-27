@@ -29,7 +29,7 @@ public interface IBusinessSession
     public void onDeviceEnter(IDeviceWrapper device);
     
     /** */
-    public boolean prepareSession(Collection<IDeviceWrapper> deviceList, JSONObject matchCondition);
+    public boolean startSession(List<IDeviceWrapper> deviceList, JSONObject matchCondition);
     
     public void endSession();
     

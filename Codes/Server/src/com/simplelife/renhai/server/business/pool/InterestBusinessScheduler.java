@@ -36,7 +36,7 @@ import com.simplelife.renhai.server.util.JSONKey;
 /** */
 public class InterestBusinessScheduler extends AbstractBusinessScheduler
 {
-	private ConcurrentHashMap<String, ConcurrentLinkedQueue<IDeviceWrapper>> interestLabelDeviceMap;
+	private ConcurrentHashMap<String, List<IDeviceWrapper>> interestLabelDeviceMap;
 	private boolean deadMatchFlag = false; 
 	
 	@Override
@@ -91,7 +91,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			return;
 		}
     	
-    	Collection<IDeviceWrapper> selectedDeviceList = new ArrayList<>();
+    	List<IDeviceWrapper> selectedDeviceList = new ArrayList<>();
     	boolean isAllDeviceFound = false;
     	String deviceFoundInterest = null;
     	
@@ -216,7 +216,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
     	}
     }
     
-    private void startSession(Collection<IDeviceWrapper> selectedDevice, String deviceFoundInterest)
+    private void startSession(List<IDeviceWrapper> selectedDevice, String deviceFoundInterest)
     {
     	IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
 		if (session == null)
@@ -242,7 +242,7 @@ public class InterestBusinessScheduler extends AbstractBusinessScheduler
 			return;
 		}
 		
-		if (session.prepareSession(selectedDevice, obj))
+		if (session.startSession(selectedDevice, obj))
 		{
 			DbLogger.increaseInterestMatchCount(deviceFoundInterest);
 			increaseMatchCount(selectedDevice, deviceFoundInterest);

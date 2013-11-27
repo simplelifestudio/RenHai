@@ -40,7 +40,7 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
 			return;
 		}
 		
-		Collection<IDeviceWrapper> selectedDevice = new ConcurrentLinkedQueue<>();
+		List<IDeviceWrapper> selectedDevice = new ArrayList<>();
 		
 		if (deviceCountPerSession == matchStartedDeviceMap.size())
 		{
@@ -72,7 +72,7 @@ public class RandomBusinessScheduler extends AbstractBusinessScheduler
 		}
 		
 		session.bindBusinessDevicePool(this.ownerBusinessPool);
-		if (!session.prepareSession(selectedDevice, null))
+		if (!session.startSession(selectedDevice, null))
 		{
 			recycleDevice(selectedDevice);
 		}
