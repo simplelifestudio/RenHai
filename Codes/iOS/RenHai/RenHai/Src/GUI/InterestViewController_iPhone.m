@@ -372,8 +372,8 @@
                     
                     RHInterestLabel* oLabel = [interestCard getLabelByIndex:position];
                     
-                    RHLabelManageViewController_iPhone* labelManagerViewController = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:oLabel.labelName];
-                    [_guiModule.mainViewController presentPopupViewController:labelManagerViewController animated:YES completion:nil];
+                    RHLabelManageViewController_iPhone* labelManagerVC = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:oLabel.labelName];
+                    [_guiModule.mainViewController presentPopupViewController:labelManagerVC animated:YES completion:nil];
                     
                     break;
                 }

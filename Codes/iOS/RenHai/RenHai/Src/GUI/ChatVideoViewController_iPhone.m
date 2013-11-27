@@ -39,6 +39,7 @@
     
     NSUInteger _countdownSeconds;
     NSTimer* _timer;
+    NSUInteger _count;
     
     NSTimer* _alohaTimer;
     
@@ -56,6 +57,9 @@
     UIPanGestureRecognizer* _panGesturer;
     
     NSTimer* _toolbarDisplayTimer;
+    
+    OTVideoView* _subscriberView;
+    OTVideoView* _publisherView;
 }
 
 @end
@@ -72,6 +76,8 @@
 
 @synthesize endChatButtonItem = _endChatButtonItem;
 @synthesize selfVideoButtonItem = _selfVideoButtonItem;
+
+@synthesize countLabel = _countLabel;
 
 #pragma mark - Public Methods
 
@@ -127,15 +133,34 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
-//    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone)
-//    {
-//        return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
-//    }
-//    else
-//    {
-        return YES;
-//    }
+    return YES;
+}
+
+-(void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
+                                        duration:(NSTimeInterval)duration
+{
+    /*
+    if (toInterfaceOrientation == UIInterfaceOrientationLandscapeLeft)
+    {
+        [_subscriberView setCenter:_parterVideoView.center];
+        [_subscriberView setTransform:CGAffineTransformMakeRotation(M_PI * 1.5)];
+    }
+    else if (toInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    {
+        [_subscriberView setCenter:_parterVideoView.center];
+        [_subscriberView setTransform:CGAffineTransformMakeRotation(M_PI_2)];
+    }
+    else if (toInterfaceOrientation == UIInterfaceOrientationPortraitUpsideDown)
+    {
+        [_subscriberView setCenter:_parterVideoView.center];
+        [_subscriberView setTransform:CGAffineTransformMakeRotation(M_PI)];
+    }
+    else
+    {
+        [_subscriberView setCenter:_parterVideoView.center];
+        [_subscriberView setTransform:CGAffineTransformMakeRotation(M_PI * 2)];
+    }
+    */
 }
 
 #pragma mark - ChatWizardPage
@@ -152,14 +177,18 @@
     _selfVideoView.hidden = !_isSelfVideoOpen;
     
     _isSelfDeciding = NO;
+    
+    _count = 0;
+    [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
 
     [self _setToolbarHidden:YES];
-    
     _selfVideoView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin| UIViewAutoresizingFlexibleLeftMargin;
 }
 
 -(void) pageWillLoad
 {
+    [self _clockStart];
+    
     [self _checkIsOthersideLost];
     
     [self _activateAlohaTimer];
@@ -178,6 +207,8 @@
     [self _disconnectWebRTC];
     
     [self _setToolbarHidden:YES];
+    
+    [self _clockCancel];
 }
 
 -(void) onOthersideEndChat
@@ -251,21 +282,55 @@
 
 -(void) _didPanned:(UIPanGestureRecognizer*) recognizer
 {
-    CGPoint locationTouch = [recognizer locationInView:_maskView];
+    CGPoint locationTouch = [recognizer locationInView:self.view];
     
-    if (CGRectContainsPoint(_parterVideoView.frame, locationTouch))
+    if (CGRectContainsPoint(_selfVideoView.frame, locationTouch))
     {
-        locationTouch = [_selfVideoView convertPoint:locationTouch fromView:_parterVideoView];
+        locationTouch = [_selfVideoView convertPoint:locationTouch fromView:self.view];
         
-        if (recognizer.state == UIGestureRecognizerStateChanged ||
-            recognizer.state == UIGestureRecognizerStateEnded)
+        if (recognizer.state == UIGestureRecognizerStateChanged || recognizer.state == UIGestureRecognizerStateEnded)
         {
-            //注意，这里取得的参照坐标系是该对象的上层View的坐标。
-            CGPoint offset = [recognizer translationInView:_parterVideoView];
-            //通过计算偏移量来设定draggableObj的新坐标
-            [_selfVideoView setCenter:CGPointMake(_selfVideoView.center.x + offset.x, _selfVideoView.center.y + offset.y)];
-            //初始化sender中的坐标位置。如果不初始化，移动坐标会一直积累起来。
-            [recognizer setTranslation:CGPointMake(0, 0) inView:_parterVideoView];
+            UIView* parentView = self.view;
+            CGFloat parentViewWidth = parentView.frame.size.width;
+            CGFloat parentViewHeight = parentView.frame.size.height;
+            
+            UIView* draggedView = _selfVideoView;
+            CGFloat draggedViewCenterX = draggedView.center.x;
+            CGFloat draggedViewCenterY = draggedView.center.y;
+            CGFloat draggedViewWidth = draggedView.frame.size.width;
+            CGFloat draggedViewHeight = draggedView.frame.size.height;
+            
+            //这里取得的参照坐标系是parentView的坐标
+            CGPoint draggedViewOffsetInParentView = [recognizer translationInView:parentView];
+            //通过计算偏移量来设定draggedView的新坐标
+            CGPoint draggedViewNewCenterPoint = CGPointMake(draggedViewCenterX + draggedViewOffsetInParentView.x, draggedViewCenterY + draggedViewOffsetInParentView.y);
+            
+            CGFloat draggedViewWidthHalf = draggedViewWidth / 2;
+            CGFloat draggedViewHeightHalf = draggedViewHeight / 2;
+            
+            //边界保护
+            if (0 > (draggedViewNewCenterPoint.x - draggedViewWidthHalf))
+            {
+                draggedViewNewCenterPoint.x = draggedViewWidthHalf;
+            }
+            else if (parentViewWidth < (draggedViewNewCenterPoint.x + draggedViewWidthHalf))
+            {
+                draggedViewNewCenterPoint.x = parentViewWidth - draggedViewWidthHalf;
+            }
+            
+            if (0 > (draggedViewNewCenterPoint.y - draggedViewHeightHalf))
+            {
+                draggedViewNewCenterPoint.y = draggedViewHeightHalf;
+            }
+            else if (parentViewHeight < (draggedViewNewCenterPoint.y + draggedViewHeightHalf))
+            {
+                draggedViewNewCenterPoint.y = parentViewHeight - draggedViewHeightHalf;
+            }
+            //设定新中心点
+            [draggedView setCenter:draggedViewNewCenterPoint];
+            
+            //初始化sender中的坐标位置。如果不初始化，移动坐标会一直积累起来
+            [recognizer setTranslation:CGPointMake(0, 0) inView:parentView];
         }
     }
 }
@@ -472,6 +537,44 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     }];
 }
 
+- (void) _clockStart
+{
+    [self _clockCancel];
+    
+    NSTimeInterval interval = 1.0;
+    _timer = [NSTimer timerWithTimeInterval:interval target:self selector:@selector(_clockTick) userInfo:nil repeats:YES];
+    NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+    [currentRunLoop addTimer:_timer forMode:NSDefaultRunLoopMode];
+    [_timer fire];
+    
+    _countLabel.hidden = NO;
+}
+
+- (void) _clockTick
+{
+    [self _updateCountLabel];
+    
+    _count++;
+}
+
+- (void) _clockCancel
+{
+    if (nil != _timer)
+    {
+        [_timer invalidate];
+        _timer = nil;
+    }
+    
+    _countLabel.hidden = YES;
+}
+
+- (void) _updateCountLabel
+{
+    [CBAppUtils asyncProcessInMainThread:^(){
+        [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
+    }];
+}
+
 #pragma mark - IBActions
 
 - (IBAction)didPressEndChatButton:(id)sender
@@ -505,18 +608,18 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 -(void) sessionDidReceiveSelfStream
 {
     OpenTokAgent* agent = _webRTCModule.openTokAgent;
-    OTVideoView* publisherView = agent.publisherView;
-    if (nil != publisherView)
+    _publisherView = agent.publisherView;
+    if (nil != _publisherView)
     {
         CGRect superFrame = _selfVideoView.frame;
         CGRect selfFrame = CGRectMake(0, 0, superFrame.size.width, superFrame.size.height);
         
-        [publisherView setFrame:selfFrame];
-        publisherView.layer.borderColor = BORDERCOLOR_VIDEOVIEW.CGColor;
-        publisherView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
-        publisherView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
+        [_publisherView setFrame:selfFrame];
+        _publisherView.layer.borderColor = BORDERCOLOR_VIDEOVIEW.CGColor;
+        _publisherView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
+        _publisherView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
         
-        [_selfVideoView addSubview:publisherView];
+        [_selfVideoView addSubview:_publisherView];
         
         [_selfVideoView setNeedsDisplay];
     }
@@ -552,24 +655,36 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 -(void) subscriberDidConnectToStream
 {
     OpenTokAgent* agent = _webRTCModule.openTokAgent;
-    OTVideoView* subscriberView = agent.subscriberView;
-    if (nil != subscriberView)
+    _subscriberView = agent.subscriberView;
+    if (nil != _subscriberView)
     {
         CGRect superFrame = _parterVideoView.frame;
         CGRect selfFrame = CGRectMake(0, 0, superFrame.size.width, superFrame.size.height);
         
-        [subscriberView setFrame:selfFrame];
-        [_parterVideoView addSubview:subscriberView];
+        [_subscriberView setFrame:selfFrame];
+        [_parterVideoView addSubview:_subscriberView];
         
         [_parterVideoView bringSubviewToFront:_selfVideoView];
         
         [_parterVideoView setNeedsDisplay];
+        
+        [self _clockCancel];
     }
+}
+
+-(void) subscriberDidChangeVideoDimensions:(CGSize)dimensions
+{
+    
 }
 
 -(void) subscriberDidFailWithError
 {
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Failed", nil);
+}
+
+-(void) subscriberDidChangeVideoDimensions
+{
+    
 }
 
 @end

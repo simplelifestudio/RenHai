@@ -73,6 +73,8 @@
 #define REUSABLEVIEW_ID_ADDIMPRESSLABELSHEADERVIEW @"AddImpressLabelsHeaderView"
 #define REUSABLEVIEW_ID_EXISTIMPRESSLABELSHEADERVIEW @"ExistImpressLabelsHeaderView"
 
+#define NIB_CHATVIDEOVIEWCONTROLLER @"ChatVideoViewController_iPhone"
+
 #define NIB_IMPRESSLABELSHEADERVIEW @"ImpressLabelsHeaderView_iPhone"
 #define NIB_ADDIMPRESSLABELSHEADERVIEW @"ChatAssessAddImpressLabelsHeaderView_iPhone"
 #define NIB_EXISTIMPRESSLABELSHEADERVIEW @"ChatAssessExistImpressLabelsHeaderView_iPhone"
@@ -95,7 +97,7 @@
 
 #define HELPSCREEN_DISPLAY_SECONDS 9.0f
 
-#define SPLASHVIEW_HIDE 0
+#define SPLASHVIEW_HIDE 1
 
 #define SCREEN_ALWAYS_ON 1
 
