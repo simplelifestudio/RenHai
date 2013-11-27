@@ -959,30 +959,30 @@
         RHMessage* requestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_InterestLabelListSync device:device info:nil];
         
         [_commModule serverDataSyncRequest:requestMessage
-                    successCompletionBlock:^(NSDictionary* serverDic){
-                        @try
-                        {
-                            [server fromJSONObject:serverDic];
-                            
-                            [CBAppUtils asyncProcessInMainThread:^(){
-                                _allowCloneLabel = NO;
-                                [self _refreshServerInterestLabelsView];
-                            }];
-                        }
-                        @catch (NSException *exception)
-                        {
-                            DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
-                        }
-                        @finally
-                        {
-                            
-                        }
-                    }
-                    failureCompletionBlock:^(){
-                    }
-                      afterCompletionBlock:^(){
-                      }
-         ];
+            successCompletionBlock:^(NSDictionary* serverDic){
+                @try
+                {
+                    [server fromJSONObject:serverDic];
+                    
+                    [CBAppUtils asyncProcessInMainThread:^(){
+                        _allowCloneLabel = NO;
+                        [self _refreshServerInterestLabelsView];
+                    }];
+                }
+                @catch (NSException *exception)
+                {
+                    DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+                }
+                @finally
+                {
+                    
+                }
+            }
+            failureCompletionBlock:^(){
+            }
+            afterCompletionBlock:^(){
+            }
+        ];
     }];
 }
 

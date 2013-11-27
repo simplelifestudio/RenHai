@@ -104,6 +104,7 @@
 "ChatWait_WaitForMatch_Detail" = "Matching strangers with similar interests...";
 "ChatWait_Matched" = "Stranger Matched";
 "ChatWait_Matched_Detail" = "A matched stranger found";
+"ChatWait_Label_Default" = "RenHai";
 "ChatWait_Cancel" = "Cancel Matching";
 "ChatWait_Cancel_Detail" = "Matching cancelled";
 "ChatWait_Action_Cancel" = "Cancel";

@@ -10,6 +10,8 @@
 #import "CBSharedInstance.h"
 #import "CBHUDAgent.h"
 
+#import "GUIStyle.h"
+
 #import "ConnectViewController_iPhone.h"
 #import "MainViewController_iPhone.h"
 #import "LeftBarViewController_iPhone.h"
