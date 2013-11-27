@@ -523,7 +523,7 @@
                 NSString* labelName = cell.labelName;
                 
                 BOOL hasLabel = [_addImpressLabelNames containsObject:labelName];
-                BOOL isFull = (_addImpressLabelNames.count >= EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS);
+                BOOL isFull = (_addImpressLabelNames.count >= ADDIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_ADDIMPRESSLABELS);
                 _allowCloneLabel = (hasLabel || isFull) ? NO : YES;
             }
             else
@@ -564,8 +564,8 @@
                 {
                     NSString* labeName = _addImpressLabelNames[position];
                     
-                    RHLabelManageViewController_iPhone* labelManagerViewController = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:labeName];
-                    [_guiModule.mainViewController presentPopupViewController:labelManagerViewController animated:YES completion:nil];
+                    RHLabelManageViewController_iPhone* labelManagerVC = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:labeName];
+                    [_guiModule.chatWizardController presentPopupViewController:labelManagerVC animated:YES completion:nil];
                     
                     break;
                 }
@@ -897,12 +897,12 @@
     
     [self _refershAddImpressLabelsView];
     
-    [_guiModule.mainViewController dismissPopupViewControllerAnimated:YES completion:nil];
+    [_guiModule.chatWizardController dismissPopupViewControllerAnimated:YES completion:nil];
 }
 
 -(void) didLabelManageCancel
 {
-    [_guiModule.mainViewController dismissPopupViewControllerAnimated:YES completion:nil];
+    [_guiModule.chatWizardController dismissPopupViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - ChatAssessAddImpressLabelsHeaderViewDelegate
@@ -910,7 +910,7 @@
 -(void) didCreateImpressLabel
 {
     RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
-    [_guiModule.mainViewController presentPopupViewController:labelManageVC animated:YES completion:nil];
+    [_guiModule.chatWizardController presentPopupViewController:labelManageVC animated:YES completion:nil];
 }
 
 -(void) didDeleteImpressLabel
