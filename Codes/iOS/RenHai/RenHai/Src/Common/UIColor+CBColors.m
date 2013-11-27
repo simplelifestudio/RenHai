@@ -563,4 +563,49 @@
     return [UIColor colorWithHexCode:@"FF7F50"];
 }
 
++(UIColor*) Grey11
+{
+    return [UIColor colorWithHexCode:@"1C1C1C"];
+}
+
++(UIColor*) Grey21
+{
+    return [UIColor colorWithHexCode:@"1C1C1C"];
+}
+
++(UIColor*) Grey31
+{
+    return [UIColor colorWithHexCode:@"4F4F4F"];
+}
+
++(UIColor*) Grey41
+{
+    return [UIColor colorWithHexCode:@"696969"];
+}
+
++(UIColor*) Grey51
+{
+    return [UIColor colorWithHexCode:@"828282"];
+}
+
++(UIColor*) Grey61
+{
+    return [UIColor colorWithHexCode:@"9C9C9C"];
+}
+
++(UIColor*) Grey71
+{
+    return [UIColor colorWithHexCode:@"B5B5B5"];
+}
+
++(UIColor*) Grey81
+{
+    return [UIColor colorWithHexCode:@"CFCFCF"];
+}
+
++(UIColor*) Grey91
+{
+    return [UIColor colorWithHexCode:@"E8E8E8"];
+}
+
 @end
