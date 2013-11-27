@@ -28,19 +28,19 @@
 #define COCOAPODS_POD_AVAILABLE_CocoaLumberjack
 #define COCOAPODS_VERSION_MAJOR_CocoaLumberjack 1
 #define COCOAPODS_VERSION_MINOR_CocoaLumberjack 6
-#define COCOAPODS_VERSION_PATCH_CocoaLumberjack 3
+#define COCOAPODS_VERSION_PATCH_CocoaLumberjack 4
 
 // CocoaLumberjack/Core
 #define COCOAPODS_POD_AVAILABLE_CocoaLumberjack_Core
 #define COCOAPODS_VERSION_MAJOR_CocoaLumberjack_Core 1
 #define COCOAPODS_VERSION_MINOR_CocoaLumberjack_Core 6
-#define COCOAPODS_VERSION_PATCH_CocoaLumberjack_Core 3
+#define COCOAPODS_VERSION_PATCH_CocoaLumberjack_Core 4
 
 // CocoaLumberjack/Extensions
 #define COCOAPODS_POD_AVAILABLE_CocoaLumberjack_Extensions
 #define COCOAPODS_VERSION_MAJOR_CocoaLumberjack_Extensions 1
 #define COCOAPODS_VERSION_MINOR_CocoaLumberjack_Extensions 6
-#define COCOAPODS_VERSION_PATCH_CocoaLumberjack_Extensions 3
+#define COCOAPODS_VERSION_PATCH_CocoaLumberjack_Extensions 4
 
 // DraggableCollectionView
 #define COCOAPODS_POD_AVAILABLE_DraggableCollectionView
@@ -54,11 +54,23 @@
 #define COCOAPODS_VERSION_MINOR_FlatUIKit 2
 #define COCOAPODS_VERSION_PATCH_FlatUIKit 0
 
+// FloatingClouds
+#define COCOAPODS_POD_AVAILABLE_FloatingClouds
+#define COCOAPODS_VERSION_MAJOR_FloatingClouds 0
+#define COCOAPODS_VERSION_MINOR_FloatingClouds 1
+#define COCOAPODS_VERSION_PATCH_FloatingClouds 1
+
 // GHUnitIOS
 #define COCOAPODS_POD_AVAILABLE_GHUnitIOS
 #define COCOAPODS_VERSION_MAJOR_GHUnitIOS 0
 #define COCOAPODS_VERSION_MINOR_GHUnitIOS 5
 #define COCOAPODS_VERSION_PATCH_GHUnitIOS 8
+
+// KXKiOS7ColorsAndGradients
+#define COCOAPODS_POD_AVAILABLE_KXKiOS7ColorsAndGradients
+#define COCOAPODS_VERSION_MAJOR_KXKiOS7ColorsAndGradients 1
+#define COCOAPODS_VERSION_MINOR_KXKiOS7ColorsAndGradients 0
+#define COCOAPODS_VERSION_PATCH_KXKiOS7ColorsAndGradients 0
 
 // MBProgressHUD
 #define COCOAPODS_POD_AVAILABLE_MBProgressHUD
