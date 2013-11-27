@@ -251,7 +251,7 @@ ChatWaitStatus;
         }
         else
         {
-            NSAssert(NO, @"Failed to leave pool!");
+
         }
     }];
 }
