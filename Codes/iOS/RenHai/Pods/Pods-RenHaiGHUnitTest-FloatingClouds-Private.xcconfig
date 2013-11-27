@@ -1,0 +1,5 @@
+#include "Pods-RenHaiGHUnitTest-FloatingClouds.xcconfig"
+GCC_PREPROCESSOR_DEFINITIONS = COCOAPODS=1
+HEADER_SEARCH_PATHS = "${PODS_ROOT}/BuildHeaders" "${PODS_ROOT}/BuildHeaders/FloatingClouds" "${PODS_ROOT}/Headers" "${PODS_ROOT}/Headers/AFNetworking" "${PODS_ROOT}/Headers/AutoScrollLabel" "${PODS_ROOT}/Headers/CWPopup" "${PODS_ROOT}/Headers/CocoaLumberjack" "${PODS_ROOT}/Headers/DraggableCollectionView" "${PODS_ROOT}/Headers/FlatUIKit" "${PODS_ROOT}/Headers/FloatingClouds" "${PODS_ROOT}/Headers/GHUnitIOS" "${PODS_ROOT}/Headers/KXKiOS7ColorsAndGradients" "${PODS_ROOT}/Headers/MBProgressHUD" "${PODS_ROOT}/Headers/OBShapedButton" "${PODS_ROOT}/Headers/OpenTokSDK-WebRTC" "${PODS_ROOT}/Headers/PKRevealController" "${PODS_ROOT}/Headers/Reachability" "${PODS_ROOT}/Headers/SSKeychain" "${PODS_ROOT}/Headers/SocketRocket"
+OTHER_LDFLAGS = -ObjC ${PODS_RENHAIGHUNITTEST_FLOATINGCLOUDS_OTHER_LDFLAGS}
+PODS_ROOT = ${SRCROOT}
