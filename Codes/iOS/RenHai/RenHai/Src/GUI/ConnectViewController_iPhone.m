@@ -706,6 +706,7 @@ ConnectStatus;
     _isAppDataSyncSuccess = NO;
     _isAppDataUpdateNecessary = NO;
     _isAppDataSyncSuccess = NO;
+    _isAppDataUpdateSuccess = NO;
     _isServerDataSyncSuccess = NO;
     
     _timerStartOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_timerStart) object:nil];
