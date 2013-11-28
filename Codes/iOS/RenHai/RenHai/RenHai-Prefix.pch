@@ -13,6 +13,7 @@
     #import <Foundation/Foundation.h>
 
     #import "CBAppUtils.h"
+    #import "CBUIUtils.h"
 
     #import "FlatUIKit.h"
     #import "UIColor+CBColors.h"

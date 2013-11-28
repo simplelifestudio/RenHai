@@ -909,8 +909,9 @@
 
 -(void) didCreateImpressLabel
 {
+    UIViewController* rootVC = [CBUIUtils getRootController];
     RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
-    [_guiModule.chatWizardController presentPopupViewController:labelManageVC animated:YES completion:nil];
+    [rootVC presentPopupViewController:labelManageVC animated:YES completion:nil];
 }
 
 -(void) didDeleteImpressLabel

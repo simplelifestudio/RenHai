@@ -804,8 +804,9 @@
 
 -(void) didCreateInterestLabel
 {
+    UIViewController* rootVC = [CBUIUtils getRootController];
     RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
-    [_guiModule.mainViewController presentPopupViewController:labelManageVC animated:YES completion:nil];
+    [rootVC presentPopupViewController:labelManageVC animated:YES completion:nil];
 }
 
 -(void) didDeleteInterestLabel
