@@ -73,7 +73,7 @@
     else
     {
         NSArray* sortedImpressLabelList = self.impressLabelList;
-        NSRange subRange = NSMakeRange(0, top - 1);
+        NSRange subRange = NSMakeRange(0, top);
         NSArray* subLabelList = [sortedImpressLabelList subarrayWithRange:subRange];
         [topList addObjectsFromArray:subLabelList]; 
     }
