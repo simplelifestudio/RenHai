@@ -236,6 +236,17 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
                   canMoveItemAtIndexPath:indexPath]) {
                 return;
             }
+            
+            // Updated by RenHai
+            // {
+            NSArray* selectedIndexPathes = self.collectionView.indexPathsForSelectedItems;
+            for (NSIndexPath* p in selectedIndexPathes)
+            {
+                [self.collectionView deselectItemAtIndexPath:p animated:NO];
+            }
+            [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            // }
+            
             // Create mock cell to drag around
             UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
             cell.highlighted = NO;
