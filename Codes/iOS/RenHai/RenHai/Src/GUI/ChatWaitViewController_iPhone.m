@@ -142,6 +142,8 @@ ChatWaitStatus;
     [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
 
     [self _computeLabelCloudView];
+    
+    [_actionButton setTitle:NSLocalizedString(@"ChatWait_Action_Cancel", nil) forState:UIControlStateNormal];
 }
 
 -(void) pageWillLoad
