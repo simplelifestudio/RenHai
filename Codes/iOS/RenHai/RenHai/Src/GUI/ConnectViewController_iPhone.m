@@ -169,7 +169,8 @@ ConnectStatus;
         {
             UIViewController* rootVC = [CBUIUtils getRootController];
             MainViewController_iPhone* mainVC = _guiModule.mainViewController;
-            [mainVC dismissPopupViewControllerAnimated:NO completion:nil];
+//            [mainVC dismissPopupViewControllerAnimated:NO completion:nil];
+            [rootVC dismissPopupViewControllerAnimated:NO completion:nil];
             
             [self _clockCancel];
             
@@ -186,7 +187,10 @@ ConnectStatus;
             }
             
             [self dismissViewControllerAnimated:NO completion:^(){
-                [mainVC resignPresentationModeEntirely:YES animated:NO completion:nil];
+                if (rootVC == mainVC)
+                {
+                    [mainVC resignPresentationModeEntirely:YES animated:NO completion:nil];
+                }
             }];
             
             if (rootVC != mainVC)

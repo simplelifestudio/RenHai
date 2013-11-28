@@ -13,7 +13,7 @@
 #import "GUIModule.h"
 #import "CommunicationModule.h"
 
-#define ALLOW_CHATVIDEO_ROTATION 1
+#define ALLOW_CHATVIDEO_ROTATION 0
 
 @interface ChatWizardController ()
 {

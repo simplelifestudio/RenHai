@@ -73,8 +73,7 @@
         }
     }
     
-    [CBUIUtils getKeyWindow].rootViewController = self;
-    [[CBUIUtils getKeyWindow] makeKeyAndVisible];
+    [CBUIUtils setRootController:self];
 }
 
 -(void) switchToChatScene
@@ -85,8 +84,7 @@
 //    [self setRightViewController:nil];
 //    [self setFrontViewController:chatWizard];
     
-    [CBUIUtils getKeyWindow].rootViewController = chatWizard;
-    [[CBUIUtils getKeyWindow] makeKeyAndVisible];
+    [CBUIUtils setRootController:chatWizard];
     
     [chatWizard wizardProcess:ChatWizardStatus_ChatWait];
 }

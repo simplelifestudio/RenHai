@@ -364,43 +364,6 @@ ChatWaitStatus;
     }];
 }
 
-- (void) _updateInfoTextView:(NSString*) info
-{
-    if (nil == _consoleInfo)
-    {
-        _consoleInfo = [NSMutableString string];
-        
-        NSString* originText = _infoTextView.text;
-        if (nil != originText && 0 < originText.length)
-        {
-            [_consoleInfo appendString:originText];
-            [_consoleInfo appendString:@"\n"];
-        }
-    }
-    else
-    {
-        _consoleInfo = [NSMutableString string];
-    }
-    
-    if (nil != info && 0 < info.length)
-    {
-        [_consoleInfo appendString:info];
-        [_consoleInfo appendString:@"\n"];
-        
-        [_infoTextView setText:_consoleInfo];
-    }
-    else
-    {
-        [_infoTextView setText:@""];
-    }
-}
-
-- (void) _clearInfoTextView
-{
-    _consoleInfo = [NSMutableString string];
-    [self _updateInfoTextView:nil];
-}
-
 - (void) _updateUIWithChatWaitStatus:(ChatWaitStatus) status
 {
     NSString* infoText = nil;
@@ -444,9 +407,9 @@ ChatWaitStatus;
     _infoLabel.text = infoText;
     if (isTextClear)
     {
-        [self _clearInfoTextView];
+
     }
-    [self _updateInfoTextView:infoDetailText];
+
     _actionButton.titleLabel.text = actionButtonTitle;
     _actionButton.hidden = isActionButtonHide;
 }
