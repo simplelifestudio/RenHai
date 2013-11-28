@@ -481,18 +481,18 @@
     }
     else if (collectionView == _serverInterestLabelsView)
     {
-        NSUInteger requrireCount = 0;
+        NSUInteger requireCount = 0;
         if (IS_IPHONE5)
         {
-            requrireCount = SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_4;
+            requireCount = SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_4;
         }
         else if (IS_IPHONE4_OR_4S)
         {
-            requrireCount = SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_3_5;
+            requireCount = SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_3_5;
         }
         else if (IS_IPAD1_OR_2_OR_MINI)
         {
-            requrireCount = SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_3_5;
+            requireCount = SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_3_5;
         }
         
         switch (section)
@@ -503,7 +503,7 @@
                 RHServerInterestLabelList* interestLabelList = server.interestLabelList;
                 NSArray* currentInterestLabels = interestLabelList.current;
                 
-                itemsCount = (currentInterestLabels.count <= requrireCount) ? currentInterestLabels.count : requrireCount;
+                itemsCount = (currentInterestLabels.count <= requireCount) ? currentInterestLabels.count : requireCount;
 
                 break;
             }

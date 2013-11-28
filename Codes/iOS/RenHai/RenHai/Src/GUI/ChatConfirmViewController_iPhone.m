@@ -27,7 +27,8 @@
 #define SECTION_ASSESSES_ITEMCOUNT 6
 
 #define SECTION_INDEX_LABELS 1
-#define SECTION_IMPRESSES_ITEMCOUNT 6
+#define SECTION_IMPRESSES_ITEMCOUNT_4 9
+#define SECTION_IMPRESSES_ITEMCOUNT_3_5 6
 
 #define COUNTDOWN_SECONDS 30
 
@@ -137,6 +138,20 @@
     RHProfile* profile = device.profile;
     RHImpressCard* impressCard = profile.impressCard;
     
+    NSUInteger requireCount = 0;
+    if (IS_IPHONE5)
+    {
+        requireCount = SECTION_IMPRESSES_ITEMCOUNT_4;
+    }
+    else if (IS_IPHONE4_OR_4S)
+    {
+        requireCount = SECTION_IMPRESSES_ITEMCOUNT_3_5;
+    }
+    else if (IS_IPAD1_OR_2_OR_MINI)
+    {
+        requireCount = SECTION_IMPRESSES_ITEMCOUNT_3_5;
+    }
+    
     switch (section)
     {
         case SECTION_INDEX_ASSESSES:
@@ -145,7 +160,7 @@
         }
         case SECTION_INDEX_LABELS:
         {
-            NSArray* impressLabelList = [impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
+            NSArray* impressLabelList = [impressCard topImpressLabelList:requireCount];
             return  impressLabelList.count;
         }
         default:
@@ -169,6 +184,21 @@
     NSString* labelCountStr = nil;
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
+
+    NSUInteger requireCount = 0;
+    if (IS_IPHONE5)
+    {
+        requireCount = SECTION_IMPRESSES_ITEMCOUNT_4;
+    }
+    else if (IS_IPHONE4_OR_4S)
+    {
+        requireCount = SECTION_IMPRESSES_ITEMCOUNT_3_5;
+    }
+    else if (IS_IPAD1_OR_2_OR_MINI)
+    {
+        requireCount = SECTION_IMPRESSES_ITEMCOUNT_4;
+    }
+    
     switch (section)
     {
         case SECTION_INDEX_ASSESSES:
@@ -219,7 +249,7 @@
         }
         case SECTION_INDEX_LABELS:
         {
-            NSArray* impressLabelList = [impressCard topImpressLabelList:SECTION_IMPRESSES_ITEMCOUNT];
+            NSArray* impressLabelList = [impressCard topImpressLabelList:requireCount];
             
             RHImpressLabel* impressLabel = nil;
             if (0 < impressLabelList.count && row < impressLabelList.count)

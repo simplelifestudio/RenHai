@@ -101,18 +101,18 @@
     }
     else if (collectionView == _impressLabelsView)
     {
-        NSUInteger requrireCount = 0;
+        NSUInteger requireCount = 0;
         if (IS_IPHONE5)
         {
-            requrireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_4;
+            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_4;
         }
         else if (IS_IPHONE4_OR_4S)
         {
-            requrireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
+            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
         }
         else if (IS_IPAD1_OR_2_OR_MINI)
         {
-            requrireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
+            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
         }
         
         switch (section)
@@ -123,7 +123,7 @@
                 RHProfile* profile = device.profile;
                 RHImpressCard* impressCard = profile.impressCard;
                 NSArray* impressLabels = impressCard.impressLabelList;
-                itemCount = (impressLabels.count <= requrireCount) ? impressLabels.count : requrireCount;
+                itemCount = (impressLabels.count <= requireCount) ? impressLabels.count : requireCount;
                 break;
             }
             default:
@@ -209,21 +209,21 @@
     }
     else if (collectionView == _impressLabelsView)
     {
-        NSUInteger requrireCount = 0;
+        NSUInteger requireCount = 0;
         if (IS_IPHONE5)
         {
-            requrireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_4;
+            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_4;
         }
         else if (IS_IPHONE4_OR_4S)
         {
-            requrireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
+            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
         }
         else if (IS_IPAD1_OR_2_OR_MINI)
         {
-            requrireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
+            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
         }
         
-        NSArray* impressLabelList = [impressCard topImpressLabelList:requrireCount];
+        NSArray* impressLabelList = [impressCard topImpressLabelList:requireCount];
         
         switch (section)
         {
