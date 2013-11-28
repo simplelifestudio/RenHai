@@ -27,7 +27,8 @@
 #define INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS 6
 
 #define SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS 0
-#define SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS 60
+#define SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_3_5 9
+#define SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_4 12
 
 @interface InterestViewController_iPhone () <InterestLabelsHeaderViewDelegate, ServerInterestLabelsHeaderViewDelegate, RHLabelManageDelegate, UIGestureRecognizerDelegate>
 {
@@ -292,15 +293,16 @@
             {
                 [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
             }
-            
-            NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {
-                [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
         }
+        [self _refreshInterestLabelsHeaderViewActions];        
         
-        [self _refreshInterestLabelsHeaderViewActions];
+        NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
+        for (NSIndexPath* indexPath in selectedIndexPathes)
+        {
+            [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+        }
+        _allowCloneLabel = NO;
+        [self _refreshServerInterestLabelsHeaderViewActions];
     }
     else if (CGRectContainsPoint(_serverInterestLabelsView.frame, locationTouch))
     {
@@ -479,6 +481,20 @@
     }
     else if (collectionView == _serverInterestLabelsView)
     {
+        NSUInteger requrireCount = 0;
+        if (IS_IPHONE5)
+        {
+            requrireCount = SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_4;
+        }
+        else if (IS_IPHONE4_OR_4S)
+        {
+            requrireCount = SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_3_5;
+        }
+        else if (IS_IPAD1_OR_2_OR_MINI)
+        {
+            requrireCount = SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_3_5;
+        }
+        
         switch (section)
         {
             case SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS:
@@ -487,7 +503,7 @@
                 RHServerInterestLabelList* interestLabelList = server.interestLabelList;
                 NSArray* currentInterestLabels = interestLabelList.current;
                 
-                itemsCount = (currentInterestLabels.count <= SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS) ? currentInterestLabels.count : SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS;
+                itemsCount = (currentInterestLabels.count <= requrireCount) ? currentInterestLabels.count : requrireCount;
 
                 break;
             }
@@ -707,6 +723,13 @@
         {
             return;
         }
+        
+//        NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
+//        for (NSIndexPath* indexPath in selectedIndexPathes)
+//        {
+//            [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+//        }
+//        [_interestLabelsView selectItemAtIndexPath:fromIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
         
         switch (fromSection)
         {
