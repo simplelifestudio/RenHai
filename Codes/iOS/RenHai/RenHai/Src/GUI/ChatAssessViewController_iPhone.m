@@ -63,10 +63,6 @@
     
     NSUInteger _assessLabelPosition;
     
-    volatile BOOL _selfAssessedFlag;
-    
-    volatile BOOL _isDeciding;
-    
     BOOL _allowCloneLabel;
     
     UITapGestureRecognizer* _singleTapGesturer;
@@ -145,10 +141,6 @@
 {
     _continueButton.hidden = NO;
     _finishButton.hidden = NO;
-    
-    _selfAssessedFlag = NO;
-    
-    _isDeciding = NO;
     
     _assessLabelPosition = 0;
     
@@ -322,19 +314,7 @@
     _finishButton.hidden = YES;
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
-        
-        @synchronized(self)
-        {
-            if (_isDeciding)
-            {
-                return;
-            }
-            else
-            {
-                _isDeciding = YES;
-            }
-        }
-        
+
         RHDevice* selfDevice = _userDataModule.device;
         
         RHBusinessSession* businessSession = _userDataModule.businessSession;
@@ -352,7 +332,6 @@
         
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
-                _selfAssessedFlag = YES;
                 
                 switch (requestType)
                 {
@@ -375,7 +354,7 @@
                 }
             }
             failureCompletionBlock:^(){
-                _selfAssessedFlag = NO;
+
             }
             afterCompletionBlock:nil
          ];
@@ -421,10 +400,7 @@
 
 - (void) _clockCountFinished
 {
-    if (!_selfAssessedFlag)
-    {
-//        [self _remoteUpdatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndQuit];
-    }
+
 }
 
 - (void) _setCountdownSeconds:(NSUInteger) seconds

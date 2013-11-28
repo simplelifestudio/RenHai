@@ -173,8 +173,7 @@
     _selfEndChatFlag = NO;
     _partnerEndChatFlag = NO;
     
-    _isSelfVideoOpen = NO;
-    _selfVideoView.hidden = !_isSelfVideoOpen;
+    [self _resetSelfVideoToClose];
     
     _isSelfDeciding = NO;
     
@@ -365,6 +364,7 @@
 -(void) _remoteEndChat
 {
     [CBAppUtils asyncProcessInMainThread:^(){
+        [self _resetSelfVideoToClose];
         _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Disconnected", nil);
     }];
     
@@ -575,6 +575,18 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     }];
 }
 
+- (void) _resetSelfVideoToClose
+{
+    _isSelfVideoOpen = NO;
+    _selfVideoView.hidden = !_isSelfVideoOpen;
+}
+
+- (void) _switchSelfVideoOpenOrClose
+{
+    _isSelfVideoOpen = !_isSelfVideoOpen;
+    _selfVideoView.hidden = !_isSelfVideoOpen;
+}
+
 #pragma mark - IBActions
 
 - (IBAction)didPressEndChatButton:(id)sender
@@ -584,8 +596,7 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 - (IBAction)didPressSelfVideoButton:(id)sender
 {
-    _isSelfVideoOpen = !_isSelfVideoOpen;
-    _selfVideoView.hidden = !_isSelfVideoOpen;
+    [self _switchSelfVideoOpenOrClose];
 }
 
 #pragma mark - OpenTokDelegate
