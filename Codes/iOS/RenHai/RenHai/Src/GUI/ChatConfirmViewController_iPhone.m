@@ -306,12 +306,12 @@
         {
             case SECTION_INDEX_ASSESSES:
             {
-                headerView.titleLabel.text = NSLocalizedString(@"Impress_Assesses", nil);
+                headerView.titleLabel.text = NSLocalizedString(@"ChatConfirm_ImpressAssesses", nil);
                 break;
             }
             case SECTION_INDEX_LABELS:
             {
-                headerView.titleLabel.text = NSLocalizedString(@"Impress_Labels", nil);
+                headerView.titleLabel.text = NSLocalizedString(@"ChatConfirm_ImpressLabels", nil);
                 break;
             }
             default:
