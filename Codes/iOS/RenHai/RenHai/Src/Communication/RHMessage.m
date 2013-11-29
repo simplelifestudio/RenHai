@@ -580,16 +580,19 @@
     
     if (nil != businessSessionNotificationMessage)
     {
-        NSDictionary* header = businessSessionNotificationMessage.header;
+        NSDictionary* header = [[NSMutableDictionary alloc] initWithDictionary:businessSessionNotificationMessage.header copyItems:YES];
         NSString* messageSn = [header objectForKey:MESSAGE_KEY_MESSAGESN];
         
         header = [RHMessage constructMessageHeader:MessageType_AppResponse messageId:MessageId_BusinessSessionNotificationResponse messageSn:messageSn deviceId:device.deviceId deviceSn:device.deviceSn];
         
-        NSDictionary* body = businessSessionNotificationMessage.body;
+        NSDictionary* body = [[NSMutableDictionary alloc] initWithDictionary:businessSessionNotificationMessage.body copyItems:YES];
         
         BusinessSessionOperationValue operationValue = BusinessSessionOperationValue_Success;
         NSNumber* oOperationValue = [NSNumber numberWithInt:operationValue];
         [body setValue:oOperationValue forKey:MESSAGE_KEY_OPERATIONVALUE];
+
+        id oNull = [NSNull null];
+        [body setValue:oNull forKey:MESSAGE_KEY_OPERATIONINFO];
         
         response = [RHMessage constructWithMessageHeader:header messageBody:body];
     }
