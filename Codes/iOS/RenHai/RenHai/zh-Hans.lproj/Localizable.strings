@@ -149,4 +149,4 @@
 "LabelManage_ModifyLabel" = "编辑";
 "LabelManage_Action_Save" = "保存";
 "LabelManage_Action_Cancel" = "取消";
-"LabelManage_LengthLimit" = "有效长度：5个汉字";
+"LabelManage_LengthLimit" = "5个汉字内有效";
