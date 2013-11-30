@@ -310,8 +310,10 @@
 
 -(void)_remoteUpdatePartnerImpressCardWithType:(BusinessSessionRequestType) requestType
 {
-    _continueButton.hidden = YES;
-    _finishButton.hidden = YES;
+    [CBAppUtils asyncProcessInMainThread:^(){
+        _continueButton.hidden = YES;
+        _finishButton.hidden = YES;
+    }];
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
 
@@ -356,7 +358,12 @@
             failureCompletionBlock:^(){
 
             }
-            afterCompletionBlock:nil
+            afterCompletionBlock:^(){
+                [CBAppUtils asyncProcessInMainThread:^(){
+                    _continueButton.hidden = NO;
+                    _finishButton.hidden = NO;
+                }];
+            }
          ];
     }];
 }

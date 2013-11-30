@@ -20,7 +20,7 @@
 #define DELAY_ENDCHAT 1.0f
 
 #define INTERVAL_TOOLBARDISPLAYTICK 1
-#define INTERVAL_ALOHA 60
+#define INTERVAL_ALOHA 5
 
 #define _TOOLBAR_DISPLAY_PERIOD 3
 
@@ -45,6 +45,7 @@
     
     volatile BOOL _selfEndChatFlag;
     volatile BOOL _partnerEndChatFlag;
+    volatile BOOL _partnerLostFlag;
     
     volatile BOOL _isSelfDeciding;
     NSCondition* _decideLock;
@@ -173,7 +174,9 @@
     _selfEndChatFlag = NO;
     _partnerEndChatFlag = NO;
     
-    [self _resetSelfVideoToClose];
+    _partnerLostFlag = NO;
+    
+    [self _resetSelfVieoToOpen];
     
     _isSelfDeciding = NO;
     
@@ -236,7 +239,6 @@
     _appDataModule = [AppDataModule sharedInstance];
     _statusModule = [BusinessStatusModule sharedInstance];
     _webRTCModule = [WebRTCModule sharedInstance];
-    [_webRTCModule registerWebRTCDelegate:self];
     
     _isSelfDeciding = NO;
     _decideLock = [[NSCondition alloc] init];
@@ -250,8 +252,8 @@
     _selfVideoView.layer.borderColor = BORDERCOLOR_VIDEOVIEW.CGColor;
     _selfVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
     _selfVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
-//
-//    _parterVideoView.layer.borderColor = BORDERCOLOR_VIDEOVIEW.CGColor;
+
+//    _parterVideoView.layer.borderColor = [UIColor redColor].CGColor;
 //    _parterVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
 //    _parterVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
     
@@ -301,6 +303,7 @@
             
             //这里取得的参照坐标系是parentView的坐标
             CGPoint draggedViewOffsetInParentView = [recognizer translationInView:parentView];
+            
             //通过计算偏移量来设定draggedView的新坐标
             CGPoint draggedViewNewCenterPoint = CGPointMake(draggedViewCenterX + draggedViewOffsetInParentView.x, draggedViewCenterY + draggedViewOffsetInParentView.y);
             
@@ -317,7 +320,7 @@
                 draggedViewNewCenterPoint.x = parentViewWidth - draggedViewWidthHalf;
             }
             
-            if (0 > (draggedViewNewCenterPoint.y - draggedViewHeightHalf))
+            if (0 >= (draggedViewNewCenterPoint.y - draggedViewHeightHalf))
             {
                 draggedViewNewCenterPoint.y = draggedViewHeightHalf;
             }
@@ -325,6 +328,7 @@
             {
                 draggedViewNewCenterPoint.y = parentViewHeight - draggedViewHeightHalf;
             }
+            
             //设定新中心点
             [draggedView setCenter:draggedViewNewCenterPoint];
             
@@ -364,8 +368,8 @@
 -(void) _remoteEndChat
 {
     [CBAppUtils asyncProcessInMainThread:^(){
-        [self _resetSelfVideoToClose];
         _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Disconnected", nil);
+        [self _resetSelfVideoToClose];        
     }];
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
@@ -477,11 +481,13 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void)_deactivateAlohaTimer
 {
-    if (nil != _alohaTimer)
-    {
-        [_alohaTimer invalidate];
-        _alohaTimer = nil;
-    }
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
+        if (nil != _alohaTimer)
+        {
+            [_alohaTimer invalidate];
+            _alohaTimer = nil;
+        }
+    }];
 }
 
 -(void) _remoteAloha
@@ -512,6 +518,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 -(void)_connectWebRTC
 {
     [CBAppUtils asyncProcessInBackgroundThread:^(){
+        [_webRTCModule registerWebRTCDelegate:self];
+        
         RHBusinessSession* businessSession = _userDataModule.businessSession;
         RHWebRTC* webrtc = businessSession.webrtc;
         
@@ -533,6 +541,7 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 -(void)_disconnectWebRTC
 {
     [CBAppUtils asyncProcessInBackgroundThread:^(){
+        [_webRTCModule unregisterWebRTCDelegate];
         [_webRTCModule unpublishAndDisconnectOnWebRTC];
     }];
 }
@@ -578,6 +587,12 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 - (void) _resetSelfVideoToClose
 {
     _isSelfVideoOpen = NO;
+    _selfVideoView.hidden = !_isSelfVideoOpen;
+}
+
+- (void) _resetSelfVieoToOpen
+{
+    _isSelfVideoOpen = YES;
     _selfVideoView.hidden = !_isSelfVideoOpen;
 }
 

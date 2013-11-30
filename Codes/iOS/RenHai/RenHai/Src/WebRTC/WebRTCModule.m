@@ -66,6 +66,11 @@ SINGLETON(WebRTCModule)
     _openTokAgent.openTokDelegate = delegate;
 }
 
+-(void) unregisterWebRTCDelegate
+{
+    _openTokAgent.openTokDelegate = nil;
+}
+
 #pragma mark - UIApplicationDelegate
 
 -(void)applicationWillResignActive:(UIApplication *)application

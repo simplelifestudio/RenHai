@@ -19,7 +19,7 @@
 #import "AppDataModule.h"
 #import "BusinessStatusModule.h"
 
-#define DELAY 0.1f
+#define DELAY 0.15f
 #define ANIMATION_POP 0.4f
 #define ANIMATION_DISMISS 0.4f
 

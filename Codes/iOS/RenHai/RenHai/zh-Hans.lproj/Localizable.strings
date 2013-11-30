@@ -141,9 +141,9 @@
 "ChatAssess_Action_AddImpressLabel" = "新建";
 "ChatAssess_Action_DelImpressLabel" = "删除";
 "ChatAssess_Action_CopyImpressLabel" = "复制";
-"ChatAssess_AssessLabels" = "给对方的评价";
-"ChatAssess_AddImpressLabels" = "给对方的印象";
-"ChatAssess_ExistImpressLabels" = "对方原有的印象";
+"ChatAssess_AssessLabels" = "我给的评价";
+"ChatAssess_AddImpressLabels" = "我给的印象";
+"ChatAssess_ExistImpressLabels" = "对方获得的印象";
 
 "LabelManage_NewLabel" = "新建";
 "LabelManage_ModifyLabel" = "编辑";
