@@ -37,6 +37,8 @@ SINGLETON(LoggerModule)
         [DDLog addLogger:_fileLogger];
     }
     
+    [[DDTTYLogger sharedInstance] setColorsEnabled:YES];
+    
     DDLogVerbose(@"Logger Level is :%d", ddLogLevel);
 }
 

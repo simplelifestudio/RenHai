@@ -32,7 +32,10 @@
     NSString* logString = [[NSString alloc] initWithFormat:logFormatString arguments:arglist];
     va_end(arglist);
 
-    DDLogError(@"[FATAL_ERROR] - %@", logString);
+    if (!condition)
+    {
+        DDLogError(@"[FATAL_ERROR] - %@", logString);        
+    }
     
     NSAssert(condition, logString);
 }

@@ -20,7 +20,7 @@
 #define PING_TEXT @"#####RenHai-App-Ping#####"
 #define PONG_LOG 0
 #define PING_ACTIVATE 1
-#define MESSAGE_LOG 0
+#define MESSAGE_LOG 1
 #define SERVERNOTIFICATION_LOG 0
 
 #define MESSAGE_ENCRYPT_NECESSARY 1
@@ -227,7 +227,7 @@
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;
 {
 #if MESSAGE_LOG
-    DDLogInfo(@"WebSocket Received Message Uncrypted: \"%@\"", message);
+    DDLogWarn(@"WebSocket Received Message Uncrypted: \"%@\"", message);
 #endif
     
     RHMessage* jsonMessage = nil;
@@ -237,7 +237,7 @@
         NSString* encryptedString = (NSString*)[dic objectForKey:MESSAGE_KEY_ENVELOPE];
         NSString* decryptedString = [CBSecurityUtils decryptByDESAndDecodeByBase64:encryptedString key:MESSAGE_SECURITY_KEY];
 #if MESSAGE_LOG
-        DDLogInfo(@"WebSocket Received Message Decrypted: \"%@\"", decryptedString);
+        DDLogVerbose(@"WebSocket Received Message Decrypted: \"%@\"", decryptedString);
 #endif
         dic = [CBJSONUtils toJSONObject:decryptedString];
     }
