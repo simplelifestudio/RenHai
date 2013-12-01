@@ -753,6 +753,11 @@
     }
 }
 
+- (CGAffineTransform)collectionView:(UICollectionView *)collectionView transformForDraggingItemAtIndexPath:(NSIndexPath *)indexPath duration:(NSTimeInterval *)duration
+{
+    return CGAffineTransformMakeScale(1.25f, 1.25f);
+}
+
 #pragma mark - UICollectionViewDelegate
 
 -(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath

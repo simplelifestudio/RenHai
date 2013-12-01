@@ -122,19 +122,32 @@ static UIImage* sortIconImage;
 {
     _shakeCell = shakeCell;
     
-//    if (_shakeCell)
-//    {
-//        [self _startQuivering];
-//    }
-//    else
-//    {
-//        [self _stopQuivering];
-//    }
+    if (_shakeCell)
+    {
+        [self _startQuivering];
+    }
+    else
+    {
+        [self _stopQuivering];
+    }
 }
 
 - (NSString*) labelName
 {
     return _textField.text;
+}
+
+- (void)setHighlighted:(BOOL)highlighted
+{
+    [super setHighlighted:highlighted];
+    if (highlighted)
+    {
+        [self _startQuivering];
+    }
+    else
+    {
+        [self _stopQuivering];
+    }
 }
 
 #pragma mark - Private Methods
