@@ -30,7 +30,7 @@
 
 -(NSMutableURLRequest*) constructURLRequest:(RHMessage*) message serviceTarget:(NSString*) serviceTarget
 {
-    NSAssert(nil != message, @"Nil JSON Message");
+    [CBAppUtils assert:(nil != message) logFormatString:@"Nil JSON Message"];
     
     NSMutableURLRequest* request = nil;
     

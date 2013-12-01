@@ -15,4 +15,6 @@
 +(void) asyncProcessInBackgroundThread:(void(^)()) block;
 +(void) asyncProcessInMainThread:(void(^)()) block;
 
++(void) assert:(BOOL) condition logFormatString:(NSString*) logFormatString, ...;
+
 @end

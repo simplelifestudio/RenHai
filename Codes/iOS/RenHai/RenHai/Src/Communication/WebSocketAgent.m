@@ -286,19 +286,18 @@
             }
             default:
             {
-                NSAssert(NO, @"Received an unexpected message!");
+                [CBAppUtils assert:NO logFormatString:@"Received an unexpected message!"];
                 break;
             }
         }
     }
     else
     {
-        DDLogError(@"Received an illegal message from server: %@", jsonMessage.toJSONString);
         /*
         RHMessage* message = [RHMessage newAppErrorResponseMessage:jsonMessage.messageSn];
         [self performSelectorInBackground:@selector(_sendJSONStringToWebSocket:) withObject:message.toJSONString];
          */
-        NSAssert(NO, @"Received an illegal message from server: %@", jsonMessage.toJSONString);
+        [CBAppUtils assert:NO logFormatString:@"Received an illegal message from server: %@", jsonMessage.toJSONString];
     }
 }
 
@@ -312,7 +311,7 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean;
 {
-    DDLogInfo(@"WebSocket closed with code: %d, reason: %@, wasClean: %@", code, reason, (wasClean) ? @"YES" : @"NO");
+    DDLogWarn(@"WebSocket closed with code: %d, reason: %@, wasClean: %@", code, reason, (wasClean) ? @"YES" : @"NO");
  
     [self closeWebSocket];
     

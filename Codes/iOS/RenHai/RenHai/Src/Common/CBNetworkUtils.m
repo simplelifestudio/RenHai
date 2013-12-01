@@ -54,7 +54,7 @@
 
 +(BOOL) isInternetConnectable:(NSString*) hostName
 {
-    NSAssert(nil != hostName && 0 < hostName.length, @"Illegal hostName");
+    [CBAppUtils assert:(nil != hostName && 0 < hostName.length) logFormatString:@"Illegal hostName"];
     
     BOOL flag = NO;
     

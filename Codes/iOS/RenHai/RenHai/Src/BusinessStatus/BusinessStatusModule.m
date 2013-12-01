@@ -1242,16 +1242,12 @@ SINGLETON(BusinessStatusModule)
 
 -(void) _triggerBusinessStatusErrorByAppMessage:(AppMessageIdentifier) appMessageId
 {
-    DDLogError(@"Error App Message:%d in BusinessStatus: %d", appMessageId, _currentBusinessStatus.identifier);
-    
-    NSAssert(NO, @"Error App Message:%d in BusinessStatus: %d", appMessageId, _currentBusinessStatus.identifier);
+    [CBAppUtils assert:NO logFormatString:@"Error App Message:%d in BusinessStatus: %d", appMessageId, _currentBusinessStatus.identifier];
 }
 
 -(void) _triggerBusinessStatusErrorByServerNotification:(ServerNotificationIdentifier) serverNotificationId
 {
-    DDLogError(@"Error Server Notification:%d in BusinessStatus: %d", serverNotificationId, _currentBusinessStatus.identifier);
-    
-    NSAssert(NO, @"Error Server Notification:%d in BusinessStatus: %d", serverNotificationId, _currentBusinessStatus.identifier);
+    [CBAppUtils assert:NO logFormatString:@"Error Server Notification:%d in BusinessStatus: %d", serverNotificationId, _currentBusinessStatus.identifier];
 }
 
 @end
