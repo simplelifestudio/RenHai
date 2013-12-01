@@ -39,7 +39,7 @@ SINGLETON(BusinessStatusModule)
 
 -(void) startService
 {
-    DDLogVerbose(@"Module:%@ is started.", self.moduleIdentity);
+    DDLogInfo(@"Module:%@ is started.", self.moduleIdentity);
     
     [super startService];
 }

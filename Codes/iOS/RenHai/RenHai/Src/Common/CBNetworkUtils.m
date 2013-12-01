@@ -43,7 +43,7 @@
                [@"en1" isEqualToString:ifa_name])
 			{
 				hostname = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)cursor->ifa_addr)->sin_addr)];
-				DDLogVerbose(@"hostname:%@",hostname);
+				DDLogInfo(@"hostname:%@",hostname);
 				break;
 			}
 		}
