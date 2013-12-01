@@ -11,14 +11,14 @@
 #import "CBStringUtils.h"
 #import "GUIModule.h"
 
-#define LENGTH_LIMIT 5
+#define LENGTH_LIMIT_HANZI 5
 
 #define MOVE_OFFSET_FOR_KEYBOARD 40
 #define MOVE_DURATION_FOR_KEYBOARD 0.3f
 
 @interface RHLabelManageViewController_iPhone () <UITextFieldDelegate>
 {
-
+    BOOL _hasMovedForOffset;
 }
 
 @property (strong, nonatomic) NSString* oldLabel;
@@ -60,6 +60,7 @@
 @synthesize textField = _textField;
 @synthesize saveButton = _saveButton;
 @synthesize cancelButton = _cancelButton;
+@synthesize limitCountLabel = _limitCountLabel;
 
 @synthesize oldLabel = _oldLabel;
 @synthesize managedLabel = _managedLabel;
@@ -139,8 +140,8 @@
     BOOL flag = NO;
 
     NSString* text = _textField.text;
-//    NSInteger textNumber = [CBStringUtils calculateTextNumber:text];
-    if (nil != text && 0 < text.length)// && textNumber <= LENGTH_LIMIT)
+    NSInteger textNumber = [CBStringUtils calculateTextNumber:text];
+    if (nil != text && 0 < text.length && textNumber <= LENGTH_LIMIT_HANZI)
     {
         [_textField resignFirstResponder];
         flag = YES;
@@ -156,7 +157,11 @@
 
 - (BOOL)textFieldShouldBeginEditing:(id)sender
 {
-    self.view.center = CGPointMake(self.view.center.x, self.view.center.y - MOVE_OFFSET_FOR_KEYBOARD);
+    if (!_hasMovedForOffset)
+    {
+        _hasMovedForOffset = YES;
+        self.view.center = CGPointMake(self.view.center.x, self.view.center.y - MOVE_OFFSET_FOR_KEYBOARD);        
+    }
     
     return YES;
 }
@@ -167,10 +172,8 @@
 {
     NSString* text = _textField.text;
     NSInteger textNumber = [CBStringUtils calculateTextNumber:text];
-    if (nil != text && 0 < text.length)// && textNumber <= LENGTH_LIMIT)
+    if (nil != text && 0 < text.length && textNumber <= LENGTH_LIMIT_HANZI)
     {
-        text = (textNumber <= LENGTH_LIMIT) ? text : ([text substringToIndex:LENGTH_LIMIT]);
-        
         _managedLabel = text;
         [_textField resignFirstResponder];
         
@@ -219,21 +222,35 @@
     {
         _textField.text = _oldLabel;
     }
-//    [_textField addTarget:self action:@selector(_textEditingChanged:) forControlEvents:UIControlEventEditingChanged];
+    [_textField addTarget:self action:@selector(_textEditingChanged:) forControlEvents:UIControlEventEditingChanged];
     
     [_saveButton setTitle:NSLocalizedString(@"LabelManage_Action_Save", nil) forState:UIControlStateNormal];
     [_cancelButton setTitle:NSLocalizedString(@"LabelManage_Action_Cancel", nil) forState:UIControlStateNormal];
+    
+    _hasMovedForOffset = NO;
+    
+    [self _updateLimitCountLabel];
 }
 
 -(void) _textEditingChanged:(UITextField*) textField
 {
-    NSString* text = textField.text;
+    [self _updateLimitCountLabel];
+}
+
+-(void) _updateLimitCountLabel
+{
+    NSString* text = _textField.text;
     NSInteger textNumber = [CBStringUtils calculateTextNumber:text];
-    if (textNumber > LENGTH_LIMIT)
+    NSInteger limitCount = LENGTH_LIMIT_HANZI - textNumber;
+    if (0 <= limitCount)
     {
-        text = [text substringToIndex:LENGTH_LIMIT];
-//        textField.text = text;        
+        [_limitCountLabel setTextColor:FLATUI_COLOR_LABEL_TEXT];
     }
+    else
+    {
+        [_limitCountLabel setTextColor:SPECIAL_COLOR_WARNING];
+    }
+    [_limitCountLabel setText:[NSString stringWithFormat:@"%d", limitCount]];
 }
 
 @end
