@@ -27,7 +27,8 @@
 #define INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS 6
 
 #define SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS 0
-#define SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS 60
+#define SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_3_5 9
+#define SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_4 12
 
 @interface InterestViewController_iPhone () <InterestLabelsHeaderViewDelegate, ServerInterestLabelsHeaderViewDelegate, RHLabelManageDelegate, UIGestureRecognizerDelegate>
 {
@@ -292,15 +293,16 @@
             {
                 [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
             }
-            
-            NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {
-                [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
         }
+        [self _refreshInterestLabelsHeaderViewActions];        
         
-        [self _refreshInterestLabelsHeaderViewActions];
+        NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
+        for (NSIndexPath* indexPath in selectedIndexPathes)
+        {
+            [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+        }
+        _allowCloneLabel = NO;
+        [self _refreshServerInterestLabelsHeaderViewActions];
     }
     else if (CGRectContainsPoint(_serverInterestLabelsView.frame, locationTouch))
     {
@@ -372,8 +374,8 @@
                     
                     RHInterestLabel* oLabel = [interestCard getLabelByIndex:position];
                     
-                    RHLabelManageViewController_iPhone* labelManagerViewController = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:oLabel.labelName];
-                    [_guiModule.mainViewController presentPopupViewController:labelManagerViewController animated:YES completion:nil];
+                    RHLabelManageViewController_iPhone* labelManagerVC = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:oLabel.labelName];
+                    [_guiModule.mainViewController presentPopupViewController:labelManagerVC animated:YES completion:nil];
                     
                     break;
                 }
@@ -479,6 +481,20 @@
     }
     else if (collectionView == _serverInterestLabelsView)
     {
+        NSUInteger requireCount = 0;
+        if (IS_IPHONE5)
+        {
+            requireCount = SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_4;
+        }
+        else if (IS_IPHONE4_OR_4S)
+        {
+            requireCount = SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_3_5;
+        }
+        else if (IS_IPAD1_OR_2_OR_MINI)
+        {
+            requireCount = SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_3_5;
+        }
+        
         switch (section)
         {
             case SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS:
@@ -487,7 +503,7 @@
                 RHServerInterestLabelList* interestLabelList = server.interestLabelList;
                 NSArray* currentInterestLabels = interestLabelList.current;
                 
-                itemsCount = (currentInterestLabels.count <= SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS) ? currentInterestLabels.count : SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS;
+                itemsCount = (currentInterestLabels.count <= requireCount) ? currentInterestLabels.count : requireCount;
 
                 break;
             }
@@ -708,6 +724,13 @@
             return;
         }
         
+//        NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
+//        for (NSIndexPath* indexPath in selectedIndexPathes)
+//        {
+//            [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+//        }
+//        [_interestLabelsView selectItemAtIndexPath:fromIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        
         switch (fromSection)
         {
             case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
@@ -728,6 +751,11 @@
     {
         
     }
+}
+
+- (CGAffineTransform)collectionView:(UICollectionView *)collectionView transformForDraggingItemAtIndexPath:(NSIndexPath *)indexPath duration:(NSTimeInterval *)duration
+{
+    return CGAffineTransformMakeScale(1.25f, 1.25f);
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -804,8 +832,9 @@
 
 -(void) didCreateInterestLabel
 {
+    UIViewController* rootVC = [CBUIUtils getRootController];
     RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
-    [_guiModule.mainViewController presentPopupViewController:labelManageVC animated:YES completion:nil];
+    [rootVC presentPopupViewController:labelManageVC animated:YES completion:nil];
 }
 
 -(void) didDeleteInterestLabel
@@ -959,30 +988,30 @@
         RHMessage* requestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_InterestLabelListSync device:device info:nil];
         
         [_commModule serverDataSyncRequest:requestMessage
-                    successCompletionBlock:^(NSDictionary* serverDic){
-                        @try
-                        {
-                            [server fromJSONObject:serverDic];
-                            
-                            [CBAppUtils asyncProcessInMainThread:^(){
-                                _allowCloneLabel = NO;
-                                [self _refreshServerInterestLabelsView];
-                            }];
-                        }
-                        @catch (NSException *exception)
-                        {
-                            DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
-                        }
-                        @finally
-                        {
-                            
-                        }
-                    }
-                    failureCompletionBlock:^(){
-                    }
-                      afterCompletionBlock:^(){
-                      }
-         ];
+            successCompletionBlock:^(NSDictionary* serverDic){
+                @try
+                {
+                    [server fromJSONObject:serverDic];
+                    
+                    [CBAppUtils asyncProcessInMainThread:^(){
+                        _allowCloneLabel = NO;
+                        [self _refreshServerInterestLabelsView];
+                    }];
+                }
+                @catch (NSException *exception)
+                {
+                    DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+                }
+                @finally
+                {
+                    
+                }
+            }
+            failureCompletionBlock:^(){
+            }
+            afterCompletionBlock:^(){
+            }
+        ];
     }];
 }
 

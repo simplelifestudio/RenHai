@@ -233,6 +233,19 @@
     DDLogInfo(@"WebRTC subscriberVideoDataReceived (%@)", subscriber.stream.streamId);
 }
 
+- (void)stream:(OTStream*)stream didChangeVideoDimensions:(CGSize)dimensions
+{
+    DDLogInfo(@"WebRTC didChangeVideoDimensions:(width: %lf, height: %lf) ", dimensions.width, dimensions.height);
+    
+    if (stream.streamId == _subscriber.stream.streamId)
+    {
+        if (nil != _openTokDelegate)
+        {
+            [_openTokDelegate subscriberDidChangeVideoDimensions:dimensions];
+        }
+    }
+}
+
 - (void)subscriber:(OTSubscriber *)subscriber didFailWithError:(OTError *)error
 {
     DDLogInfo(@"WebRTC subscriber: %@ didFailWithError: ", subscriber.stream.streamId);

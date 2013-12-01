@@ -32,6 +32,7 @@ ManageMode;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet FUIButton *saveButton;
 @property (weak, nonatomic) IBOutlet FUIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UILabel *limitCountLabel;
 
 - (IBAction)didPressSaveButton:(id)sender;
 - (IBAction)didPressCancelButton:(id)sender;

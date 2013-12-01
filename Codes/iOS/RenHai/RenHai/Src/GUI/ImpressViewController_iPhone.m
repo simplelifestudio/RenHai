@@ -26,10 +26,10 @@
 #define ASSESSLABELSVIEW_SECTION_ASSESSLABELS_ITEMCOUNT 6
 
 #define IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_INDEX 0
-#define IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT 12
+#define IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5 12
+#define IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_4 15
 
 #define DELAY_REFRESH 0.5f
-
 #define INTERVAL_DATASYNC 0
 
 @interface ImpressViewController_iPhone ()
@@ -101,6 +101,20 @@
     }
     else if (collectionView == _impressLabelsView)
     {
+        NSUInteger requireCount = 0;
+        if (IS_IPHONE5)
+        {
+            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_4;
+        }
+        else if (IS_IPHONE4_OR_4S)
+        {
+            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
+        }
+        else if (IS_IPAD1_OR_2_OR_MINI)
+        {
+            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
+        }
+        
         switch (section)
         {
             case IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_INDEX:
@@ -109,7 +123,7 @@
                 RHProfile* profile = device.profile;
                 RHImpressCard* impressCard = profile.impressCard;
                 NSArray* impressLabels = impressCard.impressLabelList;
-                itemCount = (impressLabels.count <= IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT) ? impressLabels.count : IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT;
+                itemCount = (impressLabels.count <= requireCount) ? impressLabels.count : requireCount;
                 break;
             }
             default:
@@ -195,12 +209,26 @@
     }
     else if (collectionView == _impressLabelsView)
     {
+        NSUInteger requireCount = 0;
+        if (IS_IPHONE5)
+        {
+            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_4;
+        }
+        else if (IS_IPHONE4_OR_4S)
+        {
+            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
+        }
+        else if (IS_IPAD1_OR_2_OR_MINI)
+        {
+            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
+        }
+        
+        NSArray* impressLabelList = [impressCard topImpressLabelList:requireCount];
+        
         switch (section)
         {
             case IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_INDEX:
             {
-                NSArray* impressLabelList = [impressCard topImpressLabelList:IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT];
-                
                 RHImpressLabel* impressLabel = nil;
                 if (0 < impressLabelList.count && row < impressLabelList.count)
                 {

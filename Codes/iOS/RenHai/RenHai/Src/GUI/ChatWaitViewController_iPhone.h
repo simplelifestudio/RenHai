@@ -8,16 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
-#import "ChatWaitViewController_iPhone.h"
+#import <FloatingCloudsView.h>
 
+#import "ChatWaitViewController_iPhone.h"
 #import "ChatWizardController.h"
+
 
 @interface ChatWaitViewController_iPhone : UIViewController <ChatWizardPage>
 
 @property (weak, nonatomic) IBOutlet UILabel *infoLabel;
-@property (weak, nonatomic) IBOutlet UITextView *infoTextView;
+
 @property (weak, nonatomic) IBOutlet UILabel *countLabel;
 @property (weak, nonatomic) IBOutlet FUIButton *actionButton;
+
+@property (weak, nonatomic) IBOutlet UIView *labelCloudContainer;
 
 - (IBAction)didPressActionButton:(id)sender;
 

@@ -294,10 +294,11 @@
     else
     {
         DDLogError(@"Received an illegal message from server: %@", jsonMessage.toJSONString);
-        
+        /*
         RHMessage* message = [RHMessage newAppErrorResponseMessage:jsonMessage.messageSn];
-        
         [self performSelectorInBackground:@selector(_sendJSONStringToWebSocket:) withObject:message.toJSONString];
+         */
+        NSAssert(NO, @"Received an illegal message from server: %@", jsonMessage.toJSONString);
     }
 }
 

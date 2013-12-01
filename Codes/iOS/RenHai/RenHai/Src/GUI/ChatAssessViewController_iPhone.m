@@ -33,7 +33,8 @@
 #define ADDIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_ADDIMPRESSLABELS 3
 
 #define EXISTIMPRESSLABELSVIEW_SECTION_INDEX_EXISTIMPRESSLABELS 0
-#define EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS 6
+#define EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_3_5 6
+#define EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_4 9
 
 #define DELAY_REFRESH 0.5f
 
@@ -61,10 +62,6 @@
     NSMutableArray* _addImpressLabelNames;
     
     NSUInteger _assessLabelPosition;
-    
-    volatile BOOL _selfAssessedFlag;
-    
-    volatile BOOL _isDeciding;
     
     BOOL _allowCloneLabel;
     
@@ -144,10 +141,6 @@
 {
     _continueButton.hidden = NO;
     _finishButton.hidden = NO;
-    
-    _selfAssessedFlag = NO;
-    
-    _isDeciding = NO;
     
     _assessLabelPosition = 0;
     
@@ -317,23 +310,13 @@
 
 -(void)_remoteUpdatePartnerImpressCardWithType:(BusinessSessionRequestType) requestType
 {
-    _continueButton.hidden = YES;
-    _finishButton.hidden = YES;
+    [CBAppUtils asyncProcessInMainThread:^(){
+        _continueButton.hidden = YES;
+        _finishButton.hidden = YES;
+    }];
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
-        
-        @synchronized(self)
-        {
-            if (_isDeciding)
-            {
-                return;
-            }
-            else
-            {
-                _isDeciding = YES;
-            }
-        }
-        
+
         RHDevice* selfDevice = _userDataModule.device;
         
         RHBusinessSession* businessSession = _userDataModule.businessSession;
@@ -351,7 +334,6 @@
         
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
-                _selfAssessedFlag = YES;
                 
                 switch (requestType)
                 {
@@ -374,9 +356,14 @@
                 }
             }
             failureCompletionBlock:^(){
-                _selfAssessedFlag = NO;
+
             }
-            afterCompletionBlock:nil
+            afterCompletionBlock:^(){
+                [CBAppUtils asyncProcessInMainThread:^(){
+                    _continueButton.hidden = NO;
+                    _finishButton.hidden = NO;
+                }];
+            }
          ];
     }];
 }
@@ -420,10 +407,7 @@
 
 - (void) _clockCountFinished
 {
-    if (!_selfAssessedFlag)
-    {
-//        [self _remoteUpdatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndQuit];
-    }
+
 }
 
 - (void) _setCountdownSeconds:(NSUInteger) seconds
@@ -488,15 +472,16 @@
             {
                 [_addImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
             }
-            
-            NSArray* selectedIndexPathes = _existImpressLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {
-                [_existImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
         }
+        [self _refershAddImpressLabelsViewActions];        
         
-        [self _refershAddImpressLabelsViewActions];
+        NSArray* selectedIndexPathes = _existImpressLabelsView.indexPathsForSelectedItems;
+        for (NSIndexPath* indexPath in selectedIndexPathes)
+        {
+            [_existImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+        }
+        _allowCloneLabel = NO;
+        [self _refreshExistImpressLabelsViewActions];
     }
     else if (CGRectContainsPoint(_existImpressLabelsView.frame, locationTouch))
     {
@@ -523,7 +508,7 @@
                 NSString* labelName = cell.labelName;
                 
                 BOOL hasLabel = [_addImpressLabelNames containsObject:labelName];
-                BOOL isFull = (_addImpressLabelNames.count >= EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS);
+                BOOL isFull = (_addImpressLabelNames.count >= ADDIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_ADDIMPRESSLABELS);
                 _allowCloneLabel = (hasLabel || isFull) ? NO : YES;
             }
             else
@@ -564,8 +549,8 @@
                 {
                     NSString* labeName = _addImpressLabelNames[position];
                     
-                    RHLabelManageViewController_iPhone* labelManagerViewController = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:labeName];
-                    [_guiModule.mainViewController presentPopupViewController:labelManagerViewController animated:YES completion:nil];
+                    RHLabelManageViewController_iPhone* labelManagerVC = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:labeName];
+                    [_guiModule.chatWizardController presentPopupViewController:labelManagerVC animated:YES completion:nil];
                     
                     break;
                 }
@@ -695,7 +680,21 @@
     }
     else if (cv == _existImpressLabelsView)
     {
-        itemsCount = (impressLabels.count <= EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS) ? impressLabels.count : EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS;
+        NSUInteger requireCount = 0;
+        if (IS_IPHONE5)
+        {
+            requireCount = EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_4;
+        }
+        else if (IS_IPHONE4_OR_4S)
+        {
+            requireCount = EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_3_5;
+        }
+        else if (IS_IPAD1_OR_2_OR_MINI)
+        {
+            requireCount = EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_3_5;
+        }
+        
+        itemsCount = (impressLabels.count <= requireCount) ? impressLabels.count : requireCount;
     }
     
     return itemsCount;
@@ -897,20 +896,21 @@
     
     [self _refershAddImpressLabelsView];
     
-    [_guiModule.mainViewController dismissPopupViewControllerAnimated:YES completion:nil];
+    [_guiModule.chatWizardController dismissPopupViewControllerAnimated:YES completion:nil];
 }
 
 -(void) didLabelManageCancel
 {
-    [_guiModule.mainViewController dismissPopupViewControllerAnimated:YES completion:nil];
+    [_guiModule.chatWizardController dismissPopupViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - ChatAssessAddImpressLabelsHeaderViewDelegate
 
 -(void) didCreateImpressLabel
 {
+    UIViewController* rootVC = [CBUIUtils getRootController];
     RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
-    [_guiModule.mainViewController presentPopupViewController:labelManageVC animated:YES completion:nil];
+    [rootVC presentPopupViewController:labelManageVC animated:YES completion:nil];
 }
 
 -(void) didDeleteImpressLabel

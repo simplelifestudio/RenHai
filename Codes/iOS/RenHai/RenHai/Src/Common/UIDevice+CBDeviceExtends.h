@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#define IS_IPAD1_OR_2_OR_MINI ([UIDevice currentResolution] == UIDevice_iPhoneStandardRes)
+#define IS_IPHONE4_OR_4S ([UIDevice currentResolution] == UIDevice_iPhoneHiRes)
+#define IS_IPHONE5 ([UIDevice currentResolution] == UIDevice_iPhoneTallerHiRes)
+
 enum
 {
     // iPhone 1,3,3GS 标准分辨率(320x480px)

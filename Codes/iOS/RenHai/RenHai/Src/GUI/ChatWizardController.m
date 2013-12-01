@@ -13,6 +13,8 @@
 #import "GUIModule.h"
 #import "CommunicationModule.h"
 
+#define ALLOW_CHATVIDEO_ROTATION 0
+
 @interface ChatWizardController ()
 {
     ChatWaitViewController_iPhone* _chatWaitViewController;
@@ -256,11 +258,16 @@
         flag = YES;
     }
     
+#ifdef ALLOW_CHATVIDEO_ROTATION
+    flag = NO;
+#endif
+    
 	return flag;
 }
 
 - (NSUInteger)supportedInterfaceOrientations
 {
+#ifdef ALLOW_CHATVIDEO_ROTATION
     if (self.topViewController == _chatVideoViewController)
     {
         return UIInterfaceOrientationMaskAll;
@@ -269,6 +276,9 @@
     {
         return UIInterfaceOrientationMaskPortrait;
     }
+#else
+    return UIInterfaceOrientationMaskPortrait;    
+#endif
 }
 
 - (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation

@@ -27,7 +27,7 @@
 
 "Home_OnlineCount" = "Online Users";
 "Home_ChatCount" = "Chating Users";
-"Home_Banner_NoInfo" = "No information from server.\naaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+"Home_Banner_NoInfo" = "No information from server";
 "Home_Banner_Maintenance" = "Server scheduled maintenance：from %@ to %@.";
 "Home_PressToEnterPool" = "Press to Enter";
 "Home_IsEnteringPool" = "Entering...";
@@ -104,6 +104,7 @@
 "ChatWait_WaitForMatch_Detail" = "Matching strangers with similar interests...";
 "ChatWait_Matched" = "Stranger Matched";
 "ChatWait_Matched_Detail" = "A matched stranger found";
+"ChatWait_Label_Default" = "RenHai";
 "ChatWait_Cancel" = "Cancel Matching";
 "ChatWait_Cancel_Detail" = "Matching cancelled";
 "ChatWait_Action_Cancel" = "Cancel";

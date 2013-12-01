@@ -25,5 +25,6 @@
 
 @property (weak, nonatomic) IBOutlet UIView *selfVideoView;
 @property (weak, nonatomic) IBOutlet UIView *parterVideoView;
+@property (weak, nonatomic) IBOutlet UILabel *countLabel;
 
 @end

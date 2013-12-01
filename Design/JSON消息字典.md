@@ -515,11 +515,13 @@ App与Server通过消息交互完成的数据操作
 </code></pre>
 
 ###404. Server数据同步响应 ServerDataSyncResponse
+<pre><code>
 {
 	"body":
 	{
 	}
 }
+</code></pre>
 
 ###103. 业务会话请求 BusinessSessionRequest
 <pre><code>

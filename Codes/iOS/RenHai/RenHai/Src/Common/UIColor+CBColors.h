@@ -118,6 +118,17 @@
 +(UIColor*) Orange;             // Orange           255 165 0	#FFA500
 +(UIColor*) DarkOrange;         // DarkOrange       255 140 0	#FF8C00
 +(UIColor*) Coral;              // Coral            255 127 80	#FF7F50
+
++(UIColor*) Grey11;             // Grey11           28  28  28  #1C1C1C
++(UIColor*) Grey21;             // Grey21           54  54  54  #363636
++(UIColor*) Grey31;             // Grey31           79  79  79  #4F4F4F
++(UIColor*) Grey41;             // Grey41           105 105 105 #696969
++(UIColor*) Grey51;             // Grey51           130 130 130 #828282
++(UIColor*) Grey61;             // Grey61           156 156 156 #9C9C9C
++(UIColor*) Grey71;             // Grey71           181 181 181 #B5B5B5
++(UIColor*) Grey81;             // Grey81           207 207 207 #CFCFCF
++(UIColor*) Grey91;             // Grey91           232 232 232 #E8E8E8
+
 /*
  LightCoral	240 128 128	#F08080
  Tomato	255 99 71	#FF6347

@@ -85,7 +85,7 @@ SINGLETON(GUIModule)
     [self keepScreenAlwaysOn:SCREEN_ALWAYS_ON];
     
     [_networkActivityIndicator setEnabled:YES];
-    
+
     [self _registerNotifications];
 }
 

@@ -10,6 +10,8 @@
 #import "CBSharedInstance.h"
 #import "CBHUDAgent.h"
 
+#import "GUIStyle.h"
+
 #import "ConnectViewController_iPhone.h"
 #import "MainViewController_iPhone.h"
 #import "LeftBarViewController_iPhone.h"
@@ -73,6 +75,8 @@
 #define REUSABLEVIEW_ID_ADDIMPRESSLABELSHEADERVIEW @"AddImpressLabelsHeaderView"
 #define REUSABLEVIEW_ID_EXISTIMPRESSLABELSHEADERVIEW @"ExistImpressLabelsHeaderView"
 
+#define NIB_CHATVIDEOVIEWCONTROLLER @"ChatVideoViewController_iPhone"
+
 #define NIB_IMPRESSLABELSHEADERVIEW @"ImpressLabelsHeaderView_iPhone"
 #define NIB_ADDIMPRESSLABELSHEADERVIEW @"ChatAssessAddImpressLabelsHeaderView_iPhone"
 #define NIB_EXISTIMPRESSLABELSHEADERVIEW @"ChatAssessExistImpressLabelsHeaderView_iPhone"
@@ -96,6 +100,7 @@
 #define HELPSCREEN_DISPLAY_SECONDS 9.0f
 
 #define SPLASHVIEW_HIDE 0
+#define HELPVIEW_ON_APPFIRSTLAUNCHED 0
 
 #define SCREEN_ALWAYS_ON 1
 

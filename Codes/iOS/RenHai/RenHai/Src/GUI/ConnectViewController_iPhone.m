@@ -19,7 +19,7 @@
 #import "AppDataModule.h"
 #import "BusinessStatusModule.h"
 
-#define DELAY CIRCLE_ANIMATION_DISPLAY
+#define DELAY 0.15f
 #define ANIMATION_POP 0.4f
 #define ANIMATION_DISMISS 0.4f
 
@@ -169,7 +169,8 @@ ConnectStatus;
         {
             UIViewController* rootVC = [CBUIUtils getRootController];
             MainViewController_iPhone* mainVC = _guiModule.mainViewController;
-            [mainVC dismissPopupViewControllerAnimated:NO completion:nil];
+//            [mainVC dismissPopupViewControllerAnimated:NO completion:nil];
+            [rootVC dismissPopupViewControllerAnimated:NO completion:nil];
             
             [self _clockCancel];
             
@@ -186,7 +187,10 @@ ConnectStatus;
             }
             
             [self dismissViewControllerAnimated:NO completion:^(){
-                [mainVC resignPresentationModeEntirely:YES animated:NO completion:nil];
+                if (rootVC == mainVC)
+                {
+                    [mainVC resignPresentationModeEntirely:YES animated:NO completion:nil];
+                }
             }];
             
             if (rootVC != mainVC)
@@ -706,6 +710,7 @@ ConnectStatus;
     _isAppDataSyncSuccess = NO;
     _isAppDataUpdateNecessary = NO;
     _isAppDataSyncSuccess = NO;
+    _isAppDataUpdateSuccess = NO;
     _isServerDataSyncSuccess = NO;
     
     _timerStartOperation = [[NSInvocationOperation alloc] initWithTarget:self selector:@selector(_timerStart) object:nil];

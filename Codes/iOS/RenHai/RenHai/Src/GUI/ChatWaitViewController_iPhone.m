@@ -18,10 +18,12 @@
 #import "BusinessStatusModule.h"
 
 #define DELAY CIRCLE_ANIMATION_DISPLAY
-
 #define INTERVAL_ALOHA 60
-
 #define DELAY_MATCHSTART 2.0f
+
+#define COUNT_FLOATINGLABELS_3_5 20
+#define COUNT_FLOATINGLABELS_4 25
+#define ROUHEIGHT_FLOATINGLABEL 35
 
 typedef enum
 {
@@ -31,7 +33,7 @@ typedef enum
 }
 ChatWaitStatus;
 
-@interface ChatWaitViewController_iPhone ()
+@interface ChatWaitViewController_iPhone () <FloatingCloudsViewDelegate>
 {
     GUIModule* _guiModule;
     CommunicationModule* _commModule;
@@ -54,6 +56,8 @@ ChatWaitStatus;
     
     volatile BOOL _hasRequestedMatchStart;
 }
+
+@property (nonatomic, strong) FloatingCloudsView *labelCloudView;
 
 @end
 
@@ -136,6 +140,10 @@ ChatWaitStatus;
     
     _count = 0;
     [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
+
+    [self _computeLabelCloudView];
+    
+    [_actionButton setTitle:NSLocalizedString(@"ChatWait_Action_Cancel", nil) forState:UIControlStateNormal];
 }
 
 -(void) pageWillLoad
@@ -154,6 +162,8 @@ ChatWaitStatus;
     [self _deactivateAlohaTimer];
     
     [self _clockCancel];
+    
+    [self _stopLabelCloudViewFloating];
 }
 
 -(void) onSessionBound
@@ -178,6 +188,69 @@ ChatWaitStatus;
     _userDataModule = [UserDataModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
     _statusModule = [BusinessStatusModule sharedInstance];
+    
+    [self _setupLabelCloudView];
+}
+
+- (void) _setupLabelCloudView
+{
+    _labelCloudView = [[FloatingCloudsView alloc] initWithSuperview:_labelCloudContainer];
+    _labelCloudView.delegate = self;
+    _labelCloudView.backgroundColor = [UIColor clearColor];
+    _labelCloudView.randomColors = @[[UIColor Grey31], [UIColor Grey41], [UIColor Grey51], [UIColor Grey61], [UIColor Grey71]];
+}
+
+- (void) _computeLabelCloudView
+{
+    RHServer* server = _userDataModule.server;
+    RHServerInterestLabelList* olabelList = server.interestLabelList;
+    NSArray* labelList = olabelList.current;
+    NSMutableArray* labelNameList = [NSMutableArray arrayWithCapacity:labelList.count];
+    
+    RHInterestCard* interestCard = _userDataModule.device.profile.interestCard;
+    NSArray* selfList = interestCard.labelList;
+    
+    for (RHInterestLabel* label in selfList)
+    {
+        [labelNameList addObject:label.labelName];
+    }
+    
+    for (RHInterestLabel* label in labelList)
+    {
+        if (![labelNameList containsObject:label.labelName])
+        {
+            [labelNameList addObject:label.labelName];
+        }
+    }
+    
+    NSUInteger requireLabelCount = 0;
+    if (IS_IPHONE5)
+    {
+        requireLabelCount = COUNT_FLOATINGLABELS_4;
+    }
+    else if (IS_IPHONE4_OR_4S)
+    {
+        requireLabelCount = COUNT_FLOATINGLABELS_3_5;
+    }
+    else if (IS_IPAD1_OR_2_OR_MINI)
+    {
+        requireLabelCount = COUNT_FLOATINGLABELS_3_5;
+    }
+    
+    if (requireLabelCount > labelNameList.count)
+    {
+        int rest = requireLabelCount - labelNameList.count;
+        
+        while (0 < rest)
+        {
+            NSString* s = NSLocalizedString(@"ChatWait_Label_Default", nil);
+            [labelNameList addObject:s];
+            
+            rest--;
+        }
+    }
+    _labelCloudView.contents = [labelNameList subarrayWithRange:NSMakeRange(0, requireLabelCount)];
+    [self _startLabelCloudViewFloating];
 }
 
 - (void) _clockStart
@@ -251,7 +324,7 @@ ChatWaitStatus;
         }
         else
         {
-            NSAssert(NO, @"Failed to leave pool!");
+
         }
     }];
 }
@@ -291,43 +364,6 @@ ChatWaitStatus;
     [CBAppUtils asyncProcessInMainThread:^(){
         [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
     }];
-}
-
-- (void) _updateInfoTextView:(NSString*) info
-{
-    if (nil == _consoleInfo)
-    {
-        _consoleInfo = [NSMutableString string];
-        
-        NSString* originText = _infoTextView.text;
-        if (nil != originText && 0 < originText.length)
-        {
-            [_consoleInfo appendString:originText];
-            [_consoleInfo appendString:@"\n"];
-        }
-    }
-    else
-    {
-        _consoleInfo = [NSMutableString string];
-    }
-    
-    if (nil != info && 0 < info.length)
-    {
-        [_consoleInfo appendString:info];
-        [_consoleInfo appendString:@"\n"];
-        
-        [_infoTextView setText:_consoleInfo];
-    }
-    else
-    {
-        [_infoTextView setText:@""];
-    }
-}
-
-- (void) _clearInfoTextView
-{
-    _consoleInfo = [NSMutableString string];
-    [self _updateInfoTextView:nil];
 }
 
 - (void) _updateUIWithChatWaitStatus:(ChatWaitStatus) status
@@ -373,9 +409,9 @@ ChatWaitStatus;
     _infoLabel.text = infoText;
     if (isTextClear)
     {
-        [self _clearInfoTextView];
+
     }
-    [self _updateInfoTextView:infoDetailText];
+
     _actionButton.titleLabel.text = actionButtonTitle;
     _actionButton.hidden = isActionButtonHide;
 }
@@ -407,19 +443,43 @@ ChatWaitStatus;
     [_commModule alohaRequest:_userDataModule.device];
 }
 
+-(void)_startLabelCloudViewFloating
+{
+    _labelCloudView.rowHeight = ROUHEIGHT_FLOATINGLABEL;
+    [_labelCloudView show];
+    [_labelCloudView beginAnimation];
+}
+
+-(void)_stopLabelCloudViewFloating
+{
+    [_labelCloudView stopAnimation];
+}
+
 -(void)_registerNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(_deactivateAlohaTimer)
                                                  name:UIApplicationDidEnterBackgroundNotification
                                                object:nil];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_activateAlohaTimer) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_stopLabelCloudViewFloating)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_startLabelCloudViewFloating) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 -(void)_unregisterNotifications
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - FloatingCloudsViewDelegate
+
+- (void)didTapLabel:(UILabel *)label
+{
+    
 }
 
 @end

@@ -236,9 +236,26 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
                   canMoveItemAtIndexPath:indexPath]) {
                 return;
             }
+            
+            // Updated by RenHai
+            // {
+            NSArray* selectedIndexPathes = self.collectionView.indexPathsForSelectedItems;
+            for (NSIndexPath* p in selectedIndexPathes)
+            {
+                [self.collectionView deselectItemAtIndexPath:p animated:NO];
+            }
+            [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+
+            NSArray* visibleCells = [self.collectionView visibleCells];
+            for (UICollectionViewCell* cell in visibleCells)
+            {
+                cell.highlighted = YES;
+            }
+            // }
+            
             // Create mock cell to drag around
             UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
-            cell.highlighted = NO;
+            cell.highlighted = YES;
             [mockCell removeFromSuperview];
             mockCell = [[UIImageView alloc] initWithFrame:cell.frame];
             mockCell.image = [self imageFromCell:cell];
@@ -290,6 +307,15 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
                  self.layoutHelper.hideIndexPath = nil;
                  [self.collectionView.collectionViewLayout invalidateLayout];
              }];
+            
+            // Updated by RenHai
+            // {
+            NSArray* visibleCells = [self.collectionView visibleCells];
+            for (UICollectionViewCell* cell in visibleCells)
+            {
+                cell.highlighted = NO;
+            }
+            // }
             
             // Reset
             [self invalidatesScrollTimer];

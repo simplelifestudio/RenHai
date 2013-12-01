@@ -21,5 +21,6 @@
 -(void) unpublishAndDisconnectOnWebRTC;
 
 -(void) registerWebRTCDelegate:(id<OpenTokDelegate>) delegate;
+-(void) unregisterWebRTCDelegate;
 
 @end
