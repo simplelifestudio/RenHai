@@ -374,8 +374,10 @@
                     
                     RHInterestLabel* oLabel = [interestCard getLabelByIndex:position];
                     
+                    UIViewController* rootVC = [CBUIUtils getRootController];
                     RHLabelManageViewController_iPhone* labelManagerVC = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:oLabel.labelName];
-                    [_guiModule.mainViewController presentPopupViewController:labelManagerVC animated:YES completion:nil];
+                    rootVC.useBlurForPopup = YES;
+                    [rootVC presentPopupViewController:labelManagerVC animated:YES completion:nil];
                     
                     break;
                 }
@@ -834,6 +836,7 @@
 {
     UIViewController* rootVC = [CBUIUtils getRootController];
     RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
+    rootVC.useBlurForPopup = YES;
     [rootVC presentPopupViewController:labelManageVC animated:YES completion:nil];
 }
 
