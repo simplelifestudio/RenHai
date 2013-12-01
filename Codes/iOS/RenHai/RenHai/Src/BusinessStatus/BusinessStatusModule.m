@@ -623,7 +623,7 @@ SINGLETON(BusinessStatusModule)
                       // E0
                       case ServerNotificationIdentifier_SessionBound:
                       {
-                          [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                          // IGNORE
                           break;
                       }
                       // E1
