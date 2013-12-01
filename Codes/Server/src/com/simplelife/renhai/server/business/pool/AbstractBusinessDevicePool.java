@@ -24,7 +24,7 @@ import com.simplelife.renhai.server.util.Worker;
 
 
 /** */
-public abstract class AbstractBusinessDevicePool extends AbstractDevicePool implements IBusinessPool, IProductor
+public abstract class AbstractBusinessDevicePool extends AbstractDevicePool implements IBusinessPool
 {
     // Scheduler of current BusinessDevicePool
     protected AbstractBusinessScheduler businessScheduler;
@@ -37,7 +37,15 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     protected ConcurrentHashMap<String, IDeviceWrapper> matchStartedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     
     protected final int deviceCountPerSession = 2;
-    protected Worker matchWorker = new Worker(this);
+
+    
+    public abstract void startService();
+    public abstract void stopService();
+    
+    public int getDeviceCountPerSession()
+    {
+    	return deviceCountPerSession;
+    }
     
     public Consts.BusinessType getBusinessType()
     {

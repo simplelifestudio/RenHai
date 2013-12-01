@@ -293,6 +293,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	inactiveTimer.scheduleAtFixedRate(new InactiveCheckTask(), GlobalSetting.TimeOut.CheckPingInterval, GlobalSetting.TimeOut.CheckPingInterval);
     	bannedTimer.scheduleAtFixedRate(new BannedCheckTask(), GlobalSetting.TimeOut.OnlineDeviceConnection, GlobalSetting.TimeOut.OnlineDeviceConnection);
     	statSaveTimer.scheduleAtFixedRate(new StatSaveTask(), GlobalSetting.TimeOut.SaveStatistics, GlobalSetting.TimeOut.SaveStatistics);
+    	businessPoolMap.get(Consts.BusinessType.Interest).startService();
     	logger.debug("Timers of online device pool started.");
     }
     
@@ -301,6 +302,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	inactiveTimer.cancel();
     	bannedTimer.cancel();
     	statSaveTimer.cancel();
+    	businessPoolMap.get(Consts.BusinessType.Interest).stopService();
     	logger.debug("Timers of online device pool stopped.");
     }
     

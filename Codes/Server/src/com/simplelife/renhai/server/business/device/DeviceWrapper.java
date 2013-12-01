@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -54,7 +53,6 @@ import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
-import com.simplelife.renhai.server.util.INode;
 import com.simplelife.renhai.server.util.JSONKey;
 
 
@@ -385,7 +383,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 
     	if (this.businessStatus == Consts.DeviceStatus.Disconnected)
     	{
-    		logger.warn("Received command from offline device <"+ getDeviceSn() +">\n{}", command.toReadableString());
+    		logger.warn("Received command from Disconnected device <"+ getDeviceSn() +">\n{}", command.toReadableString());
     		return;
     	}
     	

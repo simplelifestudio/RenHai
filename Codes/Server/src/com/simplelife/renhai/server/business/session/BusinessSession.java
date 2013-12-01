@@ -101,7 +101,7 @@ public class BusinessSession implements IBusinessSession
     	return true;
     }
     
-    private boolean checkStartSession(Collection<IDeviceWrapper> deviceList)
+    private boolean checkStartSession(List<IDeviceWrapper> deviceList)
     {
     	if (deviceList == null)
     	{
@@ -121,19 +121,36 @@ public class BusinessSession implements IBusinessSession
     	}
     	
     	Consts.DeviceStatus status;
+    	/*
+    	for (IDeviceWrapper deviceWrapper : deviceList)
+    	{
+    		logger.debug("=================list before checking status for start session device<{}> ", deviceWrapper.getDeviceSn());
+    	}
+    	*/
+    	
+    	int size = deviceList.size();
+    	/*
+    	for (int i = 0; i < size; i++)
+    	{
+    		logger.debug("=================list before checking status for start session, by index device<{}> ", deviceList.get(i).getDeviceSn());
+    	}
+    	*/
+    	
     	for (IDeviceWrapper deviceWrapper : deviceList)
     	{
     		if (deviceWrapper == null)
     		{
-    			logger.error("DeviceWrapper is null when trying to bind with session.");
+    			logger.error("Fatal error: DeviceWrapper is null when trying to bind with session.");
     			pool.onDeviceLeave(deviceWrapper, Consts.StatusChangeReason.UnknownBusinessException);
     			return false;
     		}
+    		
+    		//logger.debug("=================Check status of device <{}> for starting session", deviceWrapper.getDeviceSn());
     		status = deviceWrapper.getBusinessStatus();
     		
     		if ( status != Consts.DeviceStatus.MatchStarted)
     		{
-    			logger.error("Abnormal business status of device <{}>: " + status.name(), deviceWrapper.getDeviceSn());
+    			logger.error("Abnormal business status of device <{}> when trying to start session: " + status.name(), deviceWrapper.getDeviceSn());
     			return false;
     		}
     	}
@@ -211,6 +228,7 @@ public class BusinessSession implements IBusinessSession
     	}
     	
     	//logger.debug("===============before check start session");
+    	//logger.debug("===============size of deviceList:{}", deviceList.size());
     	if (!checkStartSession(deviceList))
     	{
     		endSession();
@@ -228,6 +246,7 @@ public class BusinessSession implements IBusinessSession
     			device = deviceList.get(i);
     			if (device == null)
     			{
+    				logger.error("Fatal Error: device object enclosed in Device <{}> is null!", device.getDeviceSn());
     				continue;
     			}
     			
@@ -375,6 +394,11 @@ public class BusinessSession implements IBusinessSession
     **/
     public void changeStatus(Consts.BusinessSessionStatus targetStatus)
     {
+    	if (logger.isDebugEnabled())
+    	{
+    		logger.debug("[Milestone] Status of " + sessionId + " will be changed from {} to " + targetStatus.name(), status.name());
+    	}
+    	
     	if (status == targetStatus)
     	{
     		if (targetStatus == Consts.BusinessSessionStatus.Idle && pool != null)
@@ -383,7 +407,6 @@ public class BusinessSession implements IBusinessSession
     		}
     		return;
     	}
-    	logger.debug("[Milestone] Business session " + sessionId + " changes status from {} to " + targetStatus.name(), status.name());
     	switch(targetStatus)
     	{
     		case Idle:
@@ -436,6 +459,11 @@ public class BusinessSession implements IBusinessSession
 				break;
     	}
     	status = targetStatus;
+    	
+    	if (logger.isDebugEnabled())
+    	{
+    		logger.debug("[Milestone] Status of " + sessionId + " changed to {}", status.name());
+    	}
     }
     
     
@@ -542,7 +570,7 @@ public class BusinessSession implements IBusinessSession
     		String sTemp = "[Milestone] Business progress of Device <" + deviceSn + "> is changed to " + progress.name();
     		
     		DeviceBusinessProgress tmpProgress = progressMap.get(deviceSn);
-    		if (tmpProgress != null)
+    		if (tmpProgress == null)
     		{
     			sTemp += ", but its progress is not saved in BusinessSesion currently";
     		}

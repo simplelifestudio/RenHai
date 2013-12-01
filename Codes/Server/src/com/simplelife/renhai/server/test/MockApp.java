@@ -1136,6 +1136,31 @@ public class MockApp implements IMockApp, Runnable
 			case AgreeChatReqSent:
 				if (messageId == Consts.MessageId.BusinessSessionResponse)
 				{
+					if (behaviorMode ==  MockAppConsts.MockAppBehaviorMode.ConnectLossDuringChat)
+					{
+						try
+						{
+							Thread.sleep(getRandomVideoChatDuration());
+						}
+						catch (InterruptedException e)
+						{
+							FileLogger.printStackTrace(e);
+						}
+						setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
+					}
+					else if (behaviorMode.ordinal() >= MockAppConsts.MockAppBehaviorMode.NoRequestOfAssess.ordinal())
+					{
+						task = new AutoReplyTask(
+								MockAppRequest.EndChat, 
+								null, 
+								this,
+								getRandomVideoChatDuration(),
+								MockAppConsts.MockAppBusinessStatus.EndChatReqSent);
+						task.setName("EndChatRequest" + DateUtil.getCurrentMiliseconds());
+					}
+				}
+				else if (messageId == Consts.MessageId.BusinessSessionNotification)
+				{
 					JSONObject body = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
 					//lastReceivedCommand.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Header);
 					if (body.getInteger(JSONKey.OperationType) == Consts.NotificationType.OthersideRejected.getValue())
@@ -1143,34 +1168,6 @@ public class MockApp implements IMockApp, Runnable
 						//setBusinessStatus(MockAppConsts.MockAppBusinessStatus.EnterPoolResReceived);
 						endBusiness();
 					}
-					else if (body.getInteger(JSONKey.OperationType) == Consts.NotificationType.OthersideAgreed.getValue())
-					{
-						if (behaviorMode ==  MockAppConsts.MockAppBehaviorMode.ConnectLossDuringChat)
-						{
-							try
-							{
-								Thread.sleep(getRandomVideoChatDuration());
-							}
-							catch (InterruptedException e)
-							{
-								FileLogger.printStackTrace(e);
-							}
-							setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
-						}
-						else if (behaviorMode.ordinal() >= MockAppConsts.MockAppBehaviorMode.NoRequestOfAssess.ordinal())
-						{
-							task = new AutoReplyTask(
-									MockAppRequest.EndChat, 
-									null, 
-									this,
-									getRandomVideoChatDuration(),
-									MockAppConsts.MockAppBusinessStatus.EndChatReqSent);
-							task.setName("EndChatRequest" + DateUtil.getCurrentMiliseconds());
-						}
-					}
-				}
-				else if (messageId == Consts.MessageId.BusinessSessionNotification)
-				{
 					replyNotification(obj, null);
 				}
 				else

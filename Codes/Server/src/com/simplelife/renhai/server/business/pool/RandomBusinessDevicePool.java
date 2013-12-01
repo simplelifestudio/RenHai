@@ -69,15 +69,12 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 	}
 
 	@Override
-	public boolean hasWork()
+	public void startService()
 	{
-		return false;
 	}
 
 	@Override
-	public Runnable getWork()
+	public void stopService()
 	{
-		return null;
 	}
-
 }
