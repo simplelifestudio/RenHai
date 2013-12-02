@@ -20,7 +20,7 @@
 #define DELAY_ENDCHAT 1.0f
 
 #define INTERVAL_TOOLBARDISPLAYTICK 1
-#define INTERVAL_ALOHA 5
+#define INTERVAL_ALOHA 60
 
 #define _TOOLBAR_DISPLAY_PERIOD 3
 
@@ -192,8 +192,6 @@
     [self _clockStart];
     
     [self _checkIsOthersideLost];
-    
-    [self _activateAlohaTimer];
     
     [self _registerNotifications];
     
@@ -468,30 +466,22 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void)_activateAlohaTimer
 {
-    [CBAppUtils asyncProcessInBackgroundThread:^(){
-        [self _deactivateAlohaTimer];
-        
-        _alohaTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_ALOHA target:self selector:@selector(_remoteAloha) userInfo:nil repeats:YES];
-        
-        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
-        [currentRunLoop addTimer:_alohaTimer forMode:NSRunLoopCommonModes];
-        [currentRunLoop run];
-    }];
+    _alohaTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_ALOHA target:self selector:@selector(_remoteAloha) userInfo:nil repeats:YES];
 }
 
 -(void)_deactivateAlohaTimer
 {
-    [CBAppUtils asyncProcessInBackgroundThread:^(){
-        if (nil != _alohaTimer)
-        {
-            [_alohaTimer invalidate];
-            _alohaTimer = nil;
-        }
-    }];
+    if (nil != _alohaTimer)
+    {
+        [_alohaTimer invalidate];
+        _alohaTimer = nil;
+    }
 }
 
 -(void) _remoteAloha
 {
+    DDLogVerbose(@"#####ChatVideo-Aloha");
+    
     [_commModule alohaRequest:_userDataModule.device];
 }
 
@@ -648,6 +638,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
         [_selfVideoView addSubview:_publisherView];
         
         [_selfVideoView setNeedsDisplay];
+        
+        [self _activateAlohaTimer];
     }
 }
 

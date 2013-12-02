@@ -422,7 +422,7 @@ ChatWaitStatus;
         [self _deactivateAlohaTimer];
         
         _alohaTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_ALOHA target:self selector:@selector(_remoteAloha) userInfo:nil repeats:YES];
-        
+
         NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
         [currentRunLoop addTimer:_alohaTimer forMode:NSRunLoopCommonModes];
         [currentRunLoop run];
@@ -440,6 +440,8 @@ ChatWaitStatus;
 
 -(void) _remoteAloha
 {
+    DDLogVerbose(@"#####ChatWait-Aloha");
+    
     [_commModule alohaRequest:_userDataModule.device];
 }
 
