@@ -450,9 +450,10 @@
 {
     [self _setupSideBarMenuButtons];
     
-//    [self.navigationController.navigationBar setTintColor:FLATUI_COLOR_NAVIGATIONBAR];
-    
     self.navigationItem.title = NAVIGATIONBAR_TITLE_IMPRESS;
+    
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:FLATUI_COLOR_NAVIGATIONBAR];
+    [self.navigationItem.leftBarButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
 }
 
 -(void)_setupSideBarMenuButtons

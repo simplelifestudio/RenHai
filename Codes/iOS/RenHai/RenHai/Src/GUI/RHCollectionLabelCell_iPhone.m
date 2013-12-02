@@ -77,7 +77,7 @@ static UIImage* sortIconImage;
     }
     else
     {
-        self.layer.borderColor = MAJOR_COLOR_MID.CGColor;
+        self.layer.borderColor = FLATUI_COLOR_LABELCELL_BORDER.CGColor;
     }
 }
 
@@ -188,7 +188,7 @@ static UIImage* sortIconImage;
     self.cellMode = CellMode_Normal;
     
     self.layer.borderWidth = BORDER_WIDTH;
-    self.layer.borderColor = MAJOR_COLOR_MID.CGColor;
+    self.layer.borderColor = FLATUI_COLOR_LABELCELL_BORDER.CGColor;
     self.layer.cornerRadius = CORNER_RADIUS;
 }
 

@@ -27,7 +27,7 @@
 
 "Home_OnlineCount" = "在线人数";
 "Home_ChatCount" = "聊天人数";
-"Home_Banner_NoInfo" = "当前无服务器通知。";
+"Home_Banner_NoInfo" = "Alpha测试，意见建议请联系：simplelife.patrick@gmail.com";
 "Home_Banner_Maintenance" = "服务器安排维护：自 %@ 至 %@。";
 "Home_PressToEnterPool" = "点击进入";
 "Home_IsEnteringPool" = "正在进入";

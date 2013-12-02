@@ -71,16 +71,6 @@
     [self setNavigationBarHidden:YES];
     [self popToRootViewControllerAnimated:NO];
     
-    if ([UIDevice isRunningOniOS7AndLater])
-    {
-//        self.navigationBar.barTintColor = FLATUI_COLOR_NAVIGATIONBAR;
-    }
-    else
-    {
-//        self.navigationBar.tintColor = [UIColor whiteColor];
-    }
-    
-//    [self pushViewController:_guiModule.homeViewController animated:NO];    
     [_guiModule.mainViewController showViewController:self animated:NO completion:nil];
 }
 

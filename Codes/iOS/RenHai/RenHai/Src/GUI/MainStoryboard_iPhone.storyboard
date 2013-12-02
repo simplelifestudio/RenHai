@@ -524,8 +524,9 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <view alpha="0.10000000000000001" contentMode="scaleToFill" id="kfI-o8-qqI" userLabel="maskView">
+                            <view alpha="0.050000000000000003" contentMode="scaleToFill" id="kfI-o8-qqI" userLabel="maskView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                                 <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                             </view>
@@ -573,7 +574,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="jnU-fI-8d8" userLabel="progressView" customClass="CBRoundProgressView">
-                                <rect key="frame" x="110" y="367" width="100" height="100"/>
+                                <rect key="frame" x="110" y="370" width="100" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Wmn-PD-PdJ" userLabel="enterButton" customClass="OBShapedButton">
@@ -708,7 +709,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" id="Y9q-yq-7Al" userLabel="bannerView" customClass="CBAutoScrollLabel">
-                                <rect key="frame" x="40" y="232" width="240" height="58"/>
+                                <rect key="frame" x="5" y="250" width="310" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>

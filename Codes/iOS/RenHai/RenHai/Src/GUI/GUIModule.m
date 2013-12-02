@@ -64,6 +64,8 @@ SINGLETON(GUIModule)
     _appDataModule = [AppDataModule sharedInstance];
     _statusModule = [BusinessStatusModule sharedInstance];
 
+    [self _setupUIAppearance];
+    
     [self _setupViewControllersFromStoryboard];
 }
 
@@ -165,11 +167,11 @@ SINGLETON(GUIModule)
 
 -(void) _setupViewControllersFromStoryboard
 {
-    if ([UIDevice isRunningOniOS7AndLater])
-    {
-        UIWindow* window = [CBUIUtils getKeyWindow];
-        window.tintColor = MAJOR_COLOR_MID;
-    }
+//    if ([UIDevice isRunningOniOS7AndLater])
+//    {
+//        UIWindow* window = [CBUIUtils getKeyWindow];
+//        window.tintColor = FLATUI_COLOR_TOOLBAR;
+//    }
     
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:STORYBOARD_IPHONE bundle:nil];
     
@@ -224,6 +226,27 @@ SINGLETON(GUIModule)
             }
         }
     }
+}
+
+-(void) _setupUIAppearance
+{
+    [[UINavigationBar appearance] setTitleTextAttributes:
+     [NSDictionary dictionaryWithObjectsAndKeys:
+      FLATUI_COLOR_TINT,
+      UITextAttributeTextColor,
+      SPECIAL_COLOR_CLEAR,
+      UITextAttributeTextShadowColor ,
+      nil,
+      UITextAttributeTextShadowOffset,
+      nil,
+      UITextAttributeFont,
+      nil
+      ]
+     ];
+
+    [[UINavigationBar appearance] setTintColor:FLATUI_COLOR_TINT];
+    [[UIToolbar appearance] setTintColor:FLATUI_COLOR_TINT];
+    [[UIBarButtonItem appearance] setTintColor:FLATUI_COLOR_TINT];
 }
 
 @end

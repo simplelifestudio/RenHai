@@ -209,7 +209,10 @@ static NSTimeInterval s_labelDuration = LABELS_DURATION;
     _label1.alpha = 0.0;
     _label2.alpha = 0.0;
     _label3.alpha = 0.0;
+    
     _studioLabel.alpha = 1.0;
+    
+    _label2.textColor = FLATUI_COLOR_TOOLBAR;
 }
 
 #pragma mark - ScreenOrientation Methods

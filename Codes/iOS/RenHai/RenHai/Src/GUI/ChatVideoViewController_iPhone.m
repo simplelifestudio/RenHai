@@ -26,7 +26,7 @@
 
 #define BORDERWIDTH_VIDEOVIEW 3.0f;
 #define CORNERRADIUS_VIDEOVIEW 5.0f;
-#define BORDERCOLOR_VIDEOVIEW SECONARDY_COLOR_LIGHT
+#define BORDERCOLOR_VIDEOVIEW SECONDARY_COLOR_LIGHT
 
 @interface ChatVideoViewController_iPhone () <OpenTokDelegate, UIGestureRecognizerDelegate>
 {
@@ -251,9 +251,22 @@
     _selfVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
     _selfVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
 
-//    _parterVideoView.layer.borderColor = [UIColor redColor].CGColor;
-//    _parterVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
-//    _parterVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
+    [self.navigationController.toolbar configureFlatToolbarWithColor:FLATUI_COLOR_TOOLBAR];
+    [_endChatButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
+    [_selfVideoButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
+    
+    NSDictionary *attributesNormal = [NSDictionary dictionaryWithObjectsAndKeys:
+                                FLATUI_COLOR_TINT,
+                                UITextAttributeTextColor,
+                                SPECIAL_COLOR_CLEAR,
+                                UITextAttributeTextShadowColor,
+                                nil,
+                                UITextAttributeTextShadowOffset,
+                                nil,
+                                UITextAttributeFont,
+                                nil];
+    [_endChatButtonItem setTitleTextAttributes:attributesNormal forState:UIControlStateNormal];
+    [_selfVideoButtonItem setTitleTextAttributes:attributesNormal forState:UIControlStateNormal];
     
     [self _setupGesturers];
 }
