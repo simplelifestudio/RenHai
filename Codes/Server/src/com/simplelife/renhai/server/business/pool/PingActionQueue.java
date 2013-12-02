@@ -27,7 +27,7 @@ public class PingActionQueue implements IProductor
 	
 	private PingActionQueue()
 	{
-		
+		worker.setName("Ping");
 	}
 	public void newAction(PingActionType actionType, PingNode node)
 	{

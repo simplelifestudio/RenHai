@@ -34,6 +34,11 @@ public class InterestMatchProductor implements IProductor
 	private SessionProductor sessionProductor = new SessionProductor();
 	private Logger logger = BusinessModule.instance.getLogger();
     
+	
+	public InterestMatchProductor()
+	{
+		worker.setName("InterestMatch");
+	}
 	public void startService()
 	{
 		sessionProductor.startService();

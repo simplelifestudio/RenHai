@@ -54,6 +54,7 @@ public class MockApp implements IMockApp, Runnable
 		public PingTask(MockApp mockApp)
 		{
 			this.mockApp = mockApp;
+			Thread.currentThread().setName("Ping" + DateUtil.getCurrentMiliseconds());
 		}
 		
 		@Override
@@ -61,7 +62,6 @@ public class MockApp implements IMockApp, Runnable
 		{
 			try
 			{
-				Thread.currentThread().setName("Ping" + DateUtil.getCurrentMiliseconds());
 				mockApp.ping();
 			}
 			catch(Exception e)
@@ -439,7 +439,7 @@ public class MockApp implements IMockApp, Runnable
 
     public void startTimer()
     {
-    	this.pingTimer.scheduleAtFixedRate(new PingTask(this), GlobalSetting.TimeOut.CheckPingInterval, GlobalSetting.TimeOut.CheckPingInterval);
+    	this.pingTimer.scheduleAtFixedRate(new PingTask(this), GlobalSetting.TimeOut.PingInterval, GlobalSetting.TimeOut.PingInterval);
     	executionTask.start();
     }
     

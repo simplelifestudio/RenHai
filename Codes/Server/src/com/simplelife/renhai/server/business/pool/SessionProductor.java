@@ -36,6 +36,11 @@ public class SessionProductor implements IProductor
 	private ConcurrentLinkedQueue<SessionCoordinator> sessionCoordicatorQueue = new ConcurrentLinkedQueue<>();
 	protected Worker worker = new Worker(this);
 	
+	public SessionProductor()
+	{
+		worker.setName("SessionStarter");
+	}
+	
 	public void startService()
 	{
 		worker.startExecution();
