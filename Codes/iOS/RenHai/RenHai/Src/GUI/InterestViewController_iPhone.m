@@ -100,7 +100,7 @@
 {
     [self _setupSideBarMenuButtons];
     
-    [self.navigationController.navigationBar setTintColor:FLATUI_COLOR_NAVIGATIONBAR];
+//    [self.navigationController.navigationBar setTintColor:FLATUI_COLOR_NAVIGATIONBAR];
     
     self.navigationItem.title = NAVIGATIONBAR_TITLE_INTEREST;
 }

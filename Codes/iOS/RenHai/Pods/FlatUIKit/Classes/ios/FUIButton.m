@@ -84,4 +84,20 @@
     [self setBackgroundImage:highlightedBackgroundImage forState:UIControlStateHighlighted];
 }
 
+// Updated by RenHai
+// {
+- (void)setEnabled:(BOOL)enabled
+{
+    [super setEnabled:enabled];
+    if (enabled)
+    {
+        self.alpha = 1.0;
+    }
+    else
+    {
+        self.alpha = 0.5;
+    }
+}
+// }
+
 @end

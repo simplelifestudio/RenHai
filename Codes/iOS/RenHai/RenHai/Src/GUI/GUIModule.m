@@ -165,6 +165,12 @@ SINGLETON(GUIModule)
 
 -(void) _setupViewControllersFromStoryboard
 {
+    if ([UIDevice isRunningOniOS7AndLater])
+    {
+        UIWindow* window = [CBUIUtils getKeyWindow];
+        window.tintColor = MAJOR_COLOR_MID;
+    }
+    
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:STORYBOARD_IPHONE bundle:nil];
     
     _connectViewController = [[ConnectViewController_iPhone alloc] initWithNibName:NIB_CONNECTVIEWCONTROLLER bundle:nil];
