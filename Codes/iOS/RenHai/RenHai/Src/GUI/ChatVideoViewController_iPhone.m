@@ -385,6 +385,18 @@
     
     [self.navigationController setNavigationBarHidden:hidden animated:YES];
     [self.navigationController setToolbarHidden:hidden animated:YES];
+    
+    if (_subscriberView)
+    {
+        _subscriberView.frame = CGRectMake(_parterVideoView.frame.origin.x, _parterVideoView.frame.origin.y, _parterVideoView.frame.size.width, _parterVideoView.frame.size.height);
+    }
+    
+//    if (_publisherView)
+//    {
+//        _publisherView.frame = CGRectMake(_selfVideoView.frame.origin.x, _selfVideoView.frame.origin.y, _selfVideoView.frame.size.width, _selfVideoView.frame.size.height);
+//    }
+    
+    [self.view sizeToFit];
 }
 
 -(void) _remoteEndChat
