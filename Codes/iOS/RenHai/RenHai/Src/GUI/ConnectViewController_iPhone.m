@@ -222,6 +222,7 @@ ConnectStatus;
     _statusModule = [BusinessStatusModule sharedInstance];
 
     _isViewControllerVisible = NO;
+    _infoLabel.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR;
     
     [self _resetInstance];
 }

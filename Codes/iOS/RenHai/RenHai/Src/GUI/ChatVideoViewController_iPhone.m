@@ -252,8 +252,8 @@
     _selfVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
 
     [self.navigationController.toolbar configureFlatToolbarWithColor:FLATUI_COLOR_TOOLBAR];
-    [_endChatButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
-    [_selfVideoButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
+    [_endChatButtonItem configureFlatButtonWithColor:FLATUI_COLOR_TOOLBAR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
+    [_selfVideoButtonItem configureFlatButtonWithColor:FLATUI_COLOR_TOOLBAR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
     
     NSDictionary *attributesNormal = [NSDictionary dictionaryWithObjectsAndKeys:
                                 FLATUI_COLOR_TINT,

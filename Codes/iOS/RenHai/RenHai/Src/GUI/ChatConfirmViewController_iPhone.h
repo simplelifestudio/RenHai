@@ -12,7 +12,6 @@
 
 @interface ChatConfirmViewController_iPhone : UIViewController <UICollectionViewDelegate, UICollectionViewDataSource, ChatWizardPage>
 
-@property (weak, nonatomic) IBOutlet UILabel *viewTitleLabel;
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UILabel *partnerStatusLabel;
 @property (weak, nonatomic) IBOutlet UILabel *selfStatusLabel;

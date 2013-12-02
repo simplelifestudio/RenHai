@@ -64,7 +64,6 @@
 
 @implementation ChatConfirmViewController_iPhone
 
-@synthesize viewTitleLabel = _viewTitleLabel;
 @synthesize collectionView = _collectionView;
 
 @synthesize selfStatusLabel = _selfStatusLabel;
@@ -331,13 +330,6 @@
 
 -(void) resetPage
 {
-    UserDataModule* m = [UserDataModule sharedInstance];
-    RHBusinessSession* session = m.businessSession;
-    RHMatchedCondition* matchedCondition = session.matchedCondition;
-    RHInterestLabel* interestLabel = matchedCondition.interestLabel;
-    NSString* str = [NSString stringWithFormat:NSLocalizedString(@"ChatConfirm_Title", nil), interestLabel.labelName];
-    _viewTitleLabel.text = str;
-    
     _selfStatusLabel.text = NSLocalizedString(@"ChatConfirm_SelfStatus_Undecided", nil);
     _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Undecided", nil);
     
@@ -357,6 +349,15 @@
     [self _setCountdownSeconds:COUNTDOWN_SECONDS];
     
     [self _refreshCollectionView];
+    
+    UserDataModule* m = [UserDataModule sharedInstance];
+    RHBusinessSession* session = m.businessSession;
+    RHMatchedCondition* matchedCondition = session.matchedCondition;
+    RHInterestLabel* interestLabel = matchedCondition.interestLabel;
+    NSString* str = [NSString stringWithFormat:NSLocalizedString(@"ChatConfirm_Title", nil), interestLabel.labelName];
+    self.navigationItem.title = str;
+    [self.navigationItem setHidesBackButton:YES];
+    [self.navigationController setNavigationBarHidden:NO];
 }
 
 -(void) pageWillLoad
@@ -437,6 +438,13 @@
     
     [_agreeChatButton setTitle:NSLocalizedString(@"ChatConfirm_Action_Agree", nil) forState:UIControlStateNormal];
     [_rejectChatButton setTitle:NSLocalizedString(@"ChatConfirm_Action_Reject", nil) forState:UIControlStateNormal];
+
+    [self _setupNavigationBar];
+}
+
+- (void) _setupNavigationBar
+{
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:FLATUI_COLOR_NAVIGATIONBAR_CHATWIZARD];
 }
 
 -(void)_setupCollectionView
@@ -510,8 +518,6 @@
     _agreeChatButton.hidden = YES;
     _rejectChatButton.hidden = YES;
     _selfStatusLabel.text = NSLocalizedString(@"ChatConfirm_SelfStatus_Agreed", nil);
-    
-    [self _clockCancel];
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         

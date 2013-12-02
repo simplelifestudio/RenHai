@@ -43,11 +43,11 @@
 "Device_UnbanDate" = "解禁日期";
 
 "Impress_Assesses" = "我获得的评价";
-"Impress_Chats" = "我获得的聊天评价";
+"Impress_Chats" = "别人对我的评价";
 "Impress_Labels" = "别人对我的印象";
-"Impress_AssessKey_Happy" = "相谈甚欢";
-"Impress_AssessKey_SoSo" = "话不投机";
-"Impress_AssessKey_Disgusting" = "令人生厌";
+"Impress_AssessKey_Happy" = "好评";
+"Impress_AssessKey_SoSo" = "中评";
+"Impress_AssessKey_Disgusting" = "差评";
 "Impress_ChatTotalCount" = "聊天次数";
 "Impress_ChatTotalDuration" = "聊天时长";
 "Impress_ChatLossCount" = "断线次数";
@@ -136,6 +136,7 @@
 "ChatVideo_PartnerVideo" = "对方视频";
 "ChatVideo_Action_End" = "结束聊天";
 
+"ChatAssess_Title" = "评价对方";
 "ChatAssess_Action_Continue" = "继续";
 "ChatAssess_Action_Finish" = "结束";
 "ChatAssess_Action_AddImpressLabel" = "新建";

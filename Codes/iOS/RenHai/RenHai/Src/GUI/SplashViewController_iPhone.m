@@ -18,7 +18,7 @@
 #import "PKRevealController.h"
 #import "MainViewController_iPhone.h"
 
-#define STUDIOLABEL_DURATION 0.75
+#define STUDIOLABEL_DURATION 1.5
 #define LABELS_DURATION 0.75
 #define LABELS_DURATION_OFFSET 0.5
 #define SPLASH_DURATION 0.25
@@ -212,6 +212,7 @@ static NSTimeInterval s_labelDuration = LABELS_DURATION;
     
     _studioLabel.alpha = 1.0;
     
+    _studioLabel.textColor = FLATUI_COLOR_NAVIGATIONBAR;
     _label2.textColor = FLATUI_COLOR_TOOLBAR;
 }
 

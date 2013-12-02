@@ -86,8 +86,6 @@ ChatWaitStatus;
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:YES];
-    
     [self resetPage];
 }
 
@@ -144,6 +142,10 @@ ChatWaitStatus;
     [self _computeLabelCloudView];
     
     [_actionButton setTitle:NSLocalizedString(@"ChatWait_Action_Cancel", nil) forState:UIControlStateNormal];
+    
+    self.navigationItem.title = NSLocalizedString(@"ChatWait_WaitForMatch", nil);    
+    [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationItem setHidesBackButton:YES];
 }
 
 -(void) pageWillLoad
@@ -190,6 +192,13 @@ ChatWaitStatus;
     _statusModule = [BusinessStatusModule sharedInstance];
     
     [self _setupLabelCloudView];
+    
+    [self _setupNavigationBar];
+}
+
+- (void) _setupNavigationBar
+{
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:FLATUI_COLOR_NAVIGATIONBAR_CHATWIZARD];
 }
 
 - (void) _setupLabelCloudView
@@ -250,6 +259,7 @@ ChatWaitStatus;
         }
     }
     _labelCloudView.contents = [labelNameList subarrayWithRange:NSMakeRange(0, requireLabelCount)];
+
     [self _startLabelCloudViewFloating];
 }
 
@@ -404,12 +414,6 @@ ChatWaitStatus;
         {
             break;
         }
-    }
-    
-    _infoLabel.text = infoText;
-    if (isTextClear)
-    {
-
     }
 
     _actionButton.titleLabel.text = actionButtonTitle;

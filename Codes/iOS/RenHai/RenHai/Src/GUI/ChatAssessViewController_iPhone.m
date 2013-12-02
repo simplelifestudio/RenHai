@@ -106,8 +106,6 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:YES];
-    
     [self resetPage];
 }
 
@@ -153,6 +151,10 @@
     [self _refreshExistImpressLabelsView];
     
     [self _setCountdownSeconds:COUNTDOWN_SECONDS];
+    
+    self.navigationItem.title = NSLocalizedString(@"ChatAssess_Title", nil);
+    [self.navigationController setNavigationBarHidden:NO];
+    [self.navigationItem setHidesBackButton:YES];
 }
 
 -(void) pageWillLoad
@@ -185,6 +187,21 @@
     [self _setupCollectionView];
     
     [self _setupGesturers];
+    
+    [self _setupNavigationBar];
+    
+// 已在IB上设置
+//    if ([UIDevice isRunningOniOS7AndLater])
+//    {
+//        self.edgesForExtendedLayout = UIRectEdgeNone;
+//        self.extendedLayoutIncludesOpaqueBars = NO;
+//        self.automaticallyAdjustsScrollViewInsets = NO;
+//    }
+}
+
+- (void) _setupNavigationBar
+{
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:FLATUI_COLOR_NAVIGATIONBAR_CHATWIZARD];
 }
 
 -(void)_setupGesturers
