@@ -123,6 +123,7 @@
 "ChatConfirm_Action_Agree" = "同意";
 "ChatConfirm_Action_Reject" = "拒绝";
 
+"ChatVideo_Title" = "视频聊天";
 "ChatVideo_SelfStatus_Prepairing" = "我的视频：准备中";
 "ChatVideo_SelfStatus_Connected" = "我的视频：已连接";
 "ChatVideo_SelfStatus_Failed" = "我的视频：已失败";

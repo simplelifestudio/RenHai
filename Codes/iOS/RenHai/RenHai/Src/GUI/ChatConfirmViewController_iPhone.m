@@ -97,8 +97,6 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:YES];
-    
     [self resetPage];
 }
 

@@ -103,8 +103,6 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:YES];
-    
     [self resetPage];
 }
 
@@ -183,8 +181,9 @@
     _count = 0;
     [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
 
-    [self _setToolbarHidden:YES];
-    _selfVideoView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin| UIViewAutoresizingFlexibleLeftMargin;
+    [self _setNavigationBarAndToolbarHidden:NO];
+    self.navigationItem.title = NSLocalizedString(@"ChatVideo_Title", nil);
+    [self.navigationItem setHidesBackButton:YES];
 }
 
 -(void) pageWillLoad
@@ -206,7 +205,7 @@
     
     [self _disconnectWebRTC];
     
-    [self _setToolbarHidden:YES];
+    [self _setNavigationBarAndToolbarHidden:YES];
     
     [self _clockCancel];
 }
@@ -250,25 +249,36 @@
     _selfVideoView.layer.borderColor = BORDERCOLOR_VIDEOVIEW.CGColor;
     _selfVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
     _selfVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
+    
+    [self _setupGesturers];
+    
+    [self _setupNavigationBar];
+    [self _setupToolbar];
+}
 
+- (void) _setupNavigationBar
+{
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:FLATUI_COLOR_NAVIGATIONBAR_CHATWIZARD];
+}
+
+- (void) _setupToolbar
+{
     [self.navigationController.toolbar configureFlatToolbarWithColor:FLATUI_COLOR_TOOLBAR];
     [_endChatButtonItem configureFlatButtonWithColor:FLATUI_COLOR_TOOLBAR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
     [_selfVideoButtonItem configureFlatButtonWithColor:FLATUI_COLOR_TOOLBAR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
     
     NSDictionary *attributesNormal = [NSDictionary dictionaryWithObjectsAndKeys:
-                                FLATUI_COLOR_TINT,
-                                UITextAttributeTextColor,
-                                SPECIAL_COLOR_CLEAR,
-                                UITextAttributeTextShadowColor,
-                                nil,
-                                UITextAttributeTextShadowOffset,
-                                nil,
-                                UITextAttributeFont,
-                                nil];
+                                      FLATUI_COLOR_TINT,
+                                      UITextAttributeTextColor,
+                                      SPECIAL_COLOR_CLEAR,
+                                      UITextAttributeTextShadowColor,
+                                      nil,
+                                      UITextAttributeTextShadowOffset,
+                                      nil,
+                                      UITextAttributeFont,
+                                      nil];
     [_endChatButtonItem setTitleTextAttributes:attributesNormal forState:UIControlStateNormal];
     [_selfVideoButtonItem setTitleTextAttributes:attributesNormal forState:UIControlStateNormal];
-    
-    [self _setupGesturers];
 }
 
 -(void) _setupGesturers
@@ -288,8 +298,8 @@
 
 -(void) _didSingleTapped:(UITapGestureRecognizer*) recognizer
 {
-    BOOL oldStatus = [self _isToolbarHidden];
-    [self _setToolbarHidden:!oldStatus];
+    BOOL oldStatus = [self _isNavigationBarAndToolbarHidden];
+    [self _setNavigationBarAndToolbarHidden:!oldStatus];
 }
 
 -(void) _didPanned:(UIPanGestureRecognizer*) recognizer
@@ -357,22 +367,23 @@
     }];
 }
 
--(BOOL) _isToolbarHidden
+-(BOOL) _isNavigationBarAndToolbarHidden
 {
-    return self.navigationController.toolbar.hidden;
+    return (self.navigationController.toolbar.hidden && self.navigationController.navigationBar.hidden);
 }
 
--(void) _setToolbarHidden:(BOOL) hidden
+-(void) _setNavigationBarAndToolbarHidden:(BOOL) hidden
 {
-    if (hidden)
-    {
-        [self _deactivateToolbarDisplayTimer];
-    }
-    else
-    {
-        [self _activateToolbarDisplayTimer];
-    }
+//    if (hidden)
+//    {
+//        [self _deactivateToolbarDisplayTimer];
+//    }
+//    else
+//    {
+//        [self _activateToolbarDisplayTimer];
+//    }
     
+    [self.navigationController setNavigationBarHidden:hidden animated:YES];
     [self.navigationController setToolbarHidden:hidden animated:YES];
 }
 
@@ -445,7 +456,7 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 {
     if (_TOOLBAR_DISPLAY_PERIOD <= _kToolbarDisplaySeconds)
     {
-        [self _setToolbarHidden:YES];
+        [self _setNavigationBarAndToolbarHidden:YES];
     }
     else
     {
