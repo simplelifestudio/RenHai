@@ -39,7 +39,7 @@ SINGLETON(BusinessStatusModule)
 
 -(void) startService
 {
-    DDLogVerbose(@"Module:%@ is started.", self.moduleIdentity);
+    DDLogInfo(@"Module:%@ is started.", self.moduleIdentity);
     
     [super startService];
 }
@@ -623,7 +623,7 @@ SINGLETON(BusinessStatusModule)
                       // E0
                       case ServerNotificationIdentifier_SessionBound:
                       {
-                          [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                          // IGNORE
                           break;
                       }
                       // E1
@@ -1242,16 +1242,12 @@ SINGLETON(BusinessStatusModule)
 
 -(void) _triggerBusinessStatusErrorByAppMessage:(AppMessageIdentifier) appMessageId
 {
-    DDLogError(@"Error App Message:%d in BusinessStatus: %d", appMessageId, _currentBusinessStatus.identifier);
-    
-    NSAssert(NO, @"Error App Message:%d in BusinessStatus: %d", appMessageId, _currentBusinessStatus.identifier);
+    [CBAppUtils assert:NO logFormatString:@"Error App Message:%d in BusinessStatus: %d", appMessageId, _currentBusinessStatus.identifier];
 }
 
 -(void) _triggerBusinessStatusErrorByServerNotification:(ServerNotificationIdentifier) serverNotificationId
 {
-    DDLogError(@"Error Server Notification:%d in BusinessStatus: %d", serverNotificationId, _currentBusinessStatus.identifier);
-    
-    NSAssert(NO, @"Error Server Notification:%d in BusinessStatus: %d", serverNotificationId, _currentBusinessStatus.identifier);
+    [CBAppUtils assert:NO logFormatString:@"Error Server Notification:%d in BusinessStatus: %d", serverNotificationId, _currentBusinessStatus.identifier];
 }
 
 @end

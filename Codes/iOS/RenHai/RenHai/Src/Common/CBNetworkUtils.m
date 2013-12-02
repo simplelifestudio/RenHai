@@ -43,7 +43,7 @@
                [@"en1" isEqualToString:ifa_name])
 			{
 				hostname = [NSString stringWithUTF8String:inet_ntoa(((struct sockaddr_in *)cursor->ifa_addr)->sin_addr)];
-				DDLogVerbose(@"hostname:%@",hostname);
+				DDLogInfo(@"hostname:%@",hostname);
 				break;
 			}
 		}
@@ -54,7 +54,7 @@
 
 +(BOOL) isInternetConnectable:(NSString*) hostName
 {
-    NSAssert(nil != hostName && 0 < hostName.length, @"Illegal hostName");
+    [CBAppUtils assert:(nil != hostName && 0 < hostName.length) logFormatString:@"Illegal hostName"];
     
     BOOL flag = NO;
     

@@ -66,9 +66,9 @@
 
 +(NSString*) replaceSubString:(NSString*) newSubString oldSubString:(NSString*)oldSubString string:(NSString*) string
 {
-    NSAssert(nil != string, @"Illegal main string.");
-    NSAssert(nil != oldSubString, @"Illegal old sub string.");
-    NSAssert(nil != newSubString, @"Illegal new sub string.");
+    [CBAppUtils assert:(nil != string) logFormatString:@"Illegal main string."];
+    [CBAppUtils assert:(nil != oldSubString) logFormatString:@"Illegal old sub string."];
+    [CBAppUtils assert:(nil != newSubString) logFormatString:@"Illegal new sub string."];
     
     NSMutableString* mainStringCopy = [NSMutableString stringWithString:string];
     NSRange range = [mainStringCopy rangeOfString:oldSubString];

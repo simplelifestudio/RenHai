@@ -67,8 +67,8 @@
 
 +(NSArray*) lastThreeDayStrings:(NSArray*) lastThreeDays formatString:(NSString*) formatString
 {
-    NSAssert(nil != formatString && 0 < formatString.length, @"Illegal date format string");
-    NSAssert(nil != lastThreeDays && 3 == lastThreeDays.count, @"Illegal last three days array");
+    [CBAppUtils assert:(nil != formatString && 0 < formatString.length) logFormatString:@"Illegal date format string"];
+    [CBAppUtils assert:(nil != lastThreeDays && 3 == lastThreeDays.count) logFormatString:@"Illegal last three days array"];
     
     NSMutableArray* dayStrs = [NSMutableArray array];
     
@@ -89,7 +89,7 @@
 
 +(NSInteger) dayDiffBetweenTwoDays:(NSDate*) dateA dateB:(NSDate*) dateB
 {
-    NSAssert(nil != dateA && nil != dateB, @"Nil date parameter");
+    [CBAppUtils assert:(nil != dateA && nil != dateB) logFormatString:@"Nil date parameter"];
     
     NSInteger dayIntDiff = 0;
     NSTimeInterval timeDiff = [dateA timeIntervalSinceDate:dateB];

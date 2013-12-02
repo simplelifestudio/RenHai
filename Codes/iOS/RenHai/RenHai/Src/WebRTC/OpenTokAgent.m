@@ -96,9 +96,9 @@
 
 - (void)session:(OTSession*)session didFailWithError:(OTError*)error
 {
-    DDLogInfo(@"WebRTC sessionDidFailWithError:");
-    DDLogInfo(@"- error code: %d", error.code);
-    DDLogInfo(@"- description: %@", error.localizedDescription);
+    DDLogWarn(@"WebRTC sessionDidFailWithError:");
+    DDLogWarn(@"- error code: %d", error.code);
+    DDLogWarn(@"- description: %@", error.localizedDescription);
     
     if (nil != _openTokDelegate)
     {
@@ -150,7 +150,7 @@
 
 - (void)session:(OTSession*)session didDropStream:(OTStream*)stream
 {
-    DDLogInfo(@"WebRTC sessionDidDropStream (%@)", stream.streamId);
+    DDLogWarn(@"WebRTC sessionDidDropStream (%@)", stream.streamId);
     
     BOOL flag1 = (nil != _subscriber) ? YES : NO;
     BOOL flag2 = [_subscriber.stream.streamId isEqualToString: stream.streamId];
@@ -190,9 +190,9 @@
 
 - (void)publisher:(OTPublisher*)publisher didFailWithError:(OTError*) error
 {
-    DDLogInfo(@"WebRTC publisher: %@ didFailWithError:", publisher);
-    DDLogInfo(@"- error code: %d", error.code);
-    DDLogInfo(@"- description: %@", error.localizedDescription);
+    DDLogWarn(@"WebRTC publisher: %@ didFailWithError:", publisher);
+    DDLogWarn(@"- error code: %d", error.code);
+    DDLogWarn(@"- description: %@", error.localizedDescription);
     
     _isUnpublishNecessary = YES;
     
@@ -211,7 +211,7 @@
 
 -(void)publisherDidStopStreaming:(OTPublisher*)publisher
 {
-    DDLogInfo(@"WebRTC publisherDidStopStreaming:%@", publisher);
+    DDLogWarn(@"WebRTC publisherDidStopStreaming:%@", publisher);
 }
 
 #pragma mark - OTSubscriberDelegate methods
@@ -248,9 +248,9 @@
 
 - (void)subscriber:(OTSubscriber *)subscriber didFailWithError:(OTError *)error
 {
-    DDLogInfo(@"WebRTC subscriber: %@ didFailWithError: ", subscriber.stream.streamId);
-    DDLogInfo(@"- code: %d", error.code);
-    DDLogInfo(@"- description: %@", error.localizedDescription);
+    DDLogWarn(@"WebRTC subscriber: %@ didFailWithError: ", subscriber.stream.streamId);
+    DDLogWarn(@"- code: %d", error.code);
+    DDLogWarn(@"- description: %@", error.localizedDescription);
     
     if (nil != _openTokDelegate)
     {

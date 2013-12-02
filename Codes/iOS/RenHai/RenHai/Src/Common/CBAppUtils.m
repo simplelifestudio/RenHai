@@ -25,4 +25,19 @@
     dispatch_async(dispatch_get_main_queue(), block);
 }
 
++(void) assert:(BOOL) condition logFormatString:(NSString*) logFormatString, ...
+{
+    va_list arglist;
+    va_start(arglist, logFormatString);
+    NSString* logString = [[NSString alloc] initWithFormat:logFormatString arguments:arglist];
+    va_end(arglist);
+
+    if (!condition)
+    {
+        DDLogError(@"[FATAL_ERROR] - %@", logString);        
+    }
+    
+    NSAssert(condition, logString);
+}
+
 @end

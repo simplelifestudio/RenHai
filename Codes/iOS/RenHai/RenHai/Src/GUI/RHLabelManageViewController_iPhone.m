@@ -89,11 +89,15 @@
     [super viewDidLoad];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
-    [_textField becomeFirstResponder];
-    
     [super viewDidAppear:animated];
+    [_textField becomeFirstResponder];    
 }
 
 - (void)didReceiveMemoryWarning

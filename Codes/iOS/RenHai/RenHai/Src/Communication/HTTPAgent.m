@@ -30,7 +30,7 @@
 
 -(NSMutableURLRequest*) constructURLRequest:(RHMessage*) message serviceTarget:(NSString*) serviceTarget
 {
-    NSAssert(nil != message, @"Nil JSON Message");
+    [CBAppUtils assert:(nil != message) logFormatString:@"Nil JSON Message"];
     
     NSMutableURLRequest* request = nil;
     
@@ -114,8 +114,7 @@
 {
     if (!syncInMainThread && [[NSThread currentThread] isMainThread])
     {
-        DDLogWarn(@"Warning: This method CAN NOT be invoked in Main Thread!");
-        return nil;
+        [CBAppUtils assert:NO logFormatString:@"This method CAN NOT be invoked in Main Thread!"];
     }
     
     NSTimeInterval timeout = HTTP_COMM_TIMEOUT;

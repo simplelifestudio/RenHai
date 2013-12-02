@@ -58,7 +58,7 @@ SINGLETON(UserDataModule)
     _statusModule = [BusinessStatusModule sharedInstance];
     
     [CBFileUtils createDirectory:self.dataDirectory];
-    DDLogVerbose(@"App Sandbox Path: %@", NSHomeDirectory());    
+    DDLogInfo(@"App Sandbox Path: %@", NSHomeDirectory());
 }
 
 -(void) releaseModule
@@ -70,7 +70,7 @@ SINGLETON(UserDataModule)
 
 -(void) startService
 {
-    DDLogVerbose(@"Module:%@ is started.", self.moduleIdentity);
+    DDLogInfo(@"Module:%@ is started.", self.moduleIdentity);
     
     [super startService];
     

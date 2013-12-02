@@ -202,7 +202,7 @@
 
 +(RHMessage*) newAlohaRequestMessage:(RHDevice*) device;
 {
-    NSAssert(nil != device, @"Device can not be null!");
+    [CBAppUtils assert:(nil != device) logFormatString:@"Device can not be null!"];
     
     NSString* messageSn = [RHMessage generateMessageSn];
     NSInteger deviceId = device.deviceId;
@@ -219,7 +219,7 @@
 
 +(RHMessage*) newServerTimeoutResponseMessage:(NSString*) messageSn device:(RHDevice*) device
 {
-    NSAssert(nil != device, @"Device can not be null!");
+    [CBAppUtils assert:(nil != device) logFormatString:@"Device can not be null!"];
     
     NSInteger deviceId = device.deviceId;
     NSString* deviceSn = device.deviceSn;
@@ -250,7 +250,7 @@
 
 +(RHMessage*) newAppDataSyncRequestMessage:(AppDataSyncRequestType) type device:(RHDevice*) device info:(NSDictionary*) info;
 {
-    NSAssert(nil != device, @"Device can not be null!");
+    [CBAppUtils assert:(nil != device) logFormatString:@"Device can not be null!"];
     
     RHMessage* appDataSyncRequestMessage = nil;
     
@@ -394,7 +394,7 @@
 
 +(RHMessage*) newServerDataSyncRequestMessage:(ServerDataSyncRequestType) type device:(RHDevice*) device info:(NSDictionary *)info
 {
-    NSAssert(nil != device, @"Device can not be null!");
+    [CBAppUtils assert:(nil != device) logFormatString:@"Device can not be null!"];
     
     NSString* messageSn = [RHMessage generateMessageSn];
     NSInteger deviceId = device.deviceId;
@@ -511,7 +511,7 @@
 
 +(RHMessage*) newBusinessSessionRequestMessage:(NSString*) businessSessionId businessType:(RHBusinessType) businessType operationType:(BusinessSessionRequestType) operationType device:(RHDevice*) device info:(NSDictionary*) info
 {
-    NSAssert(nil != device, @"Device can not be null!");
+    [CBAppUtils assert:(nil != device) logFormatString:@"Device can not be null!"];
     
     NSString* messageSn = [RHMessage generateMessageSn];
     NSInteger deviceId = device.deviceId;
@@ -542,7 +542,7 @@
 
 +(RHMessage*) newBusinessSessionNotificationResponseMessage:(NSString*) businessSessionId businessType:(RHBusinessType) businessType operationType:(BusinessSessionNotificationType) operationType operationValue:(BusinessSessionOperationValue) operationValue device:(RHDevice*) device info:(NSDictionary*) info
 {
-    NSAssert(nil != device, @"Device can not be null!");
+    [CBAppUtils assert:(nil != device) logFormatString:@"Device can not be null!"];
     
     NSString* messageSn = [RHMessage generateMessageSn];
     NSInteger deviceId = device.deviceId;
@@ -574,7 +574,7 @@
 
 +(RHMessage*) newBusinessSessionNotificationResponseMessage:(RHMessage*) businessSessionNotificationMessage device:(RHDevice*) device
 {
-    NSAssert(nil != device, @"Device can not be null!");
+    [CBAppUtils assert:(nil != device) logFormatString:@"Device can not be null!"];
     
     RHMessage* response = nil;
     
@@ -686,8 +686,8 @@
 
 -(NSDictionary*) toJSONObject
 {
-    NSAssert(nil != _header, @"Header part of message can not be null!");
-    NSAssert(nil != _body, @"Body part of message can not be null!");
+    [CBAppUtils assert:(nil != _header) logFormatString:@"Header part of message can not be null!"];
+    [CBAppUtils assert:(nil != _body) logFormatString:@"Body part of message can not be null!"];
     
     NSDictionary* content = [NSDictionary dictionaryWithObjects:@[_header, _body] forKeys:@[MESSAGE_KEY_HEADER, MESSAGE_KEY_BODY]];
     
