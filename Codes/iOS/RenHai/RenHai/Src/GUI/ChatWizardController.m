@@ -188,15 +188,6 @@
     
     _currentPage = nil;
     
-    if ([UIDevice isRunningOniOS7AndLater])
-    {
-//        self.navigationBar.barTintColor = [UIColor whiteColor];
-    }
-    else
-    {
-//        self.navigationBar.tintColor = [UIColor whiteColor];
-    }
-    
     self.delegate = self;
 }
 

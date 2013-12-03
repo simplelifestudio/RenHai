@@ -24,8 +24,8 @@
 
 #define _TOOLBAR_DISPLAY_PERIOD 3
 
-#define BORDERWIDTH_VIDEOVIEW 3.0f;
-#define CORNERRADIUS_VIDEOVIEW 5.0f;
+#define BORDERWIDTH_VIDEOVIEW 2.0f;
+#define CORNERRADIUS_VIDEOVIEW 6.0f;
 #define BORDERCOLOR_VIDEOVIEW SECONDARY_COLOR_LIGHT
 
 @interface ChatVideoViewController_iPhone () <OpenTokDelegate, UIGestureRecognizerDelegate>
@@ -75,9 +75,6 @@
 
 @synthesize maskView = _maskView;
 
-@synthesize endChatButtonItem = _endChatButtonItem;
-@synthesize selfVideoButtonItem = _selfVideoButtonItem;
-
 @synthesize countLabel = _countLabel;
 
 #pragma mark - Public Methods
@@ -102,8 +99,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES];
     
     [self resetPage];
 }
@@ -183,8 +178,9 @@
     _count = 0;
     [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
 
-    [self _setToolbarHidden:YES];
-    _selfVideoView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin| UIViewAutoresizingFlexibleLeftMargin;
+    [self _setNavigationBarAndToolbarHidden:NO];
+    self.navigationItem.title = NSLocalizedString(@"ChatVideo_Title", nil);
+    [self.navigationItem setHidesBackButton:YES];
 }
 
 -(void) pageWillLoad
@@ -206,7 +202,7 @@
     
     [self _disconnectWebRTC];
     
-    [self _setToolbarHidden:YES];
+    [self _setNavigationBarAndToolbarHidden:YES];
     
     [self _clockCancel];
 }
@@ -244,31 +240,33 @@
     _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Prepairing", nil);
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Prepairing", nil);
     
-    _endChatButtonItem.title = NSLocalizedString(@"ChatVideo_Action_End", nil);
-    _selfVideoButtonItem.title = NSLocalizedString(@"ChatVideo_SelfVideo", nil);
-    
     _selfVideoView.layer.borderColor = BORDERCOLOR_VIDEOVIEW.CGColor;
     _selfVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
     _selfVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
-
-    [self.navigationController.toolbar configureFlatToolbarWithColor:FLATUI_COLOR_TOOLBAR];
-    [_endChatButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
-    [_selfVideoButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
-    
-    NSDictionary *attributesNormal = [NSDictionary dictionaryWithObjectsAndKeys:
-                                FLATUI_COLOR_TINT,
-                                UITextAttributeTextColor,
-                                SPECIAL_COLOR_CLEAR,
-                                UITextAttributeTextShadowColor,
-                                nil,
-                                UITextAttributeTextShadowOffset,
-                                nil,
-                                UITextAttributeFont,
-                                nil];
-    [_endChatButtonItem setTitleTextAttributes:attributesNormal forState:UIControlStateNormal];
-    [_selfVideoButtonItem setTitleTextAttributes:attributesNormal forState:UIControlStateNormal];
     
     [self _setupGesturers];
+    
+    [self _setupNavigationBar];
+    [self _setupActionButtons];
+}
+
+- (void) _setupNavigationBar
+{
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:FLATUI_COLOR_NAVIGATIONBAR_CHATWIZARD];
+}
+
+- (void) _setupActionButtons
+{
+    [_selfVideoButton setTitle:NSLocalizedString(@"ChatVideo_SelfVideo", nil) forState:UIControlStateNormal];
+    [_endChatButton setTitle:NSLocalizedString(@"ChatVideo_Action_End", nil) forState:UIControlStateNormal];
+    
+    _selfVideoButton.buttonColor = [UIColor SeaGreen];
+    [_selfVideoButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
+    [_selfVideoButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+    
+    _endChatButton.buttonColor = FLATUI_COLOR_TOOLBAR;
+    [_endChatButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
+    [_endChatButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
 }
 
 -(void) _setupGesturers
@@ -288,8 +286,8 @@
 
 -(void) _didSingleTapped:(UITapGestureRecognizer*) recognizer
 {
-    BOOL oldStatus = [self _isToolbarHidden];
-    [self _setToolbarHidden:!oldStatus];
+    BOOL oldStatus = [self _isNavigationBarAndToolbarHidden];
+    [self _setNavigationBarAndToolbarHidden:!oldStatus];
 }
 
 -(void) _didPanned:(UIPanGestureRecognizer*) recognizer
@@ -302,51 +300,115 @@
         
         if (recognizer.state == UIGestureRecognizerStateChanged || recognizer.state == UIGestureRecognizerStateEnded)
         {
-            UIView* parentView = self.view;
-            CGFloat parentViewWidth = parentView.frame.size.width;
-            CGFloat parentViewHeight = parentView.frame.size.height;
-            
-            UIView* draggedView = _selfVideoView;
-            CGFloat draggedViewCenterX = draggedView.center.x;
-            CGFloat draggedViewCenterY = draggedView.center.y;
-            CGFloat draggedViewWidth = draggedView.frame.size.width;
-            CGFloat draggedViewHeight = draggedView.frame.size.height;
-            
-            //这里取得的参照坐标系是parentView的坐标
-            CGPoint draggedViewOffsetInParentView = [recognizer translationInView:parentView];
-            
-            //通过计算偏移量来设定draggedView的新坐标
-            CGPoint draggedViewNewCenterPoint = CGPointMake(draggedViewCenterX + draggedViewOffsetInParentView.x, draggedViewCenterY + draggedViewOffsetInParentView.y);
-            
-            CGFloat draggedViewWidthHalf = draggedViewWidth / 2;
-            CGFloat draggedViewHeightHalf = draggedViewHeight / 2;
-            
-            //边界保护
-            if (0 > (draggedViewNewCenterPoint.x - draggedViewWidthHalf))
-            {
-                draggedViewNewCenterPoint.x = draggedViewWidthHalf;
-            }
-            else if (parentViewWidth < (draggedViewNewCenterPoint.x + draggedViewWidthHalf))
-            {
-                draggedViewNewCenterPoint.x = parentViewWidth - draggedViewWidthHalf;
-            }
-            
-            if (0 >= (draggedViewNewCenterPoint.y - draggedViewHeightHalf))
-            {
-                draggedViewNewCenterPoint.y = draggedViewHeightHalf;
-            }
-            else if (parentViewHeight < (draggedViewNewCenterPoint.y + draggedViewHeightHalf))
-            {
-                draggedViewNewCenterPoint.y = parentViewHeight - draggedViewHeightHalf;
-            }
-            
-            //设定新中心点
-            [draggedView setCenter:draggedViewNewCenterPoint];
-            
-            //初始化sender中的坐标位置。如果不初始化，移动坐标会一直积累起来
-            [recognizer setTranslation:CGPointMake(0, 0) inView:parentView];
+            [self _relayoutSelfVideoViewByDragging:recognizer];
         }
     }
+}
+
+-(void) _relayoutSelfVideoViewByBarsShowingOrHidding:(BOOL) hidden
+{
+    UIView* parentView = self.view;
+    CGFloat parentViewHeight = parentView.frame.size.height;
+    
+    UIView* draggedView = _selfVideoView;
+    CGFloat draggedViewCenterX = draggedView.center.x;
+    CGFloat draggedViewCenterY = draggedView.center.y;
+    CGFloat draggedViewHeight = draggedView.frame.size.height;
+    
+    CGFloat draggedViewHeightHalf = draggedViewHeight / 2;
+    
+    CGFloat actionBarHeight = _endChatButton.frame.size.height;
+
+    CGPoint draggedViewNewCenterPoint = CGPointMake(draggedViewCenterX, draggedViewCenterY);
+
+    if (hidden)
+    {
+        if (0 >= (draggedViewNewCenterPoint.y - draggedViewHeightHalf))
+        {
+            draggedViewNewCenterPoint.y = draggedViewHeightHalf + 1;
+        }
+        else if ((parentViewHeight - actionBarHeight) <= (draggedViewNewCenterPoint.y + draggedViewHeightHalf + 64))
+        {
+            draggedViewNewCenterPoint.y = parentViewHeight - draggedViewHeightHalf;
+        }
+    }
+    else
+    {
+        if (0 >= (draggedViewNewCenterPoint.y - draggedViewHeightHalf))
+        {
+            draggedViewNewCenterPoint.y = draggedViewHeightHalf + 1;
+        }
+        else if ((parentViewHeight - actionBarHeight) < (draggedViewNewCenterPoint.y + draggedViewHeightHalf))
+        {
+            draggedViewNewCenterPoint.y = parentViewHeight - actionBarHeight - draggedViewHeightHalf;
+        }
+    }
+
+    [draggedView setCenter:draggedViewNewCenterPoint];
+}
+
+-(void) _relayoutSelfVideoViewByDragging:(UIPanGestureRecognizer*) recognizer
+{
+    UIView* parentView = self.view;
+    CGFloat parentViewWidth = parentView.frame.size.width;
+    CGFloat parentViewHeight = parentView.frame.size.height;
+    
+    UIView* draggedView = _selfVideoView;
+    CGFloat draggedViewCenterX = draggedView.center.x;
+    CGFloat draggedViewCenterY = draggedView.center.y;
+    CGFloat draggedViewWidth = draggedView.frame.size.width;
+    CGFloat draggedViewHeight = draggedView.frame.size.height;
+    
+    //这里取得的参照坐标系是parentView的坐标
+    CGPoint draggedViewOffsetInParentView = [recognizer translationInView:parentView];
+    
+    //通过计算偏移量来设定draggedView的新坐标
+    CGPoint draggedViewNewCenterPoint = CGPointMake(draggedViewCenterX + draggedViewOffsetInParentView.x, draggedViewCenterY + draggedViewOffsetInParentView.y);
+    
+    CGFloat draggedViewWidthHalf = draggedViewWidth / 2;
+    CGFloat draggedViewHeightHalf = draggedViewHeight / 2;
+    
+    //边界保护
+    if (0 >= (draggedViewNewCenterPoint.x - draggedViewWidthHalf))
+    {
+        draggedViewNewCenterPoint.x = draggedViewWidthHalf + 1;
+    }
+    else if (parentViewWidth <= (draggedViewNewCenterPoint.x + draggedViewWidthHalf))
+    {
+        draggedViewNewCenterPoint.x = parentViewWidth - draggedViewWidthHalf - 1;
+    }
+    
+    if ([self _isNavigationBarAndToolbarHidden])
+    {
+        if (0 >= (draggedViewNewCenterPoint.y - draggedViewHeightHalf))
+        {
+            draggedViewNewCenterPoint.y = draggedViewHeightHalf + 1;
+        }
+        else if (parentViewHeight < (draggedViewNewCenterPoint.y + draggedViewHeightHalf))
+        {
+            draggedViewNewCenterPoint.y = parentViewHeight - draggedViewHeightHalf;
+        }
+    }
+    else
+    {
+        CGFloat actionBarHeight = _endChatButton.frame.size.height;
+        
+        if (0 >= (draggedViewNewCenterPoint.y - draggedViewHeightHalf))
+        {
+            draggedViewNewCenterPoint.y = draggedViewHeightHalf + 1;
+        }
+        else if ((parentViewHeight - actionBarHeight) < (draggedViewNewCenterPoint.y + draggedViewHeightHalf))
+        {
+            draggedViewNewCenterPoint.y = parentViewHeight - actionBarHeight - draggedViewHeightHalf;
+        }
+    }
+    
+    //设定新中心点
+    [draggedView setCenter:draggedViewNewCenterPoint];
+    DDLogVerbose(@"draggedView new point is at: %lf, %lf", draggedViewNewCenterPoint.x, draggedViewNewCenterPoint.y);
+    
+    //初始化sender中的坐标位置。如果不初始化，移动坐标会一直积累起来
+    [recognizer setTranslation:CGPointMake(0, 0) inView:parentView];
 }
 
 -(void) _moveToChatAssessView
@@ -357,12 +419,12 @@
     }];
 }
 
--(BOOL) _isToolbarHidden
+-(BOOL) _isNavigationBarAndToolbarHidden
 {
-    return self.navigationController.toolbar.hidden;
+    return (self.navigationController.navigationBar.hidden);
 }
 
--(void) _setToolbarHidden:(BOOL) hidden
+-(void) _setNavigationBarAndToolbarHidden:(BOOL) hidden
 {
     if (hidden)
     {
@@ -373,7 +435,21 @@
         [self _activateToolbarDisplayTimer];
     }
     
-    [self.navigationController setToolbarHidden:hidden animated:YES];
+    [self.navigationController setNavigationBarHidden:hidden animated:YES];
+    _selfVideoButton.hidden = hidden;
+    _endChatButton.hidden = hidden;
+    
+    if (_subscriberView)
+    {
+        _subscriberView.frame = CGRectMake(0, 0, _parterVideoView.frame.size.width, _parterVideoView.frame.size.height);
+    }
+    
+    if (_publisherView)
+    {
+        _publisherView.frame = CGRectMake(0, 0, _selfVideoView.frame.size.width, _selfVideoView.frame.size.height);
+    }
+
+    [self _relayoutSelfVideoViewByBarsShowingOrHidding:hidden];
 }
 
 -(void) _remoteEndChat
@@ -445,7 +521,7 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 {
     if (_TOOLBAR_DISPLAY_PERIOD <= _kToolbarDisplaySeconds)
     {
-        [self _setToolbarHidden:YES];
+        [self _setNavigationBarAndToolbarHidden:YES];
     }
     else
     {
@@ -455,26 +531,26 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void)_activateToolbarDisplayTimer
 {
-    [CBAppUtils asyncProcessInBackgroundThread:^(){
-        [self _deactivateToolbarDisplayTimer];
-        
-        _toolbarDisplayTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_TOOLBARDISPLAYTICK target:self selector:@selector(_toolbarDisplayTimerClick) userInfo:nil repeats:YES];
-        
-        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
-        [currentRunLoop addTimer:_toolbarDisplayTimer forMode:NSRunLoopCommonModes];
-        [currentRunLoop run];
-    }];
+//    [CBAppUtils asyncProcessInBackgroundThread:^(){
+//        [self _deactivateToolbarDisplayTimer];
+//        
+//        _toolbarDisplayTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_TOOLBARDISPLAYTICK target:self selector:@selector(_toolbarDisplayTimerClick) userInfo:nil repeats:YES];
+//        
+//        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+//        [currentRunLoop addTimer:_toolbarDisplayTimer forMode:NSRunLoopCommonModes];
+//        [currentRunLoop run];
+//    }];
 }
 
 -(void)_deactivateToolbarDisplayTimer
 {
-    _kToolbarDisplaySeconds = 0;
-    
-    if (nil != _toolbarDisplayTimer)
-    {
-        [_toolbarDisplayTimer invalidate];
-        _toolbarDisplayTimer = nil;
-    }
+//    _kToolbarDisplaySeconds = 0;
+//    
+//    if (nil != _toolbarDisplayTimer)
+//    {
+//        [_toolbarDisplayTimer invalidate];
+//        _toolbarDisplayTimer = nil;
+//    }
 }
 
 -(void)_activateAlohaTimer
@@ -640,6 +716,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     _publisherView = agent.publisherView;
     if (nil != _publisherView)
     {
+        [agent mutePublisher:YES];
+        
         CGRect superFrame = _selfVideoView.frame;
         CGRect selfFrame = CGRectMake(0, 0, superFrame.size.width, superFrame.size.height);
         
@@ -689,15 +767,14 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     _subscriberView = agent.subscriberView;
     if (nil != _subscriberView)
     {
+        [agent muteSubscriber:YES];
+        
         CGRect superFrame = _parterVideoView.frame;
         CGRect selfFrame = CGRectMake(0, 0, superFrame.size.width, superFrame.size.height);
         
         [_subscriberView setFrame:selfFrame];
         [_parterVideoView addSubview:_subscriberView];
-        
         [_parterVideoView bringSubviewToFront:_selfVideoView];
-        
-        [_parterVideoView setNeedsDisplay];
         
         [self _clockCancel];
     }

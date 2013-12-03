@@ -129,6 +129,11 @@
 +(UIColor*) Grey81;             // Grey81           207 207 207 #CFCFCF
 +(UIColor*) Grey91;             // Grey91           232 232 232 #E8E8E8
 
++(UIColor*) IndianRed1;         // IndianRed1       255 106 106 #FF6A6A
++(UIColor*) IndianRed2;         // IndianRed2       238  99  99 #EE6363
++(UIColor*) IndianRed3;         // IndianRed3       255  85  85 #CD5555
++(UIColor*) IndianRed4;         // IndianRed4       139  58  58 #8B3A3A
+
 /*
  LightCoral	240 128 128	#F08080
  Tomato	255 99 71	#FF6347

@@ -222,8 +222,18 @@ ConnectStatus;
     _statusModule = [BusinessStatusModule sharedInstance];
 
     _isViewControllerVisible = NO;
+    _infoLabel.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR;
+    
+    [self _setupActionButtons];
     
     [self _resetInstance];
+}
+
+- (void) _setupActionButtons
+{
+    _actionButton.buttonColor = [UIColor SeaGreen];
+    [_actionButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
+    [_actionButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
 }
 
 - (void)_resetInstance

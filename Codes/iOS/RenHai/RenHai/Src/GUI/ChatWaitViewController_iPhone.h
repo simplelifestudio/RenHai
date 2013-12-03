@@ -16,8 +16,6 @@
 
 @interface ChatWaitViewController_iPhone : UIViewController <ChatWizardPage>
 
-@property (weak, nonatomic) IBOutlet UILabel *infoLabel;
-
 @property (weak, nonatomic) IBOutlet UILabel *countLabel;
 @property (weak, nonatomic) IBOutlet FUIButton *actionButton;
 

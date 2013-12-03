@@ -43,11 +43,11 @@
 "Device_UnbanDate" = "解禁日期";
 
 "Impress_Assesses" = "我获得的评价";
-"Impress_Chats" = "我获得的聊天评价";
+"Impress_Chats" = "别人对我的评价";
 "Impress_Labels" = "别人对我的印象";
-"Impress_AssessKey_Happy" = "相谈甚欢";
-"Impress_AssessKey_SoSo" = "话不投机";
-"Impress_AssessKey_Disgusting" = "令人生厌";
+"Impress_AssessKey_Happy" = "好评";
+"Impress_AssessKey_SoSo" = "中评";
+"Impress_AssessKey_Disgusting" = "差评";
 "Impress_ChatTotalCount" = "聊天次数";
 "Impress_ChatTotalDuration" = "聊天时长";
 "Impress_ChatLossCount" = "断线次数";
@@ -64,7 +64,7 @@
 "Config_ChatOn3G" = "3G连接";
 
 "Connect_Ready" = "准备";
-"Connect_Ready_Detail" = "跃跃欲试中...";
+"Connect_Ready_Detail" = "热身准备...";
 "Connect_Checking" = "检测";
 "Connect_Checking_Detail" = "正在探测人海...";
 "Connect_CheckedNormal" = "检测";
@@ -123,19 +123,21 @@
 "ChatConfirm_Action_Agree" = "同意";
 "ChatConfirm_Action_Reject" = "拒绝";
 
-"ChatVideo_SelfStatus_Prepairing" = "我的视频：准备中";
-"ChatVideo_SelfStatus_Connected" = "我的视频：已连接";
-"ChatVideo_SelfStatus_Failed" = "我的视频：已失败";
-"ChatVideo_SelfStatus_Disconnected" = "我的视频：已断开";
-"ChatVideo_PartnerStatus_Prepairing" = "对方视频：准备中";
-"ChatVideo_PartnerStatus_Connected" = "对方视频：已连接";
-"ChatVideo_PartnerStatus_Disconnected" = "对方视频：已关闭";
-"ChatVideo_PartnerStatus_Failed" = "对方视频：已失败";
+"ChatVideo_Title" = "视频聊天";
+"ChatVideo_SelfStatus_Prepairing" = "我的视频：准备";
+"ChatVideo_SelfStatus_Connected" = "我的视频：连接";
+"ChatVideo_SelfStatus_Failed" = "我的视频：失败";
+"ChatVideo_SelfStatus_Disconnected" = "我的视频：断开";
+"ChatVideo_PartnerStatus_Prepairing" = "对方视频：准备";
+"ChatVideo_PartnerStatus_Connected" = "对方视频：连接";
+"ChatVideo_PartnerStatus_Disconnected" = "对方视频：关闭";
+"ChatVideo_PartnerStatus_Failed" = "对方视频：失败";
 "ChatVideo_PartnerStatus_Lost" = "对方已掉线";
 "ChatVideo_SelfVideo" = "我的视频";
 "ChatVideo_PartnerVideo" = "对方视频";
 "ChatVideo_Action_End" = "结束聊天";
 
+"ChatAssess_Title" = "评价对方";
 "ChatAssess_Action_Continue" = "继续";
 "ChatAssess_Action_Finish" = "结束";
 "ChatAssess_Action_AddImpressLabel" = "新建";

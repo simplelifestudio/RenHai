@@ -68,6 +68,22 @@
     return view;
 }
 
+-(void) mutePublisher:(BOOL) mute
+{
+    if (_isPublisherViewReady)
+    {
+        [_publisher setPublishAudio:!mute];
+    }
+}
+
+-(void) muteSubscriber:(BOOL) mute
+{
+    if (_isSubscriberViewReady)
+    {
+        [_subscriber setSubscribeToAudio:!mute];
+    }
+}
+
 #pragma mark - OTSessionDelegate methods
 
 - (void)sessionDidConnect:(OTSession*)session

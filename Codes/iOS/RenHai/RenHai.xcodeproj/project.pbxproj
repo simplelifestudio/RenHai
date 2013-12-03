@@ -193,6 +193,7 @@
 		C59E2C1817D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
+		CD07E419184DAC130066ED29 /* RHChatActionBar.m in Sources */ = {isa = PBXBuildFile; fileRef = CD07E418184DAC130066ED29 /* RHChatActionBar.m */; };
 		CD1DFB0918001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0A18001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */; };
@@ -460,6 +461,8 @@
 		C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = MainViewController_iPhone.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C5D1214417CF9C570064C68A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; name = AppDelegate.h; path = RenHai/AppDelegate.h; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
+		CD07E417184DAC130066ED29 /* RHChatActionBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHChatActionBar.h; sourceTree = "<group>"; };
+		CD07E418184DAC130066ED29 /* RHChatActionBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHChatActionBar.m; sourceTree = "<group>"; };
 		CD1C4A9917FAB763009642D3 /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-RenHaiGHUnitTest.a"; path = "Pods/build/Debug-iphoneos/libPods-RenHaiGHUnitTest.a"; sourceTree = "<group>"; };
 		CD1DFB0618001086006ED9A4 /* ConnectViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectViewController_iPhone.h; sourceTree = "<group>"; };
 		CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectViewController_iPhone.m; sourceTree = "<group>"; };
@@ -934,6 +937,8 @@
 				CD51019E182A856600E188A3 /* RHLabelManageViewController_iPhone.h */,
 				CD51019F182A856600E188A3 /* RHLabelManageViewController_iPhone.m */,
 				CD5101A0182A856600E188A3 /* RHLabelManageViewController_iPhone.xib */,
+				CD07E417184DAC130066ED29 /* RHChatActionBar.h */,
+				CD07E418184DAC130066ED29 /* RHChatActionBar.m */,
 			);
 			path = GUI;
 			sourceTree = "<group>";
@@ -1350,6 +1355,7 @@
 				C593C49117D46CB800C26367 /* RHImpressLabel.m in Sources */,
 				C593C49517D46CC400C26367 /* RHInterestLabel.m in Sources */,
 				C5945F5B17D56DDF0084BB10 /* CBJSONUtils.m in Sources */,
+				CD07E419184DAC130066ED29 /* RHChatActionBar.m in Sources */,
 				C594602A17D6C7C90084BB10 /* HTTPAgent.m in Sources */,
 				C594603117D6CEA60084BB10 /* WebSocketAgent.m in Sources */,
 				C594603517D7352F0084BB10 /* RHMessage.m in Sources */,

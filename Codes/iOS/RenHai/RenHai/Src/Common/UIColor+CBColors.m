@@ -608,4 +608,24 @@
     return [UIColor colorWithHexCode:@"E8E8E8"];
 }
 
++(UIColor*) IndianRed1
+{
+    return [UIColor colorWithHexCode:@"FF6A6A"];
+}
+
++(UIColor*) IndianRed2
+{
+    return [UIColor colorWithHexCode:@"EE6363"];
+}
+
++(UIColor*) IndianRed3
+{
+    return [UIColor colorWithHexCode:@"CD5555"];
+}
+
++(UIColor*) IndianRed4
+{
+    return [UIColor colorWithHexCode:@"8B3A3A"];
+}
+
 @end
