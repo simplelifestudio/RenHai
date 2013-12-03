@@ -153,9 +153,10 @@ EnterOperationStatus;
 {
     [self _setupSideBarMenuButtons];
     
-    [self.navigationController.navigationBar setTintColor:FLATUI_COLOR_NAVIGATIONBAR];
-    
     self.navigationItem.title = NAVIGATIONBAR_TITLE_HOME;
+
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:FLATUI_COLOR_NAVIGATIONBAR];
+    [self.navigationItem.leftBarButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
 }
 
 -(void)_setupBannerView
@@ -190,10 +191,10 @@ EnterOperationStatus;
     //    _bannerView.textColor = [UIColor blueColor];
     _bannerView.labelSpacing = 50; // distance between start and end labels
     _bannerView.pauseInterval = 1.0; // seconds of pause before scrolling starts again
-    _bannerView.scrollSpeed = 60; // pixels per second
+    _bannerView.scrollSpeed = 25; // pixels per second
     _bannerView.textAlignment = NSTextAlignmentCenter; // centers text when no auto-scrolling is applied
-    _bannerView.fadeLength = 18.0f;
-    _bannerView.font = [UIFont systemFontOfSize:BIG_FONT];
+    _bannerView.fadeLength = SMALL_FONT;
+    _bannerView.font = [UIFont systemFontOfSize:SMALL_FONT];
     _bannerView.scrollDirection = CBAutoScrollDirectionLeft;
     
     [_bannerView observeApplicationNotifications];
@@ -208,7 +209,7 @@ EnterOperationStatus;
     {
         UIBarButtonItem* leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:sidebarMenuIcon_portrait landscapeImagePhone:sidebarMenuIcon_landscape style:UIBarButtonItemStylePlain target:self action:@selector(_leftBarButtonItemClicked:)];
         
-        self.navigationItem.leftBarButtonItem = leftBarButtonItem;
+        self.navigationItem.leftBarButtonItem = leftBarButtonItem;                
     }
 }
 

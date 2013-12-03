@@ -52,7 +52,6 @@
     RHNavigationController* navigationVC = _guiModule.navigationController;
     navigationVC.navigationBarHidden = NO;
     navigationVC.navigationBar.translucent = NO;
-    navigationVC.navigationBar.backgroundColor = [UIColor whiteColor];
     
     HomeViewController_iPhone* homeVC = _guiModule.homeViewController;
 

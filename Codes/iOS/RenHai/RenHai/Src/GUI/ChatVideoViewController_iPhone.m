@@ -20,13 +20,13 @@
 #define DELAY_ENDCHAT 1.0f
 
 #define INTERVAL_TOOLBARDISPLAYTICK 1
-#define INTERVAL_ALOHA 5
+#define INTERVAL_ALOHA 60
 
 #define _TOOLBAR_DISPLAY_PERIOD 3
 
 #define BORDERWIDTH_VIDEOVIEW 3.0f;
 #define CORNERRADIUS_VIDEOVIEW 5.0f;
-#define BORDERCOLOR_VIDEOVIEW SECONARDY_COLOR_LIGHT
+#define BORDERCOLOR_VIDEOVIEW SECONDARY_COLOR_LIGHT
 
 @interface ChatVideoViewController_iPhone () <OpenTokDelegate, UIGestureRecognizerDelegate>
 {
@@ -193,8 +193,6 @@
     
     [self _checkIsOthersideLost];
     
-    [self _activateAlohaTimer];
-    
     [self _registerNotifications];
     
     [self _connectWebRTC];
@@ -253,9 +251,22 @@
     _selfVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
     _selfVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
 
-//    _parterVideoView.layer.borderColor = [UIColor redColor].CGColor;
-//    _parterVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
-//    _parterVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
+    [self.navigationController.toolbar configureFlatToolbarWithColor:FLATUI_COLOR_TOOLBAR];
+    [_endChatButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
+    [_selfVideoButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
+    
+    NSDictionary *attributesNormal = [NSDictionary dictionaryWithObjectsAndKeys:
+                                FLATUI_COLOR_TINT,
+                                UITextAttributeTextColor,
+                                SPECIAL_COLOR_CLEAR,
+                                UITextAttributeTextShadowColor,
+                                nil,
+                                UITextAttributeTextShadowOffset,
+                                nil,
+                                UITextAttributeFont,
+                                nil];
+    [_endChatButtonItem setTitleTextAttributes:attributesNormal forState:UIControlStateNormal];
+    [_selfVideoButtonItem setTitleTextAttributes:attributesNormal forState:UIControlStateNormal];
     
     [self _setupGesturers];
 }
@@ -468,30 +479,22 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void)_activateAlohaTimer
 {
-    [CBAppUtils asyncProcessInBackgroundThread:^(){
-        [self _deactivateAlohaTimer];
-        
-        _alohaTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_ALOHA target:self selector:@selector(_remoteAloha) userInfo:nil repeats:YES];
-        
-        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
-        [currentRunLoop addTimer:_alohaTimer forMode:NSRunLoopCommonModes];
-        [currentRunLoop run];
-    }];
+    _alohaTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_ALOHA target:self selector:@selector(_remoteAloha) userInfo:nil repeats:YES];
 }
 
 -(void)_deactivateAlohaTimer
 {
-    [CBAppUtils asyncProcessInBackgroundThread:^(){
-        if (nil != _alohaTimer)
-        {
-            [_alohaTimer invalidate];
-            _alohaTimer = nil;
-        }
-    }];
+    if (nil != _alohaTimer)
+    {
+        [_alohaTimer invalidate];
+        _alohaTimer = nil;
+    }
 }
 
 -(void) _remoteAloha
 {
+    DDLogVerbose(@"#####ChatVideo-Aloha");
+    
     [_commModule alohaRequest:_userDataModule.device];
 }
 
@@ -648,6 +651,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
         [_selfVideoView addSubview:_publisherView];
         
         [_selfVideoView setNeedsDisplay];
+        
+        [self _activateAlohaTimer];
     }
 }
 

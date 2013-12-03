@@ -27,7 +27,7 @@
 
 "Home_OnlineCount" = "在线人数";
 "Home_ChatCount" = "聊天人数";
-"Home_Banner_NoInfo" = "当前无服务器通知。";
+"Home_Banner_NoInfo" = "Alpha测试，意见建议请联系：simplelife.patrick@gmail.com";
 "Home_Banner_Maintenance" = "服务器安排维护：自 %@ 至 %@。";
 "Home_PressToEnterPool" = "点击进入";
 "Home_IsEnteringPool" = "正在进入";
@@ -43,11 +43,11 @@
 "Device_UnbanDate" = "解禁日期";
 
 "Impress_Assesses" = "我获得的评价";
-"Impress_Chats" = "别人对我的评价";
+"Impress_Chats" = "我获得的聊天评价";
 "Impress_Labels" = "别人对我的印象";
 "Impress_AssessKey_Happy" = "相谈甚欢";
 "Impress_AssessKey_SoSo" = "话不投机";
-"Impress_AssessKey_Disgusting" = "令人作呕";
+"Impress_AssessKey_Disgusting" = "令人生厌";
 "Impress_ChatTotalCount" = "聊天次数";
 "Impress_ChatTotalDuration" = "聊天时长";
 "Impress_ChatLossCount" = "断线次数";
@@ -141,9 +141,9 @@
 "ChatAssess_Action_AddImpressLabel" = "新建";
 "ChatAssess_Action_DelImpressLabel" = "删除";
 "ChatAssess_Action_CopyImpressLabel" = "复制";
-"ChatAssess_AssessLabels" = "我给的评价";
-"ChatAssess_AddImpressLabels" = "我给的印象";
-"ChatAssess_ExistImpressLabels" = "对方获得的印象";
+"ChatAssess_AssessLabels" = "我给出的评价";
+"ChatAssess_AddImpressLabels" = "我给出的印象";
+"ChatAssess_ExistImpressLabels" = "对方原有的印象";
 
 "LabelManage_NewLabel" = "新建";
 "LabelManage_ModifyLabel" = "编辑";

@@ -62,6 +62,13 @@
     return flag;
 }
 
++ (BOOL)isRunningOniOS7AndLater
+{
+    float version = [[UIDevice currentDevice] systemVersion].floatValue;
+    BOOL flag = (7.0 <= version) ? YES : NO;
+    return flag;
+}
+
 + (NSString*) deviceModel
 {
     // Gets a string with the device model

@@ -13,7 +13,9 @@
 
 #define LENGTH_LIMIT_HANZI 5
 
-#define MOVE_OFFSET_FOR_KEYBOARD 40
+#define MOVE_OFFSET_FOR_KEYBOARD_3_5 60
+#define MOVE_OFFSET_FOR_KEYBOARD_4 40
+
 #define MOVE_DURATION_FOR_KEYBOARD 0.3f
 
 @interface RHLabelManageViewController_iPhone () <UITextFieldDelegate>
@@ -164,7 +166,22 @@
     if (!_hasMovedForOffset)
     {
         _hasMovedForOffset = YES;
-        self.view.center = CGPointMake(self.view.center.x, self.view.center.y - MOVE_OFFSET_FOR_KEYBOARD);        
+        
+        NSUInteger requireCount = 0;
+        if (IS_IPHONE5)
+        {
+            requireCount = MOVE_OFFSET_FOR_KEYBOARD_4;
+        }
+        else if (IS_IPHONE4_OR_4S)
+        {
+            requireCount = MOVE_OFFSET_FOR_KEYBOARD_3_5;
+        }
+        else if (IS_IPAD1_OR_2_OR_MINI)
+        {
+            requireCount = MOVE_OFFSET_FOR_KEYBOARD_3_5;
+        }
+        
+        self.view.center = CGPointMake(self.view.center.x, self.view.center.y - requireCount);
     }
     
     return YES;

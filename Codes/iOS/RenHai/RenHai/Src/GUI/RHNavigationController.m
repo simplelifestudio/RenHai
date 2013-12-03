@@ -70,7 +70,7 @@
 {
     [self setNavigationBarHidden:YES];
     [self popToRootViewControllerAnimated:NO];
-//    [self pushViewController:_guiModule.homeViewController animated:NO];    
+    
     [_guiModule.mainViewController showViewController:self animated:NO completion:nil];
 }
 
