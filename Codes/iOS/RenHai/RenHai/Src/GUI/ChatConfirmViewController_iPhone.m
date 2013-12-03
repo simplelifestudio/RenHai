@@ -433,11 +433,24 @@
     _decideLock = [[NSCondition alloc] init];
     
     [self _setupCollectionView];
-    
-    [_agreeChatButton setTitle:NSLocalizedString(@"ChatConfirm_Action_Agree", nil) forState:UIControlStateNormal];
-    [_rejectChatButton setTitle:NSLocalizedString(@"ChatConfirm_Action_Reject", nil) forState:UIControlStateNormal];
 
     [self _setupNavigationBar];
+    
+    [self _setupActionButtons];
+}
+
+- (void) _setupActionButtons
+{
+    [_agreeChatButton setTitle:NSLocalizedString(@"ChatConfirm_Action_Agree", nil) forState:UIControlStateNormal];
+    [_rejectChatButton setTitle:NSLocalizedString(@"ChatConfirm_Action_Reject", nil) forState:UIControlStateNormal];
+    
+    _agreeChatButton.buttonColor = [UIColor SeaGreen];
+    [_agreeChatButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
+    [_agreeChatButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+    
+    _rejectChatButton.buttonColor = FLATUI_COLOR_TOOLBAR;
+    [_rejectChatButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
+    [_rejectChatButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
 }
 
 - (void) _setupNavigationBar

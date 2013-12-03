@@ -68,6 +68,8 @@
     UITapGestureRecognizer* _singleTapGesturer;
     UITapGestureRecognizer* _doubleTapGesturer;
     UILongPressGestureRecognizer* _longPressGesturer;
+    
+    volatile BOOL _assessSuccessFlag;
 }
 
 @end
@@ -137,6 +139,8 @@
 
 -(void) resetPage
 {
+    _assessSuccessFlag = NO;
+    
     _continueButton.hidden = NO;
     _finishButton.hidden = NO;
     
@@ -181,9 +185,6 @@
     
     _assessLabelPosition = 0;
     
-    [_continueButton setTitle:NSLocalizedString(@"ChatAssess_Action_Continue", nil) forState:UIControlStateNormal];
-    [_finishButton setTitle:NSLocalizedString(@"ChatAssess_Action_Finish", nil) forState:UIControlStateNormal];
-    
     [self _setupCollectionView];
     
     [self _setupGesturers];
@@ -197,6 +198,22 @@
 //        self.extendedLayoutIncludesOpaqueBars = NO;
 //        self.automaticallyAdjustsScrollViewInsets = NO;
 //    }
+    
+    [self _setupActionButtons];
+}
+
+- (void) _setupActionButtons
+{
+    [_continueButton setTitle:NSLocalizedString(@"ChatAssess_Action_Continue", nil) forState:UIControlStateNormal];
+    [_finishButton setTitle:NSLocalizedString(@"ChatAssess_Action_Finish", nil) forState:UIControlStateNormal];
+    
+    _continueButton.buttonColor = [UIColor SeaGreen];
+    [_continueButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
+    [_continueButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+    
+    _finishButton.buttonColor = FLATUI_COLOR_TOOLBAR;
+    [_finishButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
+    [_finishButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
 }
 
 - (void) _setupNavigationBar
@@ -371,14 +388,16 @@
                         break;
                     }
                 }
+                
+                _assessSuccessFlag = YES;
             }
             failureCompletionBlock:^(){
-
+                _assessSuccessFlag = NO;
             }
             afterCompletionBlock:^(){
                 [CBAppUtils asyncProcessInMainThread:^(){
-                    _continueButton.hidden = NO;
-                    _finishButton.hidden = NO;
+                    _continueButton.hidden = _assessSuccessFlag;
+                    _finishButton.hidden = _assessSuccessFlag;
                 }];
             }
          ];

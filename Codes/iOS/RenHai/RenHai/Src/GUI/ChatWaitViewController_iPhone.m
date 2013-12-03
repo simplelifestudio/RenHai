@@ -141,8 +141,6 @@ ChatWaitStatus;
 
     [self _computeLabelCloudView];
     
-    [_actionButton setTitle:NSLocalizedString(@"ChatWait_Action_Cancel", nil) forState:UIControlStateNormal];
-    
     self.navigationItem.title = NSLocalizedString(@"ChatWait_WaitForMatch", nil);    
     [self.navigationController setNavigationBarHidden:NO];
     [self.navigationItem setHidesBackButton:YES];
@@ -194,6 +192,16 @@ ChatWaitStatus;
     [self _setupLabelCloudView];
     
     [self _setupNavigationBar];
+    
+    [self _setupActionButtons];
+}
+
+- (void) _setupActionButtons
+{
+    [_actionButton setTitle:NSLocalizedString(@"ChatWait_Action_Cancel", nil) forState:UIControlStateNormal];
+    _actionButton.buttonColor = FLATUI_COLOR_TOOLBAR;
+    [_actionButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
+    [_actionButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
 }
 
 - (void) _setupNavigationBar
