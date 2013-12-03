@@ -26,7 +26,7 @@
 
 #define BORDERWIDTH_VIDEOVIEW 2.0f;
 #define CORNERRADIUS_VIDEOVIEW 6.0f;
-#define BORDERCOLOR_VIDEOVIEW SECONDARY_COLOR_LIGHT
+#define BORDERCOLOR_VIDEOVIEW FLATUI_COLOR_MAJOR_E
 
 @interface ChatVideoViewController_iPhone () <OpenTokDelegate, UIGestureRecognizerDelegate>
 {
@@ -248,6 +248,13 @@
     
     [self _setupNavigationBar];
     [self _setupActionButtons];
+    
+    [self _formatFlatUI];
+}
+
+-(void)_formatFlatUI
+{
+    _countLabel.textColor = FLATUI_COLOR_TEXT_LOG;
 }
 
 - (void) _setupNavigationBar
@@ -260,13 +267,13 @@
     [_selfVideoButton setTitle:NSLocalizedString(@"ChatVideo_SelfVideo", nil) forState:UIControlStateNormal];
     [_endChatButton setTitle:NSLocalizedString(@"ChatVideo_Action_End", nil) forState:UIControlStateNormal];
     
-    _selfVideoButton.buttonColor = [UIColor SeaGreen];
-    [_selfVideoButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
-    [_selfVideoButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+    _selfVideoButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+    [_selfVideoButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateNormal];
+    [_selfVideoButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
     
-    _endChatButton.buttonColor = FLATUI_COLOR_TOOLBAR;
-    [_endChatButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
-    [_endChatButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+    _endChatButton.buttonColor = FLATUI_COLOR_BUTTONROALLBACK;
+    [_endChatButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateNormal];
+    [_endChatButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 }
 
 -(void) _setupGesturers

@@ -20,8 +20,8 @@
 #import "BusinessStatusModule.h"
 
 #define DELAY 0.15f
-#define ANIMATION_POP 0.4f
-#define ANIMATION_DISMISS 0.4f
+#define ANIMATION_POP 0.5f
+#define ANIMATION_DISMISS 0.5f
 
 typedef enum
 {
@@ -222,18 +222,25 @@ ConnectStatus;
     _statusModule = [BusinessStatusModule sharedInstance];
 
     _isViewControllerVisible = NO;
-    _infoLabel.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR;
+    _infoLabel.backgroundColor = FLATUI_COLOR_TINT_NAVIGATIONBAR;
     
     [self _setupActionButtons];
     
     [self _resetInstance];
+
+    [self _formatFlatUI];
+}
+
+- (void) _formatFlatUI
+{
+    _countLabel.textColor = FLATUI_COLOR_TEXT_LOG;
 }
 
 - (void) _setupActionButtons
 {
-    _actionButton.buttonColor = [UIColor SeaGreen];
-    [_actionButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
-    [_actionButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+    _actionButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+    [_actionButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateNormal];
+    [_actionButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 }
 
 - (void)_resetInstance

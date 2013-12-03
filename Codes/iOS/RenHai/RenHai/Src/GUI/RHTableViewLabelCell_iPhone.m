@@ -32,11 +32,11 @@
     selectedBackgroundView.backgroundColor = selectedColor;
     cell.selectedBackgroundView = selectedBackgroundView;
     
-    cell.majorLabel.backgroundColor = [UIColor clearColor];
-    cell.minorLabel.backgroundColor = [UIColor clearColor];
+    cell.majorLabel.backgroundColor = FLATUI_COLOR_CLEAR;
+    cell.minorLabel.backgroundColor = FLATUI_COLOR_CLEAR;
     
-    cell.majorLabel.textColor = COLOR_TEXT_INFO;
-    cell.minorLabel.textColor = COLOR_TEXT_INFO;
+    cell.majorLabel.textColor = FLATUI_COLOR_TEXT_INFO;
+    cell.minorLabel.textColor = FLATUI_COLOR_TEXT_LOG;
     
     return cell;
 }

@@ -194,14 +194,21 @@ ChatWaitStatus;
     [self _setupNavigationBar];
     
     [self _setupActionButtons];
+
+    [self _formatFlatUI];
+}
+
+-(void)_formatFlatUI
+{
+    _countLabel.textColor = FLATUI_COLOR_TEXT_LOG;
 }
 
 - (void) _setupActionButtons
 {
     [_actionButton setTitle:NSLocalizedString(@"ChatWait_Action_Cancel", nil) forState:UIControlStateNormal];
-    _actionButton.buttonColor = FLATUI_COLOR_TOOLBAR;
-    [_actionButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
-    [_actionButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+    _actionButton.buttonColor = FLATUI_COLOR_BUTTONROALLBACK;
+    [_actionButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateNormal];
+    [_actionButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 }
 
 - (void) _setupNavigationBar
@@ -213,7 +220,7 @@ ChatWaitStatus;
 {
     _labelCloudView = [[FloatingCloudsView alloc] initWithSuperview:_labelCloudContainer];
     _labelCloudView.delegate = self;
-    _labelCloudView.backgroundColor = [UIColor clearColor];
+    _labelCloudView.backgroundColor = FLATUI_COLOR_CLEAR;
     _labelCloudView.randomColors = @[[UIColor Grey31], [UIColor Grey41], [UIColor Grey51], [UIColor Grey61], [UIColor Grey71]];
 }
 

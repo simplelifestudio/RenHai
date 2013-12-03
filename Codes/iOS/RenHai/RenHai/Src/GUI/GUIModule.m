@@ -167,11 +167,11 @@ SINGLETON(GUIModule)
 
 -(void) _setupViewControllersFromStoryboard
 {
-//    if ([UIDevice isRunningOniOS7AndLater])
-//    {
-//        UIWindow* window = [CBUIUtils getKeyWindow];
-//        window.tintColor = FLATUI_COLOR_TOOLBAR;
-//    }
+    if ([UIDevice isRunningOniOS7AndLater])
+    {
+        UIWindow* window = [CBUIUtils getKeyWindow];
+        window.tintColor = FLATUI_COLOR_NAVIGATIONBAR_MAIN;
+    }
     
     UIStoryboard* storyboard = [UIStoryboard storyboardWithName:STORYBOARD_IPHONE bundle:nil];
     
@@ -231,22 +231,21 @@ SINGLETON(GUIModule)
 -(void) _setupUIAppearance
 {
     [[UINavigationBar appearance] setTitleTextAttributes:
-     [NSDictionary dictionaryWithObjectsAndKeys:
-      FLATUI_COLOR_TINT,
-      UITextAttributeTextColor,
-      SPECIAL_COLOR_CLEAR,
-      UITextAttributeTextShadowColor ,
-      nil,
-      UITextAttributeTextShadowOffset,
-      nil,
-      UITextAttributeFont,
-      nil
-      ]
-     ];
+        [NSDictionary dictionaryWithObjectsAndKeys:
+         FLATUI_COLOR_TEXT_INFO,
+         UITextAttributeTextColor,
+         FLATUI_COLOR_CLEAR,
+         UITextAttributeTextShadowColor ,
+         nil,
+         UITextAttributeTextShadowOffset,
+         nil,
+         UITextAttributeFont,
+         nil
+        ]
+    ];
 
-    [[UINavigationBar appearance] setTintColor:FLATUI_COLOR_TINT];
-    [[UIToolbar appearance] setTintColor:FLATUI_COLOR_TINT];
-    [[UIBarButtonItem appearance] setTintColor:FLATUI_COLOR_TINT];
+    [[UINavigationBar appearance] setTintColor:FLATUI_COLOR_TINT_NAVIGATIONBAR];
+    [[UIBarButtonItem appearance] setTintColor:FLATUI_COLOR_TINT_BARBUTTONITEM];
 }
 
 @end

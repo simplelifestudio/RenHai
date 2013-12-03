@@ -17,7 +17,7 @@
     if((self = [super initWithFrame:aRect]))
     {
         self.opaque = NO;
-        self.backgroundColor = SPECIAL_COLOR_CLEAR;
+        self.backgroundColor = FLATUI_COLOR_CLEAR;
         self.clearsContextBeforeDrawing = YES;
     }
     

@@ -132,6 +132,23 @@ EnterOperationStatus;
     
     [self _setupNavigationBar];
     [self _setupView];
+    
+    [self _formatFlatUI];
+}
+
+-(void)_formatFlatUI
+{
+    _onlineDeviceCountUnit1.textColor = FLATUI_COLOR_TEXT_LOG;
+    _onlineDeviceCountUnit2.textColor = FLATUI_COLOR_TEXT_LOG;
+    _onlineDeviceCountUnit3.textColor = FLATUI_COLOR_TEXT_LOG;
+    _onlineDeviceCountUnit4.textColor = FLATUI_COLOR_TEXT_LOG;
+    _onlineDeviceCountUnit5.textColor = FLATUI_COLOR_TEXT_LOG;
+    
+    _chatDeviceCountUnit1.textColor = FLATUI_COLOR_TEXT_LOG;
+    _chatDeviceCountUnit2.textColor = FLATUI_COLOR_TEXT_LOG;
+    _chatDeviceCountUnit3.textColor = FLATUI_COLOR_TEXT_LOG;
+    _chatDeviceCountUnit4.textColor = FLATUI_COLOR_TEXT_LOG;
+    _chatDeviceCountUnit5.textColor = FLATUI_COLOR_TEXT_LOG;
 }
 
 -(void)_setupView
@@ -140,7 +157,7 @@ EnterOperationStatus;
     _chatDeviceCountLabel.text = NSLocalizedString(@"Home_ChatCount", nil);
     
     _enterButtonProgressView.startAngle = - M_PI_2;
-    _enterButtonProgressView.tintColor = FLATUI_COLOR_PROGRESS;
+    _enterButtonProgressView.tintColor = FLATUI_COLOR_TINT_PROGRESS;
 //    _enterButtonProgressView.trackColor = FLATUI_COLOR_PROGRESS_TRACK;
     _enterButtonProgressView.roundProgressViewDelegate = self;
     
@@ -155,8 +172,11 @@ EnterOperationStatus;
     
     self.navigationItem.title = NAVIGATIONBAR_TITLE_HOME;
 
-    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:FLATUI_COLOR_NAVIGATIONBAR];
-    [self.navigationItem.leftBarButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:FLATUI_COLOR_TINT_NAVIGATIONBAR];
+    if (![UIDevice isRunningOniOS7AndLater])
+    {
+        [self.navigationItem.leftBarButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNERRADIUS_BARBUTTONITEM];
+    }
 }
 
 -(void)_setupBannerView
@@ -193,8 +213,8 @@ EnterOperationStatus;
     _bannerView.pauseInterval = 1.0; // seconds of pause before scrolling starts again
     _bannerView.scrollSpeed = 25; // pixels per second
     _bannerView.textAlignment = NSTextAlignmentCenter; // centers text when no auto-scrolling is applied
-    _bannerView.fadeLength = SMALL_FONT;
-    _bannerView.font = [UIFont systemFontOfSize:SMALL_FONT];
+    _bannerView.fadeLength = FLATUI_FONT_SMALL;
+    _bannerView.font = [UIFont systemFontOfSize:FLATUI_FONT_SMALL];
     _bannerView.scrollDirection = CBAutoScrollDirectionLeft;
     
     [_bannerView observeApplicationNotifications];
