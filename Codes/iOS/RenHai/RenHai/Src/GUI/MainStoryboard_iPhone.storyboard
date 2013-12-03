@@ -157,7 +157,7 @@
                                 </collectionReusableView>
                             </collectionView>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" id="igl-Ug-PXI" userLabel="existImpressLabelsView">
-                                <rect key="frame" x="0.0" y="200" width="320" height="219"/>
+                                <rect key="frame" x="0.0" y="200" width="320" height="230"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="5" minimumInteritemSpacing="5" id="cJV-9u-841">
@@ -472,7 +472,7 @@
                 <viewController storyboardIdentifier="chatvideo_iphone" id="Rwb-k1-UZq" customClass="ChatVideoViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aRm-Ul-Twj">
                         <rect key="frame" x="0.0" y="64" width="320" height="460"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="9xF-ar-PLg" userLabel="partnerVideoView">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
@@ -496,10 +496,10 @@
                             </view>
                             <view contentMode="scaleToFill" id="zhh-l2-GsP" userLabel="selfVideoView">
                                 <rect key="frame" x="200" y="320" width="120" height="140"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="你的视频" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tPo-eF-CUQ" userLabel="selfStatusLabel">
-                                        <rect key="frame" x="0.0" y="59" width="130" height="21"/>
+                                        <rect key="frame" x="0.0" y="59" width="120" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="highlightedColor"/>
                                     </label>

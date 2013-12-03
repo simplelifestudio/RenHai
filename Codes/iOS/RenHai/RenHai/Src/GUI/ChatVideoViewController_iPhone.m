@@ -312,51 +312,62 @@
         
         if (recognizer.state == UIGestureRecognizerStateChanged || recognizer.state == UIGestureRecognizerStateEnded)
         {
-            UIView* parentView = self.view;
-            CGFloat parentViewWidth = parentView.frame.size.width;
-            CGFloat parentViewHeight = parentView.frame.size.height;
-            
-            UIView* draggedView = _selfVideoView;
-            CGFloat draggedViewCenterX = draggedView.center.x;
-            CGFloat draggedViewCenterY = draggedView.center.y;
-            CGFloat draggedViewWidth = draggedView.frame.size.width;
-            CGFloat draggedViewHeight = draggedView.frame.size.height;
-            
-            //这里取得的参照坐标系是parentView的坐标
-            CGPoint draggedViewOffsetInParentView = [recognizer translationInView:parentView];
-            
-            //通过计算偏移量来设定draggedView的新坐标
-            CGPoint draggedViewNewCenterPoint = CGPointMake(draggedViewCenterX + draggedViewOffsetInParentView.x, draggedViewCenterY + draggedViewOffsetInParentView.y);
-            
-            CGFloat draggedViewWidthHalf = draggedViewWidth / 2;
-            CGFloat draggedViewHeightHalf = draggedViewHeight / 2;
-            
-            //边界保护
-            if (0 > (draggedViewNewCenterPoint.x - draggedViewWidthHalf))
-            {
-                draggedViewNewCenterPoint.x = draggedViewWidthHalf;
-            }
-            else if (parentViewWidth < (draggedViewNewCenterPoint.x + draggedViewWidthHalf))
-            {
-                draggedViewNewCenterPoint.x = parentViewWidth - draggedViewWidthHalf;
-            }
-            
-            if (0 >= (draggedViewNewCenterPoint.y - draggedViewHeightHalf))
-            {
-                draggedViewNewCenterPoint.y = draggedViewHeightHalf;
-            }
-            else if (parentViewHeight < (draggedViewNewCenterPoint.y + draggedViewHeightHalf))
-            {
-                draggedViewNewCenterPoint.y = parentViewHeight - draggedViewHeightHalf;
-            }
-            
-            //设定新中心点
-            [draggedView setCenter:draggedViewNewCenterPoint];
-            
-            //初始化sender中的坐标位置。如果不初始化，移动坐标会一直积累起来
-            [recognizer setTranslation:CGPointMake(0, 0) inView:parentView];
+            [self _relayoutSelfVideoViewByDragging:recognizer];
         }
     }
+}
+
+-(void) _relayoutSelfVideoViewByBarsShowingOrHidding:(BOOL) hidden
+{
+
+}
+
+-(void) _relayoutSelfVideoViewByDragging:(UIPanGestureRecognizer*) recognizer
+{
+    UIView* parentView = self.view;
+    CGFloat parentViewWidth = parentView.frame.size.width;
+    CGFloat parentViewHeight = parentView.frame.size.height;
+    
+    UIView* draggedView = _selfVideoView;
+    CGFloat draggedViewCenterX = draggedView.center.x;
+    CGFloat draggedViewCenterY = draggedView.center.y;
+    CGFloat draggedViewWidth = draggedView.frame.size.width;
+    CGFloat draggedViewHeight = draggedView.frame.size.height;
+    
+    //这里取得的参照坐标系是parentView的坐标
+    CGPoint draggedViewOffsetInParentView = [recognizer translationInView:parentView];
+    
+    //通过计算偏移量来设定draggedView的新坐标
+    CGPoint draggedViewNewCenterPoint = CGPointMake(draggedViewCenterX + draggedViewOffsetInParentView.x, draggedViewCenterY + draggedViewOffsetInParentView.y);
+    
+    CGFloat draggedViewWidthHalf = draggedViewWidth / 2;
+    CGFloat draggedViewHeightHalf = draggedViewHeight / 2;
+    
+    //边界保护
+    if (0 >= (draggedViewNewCenterPoint.x - draggedViewWidthHalf))
+    {
+        draggedViewNewCenterPoint.x = draggedViewWidthHalf + 1;
+    }
+    else if (parentViewWidth <= (draggedViewNewCenterPoint.x + draggedViewWidthHalf))
+    {
+        draggedViewNewCenterPoint.x = parentViewWidth - draggedViewWidthHalf - 1;
+    }
+    
+    if (0 >= (draggedViewNewCenterPoint.y - draggedViewHeightHalf))
+    {
+        draggedViewNewCenterPoint.y = draggedViewHeightHalf + 1;
+    }
+    else if (parentViewHeight < (draggedViewNewCenterPoint.y + draggedViewHeightHalf))
+    {
+        draggedViewNewCenterPoint.y = parentViewHeight - draggedViewHeightHalf - 1;
+    }
+    
+    //设定新中心点
+    [draggedView setCenter:draggedViewNewCenterPoint];
+    DDLogVerbose(@"draggedView new point is at: %lf, %lf", draggedViewNewCenterPoint.x, draggedViewNewCenterPoint.y);
+    
+    //初始化sender中的坐标位置。如果不初始化，移动坐标会一直积累起来
+    [recognizer setTranslation:CGPointMake(0, 0) inView:parentView];
 }
 
 -(void) _moveToChatAssessView
@@ -369,34 +380,35 @@
 
 -(BOOL) _isNavigationBarAndToolbarHidden
 {
-    return (self.navigationController.toolbar.hidden && self.navigationController.navigationBar.hidden);
+    return (self.navigationController.toolbar.hidden);
 }
 
 -(void) _setNavigationBarAndToolbarHidden:(BOOL) hidden
 {
-//    if (hidden)
-//    {
-//        [self _deactivateToolbarDisplayTimer];
-//    }
-//    else
-//    {
-//        [self _activateToolbarDisplayTimer];
-//    }
+    if (hidden)
+    {
+        [self _deactivateToolbarDisplayTimer];
+    }
+    else
+    {
+        [self _activateToolbarDisplayTimer];
+    }
     
     [self.navigationController setNavigationBarHidden:hidden animated:YES];
     [self.navigationController setToolbarHidden:hidden animated:YES];
     
     if (_subscriberView)
     {
-        _subscriberView.frame = CGRectMake(_parterVideoView.frame.origin.x, _parterVideoView.frame.origin.y, _parterVideoView.frame.size.width, _parterVideoView.frame.size.height);
+        _subscriberView.frame = CGRectMake(0, 0, _parterVideoView.frame.size.width, _parterVideoView.frame.size.height);
     }
     
-//    if (_publisherView)
-//    {
-//        _publisherView.frame = CGRectMake(_selfVideoView.frame.origin.x, _selfVideoView.frame.origin.y, _selfVideoView.frame.size.width, _selfVideoView.frame.size.height);
-//    }
-    
-    [self.view sizeToFit];
+    if (_publisherView)
+    {
+        _publisherView.frame = CGRectMake(0, 0, _selfVideoView.frame.size.width, _selfVideoView.frame.size.height);
+
+    }
+
+    [self _relayoutSelfVideoViewByBarsShowingOrHidding:hidden];
 }
 
 -(void) _remoteEndChat
@@ -478,26 +490,26 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void)_activateToolbarDisplayTimer
 {
-    [CBAppUtils asyncProcessInBackgroundThread:^(){
-        [self _deactivateToolbarDisplayTimer];
-        
-        _toolbarDisplayTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_TOOLBARDISPLAYTICK target:self selector:@selector(_toolbarDisplayTimerClick) userInfo:nil repeats:YES];
-        
-        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
-        [currentRunLoop addTimer:_toolbarDisplayTimer forMode:NSRunLoopCommonModes];
-        [currentRunLoop run];
-    }];
+//    [CBAppUtils asyncProcessInBackgroundThread:^(){
+//        [self _deactivateToolbarDisplayTimer];
+//        
+//        _toolbarDisplayTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_TOOLBARDISPLAYTICK target:self selector:@selector(_toolbarDisplayTimerClick) userInfo:nil repeats:YES];
+//        
+//        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+//        [currentRunLoop addTimer:_toolbarDisplayTimer forMode:NSRunLoopCommonModes];
+//        [currentRunLoop run];
+//    }];
 }
 
 -(void)_deactivateToolbarDisplayTimer
 {
-    _kToolbarDisplaySeconds = 0;
-    
-    if (nil != _toolbarDisplayTimer)
-    {
-        [_toolbarDisplayTimer invalidate];
-        _toolbarDisplayTimer = nil;
-    }
+//    _kToolbarDisplaySeconds = 0;
+//    
+//    if (nil != _toolbarDisplayTimer)
+//    {
+//        [_toolbarDisplayTimer invalidate];
+//        _toolbarDisplayTimer = nil;
+//    }
 }
 
 -(void)_activateAlohaTimer
