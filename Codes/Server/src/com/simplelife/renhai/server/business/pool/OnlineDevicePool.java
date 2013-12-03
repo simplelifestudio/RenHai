@@ -45,6 +45,11 @@ public class OnlineDevicePool extends AbstractDevicePool
 	
 	private class InactiveCheckTask extends TimerTask
     {
+		public InactiveCheckTask()
+		{
+			Thread.currentThread().setName("PingCheckTimer");
+		}
+		
 		@Override
 		public void run()
 		{
@@ -65,13 +70,17 @@ public class OnlineDevicePool extends AbstractDevicePool
 	
 	private class BannedCheckTask extends TimerTask
     {
+		public BannedCheckTask()
+		{
+			Thread.currentThread().setName("BanCheckTimer");
+		}
+		
 		@Override
 		public void run()
 		{
 			try
 			{
 				//Session hibernateSesion = HibernateSessionFactory.getSession();
-				Thread.currentThread().setName("BannedCheck");
 				OnlineDevicePool.instance.deleteBannedDevice();
 				//HibernateSessionFactory.closeSession();
 			}
@@ -84,12 +93,16 @@ public class OnlineDevicePool extends AbstractDevicePool
 	
 	private class StatSaveTask extends TimerTask
     {
+		public StatSaveTask()
+		{
+			Thread.currentThread().setName("StatSaveTimer");
+		}
+		
 		@Override
 		public void run()
 		{
 			try
 			{
-				Thread.currentThread().setName("StatSave");
 				OnlineDevicePool.instance.saveStatistics();
 			}
 			catch(Exception e)

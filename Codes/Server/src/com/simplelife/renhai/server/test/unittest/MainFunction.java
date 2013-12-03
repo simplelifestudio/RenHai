@@ -60,6 +60,7 @@ import com.simplelife.renhai.server.util.DbObjectCache;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
+import com.simplelife.renhai.server.websocket.SecurityUtils;
 import com.simplelife.renhai.server.websocket.WebSocketConnection;
 import com.simplelife.renhai.server.websocket.WebSocketModule;
 
@@ -169,6 +170,17 @@ public class MainFunction extends AbstractTestCase
 		app.connect(false);
 		app.syncDevice();
 		app.sendServerDataSyncRequest();
+	}
+	
+	@Test
+	public void testJSONObject() throws Exception
+	{
+		JSONObject messageObj = null;
+		String tmpStr = "Kz8g5SNtphF85ucenPGJ9hfjBhklb8s0jczpkR+HE2lu32AYu8Gu9AotjnXI 0qUxsDeXo0eWebo1ST2I4rY+/vRmKZuhpPCCtrrTLolUL2h90eII/bz8cwa7 KgGLI5PRRvInyqHp7PzCBVf9Z21t83LRV60Kx+p0o4AKEsFXxHFdm4bkC63A c969P1lrDvcucIvT5NvuOrSokSUXCthw/T/4awdMpU+DBYR9fzbxvo+t6Lam czPfPauVuYF05xibiBTlTbszeqlo1Q6cobZalBXZ7oy24LiwYDHGcdzL972k BHwdnXov6q4YvHaECb0c4wgM7/V92zqH8qVMuRdGkIpA/fTv5vWFsHkVdL61 kHOHXhekRpHiRa3Ys4Mpr4JOOxZjbyIqhRyn6ROTjt3fWnRz6Nmgkjg+KS54 v4Pu1143BWWVkMfY9ged2cs9ZS4TXnkjDh20WEysvNyPEHZSRKGclUuF4tnK H8FI7SZHIjuswV1RRo3NZDZVDNbf+HIWjsTAgrWkSbYmhS1JpR4JqMj/Qoft 6qioe2Z6Ln+Z9mguHggatA+V5+v98rdeSxm/oB/yHtuBOoJqHIOd2r506URY 2HqeNXoR4cswHVS8bIU46hVtPNp8Pxl+k0t2rLG0OYg9gw6UDFvODWGWbAtV Tn3frYg+cTZ3jBUeEAT7qnIM9QdxHBlOfIVgU2HWT9FTs6l+ZhZSHeIKgEPX edSJFWD6zdrqSQEPiDi0F3Y6/gRl5fgZDa1y83NYH98BodskRBe3azvYw+uV uQIExBGJCicyk7NnOqK4AjchkxdgbEzZXQJC2jrVg6A2xNde0Wg3SpDYxn0h 0Lg6WQEQss68R+99/0zzFSgN";
+		tmpStr = SecurityUtils.decryptByDESAndDecodeByBase64(tmpStr, GlobalSetting.BusinessSetting.EncryptKey);
+		//logger.debug("Message after decrypt:\n{}", tmpStr);
+		messageObj = JSONObject.parseObject(tmpStr);
+		System.out.println(JSON.toJSONString(messageObj, true));
 	}
 	
 	@Test

@@ -14,6 +14,7 @@ package com.simplelife.renhai.server.json;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.JSONKey;
 
@@ -21,9 +22,9 @@ import com.simplelife.renhai.server.util.JSONKey;
 /** */
 public class JSONFactory
 {
+	private static Logger logger = BusinessModule.instance.getLogger();
 	private static Consts.MessageId parseRequestMessageId(JSONObject messageObject)
 	{
-		Logger logger = JSONModule.instance.getLogger();
 		try
 		{
 			JSONObject header = messageObject.getJSONObject(JSONKey.Header);
@@ -46,7 +47,6 @@ public class JSONFactory
 	/** */
 	public static AppJSONMessage createAppJSONMessage(JSONObject messageObject)
 	{
-		Logger logger = JSONModule.instance.getLogger();
 		logger.debug("Enter createAppJSONMessage()");
 		
 		AppJSONMessage message = new UnkownRequest(messageObject); 

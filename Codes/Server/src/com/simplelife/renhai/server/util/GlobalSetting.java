@@ -447,6 +447,11 @@ public class GlobalSetting
 	
 	private static class SettingCheckTask extends TimerTask
 	{
+		public SettingCheckTask()
+		{
+			Thread.currentThread().setName("SettingCheckTimer");
+		}
+		
 		@Override
 		public void run()
 		{

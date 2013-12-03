@@ -11,6 +11,8 @@
 
 package com.simplelife.renhai.server.log;
 
+import org.slf4j.Logger;
+
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
@@ -28,13 +30,14 @@ public class DbLogger
 	//public final static DbLogger instance = new DbLogger();
 	//private static Object increaseInterestFlag = new Object();
 	//private static Object increaseImpressFlag = new Object();
+	private static Logger logger = BusinessModule.instance.getLogger();
 	
 	public static void increaseImpressAssessCount(String labelName)
 	{
 		Globalimpresslabel label = DBModule.instance.impressLabelCache.getObject(labelName);
 		if (label == null)
 		{
-			DBModule.instance.getLogger().error("Target label can't be found in DB: ", labelName);
+			logger.error("Target label can't be found in DB: ", labelName);
 			return;
 		}
 	
@@ -42,7 +45,7 @@ public class DbLogger
 		{
 			int count = label.getGlobalAssessCount();
 			label.setGlobalAssessCount(label.getGlobalAssessCount() + 1);
-			BusinessModule.instance.getLogger().debug("Assess count of global impress label <" 
+			logger.debug("Assess count of global impress label <" 
 				+ labelName + "> was increased from " + count 
 				+ " to " + label.getGlobalAssessCount());
 		}
@@ -60,7 +63,7 @@ public class DbLogger
 		Globalinterestlabel label = DBModule.instance.interestLabelCache.getObject(labelName);
 		if (label == null)
 		{
-			DBModule.instance.getLogger().error("Fatal error: target label {} can't be found in DB: ", labelName);
+			logger.error("Fatal error: target label {} can't be found in DB: ", labelName);
 			return;
 		}
 		
@@ -68,7 +71,7 @@ public class DbLogger
 		{
 			int count = label.getGlobalMatchCount();
 			label.setGlobalMatchCount(label.getGlobalMatchCount()+1);
-			BusinessModule.instance.getLogger().debug("Match count of global interest label <" 
+			logger.debug("Match count of global interest label <" 
 				+ labelName + "> was increased from " + count 
 				+ " to " + label.getGlobalMatchCount());
 		}

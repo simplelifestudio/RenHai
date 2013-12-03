@@ -233,6 +233,11 @@ public class WebRTCSessionPool extends AbstractPool
 	
 	private class TokenCheckTask extends TimerTask
 	{
+		public TokenCheckTask()
+		{
+			Thread.currentThread().setName("TokenCheckTimer");
+		}
+		
 		@Override
 		public void run()
 		{

@@ -125,7 +125,6 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
      */
     public void onDeviceLeave(IDeviceWrapper device, Consts.StatusChangeReason reason)
     {
-    	Logger logger = BusinessModule.instance.getLogger();
     	if (device == null)
     	{
     		return;

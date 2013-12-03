@@ -469,7 +469,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 			{
 				device = newDevice(deviceSn);
 				DBModule.instance.deviceCache.putObject(deviceSn, device);
-				DAOWrapper.save(device);
 				//syncType = SyncType.NewDevice;
 			}
 			else
@@ -520,6 +519,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			if (body.containsKey(JSONKey.DataUpdate))
 			{
 				update(body.getJSONObject(JSONKey.DataUpdate), response.getBody());
+				//DAOWrapper.save(device);
 			}
 		}
 		

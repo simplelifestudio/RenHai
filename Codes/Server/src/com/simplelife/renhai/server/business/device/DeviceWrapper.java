@@ -502,8 +502,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     @Override
     public void asyncSendMessage(ServerJSONMessage message)
     {
-    	Logger logger = BusinessModule.instance.getLogger();
-        try
+    	try
 		{
         	if (webSocketConnection == null)
         	{

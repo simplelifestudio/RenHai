@@ -5,8 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.lib.hibernate41.MYECLIPSE_HIBERNATE_4_1_CORE"/>
 	<classpathentry kind="con" path="melibrary.com.genuitec.eclipse.lib.hibernate41.MYECLIPSE_HIBERNATE_4_1_EXTRAS"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0"/>
 	<classpathentry kind="lib" path="lib/hibernate/mybatis-3.2.3.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate/mysql-connector-java-5.1.25-bin.jar"/>
 	<classpathentry kind="lib" path="lib/jmeter/ApacheJMeter_components.jar"/>
@@ -15,12 +13,18 @@
 	<classpathentry kind="lib" path="lib/jmeter/commons-lang3-3.1.jar"/>
 	<classpathentry kind="lib" path="lib/jmeter/jorphan.jar"/>
 	<classpathentry kind="lib" path="lib/jmeter/logkit-2.0.jar"/>
-	<classpathentry kind="lib" path="lib/json/fastjson-1.1.33.jar"/>
 	<classpathentry kind="lib" path="lib/juit/junit-4.10.jar"/>
 	<classpathentry kind="lib" path="lib/log/logback-classic-1.0.13.jar"/>
 	<classpathentry kind="lib" path="lib/log/logback-core-1.0.13.jar"/>
 	<classpathentry kind="lib" path="lib/log/slf4j-api-1.7.5.jar"/>
+	<classpathentry kind="lib" path="lib/opentok/opentok.jar"/>
 	<classpathentry kind="lib" path="lib/websocketclient/java_websocket.jar"/>
-	<classpathentry kind="lib" path="E:/work/git/RenHai/Codes/Server/lib/opentok/opentok.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0"/>
+	<classpathentry kind="lib" path="lib/json/fastjson-1.1.37.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

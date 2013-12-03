@@ -19,6 +19,7 @@ import com.simplelife.renhai.server.util.DateUtil;
 @WebServlet("/websocket")
 public class RenHaiWebSocketServlet extends WebSocketServlet {
 	private static final long serialVersionUID = 1L;
+	private Logger logger = WebSocketModule.instance.getLogger();
        
     /**
      * @see WebSocketServlet#WebSocketServlet()
@@ -47,7 +48,6 @@ public class RenHaiWebSocketServlet extends WebSocketServlet {
     @Override
     protected StreamInbound createWebSocketInbound(String arg0, HttpServletRequest arg1)
     {
-    	Logger logger = WebSocketModule.instance.getLogger();
     	Thread.currentThread().setName("WebSocket" + DateUtil.getCurrentMiliseconds());
     	
     	String id = arg1.getRemoteAddr() + "_" + arg1.getRemotePort();

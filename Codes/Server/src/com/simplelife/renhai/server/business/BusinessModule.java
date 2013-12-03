@@ -36,12 +36,8 @@ public class BusinessModule extends AbstractModule
 	@Override
 	public void startService()
     {
-		// To initialize DB connection
-    	SqlSession session = DAOWrapper.getSession();
-    	session.close();
-    	
-    	OnlineDevicePool.instance.startService();
-    	InputMsgExecutorPool.instance.startService();
+		OnlineDevicePool.instance.startService();
+		InputMsgExecutorPool.instance.startService();
     	OutputMsgExecutorPool.instance.startService();
     	WebRTCSessionPool.instance.startService();
     	PingActionQueue.instance.startService();

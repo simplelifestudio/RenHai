@@ -12,6 +12,7 @@
 package com.simplelife.renhai.server.db;
 
 import java.io.IOException;
+import java.io.Reader;
 import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -46,10 +47,13 @@ public class DAOWrapper
 				{
 					try
 					{
-						factory = (new SqlSessionFactoryBuilder()).build(Resources.getResourceAsReader("mybatis.xml"));
+						Reader reader = Resources.getResourceAsReader("mybatis.xml");
+						SqlSessionFactoryBuilder builder = new SqlSessionFactoryBuilder();
+						factory = builder.build(reader);
 					}
-					catch (IOException e)
+					catch (Exception e)
 					{
+						e.printStackTrace();
 						FileLogger.printStackTrace(e);
 						return null;
 					}
@@ -70,7 +74,7 @@ public class DAOWrapper
 		
 		public FlushTimer(FlushTask flushTask)
 		{
-			//this.flushTask = flushTask; 
+			Thread.currentThread().setName("DBFlushTimer");
 		}
 		
 		@Override
@@ -397,7 +401,6 @@ public class DAOWrapper
     
     private static void printLog(Object obj)
 	{
-		Logger logger = DBModule.instance.getLogger();
 		if (obj instanceof Globalinterestlabel)
 		{
 			Globalinterestlabel label = (Globalinterestlabel) obj;

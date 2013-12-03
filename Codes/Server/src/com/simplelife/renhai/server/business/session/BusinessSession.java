@@ -121,20 +121,7 @@ public class BusinessSession implements IBusinessSession
     	}
     	
     	Consts.DeviceStatus status;
-    	/*
-    	for (IDeviceWrapper deviceWrapper : deviceList)
-    	{
-    		logger.debug("=================list before checking status for start session device<{}> ", deviceWrapper.getDeviceSn());
-    	}
-    	*/
-    	
     	int size = deviceList.size();
-    	/*
-    	for (int i = 0; i < size; i++)
-    	{
-    		logger.debug("=================list before checking status for start session, by index device<{}> ", deviceList.get(i).getDeviceSn());
-    	}
-    	*/
     	
     	for (IDeviceWrapper deviceWrapper : deviceList)
     	{

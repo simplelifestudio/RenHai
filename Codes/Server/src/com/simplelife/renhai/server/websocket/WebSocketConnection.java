@@ -177,7 +177,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     		logger.error("Failed to parse: \n{}", message);
     	}
     	
-    	AppJSONMessage appMessage;
+    	AppJSONMessage appMessage = null;
 		if (obj == null)
 		{
 			logger.error("Invalid JSON string which can't be converted into JSON object.");
@@ -196,7 +196,6 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		}
 		else
 		{
-			logger.debug("Received message: \n{}", JSON.toJSONString(obj, true));
 			JSONObject messageObj = null;
 	    	if (GlobalSetting.BusinessSetting.Encrypt != 0)
 	    	{
@@ -205,22 +204,29 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 				{
 	    			String tmpStr = obj.getString(JSONKey.JsonEnvelope);
 	    			tmpStr = SecurityUtils.decryptByDESAndDecodeByBase64(tmpStr, GlobalSetting.BusinessSetting.EncryptKey);
-	    			logger.debug("Message after decrypt:\n{}", tmpStr);
-	    			messageObj = JSON.parseObject(tmpStr);
+	    			//logger.debug("Message after decrypt:\n{}", tmpStr);
+	    			messageObj = JSONObject.parseObject(tmpStr);
+	    			logger.debug("Received message: \n{}", JSON.toJSONString(messageObj, true));
 				}
 				catch (Exception e)
 				{
-					WebSocketModule.instance.getLogger().error(e.getMessage());
+					logger.error(e.toString());
 					FileLogger.printStackTrace(e);
+					appMessage = new InvalidRequest(obj);
+					appMessage.setErrorCode(Consts.GlobalErrorCode.InvalidJSONRequest_1100);
+					appMessage.setErrorDescription("Invalid JSON message, exception occurred in decryption or creating JSON object");
 				}
 	    	}
 	    	else
 	    	{
+	    		logger.debug("Received message: \n{}", JSON.toJSONString(obj, true));
 	    		messageObj = obj.getJSONObject(JSONKey.JsonEnvelope);
 	    	}
 	    	
-	    	appMessage = JSONFactory.createAppJSONMessage(messageObj);
-	    	
+	    	if (appMessage == null)
+	    	{
+	    		appMessage = JSONFactory.createAppJSONMessage(messageObj);
+	    	}
 		}
 
 		String messageSn = appMessage.getMessageSn();
@@ -260,7 +266,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onOpen(WsOutbound outbound)
     {
-    	WebSocketModule.instance.getLogger().debug("WebSocketConnection onOpen triggered");
+    	logger.debug("WebSocketConnection onOpen triggered");
         super.onOpen(outbound);
         isConnectionOpen = true;
     }
@@ -296,7 +302,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     @Override
     public void onPong(ByteBuffer payload)
     {
-    	WebSocketModule.instance.getLogger().debug("WebSocketConnection onPong triggered");
+    	logger.debug("WebSocketConnection onPong triggered");
     	super.onPong(payload);
     }
     
@@ -317,7 +323,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     		temp += ", deviceSn: " + connectionOwner.getDeviceSn(); 
     	}
     	
-    	WebSocketModule.instance.getLogger().debug(temp);
+    	logger.debug(temp);
     	
     	// comment out releasing device related resource
     	// to avoid loop in procedure of device releasing

@@ -149,7 +149,6 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     @Override
     public void run()
     {
-    	Logger logger = JSONModule.instance.getLogger();
     	if (deviceWrapper == null)
     	{
     		logger.error("DeviceWrapper of ServerJSONMessage is null! message Id: {}", this.header.getString(JSONKey.MessageId));

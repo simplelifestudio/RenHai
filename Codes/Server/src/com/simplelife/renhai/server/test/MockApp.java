@@ -53,7 +53,7 @@ public class MockApp implements IMockApp, Runnable
 		public PingTask(MockApp mockApp)
 		{
 			this.mockApp = mockApp;
-			Thread.currentThread().setName("Ping" + DateUtil.getCurrentMiliseconds());
+			Thread.currentThread().setName("MockPing" + DateUtil.getCurrentMiliseconds());
 		}
 		
 		@Override
@@ -638,7 +638,7 @@ public class MockApp implements IMockApp, Runnable
 		}
 		else
 		{
-			String message = JSON.toJSONString(obj, true);
+			String message = JSON.toJSONString(obj);
 			try
 			{
 				message = SecurityUtils.encryptByDESAndEncodeByBase64(message, GlobalSetting.BusinessSetting.EncryptKey);
@@ -1333,66 +1333,71 @@ public class MockApp implements IMockApp, Runnable
 		assess(impressLabelList, true);
 	}
 
-	private void setupConnection(boolean useRealSocket)
+	private boolean setupConnection(boolean useRealSocket)
 	{
-		if (useRealSocket)
-		{
-			URI uri = URI.create(websocketLink);
-			
-			new Draft_17();
-			RenHaiWebSocketClient conn = new RenHaiWebSocketClient(uri);
-			
-			Thread t = new Thread(conn);
-			t.start();
-			connection = conn;
-			
-			int count = 0;
-	    	while (count < 5)
-	    	{
-	    		if (!connection.isOpen())
-	    		{
-	    			try
-					{
-						Thread.sleep(1000);
-					}
-					catch (InterruptedException e)
-					{
-						e.printStackTrace();
-					}
-	    		}
-	    		else
-	    		{
-	    			break;
-	    		}
-	    		count++;
-	    	}
-	    	
-	    	if (this.connection.isOpen())
-	    	{
-	    		connection.bindMockApp(this);
-	    		if (behaviorMode != MockAppConsts.MockAppBehaviorMode.Manual)
-	        	{
-	        		this.prepareSending(null, null);
-	        	}
-	    	}
-	    	else
-	    	{
-	    		logger.error("Fatal error that failed to setup websocket connection with server");
-	    	}
-		}
-		else
+		if (!useRealSocket)
 		{
 			MockWebSocketConnection conn = new MockWebSocketConnection();
 			connection = conn;
 			OnlineDevicePool.instance.newDevice(conn);
 			connection.bindMockApp(this);
+			return true;
 		}
+		
+		URI uri = URI.create(websocketLink);
+		
+		new Draft_17();
+		RenHaiWebSocketClient conn = new RenHaiWebSocketClient(uri);
+		
+		Thread t = new Thread(conn);
+		t.start();
+		connection = conn;
+		
+		int count = 0;
+    	while (count < 5)
+    	{
+    		if (!connection.isOpen())
+    		{
+    			try
+				{
+					Thread.sleep(1000);
+				}
+				catch (InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+    		}
+    		else
+    		{
+    			break;
+    		}
+    		count++;
+    	}
+    	
+    	if (this.connection.isOpen())
+    	{
+    		connection.bindMockApp(this);
+    		if (behaviorMode != MockAppConsts.MockAppBehaviorMode.Manual)
+        	{
+        		this.prepareSending(null, null);
+        	}
+    		return true;
+    	}
+    	else
+    	{
+    		return false;
+    	}
 	}
 	
 	public void connect()
 	{
 		setBusinessStatus(MockAppBusinessStatus.Init);
-		setupConnection(isUsingRealSocket);
+		if (!setupConnection(isUsingRealSocket))
+		{
+			logger.error("Fatal error that failed to setup websocket connection with server");
+			setBusinessStatus(MockAppBusinessStatus.Ended);
+			return;
+		}
 		startTimer();
 	}
 	

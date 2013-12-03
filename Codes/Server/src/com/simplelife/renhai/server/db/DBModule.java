@@ -11,6 +11,7 @@
 
 package com.simplelife.renhai.server.db;
 
+import org.apache.ibatis.session.SqlSession;
 import org.slf4j.LoggerFactory;
 
 import com.simplelife.renhai.server.util.AbstractModule;
@@ -40,6 +41,10 @@ public class DBModule extends AbstractModule
 		super.startService();
 		DAOWrapper.startTimers();
 		GlobalSetting.startService();
+		
+		// To initialize DB connection
+    	SqlSession session = DAOWrapper.getSession();
+    	session.close();
     }
 	
 	@Override

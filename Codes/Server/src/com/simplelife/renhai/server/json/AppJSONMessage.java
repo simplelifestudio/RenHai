@@ -35,7 +35,6 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements IApp
     
     public AppJSONMessage(JSONObject jsonObject)
     {
-    	Logger logger = JSONModule.instance.getLogger();
     	this.jsonObject = jsonObject;
     	
     	if (jsonObject == null)
@@ -104,8 +103,6 @@ public abstract class AppJSONMessage extends AbstractJSONMessage implements IApp
 	 */
 	protected boolean checkJSONRequest()
     {
-    	Logger logger = JSONModule.instance.getLogger();
-    	
     	if (jsonObject == null)
 		{
     		setErrorDescription("Empty JSON Object is attached in request");

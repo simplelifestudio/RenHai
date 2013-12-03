@@ -112,6 +112,11 @@ public abstract class AbstractJSONMessage implements Runnable
     
     public JSONObject getJSONObject(JSONObject obj, String key)
     {
+    	if (obj == null)
+    	{
+    		return null;
+    	}
+    	
     	if (!obj.containsKey(key))
     	{
     		return null;
