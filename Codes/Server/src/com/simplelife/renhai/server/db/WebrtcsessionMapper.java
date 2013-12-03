@@ -9,5 +9,5 @@ public interface WebrtcsessionMapper {
     int insert(Webrtcsession record);
     Webrtcsession selectByPrimaryKey(Integer webRtcSessionId);
     int updateByPrimaryKey(Webrtcsession record);
-    List<Webrtcsession> selectAll();
+    List<Webrtcsession> selectAll(int webRTCAccountId);
 }

@@ -12,8 +12,6 @@
 package com.simplelife.renhai.server.util;
 
 import java.nio.ByteBuffer;
-import java.util.Date;
-
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.device.PingNode;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;

@@ -469,6 +469,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			{
 				device = newDevice(deviceSn);
 				DBModule.instance.deviceCache.putObject(deviceSn, device);
+				DAOWrapper.save(device);
 				//syncType = SyncType.NewDevice;
 			}
 			else

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+  <classPathEntry location="E:/work/git/RenHai/Codes/Server/lib/hibernate/mysql-connector-java-5.1.25-bin.jar" />
+
+  <context id="DB2Tables" targetRuntime="MyBatis3">
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+        connectionURL="jdbc:mysql://127.0.0.1:3306/renhai?useUnicode=true&amp;characterEncoding=UTF-8"
+        userId="root"
+        password="1qazZSE$4rfv">
+    </jdbcConnection>
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.simplelife.renhai.server.db" targetProject="./temp">
+      <property name="enableSubPackages" value="true" />
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="com.simplelife.renhai.server.db"  targetProject="./temp">
+      <property name="enableSubPackages" value="true" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="XMLMAPPER" targetPackage="com.simplelife.renhai.server.db"  targetProject="./temp">
+      <property name="enableSubPackages" value="true" />
+    </javaClientGenerator>
+
+    <table tableName="device" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+      <!--generatedKey column="deviceId" sqlStatement="MySql" identity="true" /-->
+      <!--columnOverride column="DATE_FIELD" property="startDate" /-->
+      <!--ignoreColumn column="FRED" /-->
+      <!--columnOverride column="LONG_VARCHAR_FIELD" jdbcType="VARCHAR" /-->
+    </table>
+
+	<table tableName="devicecard" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+	
+	<table tableName="globalimpresslabel" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+	
+	<table tableName="globalinterestlabel" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+
+	<table tableName="hotinterestlabelstatistics" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+	
+	<table tableName="impresscard" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+	
+	<table tableName="impresslabelmap" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+	
+	<table tableName="interestcard" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+
+	<table tableName="interestlabelmap" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+	
+	<table tableName="operationcode" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+	
+	<table tableName="profile" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+
+	<table tableName="profileoperationlog" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+	
+	<table tableName="sessionprofilemap" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+	
+	<table tableName="sessionrecord" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+
+	<table tableName="statisticsitem" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+	
+	<table tableName="systemmodule" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+	
+	<table tableName="systemoperationlog" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+	
+	<table tableName="systemstatistics" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+
+	<table tableName="webrtcsession" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+	
+	<table tableName="webrtcaccount" schema="renhai">
+      <property name="useActualColumnNames" value="true"/>
+    </table>
+  </context>
+</generatorConfiguration>

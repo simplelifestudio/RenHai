@@ -13,6 +13,7 @@ public class PingNode
 	private PingNode prevNode;
 	private PingNode nextNode;
     private long lastPingTime;
+    private int pingActiveTime;
 
     public PingNode(IDeviceWrapper deviceWrapper)
     {
@@ -75,6 +76,10 @@ public class PingNode
 	    	}
 	    	logger.debug(temp);
     	}
+    	
+    	pingActiveTime = GlobalSetting.TimeOut.PingInterval 
+    			+ GlobalSetting.TimeOut.CheckPingInterval 
+    			+ GlobalSetting.TimeOut.CheckPingInterval;
     }
     
     public long getLastPingTime()
@@ -84,6 +89,6 @@ public class PingNode
     
     public boolean isPingTimeout()
     {
-    	return (System.currentTimeMillis() - lastPingTime) > GlobalSetting.TimeOut.PingInterval;
+    	return (System.currentTimeMillis() - lastPingTime) > pingActiveTime;
     }
 }

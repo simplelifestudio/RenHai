@@ -34,11 +34,7 @@ import com.simplelife.renhai.server.log.FileLogger;
  */
 public class OpentokUtil
 {
-	private static OpenTokSDK sdk = new OpenTokSDK(
-			GlobalSetting.BusinessSetting.OpenTokKey, 
-			GlobalSetting.BusinessSetting.OpenTokSecret);
-	
-	public static String requestNewSession()
+	public static String requestNewSession(OpenTokSDK sdk)
 	{
 		SessionProperties sp = new SessionProperties();
         sp.p2p_preference = "enabled";
@@ -54,7 +50,7 @@ public class OpentokUtil
         return null;
 	}
 	
-	public static String updateToken(String sessionId)
+	public static String updateToken(String sessionId, OpenTokSDK sdk)
 	{
 		try
 		{

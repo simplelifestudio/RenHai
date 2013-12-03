@@ -89,8 +89,8 @@ public class GlobalSetting
 		
 		public static int OpenTokKey = 34556802;
 		public static String OpenTokSecret = "7a94109e525016628a92a1dcc392e5bdc0f27e7e";
-		public static long OpenTokTokenExpiration = 2505600;			// Opentok has changed the expiration time to second instead of millisecond!
-		public static long OpenTokTokenDuration = 7200000;				// Longest duration for using token (video chat)
+		public static long OpenTokTokenExpiration = 29 * 24 * 3600;			// Opentok has changed the expiration time to second instead of millisecond!
+		public static long OpenTokTokenDuration = 2 * 3600 * 1000;			// Longest duration for using token (video chat)
 	}
 
 	public static void checkSettingFile()

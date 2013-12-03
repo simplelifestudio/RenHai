@@ -13,8 +13,6 @@ package com.simplelife.renhai.server.util;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;

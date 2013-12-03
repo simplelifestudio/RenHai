@@ -419,8 +419,23 @@ public class DAOWrapper
 		}
 	}
     
+    public static void save(IDbObject obj)
+    {
+    	SqlSession session = getSession();
+    	try
+		{
+			obj.save(session);
+			session.commit();
+		}
+		catch(Exception e)
+		{
+			session.rollback();
+			FileLogger.printStackTrace(e);
+		}
+    }
+    
     /**
-     * Save object in cache or to DB 
+     * Save object in cache 
      * @param obj: object to be saved
      */
     public static void cache(IDbObject obj)

@@ -45,6 +45,6 @@
 		"openTokKey":34556802,
 		"openTokSecret":"7a94109e525016628a92a1dcc392e5bdc0f27e7e",
 		"openTokTokenExpiration":2505600,
-		"openTokTokenDuration":7200000
+		"openTokTokenDuration":7200000,
 	} 
 }

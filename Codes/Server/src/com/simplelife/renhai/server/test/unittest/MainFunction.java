@@ -642,7 +642,7 @@ public class MainFunction extends AbstractTestCase
 		
 		SqlSession session = DAOWrapper.getSession();
 		WebrtcsessionMapper mapper = session.getMapper(WebrtcsessionMapper.class);
-		List<Webrtcsession> list = mapper.selectAll();
+		List<Webrtcsession> list = mapper.selectAll(1);
 		for (Webrtcsession rtcSession : list)
 		{
 			System.out.println(rtcSession.getWebrtcsession());

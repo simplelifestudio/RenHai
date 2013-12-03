@@ -23,10 +23,11 @@
     webRtcSessionId, webrtcsession, requestDate, token, tokenUpdateDate, expirationDate
   </sql>
   
-  <select id="selectAll" resultMap="BaseResultMap" >
+  <select id="selectAll" resultMap="BaseResultMap" parameterType="java.lang.Integer">
   	select 
     <include refid="Base_Column_List" />
     from webrtcsession
+	where webRTCAccountId = #{webRTCAccountId,jdbcType=INTEGER}
     order by expirationDate desc
   </select>
   

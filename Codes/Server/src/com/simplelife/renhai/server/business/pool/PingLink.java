@@ -3,7 +3,6 @@ package com.simplelife.renhai.server.business.pool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.device.PingNode;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
