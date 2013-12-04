@@ -245,12 +245,33 @@
     }
     [_textField addTarget:self action:@selector(_textEditingChanged:) forControlEvents:UIControlEventEditingChanged];
     
-    [_saveButton setTitle:NSLocalizedString(@"LabelManage_Action_Save", nil) forState:UIControlStateNormal];
-    [_cancelButton setTitle:NSLocalizedString(@"LabelManage_Action_Cancel", nil) forState:UIControlStateNormal];
-    
     _hasMovedForOffset = NO;
     
     [self _updateLimitCountLabel];
+    
+    [self _setupActionButtons];
+    
+    [self _formatFlatUI];
+}
+
+-(void)_formatFlatUI
+{
+    _titleLabel.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR_MAIN;
+    self.view.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR_MAIN;
+}
+
+-(void)_setupActionButtons
+{
+    [_saveButton setTitle:NSLocalizedString(@"LabelManage_Action_Save", nil) forState:UIControlStateNormal];
+    [_cancelButton setTitle:NSLocalizedString(@"LabelManage_Action_Cancel", nil) forState:UIControlStateNormal];
+    
+    _saveButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+    [_saveButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
+    [_saveButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
+    
+    _cancelButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
+    [_cancelButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
+    [_cancelButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 }
 
 -(void) _textEditingChanged:(UITextField*) textField
@@ -265,11 +286,11 @@
     NSInteger limitCount = LENGTH_LIMIT_HANZI - textNumber;
     if (0 <= limitCount)
     {
-        [_limitCountLabel setTextColor:FLATUI_COLOR_LABEL_TEXT];
+        [_limitCountLabel setTextColor:FLATUI_COLOR_TEXT_INFO];
     }
     else
     {
-        [_limitCountLabel setTextColor:SPECIAL_COLOR_WARNING];
+        [_limitCountLabel setTextColor:FLATUI_COLOR_TEXT_WARN];
     }
     [_limitCountLabel setText:[NSString stringWithFormat:@"%d", limitCount]];
 }

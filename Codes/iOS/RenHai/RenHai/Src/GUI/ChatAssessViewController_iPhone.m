@@ -40,8 +40,6 @@
 
 #define COUNTDOWN_SECONDS 300
 
-#define COLOR_ASSESSLABEL_SELECTED [UIColor redColor]
-
 @interface ChatAssessViewController_iPhone () <ChatAssessAddImpressLabelsHeaderViewDelegate, ChatAssessExistImpressLabelsHeaderViewDelegate, RHLabelManageDelegate, UIGestureRecognizerDelegate>
 {
     GUIModule* _guiModule;
@@ -207,13 +205,13 @@
     [_continueButton setTitle:NSLocalizedString(@"ChatAssess_Action_Continue", nil) forState:UIControlStateNormal];
     [_finishButton setTitle:NSLocalizedString(@"ChatAssess_Action_Finish", nil) forState:UIControlStateNormal];
     
-    _continueButton.buttonColor = [UIColor SeaGreen];
-    [_continueButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
-    [_continueButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+    _continueButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+    [_continueButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
+    [_continueButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
     
-    _finishButton.buttonColor = FLATUI_COLOR_TOOLBAR;
-    [_finishButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateNormal];
-    [_finishButton setTitleColor:[UIColor cloudsColor] forState:UIControlStateHighlighted];
+    _finishButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
+    [_finishButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
+    [_finishButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 }
 
 - (void) _setupNavigationBar

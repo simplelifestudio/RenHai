@@ -18,8 +18,8 @@
 #import "PKRevealController.h"
 #import "MainViewController_iPhone.h"
 
-#define STUDIOLABEL_DURATION 1.5
-#define LABELS_DURATION 0.75
+#define STUDIOLABEL_DURATION 2
+#define LABELS_DURATION 1
 #define LABELS_DURATION_OFFSET 0.5
 #define SPLASH_DURATION 0.25
 
@@ -117,7 +117,7 @@
         [UIView setAnimationDuration:STUDIOLABEL_DURATION];
         [UIView setAnimationDelegate:self];
         
-        _studioLabel.alpha = 0.0;
+        _studioLabel.alpha = 0.1;
         
         [UIView setAnimationDidStopSelector:@selector(_finishShowingStudioLabel)];
         
@@ -126,7 +126,7 @@
 }
 
 - (void) _finishShowingStudioLabel
-{    
+{
     [self performSelectorOnMainThread:@selector(_startShowingLabels) withObject:self waitUntilDone:YES];
 }
 
@@ -198,6 +198,8 @@ static NSTimeInterval s_labelDuration = LABELS_DURATION;
 
 - (void) _setupViewController
 {
+//    self.view.backgroundColor = FLATUI_COLOR_TEXT_LOG;
+    
     [self _setupLabels];
     
     _loadStuffThread = [[NSThread alloc] initWithTarget:self selector:@selector(loadAnyNecessaryStuff)  object:nil];
@@ -210,10 +212,10 @@ static NSTimeInterval s_labelDuration = LABELS_DURATION;
     _label2.alpha = 0.0;
     _label3.alpha = 0.0;
     
-    _studioLabel.alpha = 1.0;
+    _studioLabel.alpha = 0.6;
     
-    _studioLabel.textColor = FLATUI_COLOR_NAVIGATIONBAR;
-    _label2.textColor = FLATUI_COLOR_TOOLBAR;
+    _studioLabel.textColor = FLATUI_COLOR_TEXT_INFO;
+    _label2.textColor = FLATUI_COLOR_TEXT_LOG;
 }
 
 #pragma mark - ScreenOrientation Methods

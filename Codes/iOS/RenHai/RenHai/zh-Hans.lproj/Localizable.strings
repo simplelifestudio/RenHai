@@ -138,8 +138,8 @@
 "ChatVideo_Action_End" = "结束聊天";
 
 "ChatAssess_Title" = "评价对方";
-"ChatAssess_Action_Continue" = "继续";
-"ChatAssess_Action_Finish" = "结束";
+"ChatAssess_Action_Continue" = "评价并继续";
+"ChatAssess_Action_Finish" = "评价并离开";
 "ChatAssess_Action_AddImpressLabel" = "新建";
 "ChatAssess_Action_DelImpressLabel" = "删除";
 "ChatAssess_Action_CopyImpressLabel" = "复制";

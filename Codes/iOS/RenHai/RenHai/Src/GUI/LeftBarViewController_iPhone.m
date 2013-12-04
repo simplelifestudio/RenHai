@@ -144,11 +144,11 @@
         }
     }
     
-    UIColor* textColor = [UIColor grayColor];
-    UIColor* backColor = [UIColor darkGrayColor];
+    UIColor* textColor = FLATUI_COLOR_LEFTBAR_TEXT;
+    UIColor* backColor = FLATUI_COLOR_LEFTBAR_BACKGROUND;
     if (row == _selectedRow)
     {
-        textColor = [UIColor whiteColor];
+        textColor = FLATUI_COLOR_LEFTBAR_ROW_SELECTED;
     }
     else
     {

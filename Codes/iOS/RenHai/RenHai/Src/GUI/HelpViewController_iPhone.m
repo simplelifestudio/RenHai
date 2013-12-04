@@ -81,8 +81,11 @@
     
     self.navigationItem.title = NAVIGATIONBAR_TITLE_HELP;
     
-    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:FLATUI_COLOR_NAVIGATIONBAR];
-    [self.navigationItem.leftBarButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNER_RADIUS];
+    [self.navigationController.navigationBar configureFlatNavigationBarWithColor:FLATUI_COLOR_NAVIGATIONBAR_MAIN];
+    if (![UIDevice isRunningOniOS7AndLater])
+    {
+        [self.navigationItem.leftBarButtonItem configureFlatButtonWithColor:FLATUI_COLOR_BARBUTTONITEM highlightedColor:FLATUI_COLOR_BARBUTTONITEM_HIGHLIGHTED cornerRadius:FLATUI_CORNERRADIUS_BARBUTTONITEM];
+    }
 }
 
 -(void)_setupSideBarMenuButtons
@@ -194,7 +197,7 @@
     [_helpView addSubview:_scrollView];
     [_scrollView scrollRectToVisible:CGRectMake(0, 0, width, height) animated:NO];
     // set page control UI attributes
-    _pageControl.backgroundColor = [UIColor clearColor];
+    _pageControl.backgroundColor = FLATUI_COLOR_CLEAR;
     _pageControl.alpha = 1.0;
     _pageControl.numberOfPages = _imageArray.count;
     [_pageControl setBounds:CGRectMake(0, 0, 18 * (_pageControl.numberOfPages + 1), 18)];
@@ -203,7 +206,7 @@
     [_helpView addSubview:_pageControl];
     [_pageControl addTarget:self action:@selector(onPageTurn:)forControlEvents:UIControlEventValueChanged];
     
-    _closeButton.backgroundColor = FLATUI_COLOR_BUTTON;
+    _closeButton.backgroundColor = FLATUI_COLOR_BUTTONROLLBACK;
     [_helpView addSubview:_closeButton];
     
     [self _registerGestureRecognizers];

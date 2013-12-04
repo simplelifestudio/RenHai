@@ -32,16 +32,16 @@
     selectedBackgroundView.backgroundColor = selectedColor;
     cell.selectedBackgroundView = selectedBackgroundView;
     
-    cell.switcherLabel.backgroundColor = [UIColor clearColor];
-    cell.switcherLabel.textColor = COLOR_TEXT_INFO;
-
+    cell.switcherLabel.backgroundColor = FLATUI_COLOR_CLEAR;
+    cell.switcherLabel.textColor = FLATUI_COLOR_TEXT_INFO;
+/*
     cell.switcher.onColor = FLATUI_COLOR_BUTTON;
     cell.switcher.offColor = FLATUI_COLOR_LABEL;
     cell.switcher.onBackgroundColor = FLATUI_COLOR_BUTTON_SHADOW;
     cell.switcher.offBackgroundColor = FLATUI_COLOR_LABEL_SHADOW;
     cell.switcher.offLabel.font = [UIFont boldFlatFontOfSize:SMALL_FONT];
     cell.switcher.onLabel.font = [UIFont boldFlatFontOfSize:SMALL_FONT];
-    
+*/
     return cell;
 }
 

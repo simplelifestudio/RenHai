@@ -134,6 +134,15 @@
 +(UIColor*) IndianRed3;         // IndianRed3       255  85  85 #CD5555
 +(UIColor*) IndianRed4;         // IndianRed4       139  58  58 #8B3A3A
 
++(UIColor*) Firebrick1;         // Firebrick1       255  48  48 #FF3030
++(UIColor*) Firebrick2;         // Firebrick2       238  44  44 #EE2C2C
++(UIColor*) Firebrick3;         // Firebrick3       205  38  38 #CD2626
++(UIColor*) Firebrick4;         // Firebrick4       139  26  26 #8B1A1A
+
++(UIColor*) Tomato;             // Tomato           255  99  71	#FF6347
+
++(UIColor*) Brown1;             // Brown1           255  64  64	#FF4040
+
 /*
  LightCoral	240 128 128	#F08080
  Tomato	255 99 71	#FF6347
@@ -370,11 +379,8 @@
  Chocolate2	238 118 33	#EE7621
  Chocolate3	205 102 29	#CD661D
  Chocolate4	139 69 19	#8B4513
- Firebrick1	255 48 48	#FF3030
- Firebrick2	238 44 44	#EE2C2C
- Firebrick3	205 38 38	#CD2626
- Firebrick4	139 26 26	#8B1A1A
- Brown1	255 64 64	#FF4040
+
+
  Brown2	238 59 59	#EE3B3B
  Brown3	205 51 51	#CD3333
  Brown4	139 35 35	#8B2323

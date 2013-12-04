@@ -73,11 +73,11 @@ static UIImage* sortIconImage;
     [super drawRect:rect];
     if (self.selected)
     {
-        self.layer.borderColor = SPECIAL_COLOR_WARNING.CGColor;
+        self.layer.borderColor = FLATUI_COLOR_COLLECTIONCELL_SELECTED.CGColor;
     }
     else
     {
-        self.layer.borderColor = FLATUI_COLOR_LABELCELL_BORDER.CGColor;
+        self.layer.borderColor = FLATUI_COLOR_COLLECTIONCELL.CGColor;
     }
 }
 
@@ -188,7 +188,7 @@ static UIImage* sortIconImage;
     self.cellMode = CellMode_Normal;
     
     self.layer.borderWidth = BORDER_WIDTH;
-    self.layer.borderColor = FLATUI_COLOR_LABELCELL_BORDER.CGColor;
+    self.layer.borderColor = FLATUI_COLOR_COLLECTIONCELL.CGColor;
     self.layer.cornerRadius = CORNER_RADIUS;
 }
 
