@@ -224,10 +224,10 @@ ConnectStatus;
     _isViewControllerVisible = NO;
     _infoLabel.backgroundColor = FLATUI_COLOR_TINT_NAVIGATIONBAR;
     
-    [self _setupActionButtons];
-    
     [self _resetInstance];
 
+    [self _setupActionButtons];
+    
     [self _formatFlatUI];
 }
 
@@ -437,7 +437,8 @@ ConnectStatus;
             [self _clearInfoTextView];
         }
         [self _updateInfoTextView:infoDetailText];
-        _actionButton.titleLabel.text = actionButtonTitle;
+
+        [_actionButton setTitle:actionButtonTitle forState:UIControlStateNormal];
         _actionButton.hidden = isActionButtonHide;
     }];
 }
