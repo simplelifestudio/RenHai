@@ -198,6 +198,8 @@ static NSTimeInterval s_labelDuration = LABELS_DURATION;
 
 - (void) _setupViewController
 {
+//    self.view.backgroundColor = FLATUI_COLOR_TEXT_LOG;
+    
     [self _setupLabels];
     
     _loadStuffThread = [[NSThread alloc] initWithTarget:self selector:@selector(loadAnyNecessaryStuff)  object:nil];

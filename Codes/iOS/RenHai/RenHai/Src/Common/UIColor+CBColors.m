@@ -628,4 +628,34 @@
     return [UIColor colorWithHexCode:@"8B3A3A"];
 }
 
++(UIColor*) Firebrick1
+{
+    return [UIColor colorWithHexCode:@"FF3030"];
+}
+
++(UIColor*) Firebrick2
+{
+    return [UIColor colorWithHexCode:@"EE2C2C"];
+}
+
++(UIColor*) Firebrick3
+{
+    return [UIColor colorWithHexCode:@"CD2626"];
+}
+
++(UIColor*) Firebrick4
+{
+    return [UIColor colorWithHexCode:@"8B1A1A"];
+}
+
++(UIColor*) Tomato
+{
+    return [UIColor colorWithHexCode:@"FF6347"];
+}
+
++(UIColor*) Brown1
+{
+    return [UIColor colorWithHexCode:@"FF4040"];
+}
+
 @end

@@ -341,13 +341,15 @@
     }
     else
     {
+        parentViewHeight = parentViewHeight - actionBarHeight;
+        
         if (0 >= (draggedViewNewCenterPoint.y - draggedViewHeightHalf))
         {
             draggedViewNewCenterPoint.y = draggedViewHeightHalf + 1;
         }
-        else if ((parentViewHeight - actionBarHeight) < (draggedViewNewCenterPoint.y + draggedViewHeightHalf))
+        else if (parentViewHeight < (draggedViewNewCenterPoint.y + draggedViewHeightHalf))
         {
-            draggedViewNewCenterPoint.y = parentViewHeight - actionBarHeight - draggedViewHeightHalf;
+            draggedViewNewCenterPoint.y = parentViewHeight - draggedViewHeightHalf;
         }
     }
 

@@ -17,9 +17,9 @@
 #define FLATUI_FONT_NORMAL 16
 #define FLATUI_FONT_SMALL 14
 
-#define FLATUI_COLOR_MAJOR_A [UIColor colorWithHexCode:@"067AB5"] // 蓝
-#define FLATUI_COLOR_MAJOR_B [UIColor IndianRed1] // 红
-#define FLATUI_COLOR_MAJOR_C [UIColor SeaGreen] // 绿
+#define FLATUI_COLOR_MAJOR_A [UIColor colorWithHexCode:@"04AEEE"] // 蓝
+#define FLATUI_COLOR_MAJOR_B [UIColor colorWithHexCode:@"FF6347"] // 红
+#define FLATUI_COLOR_MAJOR_C [UIColor colorWithHexCode:@"54FF9F"] // 绿
 #define FLATUI_COLOR_MAJOR_D [UIColor Grey21] // 黑
 #define FLATUI_COLOR_MAJOR_E [UIColor Grey51] // 灰
 #define FLATUI_COLOR_MAJOR_F [UIColor cloudsColor] // 白
