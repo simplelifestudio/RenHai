@@ -212,13 +212,11 @@ public class Interestlabelmap implements IDbObject, Comparable<Interestlabelmap>
 					return;
 				}
  				
-				Integer id = globalLabel.getGlobalInterestLabelId(); 
-				if (id == null)
+				if (globalLabel.getGlobalInterestLabelId() == null)
 				{
 					globalLabel.save(session);
-					id = globalLabel.getGlobalInterestLabelId();
 				}
-				this.globalInterestLabelId = id;
+				this.globalInterestLabelId = globalLabel.getGlobalInterestLabelId();
 			}
 			mapper.insert(this);
 		}

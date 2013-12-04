@@ -103,7 +103,14 @@ public class MessageHandler implements Runnable
 		{
 			message = queue.remove();
 			queueLock.unlock();
-			executeMessage(message);
+			try
+			{
+				executeMessage(message);
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 			queueLock.lock();
 		}while(!queue.isEmpty());
 		
@@ -135,7 +142,7 @@ public class MessageHandler implements Runnable
 						.getDeviceWrapper().getDeviceSn());
 				try
 				{
-					Thread.sleep(delay - duration);
+					Thread.sleep(delay);
 				}
 				catch (InterruptedException e)
 				{

@@ -159,7 +159,11 @@ public class DbObjectCache<T>
 	
 	private void cacheGlobalLabels(Device device)
 	{
-		Collection<Impresslabelmap> impressMaps = device.getProfile().getImpressCard().getImpressLabelMapSet();
+		Collection<Impresslabelmap> impressMaps = device
+				.getProfile()
+				.getImpressCard()
+				.getImpressLabelMapSet();
+		
 		Globalimpresslabel impressLabel;
 		for (Impresslabelmap map : impressMaps)
 		{

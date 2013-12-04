@@ -214,13 +214,11 @@ public class Impresslabelmap implements IDbObject, Comparable<Impresslabelmap>
 					return;
 				}
 				
-				Integer id = globalLabel.getGlobalImpressLabelId();
-				if (id == null)
+				if (globalLabel.getGlobalImpressLabelId() == null)
 				{
 					globalLabel.save(session);
-					id = globalLabel.getGlobalImpressLabelId();
 				}
-				this.globalImpressLabelId = id;
+				this.globalImpressLabelId = globalLabel.getGlobalImpressLabelId();
 			}
 			mapper.insert(this);
 		}

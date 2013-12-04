@@ -207,11 +207,12 @@ public class BusinessSession implements IBusinessSession
     	
     	if (logger.isDebugEnabled())
     	{
-	    	logger.debug("Enter startSession with id {}, deviceList:" , sessionId);
+    		String tmpStr = "Enter startSession with id " + sessionId + ", deviceList:";  
 	    	for (IDeviceWrapper device : deviceList)
 	    	{
-	    		logger.debug(device.getDeviceSn());
+	    		tmpStr += "<" + device.getDeviceSn() + "> ";
 	    	}
+    		logger.debug(tmpStr);
     	}
     	
     	//logger.debug("===============before check start session");

@@ -29,9 +29,6 @@ public interface IDeviceWrapper
     public Consts.DeviceStatus getBusinessStatus();
     
     /** */
-    public Consts.ServiceStatus getServiceStatus();
-    
-    /** */
     public boolean checkExistenceInDb();
     
     /** */
@@ -62,8 +59,6 @@ public interface IDeviceWrapper
     public void updateActivityTime();
     
     public void updatePingTime();
-    
-    public void setServiceStatus(Consts.ServiceStatus serviceStatus);
     
     public void changeBusinessStatus(Consts.DeviceStatus targetStatus, Consts.StatusChangeReason reason);
     

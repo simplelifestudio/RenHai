@@ -33,6 +33,7 @@ import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.log.DbLogger;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
@@ -441,14 +442,6 @@ public class AppDataSyncRequest extends AppJSONMessage
 	@Override
 	public void doRun()
 	{
-		/*
-		if (deviceWrapper.getOwnerOnlineDevicePool() == null)
-		{
-			logger.debug("Device <{}> synchronizing after connnection was released",
-					deviceWrapper.getDeviceSn());
-			deviceWrapper.bindOnlineDevicePool(OnlineDevicePool.instance);
-		}
-		*/
 		if (!checkJSONRequest())
 		{
 			responseError();
@@ -469,11 +462,9 @@ public class AppDataSyncRequest extends AppJSONMessage
 			{
 				device = newDevice(deviceSn);
 				DBModule.instance.deviceCache.putObject(deviceSn, device);
-				//syncType = SyncType.NewDevice;
 			}
 			else
 			{
-				//syncType = SyncType.ExistentNotLoaded;
 				device = loadDevice(deviceSn);
 			}
 			deviceWrapper.setDevice(device);
@@ -509,18 +500,19 @@ public class AppDataSyncRequest extends AppJSONMessage
 			return;
 		}
 		
-		deviceWrapper.setServiceStatus(Consts.ServiceStatus.Normal);
 		deviceWrapper.changeBusinessStatus(Consts.DeviceStatus.AppDataSynced, StatusChangeReason.AppDataSynchronize);
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.AppDataSyncResponse);
-		if (profile.getServiceStatus().equals(Consts.ServiceStatus.Normal.name()))
+		if (body.containsKey(JSONKey.DataUpdate))
 		{
-			// Only allow normal device to update profile
-			if (body.containsKey(JSONKey.DataUpdate))
-			{
-				update(body.getJSONObject(JSONKey.DataUpdate), response.getBody());
-				//DAOWrapper.save(device);
-			}
+			update(body.getJSONObject(JSONKey.DataUpdate), response.getBody());
+		}
+		
+		
+		if (isNewDevice)
+		{
+			// Save new device to get deviceId for app
+			//device.saveToDB();
 		}
 		
 		if (profile.getServiceStatus().equals(Consts.ServiceStatus.Banned.name()))

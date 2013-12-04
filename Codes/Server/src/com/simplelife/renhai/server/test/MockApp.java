@@ -809,6 +809,7 @@ public class MockApp implements IMockApp, Runnable
 		{
 			return;
 		}
+		logger.debug("Start ping of device <{}>", this.getDeviceSn());
 		connection.ping();
 	}
 	
@@ -1410,13 +1411,14 @@ public class MockApp implements IMockApp, Runnable
 	
 	public void setBusinessStatus(MockAppConsts.MockAppBusinessStatus status)
 	{
-		logger.debug("MockApp <{}> changes status to " + status.name(), deviceSn);
+		logger.debug("MockApp <{}> will chang status to " + status.name(), deviceSn);
 		businessStatus = status;
 		if (status == MockAppConsts.MockAppBusinessStatus.Ended)
 		{
 			stopTimer();
 			connection.closeConnection();
 		}
+		logger.debug("MockApp <{}> changed status to " + status.name(), deviceSn);
 	}
 
 

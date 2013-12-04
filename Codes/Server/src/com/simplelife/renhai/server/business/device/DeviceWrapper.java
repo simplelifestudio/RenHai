@@ -71,9 +71,6 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     // Real device object enclosed in this DeviceWrapper
     protected Device device;
     
-    // Service status of device, to indicate if device is out of service
-    protected Consts.ServiceStatus serviceStatus;
-    
     // Business session
     protected Consts.DeviceStatus businessStatus;
     
@@ -93,11 +90,6 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     
     private PingNode pingNode = new PingNode(this);
     
-    // Set service status of Device: Normal or Ban
-    public void setServiceStatus(Consts.ServiceStatus serviceStatus)
-    {
-    	this.serviceStatus = serviceStatus;
-    }
     
     @Override
     public void updatePingTime()
@@ -317,12 +309,6 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     public Consts.DeviceStatus getBusinessStatus()
     {
         return businessStatus;
-    }
-    
-    /** */
-    public Consts.ServiceStatus getServiceStatus()
-    {
-        return serviceStatus;
     }
     
     /** */
