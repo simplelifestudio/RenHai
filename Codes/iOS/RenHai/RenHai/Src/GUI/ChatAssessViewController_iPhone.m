@@ -206,11 +206,11 @@
     [_finishButton setTitle:NSLocalizedString(@"ChatAssess_Action_Finish", nil) forState:UIControlStateNormal];
     
     _continueButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
-    [_continueButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateNormal];
+    [_continueButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_continueButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
     
-    _finishButton.buttonColor = FLATUI_COLOR_BUTTONROALLBACK;
-    [_finishButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateNormal];
+    _finishButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
+    [_finishButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_finishButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 }
 

@@ -206,7 +206,7 @@
     [_helpView addSubview:_pageControl];
     [_pageControl addTarget:self action:@selector(onPageTurn:)forControlEvents:UIControlEventValueChanged];
     
-    _closeButton.backgroundColor = FLATUI_COLOR_BUTTONROALLBACK;
+    _closeButton.backgroundColor = FLATUI_COLOR_BUTTONROLLBACK;
     [_helpView addSubview:_closeButton];
     
     [self _registerGestureRecognizers];

@@ -266,11 +266,11 @@
     [_cancelButton setTitle:NSLocalizedString(@"LabelManage_Action_Cancel", nil) forState:UIControlStateNormal];
     
     _saveButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
-    [_saveButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateNormal];
+    [_saveButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_saveButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
     
-    _cancelButton.buttonColor = FLATUI_COLOR_BUTTONROALLBACK;
-    [_cancelButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateNormal];
+    _cancelButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
+    [_cancelButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_cancelButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 }
 

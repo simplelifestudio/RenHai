@@ -206,8 +206,8 @@ ChatWaitStatus;
 - (void) _setupActionButtons
 {
     [_actionButton setTitle:NSLocalizedString(@"ChatWait_Action_Cancel", nil) forState:UIControlStateNormal];
-    _actionButton.buttonColor = FLATUI_COLOR_BUTTONROALLBACK;
-    [_actionButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateNormal];
+    _actionButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
+    [_actionButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_actionButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 }
 

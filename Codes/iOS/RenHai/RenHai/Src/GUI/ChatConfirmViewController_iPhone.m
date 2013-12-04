@@ -452,11 +452,11 @@
     [_rejectChatButton setTitle:NSLocalizedString(@"ChatConfirm_Action_Reject", nil) forState:UIControlStateNormal];
     
     _agreeChatButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
-    [_agreeChatButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateNormal];
+    [_agreeChatButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_agreeChatButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
     
-    _rejectChatButton.buttonColor = FLATUI_COLOR_BUTTONROALLBACK;
-    [_rejectChatButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateNormal];
+    _rejectChatButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
+    [_rejectChatButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_rejectChatButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 }
 

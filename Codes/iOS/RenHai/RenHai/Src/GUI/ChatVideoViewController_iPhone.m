@@ -268,11 +268,11 @@
     [_endChatButton setTitle:NSLocalizedString(@"ChatVideo_Action_End", nil) forState:UIControlStateNormal];
     
     _selfVideoButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
-    [_selfVideoButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateNormal];
+    [_selfVideoButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_selfVideoButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
     
-    _endChatButton.buttonColor = FLATUI_COLOR_BUTTONROALLBACK;
-    [_endChatButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateNormal];
+    _endChatButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
+    [_endChatButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_endChatButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 }
 
