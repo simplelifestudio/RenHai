@@ -116,7 +116,7 @@
             __block BOOL hasMessageSn = NO;
             __block BOOL hasTimeStamp = NO;
             __block BOOL hasDevieSn = NO;
-            __block BOOL hasDeviceId = NO;
+//            __block BOOL hasDeviceId = NO;
             
             [header enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL* stop){
                 if ([key isEqualToString:MESSAGE_KEY_MESSAGETYPE])
@@ -139,13 +139,14 @@
                 {
                     hasDevieSn = YES;
                 }
-                else if ([key isEqualToString:MESSAGE_KEY_DEVICEID])
-                {
-                    hasDeviceId = YES;
-                }
+//                else if ([key isEqualToString:MESSAGE_KEY_DEVICEID])
+//                {
+//                    hasDeviceId = YES;
+//                }
             }];
             
-            flag = (hasMessageTye & hasMessageId & hasMessageSn & hasTimeStamp & hasDevieSn & hasDeviceId) ? YES : NO;
+//            flag = (hasMessageTye & hasMessageId & hasMessageSn & hasTimeStamp & hasDevieSn & hasDeviceId) ? YES : NO;
+            flag = (hasMessageTye & hasMessageId & hasMessageSn & hasTimeStamp & hasDevieSn) ? YES : NO;            
         }
     }
     
