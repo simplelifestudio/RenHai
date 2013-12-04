@@ -314,6 +314,8 @@ ChatWaitStatus;
 {
     _isDeciding = YES;
     
+    _actionButton.hidden = YES;
+    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         
         RHDevice* device = _userDataModule.device;
@@ -351,6 +353,8 @@ ChatWaitStatus;
         {
 
         }
+        
+        _actionButton.hidden = NO;
     }];
 }
 
@@ -413,7 +417,7 @@ ChatWaitStatus;
         {
             infoText = NSLocalizedString(@"ChatWait_Matched", nil);
             infoDetailText = NSLocalizedString(@"ChatWait_Matched_Detail", nil);
-            isActionButtonHide = YES;
+            isActionButtonHide = NO;
             isTextClear = NO;
             break;
         }
@@ -421,7 +425,7 @@ ChatWaitStatus;
         {
             infoText = NSLocalizedString(@"ChatWait_Cancel", nil);
             infoDetailText = NSLocalizedString(@"ChatWait_Cancel_Detail", nil);
-            isActionButtonHide = YES;
+            isActionButtonHide = NO;
             isTextClear = NO;
             break;
         }
