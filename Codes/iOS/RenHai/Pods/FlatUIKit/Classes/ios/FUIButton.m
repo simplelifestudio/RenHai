@@ -95,7 +95,7 @@
     }
     else
     {
-        self.alpha = 0.5;
+        self.alpha = 0.4;
     }
 }
 // }

@@ -343,8 +343,6 @@ ChatWaitStatus;
     [CBAppUtils asyncProcessInMainThread:^(){
         if (_leavePoolFlag)
         {
-            [NSThread sleepForTimeInterval:DELAY];
-            
             [self _clockCancel];
             
             [_guiModule.mainViewController switchToMainScene];
@@ -435,6 +433,8 @@ ChatWaitStatus;
         }
     }
 
+    self.navigationItem.title = infoText;
+    
     _actionButton.titleLabel.text = actionButtonTitle;
     _actionButton.hidden = isActionButtonHide;
 }
