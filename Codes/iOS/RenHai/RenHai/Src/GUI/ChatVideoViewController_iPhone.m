@@ -25,8 +25,8 @@
 #define _TOOLBAR_DISPLAY_PERIOD 3
 
 #define BORDERWIDTH_VIDEOVIEW 2.0f;
-#define CORNERRADIUS_VIDEOVIEW 6.0f;
-#define BORDERCOLOR_VIDEOVIEW FLATUI_COLOR_MAJOR_E
+#define CORNERRADIUS_VIDEOVIEW 2.0f;
+#define BORDERCOLOR_VIDEOVIEW FLATUI_COLOR_MAJOR_F
 
 @interface ChatVideoViewController_iPhone () <OpenTokDelegate, UIGestureRecognizerDelegate>
 {
