@@ -8,6 +8,8 @@
 
 #import "LeftBarHeaderView_iPhone.h"
 
+#import "GUIStyle.h"
+
 @implementation LeftBarHeaderView_iPhone
 
 - (id)initWithFrame:(CGRect)frame

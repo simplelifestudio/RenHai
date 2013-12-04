@@ -144,11 +144,11 @@ EnterOperationStatus;
     _onlineDeviceCountUnit4.textColor = FLATUI_COLOR_TEXT_LOG;
     _onlineDeviceCountUnit5.textColor = FLATUI_COLOR_TEXT_LOG;
     
-    _chatDeviceCountUnit1.textColor = FLATUI_COLOR_TEXT_LOG;
-    _chatDeviceCountUnit2.textColor = FLATUI_COLOR_TEXT_LOG;
-    _chatDeviceCountUnit3.textColor = FLATUI_COLOR_TEXT_LOG;
-    _chatDeviceCountUnit4.textColor = FLATUI_COLOR_TEXT_LOG;
-    _chatDeviceCountUnit5.textColor = FLATUI_COLOR_TEXT_LOG;
+    _chatDeviceCountUnit1.textColor = FLATUI_COLOR_TEXT_WARN;
+    _chatDeviceCountUnit2.textColor = FLATUI_COLOR_TEXT_WARN;
+    _chatDeviceCountUnit3.textColor = FLATUI_COLOR_TEXT_WARN;
+    _chatDeviceCountUnit4.textColor = FLATUI_COLOR_TEXT_WARN;
+    _chatDeviceCountUnit5.textColor = FLATUI_COLOR_TEXT_WARN;
 }
 
 -(void)_setupView

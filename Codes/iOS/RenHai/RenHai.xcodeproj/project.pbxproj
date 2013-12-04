@@ -243,6 +243,10 @@
 		CD736CEF1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */; };
 		CD736CF41817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */; };
 		CD736CF51817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */; };
+		CDA98255184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA98254184F0B9300D95896 /* LeftBarTableCell_iPhone.m */; };
+		CDA98256184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA98254184F0B9300D95896 /* LeftBarTableCell_iPhone.m */; };
+		CDA98258184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDA98257184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib */; };
+		CDA98259184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDA98257184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib */; };
 		CDBC5CC8182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CDBC5CC7182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.m */; };
 		CDBC5CC9182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CDBC5CC7182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.m */; };
 		CDBE9E251834547500005405 /* RHWebRTC.m in Sources */ = {isa = PBXBuildFile; fileRef = CDBE9E241834547500005405 /* RHWebRTC.m */; };
@@ -511,6 +515,9 @@
 		CD736CEC1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpressLabelsHeaderView_iPhone.h; sourceTree = "<group>"; };
 		CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImpressLabelsHeaderView_iPhone.m; sourceTree = "<group>"; };
 		CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImpressLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
+		CDA98253184F0B9300D95896 /* LeftBarTableCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftBarTableCell_iPhone.h; sourceTree = "<group>"; };
+		CDA98254184F0B9300D95896 /* LeftBarTableCell_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftBarTableCell_iPhone.m; sourceTree = "<group>"; };
+		CDA98257184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftBarTableCell_iPhone.xib; sourceTree = "<group>"; };
 		CDBC5CC6182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerInterestLabelsViewLayout.h; sourceTree = "<group>"; };
 		CDBC5CC7182DEBBF007DBCDC /* ServerInterestLabelsViewLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerInterestLabelsViewLayout.m; sourceTree = "<group>"; };
 		CDBE9E231834547500005405 /* RHWebRTC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHWebRTC.h; sourceTree = "<group>"; };
@@ -886,6 +893,9 @@
 				C593C47417D42B5800C26367 /* LeftBarFooterView_iPhone.h */,
 				C593C47517D42B5900C26367 /* LeftBarFooterView_iPhone.m */,
 				C593C47817D42B7400C26367 /* LeftBarFooterView_iPhone.xib */,
+				CDA98253184F0B9300D95896 /* LeftBarTableCell_iPhone.h */,
+				CDA98254184F0B9300D95896 /* LeftBarTableCell_iPhone.m */,
+				CDA98257184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib */,
 				C593C41617D2F5BF00C26367 /* HomeViewController_iPhone.h */,
 				C593C41717D2F5BF00C26367 /* HomeViewController_iPhone.m */,
 				C593C42D17D3296700C26367 /* DeviceViewController_iPhone.h */,
@@ -1138,6 +1148,7 @@
 				CDFEA31D182A175600F0351D /* order@2x.png in Resources */,
 				C54DC8E617DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.xib in Resources */,
 				C54DC8EF17DD5ECE00BBD498 /* Localizable.strings in Resources */,
+				CDA98258184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib in Resources */,
 				C53A7F1417DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib in Resources */,
 				CD32013C17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */,
 				CD734AA617E83E3000EF6CD4 /* help_01.JPG in Resources */,
@@ -1184,6 +1195,7 @@
 				C54DC8CC17DC069900BBD498 /* enterbutton_normal.png in Resources */,
 				C54DC8CE17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
 				C54DC8E717DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.xib in Resources */,
+				CDA98259184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib in Resources */,
 				C54DC8F017DD5ECE00BBD498 /* Localizable.strings in Resources */,
 				C53A7F1517DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib in Resources */,
 				CDFEA327182A1E5C00F0351D /* ChatAssessExistImpressLabelsHeaderView_iPhone.xib in Resources */,
@@ -1293,6 +1305,7 @@
 				C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */,
 				CD6D8CD118434A6A00C2330D /* RHDataUtils.m in Sources */,
 				CD5D6CFB1838923D002DEDAF /* RHStatusPeriod.m in Sources */,
+				CDA98255184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */,
 				C50505C017D2BD4800DB6589 /* CBAppUtils.m in Sources */,
 				CDBE9E2F1834D74800005405 /* OpenTokAgent.m in Sources */,
 				C50505C217D2BD4800DB6589 /* CBDateUtils.m in Sources */,
@@ -1395,6 +1408,7 @@
 				C50505CB17D2BD4800DB6589 /* CBMathUtils.m in Sources */,
 				CD3C04E8181FD1C0002B19A3 /* BusinessStatus.m in Sources */,
 				CD5D6CF418388A94002DEDAF /* RHProxy.m in Sources */,
+				CDA98256184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */,
 				CD5D6CFC1838923D002DEDAF /* RHStatusPeriod.m in Sources */,
 				C50505CD17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */,
 				CD736CEF1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */,
