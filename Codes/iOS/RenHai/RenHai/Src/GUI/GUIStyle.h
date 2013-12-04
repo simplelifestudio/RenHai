@@ -14,6 +14,7 @@
 
 // UI Style Definitions based on FlatUIKit
 
+#define FLATUI_FONT_GIANT 20
 #define FLATUI_FONT_BIG 18
 #define FLATUI_FONT_NORMAL 16
 #define FLATUI_FONT_SMALL 14

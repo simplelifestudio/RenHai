@@ -320,6 +320,13 @@
             {
                 [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
             }
+            
+            selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
+            for (NSIndexPath* indexPath in selectedIndexPathes)
+            {
+                [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            }
+            [self _refreshInterestLabelsHeaderViewActions];
         }
         else
         {

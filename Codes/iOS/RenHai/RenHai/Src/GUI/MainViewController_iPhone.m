@@ -40,6 +40,8 @@
     [self setMinimumWidth:LEFTBAR_WIDTH_IPHONE maximumWidth:LEFTBAR_WIDTH_IPHONE forViewController:self.leftViewController];
     
     _guiModule = [GUIModule sharedInstance];
+    
+    self.animationDuration = 0.3;
 }
 
 - (void)didReceiveMemoryWarning
