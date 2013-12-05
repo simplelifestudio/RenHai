@@ -48,6 +48,12 @@
     return self;
 }
 
+-(NSArray*) current
+{
+    NSArray* topList = [RHDataUtils sortedLabelList:_current sortKey:@"currentProfileCount" ascending:NO];
+    return topList;
+}
+
 #pragma mark - CBJSONable
 
 -(void) fromJSONObject:(NSDictionary *)dic
