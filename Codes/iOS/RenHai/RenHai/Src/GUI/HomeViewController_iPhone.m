@@ -144,11 +144,11 @@ EnterOperationStatus;
     _onlineDeviceCountUnit4.textColor = FLATUI_COLOR_TEXT_LOG;
     _onlineDeviceCountUnit5.textColor = FLATUI_COLOR_TEXT_LOG;
     
-    _chatDeviceCountUnit1.textColor = FLATUI_COLOR_TEXT_LOG;
-    _chatDeviceCountUnit2.textColor = FLATUI_COLOR_TEXT_LOG;
-    _chatDeviceCountUnit3.textColor = FLATUI_COLOR_TEXT_LOG;
-    _chatDeviceCountUnit4.textColor = FLATUI_COLOR_TEXT_LOG;
-    _chatDeviceCountUnit5.textColor = FLATUI_COLOR_TEXT_LOG;
+    _chatDeviceCountUnit1.textColor = FLATUI_COLOR_TEXT_WARN;
+    _chatDeviceCountUnit2.textColor = FLATUI_COLOR_TEXT_WARN;
+    _chatDeviceCountUnit3.textColor = FLATUI_COLOR_TEXT_WARN;
+    _chatDeviceCountUnit4.textColor = FLATUI_COLOR_TEXT_WARN;
+    _chatDeviceCountUnit5.textColor = FLATUI_COLOR_TEXT_WARN;
 }
 
 -(void)_setupView
@@ -213,8 +213,8 @@ EnterOperationStatus;
     _bannerView.pauseInterval = 1.0; // seconds of pause before scrolling starts again
     _bannerView.scrollSpeed = 25; // pixels per second
     _bannerView.textAlignment = NSTextAlignmentCenter; // centers text when no auto-scrolling is applied
-    _bannerView.fadeLength = FLATUI_FONT_SMALL;
-    _bannerView.font = [UIFont systemFontOfSize:FLATUI_FONT_SMALL];
+    _bannerView.fadeLength = FLATUI_FONT_BIG;
+    _bannerView.font = [UIFont systemFontOfSize:FLATUI_FONT_BIG];
     _bannerView.scrollDirection = CBAutoScrollDirectionLeft;
     
     [_bannerView observeApplicationNotifications];

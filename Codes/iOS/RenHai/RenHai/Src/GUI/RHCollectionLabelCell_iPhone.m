@@ -13,7 +13,7 @@
 
 #import "RHLabelManageViewController_iPhone.h"
 
-#define BORDER_WIDTH 1.5f
+#define BORDER_WIDTH 2.0f
 #define CORNER_RADIUS 3.0f
 
 static UIImage* delIconImage;
