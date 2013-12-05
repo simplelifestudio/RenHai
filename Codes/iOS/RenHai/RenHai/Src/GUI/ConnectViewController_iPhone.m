@@ -478,12 +478,13 @@ ConnectStatus;
     RHMessage* requestMessage = [RHMessage newProxyDataSyncRequest];
     [_commModule proxyDataSyncRequest:requestMessage
         successCompletionBlock:^(NSDictionary* proxyDic){
+            
            RHProxy* proxy = _userDataModule.proxy;
-           
+            
            @try
            {
                [proxy fromJSONObject:proxyDic];
-               
+
                switch (proxy.serviceStatus)
                {
                    case ServerServiceStatus_Normal:

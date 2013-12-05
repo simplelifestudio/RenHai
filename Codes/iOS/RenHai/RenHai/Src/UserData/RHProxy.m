@@ -64,6 +64,10 @@
             _statusPeriod = [[RHStatusPeriod alloc] init];
             [_statusPeriod fromJSONObject:statusPeriodDic];
         }
+        else
+        {
+            _statusPeriod = nil;
+        }
     }
 }
 

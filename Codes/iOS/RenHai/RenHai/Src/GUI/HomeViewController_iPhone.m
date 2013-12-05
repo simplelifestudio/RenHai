@@ -89,6 +89,8 @@ EnterOperationStatus;
 -(void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self _updateBannerView];
 }
 
 -(void) viewDidAppear:(BOOL)animated
@@ -163,7 +165,7 @@ EnterOperationStatus;
     
     _versionLabel.text = _appDataModule.appVersion;
     
-    [self _setupBannerView];
+    [self _updateBannerView];
 }
 
 -(void)_setupNavigationBar
@@ -179,7 +181,7 @@ EnterOperationStatus;
     }
 }
 
--(void)_setupBannerView
+-(void)_updateBannerView
 {
     RHProxy* proxy = _userDataModule.proxy;
     
