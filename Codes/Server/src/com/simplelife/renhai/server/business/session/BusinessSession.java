@@ -637,6 +637,11 @@ public class BusinessSession implements IBusinessSession
     @Override
     public void onDeviceLeave(IDeviceWrapper device, Consts.StatusChangeReason reason)
     {
+    	if (deviceList == null)
+    	{
+    		return;
+    	}
+    	
     	deviceList.remove(device);
    		progressMap.remove(device.getDeviceSn());
     	

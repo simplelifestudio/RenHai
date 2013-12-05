@@ -50,16 +50,26 @@ public class WebRTCSessionPool extends AbstractPool
     
     public void recycleWetRTCSession(Webrtcsession session)
     {
+    	if (session == null)
+    	{
+    		return;
+    	}
+    	
     	webRTCSessionList.add(session);
+    	logger.debug("WebRTC session <{}> is recycled", session.getWebRtcSessionId());
     }
     
     public Webrtcsession getWebRTCSession()
     {
 		if (webRTCSessionList.isEmpty())
 		{
+			logger.warn("All WebRTC session are used up");
 			return null;
 		}
-		return webRTCSessionList.remove();
+		
+		Webrtcsession session = webRTCSessionList.remove(); 
+		logger.debug("WebRTC session <{}> is removed from pool per request by business session", session.getWebRtcSessionId());
+		return session; 
     }
 
     public void startService()

@@ -4,6 +4,8 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import org.junit.Test;
+
 import com.simplelife.renhai.server.log.FileLogger;
 
 public class SecurityUtils 
@@ -43,8 +45,9 @@ public class SecurityUtils
 		byte[] encryptedData = Base64Utils.decode(encryptedString);
 		return decryptDES(encryptedData, decryptKey);
 	}  	   
-	   
-	public static void main(String[] args)
+	
+	@Test
+	public static void testEncrypt(String[] args)
 	{
 		try
 		{

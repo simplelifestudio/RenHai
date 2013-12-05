@@ -1,17 +1,63 @@
 {
-    "encrypt":1,
-    "serviceStatus":1,
-    "serviceAddress":
-    {
-        "protocol":"ws",
-        "ip":"192.81.135.31",
-        "port":80,
-        "path":"/renhai/websocket"
-    },
-    "statusPeriod":
-    {
-        "timeZone":"GMT+0800",
-        "beginTime":"2013-01-01 10:00:00",
-        "endTime":"2013-01-01 10:30:00"
-    }
+	"encrypt":1,
+	"serverList":
+	[
+		{
+			"id":"TestServer",
+			"appBaseVersion":
+			{
+				"version":1.0,
+				"build":1234
+			},
+			"status":
+			{
+				"serviceStatus":1,
+				"statusPeriod":
+				{
+					"timeZone":"GMT+0800",
+					"beginTime":"2013-01-01 10:00:00",
+					"endTime":"2013-01-01 10:30:00"
+				}
+			},
+			"address":
+			{
+				"protocol":"ws",
+				"ip":"192.81.135.31",
+				"port":80,
+				"path":"/renhai/websocket"
+			},
+			"broadcast":"这是系统广播消息"
+		},
+		
+		{
+			"id":"NormalServer",
+			"appBaseVersion":
+			{
+				"version":1.0,
+				"build":1234
+			},
+			"status":
+			{
+				"serviceStatus":1,
+				"statusPeriod":
+				{
+					"timeZone":"GMT+0800",
+					"beginTime":"2013-01-01 10:00:00",
+					"endTime":"2013-01-01 10:30:00"
+				}
+			},
+			"address":
+			{
+				"protocol":"ws",
+				"ip":"192.81.135.31",
+				"port":80,
+				"path":"/renhai/websocket"
+			},
+			"broadcast":"这是另一条系统广播消息"
+		},
+		{
+			"id":"Default",
+			"broadcast":"App版本太低"
+		}
+	]
 }

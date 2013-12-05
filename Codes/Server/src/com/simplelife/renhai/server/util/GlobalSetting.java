@@ -80,7 +80,7 @@ public class GlobalSetting
 		public static int LengthOfSessionId = 16;
 		public static int LengthOfMessageSn = 16;
 		
-		public static int MaxImpressLabelCount = 8;
+		public static int MaxImpressLabelCount = 12;
 		public static int InputMessageHandleThreads = 200;
 		public static int OutputMessageSendThreads = 500;
 		public static int MessageQueueTime = 3 * 1000;

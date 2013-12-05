@@ -1,11 +1,13 @@
 package com.simplelife.renhai.server.db;
 
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.util.IDbObject;
 
 public class Profileoperationlog implements IDbObject
 {
+	private Logger logger = DBModule.instance.getLogger();
 	private Profile profile;
 	
     /**
@@ -179,10 +181,23 @@ public class Profileoperationlog implements IDbObject
 	@Override
 	public void save(SqlSession session)
 	{
+		if (profile == null)
+		{
+			logger.error("Fatal error: profile is null when trying to save profilelog: {}", this.getLogInfo());
+			return;
+		}
+		
 		if (profileId == null)
 		{
 			profileId = profile.getProfileId();
 		}
+		
+		if (profileId == null)
+		{
+			logger.error("Fatal error: profile ID of {} is null when trying to save profilelog", profile.getDeviceId());
+			return;
+		}
+		
 		ProfileoperationlogMapper mapper = session.getMapper(ProfileoperationlogMapper.class);
 		mapper.insert(this);
 	}
