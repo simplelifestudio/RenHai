@@ -123,14 +123,9 @@ SINGLETON(CommunicationModule)
 {
     BOOL flag = NO;
     
-    if (![self isWebSocketConnected])
-    {
-        flag = [_webSocketCommAgent openWebSocket];
-    }
-    else
-    {
-        flag = (_webSocketCommAgent.webSocketState == SR_OPEN);
-    }
+    [self disconnectWebSocket];
+    
+    flag = [_webSocketCommAgent openWebSocket];
     
     return flag;
 }
