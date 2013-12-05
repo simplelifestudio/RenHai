@@ -103,7 +103,8 @@ public class Consts
 		AppUnbindSession(117),
 		WebSocketReconnect(118),
 		AppRequestStartMatch(119),
-		FailedToStartSession(120);
+		FailedToStartSession(120),
+		NewConnection(121);
 		
 		private int value;
 		private StatusChangeReason(int value)

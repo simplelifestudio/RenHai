@@ -252,7 +252,6 @@ public class OnlineDevicePool extends AbstractDevicePool
     	}
     	
     	Consts.DeviceStatus status = deviceWrapper.getBusinessStatus();
-    	
     	logger.debug("Start to remove device <{}> from OnlineDevicePool, device status: " + status.name(), deviceWrapper.getDeviceSn());
     	
     	if (status == Consts.DeviceStatus.Connected)
@@ -282,22 +281,6 @@ public class OnlineDevicePool extends AbstractDevicePool
     		{
     			logger.warn("Device <{}> may have been removed from OnlineDevicePool when trying to remove it", sn);
     		}
-    		
-    		/*
-    		if ((status == Consts.BusinessStatus.WaitMatch)
-        			|| (status == Consts.BusinessStatus.SessionBound))
-        	{
-    			logger.debug("Notify business device pools to delete device <{}> as it's also in business pool", sn);
-    			for (Consts.BusinessType type: Consts.BusinessType.values())
-        		{
-        			AbstractBusinessDevicePool pool = this.getBusinessPool(type);
-        			if (pool != null)
-        			{
-        				pool.onDeviceLeave(deviceWrapper, reason);
-        			}
-        		}
-        	}
-        	*/
     	}
     }
     

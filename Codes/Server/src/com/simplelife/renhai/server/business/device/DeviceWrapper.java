@@ -117,7 +117,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     	this.webSocketConnection = connection;
     	this.businessStatus = Consts.DeviceStatus.Connected;
     	connection.bind(this);
-    	PingLink.instance.append(this);
+    	changeBusinessStatus(DeviceStatus.Connected, StatusChangeReason.NewConnection);
     }
 
     /**
@@ -126,9 +126,12 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
      */
     public void changeBusinessStatus(Consts.DeviceStatus targetStatus, StatusChangeReason reason)
     {
-    	logger.debug("[Milestone] Device <{}> will change status from " 
-    			+ this.businessStatus.name() + " to " + targetStatus.name() 
-    			+ ", caused by " + reason.name(), this.getDeviceSn());
+    	if (logger.isDebugEnabled())
+    	{
+	    	logger.debug("[Milestone] Device <{}> will change status from " 
+	    			+ this.businessStatus.name() + " to " + targetStatus.name() 
+	    			+ ", caused by " + reason.name(), this.getDeviceSn());
+    	}
     	
     	if (ownerOnlinePool == null)
     	{
@@ -198,7 +201,14 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     			break;
     			
     		case Connected:
-    			logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+    			if (reason == StatusChangeReason.NewConnection)
+    			{
+    				PingLink.instance.append(this);
+    			}
+    			else
+    			{
+    				logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
+    			}
 				break;
 				
     		case AppDataSynced:
