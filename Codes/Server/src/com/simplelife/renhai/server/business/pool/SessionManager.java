@@ -30,13 +30,13 @@ import com.simplelife.renhai.server.util.Worker;
 /**
  * 
  */
-public class SessionProductor implements IProductor
+public class SessionManager implements IProductor
 {
 	private Logger logger = BusinessModule.instance.getLogger();
-	private ConcurrentLinkedQueue<SessionCoordinator> sessionCoordicatorQueue = new ConcurrentLinkedQueue<>();
+	private ConcurrentLinkedQueue<SessionStartTask> sessionStartTaskQueue = new ConcurrentLinkedQueue<>();
 	protected Worker worker = new Worker(this);
 	
-	public SessionProductor()
+	public SessionManager()
 	{
 		worker.setName("SessionStarter");
 	}
@@ -51,38 +51,38 @@ public class SessionProductor implements IProductor
 		worker.stopExecution();
 	}
 	
-	public void addDeviceList(List<IDeviceWrapper> selectedDevice, InterestBusinessDevicePool pool, String deviceFoundInterest)
+	public void addDeviceList(List<IDeviceWrapper> selectedDeviceList, InterestBusinessDevicePool pool, String deviceFoundInterest)
 	{
 		logger.debug("Create SessionCoordinator with device list of label {}", deviceFoundInterest);
-		SessionCoordinator coor = new SessionCoordinator(selectedDevice, pool, deviceFoundInterest);
-    	sessionCoordicatorQueue.add(coor);
+		SessionStartTask startSessionTask = new SessionStartTask(selectedDeviceList, pool, deviceFoundInterest);
+    	sessionStartTaskQueue.add(startSessionTask);
     	worker.resumeExecution();
 	}
 	
 	@Override
 	public boolean hasWork()
 	{
-		return !sessionCoordicatorQueue.isEmpty();
+		return !sessionStartTaskQueue.isEmpty();
 	}
 
 	@Override
 	public Runnable getWork()
 	{
-		return sessionCoordicatorQueue.remove();
+		return sessionStartTaskQueue.remove();
 	}
 	
-	private class SessionCoordinator implements Runnable
+	private class SessionStartTask implements Runnable
 	{
-		private List<IDeviceWrapper> selectedDevice;
+		private List<IDeviceWrapper> selectedDeviceList;
 		private InterestBusinessDevicePool pool;
 		private String deviceFoundInterest;
 		
-		public SessionCoordinator(
+		public SessionStartTask(
 				List<IDeviceWrapper> selectedDevice, 
 				InterestBusinessDevicePool pool,
 				String deviceFoundInterest)
 		{
-			this.selectedDevice = selectedDevice;
+			this.selectedDeviceList = selectedDevice;
 			this.pool = pool;
 			this.deviceFoundInterest = deviceFoundInterest;
 		}
@@ -116,14 +116,14 @@ public class SessionProductor implements IProductor
 				return;
 			}
 			
-			if (session.startSession(selectedDevice, obj))
+			if (session.startSession(selectedDeviceList, obj))
 			{
 				DbLogger.increaseInterestMatchCount(deviceFoundInterest);
-				increaseMatchCount(selectedDevice, deviceFoundInterest);
+				increaseMatchCount(selectedDeviceList, deviceFoundInterest);
 			}
 			else
 			{
-				recycleDevice(selectedDevice);
+				recycleDevice(selectedDeviceList);
 			}
 		}
 		

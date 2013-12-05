@@ -32,7 +32,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     /** */
     private ConcurrentHashMap<String, List<IDeviceWrapper>> interestLabelDeviceMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Integer> labelDeviceCountMap = new ConcurrentHashMap<>();
-    private InterestMatchProductor matchProductor = new InterestMatchProductor();
+    private InterestMatchManager matchManager = new InterestMatchManager();
     
     public ConcurrentHashMap<String, List<IDeviceWrapper>> getInterestLabelMap()
     {
@@ -41,12 +41,12 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     
     public void startService()
     {
-    	matchProductor.startService();
+    	matchManager.startService();
     }
     
     public void stopService()
     {
-    	matchProductor.stopService();
+    	matchManager.stopService();
     }
     
     public InterestBusinessDevicePool()
@@ -289,7 +289,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 		String deviceSn = device.getDeviceSn();
 		businessChoosedDeviceMap.remove(deviceSn);
 		matchStartedDeviceMap.put(deviceSn, device);
-		matchProductor.addDevice(device, this);
+		matchManager.addDevice(device, this);
 		//businessScheduler.resumeSchedule();
     }
 

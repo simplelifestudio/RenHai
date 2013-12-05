@@ -570,16 +570,16 @@ public class BusinessSessionRequest extends AppJSONMessage
 		JSONObject tempLabelObj = assessLabels.getJSONObject(0); 
 		tempLabel = tempLabelObj.getString(JSONKey.ImpressLabelName);
 		
-		updateOrAppendImpressLabel(targetCard, tempLabel, true);
-		updateOrAppendImpressLabel(sourceCard, tempLabel, false);
+		targetCard.updateOrAppendImpressLabel(deviceWrapper, tempLabel, true);
+		sourceCard.updateOrAppendImpressLabel(deviceWrapper, tempLabel, false);
 		
 		JSONArray impressLabels = impressObj.getJSONArray(JSONKey.ImpressLabelList);
 		for (int i = 0; i < impressLabels.size(); i++)
 		{
 			tempLabelObj = impressLabels.getJSONObject(i); 
 			tempLabel = tempLabelObj.getString(JSONKey.ImpressLabelName);
-			updateOrAppendImpressLabel(targetCard, tempLabel, true);
-			updateOrAppendImpressLabel(sourceCard, tempLabel, false);
+			targetCard.updateOrAppendImpressLabel(deviceWrapper, tempLabel, true);
+			sourceCard.updateOrAppendImpressLabel(deviceWrapper, tempLabel, false);
 		}
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
@@ -628,85 +628,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		deviceWrapper.prepareResponse(response);
 	}
 	
-	private void updateOrAppendImpressLabel(Impresscard card, String labelName, boolean assessedFlag)
-	{
-		Collection<Impresslabelmap> impressLabels = card.getImpressLabelMapSet();
-
-		for (Impresslabelmap label : impressLabels)
-		{
-			String tmpLabelName = label.getGlobalLabel().getImpressLabelName();
-			if (tmpLabelName.equals(labelName))
-			{
-				synchronized(label)
-				{
-					if (assessedFlag)
-					{
-						int count = label.getAssessedCount();
-						logger.debug("Impress label<"+ labelName +"> of device <{}> was increased from " 
-								+ count + " to " + (count + 1), deviceWrapper.getDeviceSn());
-						label.setAssessedCount(count + 1);
-						label.setUpdateTime(System.currentTimeMillis());
-						//label.getGlobalimpresslabel().setGlobalAssessCount(label.getGlobalimpresslabel().getGlobalAssessCount() + 1);
-						DbLogger.increaseImpressAssessCount(tmpLabelName);
-					}
-					else
-					{
-						int count = label.getAssessCount();
-						logger.debug("Assessing count of <" + labelName + "> by device <{}> was increased from " 
-								+ count + " to " + (count + 1), deviceWrapper.getDeviceSn());
-						label.setAssessCount(label.getAssessCount() + 1);
-					}
-				}
-				return;
-			}
-		}
-			
-		// Check if it's existent global impress label
-		Globalimpresslabel globalimpresslabel = DBModule.instance.impressLabelCache.getObject(labelName);
-		if (globalimpresslabel == null)
-		{
-			logger.debug("New impress label {} from device <" + deviceWrapper.getDeviceSn() + ">", labelName);
-			globalimpresslabel = new Globalimpresslabel();
-			globalimpresslabel.setGlobalAssessCount(1);
-			globalimpresslabel.setImpressLabelName(labelName);
-			
-			// If there is global label object with same label name in cache
-			// replace global label by existent global label object  
-			boolean isNewObject = DBModule.instance.impressLabelCache.putObject(labelName, globalimpresslabel);
-			if (isNewObject)
-			{
-				logger.debug("============new object, save in DAOWrapper");
-				DAOWrapper.cache(globalimpresslabel);
-			}
-			else
-			{
-				logger.debug("============old object, replace globalimpresslabel with old object");
-				globalimpresslabel = DBModule.instance.impressLabelCache.getObject(labelName);
-			}
-			//globalimpresslabel.setImpresslabelmaps(impressLabels);
-		}
 		
-		Impresslabelmap labelMap = new Impresslabelmap();
-		
-		if (assessedFlag)
-		{
-			labelMap.setAssessCount(0);
-			labelMap.setAssessedCount(1);
-		}
-		else
-		{
-			labelMap.setAssessCount(1);
-			labelMap.setAssessedCount(0);
-		}
-		
-		labelMap.setGlobalImpressLabelId(globalimpresslabel.getGlobalImpressLabelId());
-		labelMap.setGlobalLabel(globalimpresslabel);
-		labelMap.setUpdateTime(System.currentTimeMillis());
-		labelMap.setImpressCardId(card.getImpressCardId());
-		
-		impressLabels.add(labelMap);
-	}
-	
 	private void assessAndQuit()
 	{
 		assess(true);

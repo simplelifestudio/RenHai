@@ -27,27 +27,27 @@ import com.simplelife.renhai.server.util.Worker;
 /**
  * 
  */
-public class InterestMatchProductor implements IProductor 
+public class InterestMatchManager implements IProductor 
 {
 	private ConcurrentLinkedQueue<MatchCoordinator> queue = new ConcurrentLinkedQueue<>();
 	protected Worker worker = new Worker(this);
-	private SessionProductor sessionProductor = new SessionProductor();
+	private SessionManager sessionManager = new SessionManager();
 	private Logger logger = BusinessModule.instance.getLogger();
     
 	
-	public InterestMatchProductor()
+	public InterestMatchManager()
 	{
 		worker.setName("InterestMatch");
 	}
 	public void startService()
 	{
-		sessionProductor.startService();
+		sessionManager.startService();
 		worker.startExecution();
 	}
 	
 	public void stopService()
 	{
-		sessionProductor.stopService();
+		sessionManager.stopService();
 		worker.stopExecution();
 	}
 	
@@ -178,7 +178,7 @@ public class InterestMatchProductor implements IProductor
 	    	}
 	    	
 	    	logger.debug("============devicelist size before create SessionCoordinator: {}", tmpList.size());
-	    	sessionProductor.addDeviceList(tmpList, pool, interestLabel);
+	    	sessionManager.addDeviceList(tmpList, pool, interestLabel);
 	    	return true;
 	    }
 	}

@@ -68,9 +68,9 @@ public class Worker extends Thread
 				{
 					work.run();
 				}
+				/*
 				else
 				{
-					
 					try
 					{
 						Thread.sleep(100);
@@ -80,6 +80,7 @@ public class Worker extends Thread
 						FileLogger.printStackTrace(e);
 					}
 				}
+				*/
 			}
 			else
 			{

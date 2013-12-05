@@ -23,6 +23,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Sessionrecord;
 import com.simplelife.renhai.server.db.Webrtcsession;
 import com.simplelife.renhai.server.json.JSONFactory;
@@ -132,7 +133,6 @@ public class BusinessSession implements IBusinessSession
     			return false;
     		}
     		
-    		//logger.debug("=================Check status of device <{}> for starting session", deviceWrapper.getDeviceSn());
     		status = deviceWrapper.getBusinessStatus();
     		
     		if ( status != Consts.DeviceStatus.MatchStarted)
@@ -197,7 +197,6 @@ public class BusinessSession implements IBusinessSession
     @Override
     public boolean startSession(List<IDeviceWrapper> deviceList, JSONObject matchCondition)
     {
-    	//logger.debug("===============begin of start session, size of deviceList: {}", deviceList.size());
     	sessionStartTime = System.currentTimeMillis();
     	chatStartTime = 0;
     	chatEndTime = 0;
@@ -215,8 +214,6 @@ public class BusinessSession implements IBusinessSession
     		logger.debug(tmpStr);
     	}
     	
-    	//logger.debug("===============before check start session");
-    	//logger.debug("===============size of deviceList:{}", deviceList.size());
     	if (!checkStartSession(deviceList))
     	{
     		endSession();
@@ -225,8 +222,6 @@ public class BusinessSession implements IBusinessSession
     	
     	try
     	{
-    		//logger.debug("===============size of deviceList:{}", deviceList.size());
-    		//int count= 0;
     		int size = deviceList.size();
     		IDeviceWrapper device;
     		for (int i = 0; i < size; i++)
@@ -238,21 +233,16 @@ public class BusinessSession implements IBusinessSession
     				continue;
     			}
     			
-	    		//count++;
-	    		//logger.debug("===============count{}", count);
-	    		//logger.debug("===============change status for device <{}>", device.getDeviceSn());
 	    		updateBusinessProgress(device.getDeviceSn(), Consts.DeviceBusinessProgress.Init);
 	    		device.bindBusinessSession(this);
 	    		device.changeBusinessStatus(DeviceStatus.SessionBound, Consts.StatusChangeReason.BusinessSessionStarted);
 	    	}
-	    	//logger.debug("===============end of change status", deviceList.size());
     	}
     	catch(Exception e)
     	{
     		FileLogger.printStackTrace(e);
     	}
     	
-    	//logger.debug("===============notify SessionBound");
     	notifyDevices(null, Consts.NotificationType.SessionBound);
     	return true;
     }
@@ -274,6 +264,25 @@ public class BusinessSession implements IBusinessSession
     	}
     }
     
+    private void defaultGoodAssess(Collection<IDeviceWrapper> activeDeviceList, IDeviceWrapper triggerDevice)
+    {
+    	for (IDeviceWrapper device : activeDeviceList)
+    	{
+    		Impresscard card = device
+					.getDevice()
+					.getProfile()
+					.getImpressCard();
+    		if (device == triggerDevice)
+			{
+				card.updateOrAppendImpressLabel(device, Consts.SolidImpressLabel.Good.getValue(), false);
+			}
+    		else
+    		{
+				card.updateOrAppendImpressLabel(device, Consts.SolidImpressLabel.Good.getValue(), true);
+    		}
+    	}
+    }
+    
     public void notifyDevices(IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
     {
     	notifyDevices(this.deviceList, triggerDevice, notificationType);
@@ -283,13 +292,9 @@ public class BusinessSession implements IBusinessSession
     {
     	ServerJSONMessage notify;
     	String temp;
-    	//logger.debug("==============begin of notifyDevices, size of DeviceList: {}", activeDeviceList.size());
-    	//int count = 0;
     	for (IDeviceWrapper device : activeDeviceList)
     	{
-    		//count++;
-    		//logger.debug("==============count: {}, size: {}" + activeDeviceList.size(), count);
-			if (device == triggerDevice)
+    		if (device == triggerDevice)
 			{
 				continue;
 			}
@@ -357,7 +362,6 @@ public class BusinessSession implements IBusinessSession
         			, notificationType.name() + ", " + device.getDeviceSn());
         	*/
     	}
-		//logger.debug("==============end of notifyDevices");
 	}
     
     private JSONObject getOperationInfoOfOtherDevices(IDeviceWrapper deviceToBeExcluded)
@@ -564,9 +568,7 @@ public class BusinessSession implements IBusinessSession
     		}
     		logger.debug(sTemp);
     	}
-    	//logger.debug("=================before put device <{}> in progressMap", deviceSn);
     	progressMap.put(deviceSn, progress);
-    	//logger.debug("=================after put device <{}> in progressMap", deviceSn);
     }
     
     @Override
@@ -662,6 +664,7 @@ public class BusinessSession implements IBusinessSession
 				device.increaseChatDuration(duration);
 			}
 			notifyDevices(device, NotificationType.OthersideLost);
+			defaultGoodAssess(this.deviceList, device);
     	}
 		else if (reason == Consts.StatusChangeReason.AppLeaveBusiness)
 		{

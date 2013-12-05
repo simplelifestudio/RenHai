@@ -90,16 +90,11 @@ public class MessageHandler implements Runnable
 	@Override
 	public void run()
 	{
-		if (queue.isEmpty())
-		{
-			return;
-		}
-		
 		logger.debug("Message handler of device <{}> started", deviceWrapper.getDeviceSn());
 		queueLock.lock();
 		
 		AbstractJSONMessage message;
-		do
+		while(!queue.isEmpty())
 		{
 			message = queue.remove();
 			queueLock.unlock();
@@ -112,7 +107,7 @@ public class MessageHandler implements Runnable
 				FileLogger.printStackTrace(e);
 			}
 			queueLock.lock();
-		}while(!queue.isEmpty());
+		}
 		
 		executeLock.lock();
 		executeFlag = false;
@@ -125,10 +120,14 @@ public class MessageHandler implements Runnable
 	private void executeMessage(AbstractJSONMessage message)
 	{
 		int duration = message.getQueueDuration();
-		String temp = "Start to handle " + message.getMessageId().name() + " related to device <"
-				+ message.getDeviceWrapper().getDeviceSn() + "> which was queued " + duration
-				+ "ms ago, message Sn: " + message.getMessageSn();
-		logger.debug(temp);
+		
+		if (logger.isDebugEnabled())
+		{
+			String temp = "Start to handle " + message.getMessageId().name() + " related to device <"
+					+ message.getDeviceWrapper().getDeviceSn() + "> which was queued " + duration
+					+ "ms ago, message Sn: " + message.getMessageSn();
+			logger.debug(temp);
+		}
 		
 		int delay = message.getDelayOfHandle();
 		if (delay > 0)

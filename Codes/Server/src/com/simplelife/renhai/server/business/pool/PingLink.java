@@ -47,10 +47,6 @@ public class PingLink
 	{
 		PingNode node = deviceWrapper.getPingNode();
 		addToTail(node);
-		if (head == null)
-		{
-			addToHead(node);
-		}
 		count++;
 	}
 	
@@ -101,20 +97,20 @@ public class PingLink
 		
 		if (preNode != null)
 		{
-			preNode.setNextNode(node.getNextNode());
+			preNode.setNextNode(nextNode);
 		}
 		else
 		{
-			head = node.getNextNode();
+			head = nextNode;
 		}
 		
 		if (nextNode != null)
 		{
-			nextNode.setPrevNode(node.getPrevNode());
+			nextNode.setPrevNode(preNode);
 		}
 		else
 		{
-			tail = node.getPrevNode();
+			tail = preNode;
 		}
 		node.setNextNode(null);
 		node.setPrevNode(null);
@@ -139,7 +135,6 @@ public class PingLink
 			head.setPrevNode(node);
 		}
 		node.setNextNode(head);
-
 		node.setPrevNode(null);
 		head = node;
 	}
@@ -152,8 +147,12 @@ public class PingLink
 		}
 		
 		node.setPrevNode(tail);
-		
 		node.setNextNode(null);
 		tail = node;
+		
+		if (head == null)
+		{
+			addToHead(node);
+		}
 	}
 }

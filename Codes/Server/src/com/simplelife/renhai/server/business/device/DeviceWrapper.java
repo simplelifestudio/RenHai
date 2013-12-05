@@ -768,10 +768,9 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 			int count = card.getChatLossCount();
 			logger.debug("Chat loss count of device <{}> was increased from " + count + " to " + (count+1), getDeviceSn());
 			card.setChatLossCount(count + 1);
-			
-			count = card.getChatTotalCount();
-			logger.debug("Chat total count of device <{}> was increased from " + count + " to " + (count+1), getDeviceSn());
-			card.setChatTotalCount(count + 1);
+			//count = card.getChatTotalCount();
+			//logger.debug("Chat total count of device <{}> was increased from " + count + " to " + (count+1), getDeviceSn());
+			//card.setChatTotalCount(count + 1);
 		}
 	}
 	
