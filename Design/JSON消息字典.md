@@ -72,6 +72,7 @@ Random:1, Interest:2
 ###AssessAndQuit:7
 ###SessionUnbind:8
 ###MatchStart:9
+###ChatMessage:10
 
 ##5. Server业务会话通知动作 
 ###SessionBinded:1
@@ -79,6 +80,7 @@ Random:1, Interest:2
 ###OthersideAgreed:3
 ###OthersideLost:4
 ###OthersideEndChat:5
+###OthersideChatMessage:6
 
 ##6. Profile服务状态 
 正常:1/禁聊:0
@@ -621,5 +623,114 @@ App与Server通过消息交互完成的数据操作
 	{
 		"content":"This is a broadcast message!"
 	}
+}
+</code></pre>
+
+###500. Proxy信息同步请求 ProxyDataSyncRequest
+<pre><code>
+{
+	"body": 
+	{
+		"appVersion":
+		{
+			"version":1.0,
+			"build":1234
+		}
+	}	
+}
+</code></pre>
+
+###600. Proxy信息同步响应
+<pre><code>
+{
+	"body": 
+	{
+		"id":"TestServer",
+		"status":
+		{
+			"serviceStatus":1,
+			"statusPeriod":
+			{
+				"timeZone":"GMT+0800",
+				"beginTime":"2013-01-01 10:00:00",
+				"endTime":"2013-01-01 10:30:00"
+			}
+		},
+		"address":
+		{
+			"protocol":"ws",
+			"ip":"192.81.135.31",
+			"port":80,
+			"path":"/renhai/websocket"
+		},
+		"broadcast":"这是系统广播消息"
+	}
+}
+</code></pre>
+
+#ProxyServer的配置
+<pre><code>
+{
+	"encrypt":1,
+	"serverList":
+	[
+		{
+			"id":"TestServer",
+			"appBaseVersion":
+			{
+				"version":1.0,
+				"build":1234
+			},
+			"status":
+			{
+				"serviceStatus":1,
+				"statusPeriod":
+				{
+					"timeZone":"GMT+0800",
+					"beginTime":"2013-01-01 10:00:00",
+					"endTime":"2013-01-01 10:30:00"
+				}
+			},
+			"address":
+			{
+				"protocol":"ws",
+				"ip":"192.81.135.31",
+				"port":80,
+				"path":"/renhai/websocket"
+			},
+			"broadcast":"这是系统广播消息"
+		},
+		
+		{
+			"id":"NormalServer",
+			"appBaseVersion":
+			{
+				"version":1.0,
+				"build":1234
+			},
+			"status":
+			{
+				"serviceStatus":1,
+				"statusPeriod":
+				{
+					"timeZone":"GMT+0800",
+					"beginTime":"2013-01-01 10:00:00",
+					"endTime":"2013-01-01 10:30:00"
+				}
+			},
+			"address":
+			{
+				"protocol":"ws",
+				"ip":"192.81.135.31",
+				"port":80,
+				"path":"/renhai/websocket"
+			},
+			"broadcast":"这是另一条系统广播消息"
+		},
+		{
+			"id":"Default",
+			"broadcast":"App版本太低"
+		}
+	]
 }
 </code></pre>
