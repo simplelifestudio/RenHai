@@ -171,9 +171,13 @@ SINGLETON(UserDataModule)
     _businessSession = [[RHBusinessSession alloc] init];
 }
 
+#pragma mark - Private Methods
+
 -(void) _registerNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_RHSERVERNOTIFICATION object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil];
 }
 
 -(void) _unregisterNotifications
@@ -202,6 +206,10 @@ SINGLETON(UserDataModule)
                     break;
                 }
             }
+        }
+        else if ([notification.name isEqualToString:NOTIFICATION_ID_RHSERVERDISCONNECTED])
+        {
+            [self saveUserData];
         }
     }
 }

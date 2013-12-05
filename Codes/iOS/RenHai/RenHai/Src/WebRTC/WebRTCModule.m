@@ -8,6 +8,8 @@
 
 #import "WebRTCModule.h"
 
+#import "CommunicationModule.h"
+
 @interface WebRTCModule()
 {
     
@@ -36,6 +38,8 @@ SINGLETON(WebRTCModule)
 
 -(void) releaseModule
 {
+    [self _unregisterNotifications];
+    
     [super releaseModule];
 }
 
@@ -44,6 +48,8 @@ SINGLETON(WebRTCModule)
     DDLogInfo(@"Module:%@ is started.", self.moduleIdentity);
     
     [super startService];
+    
+    [self _registerNotifications];
 }
 
 -(void) processService
@@ -91,6 +97,30 @@ SINGLETON(WebRTCModule)
 -(void)applicationWillEnterForeground:(UIApplication *)application
 {
     
+}
+
+#pragma mark - Private Methods
+
+-(void) _registerNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil];
+}
+
+-(void) _unregisterNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil];
+}
+
+-(void) _onNotifications:(NSNotification*) notification
+{
+    if (nil != notification)
+    {
+        NSString* notificationName = notification.name;
+        if ([notificationName isEqualToString:NOTIFICATION_ID_RHSERVERDISCONNECTED])
+        {
+            [self unpublishAndDisconnectOnWebRTC];
+        }
+    }
 }
 
 @end
