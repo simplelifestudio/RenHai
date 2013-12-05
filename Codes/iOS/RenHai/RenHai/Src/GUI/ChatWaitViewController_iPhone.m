@@ -441,24 +441,24 @@ ChatWaitStatus;
 
 -(void)_activateAlohaTimer
 {
-    [CBAppUtils asyncProcessInBackgroundThread:^(){
-        [self _deactivateAlohaTimer];
-        
-        _alohaTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_ALOHA target:self selector:@selector(_remoteAloha) userInfo:nil repeats:YES];
-
-        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
-        [currentRunLoop addTimer:_alohaTimer forMode:NSRunLoopCommonModes];
-        [currentRunLoop run];
-    }];
+//    [CBAppUtils asyncProcessInBackgroundThread:^(){
+//        [self _deactivateAlohaTimer];
+//        
+//        _alohaTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_ALOHA target:self selector:@selector(_remoteAloha) userInfo:nil repeats:YES];
+//
+//        NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
+//        [currentRunLoop addTimer:_alohaTimer forMode:NSRunLoopCommonModes];
+//        [currentRunLoop run];
+//    }];
 }
 
 -(void)_deactivateAlohaTimer
 {
-    if (nil != _alohaTimer)
-    {
-        [_alohaTimer invalidate];
-        _alohaTimer = nil;
-    }
+//    if (nil != _alohaTimer)
+//    {
+//        [_alohaTimer invalidate];
+//        _alohaTimer = nil;
+//    }
 }
 
 -(void) _remoteAloha

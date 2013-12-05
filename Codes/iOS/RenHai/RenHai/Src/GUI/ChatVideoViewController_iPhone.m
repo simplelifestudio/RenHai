@@ -564,16 +564,16 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void)_activateAlohaTimer
 {
-    _alohaTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_ALOHA target:self selector:@selector(_remoteAloha) userInfo:nil repeats:YES];
+//    _alohaTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_ALOHA target:self selector:@selector(_remoteAloha) userInfo:nil repeats:YES];
 }
 
 -(void)_deactivateAlohaTimer
 {
-    if (nil != _alohaTimer)
-    {
-        [_alohaTimer invalidate];
-        _alohaTimer = nil;
-    }
+//    if (nil != _alohaTimer)
+//    {
+//        [_alohaTimer invalidate];
+//        _alohaTimer = nil;
+//    }
 }
 
 -(void) _remoteAloha

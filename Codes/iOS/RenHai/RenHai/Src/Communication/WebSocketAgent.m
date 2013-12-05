@@ -93,13 +93,17 @@
 
 -(void) startPing
 {
-    [_pingTimer invalidate];
+    [self stopPing];
     _pingTimer = [NSTimer scheduledTimerWithTimeInterval:HEARTBEATPING_PERIOD target:self selector:@selector(_heartBeatPing) userInfo:nil repeats:YES];
 }
 
 -(void) stopPing
 {
-    [_pingTimer invalidate];
+    if (nil != _pingTimer)
+    {
+        [_pingTimer invalidate];
+        _pingTimer = nil;
+    }
 }
 
 -(SRReadyState) webSocketState
