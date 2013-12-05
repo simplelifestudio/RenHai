@@ -362,12 +362,16 @@ static float progress = 0.0;
         {
             NSArray* unitLabels = @[_onlineDeviceCountUnit1, _onlineDeviceCountUnit2, _onlineDeviceCountUnit3, _onlineDeviceCountUnit4, _onlineDeviceCountUnit5];
             
-            NSUInteger chatCount = server.deviceCount.online;
-            NSArray* unitVals = [CBMathUtils splitIntegerByUnit:chatCount array:nil reverseOrder:YES];
-            
-            for (int i = 0; i < unitVals.count; i++)
+            NSUInteger onlineCount = server.deviceCount.online;
+            NSArray* unitVals = [CBMathUtils splitIntegerByUnit:onlineCount array:nil reverseOrder:YES];
+
+            for (int i = 0; i < unitLabels.count ; i++)
             {
-                NSNumber* unitVal = (NSNumber*)unitVals[i];
+                NSNumber* unitVal = [NSNumber numberWithInt:0];
+                if (i < unitVals.count)
+                {
+                    unitVal = unitVals[i];
+                }
                 UILabel* label = (UILabel*)unitLabels[i];
                 label.text = [NSString stringWithFormat:@"%d", unitVal.integerValue];
             }
@@ -383,12 +387,16 @@ static float progress = 0.0;
         {
             NSArray* unitLabels = @[_chatDeviceCountUnit1, _chatDeviceCountUnit2, _chatDeviceCountUnit3, _chatDeviceCountUnit4, _chatDeviceCountUnit5];
             
-            NSUInteger onlineCount = server.deviceCount.chat;
-            NSArray* unitVals = [CBMathUtils splitIntegerByUnit:onlineCount array:nil reverseOrder:YES];
+            NSUInteger chatCount = server.deviceCount.chat;
+            NSArray* unitVals = [CBMathUtils splitIntegerByUnit:chatCount array:nil reverseOrder:YES];
             
-            for (int i = 0; i < unitVals.count; i++)
+            for (int i = 0; i < unitLabels.count ; i++)
             {
-                NSNumber* unitVal = (NSNumber*)unitVals[i];
+                NSNumber* unitVal = [NSNumber numberWithInt:0];
+                if (i < unitVals.count)
+                {
+                    unitVal = unitVals[i];
+                }
                 UILabel* label = (UILabel*)unitLabels[i];
                 label.text = [NSString stringWithFormat:@"%d", unitVal.integerValue];
             }
