@@ -47,7 +47,8 @@ typedef enum
     AppMessageIdentifier_AssessAndQuit,
     AppMessageIdentifier_UnbindSession,
     AppMessageIdentifier_Aloha,
-    AppMessageIdentifier_UnchooseBusiness
+    AppMessageIdentifier_UnchooseBusiness,
+    AppMessageIdentifier_ChatMessage
 }
 AppMessageIdentifier;
 
@@ -57,7 +58,8 @@ typedef enum
     ServerNotificationIdentifier_OthersideAgreeChat,
     ServerNotificationIdentifier_OthersideRejectChat,
     ServerNotificationIdentifier_OthersideEndChat,
-    ServerNotificationIdentifier_OthersideLost
+    ServerNotificationIdentifier_OthersideLost,
+    ServerNotificationIdentifier_OthersideChatMessage
 }
 ServerNotificationIdentifier;
 

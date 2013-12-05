@@ -192,6 +192,12 @@ SINGLETON(BusinessStatusModule)
                         [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                         break;
                     }
+                    // M14
+                    case AppMessageIdentifier_ChatMessage:
+                    {
+                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        break;
+                    }
                     default:
                     {
                         [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
@@ -233,6 +239,11 @@ SINGLETON(BusinessStatusModule)
                         break;
                     }
                     // E5
+                    case ServerNotificationIdentifier_OthersideChatMessage:
+                    {
+                        [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                        break;
+                    }
                     default:
                     {
                         [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
@@ -332,6 +343,12 @@ SINGLETON(BusinessStatusModule)
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                           break;
                       }
+                      // M14
+                      case AppMessageIdentifier_ChatMessage:
+                      {
+                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          break;
+                      }
                       default:
                       {
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
@@ -368,6 +385,12 @@ SINGLETON(BusinessStatusModule)
                       }
                       // E4
                       case ServerNotificationIdentifier_OthersideLost:
+                      {
+                          [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                          break;
+                      }
+                      // E5
+                      case ServerNotificationIdentifier_OthersideChatMessage:
                       {
                           [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
                           break;
@@ -471,6 +494,12 @@ SINGLETON(BusinessStatusModule)
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                           break;
                       }
+                      // M14
+                      case AppMessageIdentifier_ChatMessage:
+                      {
+                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          break;
+                      }
                       default:
                       {
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
@@ -507,6 +536,12 @@ SINGLETON(BusinessStatusModule)
                       }
                       // E4
                       case ServerNotificationIdentifier_OthersideLost:
+                      {
+                          [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                          break;
+                      }
+                      // E5
+                      case ServerNotificationIdentifier_OthersideChatMessage:
                       {
                           [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
                           break;
@@ -610,6 +645,12 @@ SINGLETON(BusinessStatusModule)
                           [self _updateBusinessStatus:BusinessStatusIdentifier_AppDataSynced];
                           break;
                       }
+                      // M14
+                      case AppMessageIdentifier_ChatMessage:
+                      {
+                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          break;
+                      }
                       default:
                       {
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
@@ -646,6 +687,12 @@ SINGLETON(BusinessStatusModule)
                       }
                       // E4
                       case ServerNotificationIdentifier_OthersideLost:
+                      {
+                          [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                          break;
+                      }
+                      // E5
+                      case ServerNotificationIdentifier_OthersideChatMessage:
                       {
                           [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
                           break;
@@ -749,6 +796,12 @@ SINGLETON(BusinessStatusModule)
                           [self _updateBusinessStatus:BusinessStatusIdentifier_AppDataSynced];
                           break;
                       }
+                      // M14
+                      case AppMessageIdentifier_ChatMessage:
+                      {
+                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          break;
+                      }
                       default:
                       {
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
@@ -785,6 +838,12 @@ SINGLETON(BusinessStatusModule)
                       }
                       // E4
                       case ServerNotificationIdentifier_OthersideLost:
+                      {
+                          [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                          break;
+                      }
+                      // E5
+                      case ServerNotificationIdentifier_OthersideChatMessage:
                       {
                           [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
                           break;
@@ -900,6 +959,12 @@ SINGLETON(BusinessStatusModule)
                           [self _updateBusinessStatus:BusinessStatusIdentifier_AppDataSynced];
                           break;
                       }
+                      // M14
+                      case AppMessageIdentifier_ChatMessage:
+                      {
+                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          break;
+                      }
                       default:
                       {
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
@@ -940,6 +1005,12 @@ SINGLETON(BusinessStatusModule)
                       // E4
                       case ServerNotificationIdentifier_OthersideLost:
                       {
+                          break;
+                      }
+                      // E5
+                      case ServerNotificationIdentifier_OthersideChatMessage:
+                      {
+                          [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
                           break;
                       }
                       default:
@@ -1041,6 +1112,12 @@ SINGLETON(BusinessStatusModule)
                           [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                           break;
                       }
+                      // M14
+                      case AppMessageIdentifier_ChatMessage:
+                      {
+                          // IGNORE
+                          break;
+                      }
                       default:
                       {
                           break;
@@ -1076,6 +1153,12 @@ SINGLETON(BusinessStatusModule)
                       // E4
                       case ServerNotificationIdentifier_OthersideLost:
                       {
+                          break;
+                      }
+                      // E5
+                      case ServerNotificationIdentifier_OthersideChatMessage:
+                      {
+                          // IGNORE
                           break;
                       }
                       default:
@@ -1177,6 +1260,12 @@ SINGLETON(BusinessStatusModule)
                           [self _updateBusinessStatus:BusinessStatusIdentifier_Disconnected];
                           break;
                       }
+                      // M14
+                      case AppMessageIdentifier_ChatMessage:
+                      {
+                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          break;
+                      }
                       default:
                       {
                           [self _updateBusinessStatus:BusinessStatusIdentifier_Disconnected];
@@ -1215,6 +1304,12 @@ SINGLETON(BusinessStatusModule)
                       case ServerNotificationIdentifier_OthersideLost:
                       {
                           // IGNORE
+                          break;
+                      }
+                      // E5
+                      case ServerNotificationIdentifier_OthersideChatMessage:
+                      {
+                          [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
                           break;
                       }
                       default:

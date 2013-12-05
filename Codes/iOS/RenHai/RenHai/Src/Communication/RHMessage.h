@@ -216,7 +216,8 @@ typedef enum
     BusinessSessionRequestType_AssessAndContinue,
     BusinessSessionRequestType_AssessAndQuit,
     BusinessSessionRequestType_UnbindSession,
-    BusinessSessionRequestType_MatchStart
+    BusinessSessionRequestType_MatchStart,
+    BusinessSessionRequestType_ChatMessage
 }
 BusinessSessionRequestType;
 
@@ -226,7 +227,8 @@ typedef enum
     BusinessSessionNotificationType_OthersideRejected,
     BusinessSessionNotificationType_OthersideAgreed,
     BusinessSessionNotificationType_OthersideLost,
-    BusinessSessionNotificationType_OthersideEndChat = 5 // 临时使用
+    BusinessSessionNotificationType_OthersideEndChat,
+    BusinessSessionNotificationType_OthersideChatMessage
 }
 BusinessSessionNotificationType;
 
