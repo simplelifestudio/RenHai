@@ -19,7 +19,8 @@
 #import "AppDataModule.h"
 #import "BusinessStatusModule.h"
 
-#define DELAY 0.15f
+#define DELAY_POP 0.5f
+#define DELAY_STATUS_UPDATE 0.15f
 #define ANIMATION_POP 0.5f
 #define ANIMATION_DISMISS 0.5f
 
@@ -140,6 +141,8 @@ ConnectStatus;
 {
     if (!_isViewControllerVisible)
     {
+        [NSThread sleepForTimeInterval:DELAY_POP];
+        
         UIViewController* rootVC = [CBUIUtils getRootController];
         
         presentingViewController = (nil != presentingViewController) ? presentingViewController : rootVC;
@@ -287,7 +290,7 @@ ConnectStatus;
 
 - (void) _updateUIWithConnectStatus:(ConnectStatus) status
 {
-    [NSThread sleepForTimeInterval:DELAY];
+    [NSThread sleepForTimeInterval:DELAY_STATUS_UPDATE];
     
     [CBAppUtils asyncProcessInMainThread:^(){
         NSString* infoText = nil;
@@ -454,7 +457,7 @@ ConnectStatus;
 {
     [self _clockCancel];
     
-    [NSThread sleepForTimeInterval:DELAY];
+    [NSThread sleepForTimeInterval:DELAY_STATUS_UPDATE];
     
     if (_isServerDataSyncSuccess)
     {
