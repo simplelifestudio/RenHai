@@ -1,12 +1,12 @@
 //
-//  RHServer.m
+//  RHServerData.m
 //  RenHai
 //
 //  Created by DENG KE on 13-10-7.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
-#import "RHServer.h"
+#import "RHServerData.h"
 
 #import "CBJSONUtils.h"
 
@@ -16,7 +16,7 @@
 #define SERIALIZE_KEY_DEVICECAPACITY @"server.deviceCapacity"
 #define SERIALIZE_KEY_INTERESTLABELLIST @"server.interestLabelList"
 
-@interface RHServer()
+@interface RHServerData()
 {
     
 }
@@ -27,7 +27,7 @@
 
 @end
 
-@implementation RHServer
+@implementation RHServerData
 
 @synthesize deviceCount = _deviceCount;
 @synthesize deviceCapacity = _deviceCapacity;
@@ -138,7 +138,7 @@
 -(id) copyWithZone:(struct _NSZone *)zone
 {
     NSData* data = [NSKeyedArchiver archivedDataWithRootObject:self];
-    return (RHServer*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
+    return (RHServerData*)[NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
 
 #pragma mark - NSMutableCopying

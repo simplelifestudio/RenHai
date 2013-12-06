@@ -479,13 +479,16 @@ ConnectStatus;
     [_commModule proxyDataSyncRequest:requestMessage
         successCompletionBlock:^(NSDictionary* proxyDic){
             
-           RHProxy* proxy = _userDataModule.proxy;
+            RHProxy* proxy = _userDataModule.proxy;
+            RHStatus* status = proxy.status;
             
-           @try
-           {
+            @try
+            {
                [proxy fromJSONObject:proxyDic];
 
-               switch (proxy.serviceStatus)
+#warning Need to be replace once server proxy is ready
+               switch (ServerServiceStatus_Normal)
+//               switch (status.serviceStatus)
                {
                    case ServerServiceStatus_Normal:
                    {
@@ -495,7 +498,7 @@ ConnectStatus;
                    }
                    case ServerServiceStatus_Maintenance:
                    {
-                       RHStatusPeriod* period = proxy.statusPeriod;
+                       RHStatusPeriod* period = status.statusPeriod;
                        
                        NSString* localBeginTimeStr = period.localBeginTimeString;
                        NSString* localEndTimeStr = period.localEndTimeString;
@@ -523,18 +526,18 @@ ConnectStatus;
                        break;
                    }
                }
-           }
-           @catch (NSException *exception)
-           {
+            }
+            @catch (NSException *exception)
+            {
                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
                
                [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
                _isProxyDataSyncSuccess = NO;
-           }
-           @finally
-           {
+            }
+            @finally
+            {
                
-           }
+            }
         }
         failureCompletionBlock:^(){
            [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
@@ -690,7 +693,7 @@ ConnectStatus;
     
     [_commModule serverDataSyncRequest:requestMessage
         successCompletionBlock:^(NSDictionary* serverDic){
-            RHServer* server = _userDataModule.server;
+            RHServerData* server = _userDataModule.server;
             @try
             {
                 [server fromJSONObject:serverDic];

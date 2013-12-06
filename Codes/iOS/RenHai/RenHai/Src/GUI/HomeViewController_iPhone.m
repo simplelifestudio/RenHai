@@ -20,7 +20,7 @@
 #import "BusinessStatusModule.h"
 
 #define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
-#define INTERVAL_DATASYNC 5.0f
+#define INTERVAL_DATASYNC 1.0f
 
 typedef enum
 {
@@ -184,10 +184,13 @@ EnterOperationStatus;
 -(void)_updateBannerView
 {
     RHProxy* proxy = _userDataModule.proxy;
+    RHStatus* status = proxy.status;
     
     NSString* text = @"";
     
-    switch (proxy.serviceStatus)
+#warning Need to be replace once server proxy is ready    
+    switch (ServerServiceStatus_Normal)
+//    switch (status.serviceStatus)
     {
         case ServerServiceStatus_Normal:
         {
@@ -196,7 +199,7 @@ EnterOperationStatus;
         }
         case ServerServiceStatus_Maintenance:
         {
-            RHStatusPeriod* period = proxy.statusPeriod;
+            RHStatusPeriod* period = status.statusPeriod;
             NSString* localBeginTimeStr = period.localBeginTimeString;
             NSString* localEndTimeStr = period.localEndTimeString;
             NSString* periodStr = [NSString stringWithFormat:NSLocalizedString(@"Home_Banner_Maintenance", nil), localBeginTimeStr, localEndTimeStr];
@@ -327,7 +330,7 @@ static float progress = 0.0;
     
     [_commModule serverDataSyncRequest:requestMessage
         successCompletionBlock:^(NSDictionary* serverDic){
-            RHServer* server = _userDataModule.server;
+            RHServerData* server = _userDataModule.server;
             @try
             {
                 [server fromJSONObject:serverDic];
@@ -357,7 +360,7 @@ static float progress = 0.0;
 -(void) _updateUIWithOnlineDeviceCount
 {
     [CBAppUtils asyncProcessInMainThread:^(){
-        RHServer* server = _userDataModule.server;
+        RHServerData* server = _userDataModule.server;
         if (nil != server)
         {
             NSArray* unitLabels = @[_onlineDeviceCountUnit1, _onlineDeviceCountUnit2, _onlineDeviceCountUnit3, _onlineDeviceCountUnit4, _onlineDeviceCountUnit5];
@@ -382,7 +385,7 @@ static float progress = 0.0;
 -(void) _updateUIWithInterestChatDeviceCount
 {
     [CBAppUtils asyncProcessInMainThread:^(){
-        RHServer* server = _userDataModule.server;
+        RHServerData* server = _userDataModule.server;
         if (nil != server)
         {
             NSArray* unitLabels = @[_chatDeviceCountUnit1, _chatDeviceCountUnit2, _chatDeviceCountUnit3, _chatDeviceCountUnit4, _chatDeviceCountUnit5];

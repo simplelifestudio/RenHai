@@ -34,7 +34,7 @@
 
 @property (atomic, strong) RHProxy* proxy;
 @property (atomic, strong) RHDevice* device;
-@property (atomic, strong) RHServer* server;
+@property (atomic, strong) RHServerData* server;
 @property (atomic, strong) RHBusinessSession* businessSession;
 
 @end
@@ -163,7 +163,7 @@ SINGLETON(UserDataModule)
 
 -(void) _initServerData
 {
-    _server = [[RHServer alloc] init];
+    _server = [[RHServerData alloc] init];
 }
 
 -(void) _initBusinessSessionData

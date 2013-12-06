@@ -512,7 +512,7 @@
         {
             case SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS:
             {
-                RHServer* server = _userDataModule.server;
+                RHServerData* server = _userDataModule.server;
                 RHServerInterestLabelList* interestLabelList = server.interestLabelList;
                 NSArray* currentInterestLabels = interestLabelList.current;
                 
@@ -537,7 +537,7 @@
     RHDevice* device = _userDataModule.device;
     RHProfile* profile = device.profile;
     RHInterestCard* interestCard = profile.interestCard;
-    RHServer* server = _userDataModule.server;
+    RHServerData* server = _userDataModule.server;
 
     NSUInteger section = indexPath.section;
     NSUInteger position = indexPath.item;
@@ -997,7 +997,7 @@
 {
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
-        RHServer* server = _userDataModule.server;
+        RHServerData* server = _userDataModule.server;
         
         RHMessage* requestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_InterestLabelListSync device:device info:nil];
         

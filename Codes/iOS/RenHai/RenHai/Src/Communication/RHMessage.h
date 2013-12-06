@@ -13,6 +13,8 @@
 #import "RHDevice.h"
 #import "RHDataUtils.h"
 
+#import "CBJSONUtils.h"
+
 #define MESSAGE_SECURITY_KEY @"20130801"
 
 #define MESSAGE_MESSAGESN_LENGTH 16
@@ -97,8 +99,11 @@
  */
 
 // Proxy
+#define MESSAGE_KEY_SERVERID @"serverId"
+#define MESSAGE_KEY_STATUS @"status"
 #define MESSAGE_KEY_SERVICESTATUS @"serviceStatus"
-#define MESSAGE_KEY_SERVICEADDRESS @"serviceAddress"
+#define MESSAGE_KEY_ADDRESS @"address"
+#define MESSAGE_KEY_BROADCAST @"broadcast"
 #define MESSAGE_KEY_IP @"ip"
 #define MESSAGE_KEY_PORT @"port"
 #define MESSAGE_KEY_PATH @"path"
@@ -106,6 +111,9 @@
 #define MESSAGE_KEY_TIMEZONE @"timeZone"
 #define MESSAGE_KEY_BEGINTIME @"beginTime"
 #define MESSAGE_KEY_ENDTIME @"endTime"
+#define MESSAGE_KEY_APPVERSION @"appVersion"
+#define MESSAGE_KEY_VERSION @"version"
+#define MESSAGE_KEY_BUILD @"build"
 
 // DeviceCount
 #define MESSAGE_KEY_DEVICECOUNT @"deviceCount"

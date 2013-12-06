@@ -633,7 +633,7 @@ App与Server通过消息交互完成的数据操作
 	{
 		"appVersion":
 		{
-			"version":1.0,
+			"version":"1.0",
 			"build":1234
 		}
 	}	
@@ -645,7 +645,7 @@ App与Server通过消息交互完成的数据操作
 {
 	"body": 
 	{
-		"id":"TestServer",
+		"serverId":"TestServer",
 		"status":
 		{
 			"serviceStatus":1,
@@ -663,7 +663,7 @@ App与Server通过消息交互完成的数据操作
 			"port":80,
 			"path":"/renhai/websocket"
 		},
-		"broadcast":"这是系统广播消息"
+		"broadcast":"这是系统广播消息"	
 	}
 }
 </code></pre>
@@ -675,10 +675,10 @@ App与Server通过消息交互完成的数据操作
 	"serverList":
 	[
 		{
-			"id":"TestServer",
+			"serverId":"TestServer",
 			"appBaseVersion":
 			{
-				"version":1.0,
+				"version":"1.0",
 				"build":1234
 			},
 			"status":
@@ -702,10 +702,10 @@ App与Server通过消息交互完成的数据操作
 		},
 		
 		{
-			"id":"NormalServer",
+			"serverId":"NormalServer",
 			"appBaseVersion":
 			{
-				"version":1.0,
+				"version":"1.0",
 				"build":1234
 			},
 			"status":
@@ -728,7 +728,7 @@ App与Server通过消息交互完成的数据操作
 			"broadcast":"这是另一条系统广播消息"
 		},
 		{
-			"id":"Default",
+			"serverId":"Default",
 			"broadcast":"App版本太低"
 		}
 	]

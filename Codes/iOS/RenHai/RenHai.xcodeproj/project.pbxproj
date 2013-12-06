@@ -225,8 +225,8 @@
 		CD5633B71827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5633B51827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.m */; };
 		CD5D6CF318388A94002DEDAF /* RHProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CF218388A94002DEDAF /* RHProxy.m */; };
 		CD5D6CF418388A94002DEDAF /* RHProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CF218388A94002DEDAF /* RHProxy.m */; };
-		CD5D6CF718389224002DEDAF /* RHServiceAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CF618389224002DEDAF /* RHServiceAddress.m */; };
-		CD5D6CF818389224002DEDAF /* RHServiceAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CF618389224002DEDAF /* RHServiceAddress.m */; };
+		CD5D6CF718389224002DEDAF /* RHAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CF618389224002DEDAF /* RHAddress.m */; };
+		CD5D6CF818389224002DEDAF /* RHAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CF618389224002DEDAF /* RHAddress.m */; };
 		CD5D6CFB1838923D002DEDAF /* RHStatusPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CFA1838923D002DEDAF /* RHStatusPeriod.m */; };
 		CD5D6CFC1838923D002DEDAF /* RHStatusPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CFA1838923D002DEDAF /* RHStatusPeriod.m */; };
 		CD5D6CFF18389382002DEDAF /* OCBasicTest.m in Sources */ = {isa = PBXBuildFile; fileRef = CD5D6CFE18389382002DEDAF /* OCBasicTest.m */; };
@@ -243,6 +243,8 @@
 		CD736CEF1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */; };
 		CD736CF41817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */; };
 		CD736CF51817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */; };
+		CD94DEF71851614E00C9CBC4 /* RHStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = CD94DEF61851614E00C9CBC4 /* RHStatus.m */; };
+		CD94DEF81851614E00C9CBC4 /* RHStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = CD94DEF61851614E00C9CBC4 /* RHStatus.m */; };
 		CDA98255184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA98254184F0B9300D95896 /* LeftBarTableCell_iPhone.m */; };
 		CDA98256184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA98254184F0B9300D95896 /* LeftBarTableCell_iPhone.m */; };
 		CDA98258184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDA98257184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib */; };
@@ -255,8 +257,8 @@
 		CDBE9E2A183457D700005405 /* RHMatchedCondition.m in Sources */ = {isa = PBXBuildFile; fileRef = CDBE9E28183457D700005405 /* RHMatchedCondition.m */; };
 		CDBE9E2F1834D74800005405 /* OpenTokAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = CDBE9E2E1834D74800005405 /* OpenTokAgent.m */; };
 		CDBE9E301834D74800005405 /* OpenTokAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = CDBE9E2E1834D74800005405 /* OpenTokAgent.m */; };
-		CDC0518A1802E055006158B8 /* RHServer.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051891802E055006158B8 /* RHServer.m */; };
-		CDC0518B1802E055006158B8 /* RHServer.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051891802E055006158B8 /* RHServer.m */; };
+		CDC0518A1802E055006158B8 /* RHServerData.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051891802E055006158B8 /* RHServerData.m */; };
+		CDC0518B1802E055006158B8 /* RHServerData.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051891802E055006158B8 /* RHServerData.m */; };
 		CDC0518E1802E311006158B8 /* RHServerDeviceCapacity.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC0518D1802E311006158B8 /* RHServerDeviceCapacity.m */; };
 		CDC0518F1802E311006158B8 /* RHServerDeviceCapacity.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC0518D1802E311006158B8 /* RHServerDeviceCapacity.m */; };
 		CDC051921802E33D006158B8 /* RHServerDeviceCount.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051911802E33D006158B8 /* RHServerDeviceCount.m */; };
@@ -495,8 +497,8 @@
 		CD5633B51827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatAssessAddImpressLabelsHeaderView_iPhone.m; sourceTree = "<group>"; };
 		CD5D6CF118388A94002DEDAF /* RHProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHProxy.h; sourceTree = "<group>"; };
 		CD5D6CF218388A94002DEDAF /* RHProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHProxy.m; sourceTree = "<group>"; };
-		CD5D6CF518389224002DEDAF /* RHServiceAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServiceAddress.h; sourceTree = "<group>"; };
-		CD5D6CF618389224002DEDAF /* RHServiceAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServiceAddress.m; sourceTree = "<group>"; };
+		CD5D6CF518389224002DEDAF /* RHAddress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHAddress.h; sourceTree = "<group>"; };
+		CD5D6CF618389224002DEDAF /* RHAddress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHAddress.m; sourceTree = "<group>"; };
 		CD5D6CF91838923D002DEDAF /* RHStatusPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHStatusPeriod.h; sourceTree = "<group>"; };
 		CD5D6CFA1838923D002DEDAF /* RHStatusPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHStatusPeriod.m; sourceTree = "<group>"; };
 		CD5D6CFD18389382002DEDAF /* OCBasicTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCBasicTest.h; sourceTree = "<group>"; };
@@ -515,6 +517,8 @@
 		CD736CEC1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpressLabelsHeaderView_iPhone.h; sourceTree = "<group>"; };
 		CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImpressLabelsHeaderView_iPhone.m; sourceTree = "<group>"; };
 		CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImpressLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
+		CD94DEF51851614E00C9CBC4 /* RHStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHStatus.h; sourceTree = "<group>"; };
+		CD94DEF61851614E00C9CBC4 /* RHStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHStatus.m; sourceTree = "<group>"; };
 		CDA98253184F0B9300D95896 /* LeftBarTableCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftBarTableCell_iPhone.h; sourceTree = "<group>"; };
 		CDA98254184F0B9300D95896 /* LeftBarTableCell_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftBarTableCell_iPhone.m; sourceTree = "<group>"; };
 		CDA98257184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftBarTableCell_iPhone.xib; sourceTree = "<group>"; };
@@ -526,8 +530,8 @@
 		CDBE9E28183457D700005405 /* RHMatchedCondition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHMatchedCondition.m; sourceTree = "<group>"; };
 		CDBE9E2D1834D74800005405 /* OpenTokAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenTokAgent.h; sourceTree = "<group>"; };
 		CDBE9E2E1834D74800005405 /* OpenTokAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenTokAgent.m; sourceTree = "<group>"; };
-		CDC051881802E055006158B8 /* RHServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServer.h; sourceTree = "<group>"; };
-		CDC051891802E055006158B8 /* RHServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServer.m; sourceTree = "<group>"; };
+		CDC051881802E055006158B8 /* RHServerData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServerData.h; sourceTree = "<group>"; };
+		CDC051891802E055006158B8 /* RHServerData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServerData.m; sourceTree = "<group>"; };
 		CDC0518C1802E311006158B8 /* RHServerDeviceCapacity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServerDeviceCapacity.h; sourceTree = "<group>"; };
 		CDC0518D1802E311006158B8 /* RHServerDeviceCapacity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHServerDeviceCapacity.m; sourceTree = "<group>"; };
 		CDC051901802E33D006158B8 /* RHServerDeviceCount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHServerDeviceCount.h; sourceTree = "<group>"; };
@@ -771,9 +775,9 @@
 		C5F8936817CFA136003EF1B3 /* Src */ = {
 			isa = PBXGroup;
 			children = (
+				C5F8936A17CFA136003EF1B3 /* Common */,
 				C5F8936917CFA136003EF1B3 /* AppData */,
 				CD3C04DC181F9055002B19A3 /* BusinessStatus */,
-				C5F8936A17CFA136003EF1B3 /* Common */,
 				C5F8936B17CFA136003EF1B3 /* Communication */,
 				C5F8936C17CFA136003EF1B3 /* GUI */,
 				C5F8936D17CFA136003EF1B3 /* Logger */,
@@ -971,10 +975,12 @@
 				CD6D8CD018434A6A00C2330D /* RHDataUtils.m */,
 				CD5D6CF118388A94002DEDAF /* RHProxy.h */,
 				CD5D6CF218388A94002DEDAF /* RHProxy.m */,
-				CD5D6CF518389224002DEDAF /* RHServiceAddress.h */,
-				CD5D6CF618389224002DEDAF /* RHServiceAddress.m */,
+				CD94DEF51851614E00C9CBC4 /* RHStatus.h */,
+				CD94DEF61851614E00C9CBC4 /* RHStatus.m */,
 				CD5D6CF91838923D002DEDAF /* RHStatusPeriod.h */,
 				CD5D6CFA1838923D002DEDAF /* RHStatusPeriod.m */,
+				CD5D6CF518389224002DEDAF /* RHAddress.h */,
+				CD5D6CF618389224002DEDAF /* RHAddress.m */,
 				C593C47B17D46C1D00C26367 /* RHDevice.h */,
 				C593C47C17D46C1D00C26367 /* RHDevice.m */,
 				C593C47F17D46C2700C26367 /* RHDeviceCard.h */,
@@ -989,8 +995,8 @@
 				C593C48C17D46C5700C26367 /* RHImpressCard.m */,
 				C593C48F17D46CB700C26367 /* RHImpressLabel.h */,
 				C593C49017D46CB700C26367 /* RHImpressLabel.m */,
-				CDC051881802E055006158B8 /* RHServer.h */,
-				CDC051891802E055006158B8 /* RHServer.m */,
+				CDC051881802E055006158B8 /* RHServerData.h */,
+				CDC051891802E055006158B8 /* RHServerData.m */,
 				CDC0518C1802E311006158B8 /* RHServerDeviceCapacity.h */,
 				CDC0518D1802E311006158B8 /* RHServerDeviceCapacity.m */,
 				CDC051901802E33D006158B8 /* RHServerDeviceCount.h */,
@@ -1315,13 +1321,14 @@
 				C50505C817D2BD4800DB6589 /* CBHUDAgent.m in Sources */,
 				C50505CA17D2BD4800DB6589 /* CBMathUtils.m in Sources */,
 				C50505CC17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */,
-				CDC0518A1802E055006158B8 /* RHServer.m in Sources */,
+				CDC0518A1802E055006158B8 /* RHServerData.m in Sources */,
 				C50505CE17D2BD4800DB6589 /* CBModuleManager.m in Sources */,
-				CD5D6CF718389224002DEDAF /* RHServiceAddress.m in Sources */,
+				CD5D6CF718389224002DEDAF /* RHAddress.m in Sources */,
 				C50505D017D2BD4800DB6589 /* CBNetworkUtils.m in Sources */,
 				C50505D217D2BD4800DB6589 /* CBPathUtils.m in Sources */,
 				CDC0518E1802E311006158B8 /* RHServerDeviceCapacity.m in Sources */,
 				C50505D417D2BD4800DB6589 /* CBSecurityUtils.m in Sources */,
+				CD94DEF71851614E00C9CBC4 /* RHStatus.m in Sources */,
 				C50505D617D2BD4800DB6589 /* CBStringUtils.m in Sources */,
 				C50505D817D2BD4800DB6589 /* CBUIUtils.m in Sources */,
 				CD1DFB0918001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */,
@@ -1396,11 +1403,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				CDC0519B1805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m in Sources */,
+				CD94DEF81851614E00C9CBC4 /* RHStatus.m in Sources */,
 				C55B442C17CF5992009BB21B /* main.m in Sources */,
 				C55B443917CF5993009BB21B /* ViewController.m in Sources */,
 				C55B445217CF5C14009BB21B /* GTMBase64.m in Sources */,
 				C50505C117D2BD4800DB6589 /* CBAppUtils.m in Sources */,
-				CDC0518B1802E055006158B8 /* RHServer.m in Sources */,
+				CDC0518B1802E055006158B8 /* RHServerData.m in Sources */,
 				C50505C317D2BD4800DB6589 /* CBDateUtils.m in Sources */,
 				C50505C517D2BD4800DB6589 /* CBFileUtils.m in Sources */,
 				C50505C717D2BD4800DB6589 /* CBGZipUtils.m in Sources */,
@@ -1420,7 +1428,7 @@
 				CDC0518F1802E311006158B8 /* RHServerDeviceCapacity.m in Sources */,
 				C50505D717D2BD4800DB6589 /* CBStringUtils.m in Sources */,
 				C50505D917D2BD4800DB6589 /* CBUIUtils.m in Sources */,
-				CD5D6CF818389224002DEDAF /* RHServiceAddress.m in Sources */,
+				CD5D6CF818389224002DEDAF /* RHAddress.m in Sources */,
 				C50505DB17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
 				CD5101A2182A856600E188A3 /* RHLabelManageViewController_iPhone.m in Sources */,
 				CD26650D17F41DD20070934F /* UserDataModuleTest.m in Sources */,

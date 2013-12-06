@@ -58,10 +58,12 @@
     [self closeWebSocket];
     
     RHProxy* proxy = _userDataModule.proxy;
-    RHServiceAddress* address = proxy.serviceAddress;
+    RHAddress* address = proxy.address;
     NSString* remotePath = address.fullAddress;
-
-    if (nil != address && nil != remotePath)
+#warning Need to be replace once server proxy is ready
+    remotePath = @"ws://192.81.135.31:80/renhai/websocket";
+    
+    if (nil != remotePath)
     {
         _webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:remotePath]]];
         _webSocket.delegate = self;
