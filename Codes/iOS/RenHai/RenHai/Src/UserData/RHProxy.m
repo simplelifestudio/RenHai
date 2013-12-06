@@ -15,17 +15,16 @@
     
 }
 
-@property (nonatomic) ServerServiceStatus serviceStatus;
-@property (strong, nonatomic) RHServiceAddress* serviceAddress;
-@property (strong, nonatomic) RHStatusPeriod* statusPeriod;
+@property (strong, nonatomic) NSString* serverId;
+@property (strong, nonatomic) RHStatus* status;
+@property (strong, nonatomic) RHAddress* address;
+@property (strong, nonatomic) NSString* broadcast;
 
 @end
 
 @implementation RHProxy
 
-@synthesize serviceStatus = _serviceStatus;
-@synthesize serviceAddress = _serviceAddress;
-@synthesize statusPeriod = _statusPeriod;
+@synthesize address = _address;
 
 #pragma mark - Public Methods
 
@@ -45,25 +44,28 @@
 {
     if (nil != dic)
     {
-        NSNumber* oStatus = (NSNumber*)[dic objectForKey:MESSAGE_KEY_SERVICESTATUS];
-        if (nil != oStatus)
+        NSString* serverId = (NSString*)[dic objectForKey:MESSAGE_KEY_SERVERID];
+        if (nil != serverId)
         {
-            _serviceStatus = oStatus.integerValue;
+            _serverId = serverId;
         }
         
-        NSDictionary* serviceAddressDic = [dic objectForKey:MESSAGE_KEY_SERVICEADDRESS];
-        if (nil != serviceAddressDic)
+        NSDictionary* statusDic = [dic objectForKey:MESSAGE_KEY_STATUS];
+        if (nil != statusDic)
         {
-            _serviceAddress = [[RHServiceAddress alloc] init];
-            [_serviceAddress fromJSONObject:serviceAddressDic];
+            _status = [[RHStatus alloc] init];
+            [_status fromJSONObject:statusDic];
         }
         
-        NSDictionary* statusPeriodDic = [dic objectForKey:MESSAGE_KEY_STATUSPERIOD];
-        if (nil != statusPeriodDic)
+        NSDictionary* addressDic = [dic objectForKey:MESSAGE_KEY_ADDRESS];
+        if (nil != addressDic)
         {
-            _statusPeriod = [[RHStatusPeriod alloc] init];
-            [_statusPeriod fromJSONObject:statusPeriodDic];
+            _address = [[RHAddress alloc] init];
+            [_address fromJSONObject:addressDic];
         }
+        
+        NSString* broadcast = (NSString*)[dic objectForKey:MESSAGE_KEY_BROADCAST];
+        _broadcast = broadcast;
     }
 }
 
@@ -71,30 +73,39 @@
 {
     NSMutableDictionary* dic = [NSMutableDictionary dictionary];
     
-    NSNumber* oStatus = [NSNumber numberWithInteger:_serviceStatus];
-    [dic setObject:oStatus forKey:MESSAGE_KEY_SERVICESTATUS];
-    
     id oNull = [NSNull null];
-    if (nil != _serviceAddress)
+    
+    [dic setObject:_serverId forKey:MESSAGE_KEY_SERVERID];
+    
+    if (nil != _status)
     {
-        NSDictionary* serviceAddressDic = _serviceAddress.toJSONObject;
-        [dic setObject:serviceAddressDic forKey:MESSAGE_KEY_SERVICEADDRESS];
+        NSDictionary* statusDic = _status.toJSONObject;
+        [dic setObject:statusDic forKey:MESSAGE_KEY_STATUS];
     }
     else
     {
-        [dic setObject:oNull forKey:MESSAGE_KEY_SERVICEADDRESS];
+        [dic setObject:oNull forKey:MESSAGE_KEY_STATUS];
     }
     
-    if (nil != _statusPeriod)
+    if (nil != _address)
     {
-        NSDictionary* statusPeriodDic = _statusPeriod.toJSONObject;
-        [dic setObject:statusPeriodDic forKey:MESSAGE_KEY_STATUSPERIOD];
+        NSDictionary* addressDic = _address.toJSONObject;
+        [dic setObject:addressDic forKey:MESSAGE_KEY_ADDRESS];
     }
     else
     {
-        [dic setObject:oNull forKey:MESSAGE_KEY_STATUSPERIOD];
+        [dic setObject:oNull forKey:MESSAGE_KEY_ADDRESS];
     }
     
+    if (nil != _broadcast)
+    {
+        [dic setObject:_broadcast forKey:MESSAGE_KEY_BROADCAST];
+    }
+    else
+    {
+        [dic setObject:oNull forKey:MESSAGE_KEY_BROADCAST];
+    }
+
     return dic;
 }
 

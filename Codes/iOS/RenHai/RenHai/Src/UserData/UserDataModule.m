@@ -34,7 +34,7 @@
 
 @property (atomic, strong) RHProxy* proxy;
 @property (atomic, strong) RHDevice* device;
-@property (atomic, strong) RHServer* server;
+@property (atomic, strong) RHServerData* server;
 @property (atomic, strong) RHBusinessSession* businessSession;
 
 @end
@@ -163,7 +163,7 @@ SINGLETON(UserDataModule)
 
 -(void) _initServerData
 {
-    _server = [[RHServer alloc] init];
+    _server = [[RHServerData alloc] init];
 }
 
 -(void) _initBusinessSessionData
@@ -171,9 +171,13 @@ SINGLETON(UserDataModule)
     _businessSession = [[RHBusinessSession alloc] init];
 }
 
+#pragma mark - Private Methods
+
 -(void) _registerNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_RHSERVERNOTIFICATION object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil];
 }
 
 -(void) _unregisterNotifications
@@ -202,6 +206,10 @@ SINGLETON(UserDataModule)
                     break;
                 }
             }
+        }
+        else if ([notification.name isEqualToString:NOTIFICATION_ID_RHSERVERDISCONNECTED])
+        {
+            [self saveUserData];
         }
     }
 }

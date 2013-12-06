@@ -1,5 +1,5 @@
 //
-//  RHServer.h
+//  RHServerData.h
 //  RenHai
 //
 //  Created by DENG KE on 13-10-7.
@@ -14,7 +14,7 @@
 #import "RHServerDeviceCapacity.h"
 #import "RHServerInterestLabelList.h"
 
-@interface RHServer : NSObject <CBJSONable, NSCopying, NSMutableCopying>
+@interface RHServerData : NSObject <CBJSONable, NSCopying, NSMutableCopying>
 
 @property (nonatomic, strong, readonly) RHServerDeviceCount* deviceCount;
 @property (nonatomic, strong, readonly) RHServerDeviceCapacity* deviceCapacity;

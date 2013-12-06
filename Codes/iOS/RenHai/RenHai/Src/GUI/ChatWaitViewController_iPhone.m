@@ -226,7 +226,7 @@ ChatWaitStatus;
 
 - (void) _computeLabelCloudView
 {
-    RHServer* server = _userDataModule.server;
+    RHServerData* server = _userDataModule.server;
     RHServerInterestLabelList* olabelList = server.interestLabelList;
     NSArray* labelList = olabelList.current;
     NSMutableArray* labelNameList = [NSMutableArray arrayWithCapacity:labelList.count];

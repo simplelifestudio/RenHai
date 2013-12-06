@@ -39,6 +39,7 @@
 -(NSString*) deviceModel;
 -(NSString*) osVersion;
 -(NSString*) appVersion;
+-(NSUInteger) appBuild;
 -(BOOL) isJailed;
 
 @end

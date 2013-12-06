@@ -1,16 +1,19 @@
 //
-//  RHServiceAddress.m
+//  RHAddress.m
 //  RenHai
 //
 //  Created by DENG KE on 13-11-17.
 //  Copyright (c) 2013年 Simplelife Studio. All rights reserved.
 //
 
-#import "RHServiceAddress.h"
+#import "RHAddress.h"
 
 #import "CBJSONUtils.h"
 
-@interface RHServiceAddress()
+#define LOCAL_SERVER_ENABLED 0
+#define LOCAL_SERVER_IP @"192.168.1.2"
+
+@interface RHAddress()
 {
     
 }
@@ -22,7 +25,7 @@
 
 @end
 
-@implementation RHServiceAddress
+@implementation RHAddress
 
 @synthesize protocol = _protocol;
 @synthesize ip = _ip;
@@ -77,6 +80,10 @@
     if (nil != dic)
     {
         _ip = [dic objectForKey:MESSAGE_KEY_IP];
+        if (LOCAL_SERVER_ENABLED)
+        {
+            _ip = LOCAL_SERVER_IP;
+        }
         
         NSNumber* oPort = (NSNumber*)[dic objectForKey:MESSAGE_KEY_PORT];
         if (nil != oPort)

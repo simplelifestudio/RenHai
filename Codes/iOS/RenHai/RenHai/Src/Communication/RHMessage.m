@@ -13,6 +13,8 @@
 #import "CBDateUtils.h"
 #import "CBSecurityUtils.h"
 
+#import "AppDataModule.h"
+
 #import "NSDictionary+MutableDeepCopy.h"
 
 @interface RHMessage()
@@ -194,7 +196,14 @@
     NSString* messageSn = [RHMessage generateMessageSn];
     NSDictionary* messageHeader = [RHMessage constructMessageHeader:MessageType_ProxyRequest messageId:MessageId_ProxyDataSyncRequest messageSn:messageSn deviceId:0 deviceSn:nil];
     
-    NSDictionary* messageBody = [NSDictionary dictionary];
+    AppDataModule* appModule = [AppDataModule sharedInstance];
+    NSString* appVersion = appModule.appVersion;
+    NSUInteger appBuild = appModule.appBuild;
+    NSNumber* oAppBuild = [NSNumber numberWithInteger:appBuild];
+    
+    NSDictionary* appVersionDic = [NSDictionary dictionaryWithObjects:@[appVersion, oAppBuild] forKeys:@[MESSAGE_KEY_VERSION, MESSAGE_KEY_BUILD]];
+    
+    NSDictionary* messageBody = [NSDictionary dictionaryWithObject:appVersionDic forKey:MESSAGE_KEY_APPVERSION];
     
     RHMessage* message = [RHMessage constructWithMessageHeader:messageHeader messageBody:messageBody];
     

@@ -1,5 +1,5 @@
 //
-//  RHServiceAddress.h
+//  RHAddress.h
 //  RenHai
 //
 //  Created by DENG KE on 13-11-17.
@@ -10,7 +10,7 @@
 
 #import "RHMessage.h"
 
-@interface RHServiceAddress : NSObject <CBJSONable>
+@interface RHAddress : NSObject <CBJSONable>
 
 @property (strong, nonatomic, readonly) NSString* protocol;
 @property (strong, nonatomic, readonly) NSString* ip;

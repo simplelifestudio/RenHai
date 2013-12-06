@@ -225,6 +225,8 @@ sup {
 
 <h3>MatchStart:9</h3>
 
+<h3>ChatMessage:10</h3>
+
 <h2>5. Server业务会话通知动作</h2>
 
 <h3>SessionBinded:1</h3>
@@ -236,6 +238,8 @@ sup {
 <h3>OthersideLost:4</h3>
 
 <h3>OthersideEndChat:5</h3>
+
+<h3>OthersideChatMessage:6</h3>
 
 <h2>6. Profile服务状态</h2>
 
@@ -707,11 +711,14 @@ sup {
 
 <h3>404. Server数据同步响应 ServerDataSyncResponse</h3>
 
-<p>{
+<pre><code>
+{
     "body":
     {
     }
-}</p>
+}
+</code></pre>
+
 
 <h3>103. 业务会话请求 BusinessSessionRequest</h3>
 
@@ -822,6 +829,208 @@ sup {
     {
         "content":"This is a broadcast message!"
     }
+}
+</code></pre>
+
+
+<h3>500. Proxy信息同步请求 ProxyDataSyncRequest</h3>
+
+<pre><code>
+{
+    "body": 
+    {
+        "appVersion":
+
+        {
+
+            "version":1.0,
+
+            "build":1234
+
+        }
+    }   
+}
+</code></pre>
+
+
+<h3>600. Proxy信息同步响应</h3>
+
+<pre><code>
+{
+    "body": 
+    {
+        "server":
+        {
+            "id":"TestServer",
+
+            "status":
+
+            {
+
+                "serviceStatus":1,
+
+                "statusPeriod":
+
+                {
+
+                    "timeZone":"GMT+0800",
+
+                    "beginTime":"2013-01-01 10:00:00",
+
+                    "endTime":"2013-01-01 10:30:00"
+
+                }
+
+            },
+
+            "address":
+
+            {
+
+                "protocol":"ws",
+
+                "ip":"192.81.135.31",
+
+                "port":80,
+
+                "path":"/renhai/websocket"
+
+            },
+
+            "broadcast":"这是系统广播消息"      
+        }
+    }
+}
+</code></pre>
+
+
+<h1>ProxyServer的配置</h1>
+
+<pre><code>
+{
+
+    "encrypt":1,
+
+    "serverList":
+
+    [
+
+        {
+
+            "id":"TestServer",
+
+            "appBaseVersion":
+
+            {
+
+                "version":1.0,
+
+                "build":1234
+
+            },
+
+            "status":
+
+            {
+
+                "serviceStatus":1,
+
+                "statusPeriod":
+
+                {
+
+                    "timeZone":"GMT+0800",
+
+                    "beginTime":"2013-01-01 10:00:00",
+
+                    "endTime":"2013-01-01 10:30:00"
+
+                }
+
+            },
+
+            "address":
+
+            {
+
+                "protocol":"ws",
+
+                "ip":"192.81.135.31",
+
+                "port":80,
+
+                "path":"/renhai/websocket"
+
+            },
+
+            "broadcast":"这是系统广播消息"
+
+        },
+
+        
+
+        {
+
+            "id":"NormalServer",
+
+            "appBaseVersion":
+
+            {
+
+                "version":1.0,
+
+                "build":1234
+
+            },
+
+            "status":
+
+            {
+
+                "serviceStatus":1,
+
+                "statusPeriod":
+
+                {
+
+                    "timeZone":"GMT+0800",
+
+                    "beginTime":"2013-01-01 10:00:00",
+
+                    "endTime":"2013-01-01 10:30:00"
+
+                }
+
+            },
+
+            "address":
+
+            {
+
+                "protocol":"ws",
+
+                "ip":"192.81.135.31",
+
+                "port":80,
+
+                "path":"/renhai/websocket"
+
+            },
+
+            "broadcast":"这是另一条系统广播消息"
+
+        },
+
+        {
+
+            "id":"Default",
+
+            "broadcast":"App版本太低"
+
+        }
+
+    ]
+
 }
 </code></pre>
 

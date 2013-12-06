@@ -10,13 +10,14 @@
 
 #import "RHMessage.h"
 
-#import "RHServiceAddress.h"
-#import "RHStatusPeriod.h"
+#import "RHAddress.h"
+#import "RHStatus.h"
 
 @interface RHProxy : NSObject <CBJSONable>
 
-@property (nonatomic, readonly) ServerServiceStatus serviceStatus;
-@property (strong, nonatomic, readonly) RHServiceAddress* serviceAddress;
-@property (strong, nonatomic, readonly) RHStatusPeriod* statusPeriod;
+@property (strong, nonatomic, readonly) NSString* serverId;
+@property (strong, nonatomic, readonly) RHStatus* status;
+@property (strong, nonatomic, readonly) RHAddress* address;
+@property (strong, nonatomic, readonly) NSString* broadcast;
 
 @end

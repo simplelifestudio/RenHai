@@ -165,6 +165,12 @@ SINGLETON(AppDataModule)
     return version;
 }
 
+-(NSUInteger) appBuild
+{
+    NSString* build = [[[NSBundle mainBundle] infoDictionary] objectForKey:BUNDLE_KEY_BUNDLEVERSION];
+    return build.intValue;
+}
+
 -(BOOL) isJailed
 {
     BOOL isJailed = [UIDevice isJailed];
