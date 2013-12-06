@@ -1,5 +1,7 @@
 package com.simplelife.renhai.server.db;
 
+import java.util.concurrent.ConcurrentLinkedQueue;
+
 import org.apache.ibatis.session.SqlSession;
 
 import com.simplelife.renhai.server.util.IDbObject;
@@ -250,8 +252,14 @@ public class Profile implements IDbObject
 		this.impressCard = impressCard;
 	}
 
+	public void addProfileLog(Profileoperationlog log)
+	{
+		logQueue.add(log);
+	}
+	
 	private Impresscard impressCard;
 	private Interestcard interestCard;
+	private ConcurrentLinkedQueue<Profileoperationlog> logQueue = new ConcurrentLinkedQueue<>();
 
 	@Override
 	public void save(SqlSession session)
@@ -271,5 +279,13 @@ public class Profile implements IDbObject
 		
 		impressCard.setProfileId(profileId);
 		impressCard.save(session);
+		
+		Profileoperationlog log;
+		while(!logQueue.isEmpty())
+		{
+			log = logQueue.remove();
+			log.setProfileId(profileId);
+			log.save(session);
+		}
 	}
 }

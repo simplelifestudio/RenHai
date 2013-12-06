@@ -30,11 +30,11 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 {
     /** */
-    private ConcurrentHashMap<String, List<IDeviceWrapper>> interestLabelDeviceMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, IDeviceWrapper> interestLabelDeviceMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Integer> labelDeviceCountMap = new ConcurrentHashMap<>();
     private InterestMatchManager matchManager = new InterestMatchManager();
     
-    public ConcurrentHashMap<String, List<IDeviceWrapper>> getInterestLabelMap()
+    public ConcurrentHashMap<String, IDeviceWrapper> getInterestLabelMap()
     {
     	return interestLabelDeviceMap;
     }
@@ -53,9 +53,9 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     {
     	businessType = Consts.BusinessType.Interest;
     	
-		businessScheduler = new InterestBusinessScheduler();
-		businessScheduler.bind(this);
-		businessScheduler.setName("InterestScheduler");
+		//businessScheduler = new InterestBusinessScheduler();
+		//businessScheduler.bind(this);
+		//businessScheduler.setName("InterestScheduler");
 		//businessScheduler.startScheduler();
 		setCapacity(GlobalSetting.BusinessSetting.InterestBusinessPoolCapacity);
     }
@@ -112,7 +112,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	Collection<Interestlabelmap> labelSet = device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
     	if (labelSet.isEmpty())
     	{
-    		String temp = "Device <" + device.getDeviceSn() + "> has no interest label and is not allowed to enter interest business device pool.";
+    		String temp = "Device <" + device.getDeviceIdentification() + "> has no interest label and is not allowed to enter interest business device pool.";
     		logger.error(temp);
     		return temp;
     	}
@@ -193,7 +193,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     
     public void removeInterestIndex(IDeviceWrapper device)
     {
-    	logger.debug("Start to remove interest label index for device <{}>", device.getDeviceSn());
+    	logger.debug("Start to remove interest label index for device <{}>", device.getDeviceIdentification());
     	
     	if (device.getDevice() == null)
     	{
@@ -209,7 +209,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	
     	if (labelSet.isEmpty())
     	{
-    		logger.warn("Interest label set of Device <{}> is empty when trying to remove it from interest device pool.", device.getDeviceSn());
+    		logger.warn("Interest label set of Device <{}> is empty when trying to remove it from interest device pool.", device.getDeviceIdentification());
     		return;
     	}
     	
@@ -217,30 +217,33 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	{
     		String strLabel = label.getGlobalLabel().getInterestLabelName();
     		
+    		//logger.debug("====================before check interestLabelDeviceMap for "+strLabel+", device <{}>", device.getDeviceIdentification());
     		if (!this.interestLabelDeviceMap.containsKey(strLabel))
     		{
     			//logger.error("Fatal error: Interest device list for label <{}> is non-existent", strLabel);
+    			//logger.debug("====================nonexistent, for "+strLabel+", device <{}>", device.getDeviceIdentification());
     			continue;
     		}
+    		//logger.debug("====================after check interestLabelDeviceMap for "+strLabel+", device <{}>", device.getDeviceIdentification());
+    		
     		
     		if (logger.isDebugEnabled())
     		{
-    			logger.debug("Remove interest label <" + strLabel + "> for device <{}>", device.getDeviceSn());
+    			logger.debug("Remove interest label <" + strLabel + "> for device <{}>", device.getDeviceIdentification());
     		}
     		
-    		List<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(strLabel);
-    		if (deviceList == null || !deviceList.contains(device))
+    		//logger.debug("====================before get deviceList for "+strLabel+", device <{}>", device.getDeviceIdentification());
+    		if (!interestLabelDeviceMap.containsKey(strLabel))
     		{
     			//logger.warn("Device <{}> is not in list of interest queue: " + strLabel, device.getDeviceSn());
+    			//logger.debug("====================nonexistent for "+strLabel+", device <{}>", device.getDeviceIdentification());
     			continue;
     		}
+    		//logger.debug("====================after get deviceList for "+strLabel+", device <{}>", device.getDeviceIdentification());
     		
-    		synchronized(deviceList)
-    		{
-    			deviceList.remove(device);
-    		}
+    		//logger.debug("====================before remove interest label for device <{}>,", device.getDeviceIdentification());
     		
-    		if (deviceList.isEmpty())
+    		if (interestLabelDeviceMap.get(strLabel) == device)
     		{
     			interestLabelDeviceMap.remove(strLabel);
     		}
@@ -251,8 +254,8 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     @Override
     public void onDeviceLeave(IDeviceWrapper device, Consts.StatusChangeReason reason)
     {
-    	logger.debug("Enter onDeviceLeave of InterBusinessDevicePool, Device <{}> to be removed", device.getDeviceSn());
-    	String deviceSn = device.getDeviceSn();
+    	logger.debug("Enter onDeviceLeave of InterBusinessDevicePool, Device <{}> to be removed", device.getDeviceIdentification());
+    	String deviceSn = device.getDeviceIdentification();
     	if (null != this.getDevice(deviceSn))
     	{
     		if (matchStartedDeviceMap.containsKey(deviceSn))
@@ -275,7 +278,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 	@Override
 	public void startChat(IDeviceWrapper device)
 	{
-		String deviceSn = device.getDeviceSn();
+		String deviceSn = device.getDeviceIdentification();
 		matchStartedDeviceMap.remove(deviceSn);
 		sessionBoundDeviceMap.put(deviceSn, device);
 		
@@ -286,17 +289,16 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 	@Override
 	public void startMatch(IDeviceWrapper device)
     {
-		String deviceSn = device.getDeviceSn();
+		String deviceSn = device.getDeviceIdentification();
 		businessChoosedDeviceMap.remove(deviceSn);
 		matchStartedDeviceMap.put(deviceSn, device);
 		matchManager.addDevice(device, this);
-		//businessScheduler.resumeSchedule();
     }
 
 	@Override
 	public void endChat(IDeviceWrapper device)
 	{
-		String sn = device.getDeviceSn();
+		String sn = device.getDeviceIdentification();
 		boolean existFlag = false;
 		if (sessionBoundDeviceMap.containsKey(sn))
 		{

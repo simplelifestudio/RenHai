@@ -252,7 +252,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	}
     	
     	Consts.DeviceStatus status = deviceWrapper.getBusinessStatus();
-    	logger.debug("Start to remove device <{}> from OnlineDevicePool, device status: " + status.name(), deviceWrapper.getDeviceSn());
+    	logger.debug("Start to remove device <{}> from OnlineDevicePool, device status: " + status.name(), deviceWrapper.getDeviceIdentification());
     	
     	if (status == Consts.DeviceStatus.Connected)
     	{
@@ -270,7 +270,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	}
     	else
     	{
-    		String sn = deviceWrapper.getDeviceSn();
+    		String sn = deviceWrapper.getDeviceIdentification();
     		if (appDataSyncedDeviceMap.containsKey(sn))
     		{
 	    		appDataSyncedDeviceMap.remove(sn);
@@ -322,7 +322,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		return;
     	}
     	
-    	String deviceSn = deviceWrapper.getDeviceSn();
+    	String deviceSn = deviceWrapper.getDeviceIdentification();
     	if (appDataSyncedDeviceMap.containsKey(deviceSn))
     	{
     		logger.debug("Device <{}> has been in deviceMap", deviceSn);
@@ -345,8 +345,8 @@ public class OnlineDevicePool extends AbstractDevicePool
     		logger.error("Fatal error that device on connection {} has empty deviceSn", connectionId);
     		return;
     	}
-    	appDataSyncedDeviceMap.put(deviceWrapper.getDeviceSn(), deviceWrapper);
-    	logger.debug("Create device <{}> bases on connection " + connection, deviceWrapper.getDeviceSn());
+    	appDataSyncedDeviceMap.put(deviceWrapper.getDeviceIdentification(), deviceWrapper);
+    	logger.debug("Create device <{}> bases on connection " + connection, deviceWrapper.getDeviceIdentification());
     }
 
     /*
@@ -394,7 +394,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 	 */
 	public void IdentifyBannedDevice(IDeviceWrapper device)
 	{
-		logger.debug("Device <{}> was identified as banned device", device.getDeviceSn());
+		logger.debug("Device <{}> was identified as banned device", device.getDeviceIdentification());
 		connectedDeviceMap.remove(device.getConnection().getConnectionId());
 		elementCount--;
 		bannedDeviceList.add(device);
@@ -425,10 +425,10 @@ public class OnlineDevicePool extends AbstractDevicePool
 			deviceWrapper = e.getValue();
 			
 			JSONObject deviceObj = new JSONObject();
-        	response.put(deviceWrapper.getDeviceSn(), deviceObj);
+        	response.put(deviceWrapper.getDeviceIdentification(), deviceObj);
         	
         	deviceObj.put(JSONKey.DeviceId, deviceWrapper.getDevice().getDeviceId());
-        	deviceObj.put(JSONKey.DeviceSn, deviceWrapper.getDeviceSn());
+        	deviceObj.put(JSONKey.DeviceSn, deviceWrapper.getDeviceIdentification());
         	
         	if (deviceWrapper.getBusinessType() != null)
         	{
@@ -451,6 +451,8 @@ public class OnlineDevicePool extends AbstractDevicePool
 	
 	public void saveStatistics()
 	{
+		elementCount = connectedDeviceMap.size() + appDataSyncedDeviceMap.size();
+		
 		long now = System.currentTimeMillis();
 		
 		AbstractBusinessDevicePool randomPool = OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Random);
@@ -460,36 +462,36 @@ public class OnlineDevicePool extends AbstractDevicePool
 		statItem.setSaveTime(now);
 		statItem.setStatisticsItemId(Consts.StatisticsItem.OnlineDeviceCount.getValue());
 		statItem.setCount(OnlineDevicePool.instance.getElementCount());
-		DAOWrapper.cache(statItem);
+		DAOWrapper.instance.cache(statItem);
 		
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
 		statItem.setStatisticsItemId(Consts.StatisticsItem.RandomDeviceCount.getValue());
 		statItem.setCount(randomPool.getElementCount());
-		DAOWrapper.cache(statItem);
+		DAOWrapper.instance.cache(statItem);
 		
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
 		statItem.setStatisticsItemId(Consts.StatisticsItem.InterestDeviceCount.getValue());
 		statItem.setCount(interestPool.getElementCount());
-		DAOWrapper.cache(statItem);
+		DAOWrapper.instance.cache(statItem);
 		
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
 		statItem.setStatisticsItemId(Consts.StatisticsItem.ChatDeviceCount.getValue());
 		statItem.setCount(OnlineDevicePool.instance.getDeviceCountInChat());
-		DAOWrapper.cache(statItem);
+		DAOWrapper.instance.cache(statItem);
 		
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
 		statItem.setStatisticsItemId(Consts.StatisticsItem.RandomChatDeviceCount.getValue());
 		statItem.setCount(randomPool.getDeviceCountInChat());
-		DAOWrapper.cache(statItem);
+		DAOWrapper.instance.cache(statItem);
 		
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
 		statItem.setStatisticsItemId(Consts.StatisticsItem.InterestChatDeviceCount.getValue());
 		statItem.setCount(interestPool.getDeviceCountInChat());
-		DAOWrapper.cache(statItem);
+		DAOWrapper.instance.cache(statItem);
 	}
 }

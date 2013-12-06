@@ -31,7 +31,7 @@ public class TimeoutRequest extends AppJSONMessage
 	@Override
 	public void doRun()
 	{
-		logger.debug("Start to handle timeout of device <{}>", deviceWrapper.getDeviceSn());
+		logger.debug("Start to handle timeout of device <{}>", deviceWrapper.getDeviceIdentification());
 		deviceWrapper.onTimeOut();
 	}
 

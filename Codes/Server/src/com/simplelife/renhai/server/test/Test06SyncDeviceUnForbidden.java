@@ -63,7 +63,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		String.valueOf(device.getDeviceId()); 
 		
 		// Step_01 数据库操作：将设备A的服务状态更新为禁聊，到期日期为昨天
-		SqlSession session = DAOWrapper.getSession();
+		SqlSession session = DAOWrapper.instance.getSession();
 		ProfileMapper mapper = session.getMapper(ProfileMapper.class);
 		Profile profile = deviceWrapper.getDevice().getProfile(); 
 		profile.setServiceStatus(Consts.ServiceStatus.Banned.name());

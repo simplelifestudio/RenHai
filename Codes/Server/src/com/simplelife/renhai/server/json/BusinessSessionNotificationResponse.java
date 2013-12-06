@@ -70,7 +70,7 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 		int intOperationType = body.getIntValue(JSONKey.OperationType);
 		Consts.NotificationType notificationType = Consts.NotificationType.parseValue(intOperationType);
 		logger.debug("Received confirm of " + notificationType.name() 
-				+ " from Device <" + deviceWrapper.getDeviceSn() 
+				+ " from Device <" + deviceWrapper.getDeviceIdentification() 
 				+ ">, session status: {}"
 				, deviceWrapper.getOwnerBusinessSession().getStatus().name());
 		switch(notificationType)
@@ -82,7 +82,7 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 				}
 				else
 				{
-					logger.error("Fatal error: Device <{}> was in status of SessionBound but its session is null!", deviceWrapper.getDeviceSn());
+					logger.error("Fatal error: Device <{}> was in status of SessionBound but its session is null!", deviceWrapper.getDeviceIdentification());
 				}
 				break;
 			case OthersideAgreed:
@@ -94,7 +94,7 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 			case OthersideRejected:
 				break;
 			case Invalid:
-				logger.error("Invalid operation type received! " + intOperationType + " from device <{}>", deviceWrapper.getDeviceSn());
+				logger.error("Invalid operation type received! " + intOperationType + " from device <{}>", deviceWrapper.getDeviceIdentification());
 			default:
 				break;
 		}

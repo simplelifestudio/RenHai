@@ -49,7 +49,7 @@ public class DbLogger
 				+ labelName + "> was increased from " + count 
 				+ " to " + label.getGlobalAssessCount());
 		}
-		DAOWrapper.cache(label);
+		DAOWrapper.instance.cache(label);
 		
 	}
 	
@@ -75,7 +75,7 @@ public class DbLogger
 				+ labelName + "> was increased from " + count 
 				+ " to " + label.getGlobalMatchCount());
 		}
-		DAOWrapper.cache(label);
+		DAOWrapper.instance.cache(label);
 		
 	}
 	
@@ -89,7 +89,8 @@ public class DbLogger
 		log.setLogTime(now);
 		log.setProfile(profile);
 		
-		DAOWrapper.cache(log);
+		profile.addProfileLog(log);
+		//DAOWrapper.instance.cache(log);
 	}
 	
 	public static void saveSystemLog(Consts.OperationCode code
@@ -104,6 +105,6 @@ public class DbLogger
 		log.setLogInfo(logInfo);
 		log.setOperationCodeId(code.getValue());
 		log.setModuleId(module.getValue());
-		DAOWrapper.cache(log);
+		DAOWrapper.instance.cache(log);
 	}
 }

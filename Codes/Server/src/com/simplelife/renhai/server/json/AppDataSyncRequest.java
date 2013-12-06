@@ -532,7 +532,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 		DbLogger.saveSystemLog(Consts.OperationCode.AppDataSyncResponse_1007
     			, Consts.SystemModule.business
     			, header.getString(JSONKey.DeviceSn));
-		DAOWrapper.cache(device);
+		DAOWrapper.instance.cache(device);
 		deviceWrapper.prepareResponse(response);
 	}
 	
@@ -1162,7 +1162,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 			// Check if it's new interest label for this device but existent global interest label
 			if (globalInterest == null)
 			{
-				logger.debug("New interest label " +  tempStr + " submitted by device <{}>", deviceWrapper.getDeviceSn());
+				logger.debug("New interest label " +  tempStr + " submitted by device <{}>", deviceWrapper.getDeviceIdentification());
 				globalInterest = new Globalinterestlabel();
 				globalInterest.setInterestLabelName(tempStr);
 				globalInterest.setGlobalMatchCount(0);
@@ -1172,7 +1172,7 @@ public class AppDataSyncRequest extends AppJSONMessage
 				boolean isNewObject = DBModule.instance.interestLabelCache.putObject(tempStr, globalInterest);
 				if (isNewObject)
 				{
-					DAOWrapper.cache(globalInterest);
+					DAOWrapper.instance.cache(globalInterest);
 				}
 				else
 				{

@@ -53,10 +53,12 @@ public class SessionManager implements IProductor
 	
 	public void addDeviceList(List<IDeviceWrapper> selectedDeviceList, InterestBusinessDevicePool pool, String deviceFoundInterest)
 	{
+		//logger.debug("====================start of addDeviceList");
 		logger.debug("Create SessionCoordinator with device list of label {}", deviceFoundInterest);
 		SessionStartTask startSessionTask = new SessionStartTask(selectedDeviceList, pool, deviceFoundInterest);
     	sessionStartTaskQueue.add(startSessionTask);
     	worker.resumeExecution();
+    	//logger.debug("====================end of addDeviceList");
 	}
 	
 	@Override
@@ -90,6 +92,7 @@ public class SessionManager implements IProductor
 		@Override
 		public void run()
 		{
+			//logger.debug("====================enter run of SessionStartTask");
 			logger.debug("Run of SessionCoordinator, deviceFoundInterest: {}", deviceFoundInterest);
 			//logger.debug("=============begin of SessionCoordinator.run(), size of deviceList: {}", selectedDevice.size());
 			IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
@@ -99,9 +102,12 @@ public class SessionManager implements IProductor
 				return;
 			}
 			
+			//logger.debug("====================will bind session with businessDevicePool");
 			session.bindBusinessDevicePool(pool);
+			//logger.debug("====================bound session with businessDevicePool");
 			
 			JSONObject obj = null;
+			//logger.debug("====================try to load global interest label from cache");
 			Globalinterestlabel label = DBModule.instance.interestLabelCache.getObject(deviceFoundInterest);
 			if (label != null)
 			{
@@ -115,7 +121,9 @@ public class SessionManager implements IProductor
 				logger.error("Fatal error, global interest label {} can not be found when trying to start session", deviceFoundInterest);
 				return;
 			}
+			//logger.debug("====================loaded global interest label from cache");
 			
+			//logger.debug("====================before call startsession");
 			if (session.startSession(selectedDeviceList, obj))
 			{
 				DbLogger.increaseInterestMatchCount(deviceFoundInterest);
@@ -125,6 +133,7 @@ public class SessionManager implements IProductor
 			{
 				recycleDevice(selectedDeviceList);
 			}
+			//logger.debug("====================after call startsession");
 		}
 		
 		private void increaseMatchCount(Collection<IDeviceWrapper> selectedDevice, String label)

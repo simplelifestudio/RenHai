@@ -69,9 +69,9 @@ public class GlobalSetting
 	
 	public static class BusinessSetting
 	{
-		public static int OnlinePoolCapacity = 10000;
-		public static int RandomBusinessPoolCapacity = 5000;
-		public static int InterestBusinessPoolCapacity = 5000;
+		public static int OnlinePoolCapacity = 1000;
+		public static int RandomBusinessPoolCapacity = 0;
+		public static int InterestBusinessPoolCapacity = 1000;
 		public static int DefaultImpressLabelCount = 10;
 		public static int HotInterestLabelCount = 10;
 		

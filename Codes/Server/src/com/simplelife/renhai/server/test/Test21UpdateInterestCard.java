@@ -125,7 +125,7 @@ public class Test21UpdateInterestCard extends AbstractTestCase
 		checkLabel(card);
 		
 		// Step_04 ������DaoWrapper::flush
-		DAOWrapper.flushToDB();
+		DAOWrapper.instance.flushToDB();
 		
 		// Step_05 ������������A����������
 		//fail("��������������������������");
@@ -145,7 +145,7 @@ public class Test21UpdateInterestCard extends AbstractTestCase
 		//assertEquals(label.getName(), "av");
 		
 		// Step_08 ������DaoWrapper::flush
-		DAOWrapper.flushToDB();
+		DAOWrapper.instance.flushToDB();
 		
 		// Step_09 ������������A����������
 		fail("��������������������������");
@@ -159,7 +159,7 @@ public class Test21UpdateInterestCard extends AbstractTestCase
 		//assertEquals(label.getName(), "game");
 		
 		// Step_12 ������DaoWrapper::flush
-		DAOWrapper.flushToDB();
+		DAOWrapper.instance.flushToDB();
 		
 		// Step_13 ������������A����������
 		fail("��������������������������");
@@ -173,7 +173,7 @@ public class Test21UpdateInterestCard extends AbstractTestCase
 		// Step_15 ������DeviceWrapper::getInterestcard
 		
 		// Step_16 ������DaoWrapper::flush
-		DAOWrapper.flushToDB();
+		DAOWrapper.instance.flushToDB();
 		
 		// Step_17 ������������A����������
 		fail("��������������������������");

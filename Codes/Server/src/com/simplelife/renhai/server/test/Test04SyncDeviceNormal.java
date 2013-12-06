@@ -74,7 +74,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		
 		// Step_04 数据库检查：设备卡片信息
 		// 由于使用了缓存，设备退出在线设备池之前不会保存到数据库
-		//SqlSession session = DAOWrapper.getSession();
+		//SqlSession session = DAOWrapper.instance.getSession();
 		//DeviceMapper mapper = session.getMapper(DeviceMapper.class);
 		//Device deviceInDB = mapper.selectByDeviceSn(deviceWrapper.getDeviceSn());
 		Device deviceInDB = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDevice();
@@ -82,7 +82,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		Devicecard deviceCardInDB = deviceInDB.getDeviceCard();
 		assertEquals(mockApp.getAppVersion(), deviceCardInDB.getAppVersion());
 		assertEquals(mockApp.getDeviceModel(), deviceCardInDB.getDeviceModel());
-		assertEquals(OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceSn(), deviceInDB.getDeviceSn());
+		assertEquals(OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceIdentification(), deviceInDB.getDeviceSn());
 		assertEquals(Consts.YesNo.No.name(), deviceCardInDB.getIsJailed());
 		assertEquals(mockApp.getLocation(), deviceCardInDB.getLocation());
 		assertEquals(mockApp.getOSVersion(), deviceCardInDB.getOsVersion());
@@ -103,7 +103,7 @@ public class Test04SyncDeviceNormal extends AbstractTestCase
 		assertEquals(businessStatus, Consts.DeviceStatus.AppDataSynced);
 		
 		// Step_08 调用：OnlineDevicePool::getCount
-		String deviceSn = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceSn();
+		String deviceSn = OnlineDevicePool.instance.getDevice(mockApp.getDeviceSn()).getDeviceIdentification();
 		assertTrue(pool.getDevice(deviceSn) != null);
 		
 		// Step_09 调用：DeviceWrapper::getLastActivityTime

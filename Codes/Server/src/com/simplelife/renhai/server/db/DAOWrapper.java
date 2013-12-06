@@ -11,33 +11,42 @@
 
 package com.simplelife.renhai.server.db;
 
-import java.io.IOException;
 import java.io.Reader;
-import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.slf4j.Logger;
+
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDbObject;
+import com.simplelife.renhai.server.util.IProductor;
+import com.simplelife.renhai.server.util.Worker;
 
 
 /** */
-public class DAOWrapper
+public class DAOWrapper implements IProductor
 {
-	private static SqlSessionFactory factory = null;
+	public final static DAOWrapper instance = new DAOWrapper(); 
+	private SqlSessionFactory factory = null;
+	protected Logger logger = BusinessModule.instance.getLogger();
+    protected ConcurrentLinkedQueue<IDbObject> linkToBeSaved = new ConcurrentLinkedQueue<>();
+    protected volatile int objectCountInCache = 0;
+    protected Timer timer = new Timer();
+    protected Worker worker;
 	
-	public static SqlSession getSession()
+    private DAOWrapper()
+    {
+    	worker = new Worker(this);
+    }
+    
+	public SqlSession getSession()
 	{
 		if (factory == null)
 		{
@@ -68,63 +77,29 @@ public class DAOWrapper
 		return factory.openSession();
 	}
 	
-	private static class FlushTimer extends TimerTask
+	private class FlushTask implements Runnable
 	{
-		//FlushTask flushTask;
+		private IDbObject obj;
+		private SqlSession session;
 		
-		public FlushTimer(FlushTask flushTask)
+		public FlushTask(IDbObject obj, SqlSession session)
 		{
-			Thread.currentThread().setName("DBFlushTimer");
+			this.obj = obj;
+			this.session = session;
 		}
-		
+
 		@Override
 		public void run()
 		{
-			DAOWrapper.signalForFlush();
-		}
-	}
-	
-	private static class FlushTask extends Thread
-	{
-		private final ConcurrentLinkedQueue<IDbObject> linkToBeSaved;
-		private final Lock lock = new ReentrantLock();
-		private final Condition condition = lock.newCondition();
-		private boolean continueFlag = true;
-		private SqlSession session = null;
-		private boolean runningFlag = false;
-		
-		public FlushTask(ConcurrentLinkedQueue<IDbObject> linkToBeSaved)
-		{
-			this.linkToBeSaved = linkToBeSaved;
-		}
-		
-		
-		public boolean isRunning()
-		{
-			return runningFlag;
-		}
-		
-		public Lock getLock()
-	    {
-	    	return lock;
-	    }
-		
-		public void signal()
-	    {
-	    	condition.signal();
-	    }
-
-		private boolean saveObjectToDB(IDbObject obj)
-		{
+			logger.debug("Start to save object: {}", obj.toString());
 			if (session == null)
 			{
 				logger.error("Fatal error: null SQL session, check DB parameters");
-				return false;
+				return;
 			}
 			
 			try
 			{
-				//printLog(obj);
 				obj.save(session);
 				session.commit();
 			}
@@ -132,249 +107,46 @@ public class DAOWrapper
 			{
 				session.rollback();
 				FileLogger.printStackTrace(e);
-				return false;
 			}
-			return true;
+			finally
+			{
+				session.close();
+			}
+		}
+	}
+	
+	private class FlushTimer extends TimerTask
+	{
+		public FlushTimer()
+		{
+			Thread.currentThread().setName("DBFlushTimer");
 		}
 		
 		@Override
 		public void run()
 		{
-			Thread.currentThread().setName("DBCacheTask");
-			IDbObject obj = null;
-			session = getSession();
-			while (continueFlag)
-			{
-				if (linkToBeSaved.isEmpty())
-				{
-					try
-					{
-						lock.lock();
-						if (session != null)
-						{
-							session.close();
-							session = null;
-						}
-						logger.debug("Await due to no data in cache queue");
-						runningFlag = false;
-						condition.await();
-						
-						if (!linkToBeSaved.isEmpty())
-						{
-							runningFlag = true;
-							logger.debug("Resume saving data in cache queue, cache queue size: {}", linkToBeSaved.size());
-							session = getSession();
-						}
-					}
-					catch (InterruptedException e)
-					{
-						FileLogger.printStackTrace(e);
-					}
-					finally
-					{
-						lock.unlock();
-					}
-				}
-				else
-				{
-					obj = linkToBeSaved.remove();
-					if (!saveObjectToDB(obj))
-					{
-						// Try again
-						saveObjectToDB(obj);
-					}
-				}
-			}
+			DAOWrapper.instance.signalForFlush();
 		}
 	}
-
-	protected static Logger logger = BusinessModule.instance.getLogger();
-    protected static ConcurrentLinkedQueue<IDbObject> linkToBeSaved = new ConcurrentLinkedQueue<IDbObject>();
-    protected static int objectCountInCache = 0;
-    protected static Timer timer = new Timer();
-    protected static FlushTask flushTask = new FlushTask(linkToBeSaved);
-    
-    /*
-    public static Device getDeviceInCache(String deviceSn, boolean removeFlag)
+	
+	public void startService()
     {
-    	Iterator<IDbObject> it = linkToBeSaved.iterator();
-    	Object obj;
-    	while (it.hasNext())
-    	{
-    		obj = it.next();
-    		if (obj instanceof Device)
-    		{
-    			Device device = (Device) obj;
-    			if (deviceSn.equals(device.getDeviceSn()))
-    			{
-    				if (removeFlag)
-    				{
-    					linkToBeSaved.remove(obj);
-    				}
-    				return device;
-    			}
-    		}
-    	}
-    	return null;
+    	worker.startExecution();
+    	timer.scheduleAtFixedRate(new FlushTimer(), GlobalSetting.TimeOut.FlushCacheToDB, GlobalSetting.TimeOut.FlushCacheToDB);
     }
     
-    public static Globalimpresslabel getImpressLabelInCache(String lableName)
+    public void stopService()
     {
-    	Iterator<IDbObject> it = linkToBeSaved.iterator();
-    	Object obj;
-    	while (it.hasNext())
-    	{
-    		obj = it.next();
-    		if (obj instanceof Globalimpresslabel)
-    		{
-    			Globalimpresslabel label = (Globalimpresslabel) obj;
-    			if (lableName.equals(label.getImpressLabelName()))
-    			{
-    				return label;
-    			}
-    		}
-    	}
-    	return null;
-    }
-    
-    public static Globalimpresslabel getImpressLabelInCache(Integer labelId)
-    {
-    	Iterator<IDbObject> it = linkToBeSaved.iterator();
-    	Object obj;
-    	while (it.hasNext())
-    	{
-    		obj = it.next();
-    		if (obj instanceof Globalimpresslabel)
-    		{
-    			Globalimpresslabel label = (Globalimpresslabel) obj;
-    			if (label.getGlobalImpressLabelId() == labelId)
-    			{
-    				return label;
-    			}
-    		}
-    	}
-    	return null;
-    }
-    
-    public static Globalinterestlabel getInterestLabelInCache(String lableName)
-    {
-    	Iterator<IDbObject> it = linkToBeSaved.iterator();
-    	Object obj;
-    	while (it.hasNext())
-    	{
-    		obj = it.next();
-    		if (obj instanceof Globalinterestlabel)
-    		{
-    			Globalinterestlabel label = (Globalinterestlabel) obj;
-    			if (lableName.equals(label.getInterestLabelName()))
-    			{
-    				return label;
-    			}
-    		}
-    	}
-    	return null;
-    }
-    
-    public static Globalinterestlabel getInterestLabelInCache(Integer labelId)
-    {
-    	Iterator<IDbObject> it = linkToBeSaved.iterator();
-    	Object obj;
-    	while (it.hasNext())
-    	{
-    		obj = it.next();
-    		if (obj instanceof Globalinterestlabel)
-    		{
-    			Globalinterestlabel label = (Globalinterestlabel) obj;
-    			if (label.getGlobalInterestLabelId() == labelId)
-    			{
-    				return label;
-    			}
-    		}
-    	}
-    	return null;
-    }
-    */
-    
-    public static void startTimers()
-    {
-    	flushTask.start();
-    	timer.scheduleAtFixedRate(new FlushTimer(flushTask), GlobalSetting.TimeOut.FlushCacheToDB, GlobalSetting.TimeOut.FlushCacheToDB);
-    }
-    
-    public static void stopTimers()
-    {
+    	worker.stopExecution();
     	timer.cancel();
     }
     
-    public static void signalForFlush()
+    public void signalForFlush()
     {
-    	if (flushTask.isRunning())
-    	{
-    		return;
-    	}
-    	
-    	flushTask.getLock().lock();
-    	flushTask.signal();
-    	flushTask.getLock().unlock();
+    	worker.resumeExecution();
     }
     
-    
-    /**
-     * Check if an object is in DB saving cache
-     * @param obj: object to be saved
-     * @return Return true if obj is existent in cache, else return false;
-     */
-    private boolean isObjectInCache(Object obj)
-    {
-    	// Use string field to check existence of object, as ID of objects may be null before save
-    	if (obj instanceof Globalinterestlabel)
-    	{
-    		Globalinterestlabel newLabel = (Globalinterestlabel) obj;
-    		Iterator<IDbObject> it = linkToBeSaved.iterator();
-        	while (it.hasNext())
-        	{
-        		Globalinterestlabel label = (Globalinterestlabel) it.next();
-    			if (label.getInterestLabelName().equals(newLabel.getInterestLabelName()))
-    			{
-    				return true;
-    			}
-        	}
-        	return false;
-    	}
-    	
-    	if (obj instanceof Globalimpresslabel)
-    	{
-    		Globalimpresslabel newLabel = (Globalimpresslabel) obj;
-    		Iterator<IDbObject> it = linkToBeSaved.iterator();
-        	while (it.hasNext())
-        	{
-        		Globalimpresslabel label = (Globalimpresslabel) it.next();
-    			if (label.getImpressLabelName().equals(newLabel.getImpressLabelName()))
-    			{
-    				return true;
-    			}
-        	}
-        	return false;
-    	}
-    	
-    	if (obj instanceof Device)
-    	{
-    		Device newDevice = (Device) obj;
-    		Iterator<IDbObject> it = linkToBeSaved.iterator();
-        	while (it.hasNext())
-        	{
-        		Device device = (Device) it.next();
-    			if (device.getDeviceSn().equals(newDevice.getDeviceSn()))
-    			{
-    				return true;
-    			}
-        	}
-        	return false;
-    	}
-    	return false;
-    }
-    
-    public static void removeDeviceForAssess(Device device)
+    public void removeDeviceForAssess(Device device)
     {
     	if (!linkToBeSaved.contains(device))
     	{
@@ -396,10 +168,10 @@ public class DAOWrapper
     	}
     	
     	logger.debug("Remove device <{}> from cache of DAOWrapper", device.getDeviceSn());
-    	linkToBeSaved.remove(device);
+    	removeFromLink(device);
     }
     
-    private static void printLog(Object obj)
+    private void printLog(Object obj)
 	{
 		if (obj instanceof Globalinterestlabel)
 		{
@@ -422,7 +194,7 @@ public class DAOWrapper
 		}
 	}
     
-    public static void save(IDbObject obj)
+    public void save(IDbObject obj)
     {
     	SqlSession session = getSession();
     	try
@@ -435,13 +207,35 @@ public class DAOWrapper
 			session.rollback();
 			FileLogger.printStackTrace(e);
 		}
+    	finally
+    	{
+    		session.close();
+    	}
+    }
+
+    private void addToLink(IDbObject obj)
+    {
+    	linkToBeSaved.add(obj);
+    	objectCountInCache++;
+    }
+    
+    private void removeFromLink(IDbObject obj)
+    {
+    	objectCountInCache--;
+    	linkToBeSaved.remove(obj);
+    }
+    
+    private IDbObject removeFromLink()
+    {
+    	objectCountInCache--;
+    	return linkToBeSaved.remove();
     }
     
     /**
      * Save object in cache 
      * @param obj: object to be saved
      */
-    public static void cache(IDbObject obj)
+    public void cache(IDbObject obj)
     {
     	if(obj == null)
     	{
@@ -453,9 +247,9 @@ public class DAOWrapper
     		return;
     	}
     	
-    	linkToBeSaved.add(obj);
+    	addToLink(obj);
     	printLog(obj);
-    	if (linkToBeSaved.size() >= GlobalSetting.DBSetting.MaxRecordCountForFlush)
+    	if (objectCountInCache >= GlobalSetting.DBSetting.MaxRecordCountForFlush)
 		{
     		signalForFlush();
 		}
@@ -464,14 +258,14 @@ public class DAOWrapper
 	/**
 	 * Flush session to db, or stop flush timer if necessary
 	 * */
-    public static void flushToDB()
+    public void flushToDB()
     {
     	Thread.currentThread().setName("DBCacheTask");
 		IDbObject obj = null;
 		SqlSession session = getSession();
 		while (!linkToBeSaved.isEmpty())
 		{
-			obj = linkToBeSaved.remove();
+			obj = removeFromLink();
 			try
 			{
 				obj.save(session);
@@ -493,5 +287,18 @@ public class DAOWrapper
 				}
 			}
 		}
+		session.close();
     }
+
+	@Override
+	public boolean hasWork()
+	{
+		return !linkToBeSaved.isEmpty();
+	}
+
+	@Override
+	public Runnable getWork()
+	{
+		return new FlushTask(removeFromLink(), getSession());
+	}
 }

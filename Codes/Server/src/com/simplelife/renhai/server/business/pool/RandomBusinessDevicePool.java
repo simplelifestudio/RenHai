@@ -34,7 +34,7 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 	@Override
 	public void startChat(IDeviceWrapper device)
 	{
-		String deviceSn = device.getDeviceSn();
+		String deviceSn = device.getDeviceIdentification();
 		matchStartedDeviceMap.remove(deviceSn);
 		sessionBoundDeviceMap.put(deviceSn, device);
 	}
@@ -42,7 +42,7 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 	@Override
 	public void startMatch(IDeviceWrapper device)
     {
-		String deviceSn = device.getDeviceSn();
+		String deviceSn = device.getDeviceIdentification();
 		businessChoosedDeviceMap.remove(deviceSn);
 		matchStartedDeviceMap.put(deviceSn, device);
 		businessScheduler.resumeSchedule();
@@ -52,7 +52,7 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 	@Override
 	public void endChat(IDeviceWrapper device)
 	{
-		String sn = device.getDeviceSn();
+		String sn = device.getDeviceIdentification();
 		boolean existFlag = false;
 		if (sessionBoundDeviceMap.containsKey(sn))
 		{

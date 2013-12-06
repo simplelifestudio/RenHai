@@ -115,9 +115,8 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     public DeviceWrapper(IBaseConnection connection)
     {
     	this.webSocketConnection = connection;
-    	this.businessStatus = Consts.DeviceStatus.Connected;
+    	this.businessStatus = DeviceStatus.Connected;
     	connection.bind(this);
-    	changeBusinessStatus(DeviceStatus.Connected, StatusChangeReason.NewConnection);
     }
 
     /**
@@ -130,20 +129,13 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     	{
 	    	logger.debug("[Milestone] Device <{}> will change status from " 
 	    			+ this.businessStatus.name() + " to " + targetStatus.name() 
-	    			+ ", caused by " + reason.name(), this.getDeviceSn());
+	    			+ ", caused by " + reason.name(), this.getDeviceIdentification());
     	}
     	
-    	if (ownerOnlinePool == null)
+		if (ownerOnlinePool == null)
     	{
-    		if (targetStatus == DeviceStatus.Disconnected)
-    		{
-    			businessStatus = targetStatus;
-    		}
-    		else if (businessStatus != DeviceStatus.Disconnected)
-    		{
-    			logger.error("ownerOnlinePool of Device <{}> is null in status of " + businessStatus.name(), getDeviceSn());
-    		}
-    		return;
+			logger.error("ownerOnlinePool of Device <{}> is null in status of " + businessStatus.name(), getDeviceIdentification());
+			return;
     	}
     	
     	AbstractBusinessDevicePool businessPool = null;
@@ -166,13 +158,13 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     				case Connected:
     					ownerOnlinePool.deleteDevice(this, reason);
     					unbindOnlineDevicePool();				// No request is accepted from now on
-    					DAOWrapper.cache(this.getDevice());
+    					DAOWrapper.instance.cache(this.getDevice());
     					break;
     				case AppDataSynced:
     					ownerOnlinePool.deleteDevice(this, reason);
     					unbindOnlineDevicePool();				// No request is accepted from now on
     					device.getProfile().setLastActivityTime(lastActivityTime);
-    					DAOWrapper.cache(this.getDevice());
+    					DAOWrapper.instance.cache(this.getDevice());
     					break;
     				case BusinessChoosed:
     				case MatchStarted:
@@ -180,7 +172,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					ownerOnlinePool.deleteDevice(this, reason);
     					unbindOnlineDevicePool();				// No request is accepted from now on
     					device.getProfile().setLastActivityTime(lastActivityTime);
-    					DAOWrapper.cache(this.getDevice());
+    					DAOWrapper.instance.cache(this.getDevice());
     					break;
     				case SessionBound:
     					// Leave business device pool
@@ -189,7 +181,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					ownerOnlinePool.deleteDevice(this, reason);
     					unbindOnlineDevicePool();				// No request is accepted from now on
     					device.getProfile().setLastActivityTime(lastActivityTime);
-    					DAOWrapper.cache(this.getDevice());
+    					DAOWrapper.instance.cache(this.getDevice());
     					break;
     				default:
     					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
@@ -218,7 +210,8 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					// do nothing
     					break;
     				case Connected:
-    					// Init -> Idle, typical process of AppDataSyncRequest 
+    					// Init -> Idle, typical process of AppDataSyncRequest
+    					businessStatus = targetStatus;			// To ensure that deviceSn is available from now on
     					ownerOnlinePool.synchronizeDevice(this);
     					break;
     				case BusinessChoosed:
@@ -260,7 +253,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     				case BusinessChoosed:
     					businessPool = ownerOnlinePool.getBusinessPool(this.businessType);
     					businessStatus = targetStatus;				// To ensure that status of device is WaitMatch before enter business pool
-    					logger.debug("Device <{}> changed status to " + targetStatus.name(), getDeviceSn());
+    					logger.debug("Device <{}> changed status to " + targetStatus.name(), getDeviceIdentification());
     					businessPool.startMatch(this);
     					
     					// Important, return directly here to avoid status is overwritten to WaitMatch again 
@@ -297,7 +290,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     	}
     	
     	businessStatus = targetStatus;
-    	logger.debug("Device <{}> changed status to " + targetStatus.name(), getDeviceSn());
+    	logger.debug("Device <{}> changed status to " + targetStatus.name(), getDeviceIdentification());
     }
     
     /**
@@ -342,7 +335,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     		return;
     	}
     	
-    	logger.debug("Unbind device <{}> from business session", getDeviceSn());
+    	logger.debug("Unbind device <{}> from business session", getDeviceIdentification());
     	if (ownerBusinessSession == null)
     	{
     		return;
@@ -375,11 +368,11 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     {
     	logger.debug("Device <{}> received " 
     		+ command.getMessageId().name() + " at status of " 
-    		+ businessStatus.name() + ", messageSn: " + command.getMessageSn(), this.getDeviceSn());
+    		+ businessStatus.name() + ", messageSn: " + command.getMessageSn(), this.getDeviceIdentification());
 
     	if (this.businessStatus == Consts.DeviceStatus.Disconnected)
     	{
-    		logger.warn("Received command from Disconnected device <"+ getDeviceSn() +">\n{}", command.toReadableString());
+    		logger.warn("Received command from Disconnected device <"+ getDeviceIdentification() +">\n{}", command.toReadableString());
     		return;
     	}
     	
@@ -447,7 +440,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     {
     	if (this.ownerOnlinePool == null)
     	{
-    		logger.debug("ownerOnlinePool of device <{}> is null and ping is ignored, connection Id: " + connection.getConnectionId(), getDeviceSn());
+    		logger.debug("ownerOnlinePool of device <{}> is null and ping is ignored, connection Id: " + connection.getConnectionId(), getDeviceIdentification());
     		return;
     	}
     	
@@ -524,13 +517,22 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 		this.device = device;
 	}
 	
-	public String getDeviceSn()
+	private String getDeviceSn()
 	{
 		if (this.device == null)
 		{
 			return "";
 		}
 		return this.device.getDeviceSn();
+	}
+	
+	public String getDeviceIdentification()
+	{
+		if (this.businessStatus == DeviceStatus.Connected || this.businessStatus == DeviceStatus.Invalid)
+		{
+			return this.getConnection().getConnectionId();
+		}
+		return this.getDeviceSn();
 	}
 
 	@Override
@@ -748,7 +750,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 				synchronized (map)
 				{
 					int count = map.getMatchCount();
-					logger.debug("Match count of device <{}> by label " + interestLabel + " is increased from " + count + " to " + (count+1), getDeviceSn());
+					logger.debug("Match count of device <{}> by label " + interestLabel + " is increased from " + count + " to " + (count+1), getDeviceIdentification());
 					map.setMatchCount(count + 1);
 				}
 				return;
@@ -766,7 +768,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 		synchronized (card)
 		{
 			int count = card.getChatLossCount();
-			logger.debug("Chat loss count of device <{}> was increased from " + count + " to " + (count+1), getDeviceSn());
+			logger.debug("Chat loss count of device <{}> was increased from " + count + " to " + (count+1), getDeviceIdentification());
 			card.setChatLossCount(count + 1);
 			//count = card.getChatTotalCount();
 			//logger.debug("Chat total count of device <{}> was increased from " + count + " to " + (count+1), getDeviceSn());
@@ -784,7 +786,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 		synchronized (card)
 		{
 			int count = card.getChatTotalCount();
-			logger.debug("Chat total count of device <{}> was increased from " + count + " to " + (count+1), getDeviceSn());
+			logger.debug("Chat total count of device <{}> was increased from " + count + " to " + (count+1), getDeviceIdentification());
 			card.setChatTotalCount(count + 1);
 		}
 	}
@@ -799,7 +801,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 		synchronized (card)
 		{
 			int count = card.getChatTotalDuration() + duration;
-			logger.debug("Chat duration of device <{}> was increased to " + count, getDeviceSn());
+			logger.debug("Chat duration of device <{}> was increased to " + count, getDeviceIdentification());
 			card.setChatTotalDuration(count);
 		}
 	}
@@ -807,7 +809,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 	@Override
 	public int compareTo(IDeviceWrapper device)
 	{
-		return this.getDeviceSn().compareTo(device.getDeviceSn());
+		return this.getDeviceIdentification().compareTo(device.getDeviceIdentification());
 	}
 	
 	@Override

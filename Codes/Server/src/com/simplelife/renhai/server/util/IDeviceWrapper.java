@@ -54,7 +54,7 @@ public interface IDeviceWrapper
     
     public IBusinessSession getOwnerBusinessSession();
     
-    public String getDeviceSn();
+    public String getDeviceIdentification();
     
     public void updateActivityTime();
     

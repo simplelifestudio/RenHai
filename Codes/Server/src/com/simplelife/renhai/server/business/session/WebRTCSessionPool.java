@@ -44,8 +44,8 @@ public class WebRTCSessionPool extends AbstractPool
     
     private WebRTCSessionPool()
     {
-    	this.capacity = 100;
-    	//this.capacity = GlobalSetting.BusinessSetting.OnlinePoolCapacity / 2;
+    	//this.capacity = 100;
+    	this.capacity = GlobalSetting.BusinessSetting.OnlinePoolCapacity / 2;
     }
     
     public void recycleWetRTCSession(Webrtcsession session)
@@ -81,7 +81,7 @@ public class WebRTCSessionPool extends AbstractPool
     
     private int getAccountIdByDate()
     {
-    	SqlSession session = DAOWrapper.getSession();
+    	SqlSession session = DAOWrapper.instance.getSession();
     	WebrtcaccountMapper mapper = session.getMapper(WebrtcaccountMapper.class);
     	int accountNum = mapper.countAll();
     	
@@ -95,6 +95,7 @@ public class WebRTCSessionPool extends AbstractPool
     	int day = cal.get(Calendar.DAY_OF_YEAR);
     	
     	int accountId = day % accountNum + 1;
+    	session.close();
     	return accountId;
     }
     
@@ -120,7 +121,7 @@ public class WebRTCSessionPool extends AbstractPool
     {
     	for (Webrtcsession session : webRTCSessionList)
     	{
-    		DAOWrapper.cache(session);
+    		DAOWrapper.instance.cache(session);
     	}
         return true;
     }
@@ -129,7 +130,7 @@ public class WebRTCSessionPool extends AbstractPool
     /** */
     public boolean loadFromDb()
     {
-    	SqlSession session = DAOWrapper.getSession();
+    	SqlSession session = DAOWrapper.instance.getSession();
     	WebrtcaccountMapper mapper = session.getMapper(WebrtcaccountMapper.class);
     	Webrtcaccount account = mapper.selectByPrimaryKey(this.webRTCAccountId);
     	if (account == null)
@@ -161,6 +162,7 @@ public class WebRTCSessionPool extends AbstractPool
 		
 		logger.debug("Finished loading WebRTC tokens from DB, start to update tokens if needed.");
 		this.checkExpiredToken(sdk);
+		session.close();
         return true;
     }
     
@@ -182,7 +184,7 @@ public class WebRTCSessionPool extends AbstractPool
 	
 	public void checkExpiredToken()
 	{
-		SqlSession session = DAOWrapper.getSession();
+		SqlSession session = DAOWrapper.instance.getSession();
     	WebrtcaccountMapper mapper = session.getMapper(WebrtcaccountMapper.class);
     	Webrtcaccount account = mapper.selectByPrimaryKey(this.webRTCAccountId);
     	if (account == null)
@@ -195,6 +197,7 @@ public class WebRTCSessionPool extends AbstractPool
     	
     	OpenTokSDK sdk = new OpenTokSDK(account.getAccountKey(), account.getAccountSecret());
     	checkExpiredToken(sdk);
+    	session.close();
 	}
 	
 	public void checkExpiredToken(OpenTokSDK sdk)

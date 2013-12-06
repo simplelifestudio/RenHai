@@ -105,7 +105,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			if (deviceWrapper.getOwnerBusinessSession() == null)
 			{
 				setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
-				setErrorDescription("Device <" + deviceWrapper.getDeviceSn() +"> shall not deliver business request before bound with session.");
+				setErrorDescription("Device <" + deviceWrapper.getDeviceIdentification() +"> shall not deliver business request before bound with session.");
 				return false;
 			}
 		}
@@ -148,16 +148,6 @@ public class BusinessSessionRequest extends AppJSONMessage
 			return false;
 		}
 
-		/*
-		String deviceSn = deviceObj.getString(JSONKey.DeviceSn);
-		if (null == OnlineDevicePool.instance.getDevice(deviceSn))
-		{
-			this.setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
-			this.setErrorDescription("Device <" + deviceSn+ "> is not active device in OnlineDevicePool.");
-			return false;
-		}
-		*/
-		
 		JSONObject profileObj = getJSONObject(deviceObj, JSONKey.Profile);
 		if (profileObj == null)
 		{
@@ -243,7 +233,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			}
 		}
 		
-		logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceSn());
+		logger.debug("Received <" + operationType.name() + "> from device <{}>", deviceWrapper.getDeviceIdentification());
 		switch (operationType)
 		{
 			case ChooseBusiness:
@@ -283,7 +273,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 	{
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestChooseBusiness_1014
     			, deviceWrapper.getDevice().getProfile()
-    			, deviceWrapper.getDeviceSn());
+    			, deviceWrapper.getDeviceIdentification());
 		int intType = body.getIntValue(JSONKey.BusinessType);
 		Consts.BusinessType businessType = Consts.BusinessType.parseValue(intType);
 		
@@ -294,7 +284,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			if (businessType != curBusinessType)
 			{
 				this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
-				this.setErrorDescription("Device <"+ deviceWrapper.getDeviceSn() +"> is still in " + curBusinessType.name() + " pool and request of entering "+ businessType.name() +" pool is rejected.");
+				this.setErrorDescription("Device <"+ deviceWrapper.getDeviceIdentification() +"> is still in " + curBusinessType.name() + " pool and request of entering "+ businessType.name() +" pool is rejected.");
 				responseError();
 				return;
 			}
@@ -332,7 +322,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestChooseBusiness_1014
     			, deviceWrapper.getDevice().getProfile()
-    			, businessType.name() + ", " + deviceWrapper.getDeviceSn());
+    			, businessType.name() + ", " + deviceWrapper.getDeviceIdentification());
 		deviceWrapper.prepareResponse(response);
 		deviceWrapper.setBusinessType(businessType);
 		deviceWrapper.changeBusinessStatus(Consts.DeviceStatus.BusinessChoosed, StatusChangeReason.AppEnterBusiness);
@@ -342,13 +332,13 @@ public class BusinessSessionRequest extends AppJSONMessage
 	{
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestUnchooseBusiness_1015
     			, deviceWrapper.getDevice().getProfile()
-    			, deviceWrapper.getDeviceSn());
+    			, deviceWrapper.getDeviceIdentification());
 
 		Consts.DeviceStatus status = deviceWrapper.getBusinessStatus();
 		if (status.getValue() < Consts.DeviceStatus.BusinessChoosed.getValue())
 		{
 			this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
-			this.setErrorDescription("Device <"+ deviceWrapper.getDeviceSn() +"> is not in business device pool.");
+			this.setErrorDescription("Device <"+ deviceWrapper.getDeviceIdentification() +"> is not in business device pool.");
 			responseError();
 			return;
 		}
@@ -359,7 +349,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		if (businessType != curBusinessType)
 		{
 			this.setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
-			this.setErrorDescription("Device <"+ deviceWrapper.getDeviceSn() +"> is in " + curBusinessType.name() + " pool and request of leaving "+ businessType.name() +" pool is rejected.");
+			this.setErrorDescription("Device <"+ deviceWrapper.getDeviceIdentification() +"> is in " + curBusinessType.name() + " pool and request of leaving "+ businessType.name() +" pool is rejected.");
 			responseError();
 			return;
 		}
@@ -389,16 +379,16 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestUnchooseBusiness_1015
     			, deviceWrapper.getDevice().getProfile()
-    			, body.getString(JSONKey.BusinessType) + ", " + deviceWrapper.getDeviceSn());
+    			, body.getString(JSONKey.BusinessType) + ", " + deviceWrapper.getDeviceIdentification());
 	}
 	
 	private void agreeChat()
 	{
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAgreeChat_1016
     			, deviceWrapper.getDevice().getProfile()
-    			, deviceWrapper.getDeviceSn());
+    			, deviceWrapper.getDeviceIdentification());
 		
-		logger.debug("Device <{}> agreed chat.", deviceWrapper.getDeviceSn());
+		logger.debug("Device <{}> agreed chat.", deviceWrapper.getDeviceIdentification());
 		
 		IBusinessSession session = deviceWrapper.getOwnerBusinessSession(); 
 
@@ -422,7 +412,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAgreeChat_1016
     			, deviceWrapper.getDevice().getProfile()
-    			, deviceWrapper.getDeviceSn());
+    			, deviceWrapper.getDeviceIdentification());
 		deviceWrapper.prepareResponse(response);
 	}
 	
@@ -430,8 +420,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 	{
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestRejectChat_1017
     			, deviceWrapper.getDevice().getProfile()
-    			, deviceWrapper.getDeviceSn());
-		logger.debug("Device <{}> rejected chat.", deviceWrapper.getDeviceSn());
+    			, deviceWrapper.getDeviceIdentification());
+		logger.debug("Device <{}> rejected chat.", deviceWrapper.getDeviceIdentification());
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
@@ -455,7 +445,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestRejectChat_1017
     			, deviceWrapper.getDevice().getProfile()
-    			, deviceWrapper.getDeviceSn());
+    			, deviceWrapper.getDeviceIdentification());
 		deviceWrapper.prepareResponse(response);
 	}
 	
@@ -463,8 +453,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 	{
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEndChat_1018
     			, deviceWrapper.getDevice().getProfile()
-    			, deviceWrapper.getDeviceSn());
-		logger.debug("Device <{}> ended chat.", deviceWrapper.getDeviceSn());
+    			, deviceWrapper.getDeviceIdentification());
+		logger.debug("Device <{}> ended chat.", deviceWrapper.getDeviceIdentification());
 		deviceWrapper.getOwnerBusinessSession().onEndChat(deviceWrapper);
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
@@ -486,7 +476,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestEndChat_1018
     			, deviceWrapper.getDevice().getProfile()
-    			, deviceWrapper.getDeviceSn());
+    			, deviceWrapper.getDeviceIdentification());
 		deviceWrapper.prepareResponse(response);
 	}
 	
@@ -497,25 +487,25 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void assess(boolean quitAfterAssess)
 	{
-		logger.debug("Device <{}> provides assess.", deviceWrapper.getDeviceSn());
+		logger.debug("Device <{}> provides assess.", deviceWrapper.getDeviceIdentification());
 		if (quitAfterAssess)
 		{
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessQuit_1020
     			, deviceWrapper.getDevice().getProfile()
-    			, deviceWrapper.getDeviceSn());
+    			, deviceWrapper.getDeviceIdentification());
 		}
 		else
 		{
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessContinue_1019
 	    			, deviceWrapper.getDevice().getProfile()
-	    			, deviceWrapper.getDeviceSn());
+	    			, deviceWrapper.getDeviceIdentification());
 		}
 		
 		String deviceSn = body.getJSONObject(JSONKey.OperationInfo)
 				.getJSONObject(JSONKey.Device)
 				.getString(JSONKey.DeviceSn);
 		
-		if (deviceSn.equals(deviceWrapper.getDeviceSn()))
+		if (deviceSn.equals(deviceWrapper.getDeviceIdentification()))
     	{
     		logger.warn("Device <{}> is assessing itself", deviceSn);
     		setErrorCode(Consts.GlobalErrorCode.InvalidBusinessRequest_1101);
@@ -549,8 +539,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 				return;
 			}
 			
-			logger.debug("Device <{}> was released before Device <" + deviceWrapper.getDeviceSn() + "> trying to assess it, load it from DB again", targetDevice.getDeviceSn());
-			DAOWrapper.removeDeviceForAssess(targetDevice);
+			logger.debug("Device <{}> was released before Device <" + deviceWrapper.getDeviceIdentification() + "> trying to assess it, load it from DB again", targetDevice.getDeviceSn());
+			DAOWrapper.instance.removeDeviceForAssess(targetDevice);
 		}
 		else
 		{
@@ -591,7 +581,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		}
 		else
 		{
-			logger.error("Abnormal business status in device <{}>, it's assessing others but business session is null!", deviceWrapper.getDeviceSn());
+			logger.error("Abnormal business status in device <{}>, it's assessing others but business session is null!", deviceWrapper.getDeviceIdentification());
 			return;
 		}
 		response.addToBody(JSONKey.BusinessType, deviceWrapper.getBusinessType().getValue());
@@ -606,7 +596,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessQuit_1020
 	    			, deviceWrapper.getDevice().getProfile()
-	    			, deviceWrapper.getDeviceSn());
+	    			, deviceWrapper.getDeviceIdentification());
 		}
 		else
 		{
@@ -616,14 +606,14 @@ public class BusinessSessionRequest extends AppJSONMessage
 			
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessContinue_1019
 	    			, deviceWrapper.getDevice().getProfile()
-	    			, deviceWrapper.getDeviceSn());
+	    			, deviceWrapper.getDeviceIdentification());
 		}
 		
 		if (!isDeviceInPool)
 		{
 			// If device has leaved OnlineDevicePool before assess, save to DB after assess
-			logger.debug("Add device <{}> to DAOWrapper again after Device <{" + deviceWrapper.getDeviceSn() +"}> assessed it.", targetDevice.getDeviceSn());
-			DAOWrapper.cache(targetDevice);
+			logger.debug("Add device <{}> to DAOWrapper again after Device <{" + deviceWrapper.getDeviceIdentification() +"}> assessed it.", targetDevice.getDeviceSn());
+			DAOWrapper.instance.cache(targetDevice);
 		}
 		deviceWrapper.prepareResponse(response);
 	}
@@ -638,8 +628,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 	{
 		DbLogger.saveProfileLog(Consts.OperationCode.MatchStartRequest_1016
     			, deviceWrapper.getDevice().getProfile()
-    			, deviceWrapper.getDeviceSn());
-		logger.debug("Device <{}> request to start match.", deviceWrapper.getDeviceSn());
+    			, deviceWrapper.getDeviceIdentification());
+		logger.debug("Device <{}> request to start match.", deviceWrapper.getDeviceIdentification());
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
@@ -668,7 +658,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 	
 	private void sessionUnbind()
 	{
-		logger.debug("Device <{}> request to unbind business session.", deviceWrapper.getDeviceSn());
+		logger.debug("Device <{}> request to unbind business session.", deviceWrapper.getDeviceIdentification());
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);

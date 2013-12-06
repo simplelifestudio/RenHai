@@ -32,10 +32,10 @@
     <logger name="com.simplelife.renhai.server.test.MockApp" level = "DEBUG" />
 	<logger name="com.simplelife.renhai.server.json.JSONModule" level = "DEBUG" />
 	<logger name="org.apache.ibatis" level = "DEBUG" />
-    <logger name="Ping" level = "DEBUG" />
-	<logger name="DB" level = "DEBUG" />
+    <logger name="Ping" level = "ERROR" />
+	<logger name="DB" level = "ERROR" />
     
-    <root level="DEBUG">
+    <root level="ERROR">
         <appender-ref ref="FILE" />
         <appender-ref ref="STDOUT" />
     </root>

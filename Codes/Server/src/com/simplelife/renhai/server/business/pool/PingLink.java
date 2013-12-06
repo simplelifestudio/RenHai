@@ -83,7 +83,7 @@ public class PingLink
 		
 		if (printLog)
 		{
-			logger.debug("Remove Ping node of device <{}>", node.getDeviceWrapper().getDeviceSn());
+			logger.debug("Remove Ping node of device <{}>", node.getDeviceWrapper().getDeviceIdentification());
 		}
 		
 		PingNode preNode = node.getPrevNode();
@@ -123,7 +123,7 @@ public class PingLink
 	
 	public void moveToTail(PingNode node)
 	{
-		logger.debug("Move Ping node of device <{}> to tail", node.getDeviceWrapper().getDeviceSn());
+		logger.debug("Move Ping node of device <{}> to tail", node.getDeviceWrapper().getDeviceIdentification());
 		removeNode(node, false);
 		addToTail(node);
 	}

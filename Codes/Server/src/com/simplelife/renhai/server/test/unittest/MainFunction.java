@@ -215,7 +215,7 @@ public class MainFunction extends AbstractTestCase
 		app.sendRawJSONMessage(obj, true);
 		app.disconnect();
 		
-		DAOWrapper.flushToDB();
+		DAOWrapper.instance.flushToDB();
 		app.sendServerDataSyncRequest();
 	}
 	
@@ -446,8 +446,8 @@ public class MainFunction extends AbstractTestCase
 			Globalinterestlabel globalInterest2 = DBModule.instance.interestLabelCache.getObject(tempStr);
 			System.out.print("=========id before save:" + globalInterest2.getGlobalInterestLabelId() + "\n");
 			
-			DAOWrapper.cache(globalInterest);
-			DAOWrapper.flushToDB();
+			DAOWrapper.instance.cache(globalInterest);
+			DAOWrapper.instance.flushToDB();
 		}
 		
 		Globalinterestlabel globalInterest2 = DBModule.instance.interestLabelCache.getObject(tempStr);
@@ -485,14 +485,14 @@ public class MainFunction extends AbstractTestCase
 		Devicecard card = device.getDeviceCard();
 		card.setAppVersion("30.0");
 		
-		DAOWrapper.cache(device);
-		//DAOWrapper.flushToDB();
+		DAOWrapper.instance.cache(device);
+		//DAOWrapper.instance.flushToDB();
 		
 		Profile profile = device.getProfile();
 		profile.setActive("No");
 		
-		DAOWrapper.cache(profile);
-		DAOWrapper.flushToDB();
+		DAOWrapper.instance.cache(profile);
+		DAOWrapper.instance.flushToDB();
 		
 		System.out.print(OnlineDevicePool.instance.getCapacity());
 	}
@@ -596,7 +596,7 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testDuplicatedGlobalLabel()
 	{
-		SqlSession session = DAOWrapper.getSession();
+		SqlSession session = DAOWrapper.instance.getSession();
 		try
 		{
 			Globalinterestlabel globalInterest = new Globalinterestlabel();
@@ -650,9 +650,9 @@ public class MainFunction extends AbstractTestCase
 	public void testSelectWebrtcsession()
 	{
 		//Webrtcsession rtc = WebRTCSessionPool.instance.createWebRTCSession();
-		//DAOWrapper.flushToDB();
+		//DAOWrapper.instance.flushToDB();
 		
-		SqlSession session = DAOWrapper.getSession();
+		SqlSession session = DAOWrapper.instance.getSession();
 		WebrtcsessionMapper mapper = session.getMapper(WebrtcsessionMapper.class);
 		List<Webrtcsession> list = mapper.selectAll(1);
 		for (Webrtcsession rtcSession : list)
@@ -664,7 +664,7 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testQueryDeviceWithOrderBy()
 	{
-		SqlSession session = DAOWrapper.getSession();
+		SqlSession session = DAOWrapper.instance.getSession();
 		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
 		Device device = mapper.selectByStringKey(demoDeviceSn);
 		IDeviceWrapper deviceWrapper = new DeviceWrapper(new MockWebSocketConnection());

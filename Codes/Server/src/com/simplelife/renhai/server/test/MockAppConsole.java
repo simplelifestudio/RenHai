@@ -41,7 +41,7 @@ public class MockAppConsole
 	        for (int i = 0; i < threadCount; i++)
 	        {
 	        	System.out.println("Start to launch MockApp-" + i);
-	        	ExecuteThread thread = new ExecuteThread("MockApp-" + i, behaviorMode, serverLink);
+	        	ExecuteThread thread = new ExecuteThread("MA-" + i, behaviorMode, serverLink);
 	        	thread.start();
 	        	System.out.println("MockApp-" + i + " launched successfully.");
 	        	Thread.sleep(threadInterval);

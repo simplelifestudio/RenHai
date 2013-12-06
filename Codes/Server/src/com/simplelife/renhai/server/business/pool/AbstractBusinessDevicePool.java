@@ -94,7 +94,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     		return temp;
     	}
     	
-    	String sn = device.getDeviceSn();
+    	String sn = device.getDeviceIdentification();
     	if (matchStartedDeviceMap.containsKey(sn) || businessChoosedDeviceMap.containsKey(sn))
     	{
     		logger.warn("Device <{}> has been in BusinessDevicePool", sn);
@@ -115,9 +115,9 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
      */
     public void onDeviceEnter(IDeviceWrapper device)
     {
-    	businessChoosedDeviceMap.put(device.getDeviceSn(), device);
+    	businessChoosedDeviceMap.put(device.getDeviceIdentification(), device);
     	elementCount++;
-    	logger.debug("Device <{}> has entered " + businessType.name() + " pool, device count after enter: " + this.getElementCount(), device.getDeviceSn());
+    	logger.debug("Device <{}> has entered " + businessType.name() + " pool, device count after enter: " + this.getElementCount(), device.getDeviceIdentification());
     }
     
     /**
@@ -130,7 +130,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     		return;
     	}
     	
-    	String sn = device.getDeviceSn();
+    	String sn = device.getDeviceIdentification();
     	if (!(matchStartedDeviceMap.containsKey(sn) || sessionBoundDeviceMap.containsKey(sn) || businessChoosedDeviceMap.containsKey(sn)))
     	{
     		logger.debug("Device <{}> was not in " + this.businessType.name() + " Device Pool when try to release it by reason of " + reason.name(), sn);

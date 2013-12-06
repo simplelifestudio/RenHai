@@ -36,7 +36,7 @@ public class BusinessSessionPool extends AbstractPool
     
 	private BusinessSessionPool()
 	{
-		capacity = GlobalSetting.BusinessSetting.RandomBusinessPoolCapacity;
+		capacity = GlobalSetting.BusinessSetting.OnlinePoolCapacity / 2;
 		init();
 	}
     

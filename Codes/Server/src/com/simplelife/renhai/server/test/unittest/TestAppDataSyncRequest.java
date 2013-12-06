@@ -588,7 +588,7 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		app1.syncDevice(labels);
 		app1.disconnect();
 		
-		DAOWrapper.flushToDB();
+		DAOWrapper.instance.flushToDB();
 		Thread.sleep(3000);
 	}
 	

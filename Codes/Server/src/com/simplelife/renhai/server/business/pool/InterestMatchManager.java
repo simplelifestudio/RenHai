@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 
@@ -29,10 +30,11 @@ import com.simplelife.renhai.server.util.Worker;
  */
 public class InterestMatchManager implements IProductor 
 {
-	private ConcurrentLinkedQueue<MatchCoordinator> queue = new ConcurrentLinkedQueue<>();
+	private ConcurrentLinkedQueue<IDeviceWrapper> queue = new ConcurrentLinkedQueue<>();
 	protected Worker worker = new Worker(this);
 	private SessionManager sessionManager = new SessionManager();
 	private Logger logger = BusinessModule.instance.getLogger();
+	private InterestBusinessDevicePool pool;
     
 	
 	public InterestMatchManager()
@@ -53,9 +55,9 @@ public class InterestMatchManager implements IProductor
 	
 	public void addDevice(IDeviceWrapper device, InterestBusinessDevicePool pool)
 	{
-		logger.debug("Add device <{}> to InterestMatchProductor", device.getDeviceSn());
-		MatchCoordinator coor = new MatchCoordinator(device, pool);
-		queue.add(coor);
+		logger.debug("Add device <{}> to InterestMatchProductor", device.getDeviceIdentification());
+		this.pool = pool;
+		queue.add(device);
 		worker.resumeExecution();
 	}
 	
@@ -68,16 +70,18 @@ public class InterestMatchManager implements IProductor
 	@Override
 	public Runnable getWork()
 	{
-		return queue.remove();
+		IDeviceWrapper device = queue.remove();
+		MatchTask coor = new MatchTask(device, pool);
+		return coor;
 	}
 	
 	
-	private class MatchCoordinator implements Runnable
+	private class MatchTask implements Runnable
 	{
 		private IDeviceWrapper device;
 		private InterestBusinessDevicePool pool;
 		private Logger logger = BusinessModule.instance.getLogger();
-		public MatchCoordinator(IDeviceWrapper device, InterestBusinessDevicePool pool)
+		public MatchTask(IDeviceWrapper device, InterestBusinessDevicePool pool)
 		{
 			this.device = device;
 			this.pool = pool;
@@ -86,7 +90,8 @@ public class InterestMatchManager implements IProductor
 		@Override
 		public void run()
 		{
-			logger.debug("Run of MatchCoordinator for device <{}>", device.getDeviceSn());
+			logger.debug("Run of MatchCoordinator for device <{}>", device.getDeviceIdentification());
+			//logger.debug("====================start to run match manager for device <{}>", device.getDeviceIdentification());
 			Collection<Interestlabelmap> maps = device
 					.getDevice()
 					.getProfile()
@@ -107,41 +112,42 @@ public class InterestMatchManager implements IProductor
 		
 		private boolean match(String interestLabel)
 		{
-			ConcurrentHashMap<String, List<IDeviceWrapper>> interestLabelDeviceMap = pool.getInterestLabelMap();
+			//logger.debug("====================device <{}>, enter match", device.getDeviceIdentification());
+			ConcurrentHashMap<String, IDeviceWrapper> interestLabelDeviceMap = pool.getInterestLabelMap();
 			if (logger.isDebugEnabled())
 	    	{
-	    		logger.debug("Start to match device bases on interest label " + interestLabel +" from device <{}>", device.getDeviceSn());
+	    		logger.debug("Start to match device bases on interest label " + interestLabel +" from device <{}>", device.getDeviceIdentification());
 	    	}
 	    	
-	    	List<IDeviceWrapper> deviceList = interestLabelDeviceMap.get(interestLabel);
-	    	if (deviceList == null)
+	    	if (!interestLabelDeviceMap.containsKey(interestLabel))
 	    	{
+	    		//logger.debug("====================device <{}>, device list is null, return", device.getDeviceIdentification());
 	    		// It may be removed by other devices if all of devices with this label were removed 
-	    		logger.debug("Add device <{}> to device list of label " + interestLabel);
-	    		deviceList = new ArrayList<IDeviceWrapper>();
-    			interestLabelDeviceMap.put(interestLabel, deviceList);
-    			deviceList.add(device);
+	    		logger.debug("Add device <{}> to device interestLabelDeviceMap", device.getDeviceIdentification());
+    			interestLabelDeviceMap.put(interestLabel, device);
 	    		return false;
 	    	}
 	    	
-			if (deviceList.contains(device))
+	    	IDeviceWrapper tmpDevice = interestLabelDeviceMap.get(interestLabel);
+	    	//logger.debug("====================add device <{}> to device list of " + interestLabel, device.getDeviceIdentification());
+			if (tmpDevice == device)
 			{
-				// It's impossible to match here, because previous match should be successful if devices in list can be matched
-				logger.warn("Device <{}> has been in list of interest queue: " + interestLabel, device.getDeviceSn());
+				logger.error("Fatal error: device <{}> has been saved by interest label: " + interestLabel, device.getDeviceIdentification());
 				return false;
 			}
-			
-			deviceList.add(device);
 		
-			if (selectDevicePair(interestLabel, deviceList))
-			{
-				return true;
-			}
-			return false;
+			pool.removeInterestIndex(tmpDevice);
+			List<IDeviceWrapper> tmpList = new ArrayList<>();
+			tmpList.add(tmpDevice);
+			tmpList.add(device);
+			sessionManager.addDeviceList(tmpList, pool, interestLabel);
+			return true;
 		}
 		
+		/*
 	    private boolean selectDevicePair(String interestLabel, List<IDeviceWrapper> deviceList)
 	    {
+	    	logger.debug("====================device <{}>, Enter selectDevicePair", device.getDeviceIdentification());
 	    	int deviceCountPerSession = pool.getDeviceCountPerSession();
 	    	
 	    	int size = deviceList.size();
@@ -157,7 +163,9 @@ public class InterestMatchManager implements IProductor
 	    		return false;
 	    	}
 	    	
+	    	logger.debug("====================device <{}>, before create tmpList", device.getDeviceIdentification());
 	    	List<IDeviceWrapper> tmpList = new ArrayList<>();
+	    	logger.debug("====================device <{}>, after create tmpList", device.getDeviceIdentification());
 	    	if (size == deviceCountPerSession)
 	    	{
 	    		tmpList.addAll(deviceList);
@@ -171,15 +179,20 @@ public class InterestMatchManager implements IProductor
 	    		}
 	    	}
 	    	
-	    	logger.debug("============devicelist size after append: {}", tmpList.size());
-	    	for (IDeviceWrapper device : tmpList)
+	    	logger.debug("====================device <{}>, will removeInterestIndex for devices", device.getDeviceIdentification());
+	    	for (int i = tmpList.size(); i > 0; i--)
+	    	//for (IDeviceWrapper device : tmpList)
 	    	{
+	    		logger.debug("====================device <{}>, after removeInterestIndex", device.getDeviceIdentification());
 	    		pool.removeInterestIndex(device);
 	    	}
+	    	logger.debug("====================device <{}>, finished removeInterestIndex", device.getDeviceIdentification());
 	    	
-	    	logger.debug("============devicelist size before create SessionCoordinator: {}", tmpList.size());
+	    	logger.debug("====================device <{}>, will add tmpList to sessionManager", device.getDeviceIdentification());
 	    	sessionManager.addDeviceList(tmpList, pool, interestLabel);
+	    	logger.debug("====================device <{}>, tmpList added to sessionManager", device.getDeviceIdentification());
 	    	return true;
 	    }
+	    */
 	}
 }

@@ -64,7 +64,7 @@ public class DBQueryUtil
 			return label;
 		}
 		
-		SqlSession session = DAOWrapper.getSession();
+		SqlSession session = DAOWrapper.instance.getSession();
 		GlobalimpresslabelMapper mapper = session.getMapper(GlobalimpresslabelMapper.class);
 		
 		try
@@ -102,7 +102,7 @@ public class DBQueryUtil
 			return label;
 		}
 		
-		SqlSession session = DAOWrapper.getSession();
+		SqlSession session = DAOWrapper.instance.getSession();
 		GlobalinterestlabelMapper mapper = session.getMapper(GlobalinterestlabelMapper.class);
 		try
 		{

@@ -39,20 +39,20 @@ public class DBModule extends AbstractModule
 	public void startService()
     {
 		super.startService();
-		DAOWrapper.startTimers();
+		DAOWrapper.instance.startService();
 		GlobalSetting.startService();
 		
 		// To initialize DB connection
-    	SqlSession session = DAOWrapper.getSession();
+    	SqlSession session = DAOWrapper.instance.getSession();
     	session.close();
     }
 	
 	@Override
 	public void stopService()
 	{
-		DAOWrapper.flushToDB();
+		DAOWrapper.instance.flushToDB();
 		super.stopService();
-		DAOWrapper.stopTimers();
+		DAOWrapper.instance.stopService();
 		GlobalSetting.stopService();
 	}
 	

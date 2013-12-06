@@ -236,7 +236,7 @@ public class Impresscard implements IDbObject
 					{
 						int count = label.getAssessedCount();
 						logger.debug("Impress label<"+ labelName +"> of device <{}> was increased from " 
-								+ count + " to " + (count + 1), deviceWrapper.getDeviceSn());
+								+ count + " to " + (count + 1), deviceWrapper.getDeviceIdentification());
 						label.setAssessedCount(count + 1);
 						label.setUpdateTime(System.currentTimeMillis());
 						//label.getGlobalimpresslabel().setGlobalAssessCount(label.getGlobalimpresslabel().getGlobalAssessCount() + 1);
@@ -246,7 +246,7 @@ public class Impresscard implements IDbObject
 					{
 						int count = label.getAssessCount();
 						logger.debug("Assessing count of <" + labelName + "> by device <{}> was increased from " 
-								+ count + " to " + (count + 1), deviceWrapper.getDeviceSn());
+								+ count + " to " + (count + 1), deviceWrapper.getDeviceIdentification());
 						label.setAssessCount(label.getAssessCount() + 1);
 					}
 				}
@@ -258,7 +258,7 @@ public class Impresscard implements IDbObject
 		Globalimpresslabel globalimpresslabel = DBModule.instance.impressLabelCache.getObject(labelName);
 		if (globalimpresslabel == null)
 		{
-			logger.debug("New impress label {} from device <" + deviceWrapper.getDeviceSn() + ">", labelName);
+			logger.debug("New impress label {} from device <" + deviceWrapper.getDeviceIdentification() + ">", labelName);
 			globalimpresslabel = new Globalimpresslabel();
 			globalimpresslabel.setGlobalAssessCount(1);
 			globalimpresslabel.setImpressLabelName(labelName);
@@ -269,7 +269,7 @@ public class Impresscard implements IDbObject
 			if (isNewObject)
 			{
 				logger.debug("============new object, save in DAOWrapper");
-				DAOWrapper.cache(globalimpresslabel);
+				DAOWrapper.instance.cache(globalimpresslabel);
 			}
 			else
 			{

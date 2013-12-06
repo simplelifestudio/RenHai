@@ -13,6 +13,9 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.slf4j.Logger;
+
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.log.FileLogger;
 
 /**
@@ -24,7 +27,8 @@ public class Worker extends Thread
 	private Lock lock = new ReentrantLock();
 	private Condition condition = lock.newCondition();
 	private volatile boolean isRunning = false;
-	private IProductor productor; 
+	private IProductor productor;
+	private Logger logger = BusinessModule.instance.getLogger();
 
 	public Worker(IProductor productor)
 	{
@@ -68,19 +72,6 @@ public class Worker extends Thread
 				{
 					work.run();
 				}
-				/*
-				else
-				{
-					try
-					{
-						Thread.sleep(100);
-					}
-					catch (InterruptedException e)
-					{
-						FileLogger.printStackTrace(e);
-					}
-				}
-				*/
 			}
 			else
 			{

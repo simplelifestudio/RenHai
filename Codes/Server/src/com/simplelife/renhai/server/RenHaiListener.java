@@ -41,14 +41,14 @@ public class RenHaiListener implements ServletContextListener
 		System.out.println("+----------------------------------------------------------+");
 		try
 		{
-			BusinessModule.instance.startService();
-			System.out.println("+----------------------------------------------------------+");
-			System.out.println("|                  Business Module Ready                   |");
-			System.out.println("+----------------------------------------------------------+");
-			
 			DBModule.instance.startService();
 			System.out.println("+----------------------------------------------------------+");
 			System.out.println("|                      DB Module Ready                     |");
+			System.out.println("+----------------------------------------------------------+");
+			
+			BusinessModule.instance.startService();
+			System.out.println("+----------------------------------------------------------+");
+			System.out.println("|                  Business Module Ready                   |");
 			System.out.println("+----------------------------------------------------------+");
 			
 			JSONModule.instance.startService();

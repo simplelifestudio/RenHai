@@ -96,13 +96,14 @@ public class Device implements IDbObject
 	public void saveToDB()
 	{
 		// to get deviceId
-		SqlSession session = DAOWrapper.getSession();
+		SqlSession session = DAOWrapper.instance.getSession();
 		if (deviceId == null)
 		{
 			DeviceMapper deviceMapper = session.getMapper(DeviceMapper.class);
 			deviceMapper.insert(this);
 			session.commit();
 		}
+		session.close();
 	}
 	
 	@Override

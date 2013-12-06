@@ -250,6 +250,6 @@ public class Webrtcsession implements IDbObject
 		Long expire = now + GlobalSetting.BusinessSetting.OpenTokTokenExpiration * 1000; 
 		setExpirationDate(expire);
 		
-		DAOWrapper.cache(this);
+		DAOWrapper.instance.cache(this);
 	}
 }

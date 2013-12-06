@@ -1313,7 +1313,7 @@ public class MockApp implements IMockApp, Runnable
 		List<String> labels = new ArrayList<String>();
 		labels.add("“Ù¿÷");
 		labels.add("ø¥µÁ”∞");
-		labels.add("InterestOf" + this.getDeviceSn());
+		labels.add(this.getDeviceSn());
 		
 		if (System.currentTimeMillis() % 2 == 0)
 		{

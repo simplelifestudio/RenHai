@@ -233,12 +233,12 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	//logger.debug("Received message: {}", appMessage.getMessageId().name());
     	if (!syncMap.containsKey(messageSn))
     	{
-			logger.debug("New request message from device <{}> with MessageSn: " + messageSn, connectionOwner.getDeviceSn());
+			logger.debug("New request message from device <{}> with MessageSn: " + messageSn, connectionOwner.getDeviceIdentification());
 			connectionOwner.onJSONCommand(appMessage);
     	}
     	else
     	{
-    		logger.debug("Response of synchronized notification from device <{}>", connectionOwner.getDeviceSn());
+    		logger.debug("Response of synchronized notification from device <{}>", connectionOwner.getDeviceIdentification());
     		signalForSyncSend(messageSn, appMessage);
     	}
     }
@@ -320,7 +320,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	String temp = "WebSocketConnection onClose triggered, connection id: " + getConnectionId();
     	if (this.connectionOwner != null)
     	{
-    		temp += ", deviceSn: " + connectionOwner.getDeviceSn(); 
+    		temp += ", deviceSn: " + connectionOwner.getDeviceIdentification(); 
     	}
     	
     	logger.debug(temp);
@@ -390,7 +390,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		catch (IOException e)
 		{
 			FileLogger.printStackTrace(e);
-			logger.error("Connection of device <{}> was broken and will be released.", connectionOwner.getDeviceSn());
+			logger.error("Connection of device <{}> was broken and will be released.", connectionOwner.getDeviceIdentification());
 			AppJSONMessage connectionError = new ConnectionErrorEvent(null);
 			connectionOwner.onJSONCommand(connectionError);
 		}
@@ -410,7 +410,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	boolean exceptionOcurred = false;
     	try
     	{
-    		logger.debug("Send synchronized message to device <{}>, MessageSn: " + messageSn, this.connectionOwner.getDeviceSn());
+    		logger.debug("Send synchronized message to device <{}>, MessageSn: " + messageSn, this.connectionOwner.getDeviceIdentification());
     		sendMessage(message);
     		controller.condition.await(GlobalSetting.TimeOut.JSONMessageEcho, TimeUnit.SECONDS);
     	}
@@ -438,12 +438,12 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	{
 	    	if (controller.message == null)
 	    	{
-	    		logger.error("Timeout for synchronized response of device <{}>, MessageSn: " + messageSn, connectionOwner.getDeviceSn());
+	    		logger.error("Timeout for synchronized response of device <{}>, MessageSn: " + messageSn, connectionOwner.getDeviceIdentification());
 	    		controller.message = new TimeoutRequest(null);
 	    	}
 	    	else
 	    	{
-	    		logger.debug("Device <{}> replied synchronized message in time.", this.connectionOwner.getDeviceSn());
+	    		logger.debug("Device <{}> replied synchronized message in time.", this.connectionOwner.getDeviceIdentification());
 	    	}
     	}
     	return controller.message;

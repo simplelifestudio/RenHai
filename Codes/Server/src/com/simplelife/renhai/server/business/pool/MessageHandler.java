@@ -50,7 +50,7 @@ public class MessageHandler implements Runnable
 			return;
 		}
 		
-		logger.debug("{} messages in queue of Deivce <"+ deviceWrapper.getDeviceSn() +"> is released.", queue.size());
+		logger.debug("{} messages in queue of Deivce <"+ deviceWrapper.getDeviceIdentification() +"> is released.", queue.size());
 		queueLock.lock();
 		queue.clear();
 		queueLock.unlock();
@@ -90,7 +90,7 @@ public class MessageHandler implements Runnable
 	@Override
 	public void run()
 	{
-		logger.debug("Message handler of device <{}> started", deviceWrapper.getDeviceSn());
+		logger.debug("Message handler of device <{}> started", deviceWrapper.getDeviceIdentification());
 		queueLock.lock();
 		
 		AbstractJSONMessage message;
@@ -114,7 +114,7 @@ public class MessageHandler implements Runnable
 		executeLock.unlock();
 		queueLock.unlock();
 		
-		logger.debug("Message handler of device <{}> ended", deviceWrapper.getDeviceSn());
+		logger.debug("Message handler of device <{}> ended", deviceWrapper.getDeviceIdentification());
 	}
 	
 	private void executeMessage(AbstractJSONMessage message)
@@ -124,7 +124,7 @@ public class MessageHandler implements Runnable
 		if (logger.isDebugEnabled())
 		{
 			String temp = "Start to handle " + message.getMessageId().name() + " related to device <"
-					+ message.getDeviceWrapper().getDeviceSn() + "> which was queued " + duration
+					+ message.getDeviceWrapper().getDeviceIdentification() + "> which was queued " + duration
 					+ "ms ago, message Sn: " + message.getMessageSn();
 			logger.debug(temp);
 		}
@@ -138,7 +138,7 @@ public class MessageHandler implements Runnable
 				// Currently it's designed for delay of SessionBound
 				delay = delay - duration;
 				logger.debug("Delay " + delay + "ms for handle of " + message.getMessageId().name(), message
-						.getDeviceWrapper().getDeviceSn());
+						.getDeviceWrapper().getDeviceIdentification());
 				try
 				{
 					Thread.sleep(delay);
