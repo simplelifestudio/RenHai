@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E769F4FB809C49E996327365"
+               BlueprintIdentifier = "946823E986364ACF9B41B611"
                BuildableName = "libPods-RenHaiGHUnitTest-OpenTokSDK-WebRTC.a"
                BlueprintName = "Pods-RenHaiGHUnitTest-OpenTokSDK-WebRTC"
                ReferencedContainer = "container:Pods.xcodeproj">

@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "95EA2D4C2BA2495EA2E102D0"
+               BlueprintIdentifier = "045FD40E27DF498285D271A4"
                BuildableName = "libPods-RenHaiGHUnitTest-OBShapedButton.a"
                BlueprintName = "Pods-RenHaiGHUnitTest-OBShapedButton"
                ReferencedContainer = "container:Pods.xcodeproj">

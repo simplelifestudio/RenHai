@@ -47,7 +47,7 @@ Developer and client requirements
 Setting up your development environment
 ---------------------------------------
 
-Download the [OpenTok iOS SDK](https://github.com/opentok/opentok-iOS-sdk). 
+Download the [OpenTok 2.0 iOS SDK](https://github.com/opentok/opentok-ios-sdk-webrtc/). 
 
 The OpenTokHelloWorld app publishes to a demo session, and subscribes to its own stream
 (or any other stream in the session). Included in the OpenTok 2.0 iOS SDK are files you will need to develop
