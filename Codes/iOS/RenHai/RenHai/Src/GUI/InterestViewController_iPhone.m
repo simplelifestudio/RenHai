@@ -201,6 +201,31 @@
     }
 }
 
+-(void)_deselectCollectionView:(UICollectionView*) collectionView
+{
+    if (_interestLabelsView == collectionView)
+    {
+        NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
+        for (NSIndexPath* indexPath in selectedIndexPathes)
+        {
+            [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+        }
+        
+        [self _refreshInterestLabelsHeaderViewActions];
+    }
+    else if (_serverInterestLabelsView == collectionView)
+    {
+        NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
+        for (NSIndexPath* indexPath in selectedIndexPathes)
+        {
+            [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+        }
+        
+        _allowCloneLabel = NO;
+        [self _refreshServerInterestLabelsHeaderViewActions];
+    }
+}
+
 -(void)_didLongPressed:(UILongPressGestureRecognizer*) recognizer
 {
     CGPoint locationTouch = [recognizer locationInView:self.view];
@@ -212,23 +237,14 @@
         NSIndexPath* indexPath = [_interestLabelsView indexPathForItemAtPoint:locationTouch];
         if (nil == indexPath)
         {
-            NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {
-                [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
+            [self _deselectCollectionView:_interestLabelsView];
         }
         else
         {
             [_interestLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-            
-            NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {
-                [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
-            
             [self _refreshInterestLabelsHeaderViewActions];
+            
+            [self _deselectCollectionView:_serverInterestLabelsView];
         }
     }
     else if (CGRectContainsPoint(_serverInterestLabelsView.frame, locationTouch))
@@ -238,11 +254,7 @@
         NSIndexPath* indexPath = [_serverInterestLabelsView indexPathForItemAtPoint:locationTouch];
         if (nil == indexPath)
         {
-            NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {
-                [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
+            [self _deselectCollectionView:_serverInterestLabelsView];
         }
         else
         {
@@ -263,9 +275,9 @@
             {
                 [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
             }
+            
+            [self _refreshServerInterestLabelsHeaderViewActions];
         }
-        
-        [self _refreshServerInterestLabelsHeaderViewActions];
     }
 }
 
@@ -280,11 +292,7 @@
         NSIndexPath* indexPath = [_interestLabelsView indexPathForItemAtPoint:locationTouch];
         if (nil == indexPath)
         {
-            NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {      
-                [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
+            [self _deselectCollectionView:_interestLabelsView];
         }
         else
         {
@@ -297,16 +305,10 @@
             {
                 [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
             }
+            [self _refreshInterestLabelsHeaderViewActions];
         }
-        [self _refreshInterestLabelsHeaderViewActions];        
-        
-        NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
-        for (NSIndexPath* indexPath in selectedIndexPathes)
-        {
-            [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-        }
-        _allowCloneLabel = NO;
-        [self _refreshServerInterestLabelsHeaderViewActions];
+
+        [self _deselectCollectionView:_serverInterestLabelsView];
     }
     else if (CGRectContainsPoint(_serverInterestLabelsView.frame, locationTouch))
     {
@@ -315,18 +317,8 @@
         NSIndexPath* indexPath = [_serverInterestLabelsView indexPathForItemAtPoint:locationTouch];
         if (nil == indexPath)
         {
-            NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {
-                [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
-            
-            selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {
-                [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
-            [self _refreshInterestLabelsHeaderViewActions];
+            [self _deselectCollectionView:_interestLabelsView];
+            [self _deselectCollectionView:_serverInterestLabelsView];
         }
         else
         {
@@ -350,14 +342,10 @@
                 _allowCloneLabel = NO;
             }
             
-            NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {
-                [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
+            [self _deselectCollectionView:_interestLabelsView];
+            
+            [self _refreshServerInterestLabelsHeaderViewActions];
         }
-        
-        [self _refreshServerInterestLabelsHeaderViewActions];
     }
 }
 
@@ -737,12 +725,7 @@
             return;
         }
         
-//        NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
-//        for (NSIndexPath* indexPath in selectedIndexPathes)
-//        {
-//            [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-//        }
-//        [_interestLabelsView selectItemAtIndexPath:fromIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        [self _deselectCollectionView:_interestLabelsView];
         
         switch (fromSection)
         {

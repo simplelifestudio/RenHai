@@ -61,7 +61,11 @@
     RHAddress* address = proxy.address;
     NSString* remotePath = address.fullAddress;
 #warning Need to be replace once server proxy is ready
+#ifdef TARGET_RENHAILOCAL
+    remotePath = @"ws://192.168.1.2:80/renhai/websocket";
+#else
     remotePath = @"ws://192.81.135.31:80/renhai/websocket";
+#endif
     
     if (nil != remotePath)
     {
