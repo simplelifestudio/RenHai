@@ -30,14 +30,8 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 {
     /** */
-    private ConcurrentHashMap<String, IDeviceWrapper> interestLabelDeviceMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Integer> labelDeviceCountMap = new ConcurrentHashMap<>();
-    private InterestMatchManager matchManager = new InterestMatchManager();
-    
-    public ConcurrentHashMap<String, IDeviceWrapper> getInterestLabelMap()
-    {
-    	return interestLabelDeviceMap;
-    }
+    private InterestMatchManager matchManager = new InterestMatchManager(this);
     
     public void startService()
     {
@@ -52,11 +46,6 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     public InterestBusinessDevicePool()
     {
     	businessType = Consts.BusinessType.Interest;
-    	
-		//businessScheduler = new InterestBusinessScheduler();
-		//businessScheduler.bind(this);
-		//businessScheduler.setName("InterestScheduler");
-		//businessScheduler.startScheduler();
 		setCapacity(GlobalSetting.BusinessSetting.InterestBusinessPoolCapacity);
     }
     
@@ -191,64 +180,6 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	}
     }
     
-    public void removeInterestIndex(IDeviceWrapper device)
-    {
-    	logger.debug("Start to remove interest label index for device <{}>", device.getDeviceIdentification());
-    	
-    	if (device.getDevice() == null)
-    	{
-    		logger.error("Fatal error, DeviceWrapper <{}> has empty device object!");
-    		return;
-    	}
-    	
-    	Collection<Interestlabelmap> labelSet = device
-    			.getDevice()
-    			.getProfile()
-    			.getInterestCard()
-    			.getInterestLabelMapSet();
-    	
-    	if (labelSet.isEmpty())
-    	{
-    		logger.warn("Interest label set of Device <{}> is empty when trying to remove it from interest device pool.", device.getDeviceIdentification());
-    		return;
-    	}
-    	
-    	for (Interestlabelmap label : labelSet)
-    	{
-    		String strLabel = label.getGlobalLabel().getInterestLabelName();
-    		
-    		//logger.debug("====================before check interestLabelDeviceMap for "+strLabel+", device <{}>", device.getDeviceIdentification());
-    		if (!this.interestLabelDeviceMap.containsKey(strLabel))
-    		{
-    			//logger.error("Fatal error: Interest device list for label <{}> is non-existent", strLabel);
-    			//logger.debug("====================nonexistent, for "+strLabel+", device <{}>", device.getDeviceIdentification());
-    			continue;
-    		}
-    		//logger.debug("====================after check interestLabelDeviceMap for "+strLabel+", device <{}>", device.getDeviceIdentification());
-    		
-    		
-    		if (logger.isDebugEnabled())
-    		{
-    			logger.debug("Remove interest label <" + strLabel + "> for device <{}>", device.getDeviceIdentification());
-    		}
-    		
-    		//logger.debug("====================before get deviceList for "+strLabel+", device <{}>", device.getDeviceIdentification());
-    		if (!interestLabelDeviceMap.containsKey(strLabel))
-    		{
-    			//logger.warn("Device <{}> is not in list of interest queue: " + strLabel, device.getDeviceSn());
-    			//logger.debug("====================nonexistent for "+strLabel+", device <{}>", device.getDeviceIdentification());
-    			continue;
-    		}
-    		//logger.debug("====================after get deviceList for "+strLabel+", device <{}>", device.getDeviceIdentification());
-    		
-    		//logger.debug("====================before remove interest label for device <{}>,", device.getDeviceIdentification());
-    		
-    		if (interestLabelDeviceMap.get(strLabel) == device)
-    		{
-    			interestLabelDeviceMap.remove(strLabel);
-    		}
-    	}
-    }
     
     /** */
     @Override
@@ -260,7 +191,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	{
     		if (matchStartedDeviceMap.containsKey(deviceSn))
     		{
-    			removeInterestIndex(device);
+    			matchManager.removeDevice(device);
     		}
     		super.onDeviceLeave(device, reason);
     	}
@@ -271,7 +202,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 	@Override
 	public void clearPool()
 	{
-		interestLabelDeviceMap.clear();
+		matchManager.clear();
 		super.clearPool();
 	}
 
@@ -281,9 +212,6 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 		String deviceSn = device.getDeviceIdentification();
 		matchStartedDeviceMap.remove(deviceSn);
 		sessionBoundDeviceMap.put(deviceSn, device);
-		
-		//device.getDevice().getProfile().getInterestCard().getInterestLabelMapSet();
-		//this.removeInterestIndex(device);
 	}
 	
 	@Override
@@ -292,8 +220,13 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 		String deviceSn = device.getDeviceIdentification();
 		businessChoosedDeviceMap.remove(deviceSn);
 		matchStartedDeviceMap.put(deviceSn, device);
-		matchManager.addDevice(device, this);
+		addDeviceToMatchManager(device);
     }
+	
+	private void addDeviceToMatchManager(IDeviceWrapper device)
+	{
+		matchManager.addDevice(device);
+	}
 
 	@Override
 	public void endChat(IDeviceWrapper device)
