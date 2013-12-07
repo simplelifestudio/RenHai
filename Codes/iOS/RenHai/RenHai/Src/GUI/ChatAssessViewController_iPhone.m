@@ -453,6 +453,41 @@
     }
 }
 
+-(void)_deselectCollectionView:(UICollectionView*) collectionView
+{
+    if (_assessLabelsView == collectionView)
+    {
+        NSArray* selectedIndexPathes = _assessLabelsView.indexPathsForSelectedItems;
+        for (NSIndexPath* indexPath in selectedIndexPathes)
+        {
+            [_assessLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+        }
+        
+        [self _refreshAssessLabelsViewActions];
+    }
+    else if (_addImpressLabelsView == collectionView)
+    {
+        NSArray* selectedIndexPathes = _addImpressLabelsView.indexPathsForSelectedItems;
+        for (NSIndexPath* indexPath in selectedIndexPathes)
+        {
+            [_addImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+        }
+        
+        [self _refershAddImpressLabelsViewActions];
+    }
+    else if (_existImpressLabelsView == collectionView)
+    {
+        NSArray* selectedIndexPathes = _existImpressLabelsView.indexPathsForSelectedItems;
+        for (NSIndexPath* indexPath in selectedIndexPathes)
+        {
+            [_existImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+        }
+        
+        _allowCloneLabel = NO;
+        [self _refreshExistImpressLabelsViewActions];
+    }
+}
+
 -(void)_didLongPressed:(UILongPressGestureRecognizer*) recognizer
 {
 
@@ -469,18 +504,13 @@
         NSIndexPath* indexPath = [_assessLabelsView indexPathForItemAtPoint:locationTouch];
         if (nil == indexPath)
         {
-            NSArray* selectedIndexPathes = _assessLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {
-                [_assessLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
+            [self _deselectCollectionView:_assessLabelsView];
         }
         else
         {
             [_assessLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            [self _refreshAssessLabelsViewActions];
         }
-        
-        [self _refreshAssessLabelsViewActions];
     }
     else if (CGRectContainsPoint(_addImpressLabelsView.frame, locationTouch))
     {
@@ -489,11 +519,7 @@
         NSIndexPath* indexPath = [_addImpressLabelsView indexPathForItemAtPoint:locationTouch];
         if (nil == indexPath)
         {
-            NSArray* selectedIndexPathes = _addImpressLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {
-                [_addImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
+            [self _deselectCollectionView:_addImpressLabelsView];
         }
         else
         {
@@ -506,16 +532,11 @@
             {
                 [_addImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
             }
+            
+            [self _refershAddImpressLabelsViewActions];
         }
-        [self _refershAddImpressLabelsViewActions];        
         
-        NSArray* selectedIndexPathes = _existImpressLabelsView.indexPathsForSelectedItems;
-        for (NSIndexPath* indexPath in selectedIndexPathes)
-        {
-            [_existImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-        }
-        _allowCloneLabel = NO;
-        [self _refreshExistImpressLabelsViewActions];
+        [self _deselectCollectionView:_existImpressLabelsView];
     }
     else if (CGRectContainsPoint(_existImpressLabelsView.frame, locationTouch))
     {
@@ -524,13 +545,9 @@
         NSIndexPath* indexPath = [_existImpressLabelsView indexPathForItemAtPoint:locationTouch];
         if (nil == indexPath)
         {
-            NSArray* selectedIndexPathes = _existImpressLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
-            {
-                [_existImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
+            [self _deselectCollectionView:_existImpressLabelsView];
             
-            _allowCloneLabel = NO;
+            [self _deselectCollectionView:_addImpressLabelsView];
         }
         else
         {
@@ -550,16 +567,11 @@
                 [_existImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
                 _allowCloneLabel = NO;
             }
+            
+            [self _refreshExistImpressLabelsViewActions];
+            
+            [self _deselectCollectionView:_addImpressLabelsView];            
         }
-        
-        NSArray* selectedIndexPathes = _addImpressLabelsView.indexPathsForSelectedItems;
-        for (NSIndexPath* indexPath in selectedIndexPathes)
-        {
-            [_addImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-        }
-        [self _refershAddImpressLabelsViewActions];
-        
-        [self _refreshExistImpressLabelsViewActions];
     }
 }
 

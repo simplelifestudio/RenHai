@@ -18,6 +18,7 @@
 @property (nonatomic, strong) RHDevice* device;
 @property (nonatomic, strong) RHMatchedCondition* matchedCondition;
 @property (nonatomic, strong) RHWebRTC* webrtc;
+@property (nonatomic, strong) NSMutableArray* chatMessages;
 
 @end
 
@@ -30,6 +31,7 @@
 @synthesize device = _device;
 @synthesize matchedCondition = _matchedCondition;
 @synthesize webrtc = _webrtc;
+@synthesize chatMessages = _chatMessages;
 
 #pragma mark - Public Methods
 
@@ -41,6 +43,44 @@
     }
     
     return self;
+}
+
+-(void) addChatMessageWithSender:(ChatMessageSender) sender andText:(NSString*) text
+{
+    RHChatMessage* message = [[RHChatMessage alloc] initWithSender:sender andText:text];
+    [self addChatMessage:message];
+}
+
+-(void) addChatMessage:(RHChatMessage*) message
+{
+    if(nil != message)
+    {
+        message.hasRead = YES;
+        [_chatMessages addObject:message];        
+    }
+}
+
+-(BOOL) hasNewChatMessage
+{
+    BOOL flag = NO;
+    
+    RHChatMessage* message = [_chatMessages lastObject];
+    if (nil != message)
+    {
+        flag = message.hasRead;
+    }
+    
+    return flag;
+}
+
+-(RHChatMessage*) readChatMessage
+{
+    return [_chatMessages lastObject];
+}
+
+-(NSArray*) chatMessages
+{
+    return _chatMessages;
 }
 
 #pragma mark - CBJSONable
@@ -70,6 +110,8 @@
             _webrtc = [[RHWebRTC alloc] init];
             [_webrtc fromJSONObject:oWebRTC];
         }
+        
+        [_chatMessages removeAllObjects];
     }
 }
 
@@ -110,7 +152,7 @@
 
 -(void) _setupInstance
 {
-
+    _chatMessages = [NSMutableArray array];
 }
 
 @end

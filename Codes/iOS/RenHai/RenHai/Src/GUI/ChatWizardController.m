@@ -244,6 +244,13 @@
                 [_currentPage onOthersideEndChat];
             }
         }
+        else if ([notification.name isEqualToString:NOTIFICATION_ID_OTHERSIDECHATMESSAGE])
+        {
+            if (nil != _currentPage && [_currentPage respondsToSelector:@selector(onOthersideChatMessage)])
+            {
+                [_currentPage onOthersideChatMessage];
+            }
+        }
     }
 }
 

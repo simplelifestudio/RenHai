@@ -33,6 +33,7 @@
 #define NOTIFICATION_ID_OTHERSIDEREJECTED @"RHServerSessionOtherRejected"
 #define NOTIFICATION_ID_OTHERSIDELOST @"RHServerSessionOthersideLost"
 #define NOTIFICATION_ID_OTHERSIDEENDCHAT @"RHServerSessionOthersideEndChat"
+#define NOTIFICATION_ID_OTHERSIDECHATMESSAGE @"RHServerSessionOthersideChatMessage"
 
 @interface CommunicationModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 
