@@ -25,10 +25,6 @@
 #import "ConfigViewController_iPhone.h"
 
 #import "ChatWizardController.h"
-#import "ChatWaitViewController_iPhone.h"
-#import "ChatConfirmViewController_iPhone.h"
-#import "ChatVideoViewController_iPhone.h"
-#import "ChatAssessViewController_iPhone.h"
 
 #define STORYBOARD_IPHONE @"MainStoryboard_iPhone"
 
@@ -51,6 +47,7 @@
 #define STORYBOARD_ID_CHATWAIT_IPHONE @"chatwait_iphone"
 #define STORYBOARD_ID_CHATCONFIRM_IPHONE @"chatconfirm_iphone"
 #define STORYBOARD_ID_CHATVIDEO_IPHONE @"chatvideo_iphone"
+#define STORYBOARD_ID_CHATMESSAGE_IPHONE @"chatmessage_iphone"
 #define STORYBOARD_ID_CHATASSESS_IPHONE @"chatassess_iphone"
 
 #define NIB_CONNECTVIEWCONTROLLER @"ConnectViewController_iPhone"
@@ -129,7 +126,6 @@ LEFTBAR_CELL_ID;
 @property (nonatomic, strong) HelpViewController_iPhone* helpViewController;
 @property (nonatomic, strong) WarningViewController_iPhone* warningViewController;
 @property (nonatomic, strong) ChatWizardController* chatWizardController;
-
 
 @property (strong, nonatomic) CBHUDAgent* HUDAgent;
 

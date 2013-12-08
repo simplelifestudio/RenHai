@@ -78,6 +78,23 @@
     return [_chatMessages lastObject];
 }
 
+-(RHChatMessage*) chateMessageAtIndex:(NSUInteger) index
+{
+    RHChatMessage* message = nil;
+    
+    if (index < _chatMessages.count)
+    {
+        message = [_chatMessages objectAtIndex:index];
+    }
+    
+    return message;
+}
+
+-(NSUInteger) chatMessageCount
+{
+    return _chatMessages.count;
+}
+
 -(NSArray*) chatMessages
 {
     return _chatMessages;

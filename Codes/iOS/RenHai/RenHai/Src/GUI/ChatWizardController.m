@@ -13,6 +13,12 @@
 #import "GUIModule.h"
 #import "CommunicationModule.h"
 
+#import "ChatWaitViewController_iPhone.h"
+#import "ChatConfirmViewController_iPhone.h"
+#import "ChatVideoViewController_iPhone.h"
+#import "ChatMessageViewController_iPhone.h"
+#import "ChatAssessViewController_iPhone.h"
+
 #define ALLOW_CHATVIDEO_ROTATION 0
 
 @interface ChatWizardController ()

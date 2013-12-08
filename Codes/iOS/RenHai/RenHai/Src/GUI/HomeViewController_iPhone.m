@@ -188,7 +188,7 @@ EnterOperationStatus;
     
     NSString* text = @"";
     
-#warning Need to be replace once server proxy is ready    
+#warning TODO  
     switch (ServerServiceStatus_Normal)
 //    switch (status.serviceStatus)
     {

@@ -419,6 +419,9 @@
 		CDDA9FA9182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDA9FA7182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib */; };
 		CDDA9FAB1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDA9FAA1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib */; };
 		CDDA9FAC1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDA9FAA1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib */; };
+		CDDBE33C1853FD6B001A1744 /* ChatMessageViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDDBE33B1853FD6B001A1744 /* ChatMessageViewController_iPhone.m */; };
+		CDDBE33D1853FD6B001A1744 /* ChatMessageViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDDBE33B1853FD6B001A1744 /* ChatMessageViewController_iPhone.m */; };
+		CDDBE33E1853FD6B001A1744 /* ChatMessageViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDDBE33B1853FD6B001A1744 /* ChatMessageViewController_iPhone.m */; };
 		CDFEA31C182A175600F0351D /* order.png in Resources */ = {isa = PBXBuildFile; fileRef = CDFEA31A182A175600F0351D /* order.png */; };
 		CDFEA31D182A175600F0351D /* order@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDFEA31B182A175600F0351D /* order@2x.png */; };
 		CDFEA322182A1E5C00F0351D /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDFEA31E182A1E5B00F0351D /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib */; };
@@ -694,6 +697,8 @@
 		CDC0519D18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CBUIViewControlerExtends.m"; sourceTree = "<group>"; };
 		CDDA9FA7182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InterestLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
 		CDDA9FAA1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ServerInterestLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
+		CDDBE33A1853FD6B001A1744 /* ChatMessageViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageViewController_iPhone.h; sourceTree = "<group>"; };
+		CDDBE33B1853FD6B001A1744 /* ChatMessageViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatMessageViewController_iPhone.m; sourceTree = "<group>"; };
 		CDDF0FE017EB227700DA3E06 /* RenHai.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RenHai.entitlements; sourceTree = "<group>"; };
 		CDFEA31A182A175600F0351D /* order.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = order.png; sourceTree = "<group>"; };
 		CDFEA31B182A175600F0351D /* order@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "order@2x.png"; sourceTree = "<group>"; };
@@ -1097,6 +1102,8 @@
 				C593C45617D32A9700C26367 /* ChatConfirmViewController_iPhone.m */,
 				C593C46117D32ADE00C26367 /* ChatVideoViewController_iPhone.h */,
 				C593C46217D32ADE00C26367 /* ChatVideoViewController_iPhone.m */,
+				CDDBE33A1853FD6B001A1744 /* ChatMessageViewController_iPhone.h */,
+				CDDBE33B1853FD6B001A1744 /* ChatMessageViewController_iPhone.m */,
 				C593C45D17D32AC800C26367 /* ChatAssessViewController_iPhone.h */,
 				C593C45E17D32AC800C26367 /* ChatAssessViewController_iPhone.m */,
 				CD5633B41827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.h */,
@@ -1613,6 +1620,7 @@
 				C55B43F817CF580A009BB21B /* main.m in Sources */,
 				C55B445117CF5C14009BB21B /* GTMBase64.m in Sources */,
 				C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */,
+				CDDBE33C1853FD6B001A1744 /* ChatMessageViewController_iPhone.m in Sources */,
 				CD6D8CD118434A6A00C2330D /* RHDataUtils.m in Sources */,
 				CD5D6CFB1838923D002DEDAF /* RHStatusPeriod.m in Sources */,
 				CDA98255184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */,
@@ -1721,6 +1729,7 @@
 				C50505CB17D2BD4800DB6589 /* CBMathUtils.m in Sources */,
 				CD3C04E8181FD1C0002B19A3 /* BusinessStatus.m in Sources */,
 				CD5D6CF418388A94002DEDAF /* RHProxy.m in Sources */,
+				CDDBE33D1853FD6B001A1744 /* ChatMessageViewController_iPhone.m in Sources */,
 				CDA98256184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */,
 				CD5D6CFC1838923D002DEDAF /* RHStatusPeriod.m in Sources */,
 				C50505CD17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */,
@@ -1811,6 +1820,7 @@
 				CD94DEFC1851918000C9CBC4 /* main.m in Sources */,
 				CD94DEFD1851918000C9CBC4 /* GTMBase64.m in Sources */,
 				CD94DEFE1851918000C9CBC4 /* AppDelegate.m in Sources */,
+				CDDBE33E1853FD6B001A1744 /* ChatMessageViewController_iPhone.m in Sources */,
 				CD94DEFF1851918000C9CBC4 /* RHDataUtils.m in Sources */,
 				CD94DF001851918000C9CBC4 /* RHStatusPeriod.m in Sources */,
 				CD94DF011851918000C9CBC4 /* LeftBarTableCell_iPhone.m in Sources */,

@@ -147,6 +147,7 @@
 #define MESSAGE_KEY_APIKEY @"apiKey"
 #define MESSAGE_KEY_SESSIONID @"sessionId"
 #define MESSAGE_KEY_TOKEN @"token"
+#define MESSAGE_KEY_CHATMESSAGE @"chatMessage"
 
 /*
  Others
