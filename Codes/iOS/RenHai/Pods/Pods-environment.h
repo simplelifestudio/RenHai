@@ -66,8 +66,14 @@
 // JSMessagesViewController
 #define COCOAPODS_POD_AVAILABLE_JSMessagesViewController
 #define COCOAPODS_VERSION_MAJOR_JSMessagesViewController 3
-#define COCOAPODS_VERSION_MINOR_JSMessagesViewController 3
+#define COCOAPODS_VERSION_MINOR_JSMessagesViewController 4
 #define COCOAPODS_VERSION_PATCH_JSMessagesViewController 0
+
+// JSQSystemSoundPlayer
+#define COCOAPODS_POD_AVAILABLE_JSQSystemSoundPlayer
+#define COCOAPODS_VERSION_MAJOR_JSQSystemSoundPlayer 1
+#define COCOAPODS_VERSION_MINOR_JSQSystemSoundPlayer 3
+#define COCOAPODS_VERSION_PATCH_JSQSystemSoundPlayer 0
 
 // KXKiOS7ColorsAndGradients
 #define COCOAPODS_POD_AVAILABLE_KXKiOS7ColorsAndGradients
@@ -80,6 +86,12 @@
 #define COCOAPODS_VERSION_MAJOR_MBProgressHUD 0
 #define COCOAPODS_VERSION_MINOR_MBProgressHUD 8
 #define COCOAPODS_VERSION_PATCH_MBProgressHUD 0
+
+// MessageBarManager
+#define COCOAPODS_POD_AVAILABLE_MessageBarManager
+#define COCOAPODS_VERSION_MAJOR_MessageBarManager 1
+#define COCOAPODS_VERSION_MINOR_MessageBarManager 0
+#define COCOAPODS_VERSION_PATCH_MessageBarManager 0
 
 // OBShapedButton
 #define COCOAPODS_POD_AVAILABLE_OBShapedButton

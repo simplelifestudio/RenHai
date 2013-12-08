@@ -12,9 +12,12 @@ PODS:
   - FlatUIKit (1.2)
   - FloatingClouds (0.1.1)
   - GHUnitIOS (0.5.8)
-  - JSMessagesViewController (3.3.0)
+  - JSMessagesViewController (3.4.0):
+    - JSQSystemSoundPlayer
+  - JSQSystemSoundPlayer (1.3.0)
   - KXKiOS7ColorsAndGradients (1.0.0)
   - MBProgressHUD (0.8)
+  - MessageBarManager (1.0.0)
   - OBShapedButton (1.0.2)
   - OpenTokSDK-WebRTC (2.1.7)
   - PKRevealController (2.0.6)
@@ -34,8 +37,9 @@ DEPENDENCIES:
   - JSMessagesViewController
   - KXKiOS7ColorsAndGradients (~> 1.0.0)
   - MBProgressHUD (~> 0.8)
+  - MessageBarManager
   - OBShapedButton (~> 1.0.2)
-  - OpenTokSDK-WebRTC (~> 2.1.6)
+  - OpenTokSDK-WebRTC
   - PKRevealController
   - Reachability (~> 3.1.1)
   - SocketRocket (~> 0.3.1-beta2)
@@ -56,9 +60,11 @@ SPEC CHECKSUMS:
   FlatUIKit: 43b2acaa6f4ef57539b51b00e4ce62d506e33e11
   FloatingClouds: b8c30238701afd1c815d93793c50f5945ffc1edb
   GHUnitIOS: 23167e22b8abe162d71f86bd4bda7550e53414cb
-  JSMessagesViewController: 23861728e25d5325af5ef0f43f13ad6f23f56147
+  JSMessagesViewController: f01a5fcbaa20ad7758a4cb350677a0a55aa02bf6
+  JSQSystemSoundPlayer: 429f3769bd6ef045937543746828ab9f8d9b8474
   KXKiOS7ColorsAndGradients: 27cb28a573213b4bc7e9c751956fd6b1b53215f5
   MBProgressHUD: 2bbc6f470111daf7f3eaa4eb12b8cbf01c4c0622
+  MessageBarManager: 4d68a1d6a757f6f247ac6e6cefb1e94aba1f333a
   OBShapedButton: d2b9783760660ac98a32f334a587dea459a63e0b
   OpenTokSDK-WebRTC: 23a1e3a1969660c54ff14275c5fe5e5bf3b11509
   PKRevealController: 883287432cecf4cda037184eb822548b9713f8c2

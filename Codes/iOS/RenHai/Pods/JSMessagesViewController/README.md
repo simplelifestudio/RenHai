@@ -33,6 +33,7 @@ A messages UI for iPhone and iPad.
 
 * iOS 6.0+ 
 * ARC
+* [JSQSystemSoundPlayer][playerLink]
 
 ## Installation
 
@@ -42,8 +43,9 @@ A messages UI for iPhone and iPad.
 
 #### From source
 
-* Drag the `JSMessagesViewController/` folder to your project.
-* Add the `AudioToolbox.framework` to your project, if you want to use the sound effects
+* Drag the `JSMessagesViewController/` folder to your project
+* Download [JSQSystemSoundPlayer][playerLink] and follow its install instructions
+* Add the `QuartzCore.framework` to your project
 
 #### Too cool for [ARC](https://developer.apple.com/library/mac/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html)?
 
@@ -55,18 +57,18 @@ A messages UI for iPhone and iPad.
 2. Setup your `viewDidLoad` like the following:
 
 ````objective-c
-
 - (void)viewDidLoad
 {
     self.delegate = self;
     self.dataSource = self;
     [super viewDidLoad];
     
-    self.title = @"Messages";
-    
-    self.messageInputView.textView.placeHolder = @"New Message";
-}
+    [[JSBubbleView appearance] setFont:/* your font for the message bubbles */];
 
+    self.title = @"Your view controller title";
+    
+    self.messageInputView.textView.placeHolder = @"Your placeholder text";
+}
 ````
 
 3. Implement the `JSMessagesViewDelegate` protocol
@@ -74,15 +76,61 @@ A messages UI for iPhone and iPad.
 5. Implement `- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section` from the [`UITableViewDataSource` protocol](https://developer.apple.com/library/ios/documentation/uikit/reference/UITableViewDataSource_Protocol/Reference/Reference.html).
 6. Present your subclassed ViewController programatically or via StoryBoards. Your subclass should be the `rootViewController` of a `UINavigationController`.
 7. Be a badass [programming-motherfucker](http://programming-motherfucker.com) and read the fucking documentation. (Yes, there's documentation! [Seriously](http://dailyyeah.com/wp-content/uploads/2008/07/crazy_fat_kid.gif)!)
-8. See the included demo project: `JSMessagesDemo.xcodeproj`
+8. See the included demo: `JSMessagesDemo.xcworkspace`
 
 ## Documentation
 
 Documentation is [available here][docsLink] via [CocoaDocs](http://cocoadocs.org). Thanks [@CocoaDocs](https://twitter.com/CocoaDocs)!
 
+## Donate
+
+Support the developement of this **free**, open-source control! via [Square Cash](https://square.com/cash).
+
+<h4><a href="mailto:jesse.squires.developer@gmail.com?cc=cash@square.com&subject=$1&body=Thanks for developing JSMessagesViewController!">Send $1</a> <em>Just saying thanks!</em></h4>
+<h4><a href="mailto:jesse.squires.developer@gmail.com?cc=cash@square.com&subject=$5&body=Thanks for developing JSMessagesViewController!">Send $5</a> <em>This control is great!</em></h4>
+<h4><a href="mailto:jesse.squires.developer@gmail.com?cc=cash@square.com&subject=$10&body=Thanks for developing JSMessagesViewController!">Send $10</a> <em>This totally saved me time!</em></h4>
+<h4><a href="mailto:jesse.squires.developer@gmail.com?cc=cash@square.com&subject=$25&body=Thanks for developing JSMessagesViewController!">Send $25</a> <em>I want new features!</em></h4>
+
 ## Customization
 
-*Stuff here coming soon!*
+* You can customize almost any property of a cell by implementing the optional delegate method `configureCell: atIndexPath:`
+
+````objective-c
+- (void)configureCell:(JSBubbleMessageCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    if([cell messageType] == JSBubbleMessageTypeOutgoing) {
+        cell.bubbleView.textView.textColor = [UIColor whiteColor];
+    
+        if([cell.bubbleView.textView respondsToSelector:@selector(linkTextAttributes)]) {
+            NSMutableDictionary *attrs = [cell.bubbleView.textView.linkTextAttributes mutableCopy];
+            [attrs setValue:[UIColor blueColor] forKey:UITextAttributeTextColor];
+            
+            cell.bubbleView.textView.linkTextAttributes = attrs;
+        }
+    }
+    
+    if(cell.timestampLabel) {
+        cell.timestampLabel.textColor = [UIColor lightGrayColor];
+        cell.timestampLabel.shadowOffset = CGSizeZero;
+    }
+    
+    if(cell.subtitleLabel) {
+        cell.subtitleLabel.textColor = [UIColor lightGrayColor];
+    }
+}
+````
+
+* Set the font for your messages bubbles via `UIAppearance`
+
+````objective-c
+[[JSBubbleView appearance] setFont:[UIFont systemFontOfSize:16.0f]];
+````
+
+* Customize your message bubbles with `JSBubbleImageViewFactory`
+
+* Customize your avatars with `JSAvatarImageFactory`
+
+*More tips coming soon!* Have your own? Submit a PR!
 
 ## How To Contribute
 
@@ -121,6 +169,8 @@ Check out my work at [Hexed Bits](http://www.hexedbits.com).
 
 [Hemoglobe](http://bit.ly/hemoglobeapp)
 
+[Loopse](https://itunes.apple.com/us/app/loopse-spots-friends-sessions/id704783915?mt=8)
+
 [Oxwall Messenger](https://github.com/tochman/OxwallMessenger)
 
 [FourChat](https://itunes.apple.com/us/app/fourchat/id650833730?mt=8)
@@ -151,7 +201,9 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-[docsLink]:http://cocoadocs.org/docsets/JSMessagesViewController/3.3.0
+[docsLink]:http://cocoadocs.org/docsets/JSMessagesViewController/3.4.0
+
+[playerLink]:https://github.com/jessesquires/JSQSystemSoundPlayer
 
 [ss]:https://github.com/soffes/ssmessagesviewcontroller
 
