@@ -805,7 +805,8 @@ public class BusinessSession implements IBusinessSession
 			break;
 			case ChatAgreed:
 				if (operationType != Consts.OperationType.EndChat
-						&& operationType != Consts.OperationType.SessionUnbind)
+						&& operationType != Consts.OperationType.SessionUnbind
+						&& operationType != Consts.OperationType.ChatMessage)
 				{
 					return false;
 				}
