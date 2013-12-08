@@ -133,6 +133,7 @@
 "ChatVideo_PartnerStatus_Disconnected" = "对方视频：关闭";
 "ChatVideo_PartnerStatus_Failed" = "对方视频：失败";
 "ChatVideo_PartnerStatus_Lost" = "对方已掉线";
+"ChatVideo_PartnerChatMessage" = "小纸条";
 "ChatVideo_SelfVideo" = "我的视频";
 "ChatVideo_PartnerVideo" = "对方视频";
 "ChatVideo_Action_End" = "结束聊天";

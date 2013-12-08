@@ -23,6 +23,11 @@ typedef enum {
 - (void)showMessageWithTitle:(NSString*)title description:(NSString*)description type:(MessageBarMessageType)type forDuration:(CGFloat)duration;
 - (void)showMessageWithTitle:(NSString*)title description:(NSString*)description type:(MessageBarMessageType)type forDuration:(CGFloat)duration callback:(void (^)())callback;
 
+// Updated by RenHai
+// {
+- (void) dismissAllMessages;
+// }
+
 @end
 
 @interface MessageBarStyleSheet : NSObject

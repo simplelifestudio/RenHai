@@ -422,6 +422,20 @@
 		CDDBE33C1853FD6B001A1744 /* ChatMessageViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDDBE33B1853FD6B001A1744 /* ChatMessageViewController_iPhone.m */; };
 		CDDBE33D1853FD6B001A1744 /* ChatMessageViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDDBE33B1853FD6B001A1744 /* ChatMessageViewController_iPhone.m */; };
 		CDDBE33E1853FD6B001A1744 /* ChatMessageViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDDBE33B1853FD6B001A1744 /* ChatMessageViewController_iPhone.m */; };
+		CDDBE34C18548D1E001A1744 /* MessageBarManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CDDBE34418548D1E001A1744 /* MessageBarManager.m */; };
+		CDDBE34D18548D1E001A1744 /* MessageBarManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CDDBE34418548D1E001A1744 /* MessageBarManager.m */; };
+		CDDBE34E18548D1E001A1744 /* icon-error.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34618548D1E001A1744 /* icon-error.png */; };
+		CDDBE34F18548D1E001A1744 /* icon-error.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34618548D1E001A1744 /* icon-error.png */; };
+		CDDBE35018548D1E001A1744 /* icon-error@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34718548D1E001A1744 /* icon-error@2x.png */; };
+		CDDBE35118548D1E001A1744 /* icon-error@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34718548D1E001A1744 /* icon-error@2x.png */; };
+		CDDBE35218548D1E001A1744 /* icon-info.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34818548D1E001A1744 /* icon-info.png */; };
+		CDDBE35318548D1E001A1744 /* icon-info.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34818548D1E001A1744 /* icon-info.png */; };
+		CDDBE35418548D1E001A1744 /* icon-info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34918548D1E001A1744 /* icon-info@2x.png */; };
+		CDDBE35518548D1E001A1744 /* icon-info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34918548D1E001A1744 /* icon-info@2x.png */; };
+		CDDBE35618548D1E001A1744 /* icon-success.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34A18548D1E001A1744 /* icon-success.png */; };
+		CDDBE35718548D1E001A1744 /* icon-success.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34A18548D1E001A1744 /* icon-success.png */; };
+		CDDBE35818548D1E001A1744 /* icon-success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34B18548D1E001A1744 /* icon-success@2x.png */; };
+		CDDBE35918548D1E001A1744 /* icon-success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34B18548D1E001A1744 /* icon-success@2x.png */; };
 		CDFEA31C182A175600F0351D /* order.png in Resources */ = {isa = PBXBuildFile; fileRef = CDFEA31A182A175600F0351D /* order.png */; };
 		CDFEA31D182A175600F0351D /* order@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDFEA31B182A175600F0351D /* order@2x.png */; };
 		CDFEA322182A1E5C00F0351D /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDFEA31E182A1E5B00F0351D /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib */; };
@@ -699,6 +713,14 @@
 		CDDA9FAA1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ServerInterestLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
 		CDDBE33A1853FD6B001A1744 /* ChatMessageViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageViewController_iPhone.h; sourceTree = "<group>"; };
 		CDDBE33B1853FD6B001A1744 /* ChatMessageViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatMessageViewController_iPhone.m; sourceTree = "<group>"; };
+		CDDBE34318548D1E001A1744 /* MessageBarManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageBarManager.h; sourceTree = "<group>"; };
+		CDDBE34418548D1E001A1744 /* MessageBarManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageBarManager.m; sourceTree = "<group>"; };
+		CDDBE34618548D1E001A1744 /* icon-error.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-error.png"; sourceTree = "<group>"; };
+		CDDBE34718548D1E001A1744 /* icon-error@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-error@2x.png"; sourceTree = "<group>"; };
+		CDDBE34818548D1E001A1744 /* icon-info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-info.png"; sourceTree = "<group>"; };
+		CDDBE34918548D1E001A1744 /* icon-info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-info@2x.png"; sourceTree = "<group>"; };
+		CDDBE34A18548D1E001A1744 /* icon-success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-success.png"; sourceTree = "<group>"; };
+		CDDBE34B18548D1E001A1744 /* icon-success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-success@2x.png"; sourceTree = "<group>"; };
 		CDDF0FE017EB227700DA3E06 /* RenHai.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RenHai.entitlements; sourceTree = "<group>"; };
 		CDFEA31A182A175600F0351D /* order.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = order.png; sourceTree = "<group>"; };
 		CDFEA31B182A175600F0351D /* order@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "order@2x.png"; sourceTree = "<group>"; };
@@ -829,6 +851,7 @@
 		C55B441117CF587A009BB21B /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				CDDBE34118548D1E001A1744 /* MessageBarManager */,
 				C55B444D17CF5C14009BB21B /* GTMBase64 */,
 			);
 			path = Lib;
@@ -1211,6 +1234,37 @@
 			path = BusinessStatus;
 			sourceTree = "<group>";
 		};
+		CDDBE34118548D1E001A1744 /* MessageBarManager */ = {
+			isa = PBXGroup;
+			children = (
+				CDDBE34218548D1E001A1744 /* Classes */,
+				CDDBE34518548D1E001A1744 /* Icons */,
+			);
+			path = MessageBarManager;
+			sourceTree = "<group>";
+		};
+		CDDBE34218548D1E001A1744 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				CDDBE34318548D1E001A1744 /* MessageBarManager.h */,
+				CDDBE34418548D1E001A1744 /* MessageBarManager.m */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		CDDBE34518548D1E001A1744 /* Icons */ = {
+			isa = PBXGroup;
+			children = (
+				CDDBE34618548D1E001A1744 /* icon-error.png */,
+				CDDBE34718548D1E001A1744 /* icon-error@2x.png */,
+				CDDBE34818548D1E001A1744 /* icon-info.png */,
+				CDDBE34918548D1E001A1744 /* icon-info@2x.png */,
+				CDDBE34A18548D1E001A1744 /* icon-success.png */,
+				CDDBE34B18548D1E001A1744 /* icon-success@2x.png */,
+			);
+			path = Icons;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1324,8 +1378,10 @@
 			files = (
 				C55B43F617CF580A009BB21B /* InfoPlist.strings in Resources */,
 				C55B43FE17CF580A009BB21B /* Default.png in Resources */,
+				CDDBE35218548D1E001A1744 /* icon-info.png in Resources */,
 				C55B440017CF580A009BB21B /* Default@2x.png in Resources */,
 				CDDA9FAB1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */,
+				CDDBE35818548D1E001A1744 /* icon-success@2x.png in Resources */,
 				C55B440217CF580A009BB21B /* Default-568h@2x.png in Resources */,
 				C55B445D17CF8632009BB21B /* Icon-72.png in Resources */,
 				CD736CF41817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */,
@@ -1339,6 +1395,7 @@
 				C593C47217D4240800C26367 /* LeftBarHeaderView_iPhone.xib in Resources */,
 				CD5633B21827631600D2A9A6 /* close@2x.png in Resources */,
 				C593C47917D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */,
+				CDDBE34E18548D1E001A1744 /* icon-error.png in Resources */,
 				CDFEA326182A1E5C00F0351D /* ChatAssessExistImpressLabelsHeaderView_iPhone.xib in Resources */,
 				C596283917DA08AA009127E6 /* sidebar_menu_icon_landscape.png in Resources */,
 				CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */,
@@ -1358,11 +1415,14 @@
 				CDA98258184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib in Resources */,
 				C53A7F1417DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib in Resources */,
 				CD32013C17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */,
+				CDDBE35418548D1E001A1744 /* icon-info@2x.png in Resources */,
 				CD734AA617E83E3000EF6CD4 /* help_01.JPG in Resources */,
 				CD734AA717E83E3000EF6CD4 /* help_02.JPG in Resources */,
 				CDFEA322182A1E5C00F0351D /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD94DF961851933C00C9CBC4 /* RenHaiLocal-Info.plist in Resources */,
 				CD734AA817E83E3000EF6CD4 /* help_03.JPG in Resources */,
+				CDDBE35618548D1E001A1744 /* icon-success.png in Resources */,
+				CDDBE35018548D1E001A1744 /* icon-error@2x.png in Resources */,
 				CD5633B01827631600D2A9A6 /* close.png in Resources */,
 				CD734AA917E83E3000EF6CD4 /* help_04.JPG in Resources */,
 				CD734AAA17E83E3000EF6CD4 /* help_05.JPG in Resources */,
@@ -1419,8 +1479,10 @@
 			files = (
 				CD94DF5E1851918000C9CBC4 /* InfoPlist.strings in Resources */,
 				CD94DF5F1851918000C9CBC4 /* Default.png in Resources */,
+				CDDBE35318548D1E001A1744 /* icon-info.png in Resources */,
 				CD94DF601851918000C9CBC4 /* Default@2x.png in Resources */,
 				CD94DF611851918000C9CBC4 /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */,
+				CDDBE35918548D1E001A1744 /* icon-success@2x.png in Resources */,
 				CD94DF621851918000C9CBC4 /* Default-568h@2x.png in Resources */,
 				CD94DF631851918000C9CBC4 /* Icon-72.png in Resources */,
 				CD94DF641851918000C9CBC4 /* ImpressLabelsHeaderView_iPhone.xib in Resources */,
@@ -1434,6 +1496,7 @@
 				CD94DF6C1851918000C9CBC4 /* LeftBarHeaderView_iPhone.xib in Resources */,
 				CD94DF6D1851918000C9CBC4 /* close@2x.png in Resources */,
 				CD94DF6E1851918000C9CBC4 /* LeftBarFooterView_iPhone.xib in Resources */,
+				CDDBE34F18548D1E001A1744 /* icon-error.png in Resources */,
 				CD94DF6F1851918000C9CBC4 /* ChatAssessExistImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD94DF701851918000C9CBC4 /* sidebar_menu_icon_landscape.png in Resources */,
 				CD94DF711851918000C9CBC4 /* ConnectViewController_iPhone.xib in Resources */,
@@ -1453,11 +1516,14 @@
 				CD94DF7F1851918000C9CBC4 /* LeftBarTableCell_iPhone.xib in Resources */,
 				CD94DF801851918000C9CBC4 /* RHCollectionLabelCell_iPhone.xib in Resources */,
 				CD94DF811851918000C9CBC4 /* RHTableViewSwitcherCell_iPhone.xib in Resources */,
+				CDDBE35518548D1E001A1744 /* icon-info@2x.png in Resources */,
 				CD94DF821851918000C9CBC4 /* help_01.JPG in Resources */,
 				CD94DF831851918000C9CBC4 /* help_02.JPG in Resources */,
 				CD94DF841851918000C9CBC4 /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD94DF981851933C00C9CBC4 /* RenHaiLocal-Info.plist in Resources */,
 				CD94DF851851918000C9CBC4 /* help_03.JPG in Resources */,
+				CDDBE35718548D1E001A1744 /* icon-success.png in Resources */,
+				CDDBE35118548D1E001A1744 /* icon-error@2x.png in Resources */,
 				CD94DF861851918000C9CBC4 /* close.png in Resources */,
 				CD94DF871851918000C9CBC4 /* help_04.JPG in Resources */,
 				CD94DF881851918000C9CBC4 /* help_05.JPG in Resources */,
@@ -1660,6 +1726,7 @@
 				CDFEA324182A1E5C00F0351D /* ChatAssessExistImpressLabelsHeaderView_iPhone.m in Sources */,
 				C593C42B17D3284600C26367 /* SplashViewController_iPhone.m in Sources */,
 				C593C42F17D3296700C26367 /* DeviceViewController_iPhone.m in Sources */,
+				CDDBE34C18548D1E001A1744 /* MessageBarManager.m in Sources */,
 				CD5633B61827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.m in Sources */,
 				C593C44317D329BF00C26367 /* ImpressViewController_iPhone.m in Sources */,
 				C593C44717D329D200C26367 /* InterestViewController_iPhone.m in Sources */,
@@ -1860,6 +1927,7 @@
 				CD94DF231851918000C9CBC4 /* ChatAssessExistImpressLabelsHeaderView_iPhone.m in Sources */,
 				CD94DF241851918000C9CBC4 /* SplashViewController_iPhone.m in Sources */,
 				CD94DF251851918000C9CBC4 /* DeviceViewController_iPhone.m in Sources */,
+				CDDBE34D18548D1E001A1744 /* MessageBarManager.m in Sources */,
 				CD94DF261851918000C9CBC4 /* ChatAssessAddImpressLabelsHeaderView_iPhone.m in Sources */,
 				CD94DF271851918000C9CBC4 /* ImpressViewController_iPhone.m in Sources */,
 				CD94DF281851918000C9CBC4 /* InterestViewController_iPhone.m in Sources */,

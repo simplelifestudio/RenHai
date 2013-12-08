@@ -733,11 +733,7 @@
         {
             requireCount = EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_4;
         }
-        else if (IS_IPHONE4_OR_4S)
-        {
-            requireCount = EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_3_5;
-        }
-        else if (IS_IPAD1_OR_2_OR_MINI)
+        else
         {
             requireCount = EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_3_5;
         }

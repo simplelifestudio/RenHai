@@ -26,6 +26,8 @@
 
 #import "ChatWizardController.h"
 
+#import "MessageBarManager.h"
+
 #define STORYBOARD_IPHONE @"MainStoryboard_iPhone"
 
 #define SEGUE_ID_SPLASH_IPHONE2MAIN_IPHONE @"splash_iphone2main_iphone"

@@ -191,7 +191,7 @@
 {
     if([cell messageType] == JSBubbleMessageTypeOutgoing)
     {
-        [cell.bubbleView setTextColor:[UIColor whiteColor]];
+//        [cell.bubbleView setTextColor:[UIColor whiteColor]];
         
         if([cell.bubbleView.textView respondsToSelector:@selector(linkTextAttributes)])
         {

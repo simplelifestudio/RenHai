@@ -172,11 +172,7 @@
         {
             requireCount = MOVE_OFFSET_FOR_KEYBOARD_4;
         }
-        else if (IS_IPHONE4_OR_4S)
-        {
-            requireCount = MOVE_OFFSET_FOR_KEYBOARD_3_5;
-        }
-        else if (IS_IPAD1_OR_2_OR_MINI)
+        else
         {
             requireCount = MOVE_OFFSET_FOR_KEYBOARD_3_5;
         }

@@ -140,11 +140,7 @@
     {
         requireCount = SECTION_IMPRESSES_ITEMCOUNT_4;
     }
-    else if (IS_IPHONE4_OR_4S)
-    {
-        requireCount = SECTION_IMPRESSES_ITEMCOUNT_3_5;
-    }
-    else if (IS_IPAD1_OR_2_OR_MINI)
+    else
     {
         requireCount = SECTION_IMPRESSES_ITEMCOUNT_3_5;
     }
@@ -187,15 +183,11 @@
     {
         requireCount = SECTION_IMPRESSES_ITEMCOUNT_4;
     }
-    else if (IS_IPHONE4_OR_4S)
+    else
     {
         requireCount = SECTION_IMPRESSES_ITEMCOUNT_3_5;
     }
-    else if (IS_IPAD1_OR_2_OR_MINI)
-    {
-        requireCount = SECTION_IMPRESSES_ITEMCOUNT_4;
-    }
-    
+
     switch (section)
     {
         case SECTION_INDEX_ASSESSES:

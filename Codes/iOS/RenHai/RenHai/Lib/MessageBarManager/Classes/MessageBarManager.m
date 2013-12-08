@@ -10,6 +10,11 @@
 // Quartz
 #import <QuartzCore/QuartzCore.h>
 
+// Updated by RenHai
+// {
+#import "GUIStyle.h"
+// }
+
 // Image Constants
 #define kMessageBarImageIconError @"icon-error.png"
 #define kMessageBarImageIconSuccess @"icon-success.png"
@@ -89,7 +94,22 @@
     if(self = [super init]) {
         _messageBarQueue = [[NSMutableArray alloc] init];        
         _messageVisible = NO;
-        _messageBarOffset = [[UIApplication sharedApplication] statusBarFrame].size.height;
+        // Updated by RenHai
+        // {
+        if (IS_IPHONE5)
+        {
+            _messageBarOffset = [[UIApplication sharedApplication] statusBarFrame].size.height;
+        }
+        else if (IS_IPHONE4_OR_4S)
+        {
+            _messageBarOffset = [[UIApplication sharedApplication] statusBarFrame].size.height;
+        }
+        else if (IS_IPAD1_OR_2_OR_MINI)
+        {
+            _messageBarOffset = 0;
+        }
+//        _messageBarOffset = [[UIApplication sharedApplication] statusBarFrame].size.height;
+        // }
     }
     return self;
 }
@@ -128,6 +148,24 @@
         [self showNextMessage];
     }
 }
+
+// Updated by RenHai
+// {
+- (void) dismissAllMessages
+{
+    NSArray* subViews = [[[UIApplication sharedApplication] keyWindow] subviews];
+    for (UIView* subView in subViews)
+    {
+        if ([subView isMemberOfClass:[MessageView class]])
+        {
+            [subView removeFromSuperview];
+        }
+    }
+    
+    [_messageBarQueue removeAllObjects];
+}
+// }
+
 
 #pragma mark - Private
 
@@ -233,12 +271,21 @@ static UIColor *descriptionColor = nil;
         _titleString = title;
         _descriptionString = description;
         _messageType = type;
+
+        // Updated by RenHai
+        // {
+//        titleFont = [UIFont boldSystemFontOfSize:16.0];
+//        titleColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+//        
+//        descriptionFont = [UIFont systemFontOfSize:14.0];
+//        descriptionColor = [UIColor colorWithWhite:1.0 alpha:1.0];
         
-        titleFont = [UIFont boldSystemFontOfSize:16.0];
-        titleColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+        titleFont = [UIFont boldSystemFontOfSize:FLATUI_FONT_BIG];
+        titleColor = FLATUI_COLOR_TEXT_INFO;
         
-        descriptionFont = [UIFont systemFontOfSize:14.0];
-        descriptionColor = [UIColor colorWithWhite:1.0 alpha:1.0];
+        descriptionFont = [UIFont systemFontOfSize:FLATUI_FONT_NORMAL];
+        descriptionColor = FLATUI_COLOR_TEXT_INFO;
+        // }
         
         _height = 0.0;
         _width = 0.0;
@@ -265,32 +312,43 @@ static UIColor *descriptionColor = nil;
     }
     CGContextRestoreGState(context);
 
-    // bottom stroke
-    CGContextSaveGState(context);
-    {
-        CGContextBeginPath(context);
-        CGContextMoveToPoint(context, 0, rect.size.height);
-        CGContextSetStrokeColorWithColor(context, [MessageBarStyleSheet strokeColorForMessageType:_messageType].CGColor);
-        CGContextSetLineWidth(context, 1.0);
-        CGContextAddLineToPoint(context, rect.size.width, rect.size.height);
-        CGContextStrokePath(context);
-    }
-    CGContextRestoreGState(context);
+    // Updated by RenHai
+    // {
+//    // bottom stroke
+//    CGContextSaveGState(context);
+//    {
+//        CGContextBeginPath(context);
+//        CGContextMoveToPoint(context, 0, rect.size.height);
+//        CGContextSetStrokeColorWithColor(context, [MessageBarStyleSheet strokeColorForMessageType:_messageType].CGColor);
+//        CGContextSetLineWidth(context, 1.0);
+//        CGContextAddLineToPoint(context, rect.size.width, rect.size.height);
+//        CGContextStrokePath(context);
+//    }
+//    CGContextRestoreGState(context);
+    // }
 
     CGFloat xOffset = kMessageBarPadding;
     CGFloat yOffset = kMessageBarPadding;
     
-    // icon
-    CGContextSaveGState(context);
-    {
-        [[MessageBarStyleSheet iconImageForMessageType:_messageType] drawInRect:CGRectMake(xOffset, yOffset, kMessageBarIconSize, kMessageBarIconSize)];
-    }
-    CGContextRestoreGState(context);
+    // Updated by RenHai
+    // {
+//    // icon
+//    CGContextSaveGState(context);
+//    {
+//        [[MessageBarStyleSheet iconImageForMessageType:_messageType] drawInRect:CGRectMake(xOffset, yOffset, kMessageBarIconSize, kMessageBarIconSize)];
+//    }
+//    CGContextRestoreGState(context);
     
     yOffset -= kMessageBarTextOffset;
-    xOffset += kMessageBarIconSize + kMessageBarPadding;
-
-    CGFloat maxWith = (rect.size.width - (kMessageBarPadding * 3) - kMessageBarIconSize);
+//    xOffset += kMessageBarIconSize + kMessageBarPadding;
+    xOffset += kMessageBarPadding;
+    // }
+    
+    // Updated by RenHai
+    // {
+//    CGFloat maxWith = (rect.size.width - (kMessageBarPadding * 3) - kMessageBarIconSize);
+    CGFloat maxWith = (rect.size.width - (kMessageBarPadding * 2));
+    // }
     
     CGSize titleLabelSize = [_titleString sizeWithFont:titleFont forWidth:maxWith lineBreakMode:NSLineBreakByTruncatingTail];
     if (_titleString && !_descriptionString){
@@ -336,6 +394,9 @@ static UIColor *descriptionColor = nil;
 + (UIColor*)backgroundColorForMessageType:(MessageBarMessageType)type
 {
     UIColor *backgroundColor = nil;
+    // Updated by RenHai
+    // {
+    /*
     switch (type) {
         case MessageBarMessageTypeError:
             backgroundColor = [UIColor colorWithRed:1.0 green:0.611 blue:0.0 alpha:kMessageBarAlpha]; // orange
@@ -349,6 +410,24 @@ static UIColor *descriptionColor = nil;
         default:
             break;
     }
+    */
+    
+    switch (type)
+    {
+        case MessageBarMessageTypeError:
+            backgroundColor = FLATUI_COLOR_WARNING;
+            break;
+        case MessageBarMessageTypeSuccess:
+            backgroundColor = FLATUI_COLOR_SUCCESS;
+            break;
+        case MessageBarMessageTypeInfo:
+            backgroundColor = FLATUI_COLOR_CHATMESSAGE;
+            break;
+        default:
+            break;
+    }
+    
+    // }
     return backgroundColor;
 }
 

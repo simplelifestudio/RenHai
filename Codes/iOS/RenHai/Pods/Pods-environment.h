@@ -87,12 +87,6 @@
 #define COCOAPODS_VERSION_MINOR_MBProgressHUD 8
 #define COCOAPODS_VERSION_PATCH_MBProgressHUD 0
 
-// MessageBarManager
-#define COCOAPODS_POD_AVAILABLE_MessageBarManager
-#define COCOAPODS_VERSION_MAJOR_MessageBarManager 1
-#define COCOAPODS_VERSION_MINOR_MessageBarManager 0
-#define COCOAPODS_VERSION_PATCH_MessageBarManager 0
-
 // OBShapedButton
 #define COCOAPODS_POD_AVAILABLE_OBShapedButton
 #define COCOAPODS_VERSION_MAJOR_OBShapedButton 1

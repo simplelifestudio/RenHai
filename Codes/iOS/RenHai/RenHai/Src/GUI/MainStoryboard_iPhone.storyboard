@@ -488,21 +488,21 @@
             <objects>
                 <viewController storyboardIdentifier="chatvideo_iphone" id="Rwb-k1-UZq" customClass="ChatVideoViewController_iPhone" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aRm-Ul-Twj">
-                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="9xF-ar-PLg" userLabel="partnerVideoView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="592"/>
                                 <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="对方视频" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="owI-oH-NmH" userLabel="partnerStatusLabel">
-                                        <rect key="frame" x="10" y="209" width="300" height="21"/>
+                                        <rect key="frame" x="10" y="226" width="300" height="21"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Og5-3I-tAM" userLabel="countLabel">
-                                        <rect key="frame" x="10" y="242" width="300" height="80"/>
+                                        <rect key="frame" x="10" y="265" width="300" height="80"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="60"/>
                                         <color key="textColor" red="0.1176470588" green="0.56470588239999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -513,7 +513,7 @@
                             </view>
                             <view contentMode="scaleToFill" id="zhh-l2-GsP" userLabel="selfVideoView">
                                 <rect key="frame" x="200" y="364" width="120" height="140"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="你的视频" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tPo-eF-CUQ" userLabel="selfStatusLabel">
                                         <rect key="frame" x="0.0" y="59" width="120" height="21"/>
@@ -524,11 +524,11 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view alpha="0.050000000000000003" contentMode="scaleToFill" id="kfI-o8-qqI" userLabel="maskView">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="592"/>
                                 <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ypu-rk-vhR" userLabel="endChatButton" customClass="FUIButton">
-                                <rect key="frame" x="160" y="460" width="160" height="44"/>
+                                <rect key="frame" x="160" y="504" width="160" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="挂断">
@@ -539,7 +539,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="lMG-93-d6C" userLabel="chatMessageButton" customClass="FUIButton">
-                                <rect key="frame" x="80" y="460" width="80" height="44"/>
+                                <rect key="frame" x="80" y="504" width="80" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="纸条">
@@ -550,7 +550,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Htq-gH-nWp" userLabel="selfVideoButton" customClass="FUIButton">
-                                <rect key="frame" x="0.0" y="460" width="80" height="44"/>
+                                <rect key="frame" x="0.0" y="504" width="80" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="本方">
@@ -565,7 +565,6 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems/>
-                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="320" height="568"/>
                     <connections>
