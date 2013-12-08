@@ -10,12 +10,11 @@
 package com.simplelife.renhai.proxyserver;
 
 import java.io.PrintWriter;
-import java.util.Date;
 
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.proxyserver.Consts.GlobalErrorCode;
 import com.simplelife.renhai.proxyserver.Consts.MessageId;
 import com.simplelife.renhai.proxyserver.Consts.MessageType;
-import com.simplelife.renhai.proxyserver.Consts.ServiceStatus;
 
 /**
  * 
@@ -43,28 +42,31 @@ public class ProxyDataSyncRequest extends AppJSONMessage
 	@Override
 	public boolean checkJSONRequest()
 	{
+		if (!body.containsKey(JSONKey.AppVersion))
+		{
+			this.setErrorCode(GlobalErrorCode.InvalidJSONRequest_1100);
+			this.setErrorDescription(JSONKey.AppVersion + " is missed");
+			return false;
+		}
+		
+		JSONObject obj = body.getJSONObject(JSONKey.AppVersion);
+		if (!obj.containsKey(JSONKey.Version))
+		{
+			this.setErrorCode(GlobalErrorCode.InvalidJSONRequest_1100);
+			this.setErrorDescription(JSONKey.Version + " under " + JSONKey.AppVersion + " is missed");
+			return false;
+		}
+		
+		if (!obj.containsKey(JSONKey.Version))
+		{
+			this.setErrorCode(GlobalErrorCode.InvalidJSONRequest_1100);
+			this.setErrorDescription(JSONKey.Build + " under " + JSONKey.AppVersion + " is missed");
+			return false;
+		}
+		
 		return true;
 	}
 
-	private JSONObject getAddressJSON()
-	{
-		JSONObject addrObj = new JSONObject();
-		addrObj.put(JSONKey.Ip, GlobalSetting.instance.getIpAddress());
-		addrObj.put(JSONKey.Port, GlobalSetting.instance.getPort());
-		addrObj.put(JSONKey.Path, GlobalSetting.instance.getPath());
-		addrObj.put(JSONKey.Protocol, GlobalSetting.instance.getProtocol());
-		return addrObj;
-	}
-	
-	private JSONObject getServiceStatus()
-	{
-		JSONObject statusObj = new JSONObject();
-		statusObj.put(JSONKey.TimeZone, GlobalSetting.instance.getTimeZone());
-		statusObj.put(JSONKey.BeginTime, GlobalSetting.instance.getBeginTime());
-		statusObj.put(JSONKey.EndTime, GlobalSetting.instance.getEndTime());
-		return statusObj;
-	}
-	
 	@Override
 	public void doRun()
 	{
@@ -72,38 +74,19 @@ public class ProxyDataSyncRequest extends AppJSONMessage
 		
 		try
 		{
-			ServiceStatus status = GlobalSetting.instance.getServiceStatus();
+			if (!checkJSONRequest())
+			{
+				this.responseError();
+				return;
+			}
 			
+			JSONObject appVerObj = body.getJSONObject(JSONKey.AppVersion);
+			String version = appVerObj.getString(JSONKey.Version);
+			int build = appVerObj.getIntValue(JSONKey.Build);
+			
+			IServer server = GlobalSetting.instance.distributToServer(version, build);
 			ProxyDataSyncResponse response = new ProxyDataSyncResponse(this, this.out);
-			String zone = GlobalSetting.instance.getTimeZone();
-			Date begin = DateUtil.getDateByTimeZoneDateString(GlobalSetting.instance.getBeginTime(), zone);
-			Date end = DateUtil.getDateByTimeZoneDateString(GlobalSetting.instance.getEndTime(), zone);
-			
-			if (status == ServiceStatus.Normal || System.currentTimeMillis() > end.getTime())
-			{
-				// Normal status, only provide serviceAddress
-				response.addToBody(JSONKey.ServiceStatus, ServiceStatus.Normal.getValue());
-				response.addToBody(JSONKey.ServiceAddress, getAddressJSON());
-				response.addToBody(JSONKey.StatusPeriod, null);
-			}
-			else
-			{
-				if (System.currentTimeMillis() < begin.getTime())
-				{
-					// to be maintained
-					response.addToBody(JSONKey.ServiceStatus, ServiceStatus.Maintenance.getValue());
-					response.addToBody(JSONKey.ServiceAddress, getAddressJSON());
-					response.addToBody(JSONKey.StatusPeriod, getServiceStatus());
-				}
-				else
-				{
-					// under maintenance
-					response.addToBody(JSONKey.ServiceStatus, ServiceStatus.Maintenance.getValue());
-					response.addToBody(JSONKey.ServiceAddress, null);
-					response.addToBody(JSONKey.StatusPeriod, getServiceStatus());
-				}
-			}
-			
+			response.addToBody(JSONKey.Server, server.getResponse());
 			response.run();
 		}
 		catch(Exception e)

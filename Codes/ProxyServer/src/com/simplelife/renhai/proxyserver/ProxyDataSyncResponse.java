@@ -2,7 +2,6 @@ package com.simplelife.renhai.proxyserver;
 
 import java.io.PrintWriter;
 
-import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.proxyserver.Consts.MessageId;
 import com.simplelife.renhai.proxyserver.Consts.MessageType;
 

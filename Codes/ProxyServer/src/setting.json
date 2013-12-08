@@ -1,13 +1,13 @@
 {
-	"encrypt":1,
+	"encrypt":0,
 	"serverList":
 	[
 		{
-			"id":"TestServer",
-			"appBaseVersion":
+			"id":"testServer",
+			"appVersion":
 			{
-				"version":1.0,
-				"build":1234
+				"version":"0.3",
+				"build":1234 
 			},
 			"status":
 			{
@@ -26,24 +26,24 @@
 				"port":80,
 				"path":"/renhai/websocket"
 			},
-			"broadcast":"è¿™æ˜¯ç³»ç»Ÿå¹¿æ’­æ¶ˆæ¯"
+			"broadcast":"ÕâÊÇTestServerÏµÍ³¹ã²¥ÏûÏ¢"
 		},
 		
 		{
-			"id":"NormalServer",
-			"appBaseVersion":
+			"id":"normalServer",
+			"appVersion":
 			{
-				"version":1.0,
+				"version":"1.0",
 				"build":1234
 			},
 			"status":
 			{
-				"serviceStatus":1,
+				"serviceStatus":0,
 				"statusPeriod":
 				{
 					"timeZone":"GMT+0800",
-					"beginTime":"2013-01-01 10:00:00",
-					"endTime":"2013-01-01 10:30:00"
+					"beginTime":"2013-12-08 10:30:00",
+					"endTime":"2013-12-08 10:50:00"
 				}
 			},
 			"address":
@@ -53,11 +53,11 @@
 				"port":80,
 				"path":"/renhai/websocket"
 			},
-			"broadcast":"è¿™æ˜¯å¦ä¸€æ¡ç³»ç»Ÿå¹¿æ’­æ¶ˆæ¯"
+			"broadcast":"ÕâÊÇNormalServerµÄÏµÍ³¹ã²¥ÏûÏ¢"
 		},
 		{
-			"id":"Default",
-			"broadcast":"Appç‰ˆæœ¬å¤ªä½"
+			"id":"default",
+			"broadcast":"App°æ±¾Ì«µÍ£¬ÇëÉı¼¶µ½×îĞÂ°æºóÖØÊÔ£¬Ğ»Ğ»£¡"
 		}
 	]
 }

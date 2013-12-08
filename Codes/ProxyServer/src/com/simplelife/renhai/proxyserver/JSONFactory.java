@@ -60,6 +60,11 @@ public class JSONFactory
 			{
 				logger.debug("Failed to validate request: " + messageObject.toJSONString());
 			}
+			
+			ServerErrorResponse errRes = new ServerErrorResponse(null, out);
+			errRes.addToBody(JSONKey.ErrorCode, 1001);
+			errRes.addToBody(JSONKey.ErrorDescription, message.getErrorDescription());
+			errRes.run();
 			return null;
 		}
 		

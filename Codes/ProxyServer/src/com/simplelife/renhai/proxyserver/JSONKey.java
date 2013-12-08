@@ -39,4 +39,16 @@ public class JSONKey
 	public final static String JsonEnvelope					= "jsonEnvelope";
 	public final static String Encrypt						= "encrypt";
 	public final static String Protocol						= "protocol";
+	
+	public final static String Version						= "version";
+	public final static String Build						= "build";
+	public final static String Id							= "id";
+	public final static String Broadcast					= "broadcast";
+	public final static String AppVersion					= "appVersion";
+	
+	public final static String Status						= "status";
+	public final static String Address						= "address";
+	public final static String ServerList					= "serverList";
+	public final static String Server						= "server";
+	public final static String Default						= "default";
 }

@@ -77,6 +77,8 @@ public class ServiceServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
+		String command = null;
+		PrintWriter out = response.getWriter();
 		try
 		{
 			logger.debug("Beginning of doPost, proceed request from client");
@@ -91,14 +93,13 @@ public class ServiceServlet extends HttpServlet {
 			}
 			*/
 	
-			String command = readCommand(request);
+			command = readCommand(request);
 	
 			logger.debug("JSON command received: " + command);
 			
 			JSONObject jsonObj = null;
 			jsonObj = JSON.parseObject(command);
 			
-			PrintWriter out = response.getWriter();
 			if (jsonObj == null)
 			{
 				String temp = "Invalid command received: \n" + command; 
@@ -140,8 +141,6 @@ public class ServiceServlet extends HttpServlet {
 			AbstractJSONMessage appRequest = JSONFactory.createAppJSONMessage(envObj, out);
 			if (appRequest == null)
 			{
-				String temp = "Invalid command received: \n" + JSON.toJSONString(jsonObj,true);
-				reportError(temp, out);
 				return;
 			}
 			appRequest.run();
@@ -149,6 +148,8 @@ public class ServiceServlet extends HttpServlet {
 		catch(Exception e)
 		{
 			FileLogger.printStackTrace(e);
+			String temp = "Invalid command received: \n" + command; 
+			reportError(temp, out);
 			return;
 		}
 	}

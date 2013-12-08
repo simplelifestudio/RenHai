@@ -17,8 +17,10 @@ public class Consts
 {
 	public enum ServiceStatus
 	{
+		Invalid(-1),
 		Maintenance(0),
-		Normal(1);
+		Normal(1),
+		ToBeMaintained(2);
 		
 		private int value;
 		private ServiceStatus(int value)
@@ -40,7 +42,7 @@ public class Consts
 					return item;
 				}
 			}
-			return Maintenance;
+			return Invalid;
 		}
 		
 		@Override
