@@ -134,8 +134,11 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     	
 		if (ownerOnlinePool == null)
     	{
-			logger.error("ownerOnlinePool of Device <{}> is null in status of " + businessStatus.name(), getDeviceIdentification());
-			return;
+			if (businessStatus != DeviceStatus.Disconnected)
+			{
+				logger.error("ownerOnlinePool of Device <{}> is null in status of " + businessStatus.name(), getDeviceIdentification());
+				return;
+			}
     	}
     	
     	AbstractBusinessDevicePool businessPool = null;

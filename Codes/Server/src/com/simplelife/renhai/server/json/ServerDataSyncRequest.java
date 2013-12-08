@@ -135,16 +135,9 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		JSONObject countObj = body.getJSONObject(JSONKey.DeviceCount);
 		
 		boolean queryAll = false;
-		if (countObj == null)
+		if (countObj == null || countObj.isEmpty())
 		{
 			queryAll = true;
-		}
-		else
-		{
-			if (countObj.isEmpty())
-			{
-				return;
-			}
 		}
 		
 		if (queryAll || countObj.containsKey(JSONKey.Online))

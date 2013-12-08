@@ -10,6 +10,8 @@
 
 package com.simplelife.renhai.server.test;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.ibatis.scripting.xmltags.SetSqlNode;
 import org.java_websocket.drafts.Draft_17;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +34,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.log.FileLogger;
+import com.simplelife.renhai.server.test.MockAppConsts.MockAppBehaviorMode;
 import com.simplelife.renhai.server.test.MockAppConsts.MockAppBusinessStatus;
 import com.simplelife.renhai.server.test.MockAppConsts.MockAppRequest;
 import com.simplelife.renhai.server.util.CommonFunctions;
@@ -47,6 +51,27 @@ import com.simplelife.renhai.server.websocket.SecurityUtils;
 /** */
 public class MockApp implements IMockApp, Runnable
 {
+	private class MonitorTask extends TimerTask
+	{
+		private MockApp mockApp;
+		public MonitorTask(MockApp mockApp)
+		{
+			this.mockApp = mockApp;
+		}
+		
+		@Override
+		public void run()
+		{
+			try
+			{
+				mockApp.sendServerDataSyncRequest();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+		}
+	}
 	private class PingTask extends TimerTask
 	{
 		private MockApp mockApp;
@@ -222,6 +247,8 @@ public class MockApp implements IMockApp, Runnable
 
     protected int sessionId;
     protected Timer pingTimer = new Timer();
+    protected Timer monitorTimer;
+    
     protected ExecutionTask executionTask = new ExecutionTask(this);
     protected String lastSentMessageSn;
     
@@ -252,6 +279,8 @@ public class MockApp implements IMockApp, Runnable
 	protected boolean isUsingRealSocket;
 	
 	protected ConcurrentLinkedQueue<JSONObject> messageQueue = new ConcurrentLinkedQueue<>();
+	
+	protected int maxOnlineDeviceCount = 0;
 	
 	public ConcurrentLinkedQueue<JSONObject> getMessageQueue()
 	{
@@ -599,17 +628,17 @@ public class MockApp implements IMockApp, Runnable
 		
 		// Add command body
 		JSONObject deviceCountObj = new JSONObject();
-		deviceCountObj.put(JSONKey.Online, null);
-		deviceCountObj.put(JSONKey.Random, null);
-		deviceCountObj.put(JSONKey.Interest, null);
-		deviceCountObj.put(JSONKey.Chat, null);
-		deviceCountObj.put(JSONKey.RandomChat, null);
-		deviceCountObj.put(JSONKey.InterestChat, null);
+		//deviceCountObj.put(JSONKey.Online, null);
+		//deviceCountObj.put(JSONKey.Random, null);
+		//deviceCountObj.put(JSONKey.Interest, null);
+		//deviceCountObj.put(JSONKey.Chat, null);
+		//deviceCountObj.put(JSONKey.RandomChat, null);
+		//deviceCountObj.put(JSONKey.InterestChat, null);
 		
 		JSONObject deviceCapacityObj = new JSONObject();
-		deviceCapacityObj.put(JSONKey.Online, null);
-		deviceCapacityObj.put(JSONKey.Random, null);
-		deviceCapacityObj.put(JSONKey.Interest, null);
+		//deviceCapacityObj.put(JSONKey.Online, null);
+		//deviceCapacityObj.put(JSONKey.Random, null);
+		//deviceCapacityObj.put(JSONKey.Interest, null);
 		
 		JSONObject interestObj = new JSONObject();
 		interestObj.put(JSONKey.Current, 10);
@@ -617,8 +646,8 @@ public class MockApp implements IMockApp, Runnable
 		body.put(JSONKey.DeviceCount, deviceCountObj);
 		body.put(JSONKey.DeviceCapacity, deviceCapacityObj);
 		body.put(JSONKey.InterestLabelList, interestObj);
-		body.put(JSONKey.DeviceSummary, null);
-		body.put(JSONKey.DeviceDetailedInfo, this.getDeviceSn());
+		//body.put(JSONKey.DeviceSummary, null);
+		//body.put(JSONKey.DeviceDetailedInfo, this.getDeviceSn());
 		
 		lastSentMessageSn = header.getString(JSONKey.MessageSn);
 		sendRawJSONMessage(jsonObject, true);
@@ -889,7 +918,6 @@ public class MockApp implements IMockApp, Runnable
 		}
 		
 		int intMessageId = 0;
-		
 		JSONObject header = null;
 		JSONObject body = null;
 		JSONObject envObj = null;
@@ -911,6 +939,10 @@ public class MockApp implements IMockApp, Runnable
 		}
 		else if (messageId == Consts.MessageId.ServerDataSyncResponse)
 		{
+			if (behaviorMode == MockAppBehaviorMode.Monitor)
+			{
+				saveMonitorData(body);
+			}
 			return;
 		}
 		else if (messageId == Consts.MessageId.BusinessSessionNotification)
@@ -942,6 +974,35 @@ public class MockApp implements IMockApp, Runnable
 			
 		}
 		prepareSending(messageId, obj);
+	}
+	
+	private void saveMonitorData(JSONObject body)
+	{
+		JSONObject deviceCountObj = body.getJSONObject(JSONKey.DeviceCount);
+		int chat = deviceCountObj.getIntValue(JSONKey.Chat);
+		int interest = deviceCountObj.getIntValue(JSONKey.Interest);
+		int online = deviceCountObj.getIntValue(JSONKey.Online);
+		
+		if (maxOnlineDeviceCount < online)
+		{
+			maxOnlineDeviceCount = online;
+		}
+		
+		try
+		{
+			FileWriter fw = new FileWriter("./monitor.txt", true);
+			fw.write(DateUtil.getNow() + "\t" + online + "\t" + interest + "\t" + chat + "\r\n");
+			fw.close();
+		}
+		catch (IOException e)
+		{
+			FileLogger.printStackTrace(e);
+		}
+		
+		if (online == 1 && maxOnlineDeviceCount > 1)
+		{
+			this.setBusinessStatus(MockAppBusinessStatus.Ended);
+		}
 	}
 	
 	private void replyNotification(JSONObject lastReceivedCommand, MockAppBusinessStatus nextStatus)
@@ -1355,7 +1416,7 @@ public class MockApp implements IMockApp, Runnable
 		connection = conn;
 		
 		int count = 0;
-    	while (count < 5)
+    	while (count < 10)
     	{
     		if (!connection.isOpen())
     		{
@@ -1400,6 +1461,13 @@ public class MockApp implements IMockApp, Runnable
 			return;
 		}
 		startTimer();
+		
+		if (behaviorMode == MockAppBehaviorMode.Monitor)
+    	{
+    		monitorTimer = new Timer();
+    		monitorTimer.scheduleAtFixedRate(new MonitorTask(this), 1000, 1000);
+    	    syncDevice();
+    	}
 	}
 	
 	@Override

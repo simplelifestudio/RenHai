@@ -37,11 +37,13 @@ public class MockAppConsole
 	        String serverLink = args[2];
 	        String behaviorMode = args[3];
 	        //ExecutorService executeThreadPool = Executors.newFixedThreadPool(threadCount);
-	        
+
+	        ExecuteThread thread = new ExecuteThread("MA-Monitor", "Monitor", serverLink);
+	        thread.start();
 	        for (int i = 0; i < threadCount; i++)
 	        {
 	        	System.out.println("Start to launch MockApp-" + i);
-	        	ExecuteThread thread = new ExecuteThread("MA-" + i, behaviorMode, serverLink);
+	        	thread = new ExecuteThread("MA-" + i, behaviorMode, serverLink);
 	        	thread.start();
 	        	System.out.println("MockApp-" + i + " launched successfully.");
 	        	Thread.sleep(threadInterval);

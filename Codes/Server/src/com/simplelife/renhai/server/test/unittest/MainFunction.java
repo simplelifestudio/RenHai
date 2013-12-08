@@ -339,6 +339,19 @@ public class MainFunction extends AbstractTestCase
 	}
 	
 	@Test
+	public void testMonitorMode() throws InterruptedException
+	{
+		MockApp app = new MockApp("MonitorApp", "Monitor");
+		app.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		app.connect(true);
+		
+		while (app.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
+		{
+			Thread.sleep(1000);
+		}
+	}
+	
+	@Test
 	public void testBehaviorMode() throws InterruptedException
 	{
 		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit");
@@ -350,17 +363,17 @@ public class MainFunction extends AbstractTestCase
 		app2.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
 		//app2.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
 		app2.connect(true);
+	
+		MockApp app3 = new MockApp("MonitorApp", "Monitor");
+		app3.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
+		app3.connect(true);
 		
 		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended
 				|| app2.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
 		{
 			Thread.sleep(1000);
-			
-			if (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
-			{
-				//app1.sendServerDataSyncRequest();
-			}
 		}
+		System.out.print("aaaaa");
 	}
 	
 	@Test
