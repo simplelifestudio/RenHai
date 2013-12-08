@@ -63,11 +63,13 @@ public interface IBusinessSession
     
     public void onRejectChat(IDeviceWrapper device);
     
+    public void onChatMessage(IDeviceWrapper device, String chatMessage);
+    
     public void bindBusinessDevicePool(AbstractBusinessDevicePool pool);
     
     public void unbindBusinessDevicePool();
     
-    public void notifyDevices(IDeviceWrapper triggerDevice, Consts.NotificationType notificationType);
+    public void notifyDevices(IDeviceWrapper triggerDevice, Consts.NotificationType notificationType, JSONObject operationInfoObj);
     
     public boolean checkProgressForRequest(IDeviceWrapper device, Consts.OperationType operationType);
     

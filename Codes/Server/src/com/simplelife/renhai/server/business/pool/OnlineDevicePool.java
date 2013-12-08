@@ -210,7 +210,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     {
     	if (this.isPoolFull())
     	{
-    		logger.warn("Online device pool is full and request of new device was rejected.");
+    		logger.error("Online device pool is full and request of new device was rejected.");
     		return null;
     	}
     	
@@ -224,11 +224,6 @@ public class OnlineDevicePool extends AbstractDevicePool
     	elementCount++;
     	
     	logger.debug("Save connection {} in OnlineDevicePool", id);
-    	/*
-    	DbLogger.saveSystemLog(Consts.OperationCode.SetupWebScoket_1001
-    			, Consts.SystemModule.business
-    			, id);
-    	*/
     	return deviceWrapper;
     }
     

@@ -252,7 +252,8 @@ public class Consts
 		OthersideRejected(2),
 		OthersideAgreed(3), 
 		OthersideLost(4),
-		OthersideEndChat(5);
+		OthersideEndChat(5),
+		OthersideChatMessage(6);
 		
 		private int value;
 		private NotificationType(int value)
@@ -684,7 +685,8 @@ public class Consts
     	AssessAndContinue(6),
     	AssessAndQuit(7),
     	SessionUnbind(8),
-    	MatchStart(9);
+    	MatchStart(9),
+    	ChatMessage(10);
 
     	private int value;
     	
@@ -781,6 +783,7 @@ public class Consts
 		BusinessRequestAssessQuit_1020(1021),
 		BusinessResponse_1021(1022),
 		BroadcastNotification_1022(1023),
+		ChatMessage_1024(1024),
 		WebsocketTimeout_1100(1100),
 		DeviceInIdleTimeout_1101(1101),
 		SyncMessageTimeout_1102(1102),

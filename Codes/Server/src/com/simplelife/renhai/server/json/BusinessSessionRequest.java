@@ -119,6 +119,33 @@ public class BusinessSessionRequest extends AppJSONMessage
 			}
 		}
 		
+		if (operationType == Consts.OperationType.ChatMessage)
+		{
+			if (!checkChatMessage())
+			{
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	private boolean checkChatMessage()
+	{
+		if (!body.containsKey(JSONKey.OperationInfo))
+		{
+			setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+			setErrorDescription(JSONKey.OperationInfo + " must be provided for chatMessage.");
+			return false;
+		}
+		
+		JSONObject obj = body.getJSONObject(JSONKey.OperationInfo);
+		if (!obj.containsKey(JSONKey.ChatMessage))
+		{
+			setErrorCode(Consts.GlobalErrorCode.ParameterError_1103);
+			setErrorDescription(JSONKey.ChatMessage + " must be provided for chatMessage.");
+			return false;
+		}
 		return true;
 	}
 	
@@ -263,6 +290,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 			case MatchStart:
 				matchStart();
 				break;
+			case ChatMessage:
+				chatMessage();
 			default:
 				logger.error("Invalid operation type found: " + operationType.toString());
 				break;
@@ -622,6 +651,38 @@ public class BusinessSessionRequest extends AppJSONMessage
 	private void assessAndQuit()
 	{
 		assess(true);
+	}
+	
+	private void chatMessage()
+	{
+		logger.debug("Received chatMessage from Device <{}>.", deviceWrapper.getDeviceIdentification());
+		JSONObject obj = body.getJSONObject(JSONKey.OperationInfo);
+		String chatMessage = obj.getString(JSONKey.ChatMessage);
+		
+		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
+				Consts.MessageId.BusinessSessionResponse);
+		
+		if (deviceWrapper.getBusinessStatus() == Consts.DeviceStatus.SessionBound)
+		{
+			response.addToBody(JSONKey.BusinessSessionId, deviceWrapper.getOwnerBusinessSession()
+					.getSessionId());
+		}
+		else
+		{
+			response.addToBody(JSONKey.BusinessSessionId, null);
+		}
+		
+		deviceWrapper.getOwnerBusinessSession().onChatMessage(deviceWrapper, chatMessage);
+		
+		response.addToBody(JSONKey.OperationType, Consts.OperationType.ChatMessage.getValue());
+		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));
+		response.addToBody(JSONKey.OperationInfo, null);
+		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
+		
+		DbLogger.saveProfileLog(Consts.OperationCode.ChatMessage_1024
+    			, deviceWrapper.getDevice().getProfile()
+    			, deviceWrapper.getDeviceIdentification() + ":" + chatMessage);
+		deviceWrapper.prepareResponse(response);
 	}
 	
 	private void matchStart()

@@ -111,4 +111,5 @@ public class JSONKey
 	public final static String Webrtc						= "webrtc";
 	public final static String ApiKey						= "apiKey";
 	public final static String Token						= "token";
+	public final static String ChatMessage					= "chatMessage";
 }

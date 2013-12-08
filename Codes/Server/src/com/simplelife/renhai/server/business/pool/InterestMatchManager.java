@@ -87,7 +87,7 @@ public class InterestMatchManager implements IProductor
 	@Override
 	public Runnable getWork()
 	{
-		logger.debug("====================Count of devices waiting for match: {}", actionQueue.size());
+		logger.debug("Count of devices waiting for match: {}", actionQueue.size());
 		return actionQueue.remove();
 	}
 	
@@ -117,31 +117,21 @@ public class InterestMatchManager implements IProductor
     	{
     		String strLabel = label.getGlobalLabel().getInterestLabelName();
     		
-    		//logger.debug("====================before check interestLabelDeviceMap for "+strLabel+", device <{}>", device.getDeviceIdentification());
     		if (!interestLabelDeviceMap.containsKey(strLabel))
     		{
     			//logger.error("Fatal error: Interest device list for label <{}> is non-existent", strLabel);
-    			//logger.debug("====================nonexistent, for "+strLabel+", device <{}>", device.getDeviceIdentification());
     			continue;
     		}
-    		//logger.debug("====================after check interestLabelDeviceMap for "+strLabel+", device <{}>", device.getDeviceIdentification());
-    		
     		
     		if (logger.isDebugEnabled())
     		{
     			logger.debug("Remove interest label <" + strLabel + "> for device <{}>", device.getDeviceIdentification());
     		}
     		
-    		//logger.debug("====================before get deviceList for "+strLabel+", device <{}>", device.getDeviceIdentification());
     		if (!interestLabelDeviceMap.containsKey(strLabel))
     		{
-    			//logger.warn("Device <{}> is not in list of interest queue: " + strLabel, device.getDeviceSn());
-    			//logger.debug("====================nonexistent for "+strLabel+", device <{}>", device.getDeviceIdentification());
     			continue;
     		}
-    		//logger.debug("====================after get deviceList for "+strLabel+", device <{}>", device.getDeviceIdentification());
-    		
-    		//logger.debug("====================before remove interest label for device <{}>,", device.getDeviceIdentification());
     		
     		if (interestLabelDeviceMap.get(strLabel) == device)
     		{
@@ -181,7 +171,6 @@ public class InterestMatchManager implements IProductor
 		{
 			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 			logger.debug("Run of MatchCoordinator for device <{}>", device.getDeviceIdentification());
-			//logger.debug("====================start to run match manager for device <{}>", device.getDeviceIdentification());
 			Collection<Interestlabelmap> maps = device
 					.getDevice()
 					.getProfile()
@@ -206,29 +195,23 @@ public class InterestMatchManager implements IProductor
 				logger.debug("Add interest labels of device <{}> into interestLabelDeviceMap", device.getDeviceIdentification());
 				for (Interestlabelmap map : maps)
 				{
-					logger.debug("====================device <{}>, before interestLabelDeviceMap.put()", device.getDeviceIdentification());
 					strLabel = map.getGlobalLabel().getInterestLabelName();
 					interestLabelDeviceMap.put(strLabel, device);
-					logger.debug("====================device <{}>, after interestLabelDeviceMap.put()", device.getDeviceIdentification());
 				}
 			}
 		}
 		
 		private boolean match(String interestLabel)
 		{
-			logger.debug("====================device <{}>, enter match", device.getDeviceIdentification());
 			if (logger.isDebugEnabled())
 	    	{
 	    		logger.debug("Start to match device bases on interest label " + interestLabel +" from device <{}>", device.getDeviceIdentification());
 	    	}
 	    	
-			logger.debug("====================before interestLabelDeviceMap.get()");
 			IDeviceWrapper tmpDevice = interestLabelDeviceMap.get(interestLabel);
-			logger.debug("====================after interestLabelDeviceMap.get()");
 			
 	    	if (tmpDevice == null)
 	    	{
-	    		logger.debug("====================device <{}>, device with label " + interestLabel+" can't be found", device.getDeviceIdentification());
 	    		return false;
 	    	}
 	    	
@@ -238,15 +221,11 @@ public class InterestMatchManager implements IProductor
 				return false;
 			}
 			
-			logger.debug("====================before removeInterestIndex");
 			removeInterestIndex(tmpDevice);
 			List<IDeviceWrapper> tmpList = new ArrayList<>();
 			tmpList.add(tmpDevice);
 			tmpList.add(device);
-			logger.debug("====================before sessionManager.addDeviceList");
 			sessionManager.addDeviceList(tmpList, pool, interestLabel);
-			logger.debug("====================after sessionManager.addDeviceList");
-			logger.debug("====================after removeInterestIndex");
 			return true;
 		}
 	}

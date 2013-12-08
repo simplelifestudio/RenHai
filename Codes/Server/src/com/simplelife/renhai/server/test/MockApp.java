@@ -1395,7 +1395,7 @@ public class MockApp implements IMockApp, Runnable
 		setBusinessStatus(MockAppBusinessStatus.Init);
 		if (!setupConnection(isUsingRealSocket))
 		{
-			logger.error("Fatal error that failed to setup websocket connection with server");
+			logger.error("Fatal error: MockApp <{}> failed to setup websocket connection with server", deviceSn);
 			setBusinessStatus(MockAppBusinessStatus.Ended);
 			return;
 		}

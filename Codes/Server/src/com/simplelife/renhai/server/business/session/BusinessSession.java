@@ -243,7 +243,7 @@ public class BusinessSession implements IBusinessSession
     		FileLogger.printStackTrace(e);
     	}
     	
-    	notifyDevices(null, Consts.NotificationType.SessionBound);
+    	notifyDevices(null, Consts.NotificationType.SessionBound, null);
     	return true;
     }
     
@@ -282,22 +282,18 @@ public class BusinessSession implements IBusinessSession
     		}
     	}
     }
-    
-    public void notifyDevices(IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
+   
+    public void notifyDevices(IDeviceWrapper triggerDevice, 
+    		Consts.NotificationType notificationType,
+    		JSONObject operationInfoObj)
     {
-    	notifyDevices(this.deviceList, triggerDevice, notificationType);
-    }
-    
-    public void notifyDevices(Collection<IDeviceWrapper> activeDeviceList, IDeviceWrapper triggerDevice, Consts.NotificationType notificationType)
-    {
-    	if (activeDeviceList == null)
+    	if (deviceList == null)
     	{
     		return;
     	}
     	
-    	ServerJSONMessage notify;
     	String temp;
-    	for (IDeviceWrapper device : activeDeviceList)
+    	for (IDeviceWrapper device : deviceList)
     	{
     		if (device == triggerDevice)
 			{
@@ -312,62 +308,70 @@ public class BusinessSession implements IBusinessSession
 			}
 
 			// create notification for each device, to avoid conflict of multi-thread on devices
-			notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
-			temp = "Notify device <"+ device.getDeviceIdentification() +"> about " + notificationType.name();
-			if (triggerDevice != null)
+			if (logger.isDebugEnabled())
 			{
-				temp += " from device <" + triggerDevice.getDeviceIdentification() + ">";
+				temp = "Notify device <"+ device.getDeviceIdentification() +"> about " + notificationType.name();
+				if (triggerDevice != null)
+				{
+					temp += " from device <" + triggerDevice.getDeviceIdentification() + ">";
+				}
+				logger.debug(temp);
 			}
-			logger.debug(temp);
 			
-			JSONObject header = notify.getHeader(); 
-			header.put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
-			header.put(JSONKey.DeviceId, device.getDevice().getDeviceId());
-			header.put(JSONKey.DeviceSn, device.getDeviceIdentification());
-			
-			JSONObject body = notify.getBody(); 
-	    	body.put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(sessionId));
-	    	body.put(JSONKey.OperationType, notificationType.getValue());
-	    	body.put(JSONKey.OperationValue, null);
-	    	body.put(JSONKey.BusinessType, device.getBusinessType().getValue());
-	    	
-	    	
-			if (triggerDevice == null || notificationType == NotificationType.SessionBound)
+			if (operationInfoObj != null)
 			{
-				JSONObject infoObj = new JSONObject();
-				infoObj.put(JSONKey.Device, getOperationInfoOfOtherDevices(device));
-				
-				JSONObject rtcObj = new JSONObject();
-				rtcObj.put(JSONKey.ApiKey, GlobalSetting.BusinessSetting.OpenTokKey);
-				rtcObj.put(JSONKey.SessionId, this.webRTCSession.getWebrtcsession());
-				rtcObj.put(JSONKey.Token, this.webRTCSession.getToken());
-				infoObj.put(JSONKey.Webrtc, rtcObj);
-			
-				infoObj.put(JSONKey.MatchedCondition, this.matchCondition);
-				
-				notify.getBody().put(JSONKey.OperationInfo, infoObj);
-				notify.setDelayOfHandle(GlobalSetting.BusinessSetting.DelayOfSessionBound);
+				notifyDevice(device, notificationType, operationInfoObj);
 			}
 			else
 			{
-				JSONObject obj = new JSONObject();
-				JSONObject deviceObj = new JSONObject();
-				obj.put(JSONKey.Device, deviceObj);
-				deviceObj.put(JSONKey.DeviceSn, triggerDevice.getDeviceIdentification());
-				notify.getBody().put(JSONKey.OperationInfo, obj);
+				JSONObject tmpObj;
+				if(triggerDevice == null ||  notificationType == NotificationType.SessionBound)
+				{
+					tmpObj = new JSONObject();
+					tmpObj.put(JSONKey.Device, getOperationInfoOfOtherDevices(device));
+				    
+				    JSONObject rtcObj = new JSONObject();
+				    rtcObj.put(JSONKey.ApiKey, GlobalSetting.BusinessSetting.OpenTokKey);
+				    rtcObj.put(JSONKey.SessionId, this.webRTCSession.getWebrtcsession());
+				    rtcObj.put(JSONKey.Token, this.webRTCSession.getToken());
+				    tmpObj.put(JSONKey.Webrtc, rtcObj);
+				    tmpObj.put(JSONKey.MatchedCondition, this.matchCondition);
+				}
+				else
+				{
+					tmpObj = new JSONObject();
+					tmpObj.put(JSONKey.Device, getOperationInfoOfOtherDevices(device));
+				}
+				notifyDevice(device, notificationType, tmpObj);
 			}
-    		notify.setDeviceWrapper(device);
-    		//logger.debug("Send notify for device <" + device.getDeviceSn() +">");
-    		device.prepareResponse(notify);
-    		
-    		
-    		/*
-    		DbLogger.saveSystemLog(Consts.OperationCode.NotificationSessionBound_1010
-        			, Consts.SystemModule.business
-        			, notificationType.name() + ", " + device.getDeviceSn());
-        	*/
     	}
 	}
+    
+    public void notifyDevice(IDeviceWrapper device, 
+    		NotificationType notificationType, 
+    		JSONObject operationInfoObj)
+    {
+    	ServerJSONMessage notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
+    	JSONObject header = notify.getHeader(); 
+		header.put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
+		header.put(JSONKey.DeviceId, device.getDevice().getDeviceId());
+		header.put(JSONKey.DeviceSn, device.getDeviceIdentification());
+		
+		JSONObject body = notify.getBody(); 
+    	body.put(JSONKey.BusinessSessionId, CommonFunctions.getJSONValue(sessionId));
+    	body.put(JSONKey.OperationType, notificationType.getValue());
+    	body.put(JSONKey.OperationValue, null);
+    	body.put(JSONKey.BusinessType, device.getBusinessType().getValue());
+    	body.put(JSONKey.OperationInfo, operationInfoObj);
+    	
+    	if (notificationType == NotificationType.SessionBound)
+		{
+			notify.setDelayOfHandle(GlobalSetting.BusinessSetting.DelayOfSessionBound);
+		}
+    	
+    	notify.setDeviceWrapper(device);
+		device.prepareResponse(notify);
+    }
     
     private JSONObject getOperationInfoOfOtherDevices(IDeviceWrapper deviceToBeExcluded)
     {
@@ -545,7 +549,7 @@ public class BusinessSession implements IBusinessSession
     	
     	// Change status to Assess for any of App ends chat 
     	changeStatus(Consts.BusinessSessionStatus.Assess);
-    	notifyDevices(device, Consts.NotificationType.OthersideEndChat);
+    	notifyDevices(device, Consts.NotificationType.OthersideEndChat, null);
     }
     
     /** */
@@ -594,7 +598,7 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
 
-    	notifyDevices(device, Consts.NotificationType.OthersideAgreed);
+    	notifyDevices(device, Consts.NotificationType.OthersideAgreed, null);
     	
     	updateBusinessProgress(device.getDeviceIdentification(), Consts.DeviceBusinessProgress.ChatAgreed);
    		//progressMap.put(device.getDeviceSn(), Consts.BusinessProgress.ChatConfirmed);
@@ -609,6 +613,14 @@ public class BusinessSession implements IBusinessSession
     	{
     		logger.debug("Device <{}> agreed chat but not all devices agreed so far.", device.getDeviceIdentification());
     	}
+    }
+    
+    @Override
+    public void onChatMessage(IDeviceWrapper device, String chatMessage)
+    {
+    	JSONObject obj = new JSONObject();
+    	obj.put(JSONKey.ChatMessage, chatMessage);
+    	notifyDevices(device, Consts.NotificationType.OthersideChatMessage, obj);
     }
     
     @Override
@@ -629,7 +641,7 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-    	notifyDevices(device, Consts.NotificationType.OthersideRejected);
+    	notifyDevices(device, Consts.NotificationType.OthersideRejected, null);
 		
 		endReason = Consts.SessionEndReason.Reject;
     	//changeStatus(Consts.BusinessSessionStatus.Idle);
@@ -668,12 +680,12 @@ public class BusinessSession implements IBusinessSession
 				int duration = (int) (System.currentTimeMillis() - chatStartTime);
 				device.increaseChatDuration(duration);
 			}
-			notifyDevices(device, NotificationType.OthersideLost);
+			notifyDevices(device, NotificationType.OthersideLost, null);
 			defaultGoodAssess(this.deviceList, device);
     	}
 		else if (reason == Consts.StatusChangeReason.AppLeaveBusiness)
 		{
-			notifyDevices(device, NotificationType.OthersideRejected);
+			notifyDevices(device, NotificationType.OthersideRejected, null);
 		}
     
     	if (deviceList == null || deviceList.isEmpty())
