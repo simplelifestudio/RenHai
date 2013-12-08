@@ -10,16 +10,22 @@
 
 #import "ChatWizardController.h"
 
+#import "ChatMessageViewController_iPhone.h"
+
 #import "RHChatActionBar.h"
 
 @interface ChatVideoViewController_iPhone : UIViewController <ChatWizardPage>
 
+@property (strong, nonatomic) ChatMessageViewController_iPhone* chatMessageViewController;
+
 @property (weak, nonatomic) IBOutlet UIView *maskView;
 
+@property (weak, nonatomic) IBOutlet FUIButton *chatMessageButton;
 @property (weak, nonatomic) IBOutlet FUIButton *endChatButton;
 @property (weak, nonatomic) IBOutlet FUIButton *selfVideoButton;
 
 - (IBAction)didPressEndChatButton:(id)sender;
+- (IBAction)didPressChatMessageButton:(id)sender;
 - (IBAction)didPressSelfVideoButton:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UILabel *selfStatusLabel;

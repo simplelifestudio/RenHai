@@ -27,9 +27,11 @@
 -(void) addChatMessageWithSender:(ChatMessageSender) sender andText:(NSString*) text;
 -(void) addChatMessage:(RHChatMessage*) message;
 
+-(NSUInteger) chatMessageCount;
 -(NSArray*) chatMessages;
 
 -(BOOL) hasNewChatMessage;
 -(RHChatMessage*) readChatMessage;
+-(RHChatMessage*) chateMessageAtIndex:(NSUInteger) index;
 
 @end

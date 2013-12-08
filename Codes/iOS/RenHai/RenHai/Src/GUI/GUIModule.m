@@ -36,21 +36,6 @@
 
 @implementation GUIModule
 
-@synthesize connectViewController = _connectViewController;
-@synthesize mainViewController = _mainViewController;
-@synthesize leftbarViewController = _leftbarViewController;
-@synthesize homeViewController = _homeViewController;
-@synthesize deviceViewController = _deviceViewController;
-@synthesize interestViewController = _interestViewController;
-@synthesize impressViewController = _impressViewController;
-@synthesize configViewController = _configViewController;
-@synthesize helpViewController = _helpViewController;
-@synthesize warningViewController = _warningViewController;
-
-@synthesize chatWizardController = _chatWizardController;
-
-@synthesize HUDAgent = _HUDAgent;
-
 SINGLETON(GUIModule)
 
 -(void) initModule

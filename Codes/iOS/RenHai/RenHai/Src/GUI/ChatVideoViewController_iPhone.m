@@ -67,16 +67,6 @@
 
 @implementation ChatVideoViewController_iPhone
 
-@synthesize selfStatusLabel = _selfStatusLabel;
-@synthesize partnerStatusLabel = _partnerStatusLabel;
-
-@synthesize selfVideoView = _selfVideoView;
-@synthesize parterVideoView = _parterVideoView;
-
-@synthesize maskView = _maskView;
-
-@synthesize countLabel = _countLabel;
-
 #pragma mark - Public Methods
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -256,7 +246,15 @@
     [self _setupNavigationBar];
     [self _setupActionButtons];
     
+    [self _setupChatMessageViewController];
+    
     [self _formatFlatUI];
+}
+
+-(void)_setupChatMessageViewController
+{
+    UIStoryboard* storyboard = [UIStoryboard storyboardWithName:STORYBOARD_IPHONE bundle:nil];
+    _chatMessageViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATMESSAGE_IPHONE];
 }
 
 -(void)_formatFlatUI
@@ -707,11 +705,22 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     _selfVideoView.hidden = !_isSelfVideoOpen;
 }
 
+- (void) _popChatMessageViewController
+{
+//    [_chatMessageViewController popConnectView:self animated:YES];
+    [_guiModule.chatWizardController pushViewController:_chatMessageViewController animated:YES];
+}
+
 #pragma mark - IBActions
 
 - (IBAction)didPressEndChatButton:(id)sender
 {
     [self _remoteEndChat];
+}
+
+- (IBAction)didPressChatMessageButton:(id)sender
+{
+    [self _popChatMessageViewController];
 }
 
 - (IBAction)didPressSelfVideoButton:(id)sender

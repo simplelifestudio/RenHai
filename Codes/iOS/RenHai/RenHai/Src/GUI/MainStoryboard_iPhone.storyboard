@@ -61,6 +61,7 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
+                    <size key="freeformSize" width="320" height="568"/>
                     <connections>
                         <outlet property="label1" destination="dix-5b-p0q" id="vzq-rW-ayO"/>
                         <outlet property="label2" destination="LCa-5k-1zF" id="u0p-SO-7pL"/>
@@ -256,6 +257,22 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VYK-Qi-6VH" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="952" y="1174"/>
+        </scene>
+        <!--Chat Message View Controller i Phone-->
+        <scene sceneID="Ise-Qg-GKZ">
+            <objects>
+                <viewController storyboardIdentifier="chatmessage_iphone" id="BDV-7q-s7z" customClass="ChatMessageViewController_iPhone" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="4ct-gm-OSt">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                    <size key="freeformSize" width="320" height="260"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BnT-BA-DBY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1358" y="1174"/>
         </scene>
         <!--Connect View Controller i Phone-->
         <scene sceneID="RXT-2p-0YG">
@@ -510,22 +527,33 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                                 <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ypu-rk-vhR" userLabel="selfVideoButton" customClass="FUIButton">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ypu-rk-vhR" userLabel="endChatButton" customClass="FUIButton">
                                 <rect key="frame" x="160" y="460" width="160" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" title="本方">
+                                <state key="normal" title="挂断">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
                                     <action selector="didPressEndChatButton:" destination="Rwb-k1-UZq" eventType="touchUpInside" id="CZm-eD-vNz"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Htq-gH-nWp" userLabel="endChatButton" customClass="FUIButton">
-                                <rect key="frame" x="0.0" y="460" width="160" height="44"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="lMG-93-d6C" userLabel="chatMessageButton" customClass="FUIButton">
+                                <rect key="frame" x="80" y="460" width="80" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" title="挂断">
+                                <state key="normal" title="纸条">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="didPressChatMessageButton:" destination="Rwb-k1-UZq" eventType="touchUpInside" id="nbg-WD-YqL"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Htq-gH-nWp" userLabel="selfVideoButton" customClass="FUIButton">
+                                <rect key="frame" x="0.0" y="460" width="80" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="本方">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -541,6 +569,7 @@
                     <nil key="simulatedBottomBarMetrics"/>
                     <size key="freeformSize" width="320" height="568"/>
                     <connections>
+                        <outlet property="chatMessageButton" destination="lMG-93-d6C" id="fEj-cg-44H"/>
                         <outlet property="countLabel" destination="Og5-3I-tAM" id="rwi-8g-KXw"/>
                         <outlet property="endChatButton" destination="ypu-rk-vhR" id="hq0-xJ-4Vd"/>
                         <outlet property="maskView" destination="kfI-o8-qqI" id="AYG-tI-4Ra"/>
@@ -699,7 +728,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <view contentMode="scaleToFill" id="Y9q-yq-7Al" userLabel="bannerView" customClass="CBAutoScrollLabel">
-                                <rect key="frame" x="10" y="250" width="300" height="50"/>
+                                <rect key="frame" x="10" y="235" width="300" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>

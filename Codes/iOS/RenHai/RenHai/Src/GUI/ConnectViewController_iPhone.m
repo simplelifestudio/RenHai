@@ -60,7 +60,7 @@ ConnectStatus;
     NSInvocationOperation* _timerStartOperation;
     NSInvocationOperation* _timerStopOperation;
     
-    BOOL _isViewControllerVisible;
+    volatile BOOL _isViewControllerVisible;
  
     NSOperationQueue* _operationQueue;
     volatile BOOL _isProxyDataSyncSuccess;
@@ -486,7 +486,7 @@ ConnectStatus;
             {
                [proxy fromJSONObject:proxyDic];
 
-#warning Need to be replace once server proxy is ready
+#warning TODO
                switch (ServerServiceStatus_Normal)
 //               switch (status.serviceStatus)
                {
