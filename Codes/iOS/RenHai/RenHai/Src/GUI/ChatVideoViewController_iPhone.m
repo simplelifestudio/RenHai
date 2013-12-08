@@ -20,7 +20,8 @@
 #define DELAY_ENDCHAT 1.0f
 
 #define INTERVAL_TOOLBARDISPLAYTICK 1
-#define INTERVAL_ALOHA 60
+#define INTERVAL_CHATMESSAGE_DISPLAY 60
+#define INTERVAL_ALOHA 5
 
 #define _TOOLBAR_DISPLAY_PERIOD 3
 
@@ -53,6 +54,8 @@
     volatile BOOL _isInitialized;
     
     volatile BOOL _isSelfVideoOpen;
+    
+    volatile BOOL _isChatMessageEnabled;
     
     UITapGestureRecognizer* _singleTapGesturer;
     UIPanGestureRecognizer* _panGesturer;
@@ -165,6 +168,8 @@
     
     _isSelfDeciding = NO;
     
+    _isChatMessageEnabled = YES;
+    
     _count = 0;
     [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
 
@@ -215,7 +220,7 @@
 
 -(void) onOthersideChatMessage
 {
-#warning TODO
+    [self _showNewChatMessage];
 }
 
 #pragma mark - Private Methods
@@ -240,6 +245,8 @@
     _selfVideoView.layer.borderColor = BORDERCOLOR_VIDEOVIEW.CGColor;
     _selfVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
     _selfVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
+    
+    _isChatMessageEnabled = YES;
     
     [self _setupGesturers];
     
@@ -275,6 +282,10 @@
     _selfVideoButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
     [_selfVideoButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_selfVideoButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
+    
+    _chatMessageButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+    [_chatMessageButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
+    [_chatMessageButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
     
     _endChatButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
     [_endChatButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
@@ -435,7 +446,7 @@
 
 -(BOOL) _isNavigationBarAndToolbarHidden
 {
-    return (self.navigationController.navigationBar.hidden);
+    return _endChatButton.hidden;
 }
 
 -(void) _setNavigationBarAndToolbarHidden:(BOOL) hidden
@@ -449,8 +460,9 @@
         [self _activateToolbarDisplayTimer];
     }
     
-    [self.navigationController setNavigationBarHidden:hidden animated:YES];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     _selfVideoButton.hidden = hidden;
+    _chatMessageButton.hidden = hidden;
     _endChatButton.hidden = hidden;
     
     if (_subscriberView)
@@ -469,8 +481,13 @@
 -(void) _remoteEndChat
 {
     [CBAppUtils asyncProcessInMainThread:^(){
+        _isChatMessageEnabled = NO;
+        [[MessageBarManager sharedInstance] dismissAllMessages];
+        
         _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Disconnected", nil);
-        [self _resetSelfVideoToClose];        
+        [self _resetSelfVideoToClose];
+        
+        [self _setNavigationBarAndToolbarHidden:NO];
     }];
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
@@ -532,11 +549,10 @@
 
 - (void) _checkIsOthersideChatMessageUnread
 {
-    UserDataModule* userDataModule = [UserDataModule sharedInstance];
-    RHBusinessSession* businessSession = userDataModule.businessSession;
+    RHBusinessSession* businessSession = _userDataModule.businessSession;
     if ([businessSession hasNewChatMessage])
     {
-#warning TODO
+        [self _showNewChatMessage];        
     }
 }
 
@@ -579,23 +595,25 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void)_activateAlohaTimer
 {
-//    _alohaTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_ALOHA target:self selector:@selector(_remoteAloha) userInfo:nil repeats:YES];
+    _alohaTimer = [NSTimer scheduledTimerWithTimeInterval:INTERVAL_ALOHA target:self selector:@selector(_remoteAloha) userInfo:nil repeats:YES];
 }
 
 -(void)_deactivateAlohaTimer
 {
-//    if (nil != _alohaTimer)
-//    {
-//        [_alohaTimer invalidate];
-//        _alohaTimer = nil;
-//    }
+    if (nil != _alohaTimer)
+    {
+        [_alohaTimer invalidate];
+        _alohaTimer = nil;
+    }
 }
 
 -(void) _remoteAloha
 {
-    DDLogVerbose(@"#####ChatVideo-Aloha");
+    [_userDataModule.businessSession addChatMessageWithSender:ChatMessageSender_Partner andText:@"这只是一条供测试使用的小纸条。"];
+    [self onOthersideChatMessage];
     
-    [_commModule alohaRequest:_userDataModule.device];
+//    DDLogVerbose(@"#####ChatVideo-Aloha");
+//    [_commModule alohaRequest:_userDataModule.device];
 }
 
 -(void)_registerNotifications
@@ -708,7 +726,21 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 - (void) _popChatMessageViewController
 {
 //    [_chatMessageViewController popConnectView:self animated:YES];
-    [_guiModule.chatWizardController pushViewController:_chatMessageViewController animated:YES];
+//    [_guiModule.chatWizardController pushViewController:_chatMessageViewController animated:YES];
+}
+
+- (void) _showNewChatMessage
+{
+    if (_isChatMessageEnabled)
+    {
+        RHBusinessSession* businessSession = _userDataModule.businessSession;
+        RHChatMessage* chatMessage = [businessSession readChatMessage];
+        
+        [[MessageBarManager sharedInstance] showMessageWithTitle:NSLocalizedString(@"ChatVideo_PartnerChatMessage", nil)
+                                                     description:chatMessage.text
+                                                            type:MessageBarMessageTypeInfo
+                                                     forDuration:INTERVAL_CHATMESSAGE_DISPLAY];
+    }
 }
 
 #pragma mark - IBActions

@@ -252,11 +252,7 @@ ChatWaitStatus;
     {
         requireLabelCount = COUNT_FLOATINGLABELS_4;
     }
-    else if (IS_IPHONE4_OR_4S)
-    {
-        requireLabelCount = COUNT_FLOATINGLABELS_3_5;
-    }
-    else if (IS_IPAD1_OR_2_OR_MINI)
+    else
     {
         requireLabelCount = COUNT_FLOATINGLABELS_3_5;
     }

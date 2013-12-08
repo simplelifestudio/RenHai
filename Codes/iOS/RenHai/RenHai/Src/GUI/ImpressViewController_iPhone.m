@@ -106,11 +106,7 @@
         {
             requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_4;
         }
-        else if (IS_IPHONE4_OR_4S)
-        {
-            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
-        }
-        else if (IS_IPAD1_OR_2_OR_MINI)
+        else
         {
             requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
         }
@@ -214,11 +210,7 @@
         {
             requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_4;
         }
-        else if (IS_IPHONE4_OR_4S)
-        {
-            requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
-        }
-        else if (IS_IPAD1_OR_2_OR_MINI)
+        else
         {
             requireCount = IMPRESSLABELSVIEW_SECTION_IMPRESSLABELS_ITEMCOUNT_3_5;
         }

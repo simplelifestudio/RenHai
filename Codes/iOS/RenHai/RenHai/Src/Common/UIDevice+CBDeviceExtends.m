@@ -16,7 +16,12 @@
 
 + (UIDeviceResolution) currentResolution
 {
-    if(UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    if ([[UIDevice currentDevice].model rangeOfString:@"iPad"].location != NSNotFound)
+    {
+#warning Below code can not detect iPad mini correctly.
+        return (([[UIScreen mainScreen] respondsToSelector: @selector(scale)]) ? UIDevice_iPadHiRes : UIDevice_iPadStandardRes);
+    }
+    else
     {
         if ([[UIScreen mainScreen] respondsToSelector: @selector(scale)])
         {
@@ -33,10 +38,6 @@
         {
             return UIDevice_iPhoneStandardRes;
         }
-    }
-    else
-    {
-        return (([[UIScreen mainScreen] respondsToSelector: @selector(scale)]) ? UIDevice_iPadHiRes : UIDevice_iPadStandardRes);
     }
 }
 
