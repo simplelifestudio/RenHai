@@ -14,6 +14,7 @@ pod 'CWPopup', '~> 1.2.5'
 pod 'AutoScrollLabel', '~> 0.2.1'
 pod 'FloatingClouds', :git => 'https://github.com/satgi/FloatingCloudsView.git'
 pod 'KXKiOS7ColorsAndGradients', '~> 1.0.0'
+pod 'JSMessagesViewController'
 
 target :RenHaiGHUnitTest do
         pod 'GHUnitIOS', '~> 0.5.8'

@@ -243,6 +243,9 @@
 		CD736CEF1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */; };
 		CD736CF41817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */; };
 		CD736CF51817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */; };
+		CD7EE477185309AD0091EA7A /* RHChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CD7EE476185309AD0091EA7A /* RHChatMessage.m */; };
+		CD7EE478185309AD0091EA7A /* RHChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CD7EE476185309AD0091EA7A /* RHChatMessage.m */; };
+		CD7EE479185309AD0091EA7A /* RHChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CD7EE476185309AD0091EA7A /* RHChatMessage.m */; };
 		CD94DEF71851614E00C9CBC4 /* RHStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = CD94DEF61851614E00C9CBC4 /* RHStatus.m */; };
 		CD94DEF81851614E00C9CBC4 /* RHStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = CD94DEF61851614E00C9CBC4 /* RHStatus.m */; };
 		CD94DEFC1851918000C9CBC4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B43F717CF580A009BB21B /* main.m */; };
@@ -660,6 +663,8 @@
 		CD736CEC1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImpressLabelsHeaderView_iPhone.h; sourceTree = "<group>"; };
 		CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImpressLabelsHeaderView_iPhone.m; sourceTree = "<group>"; };
 		CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImpressLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
+		CD7EE475185309AD0091EA7A /* RHChatMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHChatMessage.h; sourceTree = "<group>"; };
+		CD7EE476185309AD0091EA7A /* RHChatMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHChatMessage.m; sourceTree = "<group>"; };
 		CD94DEF51851614E00C9CBC4 /* RHStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHStatus.h; sourceTree = "<group>"; };
 		CD94DEF61851614E00C9CBC4 /* RHStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHStatus.m; sourceTree = "<group>"; };
 		CD94DF901851918100C9CBC4 /* RenHaiLocal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHaiLocal.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -789,6 +794,7 @@
 			isa = PBXGroup;
 			children = (
 				C5F8936817CFA136003EF1B3 /* Src */,
+				C5F8936D17CFA136003EF1B3 /* Logger */,
 				C55B441117CF587A009BB21B /* Lib */,
 				C55B441217CF587A009BB21B /* Res */,
 				C55B43F217CF580A009BB21B /* Supporting Files */,
@@ -938,12 +944,11 @@
 			children = (
 				C5F8936A17CFA136003EF1B3 /* Common */,
 				C5F8936917CFA136003EF1B3 /* AppData */,
+				C5F8936E17CFA136003EF1B3 /* UserData */,
 				CD3C04DC181F9055002B19A3 /* BusinessStatus */,
 				C5F8936B17CFA136003EF1B3 /* Communication */,
-				C5F8936C17CFA136003EF1B3 /* GUI */,
-				C5F8936D17CFA136003EF1B3 /* Logger */,
-				C5F8936E17CFA136003EF1B3 /* UserData */,
 				C5F8936F17CFA136003EF1B3 /* WebRTC */,
+				C5F8936C17CFA136003EF1B3 /* GUI */,
 			);
 			path = Src;
 			sourceTree = "<group>";
@@ -1124,7 +1129,8 @@
 				C50505E017D2C53A00DB6589 /* LoggerModule.h */,
 				C50505E117D2C53A00DB6589 /* LoggerModule.m */,
 			);
-			path = Logger;
+			name = Logger;
+			path = Src/Logger;
 			sourceTree = "<group>";
 		};
 		C5F8936E17CFA136003EF1B3 /* UserData */ = {
@@ -1166,6 +1172,8 @@
 				CDC051951802E389006158B8 /* RHServerInterestLabelList.m */,
 				CD34DCB1180A8F4E003BBE06 /* RHBusinessSession.h */,
 				CD34DCB2180A8F4F003BBE06 /* RHBusinessSession.m */,
+				CD7EE475185309AD0091EA7A /* RHChatMessage.h */,
+				CD7EE476185309AD0091EA7A /* RHChatMessage.m */,
 				CDBE9E231834547500005405 /* RHWebRTC.h */,
 				CDBE9E241834547500005405 /* RHWebRTC.m */,
 				CDBE9E27183457D700005405 /* RHMatchedCondition.h */,
@@ -1657,6 +1665,7 @@
 				C593C45F17D32AC800C26367 /* ChatAssessViewController_iPhone.m in Sources */,
 				C593C46317D32ADE00C26367 /* ChatVideoViewController_iPhone.m in Sources */,
 				C593C46717D32AF600C26367 /* WarningViewController_iPhone.m in Sources */,
+				CD7EE477185309AD0091EA7A /* RHChatMessage.m in Sources */,
 				C593C46B17D4224B00C26367 /* LeftBarViewController_iPhone.m in Sources */,
 				C593C46F17D4235A00C26367 /* LeftBarHeaderView_iPhone.m in Sources */,
 				C593C47617D42B5A00C26367 /* LeftBarFooterView_iPhone.m in Sources */,
@@ -1791,6 +1800,7 @@
 				C580526E17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m in Sources */,
 				C580527217E1E577003D9F88 /* ServerInterestLabelsHeaderView_iPhone.m in Sources */,
 				CD32013B17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */,
+				CD7EE478185309AD0091EA7A /* RHChatMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1853,6 +1863,7 @@
 				CD94DF301851918000C9CBC4 /* ChatAssessViewController_iPhone.m in Sources */,
 				CD94DF311851918000C9CBC4 /* ChatVideoViewController_iPhone.m in Sources */,
 				CD94DF321851918000C9CBC4 /* WarningViewController_iPhone.m in Sources */,
+				CD7EE479185309AD0091EA7A /* RHChatMessage.m in Sources */,
 				CD94DF331851918000C9CBC4 /* LeftBarViewController_iPhone.m in Sources */,
 				CD94DF341851918000C9CBC4 /* LeftBarHeaderView_iPhone.m in Sources */,
 				CD94DF351851918000C9CBC4 /* LeftBarFooterView_iPhone.m in Sources */,

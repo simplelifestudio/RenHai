@@ -276,6 +276,14 @@ SINGLETON(UserDataModule)
                 
                 break;
             }
+            case BusinessSessionNotificationType_OthersideChatMessage:
+            {
+                [_statusModule recordServerNotification:ServerNotificationIdentifier_OthersideChatMessage];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_OTHERSIDECHATMESSAGE object:self];
+                
+                break;
+            }
             default:
             {
                 break;

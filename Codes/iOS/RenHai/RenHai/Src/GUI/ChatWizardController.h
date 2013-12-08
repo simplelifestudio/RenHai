@@ -21,6 +21,7 @@
 -(void) onOthersideRejected;
 -(void) onOthersideLost;
 -(void) onOthersideEndChat;
+-(void) onOthersideChatMessage;
 
 @end
 

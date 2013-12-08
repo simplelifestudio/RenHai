@@ -189,6 +189,8 @@
     
     [self _checkIsOthersideLost];
     
+    [self _checkIsOthersideChatMessageUnread];    
+    
     [self _registerNotifications];
     
     [self _connectWebRTC];
@@ -219,6 +221,11 @@
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Lost", nil);
     
     [self _remoteEndChat];
+}
+
+-(void) onOthersideChatMessage
+{
+#warning TODO
 }
 
 #pragma mark - Private Methods
@@ -525,6 +532,16 @@
     }
 }
 
+- (void) _checkIsOthersideChatMessageUnread
+{
+    UserDataModule* userDataModule = [UserDataModule sharedInstance];
+    RHBusinessSession* businessSession = userDataModule.businessSession;
+    if ([businessSession hasNewChatMessage])
+    {
+#warning TODO
+    }
+}
+
 static NSInteger _kToolbarDisplaySeconds = 0;
 -(void)_toolbarDisplayTimerClick
 {
@@ -772,6 +789,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void) subscriberDidConnectToStream
 {
+    DDLogVerbose(@"#####WebRTC: Subscriber begins to connect streaming.");
+    
     OpenTokAgent* agent = _webRTCModule.openTokAgent;
     _subscriberView = agent.subscriberView;
     if (nil != _subscriberView)
@@ -787,6 +806,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
         
         [self _clockCancel];
     }
+    
+    DDLogVerbose(@"#####WebRTC: Subscriber finishes to connect streaming.");
 }
 
 -(void) subscriberDidChangeVideoDimensions:(CGSize)dimensions
