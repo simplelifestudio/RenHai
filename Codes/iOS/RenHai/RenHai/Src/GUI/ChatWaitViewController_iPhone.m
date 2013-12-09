@@ -19,7 +19,7 @@
 
 #define DELAY CIRCLE_ANIMATION_DISPLAY
 #define INTERVAL_ALOHA 60
-#define DELAY_MATCHSTART 2.0f
+#define DELAY_MATCHSTART 3
 
 #define COUNT_FLOATINGLABELS_3_5 20
 #define COUNT_FLOATINGLABELS_4 25
@@ -291,9 +291,11 @@ ChatWaitStatus;
     
     _count++;
     
-    if (_count > DELAY_MATCHSTART)
+    int a = _count % DELAY_MATCHSTART;
+    DDLogVerbose(@"#####a = %d", a);
+    if (0 == a)
     {
-        [self _requestMatchStart];
+        [self _remoteRequestMatchStart];
     }
 }
 
@@ -352,9 +354,9 @@ ChatWaitStatus;
     }];
 }
 
--(void)_requestMatchStart
+-(void)_remoteRequestMatchStart
 {
-    if (_hasRequestedMatchStart)
+    if (_hasRequestedMatchStart && _matchStartFlag)
     {
         return;
     }
