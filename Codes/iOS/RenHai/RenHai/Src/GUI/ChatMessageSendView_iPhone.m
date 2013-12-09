@@ -65,6 +65,14 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
+-(BOOL)resignFirstResponder
+{
+    [self.textField resignFirstResponder];
+    self.hidden = YES;
+    
+    return [super resignFirstResponder];
+}
+
 #pragma mark - IBActions
 
 - (IBAction)didPressSendButton:(id)sender
@@ -121,13 +129,6 @@
                      animations:^{
                          self.frame = CGRectMake(0, self.superview.frame.size.height - _oldFrame.size.height * 2, _oldFrame.size.width, _oldFrame.size.height);
                      } completion:nil];
-}
-
--(BOOL)resignFirstResponder
-{
-    [self.textField resignFirstResponder];
-    self.hidden = YES;
-    return [super resignFirstResponder];
 }
 
 #pragma mark - UITextFieldDelegate

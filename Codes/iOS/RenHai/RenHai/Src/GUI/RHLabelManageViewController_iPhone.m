@@ -13,9 +13,6 @@
 
 #define LENGTH_LIMIT_HANZI 5
 
-#define MOVE_OFFSET_FOR_KEYBOARD_3_5 80
-#define MOVE_OFFSET_FOR_KEYBOARD_4 40
-
 #define MOVE_DURATION_FOR_KEYBOARD 0.3f
 
 @interface RHLabelManageViewController_iPhone () <UITextFieldDelegate>
@@ -52,7 +49,7 @@
     vc.manageMode = ManageMode_ModifyLabel;
     vc.manageDelegate = manageDelegate;
     vc.oldLabel = label;
-    
+
     return vc;
 }
 
@@ -94,12 +91,20 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self _registerNotifications];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [_textField becomeFirstResponder];    
+    
+    [_textField becomeFirstResponder];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [self _unregisterNotifications];
 }
 
 - (void)didReceiveMemoryWarning
@@ -108,38 +113,6 @@
 }
 
 #pragma mark - UITextFieldDelegate
-
--(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-{
-//    BOOL flag = NO;
-//    
-//    @try
-//    {
-//        NSMutableString* text = [_textField.text mutableCopy];
-//        NSInteger oldTextNumber = [CBStringUtils calculateTextNumber:text];
-//        
-//        [text replaceCharactersInRange:range withString:string];
-//        NSInteger newTextNumber = [CBStringUtils calculateTextNumber:text];
-//        
-//        flag = (newTextNumber <= LENGTH_LIMIT || newTextNumber < oldTextNumber);
-//        
-//        flag = YES;
-//    }
-//    @catch (NSException *exception)
-//    {
-//        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
-//        
-//        flag = NO;
-//    }
-//    @finally
-//    {
-//
-//    }
-//    
-//    return flag;
-    
-    return YES;
-}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
@@ -159,29 +132,6 @@
     }
     
     return flag;
-}
-
-- (BOOL)textFieldShouldBeginEditing:(id)sender
-{
-    if (!_hasMovedForOffset)
-    {
-        _hasMovedForOffset = YES;
-        
-#warning Should replace with API but not hard code
-        NSUInteger requireCount = 0;
-        if (IS_IPHONE5)
-        {
-            requireCount = MOVE_OFFSET_FOR_KEYBOARD_4;
-        }
-        else
-        {
-            requireCount = MOVE_OFFSET_FOR_KEYBOARD_3_5;
-        }
-        
-        self.view.center = CGPointMake(self.view.center.x, self.view.center.y - requireCount);
-    }
-    
-    return YES;
 }
 
 #pragma mark - IBActions
@@ -290,6 +240,42 @@
         [_limitCountLabel setTextColor:FLATUI_COLOR_TEXT_WARN];
     }
     [_limitCountLabel setText:[NSString stringWithFormat:@"%d", limitCount]];
+}
+
+-(void) _registerNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+-(void) _unregisterNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)_keyboardWillShow:(NSNotification*)notification
+{
+    CGRect _keyboardRect = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect _oldFrame = self.view.frame;
+    
+    [UIView animateWithDuration:MOVE_DURATION_FOR_KEYBOARD
+                          delay:0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.view.frame = CGRectMake(_oldFrame.origin.x, _keyboardRect.origin.y - _oldFrame.size.height, _oldFrame.size.width, _oldFrame.size.height);
+                     } completion:nil];
+}
+
+- (void)_keyboardWillHide:(NSNotification*)notification
+{
+//    CGRect _oldFrame = self.view.frame;
+//    
+//    [UIView animateWithDuration:MOVE_DURATION_FOR_KEYBOARD
+//                          delay:0
+//                        options:UIViewAnimationOptionCurveEaseInOut
+//                     animations:^{
+//                         self.view.frame = CGRectMake(0, self.view.frame.size.height - _oldFrame.size.height * 2, _oldFrame.size.width, _oldFrame.size.height);
+//                     } completion:nil];
 }
 
 @end

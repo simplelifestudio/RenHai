@@ -923,12 +923,23 @@
     
     [self _remoteUpdateInterestCard];
     
-    [_guiModule.mainViewController dismissPopupViewControllerAnimated:YES completion:nil];
+    [self _dismissPopupViewController];
 }
 
 -(void) didLabelManageCancel
 {
-    [_guiModule.mainViewController dismissPopupViewControllerAnimated:YES completion:nil];
+    [self _dismissPopupViewController];
+}
+
+- (void)_dismissPopupViewController
+{
+    UIViewController* rootVC = [CBUIUtils getRootController];
+    if (rootVC.popupViewController != nil)
+    {
+        [rootVC dismissPopupViewControllerAnimated:YES completion:^{
+            
+        }];
+    }
 }
 
 #pragma mark - Remote Operations
