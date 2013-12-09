@@ -131,7 +131,14 @@ public class MockApp implements IMockApp, Runnable
 				else
 				{
 					JSONObject obj = messageQueue.remove();
-					mockApp.execute(obj);
+					try
+					{
+						mockApp.execute(obj);
+					}
+					catch(Exception e)
+					{
+						FileLogger.printStackTrace(e);
+					}
 				}
 			}
 		}
@@ -941,7 +948,14 @@ public class MockApp implements IMockApp, Runnable
 		{
 			if (behaviorMode == MockAppBehaviorMode.Monitor)
 			{
-				saveMonitorData(body);
+				try
+				{
+					saveMonitorData(body);
+				}
+				catch(Exception e)
+				{
+					FileLogger.printStackTrace(e);
+				}
 			}
 			return;
 		}

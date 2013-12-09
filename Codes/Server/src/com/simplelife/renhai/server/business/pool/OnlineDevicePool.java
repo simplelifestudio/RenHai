@@ -123,7 +123,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     
     private OnlineDevicePool()
     {
-    	this.addBusinessPool(Consts.BusinessType.Random, new RandomBusinessDevicePool());
+    	//this.addBusinessPool(Consts.BusinessType.Random, new RandomBusinessDevicePool());
     	this.addBusinessPool(Consts.BusinessType.Interest, new InterestBusinessDevicePool());
     	setCapacity(GlobalSetting.BusinessSetting.OnlinePoolCapacity);
     }
