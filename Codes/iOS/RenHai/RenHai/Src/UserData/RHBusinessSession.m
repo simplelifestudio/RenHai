@@ -55,8 +55,12 @@
 {
     if(nil != message)
     {
-        message.hasRead = YES;
-        [_chatMessages addObject:message];        
+        if (message.sender == ChatMessageSender_Self)
+        {
+            message.hasRead = YES;
+        }
+        
+        [_chatMessages addObject:message];
     }
 }
 
@@ -64,10 +68,13 @@
 {
     BOOL flag = NO;
     
-    RHChatMessage* message = [_chatMessages lastObject];
-    if (nil != message)
+    for (RHChatMessage* message in _chatMessages)
     {
-        flag = message.hasRead;
+        if (message.sender == ChatMessageSender_Partner && !message.hasRead)
+        {
+            flag = YES;
+            break;
+        }
     }
     
     return flag;
@@ -75,10 +82,22 @@
 
 -(RHChatMessage*) readChatMessage
 {
-    return [_chatMessages lastObject];
+    RHChatMessage* chatMessage = nil;
+    
+    for (RHChatMessage* message in _chatMessages)
+    {
+        if (message.sender == ChatMessageSender_Partner && !message.hasRead)
+        {
+            chatMessage = message;
+            chatMessage.hasRead = YES;
+            break;
+        }
+    }
+    
+    return chatMessage;
 }
 
--(RHChatMessage*) chateMessageAtIndex:(NSUInteger) index
+-(RHChatMessage*) chatMessageAtIndex:(NSUInteger) index
 {
     RHChatMessage* message = nil;
     
