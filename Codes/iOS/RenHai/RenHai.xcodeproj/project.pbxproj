@@ -436,6 +436,12 @@
 		CDDBE35718548D1E001A1744 /* icon-success.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34A18548D1E001A1744 /* icon-success.png */; };
 		CDDBE35818548D1E001A1744 /* icon-success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34B18548D1E001A1744 /* icon-success@2x.png */; };
 		CDDBE35918548D1E001A1744 /* icon-success@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE34B18548D1E001A1744 /* icon-success@2x.png */; };
+		CDDBE35C1854AAED001A1744 /* ChatMessageSendView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDDBE35B1854AAED001A1744 /* ChatMessageSendView_iPhone.m */; };
+		CDDBE35D1854AAED001A1744 /* ChatMessageSendView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDDBE35B1854AAED001A1744 /* ChatMessageSendView_iPhone.m */; };
+		CDDBE35E1854AAED001A1744 /* ChatMessageSendView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDDBE35B1854AAED001A1744 /* ChatMessageSendView_iPhone.m */; };
+		CDDBE3601854ACA4001A1744 /* ChatMessageSendView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE35F1854ACA4001A1744 /* ChatMessageSendView_iPhone.xib */; };
+		CDDBE3611854ACA4001A1744 /* ChatMessageSendView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE35F1854ACA4001A1744 /* ChatMessageSendView_iPhone.xib */; };
+		CDDBE3621854ACA4001A1744 /* ChatMessageSendView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDBE35F1854ACA4001A1744 /* ChatMessageSendView_iPhone.xib */; };
 		CDFEA31C182A175600F0351D /* order.png in Resources */ = {isa = PBXBuildFile; fileRef = CDFEA31A182A175600F0351D /* order.png */; };
 		CDFEA31D182A175600F0351D /* order@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CDFEA31B182A175600F0351D /* order@2x.png */; };
 		CDFEA322182A1E5C00F0351D /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDFEA31E182A1E5B00F0351D /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib */; };
@@ -721,6 +727,9 @@
 		CDDBE34918548D1E001A1744 /* icon-info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-info@2x.png"; sourceTree = "<group>"; };
 		CDDBE34A18548D1E001A1744 /* icon-success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-success.png"; sourceTree = "<group>"; };
 		CDDBE34B18548D1E001A1744 /* icon-success@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-success@2x.png"; sourceTree = "<group>"; };
+		CDDBE35A1854AAED001A1744 /* ChatMessageSendView_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageSendView_iPhone.h; sourceTree = "<group>"; };
+		CDDBE35B1854AAED001A1744 /* ChatMessageSendView_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChatMessageSendView_iPhone.m; sourceTree = "<group>"; };
+		CDDBE35F1854ACA4001A1744 /* ChatMessageSendView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatMessageSendView_iPhone.xib; sourceTree = "<group>"; };
 		CDDF0FE017EB227700DA3E06 /* RenHai.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = RenHai.entitlements; sourceTree = "<group>"; };
 		CDFEA31A182A175600F0351D /* order.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = order.png; sourceTree = "<group>"; };
 		CDFEA31B182A175600F0351D /* order@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "order@2x.png"; sourceTree = "<group>"; };
@@ -1125,6 +1134,9 @@
 				C593C45617D32A9700C26367 /* ChatConfirmViewController_iPhone.m */,
 				C593C46117D32ADE00C26367 /* ChatVideoViewController_iPhone.h */,
 				C593C46217D32ADE00C26367 /* ChatVideoViewController_iPhone.m */,
+				CDDBE35A1854AAED001A1744 /* ChatMessageSendView_iPhone.h */,
+				CDDBE35B1854AAED001A1744 /* ChatMessageSendView_iPhone.m */,
+				CDDBE35F1854ACA4001A1744 /* ChatMessageSendView_iPhone.xib */,
 				CDDBE33A1853FD6B001A1744 /* ChatMessageViewController_iPhone.h */,
 				CDDBE33B1853FD6B001A1744 /* ChatMessageViewController_iPhone.m */,
 				C593C45D17D32AC800C26367 /* ChatAssessViewController_iPhone.h */,
@@ -1407,6 +1419,7 @@
 				C596283F17DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png in Resources */,
 				C54DC8C717DC069900BBD498 /* enterbutton_highlighted.png in Resources */,
 				C54DC8C917DC069900BBD498 /* enterbutton_highlighted@2x.png in Resources */,
+				CDDBE3601854ACA4001A1744 /* ChatMessageSendView_iPhone.xib in Resources */,
 				C54DC8CB17DC069900BBD498 /* enterbutton_normal.png in Resources */,
 				C54DC8CD17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
 				CDFEA31D182A175600F0351D /* order@2x.png in Resources */,
@@ -1465,6 +1478,7 @@
 				C54DC8CE17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
 				C54DC8E717DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.xib in Resources */,
 				CDA98259184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib in Resources */,
+				CDDBE3611854ACA4001A1744 /* ChatMessageSendView_iPhone.xib in Resources */,
 				C54DC8F017DD5ECE00BBD498 /* Localizable.strings in Resources */,
 				C53A7F1517DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib in Resources */,
 				CDFEA327182A1E5C00F0351D /* ChatAssessExistImpressLabelsHeaderView_iPhone.xib in Resources */,
@@ -1508,6 +1522,7 @@
 				CD94DF771851918000C9CBC4 /* sidebar_menu_icon_portrait@2x.png in Resources */,
 				CD94DF781851918000C9CBC4 /* enterbutton_highlighted.png in Resources */,
 				CD94DF791851918000C9CBC4 /* enterbutton_highlighted@2x.png in Resources */,
+				CDDBE3621854ACA4001A1744 /* ChatMessageSendView_iPhone.xib in Resources */,
 				CD94DF7A1851918000C9CBC4 /* enterbutton_normal.png in Resources */,
 				CD94DF7B1851918000C9CBC4 /* enterbutton_normal@2x.png in Resources */,
 				CD94DF7C1851918000C9CBC4 /* order@2x.png in Resources */,
@@ -1692,6 +1707,7 @@
 				CDA98255184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */,
 				C50505C017D2BD4800DB6589 /* CBAppUtils.m in Sources */,
 				CDBE9E2F1834D74800005405 /* OpenTokAgent.m in Sources */,
+				CDDBE35C1854AAED001A1744 /* ChatMessageSendView_iPhone.m in Sources */,
 				C50505C217D2BD4800DB6589 /* CBDateUtils.m in Sources */,
 				C50505C417D2BD4800DB6589 /* CBFileUtils.m in Sources */,
 				CD736CEE1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */,
@@ -1803,6 +1819,7 @@
 				CD736CEF1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */,
 				C50505CF17D2BD4800DB6589 /* CBModuleManager.m in Sources */,
 				C50505D117D2BD4800DB6589 /* CBNetworkUtils.m in Sources */,
+				CDDBE35D1854AAED001A1744 /* ChatMessageSendView_iPhone.m in Sources */,
 				C50505D317D2BD4800DB6589 /* CBPathUtils.m in Sources */,
 				CD6D8CD218434A6A00C2330D /* RHDataUtils.m in Sources */,
 				C50505D517D2BD4800DB6589 /* CBSecurityUtils.m in Sources */,
@@ -1893,6 +1910,7 @@
 				CD94DF011851918000C9CBC4 /* LeftBarTableCell_iPhone.m in Sources */,
 				CD94DF021851918000C9CBC4 /* CBAppUtils.m in Sources */,
 				CD94DF031851918000C9CBC4 /* OpenTokAgent.m in Sources */,
+				CDDBE35E1854AAED001A1744 /* ChatMessageSendView_iPhone.m in Sources */,
 				CD94DF041851918000C9CBC4 /* CBDateUtils.m in Sources */,
 				CD94DF051851918000C9CBC4 /* CBFileUtils.m in Sources */,
 				CD94DF061851918000C9CBC4 /* ImpressLabelsHeaderView_iPhone.m in Sources */,

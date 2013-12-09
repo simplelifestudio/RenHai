@@ -167,6 +167,7 @@
     {
         _hasMovedForOffset = YES;
         
+#warning Should replace with API but not hard code
         NSUInteger requireCount = 0;
         if (IS_IPHONE5)
         {

@@ -17,11 +17,13 @@
 #import "WebRTCModule.h"
 #import "OpenTokAgent.h"
 
+#import "ChatMessageSendView_iPhone.h"
+
 #define DELAY_ENDCHAT 1.0f
 
 #define INTERVAL_TOOLBARDISPLAYTICK 1
 #define INTERVAL_CHATMESSAGE_DISPLAY 60
-#define INTERVAL_ALOHA 5
+#define INTERVAL_ALOHA 60
 
 #define _TOOLBAR_DISPLAY_PERIOD 3
 
@@ -29,7 +31,9 @@
 #define CORNERRADIUS_VIDEOVIEW 3.0f;
 #define BORDERCOLOR_VIDEOVIEW FLATUI_COLOR_MAJOR_F
 
-@interface ChatVideoViewController_iPhone () <OpenTokDelegate, UIGestureRecognizerDelegate>
+#define NIB_CHATMESSAGESENDVIEW @"ChatMessageSendView_iPhone"
+
+@interface ChatVideoViewController_iPhone () <OpenTokDelegate, UIGestureRecognizerDelegate, ChatMessageSendDelegate>
 {
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
@@ -64,6 +68,8 @@
     
     OTVideoView* _subscriberView;
     OTVideoView* _publisherView;
+    
+    ChatMessageSendView_iPhone* _sendChatMessageView;
 }
 
 @end
@@ -150,6 +156,14 @@
         [_subscriberView setTransform:CGAffineTransformMakeRotation(M_PI * 2)];
     }
     */
+}
+
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+     {
+         [_sendChatMessageView resignFirstResponder];
+     }];
 }
 
 #pragma mark - ChatWizardPage
@@ -253,9 +267,28 @@
     [self _setupNavigationBar];
     [self _setupActionButtons];
     
+    [self _setupChatMessageSendView];
+    
     [self _setupChatMessageViewController];
     
     [self _formatFlatUI];
+}
+
+-(void)_setupChatMessageSendView
+{
+    if (nil == _sendChatMessageView)
+    {
+        _sendChatMessageView = [CBUIUtils componentFromNib:NIB_CHATMESSAGESENDVIEW owner:self options:nil];
+        [self.view addSubview:_sendChatMessageView];        
+        
+        CGRect oldFrame = _sendChatMessageView.frame;
+        CGRect newFrame = CGRectMake(_selfVideoButton.frame.origin.x, _selfVideoButton.frame.origin.y - oldFrame.size.height * 2, oldFrame.size.width, oldFrame.size.height);
+        _sendChatMessageView.frame = newFrame;
+        
+        _sendChatMessageView.hidden = YES;
+        
+        _sendChatMessageView.sendDelegate = self;
+    }
 }
 
 -(void)_setupChatMessageViewController
@@ -532,6 +565,38 @@
     }];
 }
 
+- (void) _remoteSendChatMessage:(RHChatMessage*) message
+{
+    [CBAppUtils asyncProcessInBackgroundThread:^(){
+        UserDataModule* userDataModule = [UserDataModule sharedInstance];
+        RHBusinessSession* businessSession = userDataModule.businessSession;
+        RHDevice* device = userDataModule.device;
+        
+        [businessSession addChatMessage:message];
+        
+        NSString* businessSessionId = businessSession.businessSessionId;
+        RHBusinessType businessType = businessSession.businessType;
+        BusinessSessionRequestType businessSessionRequestType = BusinessSessionRequestType_ChatMessage;
+        NSDictionary* info = [NSDictionary dictionaryWithObject:message.text forKey:MESSAGE_KEY_CHATMESSAGE];
+        
+        CommunicationModule* commModule = [CommunicationModule sharedInstance];
+        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:businessSessionRequestType device:device info:info];
+        [commModule businessSessionRequest:requestMessage
+            successCompletionBlock:^(){
+
+            }
+            failureCompletionBlock:^(){
+
+            }
+            afterCompletionBlock:^(){
+              [CBAppUtils asyncProcessInMainThread:^(){
+                  
+              }];
+            }
+         ];
+    }];
+}
+
 -(void) _checkIsOthersideLost
 {
     BusinessStatusModule* statusModule = [BusinessStatusModule sharedInstance];
@@ -609,9 +674,6 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void) _remoteAloha
 {
-    [_userDataModule.businessSession addChatMessageWithSender:ChatMessageSender_Partner andText:@"这只是一条供测试使用的小纸条。"];
-    [self onOthersideChatMessage];
-    
 //    DDLogVerbose(@"#####ChatVideo-Aloha");
 //    [_commModule alohaRequest:_userDataModule.device];
 }
@@ -723,6 +785,17 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     _selfVideoView.hidden = !_isSelfVideoOpen;
 }
 
+- (void) _switchChatMessageSendViewOpenOrClose
+{
+    BOOL hidden = _sendChatMessageView.hidden;
+    _sendChatMessageView.hidden = !hidden;
+    
+    if (!_sendChatMessageView.hidden)
+    {
+        [_sendChatMessageView.textField becomeFirstResponder];
+    }
+}
+
 - (void) _popChatMessageViewController
 {
 //    [_chatMessageViewController popConnectView:self animated:YES];
@@ -752,7 +825,7 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 - (IBAction)didPressChatMessageButton:(id)sender
 {
-    [self _popChatMessageViewController];
+    [self _switchChatMessageSendViewOpenOrClose];
 }
 
 - (IBAction)didPressSelfVideoButton:(id)sender
@@ -864,6 +937,16 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 -(void) subscriberDidChangeVideoDimensions
 {
     
+}
+
+#pragma mark - ChatMessageSendDelegate
+
+-(void) onSendMessage:(NSString *)text
+{
+    RHChatMessage* chatMessage = [[RHChatMessage alloc] initWithSender:ChatMessageSender_Self andText:text];
+    [self _remoteSendChatMessage:chatMessage];
+    
+//    [self _switchChatMessageSendViewOpenOrClose];
 }
 
 @end

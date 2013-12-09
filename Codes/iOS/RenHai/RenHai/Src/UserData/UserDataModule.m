@@ -281,7 +281,9 @@ SINGLETON(UserDataModule)
                 [_statusModule recordServerNotification:ServerNotificationIdentifier_OthersideChatMessage];
                 
                 NSDictionary* messageBody = message.body;
-                NSString* text = (NSString*)[messageBody objectForKey:MESSAGE_KEY_CHATMESSAGE];
+                NSDictionary* infoDic = (NSDictionary*)[messageBody objectForKey:MESSAGE_KEY_OPERATIONINFO];
+                NSString* text = (NSString*)[infoDic objectForKey:MESSAGE_KEY_CHATMESSAGE];
+                
                 [_businessSession addChatMessageWithSender:ChatMessageSender_Partner andText:text];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_OTHERSIDECHATMESSAGE object:self];

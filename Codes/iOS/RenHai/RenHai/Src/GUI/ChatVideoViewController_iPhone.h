@@ -14,6 +14,8 @@
 
 #import "RHChatActionBar.h"
 
+#import "ChatMessageSendView_iPhone.h"
+
 @interface ChatVideoViewController_iPhone : UIViewController <ChatWizardPage>
 
 @property (strong, nonatomic) ChatMessageViewController_iPhone* chatMessageViewController;

@@ -204,6 +204,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_OTHERSIDEREJECTED object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_OTHERSIDELOST object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_OTHERSIDEENDCHAT object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_OTHERSIDECHATMESSAGE object:nil];
 }
 
 -(void) _unregisterNotifications

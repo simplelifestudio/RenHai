@@ -32,6 +32,6 @@
 
 -(BOOL) hasNewChatMessage;
 -(RHChatMessage*) readChatMessage;
--(RHChatMessage*) chateMessageAtIndex:(NSUInteger) index;
+-(RHChatMessage*) chatMessageAtIndex:(NSUInteger) index;
 
 @end

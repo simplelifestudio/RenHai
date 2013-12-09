@@ -292,7 +292,7 @@
 {
     UserDataModule* userDataModule = [UserDataModule sharedInstance];
     RHBusinessSession* businessSession = userDataModule.businessSession;
-    RHChatMessage* message = [businessSession chateMessageAtIndex:index];
+    RHChatMessage* message = [businessSession chatMessageAtIndex:index];
     return message;
 }
 
