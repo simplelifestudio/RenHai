@@ -117,8 +117,6 @@ public class MockAppConsole
                 }
             }
             logger.debug("MockApp: " + name + " ended");
-            app.stopTimer();
-            app.disconnect();
             return;
         }
         

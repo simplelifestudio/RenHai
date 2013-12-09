@@ -679,7 +679,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		response.addToBody(JSONKey.OperationInfo, null);
 		response.addToBody(JSONKey.OperationValue, Consts.SuccessOrFail.Success.getValue());
 		
-		DbLogger.saveProfileLog(Consts.OperationCode.ChatMessage_1024
+		DbLogger.saveProfileLog(Consts.OperationCode.ChatMessage_1023
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceIdentification() + ":" + chatMessage);
 		deviceWrapper.prepareResponse(response);

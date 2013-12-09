@@ -469,13 +469,6 @@ public class MockApp implements IMockApp, Runnable
     {
     	this.pingTimer.scheduleAtFixedRate(new PingTask(this), GlobalSetting.TimeOut.PingInterval, GlobalSetting.TimeOut.PingInterval);
     	executionTask.start();
-    	
-    	if (behaviorMode == MockAppBehaviorMode.Monitor)
-    	{
-    		monitorTimer = new Timer();
-    		monitorTimer.scheduleAtFixedRate(new MonitorTask(this), 1000, 1000);
-    	    syncDevice();
-    	}
     }
     
     public void stopTimer()
@@ -483,11 +476,6 @@ public class MockApp implements IMockApp, Runnable
     	this.pingTimer.cancel();
     	logger.debug("Ping timer of MockApp <{}> was stopped", deviceSn);
     	executionTask.stopExecution();
-    	
-    	if (behaviorMode == MockAppBehaviorMode.Monitor)
-    	{
-    		monitorTimer.cancel();
-    	}
     }
     
     /**
@@ -1473,6 +1461,13 @@ public class MockApp implements IMockApp, Runnable
 			return;
 		}
 		startTimer();
+		
+		if (behaviorMode == MockAppBehaviorMode.Monitor)
+    	{
+    		monitorTimer = new Timer();
+    		monitorTimer.scheduleAtFixedRate(new MonitorTask(this), 1000, 1000);
+    	    syncDevice();
+    	}
 	}
 	
 	@Override
