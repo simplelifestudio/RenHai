@@ -1,14 +1,16 @@
 move E:\work\tomcat\logs\renhai.log .\
-move  \\192.168.1.5\本地磁盘（e）\work\MockApp\MockApp.txt .\
+move \\192.168.1.5\本地磁盘（e）\work\MockApp\MockApp.txt .\
+move \\192.168.1.5\本地磁盘（e）\work\MockApp\Monitor.txt .\
 rem move  \\192.168.1.5\本地磁盘（e）\work\tomcat\logs\renhai.log .\
 
 rem call 00_LogAnalyzeTool.py renhai.log InterestScheduler.txt "InterestScheduler"
 rem call 00_LogAnalyzeTool.py renhai.log RandomScheduler.txt "RandomScheduler"
 
 call 00_LogAnalyzeTool.py MockApp.txt app_error.txt "[ERROR],timeout,[WARN ]"
-call 00_LogAnalyzeTool.py renhai.log match.txt "===================="
+rem call 00_LogAnalyzeTool.py renhai.log match.txt "===================="
+rem call 00_LogAnalyzeTool.py renhai.log online.txt "\"online\":"
 rem call 00_LogAnalyzeTool.py renhai.log MatchStart.txt "<MatchStart>,Enter startSession"
-call 00_LogAnalyzeTool.py renhai.log WaitMatch.txt "waiting for match:"
+rem call 00_LogAnalyzeTool.py renhai.log WaitMatch.txt "waiting for match:"
 rem call 00_LogAnalyzeTool.py renhai.log WebRTC.txt "WebRTC session"
 rem call 00_LogAnalyzeTool.py renhai.log DBCacheTask.txt "[DBCacheTask]"
 rem call 00_LogAnalyzeTool.py renhai.log DBCache.txt "=============Cache"

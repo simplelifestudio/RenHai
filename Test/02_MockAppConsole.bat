@@ -19,5 +19,5 @@ rem |     - NormalAndContinue                                             |
 rem |     - NormalAndQuit                                                 |
 rem +---------------------------------------------------------------------+
 
-rem call java -jar ./renhai.jar 200 1000 "ws://192.168.1.2/renhai/websocket" "NormalAndContinue" > MockApp.txt
-call java -jar ./renhai.jar 2000 100 "ws://192.81.135.31/renhai/websocket" "NormalAndContinue" > MockApp.txt
+call java -jar ./renhai.jar 201 100 "ws://192.168.1.5/renhai/websocket" "NormalAndContinue" > MockApp.txt
+rem call java -jar ./renhai.jar 10 100 "ws://192.81.135.31/renhai/websocket" "NormalAndContinue" > MockApp.txt
