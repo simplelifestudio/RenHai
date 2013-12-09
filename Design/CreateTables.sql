@@ -227,11 +227,12 @@ INSERT INTO `operationcode` VALUES ('19', '1019', 'User', '业务会话请求 Bu
 INSERT INTO `operationcode` VALUES ('20', '1020', 'User', '业务会话请求 BusinessSessionRequest - 评价并退出');
 INSERT INTO `operationcode` VALUES ('21', '1021', 'System', '业务会话响应 BusinessSessionResponse');
 INSERT INTO `operationcode` VALUES ('22', '1022', 'System', 'Server广播通知 BroadcastNotification');
-INSERT INTO `operationcode` VALUES ('23', '1100', 'System', 'WebSocket连接超时，释放设备');
-INSERT INTO `operationcode` VALUES ('24', '1101', 'System', '空闲状态超时，释放设备');
-INSERT INTO `operationcode` VALUES ('25', '1102', 'System', '消息响应超时，释放设备');
-INSERT INTO `operationcode` VALUES ('26', '1103', 'System', '周期性保存数据到数据库');
-INSERT INTO `operationcode` VALUES ('27', '1104', 'System', '周期性更新WebRTC Session');
+INSERT INTO `operationcode` VALUES ('23', '1023', 'User', '业务会话请求 BusinessSessionRequest - 小纸条');
+INSERT INTO `operationcode` VALUES ('24', '1100', 'System', 'WebSocket连接超时，释放设备');
+INSERT INTO `operationcode` VALUES ('25', '1101', 'System', '空闲状态超时，释放设备');
+INSERT INTO `operationcode` VALUES ('26', '1102', 'System', '消息响应超时，释放设备');
+INSERT INTO `operationcode` VALUES ('27', '1103', 'System', '周期性保存数据到数据库');
+INSERT INTO `operationcode` VALUES ('28', '1104', 'System', '周期性更新WebRTC Session');
 
 -- ----------------------------
 -- Table structure for `profile`
