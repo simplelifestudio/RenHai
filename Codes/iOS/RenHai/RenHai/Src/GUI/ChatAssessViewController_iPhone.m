@@ -940,12 +940,23 @@
     
     [self _refershAddImpressLabelsView];
     
-    [_guiModule.chatWizardController dismissPopupViewControllerAnimated:YES completion:nil];
+    [self _dismissPopupViewController];
 }
 
 -(void) didLabelManageCancel
 {
-    [_guiModule.chatWizardController dismissPopupViewControllerAnimated:YES completion:nil];
+    [self _dismissPopupViewController];
+}
+
+- (void)_dismissPopupViewController
+{
+    UIViewController* rootVC = [CBUIUtils getRootController];
+    if (rootVC.popupViewController != nil)
+    {
+        [rootVC dismissPopupViewControllerAnimated:YES completion:^{
+            
+        }];
+    }
 }
 
 #pragma mark - ChatAssessAddImpressLabelsHeaderViewDelegate
