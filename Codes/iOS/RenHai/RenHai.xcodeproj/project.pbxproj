@@ -390,7 +390,6 @@
 		CD94DF891851918000C9CBC4 /* help_06.JPG in Resources */ = {isa = PBXBuildFile; fileRef = CD734AA517E83E3000EF6CD4 /* help_06.JPG */; };
 		CD94DF961851933C00C9CBC4 /* RenHaiLocal-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CD94DF951851933C00C9CBC4 /* RenHaiLocal-Info.plist */; };
 		CD94DF971851933C00C9CBC4 /* RenHaiLocal-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CD94DF951851933C00C9CBC4 /* RenHaiLocal-Info.plist */; };
-		CD94DF981851933C00C9CBC4 /* RenHaiLocal-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CD94DF951851933C00C9CBC4 /* RenHaiLocal-Info.plist */; };
 		CDA98255184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA98254184F0B9300D95896 /* LeftBarTableCell_iPhone.m */; };
 		CDA98256184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA98254184F0B9300D95896 /* LeftBarTableCell_iPhone.m */; };
 		CDA98258184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDA98257184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib */; };
@@ -1347,7 +1346,7 @@
 		C55B43E017CF580A009BB21B /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0460;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Simplelife Studio";
 				TargetAttributes = {
 					C55B43E717CF580A009BB21B = {
@@ -1535,7 +1534,6 @@
 				CD94DF821851918000C9CBC4 /* help_01.JPG in Resources */,
 				CD94DF831851918000C9CBC4 /* help_02.JPG in Resources */,
 				CD94DF841851918000C9CBC4 /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib in Resources */,
-				CD94DF981851933C00C9CBC4 /* RenHaiLocal-Info.plist in Resources */,
 				CD94DF851851918000C9CBC4 /* help_03.JPG in Resources */,
 				CDDBE35718548D1E001A1744 /* icon-success.png in Resources */,
 				CDDBE35118548D1E001A1744 /* icon-error@2x.png in Resources */,
