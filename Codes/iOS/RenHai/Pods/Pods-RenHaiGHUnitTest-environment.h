@@ -111,6 +111,12 @@
 #define COCOAPODS_VERSION_MINOR_PKRevealController 0
 #define COCOAPODS_VERSION_PATCH_PKRevealController 6
 
+// PulsingHalo
+#define COCOAPODS_POD_AVAILABLE_PulsingHalo
+#define COCOAPODS_VERSION_MAJOR_PulsingHalo 0
+#define COCOAPODS_VERSION_MINOR_PulsingHalo 0
+#define COCOAPODS_VERSION_PATCH_PulsingHalo 1
+
 // Reachability
 #define COCOAPODS_POD_AVAILABLE_Reachability
 #define COCOAPODS_VERSION_MAJOR_Reachability 3

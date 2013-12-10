@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0500"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "E712CE83CEC04726BE89486F"
+               BlueprintIdentifier = "0E07D450C4994ECAA8DEB18A"
                BuildableName = "libPods-RenHaiGHUnitTest-FlatUIKit.a"
                BlueprintName = "Pods-RenHaiGHUnitTest-FlatUIKit"
                ReferencedContainer = "container:Pods.xcodeproj">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0500"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CF9EE109A3704A47B2A2CBF0"
+               BlueprintIdentifier = "72B1082ABC6C4506817EA61E"
                BuildableName = "libPods-RenHaiGHUnitTest-OpenTokSDK-WebRTC.a"
                BlueprintName = "Pods-RenHaiGHUnitTest-OpenTokSDK-WebRTC"
                ReferencedContainer = "container:Pods.xcodeproj">

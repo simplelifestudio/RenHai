@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0500"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B536B1A06AC34253B57353CC"
+               BlueprintIdentifier = "08E1F681111A4E058D50142F"
                BuildableName = "libPods-RenHaiGHUnitTest-SocketRocket.a"
                BlueprintName = "Pods-RenHaiGHUnitTest-SocketRocket"
                ReferencedContainer = "container:Pods.xcodeproj">

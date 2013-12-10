@@ -20,6 +20,7 @@ PODS:
   - OBShapedButton (1.0.2)
   - OpenTokSDK-WebRTC (2.1.7)
   - PKRevealController (2.0.6)
+  - PulsingHalo (0.0.1)
   - Reachability (3.1.1)
   - SocketRocket (0.3.1-beta2)
   - SSKeychain (1.2.1)
@@ -39,6 +40,7 @@ DEPENDENCIES:
   - OBShapedButton (~> 1.0.2)
   - OpenTokSDK-WebRTC
   - PKRevealController
+  - PulsingHalo
   - Reachability (~> 3.1.1)
   - SocketRocket (~> 0.3.1-beta2)
   - SSKeychain (~> 1.2.1)
@@ -65,6 +67,7 @@ SPEC CHECKSUMS:
   OBShapedButton: d2b9783760660ac98a32f334a587dea459a63e0b
   OpenTokSDK-WebRTC: 23a1e3a1969660c54ff14275c5fe5e5bf3b11509
   PKRevealController: 883287432cecf4cda037184eb822548b9713f8c2
+  PulsingHalo: 6c5b7e18ca5c6c1319d5e2fd277f123ed74a1435
   Reachability: be4883bb93f31e38266ae3365e5600a317aae735
   SocketRocket: 7ac946bcce46287a791dfff3c1f8daa692821dae
   SSKeychain: d18926838c2e7cd342e2a49e9f869858e49f035a

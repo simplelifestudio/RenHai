@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0500"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "244A48AD39FE4B6988B5DF7E"
+               BlueprintIdentifier = "5F7B78C3CCCD4334918477F4"
                BuildableName = "libPods-RenHaiGHUnitTest-AFNetworking.a"
                BlueprintName = "Pods-RenHaiGHUnitTest-AFNetworking"
                ReferencedContainer = "container:Pods.xcodeproj">

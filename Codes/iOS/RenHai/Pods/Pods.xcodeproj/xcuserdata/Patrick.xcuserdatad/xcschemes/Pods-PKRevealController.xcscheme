@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0500"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A8764B72BB4145778DC9A496"
+               BlueprintIdentifier = "32A47A03F75C4A00A03DFBE5"
                BuildableName = "libPods-PKRevealController.a"
                BlueprintName = "Pods-PKRevealController"
                ReferencedContainer = "container:Pods.xcodeproj">

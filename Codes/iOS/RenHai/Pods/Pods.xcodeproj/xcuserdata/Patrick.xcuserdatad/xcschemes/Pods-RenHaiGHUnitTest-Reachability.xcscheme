@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0500"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "DADA6C1549C7411FB3415D2A"
+               BlueprintIdentifier = "30F16DB7651D49338D891A0B"
                BuildableName = "libPods-RenHaiGHUnitTest-Reachability.a"
                BlueprintName = "Pods-RenHaiGHUnitTest-Reachability"
                ReferencedContainer = "container:Pods.xcodeproj">

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0510"
+   LastUpgradeVersion = "0500"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3DF22D0E622842738111D17A"
+               BlueprintIdentifier = "ACD12EF6FE4D420A9B105141"
                BuildableName = "libPods-RenHaiGHUnitTest-GHUnitIOS.a"
                BlueprintName = "Pods-RenHaiGHUnitTest-GHUnitIOS"
                ReferencedContainer = "container:Pods.xcodeproj">
