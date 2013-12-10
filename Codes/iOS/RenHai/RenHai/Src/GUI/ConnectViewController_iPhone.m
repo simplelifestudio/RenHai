@@ -290,8 +290,6 @@ ConnectStatus;
 
 - (void) _updateUIWithConnectStatus:(ConnectStatus) status
 {
-    [NSThread sleepForTimeInterval:DELAY_STATUS_UPDATE];
-    
     [CBAppUtils asyncProcessInMainThread:^(){
         NSString* infoText = nil;
         NSString* infoDetailText = nil;
@@ -480,52 +478,63 @@ ConnectStatus;
         successCompletionBlock:^(NSDictionary* proxyDic){
             
             RHProxy* proxy = _userDataModule.proxy;
-            RHStatus* status = proxy.status;
             
             @try
             {
-               [proxy fromJSONObject:proxyDic];
+                [proxy fromJSONObject:proxyDic];
+                
+                RHStatus* status = proxy.status;
+                
+                if(nil == status)
+                {
+                    [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
+                    if (nil != proxy.broadcast)
+                    {
+                        [self _updateInfoTextView:proxy.broadcast];    
+                    }
+                    
+                    _isProxyDataSyncSuccess = NO;
+                    return;
+                }
 
-#warning TODO
-               switch (ServerServiceStatus_Normal)
-//               switch (status.serviceStatus)
-               {
-                   case ServerServiceStatus_Normal:
-                   {
-                       [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncedNormal];
-                       _isProxyDataSyncSuccess = YES;
-                       break;
-                   }
-                   case ServerServiceStatus_Maintenance:
-                   {
-                       RHStatusPeriod* period = status.statusPeriod;
+                switch (status.serviceStatus)
+                {
+                    case ServerServiceStatus_Maintenance:
+                    {
+                        RHStatusPeriod* period = status.statusPeriod;
                        
-                       NSString* localBeginTimeStr = period.localBeginTimeString;
-                       NSString* localEndTimeStr = period.localEndTimeString;
+                        NSString* localBeginTimeStr = period.localBeginTimeString;
+                        NSString* localEndTimeStr = period.localEndTimeString;
                        
-                       NSString* periodStr = [NSString stringWithFormat:NSLocalizedString(@"Connect_CheckedMaintenance_Detail", nil), localBeginTimeStr, localEndTimeStr];
-                       [self _updateInfoTextView:periodStr];
-                       
-                       _isProxyDataSyncSuccess = ![period isInPeriod];
-                       
-                       if (_isProxyDataSyncSuccess)
-                       {
+                        NSString* periodStr = [NSString stringWithFormat:NSLocalizedString(@"Connect_CheckedMaintenance_Detail", nil), localBeginTimeStr, localEndTimeStr];
+                        [self _updateInfoTextView:periodStr];
+
+                        _isProxyDataSyncSuccess = ![period isInPeriod];
+
+                        if (_isProxyDataSyncSuccess)
+                        {
                            [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncedMaintenance_BeforePeriod];
-                       }
-                       else
-                       {
+                        }
+                        else
+                        {
                            [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncedMaintenance_InPeriod];
-                       }
-                       
-                       break;
-                   }
-                   default:
-                   {
-                       [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
-                       _isProxyDataSyncSuccess = NO;
-                       break;
-                   }
-               }
+                        }
+
+                        break;
+                    }
+                    case ServerServiceStatus_Normal:
+                    {
+                        [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncedNormal];
+                        _isProxyDataSyncSuccess = YES;
+                        break;
+                    }
+                    default:
+                    {
+                        [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
+                        _isProxyDataSyncSuccess = NO;
+                        break;
+                    }
+                }
             }
             @catch (NSException *exception)
             {

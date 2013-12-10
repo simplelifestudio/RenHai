@@ -225,7 +225,7 @@
 
 -(void)_setupGesturers
 {
-    UIView* touchView = self.navigationController.view;
+    UIView* touchView = self.view;
     
     _singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
     _singleTapGesturer.delegate = self;

@@ -187,13 +187,11 @@ EnterOperationStatus;
     
     NSString* text = @"";
     
-#warning TODO  
-    switch (ServerServiceStatus_Normal)
-//    switch (status.serviceStatus)
+    switch (status.serviceStatus)
     {
         case ServerServiceStatus_Normal:
         {
-//            text = NSLocalizedString(@"Home_Banner_NoInfo", nil);
+            text = (nil != proxy.broadcast) ? proxy.broadcast : text;
             break;
         }
         case ServerServiceStatus_Maintenance:
@@ -213,7 +211,7 @@ EnterOperationStatus;
 
     _bannerView.text = text;
     //    _bannerView.textColor = [UIColor blueColor];
-    _bannerView.labelSpacing = 50; // distance between start and end labels
+    _bannerView.labelSpacing = 100; // distance between start and end labels
     _bannerView.pauseInterval = 1.0; // seconds of pause before scrolling starts again
     _bannerView.scrollSpeed = 25; // pixels per second
     _bannerView.textAlignment = NSTextAlignmentCenter; // centers text when no auto-scrolling is applied

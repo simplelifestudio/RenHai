@@ -247,15 +247,17 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-#warning Should be replaced with API but not hard code.
+    CGFloat navigationBarHeight = _guiModule.navigationController.navigationBar.frame.size.height;
+    
     NSUInteger requireCount = 0;
     if ([UIDevice isRunningOniOS7AndLater])
     {
-        requireCount = 64;
+        CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
+        requireCount = statusBarHeight + navigationBarHeight;
     }
     else
     {
-        requireCount = 44;
+        requireCount = navigationBarHeight;
     }
     
     return requireCount;
