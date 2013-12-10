@@ -112,14 +112,14 @@
 "ChatConfirm_Title" = "根据\"%@\"找到对方";
 "ChatConfirm_ImpressAssesses" = "对方获得的评价";
 "ChatConfirm_ImpressLabels" = "对方获得的印象";
-"ChatConfirm_SelfStatus_Undecided" = "我的决定：考虑中";
-"ChatConfirm_SelfStatus_Agreed" = "我的决定：已同意";
-"ChatConfirm_SelfStatus_Rejected" = "我的决定：已拒绝";
+"ChatConfirm_SelfStatus_Undecided" = "我在考虑";
+"ChatConfirm_SelfStatus_Agreed" = "我已同意";
+"ChatConfirm_SelfStatus_Rejected" = "我已拒绝";
 "ChatConfirm_SelfStatus_Lost" = "我已掉线";
-"ChatConfirm_PartnerStatus_Undecided" = "对方决定：考虑中";
-"ChatConfirm_PartnerStatus_Agreed" = "对方决定：已同意";
-"ChatConfirm_PartnerStatus_Rejected" = "对方决定：已拒绝";
-"ChatConfirm_PartnerStatus_Lost" = "对方已掉线";
+"ChatConfirm_PartnerStatus_Undecided" = "对方考虑";
+"ChatConfirm_PartnerStatus_Agreed" = "对方同意";
+"ChatConfirm_PartnerStatus_Rejected" = "对方拒绝";
+"ChatConfirm_PartnerStatus_Lost" = "对方掉线";
 "ChatConfirm_Action_Agree" = "同意";
 "ChatConfirm_Action_Reject" = "拒绝";
 

@@ -62,6 +62,7 @@
     volatile BOOL _isChatMessageEnabled;
     
     UITapGestureRecognizer* _singleTapGesturer;
+    UITapGestureRecognizer* _doubleTapGesturer;
     UIPanGestureRecognizer* _panGesturer;
     
     NSTimer* _toolbarDisplayTimer;
@@ -157,14 +158,6 @@
     }
     */
 }
-
-//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-//{
-//    [self.view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-//     {
-//         [_sendChatMessageView resignFirstResponder];
-//     }];
-//}
 
 #pragma mark - ChatWizardPage
 
@@ -335,11 +328,17 @@
     _singleTapGesturer.numberOfTapsRequired = 1;
     [_maskView addGestureRecognizer:_singleTapGesturer];
     
+    _doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
+    _doubleTapGesturer.delegate = self;
+    _doubleTapGesturer.numberOfTapsRequired = 2;
+    [_maskView addGestureRecognizer:_doubleTapGesturer];
+    
     _panGesturer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_didPanned:)];
     [_panGesturer setMaximumNumberOfTouches:1];
     [_panGesturer setMinimumNumberOfTouches:1];
     [_maskView addGestureRecognizer:_panGesturer];
     
+    [_singleTapGesturer requireGestureRecognizerToFail:_doubleTapGesturer];
     [_singleTapGesturer requireGestureRecognizerToFail:_panGesturer];
 }
 
@@ -353,6 +352,11 @@
     
     BOOL oldStatus = [self _isNavigationBarAndToolbarHidden];
     [self _setNavigationBarAndToolbarHidden:!oldStatus];
+}
+
+-(void) _didDoubleTapped:(UITapGestureRecognizer*) recognizer
+{
+    [self _switchSelfVideoOpenOrClose];
 }
 
 -(void) _didPanned:(UIPanGestureRecognizer*) recognizer
