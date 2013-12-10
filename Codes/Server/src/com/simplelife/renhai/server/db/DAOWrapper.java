@@ -79,45 +79,16 @@ public class DAOWrapper implements IProductor
 	
 	private class FlushTask implements Runnable
 	{
-		private IDbObject obj;
-		private SqlSession session;
-		
-		public FlushTask(IDbObject obj, SqlSession session)
-		{
-			this.obj = obj;
-			this.session = session;
-		}
-
 		@Override
 		public void run()
 		{
-			logger.debug("Start to save object: {}", obj.toString());
-			if (session == null)
-			{
-				logger.error("Fatal error: null SQL session, check DB parameters");
-				return;
-			}
-			
-			try
-			{
-				obj.save(session);
-				session.commit();
-			}
-			catch(Exception e)
-			{
-				session.rollback();
-				FileLogger.printStackTrace(e);
-			}
-			finally
-			{
-				session.close();
-			}
+			DAOWrapper.instance.flushToDB();
 		}
 	}
 	
 	private class FlushTimer extends TimerTask
 	{
-		public FlushTimer()
+		public FlushTimer(Worker worker)
 		{
 			Thread.currentThread().setName("DBFlushTimer");
 		}
@@ -125,14 +96,14 @@ public class DAOWrapper implements IProductor
 		@Override
 		public void run()
 		{
-			DAOWrapper.instance.signalForFlush();
+			worker.resumeExecution();
 		}
 	}
 	
 	public void startService()
     {
     	worker.startExecution();
-    	timer.scheduleAtFixedRate(new FlushTimer(), GlobalSetting.TimeOut.FlushCacheToDB, GlobalSetting.TimeOut.FlushCacheToDB);
+    	timer.scheduleAtFixedRate(new FlushTimer(worker), GlobalSetting.TimeOut.FlushCacheToDB, GlobalSetting.TimeOut.FlushCacheToDB);
     }
     
     public void stopService()
@@ -299,6 +270,6 @@ public class DAOWrapper implements IProductor
 	@Override
 	public Runnable getWork()
 	{
-		return new FlushTask(removeFromLink(), getSession());
+		return new FlushTask();
 	}
 }

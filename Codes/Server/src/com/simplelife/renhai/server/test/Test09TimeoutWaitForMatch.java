@@ -56,7 +56,7 @@ public class Test09TimeoutWaitForMatch extends AbstractTestCase
 		
 		AbstractBusinessDevicePool businessPool = pool.getBusinessPool(businessType);
 		
-		pool.getElementCount();
+		pool.getDeviceCount();
 		
 		// Step_02 µ÷ÓÃ£ºRandomBusinessDevicePool::getCount
 		//int randomDeviceCount = pool.getBusinessPool(Consts.BusinessType.Random).getElementCount();

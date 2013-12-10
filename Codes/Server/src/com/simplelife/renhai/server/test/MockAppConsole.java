@@ -28,6 +28,7 @@ public class MockAppConsole
         
         try
         {
+        	MockApp.mockAppExecutePool.startService();
 	        String arg = args[0];
 	        int threadCount = Integer.parseInt(arg);
 	        
@@ -98,10 +99,7 @@ public class MockAppConsole
         @Override
         public void run()
         {
-            MockApp app = new MockApp(name, behaviorMode);
-            app.setWebsocketLink(websocketLink);
-            app.connect(true);
-            
+            MockApp app = new MockApp(name, behaviorMode, websocketLink);
             while (app.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
             {
                 try

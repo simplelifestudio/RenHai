@@ -54,6 +54,7 @@ public class GlobalSetting
 		public static int CheckPingInterval = 1 * 1000;
 		
 		public static int SaveStatistics = 600 * 1000;
+		public static int AdjustDeviceCount = 60 * 1000;
 	}
 	
 	public static class DBSetting
@@ -82,7 +83,7 @@ public class GlobalSetting
 		
 		public static int MaxImpressLabelCount = 12;
 		public static int InputMessageHandleThreads = 200;
-		public static int OutputMessageSendThreads = 500;
+		public static int OutputMessageSendThreads = 700;
 		public static int MessageQueueTime = 3 * 1000;
 		
 		public static int DelayOfSessionBound = 1000;

@@ -36,5 +36,5 @@ public abstract class AbstractPool implements IPool
     public abstract boolean isPoolFull();
     
     /** */
-    public abstract int getElementCount();
+    public abstract int getDeviceCount();
 }

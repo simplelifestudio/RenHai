@@ -66,13 +66,13 @@ public class Test20MatchConfirmBReject extends AbstractTestCase
 		mockApp2.syncDevice();
 		
 		// Step_01 调用：OnlineDevicePool::getCount
-		int deviceCount = onlinePool.getElementCount();
+		int deviceCount = onlinePool.getDeviceCount();
 		
 		// Step_02 调用：RandomBusinessDevicePool::getCount
-		int randomDeviceCount = businessPool.getElementCount();
+		int randomDeviceCount = businessPool.getDeviceCount();
 		
 		// Step_03 调用：BusinessSessionPool::getCount
-		int sessionCount = sessionPool.getElementCount();
+		int sessionCount = sessionPool.getDeviceCount();
 		
 		// Step_04 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper1.getBusinessStatus());
@@ -94,8 +94,8 @@ public class Test20MatchConfirmBReject extends AbstractTestCase
 		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper2.getBusinessStatus());
 		
 		// Step_10 调用：RandomBusinessDevicePool::getCount
-		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
-		randomDeviceCount = businessPool.getElementCount();
+		assertEquals(randomDeviceCount + 2, businessPool.getDeviceCount());
+		randomDeviceCount = businessPool.getDeviceCount();
 		
 		// Step_11 调用：RandomBusinessScheduler::schedule
 		mockApp1.clearLastReceivedCommand();
@@ -107,8 +107,8 @@ public class Test20MatchConfirmBReject extends AbstractTestCase
 		Thread.sleep(500);
 		
 		// Step_12 调用：BusinessSessionPool::getCount
-		assertEquals(sessionCount - 1, sessionPool.getElementCount());
-		sessionCount = sessionPool.getElementCount();
+		assertEquals(sessionCount - 1, sessionPool.getDeviceCount());
+		sessionCount = sessionPool.getDeviceCount();
 		
 		// Step_14 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceStatus.SessionBound, deviceWrapper1.getBusinessStatus());
@@ -150,10 +150,10 @@ public class Test20MatchConfirmBReject extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_21 调用：OnlineDevicePool::getCount
-		assertEquals(deviceCount, onlinePool.getElementCount());
+		assertEquals(deviceCount, onlinePool.getDeviceCount());
 		
 		// Step_22 调用：BusinessSessionPool::getCount
 		assertEquals(session.getStatus(), Consts.BusinessSessionStatus.Idle);
-		assertEquals(sessionCount + 1, sessionPool.getElementCount());
+		assertEquals(sessionCount + 1, sessionPool.getDeviceCount());
 	}
 }

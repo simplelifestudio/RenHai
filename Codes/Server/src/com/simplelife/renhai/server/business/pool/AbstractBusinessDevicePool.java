@@ -30,9 +30,9 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     protected Logger logger = BusinessModule.instance.getLogger();
     
     // Map for saving devices in chat
-    protected ConcurrentHashMap<String, IDeviceWrapper> sessionBoundDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     protected ConcurrentHashMap<String, IDeviceWrapper> businessChoosedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     protected ConcurrentHashMap<String, IDeviceWrapper> matchStartedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
+    protected ConcurrentHashMap<String, IDeviceWrapper> sessionBoundDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     
     protected final int deviceCountPerSession = 2;
 
@@ -60,7 +60,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
      */
     public boolean isPoolFull()
     {
-    	return (getElementCount() >= this.capacity);
+    	return (getDeviceCount() >= this.capacity);
     }
     
     /**
@@ -116,8 +116,8 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     public void onDeviceEnter(IDeviceWrapper device)
     {
     	businessChoosedDeviceMap.put(device.getDeviceIdentification(), device);
-    	elementCount++;
-    	logger.debug("Device <{}> has entered " + businessType.name() + " pool, device count after enter: " + this.getElementCount(), device.getDeviceIdentification());
+    	deviceCount.addAndGet(1);
+    	logger.debug("Device <{}> has entered " + businessType.name() + " pool, device count after enter: " + this.getDeviceCount(), device.getDeviceIdentification());
     }
     
     /**
@@ -137,7 +137,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     		return;
     	}
     	
-    	elementCount--;
+    	deviceCount.addAndGet(-1);
     	if (matchStartedDeviceMap.containsKey(sn))
     	{
 	    	matchStartedDeviceMap.remove(sn);
@@ -196,13 +196,21 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	@Override
 	public void clearPool()
 	{
+		businessChoosedDeviceMap.clear();
 		matchStartedDeviceMap.clear();
 		sessionBoundDeviceMap.clear();
-		businessChoosedDeviceMap.clear();
 	}
 	
 	public int getDeviceCountInChat()
 	{
 		return sessionBoundDeviceMap.size();
+	}
+	
+	@Override
+	public void adjustDeviceCount()
+	{
+		deviceCount.set(businessChoosedDeviceMap.size() 
+				+ matchStartedDeviceMap.size() 
+				+ sessionBoundDeviceMap.size()); 
 	}
 }

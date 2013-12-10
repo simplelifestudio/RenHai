@@ -22,7 +22,7 @@ public interface IPool
     public int getCapacity();
     
     /** */
-    public int getElementCount();
+    public int getDeviceCount();
     
     public void clearPool();
 }

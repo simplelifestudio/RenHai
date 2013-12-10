@@ -28,6 +28,7 @@ import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Systemstatistics;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.PingActionType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
@@ -42,79 +43,10 @@ public class OnlineDevicePool extends AbstractDevicePool
 {
 	private Logger logger = BusinessModule.instance.getLogger();
 	protected ConcurrentHashMap<String, IDeviceWrapper> appDataSyncedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
-	
-	private class InactiveCheckTask extends TimerTask
-    {
-		public InactiveCheckTask()
-		{
-			Thread.currentThread().setName("PingCheckTimer");
-		}
-		
-		@Override
-		public void run()
-		{
-			try
-			{
-				//Session hibernateSesion = HibernateSessionFactory.getSession();
-				//Thread.currentThread().setName("InactiveCheck");
-				//OnlineDevicePool.instance.checkInactiveDevice();
-				//HibernateSessionFactory.closeSession();
-				PingActionQueue.instance.newAction(PingActionType.CheckInactivity, null);
-			}
-			catch(Exception e)
-			{
-				FileLogger.printStackTrace(e);
-			}
-		}
-    }
-	
-	private class BannedCheckTask extends TimerTask
-    {
-		public BannedCheckTask()
-		{
-			Thread.currentThread().setName("BanCheckTimer");
-		}
-		
-		@Override
-		public void run()
-		{
-			try
-			{
-				//Session hibernateSesion = HibernateSessionFactory.getSession();
-				OnlineDevicePool.instance.deleteBannedDevice();
-				//HibernateSessionFactory.closeSession();
-			}
-			catch(Exception e)
-			{
-				FileLogger.printStackTrace(e);
-			}
-		}
-    }
-	
-	private class StatSaveTask extends TimerTask
-    {
-		public StatSaveTask()
-		{
-			Thread.currentThread().setName("StatSaveTimer");
-		}
-		
-		@Override
-		public void run()
-		{
-			try
-			{
-				OnlineDevicePool.instance.saveStatistics();
-			}
-			catch(Exception e)
-			{
-				FileLogger.printStackTrace(e);
-			}
-		}
-    }
-	
 	private Timer inactiveTimer = new Timer();
 	private Timer bannedTimer = new Timer();
 	private Timer statSaveTimer = new Timer();
+	private Timer adjustCountTimer = new Timer();
     private ConcurrentHashMap<String, IDeviceWrapper> connectedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     private HashMap<Consts.BusinessType, AbstractBusinessDevicePool> businessPoolMap = new HashMap<Consts.BusinessType, AbstractBusinessDevicePool>();
     private ConcurrentLinkedQueue<IDeviceWrapper> bannedDeviceList = new ConcurrentLinkedQueue<IDeviceWrapper> ();
@@ -127,60 +59,6 @@ public class OnlineDevicePool extends AbstractDevicePool
     	this.addBusinessPool(Consts.BusinessType.Interest, new InterestBusinessDevicePool());
     	setCapacity(GlobalSetting.BusinessSetting.OnlinePoolCapacity);
     }
-    
-    /*
-    private void checkDeviceMap(ConcurrentHashMap<String, IDeviceWrapper> deviceMap)
-    {
-    	Iterator<Entry<String, IDeviceWrapper>> entryKeyIterator = deviceMap.entrySet().iterator();
-        IDeviceWrapper deviceWrapper;
-        long lastPingTime;
-        long lastActivityTime;
-        long now = System.currentTimeMillis();
-		while (entryKeyIterator.hasNext())
-		{
-			Entry<String, IDeviceWrapper> e = entryKeyIterator.next();
-			deviceWrapper = e.getValue();
-			
-			lastActivityTime = deviceWrapper.getLastActivityTime();
-			if ((lastActivityTime > 0) && ((now - lastActivityTime) > GlobalSetting.TimeOut.DeviceInIdle))
-			{
-				logger.debug("Device with connection id {} will be removed from online device pool due to last activity time is: " + DateUtil.getDateStringByLongValue(deviceWrapper.getLastActivityTime())
-						, deviceWrapper.getConnection().getConnectionId());
-				
-				deviceWrapper.changeBusinessStatus(Consts.DeviceStatus.Disconnected, Consts.StatusChangeReason.TimeoutOfActivity);
-				//deleteDevice(deviceWrapper, Consts.StatusChangeReason.TimeoutOfActivity);
-				continue;
-			}
-			
-			lastPingTime = deviceWrapper.getLastPingTime();
-			//String temp = "last ping time: " + lastTime + ", now: " + now + ", diff: " + (now - lastTime) + ", setting: " + GlobalSetting.TimeOut.OnlineDeviceConnection;
-			//logger.debug(temp);
-			if ((now - lastPingTime) > GlobalSetting.TimeOut.OnlineDeviceConnection)
-			{
-				if ((now - lastActivityTime) < GlobalSetting.TimeOut.OnlineDeviceConnection)
-				{
-					// The extreme case of there is activity but no ping 
-					continue;
-				}
-				logger.debug("Device with connection id {} will be removed from online device pool due to last ping time is: " 
-						+ DateUtil.getDateStringByLongValue(deviceWrapper.getLastPingTime()) + ", id in map: " + e.getKey(),
-						deviceWrapper.getConnection().getConnectionId());
-				//deleteDevice(deviceWrapper, Consts.StatusChangeReason.TimeoutOfPing);
-				deviceWrapper.changeBusinessStatus(Consts.DeviceStatus.Disconnected, Consts.StatusChangeReason.TimeoutOfPing);
-				continue;
-			}
-		}
-    }
-    */
-    
-    /*
-    private void checkInactiveDevice()
-    {
-    	logger.debug("Start to check inactive connections.");
-    	checkDeviceMap(this.appDataSyncedDeviceMap);
-    	checkDeviceMap(this.connectedDeviceMap);
-	}
-	*/
     
     /** */
     public void addBusinessPool(Consts.BusinessType type, AbstractBusinessDevicePool pool)
@@ -221,7 +99,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	
     	String id = connection.getConnectionId();
     	connectedDeviceMap.put(id, deviceWrapper);
-    	elementCount++;
+    	deviceCount.addAndGet(1);
     	
     	logger.debug("Save connection {} in OnlineDevicePool", id);
     	return deviceWrapper;
@@ -255,8 +133,8 @@ public class OnlineDevicePool extends AbstractDevicePool
     		if (connectedDeviceMap.containsKey(id))
     		{
 	    		connectedDeviceMap.remove(id);
-	    		elementCount--;
-	    		logger.debug("Device <{}> was removed from queueDeviceMap of online device pool, device count after remove: " + getElementCount(), id);
+	    		deviceCount.addAndGet(-1);
+	    		logger.debug("Device <{}> was removed from queueDeviceMap of online device pool, device count after remove: " + getDeviceCount(), id);
     		}
     		else
     		{
@@ -269,8 +147,8 @@ public class OnlineDevicePool extends AbstractDevicePool
     		if (appDataSyncedDeviceMap.containsKey(sn))
     		{
 	    		appDataSyncedDeviceMap.remove(sn);
-	    		elementCount--;
-	    		logger.debug("Device <{}> was removed from deviceMap of online device pool, device count after remove: " + getElementCount(), sn);
+	    		deviceCount.addAndGet(-1);
+	    		logger.debug("Device <{}> was removed from deviceMap of online device pool, device count after remove: " + getDeviceCount(), sn);
     		}
     		else
     		{
@@ -284,6 +162,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	inactiveTimer.scheduleAtFixedRate(new InactiveCheckTask(), GlobalSetting.TimeOut.CheckPingInterval, GlobalSetting.TimeOut.CheckPingInterval);
     	bannedTimer.scheduleAtFixedRate(new BannedCheckTask(), GlobalSetting.TimeOut.OnlineDeviceConnection, GlobalSetting.TimeOut.OnlineDeviceConnection);
     	statSaveTimer.scheduleAtFixedRate(new StatSaveTask(), GlobalSetting.TimeOut.SaveStatistics, GlobalSetting.TimeOut.SaveStatistics);
+    	adjustCountTimer.scheduleAtFixedRate(new AdjustDeviceCountTask(), GlobalSetting.TimeOut.AdjustDeviceCount, GlobalSetting.TimeOut.AdjustDeviceCount);
     	businessPoolMap.get(Consts.BusinessType.Interest).startService();
     	logger.debug("Timers of online device pool started.");
     }
@@ -293,6 +172,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	inactiveTimer.cancel();
     	bannedTimer.cancel();
     	statSaveTimer.cancel();
+    	adjustCountTimer.cancel();
     	businessPoolMap.get(Consts.BusinessType.Interest).stopService();
     	logger.debug("Timers of online device pool stopped.");
     }
@@ -338,6 +218,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	if (deviceSn == null || deviceSn.length() == 0)
     	{
     		logger.error("Fatal error that device on connection {} has empty deviceSn", connectionId);
+    		deviceCount.addAndGet(-1);
     		return;
     	}
     	appDataSyncedDeviceMap.put(deviceWrapper.getDeviceIdentification(), deviceWrapper);
@@ -362,7 +243,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 	@Override
 	public boolean isPoolFull()
 	{
-		int count = this.getElementCount();
+		int count = this.getDeviceCount();
 		return (count >= capacity);
 	}
 	
@@ -391,7 +272,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 	{
 		logger.debug("Device <{}> was identified as banned device", device.getDeviceIdentification());
 		connectedDeviceMap.remove(device.getConnection().getConnectionId());
-		elementCount--;
+		deviceCount.addAndGet(-1);
 		bannedDeviceList.add(device);
 	}
 	
@@ -446,8 +327,6 @@ public class OnlineDevicePool extends AbstractDevicePool
 	
 	public void saveStatistics()
 	{
-		elementCount = connectedDeviceMap.size() + appDataSyncedDeviceMap.size();
-		
 		long now = System.currentTimeMillis();
 		
 		AbstractBusinessDevicePool randomPool = OnlineDevicePool.instance.getBusinessPool(Consts.BusinessType.Random);
@@ -456,19 +335,19 @@ public class OnlineDevicePool extends AbstractDevicePool
 		Systemstatistics statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
 		statItem.setStatisticsItemId(Consts.StatisticsItem.OnlineDeviceCount.getValue());
-		statItem.setCount(OnlineDevicePool.instance.getElementCount());
+		statItem.setCount(OnlineDevicePool.instance.getDeviceCount());
 		DAOWrapper.instance.cache(statItem);
 		
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
 		statItem.setStatisticsItemId(Consts.StatisticsItem.RandomDeviceCount.getValue());
-		statItem.setCount(randomPool.getElementCount());
+		statItem.setCount(randomPool.getDeviceCount());
 		DAOWrapper.instance.cache(statItem);
 		
 		statItem = new Systemstatistics();
 		statItem.setSaveTime(now);
 		statItem.setStatisticsItemId(Consts.StatisticsItem.InterestDeviceCount.getValue());
-		statItem.setCount(interestPool.getElementCount());
+		statItem.setCount(interestPool.getDeviceCount());
 		DAOWrapper.instance.cache(statItem);
 		
 		statItem = new Systemstatistics();
@@ -489,4 +368,90 @@ public class OnlineDevicePool extends AbstractDevicePool
 		statItem.setCount(interestPool.getDeviceCountInChat());
 		DAOWrapper.instance.cache(statItem);
 	}
+	
+	@Override
+	public void adjustDeviceCount()
+	{
+		deviceCount.set(connectedDeviceMap.size() + appDataSyncedDeviceMap.size());
+	}
+	
+	private class AdjustDeviceCountTask  extends TimerTask
+	{
+		public AdjustDeviceCountTask()
+		{
+			Thread.currentThread().setName("AdjustDeviceCountTask");
+		}
+
+		@Override
+		public void run()
+		{
+			OnlineDevicePool.instance.adjustDeviceCount();
+			AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(BusinessType.Interest);
+			pool.adjustDeviceCount();
+		}
+	}
+	private class InactiveCheckTask extends TimerTask
+    {
+		public InactiveCheckTask()
+		{
+			Thread.currentThread().setName("PingCheckTimer");
+		}
+		
+		@Override
+		public void run()
+		{
+			try
+			{
+				PingActionQueue.instance.newAction(PingActionType.CheckInactivity, null);
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+		}
+    }
+	
+	private class BannedCheckTask extends TimerTask
+    {
+		public BannedCheckTask()
+		{
+			Thread.currentThread().setName("BanCheckTimer");
+		}
+		
+		@Override
+		public void run()
+		{
+			try
+			{
+				//Session hibernateSesion = HibernateSessionFactory.getSession();
+				OnlineDevicePool.instance.deleteBannedDevice();
+				//HibernateSessionFactory.closeSession();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+		}
+    }
+	
+	private class StatSaveTask extends TimerTask
+    {
+		public StatSaveTask()
+		{
+			Thread.currentThread().setName("StatSaveTimer");
+		}
+		
+		@Override
+		public void run()
+		{
+			try
+			{
+				OnlineDevicePool.instance.saveStatistics();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+		}
+    }
 }

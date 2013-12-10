@@ -70,13 +70,13 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_01 调用：OnlineDevicePool::getCount
-		int deviceCount = onlinePool.getElementCount();
+		int deviceCount = onlinePool.getDeviceCount();
 		
 		// Step_02 调用：RandomBusinessDevicePool::getCount
-		int randomDeviceCount = businessPool.getElementCount();
+		int randomDeviceCount = businessPool.getDeviceCount();
 		
 		// Step_03 调用：BusinessSessionPool::getCount
-		int sessionCount = sessionPool.getElementCount();
+		int sessionCount = sessionPool.getDeviceCount();
 		
 		// Step_04 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper1.getBusinessStatus());
@@ -99,8 +99,8 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper2.getBusinessStatus());
 		
 		// Step_10 调用：RandomBusinessDevicePool::getCount
-		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
-		randomDeviceCount = businessPool.getElementCount();
+		assertEquals(randomDeviceCount + 2, businessPool.getDeviceCount());
+		randomDeviceCount = businessPool.getDeviceCount();
 		
 		// Step_11 调用：MockWebSocketConnection::disableConnection，禁用A的通信功能
 		
@@ -126,7 +126,7 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		assertTrue(deviceWrapper1.getOwnerBusinessSession() == null);
 		assertTrue(deviceWrapper2.getOwnerBusinessSession() == null);
 		
-		assertEquals(sessionCount, sessionPool.getElementCount());
+		assertEquals(sessionCount, sessionPool.getDeviceCount());
 		
 		// Step_15 Mock事件：A的通信被禁用掉后，抛出IOException
 		// Step_16 Mock事件：B的通信被禁用掉后，抛出IOException
@@ -138,9 +138,9 @@ public class Test11FailToNotifyBoth extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_19 调用：OnlineDevicePool::getCount
-		assertEquals(deviceCount - 2, onlinePool.getElementCount());
+		assertEquals(deviceCount - 2, onlinePool.getDeviceCount());
 		
 		// Step_20 调用：BusinessSessionPool::getCount
-		assertEquals(sessionCount, sessionPool.getElementCount());
+		assertEquals(sessionCount, sessionPool.getDeviceCount());
 	}
 }

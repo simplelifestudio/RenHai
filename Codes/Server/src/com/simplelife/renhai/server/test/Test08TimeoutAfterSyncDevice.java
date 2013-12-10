@@ -53,7 +53,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 		IDeviceWrapper deviceWrapper = pool.getDevice(mockApp.getConnectionId());
 		
 		// Step_01 调用：OnlineDevicePool::getCount
-		int deviceCount = pool.getElementCount();
+		int deviceCount = pool.getDeviceCount();
 		
 		// Step_02 Mock请求：设备同步
 		mockApp.syncDevice();
@@ -63,7 +63,7 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper.getBusinessStatus());
 		
 		// Step_04 调用：OnlineDevicePool::getCount
-		assertEquals(deviceCount, pool.getElementCount());
+		assertEquals(deviceCount, pool.getDeviceCount());
 		
 		mockApp.stopTimer();
 		logger.debug("Stop ping timer and wait for timeout");
@@ -76,6 +76,6 @@ public class Test08TimeoutAfterSyncDevice extends AbstractTestCase
 		
 		assertTrue(pool.getDevice(mockApp.getDeviceSn()) == null );
 		// Step_07 调用：OnlineDevicePool::getCount
-		assertEquals(deviceCount-1, pool.getElementCount());
+		assertEquals(deviceCount-1, pool.getDeviceCount());
 	}
 }

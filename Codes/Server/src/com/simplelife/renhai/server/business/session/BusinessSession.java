@@ -266,6 +266,11 @@ public class BusinessSession implements IBusinessSession
     
     private void defaultGoodAssess(Collection<IDeviceWrapper> activeDeviceList, IDeviceWrapper triggerDevice)
     {
+    	if (activeDeviceList == null)
+    	{
+    		return;
+    	}
+    	
     	for (IDeviceWrapper device : activeDeviceList)
     	{
     		Impresscard card = device
@@ -375,6 +380,11 @@ public class BusinessSession implements IBusinessSession
     
     private JSONObject getOperationInfoOfOtherDevices(IDeviceWrapper deviceToBeExcluded)
     {
+    	if (deviceList == null)
+    	{
+    		return null;
+    	}
+    	
     	for (IDeviceWrapper device : deviceList)
     	{
     		if (device != deviceToBeExcluded)

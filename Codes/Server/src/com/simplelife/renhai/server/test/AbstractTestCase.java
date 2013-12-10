@@ -116,7 +116,7 @@ public abstract class AbstractTestCase extends TestCase
 			deviceSn = CommonFunctions.getRandomString(24);
 		}
 		
-		MockApp mockApp = new MockApp(deviceSn, MockAppConsts.MockAppBehaviorMode.Manual.name(), false);
+		MockApp mockApp = new MockApp(deviceSn, MockAppConsts.MockAppBehaviorMode.Manual.name());
 		return mockApp;
 	}
 	

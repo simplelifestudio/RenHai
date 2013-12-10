@@ -111,7 +111,7 @@ public class WebRTCSessionPool extends AbstractPool
     }
     
     /** */
-    public int getElementCount()
+    public int getDeviceCount()
     {
         return webRTCSessionList.size();
     }
