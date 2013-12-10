@@ -97,7 +97,7 @@
     [self _setupNavigationBar];
     [self _setupCollectionView];
     
-    [self _setupGestuers];
+    [self _setupGesturers];
 }
 
 -(void)_setupNavigationBar
@@ -126,7 +126,7 @@
     }
 }
 
--(void)_setupGestuers
+-(void)_setupGesturers
 {
     UIView* touchView = self.navigationController.view;
 

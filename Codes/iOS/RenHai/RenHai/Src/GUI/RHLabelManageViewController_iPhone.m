@@ -270,21 +270,22 @@
     CGRect _keyboardRect = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect _oldFrame = self.view.frame;
     
+    CGFloat yOffset = 0;
+    CGFloat fixOffset = 10.0f;
     if (_isKeyboardOpen)
     {
-        CGFloat yOffset = 10.0f;
+        yOffset = fixOffset;
         self.view.frame = CGRectMake(_oldFrame.origin.x, _keyboardRect.origin.y - _oldFrame.size.height - yOffset, _oldFrame.size.width, _oldFrame.size.height);
     }
     else
     {
-        if (IS_IPHONE5)
+        yOffset = ((_oldFrame.origin.y + _oldFrame.size.height) - _keyboardRect.origin.y);
+        yOffset += fixOffset;
+        if (0 < yOffset)
         {
-            
+            self.view.frame = CGRectMake(_oldFrame.origin.x, _oldFrame.origin.y - yOffset, _oldFrame.size.width, _oldFrame.size.height);
         }
-        else
-        {
-            
-        }
+        DDLogVerbose(@"LabelManager's yOffset = %f", yOffset);
         
         _isKeyboardOpen = YES;        
     }

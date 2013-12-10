@@ -225,20 +225,22 @@
 
 -(void)_setupGesturers
 {
+    UIView* touchView = self.navigationController.view;
+    
     _singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
     _singleTapGesturer.delegate = self;
     _singleTapGesturer.numberOfTapsRequired = 1;
-    [self.view addGestureRecognizer:_singleTapGesturer];
+    [touchView addGestureRecognizer:_singleTapGesturer];
     
     _doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
     _doubleTapGesturer.delegate = self;
     _doubleTapGesturer.numberOfTapsRequired = 2;
-    [self.view addGestureRecognizer:_doubleTapGesturer];
+    [touchView addGestureRecognizer:_doubleTapGesturer];
     
 //    _longPressGesturer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(_didLongPressed:)];
 //    _longPressGesturer.delegate = self;
 //    _longPressGesturer.minimumPressDuration = 1.0f;
-//    [self.view addGestureRecognizer:_longPressGesturer];
+//    [touchView addGestureRecognizer:_longPressGesturer];
 //
 //    [_singleTapGesturer requireGestureRecognizerToFail:_longPressGesturer];
 }
