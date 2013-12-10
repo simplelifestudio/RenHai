@@ -561,6 +561,7 @@ ChoiceType;
             }
             failureCompletionBlock:^(){
                 _selfAgreeChatFlag = NO;
+                [_statusModule recordRemoteStatusAbnormal];
             }
             afterCompletionBlock:^(){
 
@@ -608,6 +609,7 @@ ChoiceType;
             }
             failureCompletionBlock:^(){
                 _selfRejectChatFlag = NO;
+                [_statusModule recordRemoteStatusAbnormal];
             }
             afterCompletionBlock:^(){
 
@@ -654,6 +656,7 @@ ChoiceType;
                 }
                 failureCompletionBlock:^(){
                     _selfUnbindSessionFlag = NO;
+                    [_statusModule recordRemoteStatusAbnormal];
                 }
                 afterCompletionBlock:nil
              ];

@@ -54,6 +54,7 @@ AppMessageIdentifier;
 
 typedef enum
 {
+    ServerNotificationIdentifier_RemoteStatusAbnormal = -1,
     ServerNotificationIdentifier_SessionBound = 0,
     ServerNotificationIdentifier_OthersideAgreeChat,
     ServerNotificationIdentifier_OthersideRejectChat,

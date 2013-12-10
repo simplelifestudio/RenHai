@@ -327,6 +327,7 @@ ChatWaitStatus;
             }
             failureCompletionBlock:^(){
                 _leavePoolFlag = NO;
+                [_statusModule recordRemoteStatusAbnormal];
             }
             afterCompletionBlock:^(){
                 [self _finishLeavingPool];
@@ -378,6 +379,7 @@ ChatWaitStatus;
             }
             failureCompletionBlock:^(){
                 _matchStartFlag = NO;
+                [_statusModule recordRemoteStatusAbnormal];
             }
             afterCompletionBlock:nil
          ];

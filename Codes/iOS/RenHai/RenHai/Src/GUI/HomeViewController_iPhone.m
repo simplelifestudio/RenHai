@@ -477,6 +477,8 @@ static float progress = 0.0;
             }
             failureCompletionBlock:^(){
                 [self _updateEnterPoolFlag:NO];
+                
+                [_statusModule recordRemoteStatusAbnormal];
             }
             afterCompletionBlock:^(){
                 [_reachLock lock];

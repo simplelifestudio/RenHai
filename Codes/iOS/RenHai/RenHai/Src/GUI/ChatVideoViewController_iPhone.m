@@ -567,6 +567,7 @@
             }
             failureCompletionBlock:^(){
                 _selfEndChatFlag = NO;
+                [_statusModule recordRemoteStatusAbnormal];
             }
             afterCompletionBlock:^(){
 
@@ -597,10 +598,10 @@
         RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:businessSessionRequestType device:device info:info];
         [commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
-
+                [_statusModule recordAppMessage:AppMessageIdentifier_ChatMessage];
             }
             failureCompletionBlock:^(){
-
+                [_statusModule recordRemoteStatusAbnormal];
             }
             afterCompletionBlock:^(){
               [CBAppUtils asyncProcessInMainThread:^(){
