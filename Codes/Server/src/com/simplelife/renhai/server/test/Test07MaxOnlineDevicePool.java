@@ -61,7 +61,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 		int deviceCount;
 		synchronized(pool)
 		{
-			deviceCount = pool.getElementCount();
+			deviceCount = pool.getDeviceCount();
 			pool.setCapacity(deviceCount);
 		}
 		
@@ -70,7 +70,7 @@ public class Test07MaxOnlineDevicePool extends AbstractTestCase
 		assertTrue(mockApp1 != null);
 		assertTrue(mockApp2 == null);
 		
-		assertEquals(deviceCount, pool.getElementCount());
+		assertEquals(deviceCount, pool.getDeviceCount());
 		
 		IDeviceWrapper deviceWrapper1 = OnlineDevicePool.instance.getDevice(mockApp1.getConnectionId());
 		

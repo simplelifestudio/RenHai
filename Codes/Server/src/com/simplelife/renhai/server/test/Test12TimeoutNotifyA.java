@@ -66,13 +66,13 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_01 调用：OnlineDevicePool::getCount
-		int deviceCount = onlinePool.getElementCount();
+		int deviceCount = onlinePool.getDeviceCount();
 		
 		// Step_02 调用：RandomBusinessDevicePool::getCount
-		int randomDeviceCount = businessPool.getElementCount();
+		int randomDeviceCount = businessPool.getDeviceCount();
 		
 		// Step_03 调用：BusinessSessionPool::getCount
-		int sessionCount = sessionPool.getElementCount();
+		int sessionCount = sessionPool.getDeviceCount();
 		
 		// Step_04 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper1.getBusinessStatus());
@@ -100,8 +100,8 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper2.getBusinessStatus());
 		
 		// Step_10 调用：RandomBusinessDevicePool::getCount
-		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
-		randomDeviceCount = businessPool.getElementCount();
+		assertEquals(randomDeviceCount + 2, businessPool.getDeviceCount());
+		randomDeviceCount = businessPool.getDeviceCount();
 
 		mockApp1.matchStart();
 		mockApp2.matchStart();

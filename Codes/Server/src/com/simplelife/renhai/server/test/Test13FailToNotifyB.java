@@ -70,12 +70,12 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		assertTrue(mockApp2.checkLastResponse(Consts.MessageId.AppDataSyncResponse, null));
 		
 		// Step_01 调用：OnlineDevicePool::getCount
-		int deviceCount = onlinePool.getElementCount();
+		int deviceCount = onlinePool.getDeviceCount();
 		
 		// Step_02 调用：RandomBusinessDevicePool::getCount
-		int randomDeviceCount = businessPool.getElementCount();
+		int randomDeviceCount = businessPool.getDeviceCount();
 		
-		sessionPool.getElementCount();
+		sessionPool.getDeviceCount();
 		
 		// Step_04 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper1.getBusinessStatus());
@@ -101,8 +101,8 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper2.getBusinessStatus());
 		
 		// Step_10 调用：RandomBusinessDevicePool::getCount
-		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
-		randomDeviceCount = businessPool.getElementCount();
+		assertEquals(randomDeviceCount + 2, businessPool.getDeviceCount());
+		randomDeviceCount = businessPool.getDeviceCount();
 		
 		// Step_12 调用：RandomBusinessScheduler::schedule
 		connection2.disableConnection();
@@ -154,7 +154,7 @@ public class Test13FailToNotifyB extends AbstractTestCase
 		//mockApp2.ping();
 		
 		// Step_25 调用：OnlineDevicePool::getCount
-		assertEquals(deviceCount - 1, onlinePool.getElementCount());
+		assertEquals(deviceCount - 1, onlinePool.getDeviceCount());
 		
 		// Step_26 调用：BusinessSessionPool::getCount
 		

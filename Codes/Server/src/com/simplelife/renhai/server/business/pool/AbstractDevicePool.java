@@ -11,17 +11,21 @@
 
 package com.simplelife.renhai.server.business.pool;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
 /** */
 public abstract class AbstractDevicePool extends AbstractPool
 {
-	protected volatile int elementCount;
-	public int getElementCount()
+	protected AtomicInteger deviceCount = new AtomicInteger();
+	public int getDeviceCount()
     {
-    	return elementCount;
+    	return deviceCount.get();
     }
+	
+	public abstract void adjustDeviceCount();
 	
 	public abstract IDeviceWrapper getDevice(String deviceSn);
     public abstract boolean isPoolFull();

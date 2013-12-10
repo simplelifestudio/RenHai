@@ -82,11 +82,11 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		deviceCapacityObject = body.getJSONObject(JSONKey.DeviceCapacity);
 		body.getJSONObject(JSONKey.InterestLabelList);
 		
-		assertEquals(onlinePool.getElementCount(), deviceCountObj.getIntValue(JSONKey.Online));
+		assertEquals(onlinePool.getDeviceCount(), deviceCountObj.getIntValue(JSONKey.Online));
 		
 		if (businessType == Consts.BusinessType.Random)
 		{
-			assertEquals(businessPool.getElementCount(), deviceCountObj.getIntValue(JSONKey.Random));
+			assertEquals(businessPool.getDeviceCount(), deviceCountObj.getIntValue(JSONKey.Random));
 			assertEquals(0, deviceCountObj.getIntValue(JSONKey.Interest));
 			assertEquals(businessPool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.RandomChat));
 			assertEquals(0, deviceCountObj.getIntValue(JSONKey.InterestChat));
@@ -94,7 +94,7 @@ public class Test23NormalProcessAndStatistics extends AbstractTestCase
 		else
 		{
 			assertEquals(0, deviceCountObj.getIntValue(JSONKey.Random));
-			assertEquals(businessPool.getElementCount(), deviceCountObj.getIntValue(JSONKey.Interest));
+			assertEquals(businessPool.getDeviceCount(), deviceCountObj.getIntValue(JSONKey.Interest));
 			assertEquals(businessPool.getDeviceCountInChat(), deviceCountObj.getIntValue(JSONKey.InterestChat));
 			assertEquals(0, deviceCountObj.getIntValue(JSONKey.RandomChat));
 		}

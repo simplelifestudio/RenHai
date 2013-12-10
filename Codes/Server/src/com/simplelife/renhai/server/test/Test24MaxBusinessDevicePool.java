@@ -62,7 +62,7 @@ public class Test24MaxBusinessDevicePool extends AbstractTestCase
 		mockApp2.syncDevice();
 		
 		// Step_05 调用：RandomBusinessDevicePool::setCapacity(1)
-		businessPool.setCapacity(businessPool.getElementCount() + 1);
+		businessPool.setCapacity(businessPool.getDeviceCount() + 1);
 		
 		// Step_06 Mock请求：A进入随机聊天
 		mockApp1.chooseBusiness(businessType);

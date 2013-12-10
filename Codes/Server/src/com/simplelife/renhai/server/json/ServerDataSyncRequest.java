@@ -142,17 +142,17 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		
 		if (queryAll || countObj.containsKey(JSONKey.Online))
 		{
-			responseObj.put(JSONKey.Online, OnlineDevicePool.instance.getElementCount());
+			responseObj.put(JSONKey.Online, OnlineDevicePool.instance.getDeviceCount());
 		}
 		
 		if (queryAll || countObj.containsKey(JSONKey.Random))
 		{
-			responseObj.put(JSONKey.Random, randomPool.getElementCount());
+			responseObj.put(JSONKey.Random, randomPool.getDeviceCount());
 		}
 		
 		if (queryAll || countObj.containsKey(JSONKey.Interest))
 		{
-			responseObj.put(JSONKey.Interest, interestPool.getElementCount());
+			responseObj.put(JSONKey.Interest, interestPool.getDeviceCount());
 		}
 		
 		if (queryAll || countObj.containsKey(JSONKey.Chat))

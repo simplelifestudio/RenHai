@@ -71,7 +71,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		mapper.insert(profile);
 		
 		// Step_02 调用：OnlineDevicePool::getCount
-		int deviceCount = pool.getElementCount();
+		int deviceCount = pool.getDeviceCount();
 		
 		// Step_03 调用：DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceStatus.Connected, deviceWrapper.getBusinessStatus());
@@ -86,7 +86,7 @@ public class Test06SyncDeviceUnForbidden extends AbstractTestCase
 		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper.getBusinessStatus());
 		
 		// Step_06 调用：OnlineDevicePool::getCount
-		assertEquals(deviceCount, pool.getElementCount());
+		assertEquals(deviceCount, pool.getDeviceCount());
 		
 		// Step_06 调用：DeviceWrapper::getLastActivityTime
 		assertTrue(deviceWrapper.getLastActivityTime() > lastActivity);

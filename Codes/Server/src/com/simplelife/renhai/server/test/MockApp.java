@@ -19,6 +19,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -32,7 +33,12 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.simplelife.renhai.server.business.pool.AbstractMsgExecutorPool;
+import com.simplelife.renhai.server.business.pool.InputMsgExecutorPool;
+import com.simplelife.renhai.server.business.pool.MessageHandler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.json.JSONFactory;
+import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.test.MockAppConsts.MockAppBehaviorMode;
 import com.simplelife.renhai.server.test.MockAppConsts.MockAppBusinessStatus;
@@ -43,6 +49,7 @@ import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.Consts.NotificationType;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
+import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.IMockApp;
 import com.simplelife.renhai.server.util.IMockConnection;
 import com.simplelife.renhai.server.util.JSONKey;
@@ -51,6 +58,15 @@ import com.simplelife.renhai.server.websocket.SecurityUtils;
 /** */
 public class MockApp implements IMockApp, Runnable
 {
+	public final static AbstractMsgExecutorPool mockAppExecutePool = new AbstractMsgExecutorPool()
+	{
+		@Override
+		public void startService()
+		{
+			executeThreadPool = Executors.newFixedThreadPool(GlobalSetting.BusinessSetting.OutputMessageSendThreads);
+		}
+	};
+	
 	private class MonitorTask extends TimerTask
 	{
 		private MockApp mockApp;
@@ -72,6 +88,7 @@ public class MockApp implements IMockApp, Runnable
 			}
 		}
 	}
+	
 	private class PingTask extends TimerTask
 	{
 		private MockApp mockApp;
@@ -95,56 +112,26 @@ public class MockApp implements IMockApp, Runnable
 		}
 	}
 	
-	protected class ExecutionTask extends Thread
+	/*
+	protected class ExecutionTask implements Runnable
 	{
 		private MockApp mockApp;
-		private boolean continueFlag = true;
-		
-
-		public ExecutionTask(MockApp mockApp)
+		private JSONObject obj;
+		public ExecutionTask(MockApp mockApp, JSONObject obj)
 		{
 			this.mockApp = mockApp;
-		}
-		
-		public void stopExecution()
-		{
-			continueFlag = false;
+			this.obj = obj;
 		}
 		
 		@Override
 		public void run()
 		{
-			ConcurrentLinkedQueue<JSONObject> messageQueue = mockApp.getMessageQueue();
-			while(continueFlag)
-			{
-				if (messageQueue.isEmpty())
-				{
-					try
-					{
-						Thread.sleep(500);
-					}
-					catch (InterruptedException e)
-					{
-						FileLogger.printStackTrace(e);
-					}
-				}
-				else
-				{
-					JSONObject obj = messageQueue.remove();
-					try
-					{
-						mockApp.execute(obj);
-					}
-					catch(Exception e)
-					{
-						FileLogger.printStackTrace(e);
-					}
-				}
-			}
+			mockApp.execute(obj);
 		}
 	}
+	*/
 	
-	protected class AutoReplyTask extends Thread
+	protected class AutoReplyTask implements Runnable
 	{
 		private MockAppConsts.MockAppRequest messageIdToBeSent;
 		private JSONObject receivedMessage;
@@ -169,12 +156,13 @@ public class MockApp implements IMockApp, Runnable
 		@Override
 		public void run()
 		{
+			Thread.currentThread().setName(messageIdToBeSent.name() + DateUtil.getCurrentMiliseconds());
 			if (delay > 0)
 			{
 				try
 				{
 					logger.debug("Sleep " + delay + " ms, next status: " + nextStatus + ", message to be sent: " + messageIdToBeSent);
-					AutoReplyTask.sleep(delay);
+					Thread.sleep(delay);
 					
 					if (app.getBusinessStatus() == MockAppBusinessStatus.Ended)
 					{
@@ -256,7 +244,6 @@ public class MockApp implements IMockApp, Runnable
     protected Timer pingTimer = new Timer();
     protected Timer monitorTimer;
     
-    protected ExecutionTask executionTask = new ExecutionTask(this);
     protected String lastSentMessageSn;
     
     protected String peerDeviceId;
@@ -264,8 +251,8 @@ public class MockApp implements IMockApp, Runnable
     protected Consts.BusinessType businessType;
     protected JSONObject lastReceivedCommand;
     
-    protected Lock lock = new ReentrantLock();
-	protected Condition condition = lock.newCondition();
+    //protected Lock lock = new ReentrantLock();
+	//protected Condition condition = lock.newCondition();
 	
 	protected String deviceSn;
 	protected int deviceId;
@@ -285,15 +272,10 @@ public class MockApp implements IMockApp, Runnable
 	protected int chatCount = 0;
 	protected boolean isUsingRealSocket;
 	
-	protected ConcurrentLinkedQueue<JSONObject> messageQueue = new ConcurrentLinkedQueue<>();
+	//protected ConcurrentLinkedQueue<JSONObject> messageQueue = new ConcurrentLinkedQueue<>();
+	private MockMessageHandler inputMessageHandler = new MockMessageHandler(this, MockApp.mockAppExecutePool);
 	
 	protected int maxOnlineDeviceCount = 0;
-	
-	public ConcurrentLinkedQueue<JSONObject> getMessageQueue()
-	{
-		return messageQueue;
-	}
-	
 	public boolean isUseRealSocket()
 	{
 		return isUsingRealSocket;
@@ -475,14 +457,25 @@ public class MockApp implements IMockApp, Runnable
     public void startTimer()
     {
     	this.pingTimer.scheduleAtFixedRate(new PingTask(this), GlobalSetting.TimeOut.PingInterval, GlobalSetting.TimeOut.PingInterval);
-    	executionTask.start();
+    	
+    	if (behaviorMode == MockAppBehaviorMode.Monitor)
+    	{
+    		monitorTimer = new Timer();
+    		monitorTimer.scheduleAtFixedRate(new MonitorTask(this), 1000, 1000);
+    	}
     }
     
     public void stopTimer()
     {
+    	if (behaviorMode == MockAppBehaviorMode.Monitor)
+    	{
+    		if (monitorTimer != null)
+    		{
+    			monitorTimer.cancel();
+    		}
+    	}
     	this.pingTimer.cancel();
     	logger.debug("Ping timer of MockApp <{}> was stopped", deviceSn);
-    	executionTask.stopExecution();
     }
     
     /**
@@ -524,6 +517,7 @@ public class MockApp implements IMockApp, Runnable
     		return;
     	}
     	
+    	/*
     	lock.lock();
     	try
 		{
@@ -534,6 +528,7 @@ public class MockApp implements IMockApp, Runnable
 			FileLogger.printStackTrace(e);
 		}
     	lock.unlock();
+    	*/
     }
     
     public void startAutoReply()
@@ -548,21 +543,16 @@ public class MockApp implements IMockApp, Runnable
     
     public MockApp(String deviceSn)
 	{
-    	this.deviceSn = deviceSn;
-    	this.behaviorMode = MockAppConsts.MockAppBehaviorMode.Manual;
-    	isUsingRealSocket = false;
-    	this.connect(isUsingRealSocket);
-	}
-    
-    public MockApp(String deviceSn, String strBehaviorMode, boolean realSocket)
-	{
-    	this(deviceSn, strBehaviorMode);
-    	this.isUsingRealSocket = realSocket;
-    	this.connect(realSocket);
+    	this(deviceSn, MockAppConsts.MockAppBehaviorMode.Manual.getValue());
 	}
     
     public MockApp(String deviceSn, String strBehaviorMode)
 	{
+    	this(deviceSn, strBehaviorMode, null);
+	}
+    
+    public MockApp(String deviceSn, String strBehaviorMode, String serverLink)
+    {
     	this.deviceSn = deviceSn;
     	MockAppConsts.MockAppBehaviorMode tmpBehaviorMode = MockAppConsts.MockAppBehaviorMode.parseFromStringValue(strBehaviorMode);
     	
@@ -571,10 +561,19 @@ public class MockApp implements IMockApp, Runnable
     		logger.error("Fatal error that {} is invalid behavior mode, Normal mode will be configurated instead.", strBehaviorMode);
     		tmpBehaviorMode = MockAppConsts.MockAppBehaviorMode.NormalAndQuit;
     	}
+    	
     	this.behaviorMode = tmpBehaviorMode;
-    	businessStatus = MockAppConsts.MockAppBusinessStatus.Init;
-	}
-	
+    	this.setWebsocketLink(serverLink);
+    	if (serverLink == null)
+    	{
+    		this.connect(false);
+    	}
+    	else
+    	{
+    		this.connect(true);
+    	}
+    }
+    
 	public String getConnectionId()
 	{
 		return connection.getConnectionId();
@@ -906,11 +905,7 @@ public class MockApp implements IMockApp, Runnable
 	public synchronized void onJSONCommand(JSONObject obj)
 	{
 		lastReceivedCommand = obj;
-		lock.lock();
-		condition.signal();
-		lock.unlock();
-		
-		messageQueue.add(obj);
+		this.inputMessageHandler.addMessage(obj);
 	}
 	
 	public void execute(JSONObject obj)
@@ -981,7 +976,7 @@ public class MockApp implements IMockApp, Runnable
 							this,
 							500,
 							null);
-					task.start();
+					MockApp.mockAppExecutePool.execute(task);
 				}
 			}
 			return;
@@ -1027,8 +1022,8 @@ public class MockApp implements IMockApp, Runnable
 				lastReceivedCommand, 
 				this, 0,
 				nextStatus);
-		task.setName("NotificationReply" + DateUtil.getCurrentMiliseconds());
-		task.start();
+		//task.setName("NotificationReply" + DateUtil.getCurrentMiliseconds());
+		MockApp.mockAppExecutePool.execute(task);
 	}
 	
 	private boolean endBusiness()
@@ -1097,7 +1092,7 @@ public class MockApp implements IMockApp, Runnable
 						this, 
 						MockAppConsts.Setting.ChatConfirmDuration, 
 						MockAppConsts.MockAppBusinessStatus.SessionUnbindReqSent);
-				task.setName("SessionUnbindReqSent" + DateUtil.getCurrentMiliseconds());
+				//task.setName("SessionUnbindReqSent" + DateUtil.getCurrentMiliseconds());
 				replyNotification(obj, null);
 				return;
 			}
@@ -1109,7 +1104,7 @@ public class MockApp implements IMockApp, Runnable
 				if (behaviorMode.ordinal() > MockAppConsts.MockAppBehaviorMode.NoAppSyncRequest.ordinal())
 				{
 					task = new AutoReplyTask(MockAppRequest.AppDataSyncRequest, null, this, 0, MockAppConsts.MockAppBusinessStatus.AppDataSyncReqSent);
-					task.setName("AppDataSyncRequest" + DateUtil.getCurrentMiliseconds());
+					//task.setName("AppDataSyncRequest" + DateUtil.getCurrentMiliseconds());
 				}
 				break;
 				
@@ -1124,7 +1119,7 @@ public class MockApp implements IMockApp, Runnable
 								this, 
 								300, 
 								MockAppConsts.MockAppBusinessStatus.EnterPoolReqSent);
-						task.setName("EnterPoolRequest" + DateUtil.getCurrentMiliseconds());
+						//task.setName("EnterPoolRequest" + DateUtil.getCurrentMiliseconds());
 					}
 				}
 				break;
@@ -1140,7 +1135,7 @@ public class MockApp implements IMockApp, Runnable
 							this, 
 							MockAppConsts.Setting.ChatConfirmDuration,
 							MockAppConsts.MockAppBusinessStatus.MatchStartReqSent);
-					task.setName("MatchStart" + DateUtil.getCurrentMiliseconds());
+					//task.setName("MatchStart" + DateUtil.getCurrentMiliseconds());
 				}
 				else
 				{
@@ -1176,8 +1171,9 @@ public class MockApp implements IMockApp, Runnable
 									null, 
 									this, MockAppConsts.Setting.ChatConfirmDuration,
 									MockAppConsts.MockAppBusinessStatus.Ended);
-							chatConfirmTask.setName("AgreeChatThread" + DateUtil.getCurrentMiliseconds());
-							chatConfirmTask.start();
+							//chatConfirmTask.setName("AgreeChatThread" + DateUtil.getCurrentMiliseconds());
+							//chatConfirmTask.start();
+							MockApp.mockAppExecutePool.execute(chatConfirmTask);
 						}
 						else if (behaviorMode == MockAppConsts.MockAppBehaviorMode.ConnectLossDuringChatConfirm)
 						{
@@ -1190,8 +1186,9 @@ public class MockApp implements IMockApp, Runnable
 									null, 
 									this, MockAppConsts.Setting.ChatConfirmDuration,
 									MockAppConsts.MockAppBusinessStatus.AgreeChatReqSent);
-							chatConfirmTask.setName("AgreeChatThread");
-							chatConfirmTask.start();
+							//chatConfirmTask.setName("AgreeChatThread");
+							//chatConfirmTask.start();
+							MockApp.mockAppExecutePool.execute(chatConfirmTask);
 						}
 			    	}
 				}
@@ -1231,7 +1228,7 @@ public class MockApp implements IMockApp, Runnable
 								this,
 								getRandomVideoChatDuration(),
 								MockAppConsts.MockAppBusinessStatus.EndChatReqSent);
-						task.setName("EndChatRequest" + DateUtil.getCurrentMiliseconds());
+						//task.setName("EndChatRequest" + DateUtil.getCurrentMiliseconds());
 					}
 				}
 				else if (messageId == Consts.MessageId.BusinessSessionNotification)
@@ -1272,7 +1269,7 @@ public class MockApp implements IMockApp, Runnable
 									this, MockAppConsts.Setting.AssessDuration,
 									MockAppConsts.MockAppBusinessStatus.AssessReqSent);
 						}
-						task.setName("AssessAndQuit" + DateUtil.getCurrentMiliseconds());
+						//task.setName("AssessAndQuit" + DateUtil.getCurrentMiliseconds());
 					}
 				}
 				else if (messageId == Consts.MessageId.BusinessSessionNotification)
@@ -1296,7 +1293,7 @@ public class MockApp implements IMockApp, Runnable
 								this, 
 								MockAppConsts.Setting.ChatConfirmDuration,
 								MockAppConsts.MockAppBusinessStatus.MatchStartReqSent);
-						task.setName("MatchStart" + DateUtil.getCurrentMiliseconds());
+						//task.setName("MatchStart" + DateUtil.getCurrentMiliseconds());
 					}
 					
 				}
@@ -1326,7 +1323,7 @@ public class MockApp implements IMockApp, Runnable
 		
 		if (task != null)
 		{
-			task.start();
+			MockApp.mockAppExecutePool.execute(task);
 		}
 	}
 	
@@ -1453,10 +1450,6 @@ public class MockApp implements IMockApp, Runnable
     	if (this.connection.isOpen())
     	{
     		connection.bindMockApp(this);
-    		if (behaviorMode != MockAppConsts.MockAppBehaviorMode.Manual)
-        	{
-        		this.prepareSending(null, null);
-        	}
     		return true;
     	}
     	else
@@ -1475,12 +1468,9 @@ public class MockApp implements IMockApp, Runnable
 			return;
 		}
 		startTimer();
-		
-		if (behaviorMode == MockAppBehaviorMode.Monitor)
+		if (behaviorMode != MockAppConsts.MockAppBehaviorMode.Manual)
     	{
-    		monitorTimer = new Timer();
-    		monitorTimer.scheduleAtFixedRate(new MonitorTask(this), 1000, 1000);
-    	    syncDevice();
+    		this.prepareSending(null, null);
     	}
 	}
 	

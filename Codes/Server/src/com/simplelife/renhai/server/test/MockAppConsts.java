@@ -111,12 +111,12 @@ public class MockAppConsts
 	public enum MockAppBehaviorMode
 	{
 		Invalid(""),
-		Monitor("Monitor"),
 		Manual("Manual"),
 		SendInvalidJSONCommand("SendInvalidJSONCommand"),
 		NoAppSyncRequest("NoAppSyncRequest"),
 		// Needs to send AppDataSyncRequest from now on
 		
+		Monitor("Monitor"),
 		NoEnterPoolRequest("NoEnterPoolRequest"),
 		// Needs to request enter pool from now on 
 		

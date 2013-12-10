@@ -278,18 +278,18 @@ public class MainFunction extends AbstractTestCase
 		mockApp1.disconnect();
 		*/
 		
-		MockApp mockApp1 = new MockApp("deviceSn", manualMode, true);
+		MockApp mockApp1 = new MockApp("deviceSn", manualMode);
 		mockApp1.syncDevice();
 
 		// 2把1踢掉
-		MockApp mockApp2 = new MockApp("deviceSn", manualMode, true);
+		MockApp mockApp2 = new MockApp("deviceSn", manualMode);
 		mockApp2.syncDevice();
 		
 		// 1被踢掉，重新建立连接之前无法发消息
 		mockApp1.sendServerDataSyncRequest();
 		
 		// 重新建立连接，同步，理论上应该把2踢掉
-		mockApp1 = new MockApp("deviceSn", manualMode, true);
+		mockApp1 = new MockApp("deviceSn", manualMode);
 		mockApp1.syncDevice();
 		
 		// 应该失败

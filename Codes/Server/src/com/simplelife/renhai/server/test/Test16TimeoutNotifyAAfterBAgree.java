@@ -65,13 +65,13 @@ public class Test16TimeoutNotifyAAfterBAgree extends AbstractTestCase
 		mockApp1.syncDevice();
 		mockApp2.syncDevice();
 		
-		onlinePool.getElementCount();
+		onlinePool.getDeviceCount();
 		
 		// Step_02 调用：RandomBusinessDevicePool::getCount
-		int randomDeviceCount = businessPool.getElementCount();
+		int randomDeviceCount = businessPool.getDeviceCount();
 		
 		// Step_03 调用：BusinessSessionPool::getCount
-		int sessionCount = sessionPool.getElementCount();
+		int sessionCount = sessionPool.getDeviceCount();
 		
 		// Step_04 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceStatus.AppDataSynced, deviceWrapper1.getBusinessStatus());
@@ -93,8 +93,8 @@ public class Test16TimeoutNotifyAAfterBAgree extends AbstractTestCase
 		assertEquals(Consts.DeviceStatus.BusinessChoosed, deviceWrapper2.getBusinessStatus());
 		
 		// Step_10 调用：RandomBusinessDevicePool::getCount
-		assertEquals(randomDeviceCount + 2, businessPool.getElementCount());
-		randomDeviceCount = businessPool.getElementCount();
+		assertEquals(randomDeviceCount + 2, businessPool.getDeviceCount());
+		randomDeviceCount = businessPool.getDeviceCount();
 		
 		// Step_11 调用：RandomBusinessScheduler::schedule
 		mockApp1.clearLastReceivedCommand();
@@ -106,8 +106,8 @@ public class Test16TimeoutNotifyAAfterBAgree extends AbstractTestCase
 		assertTrue(mockApp2.checkLastNotification(Consts.MessageId.BusinessSessionNotification, Consts.NotificationType.SessionBound));
 		
 		// Step_12 调用：BusinessSessionPool::getCount
-		assertEquals(sessionCount - 1, sessionPool.getElementCount());
-		sessionCount = sessionPool.getElementCount();
+		assertEquals(sessionCount - 1, sessionPool.getDeviceCount());
+		sessionCount = sessionPool.getDeviceCount();
 		
 		// Step_13 调用：A DeviceWrapper::getBusinessStatus
 		assertEquals(Consts.DeviceStatus.SessionBound, deviceWrapper1.getBusinessStatus());

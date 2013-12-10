@@ -82,7 +82,7 @@ public class BusinessSessionPool extends AbstractPool
 	}
 	
 	/** */
-	public int getElementCount()
+	public int getDeviceCount()
 	{
 		return sessionList.size();
 	}
