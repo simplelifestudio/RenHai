@@ -478,7 +478,7 @@ static float progress = 0.0;
             failureCompletionBlock:^(){
                 [self _updateEnterPoolFlag:NO];
                 
-                [_statusModule recordRemoteStatusAbnormal];
+                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_ChooseBusiness];
             }
             afterCompletionBlock:^(){
                 [_reachLock lock];

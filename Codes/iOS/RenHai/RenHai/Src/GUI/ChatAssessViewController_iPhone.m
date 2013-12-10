@@ -397,7 +397,7 @@
             }
             failureCompletionBlock:^(){
                 _assessSuccessFlag = NO;
-                [_statusModule recordRemoteStatusAbnormal];
+                [_statusModule recordRemoteStatusAbnormal:requestType];
             }
             afterCompletionBlock:^(){
                 [CBAppUtils asyncProcessInMainThread:^(){

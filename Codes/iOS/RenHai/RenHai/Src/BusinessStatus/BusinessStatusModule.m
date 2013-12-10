@@ -18,7 +18,7 @@
     
     NSMutableDictionary* _businessStatusMap;
     
-    NSUInteger _remoteStatusAbnormalCount;
+    NSMutableArray* _remoteStatusAbnormalRecords;
 }
 
 @end
@@ -34,10 +34,10 @@ SINGLETON(BusinessStatusModule)
     [self setModuleIdentity:NSLocalizedString(@"BusinessStatus Module", nil)];
     [self.serviceThread setName:NSLocalizedString(@"BusinessStatus Module Thread", nil)];
     [self setKeepAlive:FALSE];
-
-    _remoteStatusAbnormalCount = 3;
     
     [self _initBusinessStatusMap];
+    
+    _remoteStatusAbnormalRecords = [NSMutableArray array];
 }
 
 -(void) releaseModule
@@ -81,11 +81,31 @@ SINGLETON(BusinessStatusModule)
     [_currentBusinessStatus recordServerNotification:serverNotificationId];
 }
 
--(void) recordRemoteStatusAbnormal
+-(void) recordRemoteStatusAbnormal:(AppMessageIdentifier) appMessageId
 {
-    DDLogWarn(@"Recorded remote status abnormal.");
+    DDLogWarn(@"Recorded remote status abnormal caused by app message: %d", appMessageId);
+
+    BOOL flag = NO;
     
-    [self recordServerNotification:ServerNotificationIdentifier_RemoteStatusAbnormal];
+    NSNumber* oAppMessageId = [NSNumber numberWithInt:appMessageId];
+    
+    NSNumber* lastAppMessageId = [_remoteStatusAbnormalRecords lastObject];
+    if (nil != lastAppMessageId)
+    {
+        if (lastAppMessageId.intValue == oAppMessageId.intValue)
+        {
+            flag = YES;
+        }
+        else
+        {
+            [_remoteStatusAbnormalRecords addObject:oAppMessageId];
+        }
+    }
+    
+    if (flag)
+    {
+        [self _triggerBusinessStatusErrorByRemoteStatusAbnormal];
+    }
 }
 
 #pragma mark - UIApplicationDelegate
@@ -1362,16 +1382,9 @@ SINGLETON(BusinessStatusModule)
 
 -(void) _triggerBusinessStatusErrorByRemoteStatusAbnormal
 {
-    DDLogError(@"Remote business status abnormal record.");
-    
-    _remoteStatusAbnormalCount++;
-    
-    if (LIMIT_REMOTESTATUSABNORMAL <= _remoteStatusAbnormalCount)
-    {
-        DDLogError(@"Reached limit of remote business status abnormal, app is going to reconnect.");
-        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_RHSERVERDISCONNECTED object:self];
-        _remoteStatusAbnormalCount = 0;
-    }
+    DDLogError(@"Reached limit of remote business status abnormal, app is going to reconnect.");
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_RHSERVERDISCONNECTED object:self];
 }
 
 @end

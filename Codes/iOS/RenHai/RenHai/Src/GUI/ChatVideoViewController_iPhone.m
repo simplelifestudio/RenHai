@@ -567,7 +567,7 @@
             }
             failureCompletionBlock:^(){
                 _selfEndChatFlag = NO;
-                [_statusModule recordRemoteStatusAbnormal];
+                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_EndChat];
             }
             afterCompletionBlock:^(){
 
@@ -601,7 +601,7 @@
                 [_statusModule recordAppMessage:AppMessageIdentifier_ChatMessage];
             }
             failureCompletionBlock:^(){
-                [_statusModule recordRemoteStatusAbnormal];
+                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_ChatMessage];
             }
             afterCompletionBlock:^(){
               [CBAppUtils asyncProcessInMainThread:^(){

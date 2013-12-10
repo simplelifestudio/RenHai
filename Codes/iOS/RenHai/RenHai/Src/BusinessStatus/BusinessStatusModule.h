@@ -21,6 +21,6 @@
 
 -(void) recordServerNotification:(ServerNotificationIdentifier) serverNotificationId;
 
--(void) recordRemoteStatusAbnormal;
+-(void) recordRemoteStatusAbnormal:(AppMessageIdentifier) appMessageId;
 
 @end
