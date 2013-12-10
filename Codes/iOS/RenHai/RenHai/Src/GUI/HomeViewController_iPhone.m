@@ -19,8 +19,16 @@
 #import "AppDataModule.h"
 #import "BusinessStatusModule.h"
 
+#import <PulsingHalo/PulsingHaloLayer.h>
+
 #define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
 #define INTERVAL_DATASYNC 1.0f
+
+#define HALO_SPEED_FAST 4.5
+#define HALO_SPEED_SLOW 1.5
+#define HALO_RADIUS 120
+#define HALO_COLOR_FAST FLATUI_COLOR_MAJOR_A
+#define HALO_COLOR_SLOW FLATUI_COLOR_MAJOR_A
 
 typedef enum
 {
@@ -49,33 +57,11 @@ EnterOperationStatus;
     NSCondition* _reachLock;
 }
 
+@property (nonatomic, strong) PulsingHaloLayer* haloLayer;
+
 @end
 
 @implementation HomeViewController_iPhone
-
-@synthesize enterButtonProgressView = _enterButtonProgressView;
-@synthesize enterButton = _enterButton;
-@synthesize enterLabel = _enterLabel;
-@synthesize helpButton = _helpButton;
-
-@synthesize onlineDeviceCountUnit1 = _onlineDeviceCountUnit1;
-@synthesize onlineDeviceCountUnit2 = _onlineDeviceCountUnit2;
-@synthesize onlineDeviceCountUnit3 = _onlineDeviceCountUnit3;
-@synthesize onlineDeviceCountUnit4 = _onlineDeviceCountUnit4;
-@synthesize onlineDeviceCountUnit5 = _onlineDeviceCountUnit5;
-
-@synthesize chatDeviceCountUnit1 = _chatDeviceCountUnit1;
-@synthesize chatDeviceCountUnit2 = _chatDeviceCountUnit2;
-@synthesize chatDeviceCountUnit3 = _chatDeviceCountUnit3;
-@synthesize chatDeviceCountUnit4 = _chatDeviceCountUnit4;
-@synthesize chatDeviceCountUnit5 = _chatDeviceCountUnit5;
-
-@synthesize versionLabel = _versionLabel;
-
-@synthesize onlineDeviceCountLabel = _onlineDeviceCountLabel;
-@synthesize chatDeviceCountLabel = _chatDeviceCountLabel;
-
-@synthesize bannerView = _bannerView;
 
 #pragma mark - Public Methods
 
@@ -107,10 +93,14 @@ EnterOperationStatus;
     [_bannerView scrollLabelIfNeeded];
     
     [_guiModule.mainViewController enableGesturers];
+    
+    [self _startHalo];
 }
 
 -(void) viewWillDisappear:(BOOL)animated
 {
+    [self _stopHalo];
+    
     [self _deactivateDataSyncTimer];
     
     [self _unregisterNotifications];
@@ -166,6 +156,13 @@ EnterOperationStatus;
     _versionLabel.text = _appDataModule.appVersion;
     
     [_enterButton setImage:[UIImage imageNamed:@"enterbutton_highlighted.png"] forState:UIControlStateHighlighted];
+    
+    _haloLayer = [PulsingHaloLayer layer];
+    _haloLayer.pulseInterval = 0;
+    _haloLayer.position = _enterButton.center;
+    _haloLayer.backgroundColor = HALO_COLOR_SLOW.CGColor;
+    _haloLayer.radius = HALO_RADIUS;
+    _haloLayer.speed = HALO_SPEED_SLOW;
     
     [self _updateBannerView];
 }
@@ -265,6 +262,9 @@ EnterOperationStatus;
     
     [_guiModule.mainViewController disableGesturers];
     
+    _haloLayer.speed = HALO_SPEED_FAST;
+    _haloLayer.backgroundColor = HALO_COLOR_FAST.CGColor;
+    
     [self _enterButtonTimerStarted];
 }
 
@@ -277,6 +277,9 @@ EnterOperationStatus;
 //    _enterLabel.hidden = NO;
     _helpButton.enabled = NO;
     _versionLabel.enabled = YES;
+    
+    _haloLayer.speed = HALO_SPEED_SLOW;
+    _haloLayer.backgroundColor = HALO_COLOR_SLOW.CGColor;
     
     self.navigationItem.leftBarButtonItem.enabled = YES;
 }
@@ -527,6 +530,16 @@ static float progress = 0.0;
 -(void)_unregisterNotifications
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)_startHalo
+{
+    [self.navigationController.view.layer insertSublayer:_haloLayer below:_enterButtonProgressView.layer];
+}
+
+-(void)_stopHalo
+{
+    [_haloLayer removeFromSuperlayer];
 }
 
 #pragma mark - IBActions
