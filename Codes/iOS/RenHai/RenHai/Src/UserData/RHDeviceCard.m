@@ -65,7 +65,7 @@
         
         _deviceModel = appDataModule.deviceModel;
         _osVersion = appDataModule.osVersion;
-        _appVersion = [NSString stringWithFormat:@"%f", appDataModule.appVersion];
+        _appVersion = [NSString stringWithFormat:@"%@", appDataModule.appVersion];
         _isJailed = appDataModule.isJailed;
     }
     

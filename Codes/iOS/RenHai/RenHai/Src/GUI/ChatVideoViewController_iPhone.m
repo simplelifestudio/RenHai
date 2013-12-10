@@ -59,8 +59,6 @@
     
     volatile BOOL _isSelfVideoOpen;
     
-    volatile BOOL _isChatMessageEnabled;
-    
     UITapGestureRecognizer* _singleTapGesturer;
     UITapGestureRecognizer* _doubleTapGesturer;
     UIPanGestureRecognizer* _panGesturer;
@@ -70,6 +68,7 @@
     OTVideoView* _subscriberView;
     OTVideoView* _publisherView;
     
+    volatile BOOL _isChatMessageEnabled;
     ChatMessageSendView_iPhone* _sendChatMessageView;
 }
 
@@ -175,15 +174,14 @@
     
     _isSelfDeciding = NO;
     
-    _isChatMessageEnabled = YES;
-    
     _count = 0;
     [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
 
-    [self _setNavigationBarAndToolbarHidden:NO];
+    [self _setNavigationBarAndToolbarHidden:YES];
     self.navigationItem.title = NSLocalizedString(@"ChatVideo_Title", nil);
     [self.navigationItem setHidesBackButton:YES];
     
+    _isChatMessageEnabled = YES;
     [_sendChatMessageView resignFirstResponder];
 }
 
@@ -527,6 +525,7 @@
 -(void) _remoteEndChat
 {
     [CBAppUtils asyncProcessInMainThread:^(){
+
         _isChatMessageEnabled = NO;
         [_sendChatMessageView resignFirstResponder];
         
@@ -535,7 +534,7 @@
         _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Disconnected", nil);
         [self _resetSelfVideoToClose];
         
-        [self _setNavigationBarAndToolbarHidden:NO];
+        [self _setNavigationBarAndToolbarHidden:YES];
     }];
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
@@ -570,7 +569,7 @@
                 _selfEndChatFlag = NO;
             }
             afterCompletionBlock:^(){
-               
+
             }
          ];
         
