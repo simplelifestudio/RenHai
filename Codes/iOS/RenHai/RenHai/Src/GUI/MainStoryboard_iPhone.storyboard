@@ -189,7 +189,7 @@
                                 <color key="currentPageIndicatorTintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </pageControl>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="IHA-vv-7hA" userLabel="finishButton" customClass="FUIButton">
-                                <rect key="frame" x="160" y="460" width="160" height="44"/>
+                                <rect key="frame" x="160" y="461" width="160" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="结束">
@@ -200,7 +200,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="9zZ-8a-hPR" userLabel="continueButton" customClass="FUIButton">
-                                <rect key="frame" x="0.0" y="460" width="160" height="44"/>
+                                <rect key="frame" x="0.0" y="461" width="160" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="继续">
@@ -359,7 +359,7 @@
                                 <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="a17-1G-6mN" userLabel="actionButton" customClass="FUIButton">
-                                <rect key="frame" x="0.0" y="460" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="461" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="取消">
@@ -428,7 +428,7 @@
                                 </collectionReusableView>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="HuW-Sf-JEG" userLabel="rejectChatButton" customClass="FUIButton">
-                                <rect key="frame" x="160" y="460" width="160" height="44"/>
+                                <rect key="frame" x="160" y="461" width="160" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="拒绝">
@@ -439,7 +439,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="tgQ-AA-Ev2" userLabel="agreeChatButton" customClass="FUIButton">
-                                <rect key="frame" x="0.0" y="460" width="160" height="44"/>
+                                <rect key="frame" x="0.0" y="461" width="160" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="同意">
@@ -528,7 +528,7 @@
                                 <autoresizingMask key="autoresizingMask" heightSizable="YES"/>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ypu-rk-vhR" userLabel="endChatButton" customClass="FUIButton">
-                                <rect key="frame" x="160" y="504" width="160" height="44"/>
+                                <rect key="frame" x="160" y="505" width="160" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="挂断">
@@ -538,19 +538,8 @@
                                     <action selector="didPressEndChatButton:" destination="Rwb-k1-UZq" eventType="touchUpInside" id="CZm-eD-vNz"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="lMG-93-d6C" userLabel="chatMessageButton" customClass="FUIButton">
-                                <rect key="frame" x="80" y="504" width="80" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                <state key="normal" title="纸条">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="didPressChatMessageButton:" destination="Rwb-k1-UZq" eventType="touchUpInside" id="nbg-WD-YqL"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Htq-gH-nWp" userLabel="selfVideoButton" customClass="FUIButton">
-                                <rect key="frame" x="0.0" y="504" width="80" height="44"/>
+                                <rect key="frame" x="0.0" y="505" width="80" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <state key="normal" title="本方">
@@ -558,6 +547,17 @@
                                 </state>
                                 <connections>
                                     <action selector="didPressSelfVideoButton:" destination="Rwb-k1-UZq" eventType="touchUpInside" id="IPn-7T-drL"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="lMG-93-d6C" userLabel="chatMessageButton" customClass="FUIButton">
+                                <rect key="frame" x="0.0" y="505" width="160" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                <state key="normal" title="纸条">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="didPressChatMessageButton:" destination="Rwb-k1-UZq" eventType="touchUpInside" id="nbg-WD-YqL"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -592,24 +592,8 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" id="jnU-fI-8d8" userLabel="progressView" customClass="CBRoundProgressView">
-                                <rect key="frame" x="110" y="370" width="100" height="100"/>
+                                <rect key="frame" x="120" y="395" width="80" height="80"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Wmn-PD-PdJ" userLabel="enterButton" customClass="OBShapedButton">
-                                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" title="Button" image="enterbutton_normal.png">
-                                            <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="onPressEnterButton:" destination="KTb-47-hxa" eventType="touchUpInside" id="ksw-4J-9Ka"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <color key="tintColor" red="0.11764705882352941" green="0.56470588235294117" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
@@ -719,7 +703,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="软件版本" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WaR-mf-WcD">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="软件版本" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WaR-mf-WcD" userLabel="versionLabel">
                                 <rect key="frame" x="236" y="507" width="64" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -731,6 +715,20 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Wmn-PD-PdJ" userLabel="enterButton" customClass="OBShapedButton">
+                                <rect key="frame" x="120" y="395" width="80" height="80"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                <state key="normal" title="Button" image="enterbutton_normal.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="onPressEnterButton:" destination="KTb-47-hxa" eventType="touchUpInside" id="ksw-4J-9Ka"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>

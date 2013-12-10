@@ -29,7 +29,7 @@
 "Home_ChatCount" = "聊天人数";
 "Home_Banner_NoInfo" = "Alpha测试，意见建议请联系：simplelife.patrick@gmail.com";
 "Home_Banner_Maintenance" = "服务器安排维护：自 %@ 至 %@。";
-"Home_PressToEnterPool" = "点击进入";
+"Home_PressToEnterPool" = "点击开始";
 "Home_IsEnteringPool" = "正在进入";
 "Home_EnterPoolFailed" = "无法进入";
 
@@ -134,8 +134,9 @@
 "ChatVideo_PartnerStatus_Failed" = "对方视频：失败";
 "ChatVideo_PartnerStatus_Lost" = "对方已掉线";
 "ChatVideo_PartnerChatMessage" = "对方的小纸条";
-"ChatVideo_ChatMessageSendTip" = "写张小纸条传给对方";
+"ChatVideo_ChatMessageSendTip" = "写张纸条传给对方";
 "ChatVideo_SelfVideo" = "我的视频";
+"ChatVideo_ChatMessage" = "纸条";
 "ChatVideo_PartnerVideo" = "对方视频";
 "ChatVideo_Action_Send" = "发送";
 "ChatVideo_Action_End" = "结束聊天";

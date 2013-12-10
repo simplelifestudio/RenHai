@@ -68,6 +68,8 @@
     UILongPressGestureRecognizer* _longPressGesturer;
     
     volatile BOOL _assessSuccessFlag;
+    
+    volatile BOOL _isLabelManaging;
 }
 
 @end
@@ -182,6 +184,8 @@
     _addImpressLabelNames = [NSMutableArray array];
     
     _assessLabelPosition = 0;
+    
+    _isLabelManaging = NO;
     
     [self _setupCollectionView];
     
@@ -495,6 +499,13 @@
 
 -(void)_didSingleTapped:(UITapGestureRecognizer*) recognizer
 {
+    if (_isLabelManaging)
+    {
+        [self _dismissPopupViewController];
+        
+        return;
+    }
+    
     CGPoint locationTouch = [recognizer locationInView:self.view];
     
     if (CGRectContainsPoint(_assessLabelsView.frame, locationTouch))
@@ -599,7 +610,7 @@
                     RHLabelManageViewController_iPhone* labelManagerVC = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:labeName];
                     rootVC.useBlurForPopup = YES;
                     [rootVC presentPopupViewController:labelManagerVC animated:YES completion:nil];
-                    
+                    _isLabelManaging = YES;
                     break;
                 }
                 default:
@@ -954,7 +965,7 @@
     if (rootVC.popupViewController != nil)
     {
         [rootVC dismissPopupViewControllerAnimated:YES completion:^{
-            
+            _isLabelManaging = NO;
         }];
     }
 }
@@ -963,14 +974,25 @@
 
 -(void) didCreateImpressLabel
 {
+    if (_isLabelManaging)
+    {
+        return;
+    }
+    
     UIViewController* rootVC = [CBUIUtils getRootController];
     RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
     rootVC.useBlurForPopup = YES;
     [rootVC presentPopupViewController:labelManageVC animated:YES completion:nil];
+    _isLabelManaging = YES;
 }
 
 -(void) didDeleteImpressLabel
 {
+    if (_isLabelManaging)
+    {
+        return;
+    }
+    
     NSArray* selectedIndexPathes = _addImpressLabelsView.indexPathsForSelectedItems;
     for (NSIndexPath* indexPath in selectedIndexPathes)
     {
@@ -999,6 +1021,11 @@
 
 -(void) didCloneImpressLabel
 {
+    if (_isLabelManaging)
+    {
+        return;
+    }
+    
     NSArray* selectedIndexPathes = _existImpressLabelsView.indexPathsForSelectedItems;
     for (NSIndexPath* indexPath in selectedIndexPathes)
     {

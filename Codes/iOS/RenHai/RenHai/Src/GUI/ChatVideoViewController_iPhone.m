@@ -310,13 +310,14 @@
 - (void) _setupActionButtons
 {
     [_selfVideoButton setTitle:NSLocalizedString(@"ChatVideo_SelfVideo", nil) forState:UIControlStateNormal];
+    [_chatMessageButton setTitle:NSLocalizedString(@"ChatVideo_ChatMessage", nil) forState:UIControlStateNormal];
     [_endChatButton setTitle:NSLocalizedString(@"ChatVideo_Action_End", nil) forState:UIControlStateNormal];
     
-    _selfVideoButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+    _selfVideoButton.buttonColor = FLATUI_COLOR_BUTTONNORMAL;
     [_selfVideoButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_selfVideoButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
     
-    _chatMessageButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+    _chatMessageButton.buttonColor = FLATUI_COLOR_BUTTONNORMAL;
     [_chatMessageButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_chatMessageButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
     

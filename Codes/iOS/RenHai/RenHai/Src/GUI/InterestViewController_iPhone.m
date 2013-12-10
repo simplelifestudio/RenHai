@@ -44,6 +44,8 @@
     UITapGestureRecognizer* _singleTapGesturer;
     UITapGestureRecognizer* _doubleTapGesturer;
     UILongPressGestureRecognizer* _longPressGesturer;
+    
+    volatile BOOL _isLabelManaging;
 }
 
 @end
@@ -90,6 +92,8 @@
     _userDataModule = [UserDataModule sharedInstance];
     _guiModule = [GUIModule sharedInstance];
     
+    _isLabelManaging = NO;
+    
     [self _setupNavigationBar];
     [self _setupCollectionView];
     
@@ -124,20 +128,22 @@
 
 -(void)_setupGestuers
 {
+    UIView* touchView = self.navigationController.view;
+
     _singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
     _singleTapGesturer.delegate = self;
     _singleTapGesturer.numberOfTapsRequired = 1;
-    [self.view addGestureRecognizer:_singleTapGesturer];
+    [touchView addGestureRecognizer:_singleTapGesturer];
     
     _doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
     _doubleTapGesturer.delegate = self;
     _doubleTapGesturer.numberOfTapsRequired = 2;
-    [self.view addGestureRecognizer:_doubleTapGesturer];
+    [touchView addGestureRecognizer:_doubleTapGesturer];
     
 //    _longPressGesturer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(_didLongPressed:)];
 //    _longPressGesturer.delegate = self;
 //    _longPressGesturer.minimumPressDuration = 1.0f;
-//    [self.view addGestureRecognizer:_longPressGesturer];
+//    [touchView addGestureRecognizer:_longPressGesturer];
 //    
 //    [_singleTapGesturer requireGestureRecognizerToFail:_longPressGesturer];
 }
@@ -283,6 +289,13 @@
 
 -(void)_didSingleTapped:(UITapGestureRecognizer*) recognizer
 {
+    if (_isLabelManaging)
+    {
+        [self _dismissPopupViewController];
+        
+        return;
+    }
+    
     CGPoint locationTouch = [recognizer locationInView:self.view];
     
     if (CGRectContainsPoint(_interestLabelsView.frame, locationTouch))
@@ -377,7 +390,7 @@
                     RHLabelManageViewController_iPhone* labelManagerVC = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:oLabel.labelName];
                     rootVC.useBlurForPopup = YES;
                     [rootVC presentPopupViewController:labelManagerVC animated:YES completion:nil];
-                    
+                    _isLabelManaging = YES;
                     break;
                 }
                 default:
@@ -824,14 +837,25 @@
 
 -(void) didCreateInterestLabel
 {
+    if (_isLabelManaging)
+    {
+        return;
+    }
+    
     UIViewController* rootVC = [CBUIUtils getRootController];
     RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
     rootVC.useBlurForPopup = YES;
+    _isLabelManaging = YES;
     [rootVC presentPopupViewController:labelManageVC animated:YES completion:nil];
 }
 
 -(void) didDeleteInterestLabel
 {
+    if (_isLabelManaging)
+    {
+        return;
+    }
+    
     RHDevice* device = _userDataModule.device;
     RHProfile* profile = device.profile;
     RHInterestCard* interestCard = profile.interestCard;
@@ -937,7 +961,7 @@
     if (rootVC.popupViewController != nil)
     {
         [rootVC dismissPopupViewControllerAnimated:YES completion:^{
-            
+            _isLabelManaging = NO;
         }];
     }
 }

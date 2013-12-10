@@ -165,6 +165,8 @@ EnterOperationStatus;
     
     _versionLabel.text = _appDataModule.appVersion;
     
+    [_enterButton setImage:[UIImage imageNamed:@"enterbutton_highlighted.png"] forState:UIControlStateHighlighted];
+    
     [self _updateBannerView];
 }
 

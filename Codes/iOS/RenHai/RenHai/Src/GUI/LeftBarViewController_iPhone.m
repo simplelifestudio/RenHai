@@ -21,7 +21,7 @@
 #define NIB_LeftBarFooterView_iPhone @"LeftBarFooterView_iPhone"
 #define HEIGHT_LeftBarFooterView 100
 
-#define HEIGHT_LeftBarCell 90;
+#define HEIGHT_LeftBarCell 60;
 
 #define NIB_LEFTBARTABLECELL @"LeftBarTableCell_iPhone"
 
