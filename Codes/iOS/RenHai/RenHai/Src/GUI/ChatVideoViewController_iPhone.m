@@ -158,13 +158,13 @@
     */
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [self.view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-     {
-         [_sendChatMessageView resignFirstResponder];
-     }];
-}
+//-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+//{
+//    [self.view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
+//     {
+//         [_sendChatMessageView resignFirstResponder];
+//     }];
+//}
 
 #pragma mark - ChatWizardPage
 
@@ -190,6 +190,8 @@
     [self _setNavigationBarAndToolbarHidden:NO];
     self.navigationItem.title = NSLocalizedString(@"ChatVideo_Title", nil);
     [self.navigationItem setHidesBackButton:YES];
+    
+    [_sendChatMessageView resignFirstResponder];
 }
 
 -(void) pageWillLoad
@@ -343,6 +345,12 @@
 
 -(void) _didSingleTapped:(UITapGestureRecognizer*) recognizer
 {
+    if (!_sendChatMessageView.hidden)
+    {
+         [_sendChatMessageView resignFirstResponder];
+        return;
+    }
+    
     BOOL oldStatus = [self _isNavigationBarAndToolbarHidden];
     [self _setNavigationBarAndToolbarHidden:!oldStatus];
 }
@@ -495,7 +503,7 @@
     }
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    _selfVideoButton.hidden = hidden;
+    _selfVideoButton.hidden = YES;
     _chatMessageButton.hidden = hidden;
     _endChatButton.hidden = hidden;
     
@@ -516,6 +524,8 @@
 {
     [CBAppUtils asyncProcessInMainThread:^(){
         _isChatMessageEnabled = NO;
+        [_sendChatMessageView resignFirstResponder];
+        
         [[MessageBarManager sharedInstance] dismissAllMessages];
         
         _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Disconnected", nil);

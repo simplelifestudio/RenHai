@@ -292,7 +292,7 @@ ChatWaitStatus;
     _count++;
     
     int a = _count % DELAY_MATCHSTART;
-    DDLogVerbose(@"#####a = %d", a);
+
     if (0 == a)
     {
         [self _remoteRequestMatchStart];

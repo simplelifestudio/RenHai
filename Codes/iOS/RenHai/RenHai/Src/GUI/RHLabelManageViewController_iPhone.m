@@ -277,8 +277,19 @@
     }
     else
     {
+        if (IS_IPHONE5)
+        {
+            
+        }
+        else
+        {
+            
+        }
+        
         _isKeyboardOpen = YES;        
     }
+    
+    DDLogVerbose(@"LabelManager's frame = %f - %f - %f - %f", self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
 }
 
 - (void)_keyboardWillHide:(NSNotification*)notification
