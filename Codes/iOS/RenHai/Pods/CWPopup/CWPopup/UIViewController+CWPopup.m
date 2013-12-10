@@ -233,14 +233,17 @@ NSString const *CWUseBlurForPopup = @"CWUseBlurForPopup";
             [self.popupViewController.view addMotionEffect:interpolationVertical];
         }
 #endif
-        // shadow setup
-        viewControllerToPresent.view.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
-        viewControllerToPresent.view.layer.shadowColor = [UIColor blackColor].CGColor;
-        viewControllerToPresent.view.layer.shadowRadius = 3.0f;
-        viewControllerToPresent.view.layer.shadowOpacity = 0.8f;
-        viewControllerToPresent.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:viewControllerToPresent.view.layer.bounds].CGPath;
+        // Updated by RenHai
+        // {
+//        // shadow setup
+//        viewControllerToPresent.view.layer.shadowOffset = CGSizeMake(0.0f, 0.0f);
+//        viewControllerToPresent.view.layer.shadowColor = [UIColor blackColor].CGColor;
+//        viewControllerToPresent.view.layer.shadowRadius = 3.0f;
+//        viewControllerToPresent.view.layer.shadowOpacity = 0.8f;
+//        viewControllerToPresent.view.layer.shadowPath = [UIBezierPath bezierPathWithRect:viewControllerToPresent.view.layer.bounds].CGPath;
         // rounded corners
-        viewControllerToPresent.view.layer.cornerRadius = 5.0f;
+//        viewControllerToPresent.view.layer.cornerRadius = 5.0f;
+        // }
         // blurview
         if (self.useBlurForPopup) {
             [self addBlurView];
@@ -257,6 +260,7 @@ NSString const *CWUseBlurForPopup = @"CWUseBlurForPopup";
             objc_setAssociatedObject(self, &CWBlurViewKey, fadeView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         }
         UIView *blurView = objc_getAssociatedObject(self, &CWBlurViewKey);
+
         // setup
         if (flag) { // animate
             CGRect initialFrame = CGRectMake(finalFrame.origin.x, [UIScreen mainScreen].bounds.size.height + viewControllerToPresent.view.frame.size.height/2, finalFrame.size.width, finalFrame.size.height);
