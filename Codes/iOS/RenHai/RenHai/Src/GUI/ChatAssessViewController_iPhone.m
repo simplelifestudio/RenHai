@@ -34,7 +34,7 @@
 
 #define EXISTIMPRESSLABELSVIEW_SECTION_INDEX_EXISTIMPRESSLABELS 0
 #define EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_3_5 6
-#define EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_4 9
+#define EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_4 12
 
 #define DELAY_REFRESH 0.5f
 
@@ -370,6 +370,8 @@
         
         RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:requestType device:selfDevice info:info];
         
+        __block AppMessageIdentifier appMessageId = AppMessageIdentifier_Disconnect;
+        
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
                 
@@ -377,13 +379,17 @@
                 {
                     case BusinessSessionRequestType_AssessAndContinue:
                     {
-                        [_statusModule recordAppMessage:AppMessageIdentifier_AssessAndContinue];
+                        appMessageId = AppMessageIdentifier_AssessAndContinue;
+                        
+                        [_statusModule recordAppMessage:appMessageId];
                         [self _moveToChatWaitView];
                         break;
                     }
                     case BusinessSessionRequestType_AssessAndQuit:
                     {
-                        [_statusModule recordAppMessage:AppMessageIdentifier_AssessAndQuit];
+                        appMessageId = AppMessageIdentifier_AssessAndQuit;
+                        
+                        [_statusModule recordAppMessage:appMessageId];
                         [self _moveToHomeView];
                         break;
                     }
@@ -397,7 +403,7 @@
             }
             failureCompletionBlock:^(){
                 _assessSuccessFlag = NO;
-                [_statusModule recordRemoteStatusAbnormal:requestType];
+                [_statusModule recordRemoteStatusAbnormal:appMessageId];
             }
             afterCompletionBlock:^(){
                 [CBAppUtils asyncProcessInMainThread:^(){
@@ -896,6 +902,8 @@
             reusableView = _existImpressLabelsHeaderView;
         }
     }
+    
+    reusableView.backgroundColor = FLATUI_COLOR_UICOLLECTIONREUSABLEVIEW_BACKGROUND;
     
     return reusableView;
 }

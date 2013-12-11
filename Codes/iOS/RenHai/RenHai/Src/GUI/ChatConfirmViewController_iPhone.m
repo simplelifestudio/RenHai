@@ -311,6 +311,7 @@ ChoiceType;
         reusableView = headerView;
     }
     
+    reusableView.backgroundColor = FLATUI_COLOR_UICOLLECTIONREUSABLEVIEW_BACKGROUND;
     
     return reusableView;
 }
