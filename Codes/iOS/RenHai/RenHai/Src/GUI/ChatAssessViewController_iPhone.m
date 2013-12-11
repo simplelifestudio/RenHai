@@ -617,7 +617,6 @@
                     
                     UIViewController* rootVC = [CBUIUtils getRootController];
                     RHLabelManageViewController_iPhone* labelManagerVC = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:labeName];
-                    rootVC.useBlurForPopup = YES;
                     [rootVC presentPopupViewController:labelManagerVC animated:YES completion:nil];
                     _isLabelManaging = YES;
                     break;
@@ -992,7 +991,6 @@
     
     UIViewController* rootVC = [CBUIUtils getRootController];
     RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
-    rootVC.useBlurForPopup = YES;
     [rootVC presentPopupViewController:labelManageVC animated:YES completion:nil];
     _isLabelManaging = YES;
 }

@@ -8,6 +8,9 @@
 
 #import "RHLabelManageViewController_iPhone.h"
 
+#import "UIDevice+CBDeviceExtends.h"
+#import <CWPopup/UIViewController+CWPopup.h>
+
 #import "CBStringUtils.h"
 #import "GUIModule.h"
 
@@ -40,6 +43,11 @@
     vc.manageDelegate = manageDelegate;
     vc.oldLabel = nil;
     
+    if ([UIDevice isRunningOniOS7AndLater])
+    {
+        vc.useBlurForPopup = YES;
+    }
+    
     return vc;
 }
 
@@ -52,6 +60,11 @@
     vc.manageDelegate = manageDelegate;
     vc.oldLabel = label;
 
+    if ([UIDevice isRunningOniOS7AndLater])
+    {
+        vc.useBlurForPopup = YES;
+    }
+    
     return vc;
 }
 
@@ -223,12 +236,18 @@
     [_cancelButton setTitle:NSLocalizedString(@"LabelManage_Action_Cancel", nil) forState:UIControlStateNormal];
     
     _saveButton.buttonColor = FLATUI_COLOR_BUTTONNORMAL;
-//    _saveButton.highlightedColor = FLATUI_COLOR_BUTTONHIGHLIGHTED;
+    if ([UIDevice isRunningOniOS7AndLater])
+    {
+        _saveButton.highlightedColor = FLATUI_COLOR_BUTTONHIGHLIGHTED;
+    }
     [_saveButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_saveButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 
     _cancelButton.buttonColor = FLATUI_COLOR_BUTTONNORMAL;
-//    _cancelButton.highlightedColor = FLATUI_COLOR_BUTTONHIGHLIGHTED;
+    if ([UIDevice isRunningOniOS7AndLater])
+    {
+        _cancelButton.highlightedColor = FLATUI_COLOR_BUTTONHIGHLIGHTED;
+    }
     [_cancelButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_cancelButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 }
@@ -271,26 +290,33 @@
     CGRect _oldFrame = self.view.frame;
     
     CGFloat yOffset = 0;
-    CGFloat fixOffset = 10.0f;
-    if (_isKeyboardOpen)
+    yOffset = ((_oldFrame.origin.y + _oldFrame.size.height) - _keyboardRect.origin.y);
+#warning DIRTY
+    GUIModule* guiModule = [GUIModule sharedInstance];
+    BOOL flag1 = (nil != self.manageDelegate);
+    UIViewController* presentingVC = (UIViewController*)self.manageDelegate;
+    UIViewController* parentVCOfPresentingVC = presentingVC.parentViewController;
+    BOOL flag2 = parentVCOfPresentingVC == guiModule.navigationController;
+    if (flag1 && flag2)
     {
-        yOffset = fixOffset;
-        self.view.frame = CGRectMake(_oldFrame.origin.x, _keyboardRect.origin.y - _oldFrame.size.height - yOffset, _oldFrame.size.width, _oldFrame.size.height);
-    }
-    else
-    {
-        yOffset = ((_oldFrame.origin.y + _oldFrame.size.height) - _keyboardRect.origin.y);
-        yOffset += fixOffset;
-        if (0 < yOffset)
+        if (![UIDevice isRunningOniOS7AndLater])
         {
-            self.view.frame = CGRectMake(_oldFrame.origin.x, _oldFrame.origin.y - yOffset, _oldFrame.size.width, _oldFrame.size.height);
+            yOffset += [UIApplication sharedApplication].statusBarFrame.size.height;
         }
-        DDLogVerbose(@"LabelManager's yOffset = %f", yOffset);
-        
-        _isKeyboardOpen = YES;        
     }
+
+    self.view.frame = CGRectMake(_oldFrame.origin.x, _oldFrame.origin.y - yOffset, _oldFrame.size.width, _oldFrame.size.height);
     
     DDLogVerbose(@"LabelManager's frame = %f - %f - %f - %f", self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
+    DDLogVerbose(@"LabelManager's superView's frame = %f - %f - %f - %f", self.view.superview.frame.origin.x, self.view.superview.frame.origin.y, self.view.superview.frame.size.width, self.view.superview.frame.size.height);
+    DDLogVerbose(@"LabelManager's superView's superView's frame = %f - %f - %f - %f", self.view.superview.superview.frame.origin.x, self.view.superview.superview.frame.origin.y, self.view.superview.superview.frame.size.width, self.view.superview.superview.frame.size.height);
+    
+    CGPoint center = self.view.center;
+    DDLogVerbose(@"Center in view = %f - %f", center.x, center.y);
+    CGPoint superCenter = [self.view convertPoint:center toView:self.view.superview];
+    DDLogVerbose(@"Center in superView = %f - %f", superCenter.x, superCenter.y);
+    CGPoint superSuperCenter = [self.view convertPoint:center toView:self.view.superview.superview];
+    DDLogVerbose(@"Center in superSuperView = %f - %f", superSuperCenter.x, superSuperCenter.y);
 }
 
 - (void)_keyboardWillHide:(NSNotification*)notification
