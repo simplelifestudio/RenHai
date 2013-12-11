@@ -228,8 +228,7 @@
 {
     _textField.layer.masksToBounds = YES;
     _textField.layer.borderColor = FLATUI_COLOR_TEXTFIELD_BORDER.CGColor;
-    _textField.layer.borderWidth = 1.0f;
-    
+    _textField.layer.borderWidth = FLATUI_WIDTH_TEXTFIELD_BORDER;
     _textField.backgroundColor = FLATUI_COLOR_TEXTFIELD_BACKGROUND;
     
     [_saveButton setTitle:NSLocalizedString(@"LabelManage_Action_Save", nil) forState:UIControlStateNormal];
@@ -243,7 +242,7 @@
     [_saveButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_saveButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 
-    _cancelButton.buttonColor = FLATUI_COLOR_BUTTONNORMAL;
+    _cancelButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
     if ([UIDevice isRunningOniOS7AndLater])
     {
         _cancelButton.highlightedColor = FLATUI_COLOR_BUTTONHIGHLIGHTED;

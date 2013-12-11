@@ -49,7 +49,7 @@
 
     _textField.layer.masksToBounds = YES;
     _textField.layer.borderColor = FLATUI_COLOR_TEXTFIELD_BORDER.CGColor;
-    _textField.layer.borderWidth = 1.0f;
+    _textField.layer.borderWidth = FLATUI_WIDTH_TEXTFIELD_BORDER;
     _textField.backgroundColor = FLATUI_COLOR_TEXTFIELD_BACKGROUND;
     
     [self _setupActionButtons];
