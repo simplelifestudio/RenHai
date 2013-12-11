@@ -385,6 +385,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 		@Override
 		public void run()
 		{
+			logger.debug("Adjust device count of pools");
 			OnlineDevicePool.instance.adjustDeviceCount();
 			AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(BusinessType.Interest);
 			pool.adjustDeviceCount();

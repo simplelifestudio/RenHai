@@ -127,6 +127,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     {
     	if (device == null)
     	{
+    		logger.debug("Device in DeviceWrapper <{}> is null, return directly");
     		return;
     	}
     	

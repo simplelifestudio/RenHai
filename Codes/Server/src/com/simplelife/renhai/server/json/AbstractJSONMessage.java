@@ -17,11 +17,12 @@ import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.IRunnableMessage;
 
 /**
  * 
  */
-public abstract class AbstractJSONMessage implements Runnable
+public abstract class AbstractJSONMessage implements IRunnableMessage
 {
 	protected Logger logger = BusinessModule.instance.getLogger();
 	
@@ -40,6 +41,16 @@ public abstract class AbstractJSONMessage implements Runnable
     protected long queueTime;
     protected int delayOfHandle;
     
+    
+    public String getMessageName()
+    {
+    	return this.getMessageId().name();
+    }
+    
+    public String getMsgOwnerInfo()
+    {
+    	return deviceWrapper.getDeviceIdentification();
+    }
     
 	public int getDelayOfHandle()
 	{

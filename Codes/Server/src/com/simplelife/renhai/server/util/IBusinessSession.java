@@ -45,9 +45,6 @@ public interface IBusinessSession
     public void onEndChat(IDeviceWrapper device);
     
     /** */
-    public Collection<IDeviceWrapper> getDeviceList();
-    
-    /** */
     public BusinessSessionStatus getStatus();
     
     public String getSessionId();

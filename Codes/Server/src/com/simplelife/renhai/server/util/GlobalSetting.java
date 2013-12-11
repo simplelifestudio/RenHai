@@ -81,7 +81,7 @@ public class GlobalSetting
 		public static int LengthOfSessionId = 16;
 		public static int LengthOfMessageSn = 16;
 		
-		public static int MaxImpressLabelCount = 12;
+		public static int MaxImpressLabelCount = 20;
 		public static int InputMessageHandleThreads = 200;
 		public static int OutputMessageSendThreads = 700;
 		public static int MessageQueueTime = 3 * 1000;
@@ -92,6 +92,7 @@ public class GlobalSetting
 		public static String OpenTokSecret = "7a94109e525016628a92a1dcc392e5bdc0f27e7e";
 		public static long OpenTokTokenExpiration = 29 * 24 * 3600;			// Opentok has changed the expiration time to second instead of millisecond!
 		public static long OpenTokTokenDuration = 2 * 3600 * 1000;			// Longest duration for using token (video chat)
+		public static long AccountCheckInterval = 60 * 1000;				// Longest duration for using token (video chat)
 	}
 
 	public static void checkSettingFile()

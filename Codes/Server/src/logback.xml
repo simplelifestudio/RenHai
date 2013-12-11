@@ -31,7 +31,7 @@
 
     <logger name="com.simplelife.renhai.server.business.BusinessModule" level = "DEBUG" />
     <logger name="com.simplelife.renhai.server.db.DBModule" level = "DEBUG" />
-    <logger name="com.simplelife.renhai.server.websocket.WebSocketModule" level = "DEBUG" />
+    <logger name="com.simplelife.renhai.server.websocket.WebSocketModule" level = "ERROR" />
     <logger name="com.simplelife.renhai.server.test.MockApp" level = "DEBUG" />
 	<logger name="com.simplelife.renhai.server.json.JSONModule" level = "DEBUG" />
 	<logger name="org.apache.ibatis" level = "DEBUG" />

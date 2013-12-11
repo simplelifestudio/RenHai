@@ -118,12 +118,18 @@ public class PingLink
 	}
 	public void removeNode(PingNode node)
 	{
+		logger.debug("Remove Ping node of device <{}>", node.getDeviceWrapper().getDeviceIdentification());
 		removeNode(node, true);
 	}
 	
 	public void moveToTail(PingNode node)
 	{
 		logger.debug("Move Ping node of device <{}> to tail", node.getDeviceWrapper().getDeviceIdentification());
+		if (tail == node)
+		{
+			return;
+		}
+		
 		removeNode(node, false);
 		addToTail(node);
 	}

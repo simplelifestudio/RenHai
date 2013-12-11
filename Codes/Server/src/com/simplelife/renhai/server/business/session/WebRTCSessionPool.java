@@ -76,8 +76,8 @@ public class WebRTCSessionPool extends AbstractPool
 
     public void startService()
     {
-    	//timer.scheduleAtFixedRate(new TokenCheckTask(), GlobalSetting.BusinessSetting.OpenTokTokenDuration, GlobalSetting.BusinessSetting.OpenTokTokenDuration);
-    	timer.scheduleAtFixedRate(new TokenCheckTask(), 10000, 10000);
+    	timer.scheduleAtFixedRate(new TokenCheckTask(), GlobalSetting.BusinessSetting.AccountCheckInterval, GlobalSetting.BusinessSetting.AccountCheckInterval);
+    	//timer.scheduleAtFixedRate(new TokenCheckTask(), 10000, 10000);
     	checkExpiredToken();
     }
     

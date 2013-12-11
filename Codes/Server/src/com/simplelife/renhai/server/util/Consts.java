@@ -325,7 +325,8 @@ public class Consts
 		Init(1), 
 		SessionBoundAcked(2), 
 		ChatAgreed(3), 
-		ChatEnded(4);
+		ChatEnded(4),
+		Leaved(5);
 		
 		private int value;
 		private DeviceBusinessProgress(int value)

@@ -88,7 +88,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     private MessageHandler inputMessageHandler = new MessageHandler(this, InputMsgExecutorPool.instance);
     private MessageHandler outputMessageHandler = new MessageHandler(this, OutputMsgExecutorPool.instance);
     
-    private PingNode pingNode = new PingNode(this);
+    private PingNode pingNode;
     
     
     @Override
@@ -116,6 +116,8 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     {
     	this.webSocketConnection = connection;
     	this.businessStatus = DeviceStatus.Connected;
+    	pingNode = new PingNode(this);
+    	PingLink.instance.append(this);
     	connection.bind(this);
     }
 
@@ -151,11 +153,8 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     	switch(targetStatus)
     	{
     		case Disconnected:
-    			if (reason != StatusChangeReason.TimeoutOfPing)
-    			{
-    				PingActionQueue.instance.newAction(PingActionType.DeviceRemoved, this.pingNode);
-    			}
-    			
+    			inputMessageHandler.clearMessage();
+    			outputMessageHandler.clearMessage();
     			switch(businessStatus)
     			{
     				case Connected:
@@ -178,20 +177,71 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					DAOWrapper.instance.cache(this.getDevice());
     					break;
     				case SessionBound:
-    					// Leave business device pool
-    					unbindBusinessSession(reason);
-    					businessPool.onDeviceLeave(this, reason);
-    					ownerOnlinePool.deleteDevice(this, reason);
-    					unbindOnlineDevicePool();				// No request is accepted from now on
-    					device.getProfile().setLastActivityTime(lastActivityTime);
-    					DAOWrapper.instance.cache(this.getDevice());
+    					logger.debug("===============1===============Device <{}>", this.getDeviceIdentification());
+    					try
+    					{
+    						unbindBusinessSession(reason);
+    					}
+    					catch(Exception e)
+    					{
+    						FileLogger.printStackTrace(e);
+    					}
+    					logger.debug("===============2===============Device <{}>", this.getDeviceIdentification());
+    					try
+    					{
+    						businessPool.onDeviceLeave(this, reason);
+    					}
+    					catch(Exception e)
+    					{
+    						FileLogger.printStackTrace(e);
+    					}
+    					logger.debug("===============3===============Device <{}>", this.getDeviceIdentification());
+    					try
+    					{
+    						ownerOnlinePool.deleteDevice(this, reason);
+    					}
+    					catch(Exception e)
+    					{
+    						FileLogger.printStackTrace(e);
+    					}
+    					logger.debug("===============4===============Device <{}>", this.getDeviceIdentification());
+    					try
+    					{
+    						unbindOnlineDevicePool();				// No request is accepted from now on
+    					}
+    					catch(Exception e)
+    					{
+    						FileLogger.printStackTrace(e);
+    					}
+    					logger.debug("===============5===============Device <{}>", this.getDeviceIdentification());
+    					try
+    					{
+    						device.getProfile().setLastActivityTime(lastActivityTime);
+    					}
+    					catch(Exception e)
+    					{
+    						FileLogger.printStackTrace(e);
+    					}
+    					logger.debug("===============6===============Device <{}>", this.getDeviceIdentification());
+    					try
+    					{
+    						DAOWrapper.instance.cache(this.getDevice());
+    					}
+    					catch(Exception e)
+    					{
+    						FileLogger.printStackTrace(e);
+    					}
+    					logger.debug("===============7===============Device <{}>", this.getDeviceIdentification());
     					break;
     				default:
     					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
     					break;
     			}
-    			inputMessageHandler.clearMessage();
-    			outputMessageHandler.clearMessage();
+    			
+    			if (reason != StatusChangeReason.TimeoutOfPing)
+    			{
+    				PingActionQueue.instance.newAction(PingActionType.DeviceRemoved, this.pingNode);
+    			}
     			this.webSocketConnection.closeConnection();			// Close socket at last step
     			break;
     			
@@ -333,18 +383,25 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     /** */
     public void unbindBusinessSession(StatusChangeReason reason)
     {
+    	logger.debug("===============11===============Device <{}>", this.getDeviceIdentification());
     	if (this.businessStatus != Consts.DeviceStatus.SessionBound)
     	{
+    		logger.debug("Device <{}> is not in status of SessionBound, return directly");
     		return;
     	}
     	
-    	logger.debug("Unbind device <{}> from business session", getDeviceIdentification());
+    	logger.debug("===============12===============Device <{}>", this.getDeviceIdentification());
     	if (ownerBusinessSession == null)
     	{
+    		logger.debug("ownerBusinessSession of Device <{}> is null, return directly");
     		return;
     	}
+    	
+    	logger.debug("===============13===============Device <{}>", this.getDeviceIdentification());
+    	logger.debug("Unbind device <{}> from business session", getDeviceIdentification());
     	ownerBusinessSession.onDeviceLeave(this, reason);
     	ownerBusinessSession = null;
+    	logger.debug("===============14===============Device <{}>", this.getDeviceIdentification());
     }
     
     /** */

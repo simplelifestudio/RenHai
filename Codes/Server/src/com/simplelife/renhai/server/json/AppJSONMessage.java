@@ -18,13 +18,13 @@ import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
-import com.simplelife.renhai.server.util.IAppJSONMessage;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.IRunnableMessage;
 import com.simplelife.renhai.server.util.JSONKey;
 
 
 /** */
-public abstract class AppJSONMessage extends AbstractJSONMessage implements IAppJSONMessage
+public abstract class AppJSONMessage extends AbstractJSONMessage
 {
     private String errorDescription;
     private Consts.GlobalErrorCode errorCode;

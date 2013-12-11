@@ -20,6 +20,7 @@ import com.simplelife.renhai.server.json.AbstractJSONMessage;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.Consts.MessageId;
+import com.simplelife.renhai.server.util.IRunnableMessage;
 
 /**
  * 
@@ -33,7 +34,7 @@ public class MessageHandler implements Runnable
 	private boolean executeFlag = false;
 	private Lock executeLock = new ReentrantLock();
 	
-	private ConcurrentLinkedQueue<AbstractJSONMessage> queue = new ConcurrentLinkedQueue<>();
+	private ConcurrentLinkedQueue<IRunnableMessage> queue = new ConcurrentLinkedQueue<>();
 	private Lock queueLock = new ReentrantLock();
 	
 	
@@ -56,7 +57,7 @@ public class MessageHandler implements Runnable
 		queueLock.unlock();
 	}
 	
-	public void addMessage(AbstractJSONMessage message)
+	public void addMessage(IRunnableMessage message)
 	{
 		if (message == null)
 		{
@@ -64,10 +65,15 @@ public class MessageHandler implements Runnable
 		}
 		
 		message.setQueueTime(System.currentTimeMillis());
-		logger.debug("Queue message " + message.getMessageId().name() 
-				+ " with MessageSN: " + message.getMessageSn());
+		String messageName = message.getMessageName();
 		
-		if (message.getMessageId() == MessageId.AppDataSyncRequest)
+		if (logger.isDebugEnabled())
+		{
+			logger.debug("Queue message " +  messageName
+				+ " with MessageSN: " + message.getMessageSn());
+		}
+		
+		if (messageName.equals(MessageId.AppDataSyncRequest.name()))
 		{
 			// Put AppDataSyncRequest in higher priority
 			InputMsgExecutorPool.instance.execute(message);
@@ -93,7 +99,7 @@ public class MessageHandler implements Runnable
 		logger.debug("Message handler of device <{}> started", deviceWrapper.getDeviceIdentification());
 		queueLock.lock();
 		
-		AbstractJSONMessage message;
+		IRunnableMessage message;
 		while(!queue.isEmpty())
 		{
 			message = queue.remove();
@@ -117,14 +123,14 @@ public class MessageHandler implements Runnable
 		logger.debug("Message handler of device <{}> ended", deviceWrapper.getDeviceIdentification());
 	}
 	
-	private void executeMessage(AbstractJSONMessage message)
+	private void executeMessage(IRunnableMessage message)
 	{
 		int duration = message.getQueueDuration();
 		
 		if (logger.isDebugEnabled())
 		{
-			String temp = "Start to handle " + message.getMessageId().name() + " related to device <"
-					+ message.getDeviceWrapper().getDeviceIdentification() + "> which was queued " + duration
+			String temp = "Start to handle " + message.getMessageName() + " related to device <"
+					+ message.getMsgOwnerInfo() + "> which was queued " + duration
 					+ "ms ago, message Sn: " + message.getMessageSn();
 			logger.debug(temp);
 		}
@@ -137,8 +143,7 @@ public class MessageHandler implements Runnable
 				// To ensure message is delayed for given time
 				// Currently it's designed for delay of SessionBound
 				delay = delay - duration;
-				logger.debug("Delay " + delay + "ms for handle of " + message.getMessageId().name(), message
-						.getDeviceWrapper().getDeviceIdentification());
+				logger.debug("Delay " + delay + "ms for handle of " + message.getMessageName(), message.getMsgOwnerInfo());
 				try
 				{
 					Thread.sleep(delay);
