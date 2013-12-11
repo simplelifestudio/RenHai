@@ -377,9 +377,12 @@ NSString const *CWUseBlurForPopup = @"CWUseBlurForPopup";
 }
 
 - (BOOL)useBlurForPopup {
-    NSNumber *result = objc_getAssociatedObject(self, &CWUseBlurForPopup);
-    return [result boolValue];
-
+    // Updated by RenHai
+    // {
+//    NSNumber *result = objc_getAssociatedObject(self, &CWUseBlurForPopup);
+//    return result.boolValue;
+    return YES;
+    // }
 }
 
 @end
