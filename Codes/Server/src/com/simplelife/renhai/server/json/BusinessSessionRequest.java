@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
+import com.simplelife.renhai.server.business.pool.MessageHandler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
@@ -620,7 +621,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		if (quitAfterAssess)
 		{
 			response.addToBody(JSONKey.OperationType, Consts.OperationType.AssessAndQuit.getValue());
-			deviceWrapper.getOwnerBusinessSession().onAssessAndQuit(this.deviceWrapper);
+			//deviceWrapper.getOwnerBusinessSession().onAssessAndQuit(this.deviceWrapper);
 			deviceWrapper.changeBusinessStatus(DeviceStatus.AppDataSynced, StatusChangeReason.AssessAndQuit);
 			
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessQuit_1020
@@ -630,7 +631,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 		else
 		{
 			response.addToBody(JSONKey.OperationType, Consts.OperationType.AssessAndContinue.getValue());
-			deviceWrapper.getOwnerBusinessSession().onAssessAndContinue(this.deviceWrapper);
+			//deviceWrapper.getOwnerBusinessSession().onAssessAndContinue(this.deviceWrapper);
 			deviceWrapper.changeBusinessStatus(DeviceStatus.BusinessChoosed, StatusChangeReason.AssessAndContinue);
 			
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessContinue_1019

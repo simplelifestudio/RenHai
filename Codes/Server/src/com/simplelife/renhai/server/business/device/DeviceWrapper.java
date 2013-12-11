@@ -53,6 +53,7 @@ import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.IRunnableMessage;
 import com.simplelife.renhai.server.util.JSONKey;
 
 
@@ -85,11 +86,12 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     
     private Long lastActivityTime;
     
-    private MessageHandler inputMessageHandler = new MessageHandler(this, InputMsgExecutorPool.instance);
-    private MessageHandler outputMessageHandler = new MessageHandler(this, OutputMsgExecutorPool.instance);
+    private MessageHandler inputMessageHandler;
+    private MessageHandler outputMessageHandler;
     
     private PingNode pingNode;
     
+    private MessageHandler changeStatusHandler;
     
     @Override
     public void updatePingTime()
@@ -119,6 +121,9 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     	pingNode = new PingNode(this);
     	PingLink.instance.append(this);
     	connection.bind(this);
+    	inputMessageHandler = new MessageHandler(connection.getConnectionId(), InputMsgExecutorPool.instance);
+        outputMessageHandler = new MessageHandler(connection.getConnectionId(), OutputMsgExecutorPool.instance);
+        changeStatusHandler = new  MessageHandler(connection.getConnectionId(), InputMsgExecutorPool.instance);
     }
 
     /**
@@ -126,6 +131,11 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
      * @param targetStatus: target business status
      */
     public void changeBusinessStatus(Consts.DeviceStatus targetStatus, StatusChangeReason reason)
+    {
+    	changeStatusHandler.addMessage(new DeviceStatusChangeTask(targetStatus, reason));
+    }
+    
+    private void serialChangeBusinessStatus(Consts.DeviceStatus targetStatus, StatusChangeReason reason)
     {
     	if (logger.isDebugEnabled())
     	{
@@ -177,7 +187,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					DAOWrapper.instance.cache(this.getDevice());
     					break;
     				case SessionBound:
-    					logger.debug("===============1===============Device <{}>", this.getDeviceIdentification());
+    					//logger.debug("===============1===============Device <{}>", this.getDeviceIdentification());
     					try
     					{
     						unbindBusinessSession(reason);
@@ -186,7 +196,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					{
     						FileLogger.printStackTrace(e);
     					}
-    					logger.debug("===============2===============Device <{}>", this.getDeviceIdentification());
+    					//logger.debug("===============2===============Device <{}>", this.getDeviceIdentification());
     					try
     					{
     						businessPool.onDeviceLeave(this, reason);
@@ -195,7 +205,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					{
     						FileLogger.printStackTrace(e);
     					}
-    					logger.debug("===============3===============Device <{}>", this.getDeviceIdentification());
+    					//logger.debug("===============3===============Device <{}>", this.getDeviceIdentification());
     					try
     					{
     						ownerOnlinePool.deleteDevice(this, reason);
@@ -204,7 +214,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					{
     						FileLogger.printStackTrace(e);
     					}
-    					logger.debug("===============4===============Device <{}>", this.getDeviceIdentification());
+    					//logger.debug("===============4===============Device <{}>", this.getDeviceIdentification());
     					try
     					{
     						unbindOnlineDevicePool();				// No request is accepted from now on
@@ -213,7 +223,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					{
     						FileLogger.printStackTrace(e);
     					}
-    					logger.debug("===============5===============Device <{}>", this.getDeviceIdentification());
+    					//logger.debug("===============5===============Device <{}>", this.getDeviceIdentification());
     					try
     					{
     						device.getProfile().setLastActivityTime(lastActivityTime);
@@ -222,7 +232,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					{
     						FileLogger.printStackTrace(e);
     					}
-    					logger.debug("===============6===============Device <{}>", this.getDeviceIdentification());
+    					//logger.debug("===============6===============Device <{}>", this.getDeviceIdentification());
     					try
     					{
     						DAOWrapper.instance.cache(this.getDevice());
@@ -231,8 +241,12 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					{
     						FileLogger.printStackTrace(e);
     					}
-    					logger.debug("===============7===============Device <{}>", this.getDeviceIdentification());
+    					//logger.debug("===============7===============Device <{}>", this.getDeviceIdentification());
     					break;
+    					
+    				case Disconnected:
+    					break;
+    					
     				default:
     					logger.error("Abnormal business status change for device:<" + device.getDeviceSn() + ">, source status: " + businessStatus.name() + ", target status: " + targetStatus.name());
     					break;
@@ -266,6 +280,10 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					// Init -> Idle, typical process of AppDataSyncRequest
     					businessStatus = targetStatus;			// To ensure that deviceSn is available from now on
     					ownerOnlinePool.synchronizeDevice(this);
+    					
+    					inputMessageHandler.setMsgOwnerInfo(getDeviceSn());
+    					outputMessageHandler.setMsgOwnerInfo(getDeviceSn());
+    					changeStatusHandler.setMsgOwnerInfo(getDeviceSn());
     					break;
     				case BusinessChoosed:
     				case MatchStarted:
@@ -383,25 +401,25 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     /** */
     public void unbindBusinessSession(StatusChangeReason reason)
     {
-    	logger.debug("===============11===============Device <{}>", this.getDeviceIdentification());
+    	//logger.debug("===============11===============Device <{}>", this.getDeviceIdentification());
     	if (this.businessStatus != Consts.DeviceStatus.SessionBound)
     	{
     		logger.debug("Device <{}> is not in status of SessionBound, return directly");
     		return;
     	}
     	
-    	logger.debug("===============12===============Device <{}>", this.getDeviceIdentification());
+    	//logger.debug("===============12===============Device <{}>", this.getDeviceIdentification());
     	if (ownerBusinessSession == null)
     	{
     		logger.debug("ownerBusinessSession of Device <{}> is null, return directly");
     		return;
     	}
     	
-    	logger.debug("===============13===============Device <{}>", this.getDeviceIdentification());
+    	//logger.debug("===============13===============Device <{}>", this.getDeviceIdentification());
     	logger.debug("Unbind device <{}> from business session", getDeviceIdentification());
     	ownerBusinessSession.onDeviceLeave(this, reason);
     	ownerBusinessSession = null;
-    	logger.debug("===============14===============Device <{}>", this.getDeviceIdentification());
+    	//logger.debug("===============14===============Device <{}>", this.getDeviceIdentification());
     }
     
     /** */
@@ -426,13 +444,16 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     @Override
     public void onJSONCommand(AppJSONMessage command)
     {
-    	logger.debug("Device <{}> received " 
-    		+ command.getMessageId().name() + " at status of " 
-    		+ businessStatus.name() + ", messageSn: " + command.getMessageSn(), this.getDeviceIdentification());
-
+    	if (logger.isDebugEnabled())
+    	{
+	    	logger.debug("Device <{}> received " 
+	    		+ command.getMessageId().name() + " at status of " 
+	    		+ businessStatus.name() + ", messageSn: " + command.getMessageSn(), this.getDeviceIdentification());
+    	}
+    	
     	if (this.businessStatus == Consts.DeviceStatus.Disconnected)
     	{
-    		logger.warn("Received command from Disconnected device <"+ getDeviceIdentification() +">\n{}", command.toReadableString());
+    		logger.warn("Device <"+ getDeviceIdentification() +"> was disconnected, handle of command {} is given up", command.getMessageId().name());
     		return;
     	}
     	
@@ -876,6 +897,59 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 	public void prepareResponse(ServerJSONMessage response)
 	{
 		outputMessageHandler.addMessage(response);
+	}
+	
+	private class DeviceStatusChangeTask implements IRunnableMessage
+	{
+		private DeviceStatus targetStatus;
+		private StatusChangeReason reason;
+		private long queueTime;
+		public DeviceStatusChangeTask(DeviceStatus targetStatus, StatusChangeReason reason)
+		{
+			this.targetStatus = targetStatus;
+			this.reason = reason;
+		}
+		@Override
+		public void run()
+		{
+			serialChangeBusinessStatus(targetStatus, reason);
+		}
+
+		@Override
+		public int getQueueDuration()
+		{
+			return (int)(System.currentTimeMillis() - queueTime);
+		}
+
+		@Override
+		public void setQueueTime(long now)
+		{
+			queueTime = now;
+		}
+
+		@Override
+		public String getMessageName()
+		{
+			return "DeviceStatusChangeTask";
+		}
+
+		@Override
+		public String getMessageSn()
+		{
+			return "";
+		}
+
+		@Override
+		public String getMsgOwnerInfo()
+		{
+			return getDeviceSn();
+		}
+
+		@Override
+		public int getDelayOfHandle()
+		{
+			return 0;
+		}
 	}
 }
 

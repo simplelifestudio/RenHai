@@ -337,7 +337,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     {
     	if (getWsOutbound().isClosed())
     	{
-    		logger.error("The websocket connection with id {} has been closed, sending of "+ message.getMessageId().name() +" is given up.", this.getConnectionId());
+    		logger.warn("The websocket connection with id {} has been closed, sending of "+ message.getMessageId().name() +" is given up.", this.getConnectionId());
     		return;
     	}
     	
@@ -439,7 +439,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 	    	if (controller.message == null)
 	    	{
 	    		logger.error("Timeout for synchronized response of device <{}>, MessageSn: " + messageSn, connectionOwner.getDeviceIdentification());
-	    		controller.message = new TimeoutRequest(null);
+	    		controller.message = new TimeoutRequest(messageSn);
 	    	}
 	    	else
 	    	{

@@ -27,7 +27,8 @@ import com.simplelife.renhai.server.util.IRunnableMessage;
  */
 public class MessageHandler implements Runnable
 {
-	private IDeviceWrapper deviceWrapper;
+	//private IDeviceWrapper deviceWrapper;
+	private String msgOwnerInfo;
 	private Logger logger = BusinessModule.instance.getLogger();
 	private AbstractMsgExecutorPool executor;
 	
@@ -37,11 +38,15 @@ public class MessageHandler implements Runnable
 	private ConcurrentLinkedQueue<IRunnableMessage> queue = new ConcurrentLinkedQueue<>();
 	private Lock queueLock = new ReentrantLock();
 	
-	
-	public MessageHandler(IDeviceWrapper deviceWrapper, AbstractMsgExecutorPool executor)
+	public MessageHandler(String msgOwnerInfo, AbstractMsgExecutorPool executorPool)
 	{
-		this.deviceWrapper = deviceWrapper;
-		this.executor = executor;
+		this.msgOwnerInfo = msgOwnerInfo;
+		this.executor = executorPool;
+	}
+
+	public void setMsgOwnerInfo(String msgOwnerInfo)
+	{
+		this.msgOwnerInfo = msgOwnerInfo;
 	}
 	
 	public void clearMessage()
@@ -51,7 +56,7 @@ public class MessageHandler implements Runnable
 			return;
 		}
 		
-		logger.debug("{} messages in queue of Deivce <"+ deviceWrapper.getDeviceIdentification() +"> is released.", queue.size());
+		logger.debug("{} messages in queue of Deivce <"+ msgOwnerInfo +"> is released.", queue.size());
 		queueLock.lock();
 		queue.clear();
 		queueLock.unlock();
@@ -96,7 +101,7 @@ public class MessageHandler implements Runnable
 	@Override
 	public void run()
 	{
-		logger.debug("Message handler of device <{}> started", deviceWrapper.getDeviceIdentification());
+		logger.debug("Message handler of device <{}> started", msgOwnerInfo);
 		queueLock.lock();
 		
 		IRunnableMessage message;
@@ -120,7 +125,7 @@ public class MessageHandler implements Runnable
 		executeLock.unlock();
 		queueLock.unlock();
 		
-		logger.debug("Message handler of device <{}> ended", deviceWrapper.getDeviceIdentification());
+		logger.debug("Message handler of device <{}> ended", msgOwnerInfo);
 	}
 	
 	private void executeMessage(IRunnableMessage message)

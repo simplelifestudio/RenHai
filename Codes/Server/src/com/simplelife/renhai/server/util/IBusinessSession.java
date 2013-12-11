@@ -50,9 +50,9 @@ public interface IBusinessSession
     public String getSessionId();
     
     /** */
-    public void onAssessAndContinue(IDeviceWrapper sourceDevice);
+    //public void onAssessAndContinue(IDeviceWrapper sourceDevice);
     
-    public void onAssessAndQuit(IDeviceWrapper sourceDevice);
+    //public void onAssessAndQuit(IDeviceWrapper sourceDevice);
     
     public void onBindConfirm(IDeviceWrapper device);
     

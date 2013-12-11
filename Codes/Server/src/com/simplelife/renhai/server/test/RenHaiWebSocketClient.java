@@ -73,7 +73,7 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	@Override
 	public void onError(Exception arg0)
 	{
-		String temp =  "==================onError: " +  arg0.getMessage();
+		String temp =  "WebSocket connection onError: " +  arg0.getMessage();
 		if (mockApp != null)
 		{
 			temp += ", MockApp <" + mockApp.getDeviceSn() + ">";
@@ -183,7 +183,7 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	@Override
 	public void onTimeout()
 	{
-		logger.debug("==================onTimeout");
+		logger.debug("Websocket connection onTimeout");
 	}
 
 

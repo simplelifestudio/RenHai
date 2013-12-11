@@ -22,6 +22,14 @@ public class TimeoutRequest extends AppJSONMessage
 	/**
 	 * @param jsonObject
 	 */
+	
+	public TimeoutRequest(String messageSn)
+	{
+		super(null);
+		this.messageSn = messageSn;
+		messageId = Consts.MessageId.TimeoutRequest;
+	}
+	
 	public TimeoutRequest(JSONObject jsonObject)
 	{
 		super(jsonObject);
