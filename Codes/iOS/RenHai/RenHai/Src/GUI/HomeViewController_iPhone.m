@@ -22,7 +22,7 @@
 #import <PulsingHalo/PulsingHaloLayer.h>
 
 #define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
-#define INTERVAL_DATASYNC 1.0f
+#define INTERVAL_DATASYNC 5
 
 #define HALO_SPEED_FAST 6
 #define HALO_SPEED_SLOW 1.5
@@ -153,9 +153,9 @@ EnterOperationStatus;
 //    _enterButtonProgressView.trackColor = FLATUI_COLOR_PROGRESS_TRACK;
     _enterButtonProgressView.roundProgressViewDelegate = self;
     
-    _versionLabel.text = _appDataModule.appVersion;
+    _versionLabel.text = _appDataModule.appFullVerion;
     
-//    [_enterButton setImage:[UIImage imageNamed:@"enterbutton_highlighted.png"] forState:UIControlStateHighlighted];
+    [_enterButton setImage:[UIImage imageNamed:@"enterbutton_highlighted.png"] forState:UIControlStateHighlighted];
     
     _haloLayer = [PulsingHaloLayer layer];
     _haloLayer.pulseInterval = 0;

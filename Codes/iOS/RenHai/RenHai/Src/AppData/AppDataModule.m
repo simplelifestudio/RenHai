@@ -171,6 +171,18 @@ SINGLETON(AppDataModule)
     return build.intValue;
 }
 
+-(NSString*) appFullVerion
+{
+    NSMutableString* fullVersion = [NSMutableString string];
+    
+    [fullVersion appendString:self.appVersion];
+    [fullVersion appendString:@"("];
+    [fullVersion appendString:[NSString stringWithFormat:@"%d", self.appBuild]];
+    [fullVersion appendString:@")"];
+    
+    return fullVersion;
+}
+
 -(BOOL) isJailed
 {
     BOOL isJailed = [UIDevice isJailed];
