@@ -176,9 +176,8 @@ SINGLETON(AppDataModule)
     NSMutableString* fullVersion = [NSMutableString string];
     
     [fullVersion appendString:self.appVersion];
-    [fullVersion appendString:@"("];
+    [fullVersion appendString:@"-b"];
     [fullVersion appendString:[NSString stringWithFormat:@"%d", self.appBuild]];
-    [fullVersion appendString:@")"];
     
     return fullVersion;
 }

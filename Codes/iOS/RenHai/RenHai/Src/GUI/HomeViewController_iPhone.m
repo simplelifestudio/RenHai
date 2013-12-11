@@ -195,13 +195,12 @@ EnterOperationStatus;
     RHProxy* proxy = _userDataModule.proxy;
     RHStatus* status = proxy.status;
     
-    NSString* text = @"";
+    NSMutableString* text = [NSMutableString string];
     
     switch (status.serviceStatus)
     {
         case ServerServiceStatus_Normal:
         {
-            text = (nil != proxy.broadcast) ? proxy.broadcast : text;
             break;
         }
         case ServerServiceStatus_Maintenance:
@@ -210,7 +209,7 @@ EnterOperationStatus;
             NSString* localBeginTimeStr = period.localBeginTimeString;
             NSString* localEndTimeStr = period.localEndTimeString;
             NSString* periodStr = [NSString stringWithFormat:NSLocalizedString(@"Home_Banner_Maintenance", nil), localBeginTimeStr, localEndTimeStr];
-            text = periodStr;
+            [text appendString:periodStr];
             break;
         }
         default:
@@ -218,11 +217,17 @@ EnterOperationStatus;
             break;
         }
     }
+    
+    if (nil != proxy.broadcast)
+    {
+        [text appendString:@" "];        
+        [text appendString:proxy.broadcast];
+    }
 
     _bannerView.text = text;
     //    _bannerView.textColor = [UIColor blueColor];
     _bannerView.labelSpacing = 100; // distance between start and end labels
-    _bannerView.pauseInterval = 1.0; // seconds of pause before scrolling starts again
+    _bannerView.pauseInterval = 0; // seconds of pause before scrolling starts again
     _bannerView.scrollSpeed = 25; // pixels per second
     _bannerView.textAlignment = NSTextAlignmentCenter; // centers text when no auto-scrolling is applied
     _bannerView.fadeLength = FLATUI_FONT_BIG;

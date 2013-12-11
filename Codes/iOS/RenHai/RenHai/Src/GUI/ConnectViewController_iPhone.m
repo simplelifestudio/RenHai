@@ -290,6 +290,8 @@ ConnectStatus;
 
 - (void) _updateUIWithConnectStatus:(ConnectStatus) status
 {
+    [NSThread sleepForTimeInterval:DELAY_STATUS_UPDATE];
+    
     [CBAppUtils asyncProcessInMainThread:^(){
         NSString* infoText = nil;
         NSString* infoDetailText = nil;
@@ -490,6 +492,7 @@ ConnectStatus;
                     [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
                     if (nil != proxy.broadcast)
                     {
+                        [NSThread sleepForTimeInterval:DELAY_STATUS_UPDATE * 2];
                         [self _updateInfoTextView:proxy.broadcast];    
                     }
                     
