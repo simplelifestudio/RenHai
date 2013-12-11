@@ -318,8 +318,8 @@
         reusableView = headerView;        
     }
     
-    reusableView.backgroundColor = FLATUI_COLOR_MAJOR_F;
-    DDLogVerbose(@"#####resuableView height: %f", reusableView.frame.size.height);
+    reusableView.backgroundColor = FLATUI_COLOR_UICOLLECTIONREUSABLEVIEW_BACKGROUND;
+
     return reusableView;
 }
 
