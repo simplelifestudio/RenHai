@@ -29,6 +29,7 @@ import com.simplelife.renhai.server.db.Webrtcaccount;
 import com.simplelife.renhai.server.db.WebrtcaccountMapper;
 import com.simplelife.renhai.server.db.Webrtcsession;
 import com.simplelife.renhai.server.db.WebrtcsessionMapper;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.OpentokUtil;
 
@@ -40,7 +41,8 @@ public class WebRTCSessionPool extends AbstractPool
     protected Timer timer = new Timer();
     public static final WebRTCSessionPool instance = new WebRTCSessionPool();
     private Logger logger = DBModule.instance.getLogger();
-    private int webRTCAccountId = 0;
+    private Webrtcaccount account = null;
+    private int accountNum = -1;
     
     private WebRTCSessionPool()
     {
@@ -74,16 +76,20 @@ public class WebRTCSessionPool extends AbstractPool
 
     public void startService()
     {
-    	timer.scheduleAtFixedRate(new TokenCheckTask(), GlobalSetting.BusinessSetting.OpenTokTokenDuration, GlobalSetting.BusinessSetting.OpenTokTokenDuration);
-    	this.webRTCAccountId = getAccountIdByDate();
-    	loadFromDb();
+    	//timer.scheduleAtFixedRate(new TokenCheckTask(), GlobalSetting.BusinessSetting.OpenTokTokenDuration, GlobalSetting.BusinessSetting.OpenTokTokenDuration);
+    	timer.scheduleAtFixedRate(new TokenCheckTask(), 10000, 10000);
+    	checkExpiredToken();
     }
     
     private int getAccountIdByDate()
     {
-    	SqlSession session = DAOWrapper.instance.getSession();
-    	WebrtcaccountMapper mapper = session.getMapper(WebrtcaccountMapper.class);
-    	int accountNum = mapper.countAll();
+    	if (accountNum == -1)
+    	{
+    		SqlSession session = DAOWrapper.instance.getSession();
+    		WebrtcaccountMapper mapper = session.getMapper(WebrtcaccountMapper.class);
+    		accountNum = mapper.countAll();
+    		session.close();
+    	}
     	
     	if (accountNum == 0)
     	{
@@ -95,7 +101,6 @@ public class WebRTCSessionPool extends AbstractPool
     	int day = cal.get(Calendar.DAY_OF_YEAR);
     	
     	int accountId = day % accountNum + 1;
-    	session.close();
     	return accountId;
     }
     
@@ -128,24 +133,12 @@ public class WebRTCSessionPool extends AbstractPool
     */
     
     /** */
-    public boolean loadFromDb()
+    public boolean loadFromDb(Webrtcaccount account, OpenTokSDK sdk)
     {
     	SqlSession session = DAOWrapper.instance.getSession();
-    	WebrtcaccountMapper mapper = session.getMapper(WebrtcaccountMapper.class);
-    	Webrtcaccount account = mapper.selectByPrimaryKey(this.webRTCAccountId);
-    	if (account == null)
-    	{
-    		logger.error("Fatal Error: WebRTC account with id {} can't be found in DB, default account will be used.");
-    		account = new Webrtcaccount();
-    		account.setAccountKey(GlobalSetting.BusinessSetting.OpenTokKey);
-    		account.setAccountSecret(GlobalSetting.BusinessSetting.OpenTokSecret);
-    	}
-    	
-    	OpenTokSDK sdk = new OpenTokSDK(account.getAccountKey(), account.getAccountSecret());
-    	
     	logger.debug("Load WebRTC tokens from DB...");
     	WebrtcsessionMapper sessionMapper = session.getMapper(WebrtcsessionMapper.class);
-		List<Webrtcsession> list = sessionMapper.selectAll(this.webRTCAccountId);
+		List<Webrtcsession> list = sessionMapper.selectAll(account.getWebRTCAccountId());
 		for (Webrtcsession rtcSession : list)
 		{
 			webRTCSessionList.add(rtcSession);
@@ -160,8 +153,7 @@ public class WebRTCSessionPool extends AbstractPool
 			}
 		}
 		
-		logger.debug("Finished loading WebRTC tokens from DB, start to update tokens if needed.");
-		this.checkExpiredToken(sdk);
+		logger.debug("Finished loading {} WebRTC tokens from DB, start to update tokens if needed.", webRTCSessionList.size());
 		session.close();
         return true;
     }
@@ -182,11 +174,12 @@ public class WebRTCSessionPool extends AbstractPool
 		webRTCSessionList.clear();
 	}
 	
-	public void checkExpiredToken()
+	private Webrtcaccount getAccount(int accountId)
 	{
 		SqlSession session = DAOWrapper.instance.getSession();
     	WebrtcaccountMapper mapper = session.getMapper(WebrtcaccountMapper.class);
-    	Webrtcaccount account = mapper.selectByPrimaryKey(this.webRTCAccountId);
+    	Webrtcaccount account = mapper.selectByPrimaryKey(accountId);
+    	session.close();
     	if (account == null)
     	{
     		logger.error("Fatal Error: WebRTC account with id {} can't be found in DB, default account will be used.");
@@ -194,31 +187,52 @@ public class WebRTCSessionPool extends AbstractPool
     		account.setAccountKey(GlobalSetting.BusinessSetting.OpenTokKey);
     		account.setAccountSecret(GlobalSetting.BusinessSetting.OpenTokSecret);
     	}
-    	
-    	OpenTokSDK sdk = new OpenTokSDK(account.getAccountKey(), account.getAccountSecret());
-    	checkExpiredToken(sdk);
-    	session.close();
+    	return account;
 	}
 	
-	public void checkExpiredToken(OpenTokSDK sdk)
+	private OpenTokSDK getOpenTokSDK(Webrtcaccount account)
 	{
+		OpenTokSDK sdk = new OpenTokSDK(account.getAccountKey(), account.getAccountSecret());
+    	return sdk;
+	}
+	
+	public void checkExpiredToken()
+	{
+		logger.debug("Start to check expired token");
 		int accountId = this.getAccountIdByDate();
-		if (accountId != this.webRTCAccountId)
+		if (account == null)
 		{
-			logger.debug("Start to load WebRTC tokens of account <{}>", accountId);
+			// The first time
+			account = getAccount(accountId);
+			OpenTokSDK sdk = getOpenTokSDK(account);
+			loadFromDb(account, sdk);
+			return;
+		}
+		
+		if (accountId != account.getWebRTCAccountId())
+		{
+			logger.debug("Clear tokens and load tokens of next account from DB");
 			clearPool();
-			loadFromDb();
 			
-			if (!this.webRTCSessionList.isEmpty())
-			{
-				webRTCAccountId = accountId;
-			}
-			else
+			Webrtcaccount tmpAccount = getAccount(accountId);
+			OpenTokSDK sdk = getOpenTokSDK(tmpAccount);
+			loadFromDb(tmpAccount, sdk);
+			
+			if (this.webRTCSessionList.isEmpty())
 			{
 				logger.error("Fatal Error: failed to load WebRTC tokens of account <{}>", accountId);
+				return;
 			}
+			account = tmpAccount;
 		}
-		logger.debug("Start to check expired WebRTC token");
+		
+		OpenTokSDK sdk = getOpenTokSDK(account);
+		updateToken(sdk);
+	}
+
+	private void updateToken(OpenTokSDK sdk)
+	{
+		logger.debug("Start to update WebRTC tokens");
 		Iterator<Webrtcsession> it = webRTCSessionList.iterator();
 		Webrtcsession session;
 		while (it.hasNext())
@@ -241,20 +255,27 @@ public class WebRTCSessionPool extends AbstractPool
 			}
 		}
 	}
-
 	
 	
 	private class TokenCheckTask extends TimerTask
 	{
 		public TokenCheckTask()
 		{
-			Thread.currentThread().setName("TokenCheckTimer");
+			
 		}
 		
 		@Override
 		public void run()
 		{
-			WebRTCSessionPool.instance.checkExpiredToken();
+			Thread.currentThread().setName("TokenCheckTimer");
+			try
+			{
+				WebRTCSessionPool.instance.checkExpiredToken();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
 	}
 }
