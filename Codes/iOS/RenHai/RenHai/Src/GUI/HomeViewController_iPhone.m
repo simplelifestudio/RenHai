@@ -155,7 +155,7 @@ EnterOperationStatus;
     
     _versionLabel.text = _appDataModule.appVersion;
     
-    [_enterButton setImage:[UIImage imageNamed:@"enterbutton_highlighted.png"] forState:UIControlStateHighlighted];
+//    [_enterButton setImage:[UIImage imageNamed:@"enterbutton_highlighted.png"] forState:UIControlStateHighlighted];
     
     _haloLayer = [PulsingHaloLayer layer];
     _haloLayer.pulseInterval = 0;
@@ -275,6 +275,8 @@ EnterOperationStatus;
 //    _enterLabel.hidden = NO;
     _helpButton.enabled = NO;
     _versionLabel.enabled = YES;
+    
+    [_guiModule.mainViewController enableGesturers];
     
     _haloLayer.speed = HALO_SPEED_SLOW;
     _haloLayer.backgroundColor = HALO_COLOR_SLOW.CGColor;
