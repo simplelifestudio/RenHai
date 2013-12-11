@@ -42,11 +42,7 @@
     vc.manageMode = ManageMode_NewLabel;
     vc.manageDelegate = manageDelegate;
     vc.oldLabel = nil;
-    
-    if ([UIDevice isRunningOniOS7AndLater])
-    {
-        vc.useBlurForPopup = YES;
-    }
+    [vc setUseBlurForPopup:YES];
     
     return vc;
 }
@@ -59,11 +55,7 @@
     vc.manageMode = ManageMode_ModifyLabel;
     vc.manageDelegate = manageDelegate;
     vc.oldLabel = label;
-
-    if ([UIDevice isRunningOniOS7AndLater])
-    {
-        vc.useBlurForPopup = YES;
-    }
+    [vc setUseBlurForPopup:YES];
     
     return vc;
 }

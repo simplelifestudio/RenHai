@@ -406,7 +406,7 @@ static UIColor *descriptionColor = nil;
             backgroundColor = FLATUI_COLOR_SUCCESS;
             break;
         case MessageBarMessageTypeInfo:
-            backgroundColor = FLATUI_COLOR_CHATMESSAGE;
+            backgroundColor = FLATUI_COLOR_CHATMESSAGE_BACKGROUND;
             break;
         default:
             break;
