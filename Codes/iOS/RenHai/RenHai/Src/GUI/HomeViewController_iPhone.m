@@ -26,7 +26,8 @@
 
 #define HALO_SPEED_FAST 6
 #define HALO_SPEED_SLOW 1.5
-#define HALO_RADIUS 120
+#define HALO_RADIUS_3_5 100
+#define HALO_RADIUS_4 120
 #define HALO_COLOR_FAST FLATUI_COLOR_MAJOR_A
 #define HALO_COLOR_SLOW FLATUI_COLOR_MAJOR_A
 
@@ -161,7 +162,16 @@ EnterOperationStatus;
     _haloLayer.pulseInterval = 0;
     _haloLayer.position = _enterButton.center;
     _haloLayer.backgroundColor = HALO_COLOR_SLOW.CGColor;
-    _haloLayer.radius = HALO_RADIUS;
+
+    if (IS_IPHONE5)
+    {
+        _haloLayer.radius = HALO_RADIUS_4;
+    }
+    else
+    {
+        _haloLayer.radius = HALO_RADIUS_3_5;
+    }
+    
     _haloLayer.speed = HALO_SPEED_SLOW;
     
     [self _updateBannerView];
