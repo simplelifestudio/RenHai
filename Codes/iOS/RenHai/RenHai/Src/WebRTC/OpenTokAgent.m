@@ -45,7 +45,10 @@
         [self _unpublish];
     }
     
-    [_session disconnect];
+    if (nil != _session)
+    {
+        [_session disconnect];        
+    }
 }
 
 -(OTVideoView*) publisherView

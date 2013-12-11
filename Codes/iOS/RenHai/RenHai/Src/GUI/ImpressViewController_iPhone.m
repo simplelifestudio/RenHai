@@ -318,9 +318,15 @@
         reusableView = headerView;        
     }
     
-    
+    reusableView.backgroundColor = FLATUI_COLOR_UICOLLECTIONREUSABLEVIEW_BACKGROUND;
+
     return reusableView;
 }
+
+//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+//{
+//
+//}
 
 #pragma mark - UIScrollViewDelegate
 

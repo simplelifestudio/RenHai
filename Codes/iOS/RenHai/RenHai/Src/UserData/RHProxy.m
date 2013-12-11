@@ -42,6 +42,7 @@
 
 -(void) fromJSONObject:(NSDictionary *)dic
 {
+    dic = [dic objectForKey:MESSAGE_KEY_SERVER];
     if (nil != dic)
     {
         NSString* serverId = (NSString*)[dic objectForKey:MESSAGE_KEY_SERVERID];

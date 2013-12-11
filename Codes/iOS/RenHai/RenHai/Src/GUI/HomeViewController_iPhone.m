@@ -19,8 +19,17 @@
 #import "AppDataModule.h"
 #import "BusinessStatusModule.h"
 
+#import <PulsingHalo/PulsingHaloLayer.h>
+
 #define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
-#define INTERVAL_DATASYNC 1.0f
+#define INTERVAL_DATASYNC 5
+
+#define HALO_SPEED_FAST 6
+#define HALO_SPEED_SLOW 1.5
+#define HALO_RADIUS_3_5 100
+#define HALO_RADIUS_4 120
+#define HALO_COLOR_FAST FLATUI_COLOR_MAJOR_A
+#define HALO_COLOR_SLOW FLATUI_COLOR_MAJOR_A
 
 typedef enum
 {
@@ -49,33 +58,11 @@ EnterOperationStatus;
     NSCondition* _reachLock;
 }
 
+@property (nonatomic, strong) PulsingHaloLayer* haloLayer;
+
 @end
 
 @implementation HomeViewController_iPhone
-
-@synthesize enterButtonProgressView = _enterButtonProgressView;
-@synthesize enterButton = _enterButton;
-@synthesize enterLabel = _enterLabel;
-@synthesize helpButton = _helpButton;
-
-@synthesize onlineDeviceCountUnit1 = _onlineDeviceCountUnit1;
-@synthesize onlineDeviceCountUnit2 = _onlineDeviceCountUnit2;
-@synthesize onlineDeviceCountUnit3 = _onlineDeviceCountUnit3;
-@synthesize onlineDeviceCountUnit4 = _onlineDeviceCountUnit4;
-@synthesize onlineDeviceCountUnit5 = _onlineDeviceCountUnit5;
-
-@synthesize chatDeviceCountUnit1 = _chatDeviceCountUnit1;
-@synthesize chatDeviceCountUnit2 = _chatDeviceCountUnit2;
-@synthesize chatDeviceCountUnit3 = _chatDeviceCountUnit3;
-@synthesize chatDeviceCountUnit4 = _chatDeviceCountUnit4;
-@synthesize chatDeviceCountUnit5 = _chatDeviceCountUnit5;
-
-@synthesize versionLabel = _versionLabel;
-
-@synthesize onlineDeviceCountLabel = _onlineDeviceCountLabel;
-@synthesize chatDeviceCountLabel = _chatDeviceCountLabel;
-
-@synthesize bannerView = _bannerView;
 
 #pragma mark - Public Methods
 
@@ -107,10 +94,14 @@ EnterOperationStatus;
     [_bannerView scrollLabelIfNeeded];
     
     [_guiModule.mainViewController enableGesturers];
+    
+    [self _startHalo];
 }
 
 -(void) viewWillDisappear:(BOOL)animated
 {
+    [self _stopHalo];
+    
     [self _deactivateDataSyncTimer];
     
     [self _unregisterNotifications];
@@ -163,7 +154,25 @@ EnterOperationStatus;
 //    _enterButtonProgressView.trackColor = FLATUI_COLOR_PROGRESS_TRACK;
     _enterButtonProgressView.roundProgressViewDelegate = self;
     
-    _versionLabel.text = _appDataModule.appVersion;
+    _versionLabel.text = _appDataModule.appFullVerion;
+    
+    [_enterButton setImage:[UIImage imageNamed:@"enterbutton_highlighted.png"] forState:UIControlStateHighlighted];
+    
+    _haloLayer = [PulsingHaloLayer layer];
+    _haloLayer.pulseInterval = 0;
+    _haloLayer.position = _enterButton.center;
+    _haloLayer.backgroundColor = HALO_COLOR_SLOW.CGColor;
+
+    if (IS_IPHONE5)
+    {
+        _haloLayer.radius = HALO_RADIUS_4;
+    }
+    else
+    {
+        _haloLayer.radius = HALO_RADIUS_3_5;
+    }
+    
+    _haloLayer.speed = HALO_SPEED_SLOW;
     
     [self _updateBannerView];
 }
@@ -186,15 +195,12 @@ EnterOperationStatus;
     RHProxy* proxy = _userDataModule.proxy;
     RHStatus* status = proxy.status;
     
-    NSString* text = @"";
+    NSMutableString* text = [NSMutableString string];
     
-#warning TODO  
-    switch (ServerServiceStatus_Normal)
-//    switch (status.serviceStatus)
+    switch (status.serviceStatus)
     {
         case ServerServiceStatus_Normal:
         {
-//            text = NSLocalizedString(@"Home_Banner_NoInfo", nil);
             break;
         }
         case ServerServiceStatus_Maintenance:
@@ -203,7 +209,7 @@ EnterOperationStatus;
             NSString* localBeginTimeStr = period.localBeginTimeString;
             NSString* localEndTimeStr = period.localEndTimeString;
             NSString* periodStr = [NSString stringWithFormat:NSLocalizedString(@"Home_Banner_Maintenance", nil), localBeginTimeStr, localEndTimeStr];
-            text = periodStr;
+            [text appendString:periodStr];
             break;
         }
         default:
@@ -211,11 +217,17 @@ EnterOperationStatus;
             break;
         }
     }
+    
+    if (nil != proxy.broadcast)
+    {
+        [text appendString:@" "];        
+        [text appendString:proxy.broadcast];
+    }
 
     _bannerView.text = text;
     //    _bannerView.textColor = [UIColor blueColor];
-    _bannerView.labelSpacing = 50; // distance between start and end labels
-    _bannerView.pauseInterval = 1.0; // seconds of pause before scrolling starts again
+    _bannerView.labelSpacing = 100; // distance between start and end labels
+    _bannerView.pauseInterval = 0; // seconds of pause before scrolling starts again
     _bannerView.scrollSpeed = 25; // pixels per second
     _bannerView.textAlignment = NSTextAlignmentCenter; // centers text when no auto-scrolling is applied
     _bannerView.fadeLength = FLATUI_FONT_BIG;
@@ -263,6 +275,9 @@ EnterOperationStatus;
     
     [_guiModule.mainViewController disableGesturers];
     
+    _haloLayer.speed = HALO_SPEED_FAST;
+    _haloLayer.backgroundColor = HALO_COLOR_FAST.CGColor;
+    
     [self _enterButtonTimerStarted];
 }
 
@@ -275,6 +290,11 @@ EnterOperationStatus;
 //    _enterLabel.hidden = NO;
     _helpButton.enabled = NO;
     _versionLabel.enabled = YES;
+    
+    [_guiModule.mainViewController enableGesturers];
+    
+    _haloLayer.speed = HALO_SPEED_SLOW;
+    _haloLayer.backgroundColor = HALO_COLOR_SLOW.CGColor;
     
     self.navigationItem.leftBarButtonItem.enabled = YES;
 }
@@ -474,6 +494,8 @@ static float progress = 0.0;
             }
             failureCompletionBlock:^(){
                 [self _updateEnterPoolFlag:NO];
+                
+                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_ChooseBusiness];
             }
             afterCompletionBlock:^(){
                 [_reachLock lock];
@@ -525,6 +547,16 @@ static float progress = 0.0;
 -(void)_unregisterNotifications
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)_startHalo
+{
+    [self.navigationController.view.layer insertSublayer:_haloLayer below:_enterButtonProgressView.layer];
+}
+
+-(void)_stopHalo
+{
+    [_haloLayer removeFromSuperlayer];
 }
 
 #pragma mark - IBActions

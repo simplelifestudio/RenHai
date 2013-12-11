@@ -60,12 +60,11 @@
     RHProxy* proxy = _userDataModule.proxy;
     RHAddress* address = proxy.address;
     NSString* remotePath = address.fullAddress;
-#warning TODO
-#ifdef TARGET_RENHAILOCAL
-    remotePath = @"ws://192.168.1.2:80/renhai/websocket";
-#else
-    remotePath = @"ws://192.81.135.31:80/renhai/websocket";
-#endif
+//#ifdef TARGET_RENHAILOCAL
+//    remotePath = @"ws://192.168.1.2:80/renhai/websocket";
+//#else
+//    remotePath = @"ws://192.81.135.31:80/renhai/websocket";
+//#endif
     
     if (nil != remotePath)
     {

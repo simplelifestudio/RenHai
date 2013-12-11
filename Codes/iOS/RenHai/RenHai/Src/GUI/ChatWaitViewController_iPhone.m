@@ -292,7 +292,7 @@ ChatWaitStatus;
     _count++;
     
     int a = _count % DELAY_MATCHSTART;
-    DDLogVerbose(@"#####a = %d", a);
+
     if (0 == a)
     {
         [self _remoteRequestMatchStart];
@@ -327,6 +327,7 @@ ChatWaitStatus;
             }
             failureCompletionBlock:^(){
                 _leavePoolFlag = NO;
+                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_UnbindSession];
             }
             afterCompletionBlock:^(){
                 [self _finishLeavingPool];
@@ -378,6 +379,7 @@ ChatWaitStatus;
             }
             failureCompletionBlock:^(){
                 _matchStartFlag = NO;
+                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_MatchStart];
             }
             afterCompletionBlock:nil
          ];

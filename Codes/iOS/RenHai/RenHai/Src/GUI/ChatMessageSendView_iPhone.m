@@ -40,10 +40,17 @@
 
 -(void)_setupInstance
 {
+    self.backgroundColor = FLATUI_COLOR_CHATMESSAGESENDER_BACKGROUND;
+    
     _textField.delegate = self;
     _textField.returnKeyType = UIReturnKeySend;
     _textField.placeholder = NSLocalizedString(@"ChatVideo_ChatMessageSendTip", nil);
     _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+
+    _textField.layer.masksToBounds = YES;
+    _textField.layer.borderColor = FLATUI_COLOR_TEXTFIELD_BORDER.CGColor;
+    _textField.layer.borderWidth = 1.0f;
+    _textField.backgroundColor = FLATUI_COLOR_TEXTFIELD_BACKGROUND;
     
     [self _setupActionButtons];
     
@@ -54,7 +61,8 @@
 {
     [_sendButton setTitle:NSLocalizedString(@"ChatVideo_Action_Send", nil) forState:UIControlStateNormal];
     
-    _sendButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+    _sendButton.buttonColor = FLATUI_COLOR_BUTTONNORMAL;
+    _sendButton.highlightedColor = FLATUI_COLOR_BUTTONHIGHLIGHTED;
     [_sendButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_sendButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 }

@@ -59,9 +59,8 @@
     
     volatile BOOL _isSelfVideoOpen;
     
-    volatile BOOL _isChatMessageEnabled;
-    
     UITapGestureRecognizer* _singleTapGesturer;
+    UITapGestureRecognizer* _doubleTapGesturer;
     UIPanGestureRecognizer* _panGesturer;
     
     NSTimer* _toolbarDisplayTimer;
@@ -69,6 +68,7 @@
     OTVideoView* _subscriberView;
     OTVideoView* _publisherView;
     
+    volatile BOOL _isChatMessageEnabled;
     ChatMessageSendView_iPhone* _sendChatMessageView;
 }
 
@@ -158,14 +158,6 @@
     */
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [self.view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop)
-     {
-         [_sendChatMessageView resignFirstResponder];
-     }];
-}
-
 #pragma mark - ChatWizardPage
 
 -(void) resetPage
@@ -182,14 +174,15 @@
     
     _isSelfDeciding = NO;
     
-    _isChatMessageEnabled = YES;
-    
     _count = 0;
     [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
 
-    [self _setNavigationBarAndToolbarHidden:NO];
+    [self _setNavigationBarAndToolbarHidden:YES];
     self.navigationItem.title = NSLocalizedString(@"ChatVideo_Title", nil);
     [self.navigationItem setHidesBackButton:YES];
+    
+    _isChatMessageEnabled = YES;
+    [_sendChatMessageView resignFirstResponder];
 }
 
 -(void) pageWillLoad
@@ -310,13 +303,14 @@
 - (void) _setupActionButtons
 {
     [_selfVideoButton setTitle:NSLocalizedString(@"ChatVideo_SelfVideo", nil) forState:UIControlStateNormal];
+    [_chatMessageButton setTitle:NSLocalizedString(@"ChatVideo_ChatMessage", nil) forState:UIControlStateNormal];
     [_endChatButton setTitle:NSLocalizedString(@"ChatVideo_Action_End", nil) forState:UIControlStateNormal];
     
-    _selfVideoButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+    _selfVideoButton.buttonColor = FLATUI_COLOR_BUTTONNORMAL;
     [_selfVideoButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_selfVideoButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
     
-    _chatMessageButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+    _chatMessageButton.buttonColor = FLATUI_COLOR_BUTTONNORMAL;
     [_chatMessageButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_chatMessageButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
     
@@ -332,18 +326,35 @@
     _singleTapGesturer.numberOfTapsRequired = 1;
     [_maskView addGestureRecognizer:_singleTapGesturer];
     
+    _doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
+    _doubleTapGesturer.delegate = self;
+    _doubleTapGesturer.numberOfTapsRequired = 2;
+    [_maskView addGestureRecognizer:_doubleTapGesturer];
+    
     _panGesturer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_didPanned:)];
     [_panGesturer setMaximumNumberOfTouches:1];
     [_panGesturer setMinimumNumberOfTouches:1];
     [_maskView addGestureRecognizer:_panGesturer];
     
+    [_singleTapGesturer requireGestureRecognizerToFail:_doubleTapGesturer];
     [_singleTapGesturer requireGestureRecognizerToFail:_panGesturer];
 }
 
 -(void) _didSingleTapped:(UITapGestureRecognizer*) recognizer
 {
+    if (!_sendChatMessageView.hidden)
+    {
+         [_sendChatMessageView resignFirstResponder];
+        return;
+    }
+    
     BOOL oldStatus = [self _isNavigationBarAndToolbarHidden];
     [self _setNavigationBarAndToolbarHidden:!oldStatus];
+}
+
+-(void) _didDoubleTapped:(UITapGestureRecognizer*) recognizer
+{
+    [self _switchSelfVideoOpenOrClose];
 }
 
 -(void) _didPanned:(UIPanGestureRecognizer*) recognizer
@@ -494,7 +505,7 @@
     }
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    _selfVideoButton.hidden = hidden;
+    _selfVideoButton.hidden = YES;
     _chatMessageButton.hidden = hidden;
     _endChatButton.hidden = hidden;
     
@@ -514,13 +525,16 @@
 -(void) _remoteEndChat
 {
     [CBAppUtils asyncProcessInMainThread:^(){
+
         _isChatMessageEnabled = NO;
+        [_sendChatMessageView resignFirstResponder];
+        
         [[MessageBarManager sharedInstance] dismissAllMessages];
         
         _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Disconnected", nil);
         [self _resetSelfVideoToClose];
         
-        [self _setNavigationBarAndToolbarHidden:NO];
+        [self _setNavigationBarAndToolbarHidden:YES];
     }];
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
@@ -553,9 +567,10 @@
             }
             failureCompletionBlock:^(){
                 _selfEndChatFlag = NO;
+                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_EndChat];
             }
             afterCompletionBlock:^(){
-               
+
             }
          ];
         
@@ -583,10 +598,10 @@
         RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:businessSessionRequestType device:device info:info];
         [commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
-
+                [_statusModule recordAppMessage:AppMessageIdentifier_ChatMessage];
             }
             failureCompletionBlock:^(){
-
+                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_ChatMessage];
             }
             afterCompletionBlock:^(){
               [CBAppUtils asyncProcessInMainThread:^(){

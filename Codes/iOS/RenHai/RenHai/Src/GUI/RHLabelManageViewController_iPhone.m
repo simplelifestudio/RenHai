@@ -18,6 +18,8 @@
 @interface RHLabelManageViewController_iPhone () <UITextFieldDelegate>
 {
     BOOL _hasMovedForOffset;
+    
+    BOOL _isKeyboardOpen;
 }
 
 @property (strong, nonatomic) NSString* oldLabel;
@@ -194,6 +196,8 @@
     
     _hasMovedForOffset = NO;
     
+    _isKeyboardOpen = NO;
+    
     [self _updateLimitCountLabel];
     
     [self _setupActionButtons];
@@ -203,20 +207,28 @@
 
 -(void)_formatFlatUI
 {
-    _titleLabel.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR_MAIN;
-    self.view.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR_MAIN;
+    _titleLabel.backgroundColor = FLATUI_COLOR_LABELMANAGER_LABEL;
+    self.view.backgroundColor = FLATUI_COLOR_LABELMANAGER_BACKGROUND;
 }
 
 -(void)_setupActionButtons
 {
+    _textField.layer.masksToBounds = YES;
+    _textField.layer.borderColor = FLATUI_COLOR_TEXTFIELD_BORDER.CGColor;
+    _textField.layer.borderWidth = 1.0f;
+    
+    _textField.backgroundColor = FLATUI_COLOR_TEXTFIELD_BACKGROUND;
+    
     [_saveButton setTitle:NSLocalizedString(@"LabelManage_Action_Save", nil) forState:UIControlStateNormal];
     [_cancelButton setTitle:NSLocalizedString(@"LabelManage_Action_Cancel", nil) forState:UIControlStateNormal];
     
-    _saveButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+    _saveButton.buttonColor = FLATUI_COLOR_BUTTONNORMAL;
+//    _saveButton.highlightedColor = FLATUI_COLOR_BUTTONHIGHLIGHTED;
     [_saveButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_saveButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
-    
-    _cancelButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
+
+    _cancelButton.buttonColor = FLATUI_COLOR_BUTTONNORMAL;
+//    _cancelButton.highlightedColor = FLATUI_COLOR_BUTTONHIGHLIGHTED;
     [_cancelButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_cancelButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
 }
@@ -258,24 +270,32 @@
     CGRect _keyboardRect = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect _oldFrame = self.view.frame;
     
-    [UIView animateWithDuration:MOVE_DURATION_FOR_KEYBOARD
-                          delay:0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-                         self.view.frame = CGRectMake(_oldFrame.origin.x, _keyboardRect.origin.y - _oldFrame.size.height, _oldFrame.size.width, _oldFrame.size.height);
-                     } completion:nil];
+    CGFloat yOffset = 0;
+    CGFloat fixOffset = 10.0f;
+    if (_isKeyboardOpen)
+    {
+        yOffset = fixOffset;
+        self.view.frame = CGRectMake(_oldFrame.origin.x, _keyboardRect.origin.y - _oldFrame.size.height - yOffset, _oldFrame.size.width, _oldFrame.size.height);
+    }
+    else
+    {
+        yOffset = ((_oldFrame.origin.y + _oldFrame.size.height) - _keyboardRect.origin.y);
+        yOffset += fixOffset;
+        if (0 < yOffset)
+        {
+            self.view.frame = CGRectMake(_oldFrame.origin.x, _oldFrame.origin.y - yOffset, _oldFrame.size.width, _oldFrame.size.height);
+        }
+        DDLogVerbose(@"LabelManager's yOffset = %f", yOffset);
+        
+        _isKeyboardOpen = YES;        
+    }
+    
+    DDLogVerbose(@"LabelManager's frame = %f - %f - %f - %f", self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height);
 }
 
 - (void)_keyboardWillHide:(NSNotification*)notification
 {
-//    CGRect _oldFrame = self.view.frame;
-//    
-//    [UIView animateWithDuration:MOVE_DURATION_FOR_KEYBOARD
-//                          delay:0
-//                        options:UIViewAnimationOptionCurveEaseInOut
-//                     animations:^{
-//                         self.view.frame = CGRectMake(0, self.view.frame.size.height - _oldFrame.size.height * 2, _oldFrame.size.width, _oldFrame.size.height);
-//                     } completion:nil];
+    _isKeyboardOpen = NO;
 }
 
 @end

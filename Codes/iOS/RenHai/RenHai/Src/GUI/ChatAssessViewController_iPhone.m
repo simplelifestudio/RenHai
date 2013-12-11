@@ -34,7 +34,7 @@
 
 #define EXISTIMPRESSLABELSVIEW_SECTION_INDEX_EXISTIMPRESSLABELS 0
 #define EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_3_5 6
-#define EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_4 9
+#define EXISTIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_EXISTIMPRESSLABELS_4 12
 
 #define DELAY_REFRESH 0.5f
 
@@ -68,6 +68,8 @@
     UILongPressGestureRecognizer* _longPressGesturer;
     
     volatile BOOL _assessSuccessFlag;
+    
+    volatile BOOL _isLabelManaging;
 }
 
 @end
@@ -183,6 +185,8 @@
     
     _assessLabelPosition = 0;
     
+    _isLabelManaging = NO;
+    
     [self _setupCollectionView];
     
     [self _setupGesturers];
@@ -221,20 +225,22 @@
 
 -(void)_setupGesturers
 {
+    UIView* touchView = self.view;
+    
     _singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
     _singleTapGesturer.delegate = self;
     _singleTapGesturer.numberOfTapsRequired = 1;
-    [self.view addGestureRecognizer:_singleTapGesturer];
+    [touchView addGestureRecognizer:_singleTapGesturer];
     
     _doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
     _doubleTapGesturer.delegate = self;
     _doubleTapGesturer.numberOfTapsRequired = 2;
-    [self.view addGestureRecognizer:_doubleTapGesturer];
+    [touchView addGestureRecognizer:_doubleTapGesturer];
     
 //    _longPressGesturer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(_didLongPressed:)];
 //    _longPressGesturer.delegate = self;
 //    _longPressGesturer.minimumPressDuration = 1.0f;
-//    [self.view addGestureRecognizer:_longPressGesturer];
+//    [touchView addGestureRecognizer:_longPressGesturer];
 //
 //    [_singleTapGesturer requireGestureRecognizerToFail:_longPressGesturer];
 }
@@ -364,6 +370,8 @@
         
         RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:requestType device:selfDevice info:info];
         
+        __block AppMessageIdentifier appMessageId = AppMessageIdentifier_Disconnect;
+        
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
                 
@@ -371,13 +379,17 @@
                 {
                     case BusinessSessionRequestType_AssessAndContinue:
                     {
-                        [_statusModule recordAppMessage:AppMessageIdentifier_AssessAndContinue];
+                        appMessageId = AppMessageIdentifier_AssessAndContinue;
+                        
+                        [_statusModule recordAppMessage:appMessageId];
                         [self _moveToChatWaitView];
                         break;
                     }
                     case BusinessSessionRequestType_AssessAndQuit:
                     {
-                        [_statusModule recordAppMessage:AppMessageIdentifier_AssessAndQuit];
+                        appMessageId = AppMessageIdentifier_AssessAndQuit;
+                        
+                        [_statusModule recordAppMessage:appMessageId];
                         [self _moveToHomeView];
                         break;
                     }
@@ -391,6 +403,7 @@
             }
             failureCompletionBlock:^(){
                 _assessSuccessFlag = NO;
+                [_statusModule recordRemoteStatusAbnormal:appMessageId];
             }
             afterCompletionBlock:^(){
                 [CBAppUtils asyncProcessInMainThread:^(){
@@ -495,6 +508,13 @@
 
 -(void)_didSingleTapped:(UITapGestureRecognizer*) recognizer
 {
+    if (_isLabelManaging)
+    {
+        [self _dismissPopupViewController];
+        
+        return;
+    }
+    
     CGPoint locationTouch = [recognizer locationInView:self.view];
     
     if (CGRectContainsPoint(_assessLabelsView.frame, locationTouch))
@@ -599,7 +619,7 @@
                     RHLabelManageViewController_iPhone* labelManagerVC = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:labeName];
                     rootVC.useBlurForPopup = YES;
                     [rootVC presentPopupViewController:labelManagerVC animated:YES completion:nil];
-                    
+                    _isLabelManaging = YES;
                     break;
                 }
                 default:
@@ -883,6 +903,8 @@
         }
     }
     
+    reusableView.backgroundColor = FLATUI_COLOR_UICOLLECTIONREUSABLEVIEW_BACKGROUND;
+    
     return reusableView;
 }
 
@@ -954,7 +976,7 @@
     if (rootVC.popupViewController != nil)
     {
         [rootVC dismissPopupViewControllerAnimated:YES completion:^{
-            
+            _isLabelManaging = NO;
         }];
     }
 }
@@ -963,14 +985,25 @@
 
 -(void) didCreateImpressLabel
 {
+    if (_isLabelManaging)
+    {
+        return;
+    }
+    
     UIViewController* rootVC = [CBUIUtils getRootController];
     RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
     rootVC.useBlurForPopup = YES;
     [rootVC presentPopupViewController:labelManageVC animated:YES completion:nil];
+    _isLabelManaging = YES;
 }
 
 -(void) didDeleteImpressLabel
 {
+    if (_isLabelManaging)
+    {
+        return;
+    }
+    
     NSArray* selectedIndexPathes = _addImpressLabelsView.indexPathsForSelectedItems;
     for (NSIndexPath* indexPath in selectedIndexPathes)
     {
@@ -999,6 +1032,11 @@
 
 -(void) didCloneImpressLabel
 {
+    if (_isLabelManaging)
+    {
+        return;
+    }
+    
     NSArray* selectedIndexPathes = _existImpressLabelsView.indexPathsForSelectedItems;
     for (NSIndexPath* indexPath in selectedIndexPathes)
     {

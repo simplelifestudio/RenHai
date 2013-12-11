@@ -99,7 +99,7 @@
  */
 
 // Proxy
-#define MESSAGE_KEY_SERVERID @"serverId"
+#define MESSAGE_KEY_SERVERID @"id"
 #define MESSAGE_KEY_STATUS @"status"
 #define MESSAGE_KEY_SERVICESTATUS @"serviceStatus"
 #define MESSAGE_KEY_ADDRESS @"address"
@@ -114,6 +114,7 @@
 #define MESSAGE_KEY_APPVERSION @"appVersion"
 #define MESSAGE_KEY_VERSION @"version"
 #define MESSAGE_KEY_BUILD @"build"
+#define MESSAGE_KEY_SERVER @"server"
 
 // DeviceCount
 #define MESSAGE_KEY_DEVICECOUNT @"deviceCount"

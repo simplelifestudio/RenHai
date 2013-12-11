@@ -37,6 +37,15 @@
 #define DELAY_AGREECHAT 1.0f
 #define DELAY_REJECTCHAT 1.0f
 
+typedef enum
+{
+    ChoiceType_Considering = 0,
+    ChoiceType_Agreed,
+    ChoiceType_Rejected,
+    ChoiceType_Lost
+}
+ChoiceType;
+
 @interface ChatConfirmViewController_iPhone ()
 {
     GUIModule* _guiModule;
@@ -63,16 +72,6 @@
 @end
 
 @implementation ChatConfirmViewController_iPhone
-
-@synthesize collectionView = _collectionView;
-
-@synthesize selfStatusLabel = _selfStatusLabel;
-@synthesize partnerStatusLabel = _partnerStatusLabel;
-
-@synthesize countLabel = _countLabel;
-
-@synthesize agreeChatButton = _agreeChatButton;
-@synthesize rejectChatButton = _rejectChatButton;
 
 #pragma mark - Public Methods
 
@@ -312,6 +311,7 @@
         reusableView = headerView;
     }
     
+    reusableView.backgroundColor = FLATUI_COLOR_UICOLLECTIONREUSABLEVIEW_BACKGROUND;
     
     return reusableView;
 }
@@ -320,8 +320,8 @@
 
 -(void) resetPage
 {
-    _selfStatusLabel.text = NSLocalizedString(@"ChatConfirm_SelfStatus_Undecided", nil);
-    _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Undecided", nil);
+    [self _updateSelfChocieStatus:ChoiceType_Considering];
+    [self _updatePartnerChoiceStatus:ChoiceType_Considering];
     
     _selfAgreeChatFlag = NO;
     _selfRejectChatFlag = NO;
@@ -368,7 +368,7 @@
     {
         _partnerAgreeChatFlag = YES;
         
-        _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Agreed", nil);
+        [self _updatePartnerChoiceStatus:ChoiceType_Agreed];
         
         if (_selfAgreeChatFlag)
         {
@@ -386,7 +386,7 @@
         _agreeChatButton.hidden = YES;
         _rejectChatButton.hidden = YES;
         
-        _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Rejected", nil);
+        [self _updatePartnerChoiceStatus:ChoiceType_Rejected];
         
         [self _clockCancel];
         
@@ -403,7 +403,7 @@
         _agreeChatButton.hidden = YES;
         _rejectChatButton.hidden = YES;
         
-        _partnerStatusLabel.text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Lost", nil);
+        [self _updatePartnerChoiceStatus:ChoiceType_Lost];
         
         [self _clockCancel];
         
@@ -527,7 +527,8 @@
 {
     _agreeChatButton.hidden = YES;
     _rejectChatButton.hidden = YES;
-    _selfStatusLabel.text = NSLocalizedString(@"ChatConfirm_SelfStatus_Agreed", nil);
+
+    [self _updateSelfChocieStatus:ChoiceType_Agreed];
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         
@@ -561,6 +562,7 @@
             }
             failureCompletionBlock:^(){
                 _selfAgreeChatFlag = NO;
+                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_AgreeChat];
             }
             afterCompletionBlock:^(){
 
@@ -577,7 +579,8 @@
 {
     _agreeChatButton.hidden = YES;
     _rejectChatButton.hidden = YES;
-    _selfStatusLabel.text = NSLocalizedString(@"ChatConfirm_SelfStatus_Rejected", nil);
+
+    [self _updateSelfChocieStatus:ChoiceType_Rejected];
     
     [CBAppUtils asyncProcessInBackgroundThread:^(){
     
@@ -607,6 +610,7 @@
             }
             failureCompletionBlock:^(){
                 _selfRejectChatFlag = NO;
+                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_RejectChat];
             }
             afterCompletionBlock:^(){
 
@@ -653,6 +657,7 @@
                 }
                 failureCompletionBlock:^(){
                     _selfUnbindSessionFlag = NO;
+                    [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_UnbindSession];
                 }
                 afterCompletionBlock:nil
              ];
@@ -702,6 +707,86 @@
 -(void) _refreshCollectionView
 {
     [_collectionView reloadData];    
+}
+
+-(void) _updateSelfChocieStatus:(ChoiceType) type
+{
+    NSString* text = nil;
+    UIColor* color = FLATUI_COLOR_CHATCONFIRMTYPE_CONSIDERING;
+    switch (type)
+    {
+        case ChoiceType_Considering:
+        {
+            text = NSLocalizedString(@"ChatConfirm_SelfStatus_Undecided", nil);
+            color = FLATUI_COLOR_CHATCONFIRMTYPE_CONSIDERING;
+            break;
+        }
+        case ChoiceType_Agreed:
+        {
+            text = NSLocalizedString(@"ChatConfirm_SelfStatus_Agreed", nil);
+            color = FLATUI_COLOR_CHATCONFIRMTYPE_AGREED;
+            break;
+        }
+        case ChoiceType_Rejected:
+        {
+            text = NSLocalizedString(@"ChatConfirm_SelfStatus_Rejected", nil);
+            color = FLATUI_COLOR_CHATCONFIRMTYPE_REJECTED;
+            break;
+        }
+        case ChoiceType_Lost:
+        {
+            text = NSLocalizedString(@"ChatConfirm_SelfStatus_Lost", nil);
+            color = FLATUI_COLOR_CHATCONFIRMTYPE_LOST;
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    
+    _selfStatusLabel.text = text;
+    _selfStatusLabel.backgroundColor = color;
+}
+
+-(void) _updatePartnerChoiceStatus:(ChoiceType) type
+{
+    NSString* text = nil;
+    UIColor* color = FLATUI_COLOR_CHATCONFIRMTYPE_CONSIDERING;
+    switch (type)
+    {
+        case ChoiceType_Considering:
+        {
+            text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Undecided", nil);
+            color = FLATUI_COLOR_CHATCONFIRMTYPE_CONSIDERING;
+            break;
+        }
+        case ChoiceType_Agreed:
+        {
+            text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Agreed", nil);
+            color = FLATUI_COLOR_CHATCONFIRMTYPE_AGREED;
+            break;
+        }
+        case ChoiceType_Rejected:
+        {
+            text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Rejected", nil);
+            color = FLATUI_COLOR_CHATCONFIRMTYPE_REJECTED;
+            break;
+        }
+        case ChoiceType_Lost:
+        {
+            text = NSLocalizedString(@"ChatConfirm_PartnerStatus_Lost", nil);
+            color = FLATUI_COLOR_CHATCONFIRMTYPE_LOST;
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    
+    _partnerStatusLabel.text = text;
+    _partnerStatusLabel.backgroundColor = color;
 }
 
 #pragma mark - IBActions

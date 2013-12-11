@@ -29,7 +29,7 @@
 "Home_ChatCount" = "聊天人数";
 "Home_Banner_NoInfo" = "Alpha测试，意见建议请联系：simplelife.patrick@gmail.com";
 "Home_Banner_Maintenance" = "服务器安排维护：自 %@ 至 %@。";
-"Home_PressToEnterPool" = "点击进入";
+"Home_PressToEnterPool" = "点击开始";
 "Home_IsEnteringPool" = "正在进入";
 "Home_EnterPoolFailed" = "无法进入";
 
@@ -64,7 +64,7 @@
 "Config_ChatOn3G" = "3G连接";
 
 "Connect_Ready" = "准备";
-"Connect_Ready_Detail" = "热身准备...";
+"Connect_Ready_Detail" = "正在检查网络...";
 "Connect_Checking" = "检测";
 "Connect_Checking_Detail" = "正在探测人海...";
 "Connect_CheckedNormal" = "检测";
@@ -112,14 +112,14 @@
 "ChatConfirm_Title" = "根据\"%@\"找到对方";
 "ChatConfirm_ImpressAssesses" = "对方获得的评价";
 "ChatConfirm_ImpressLabels" = "对方获得的印象";
-"ChatConfirm_SelfStatus_Undecided" = "我的决定：考虑中";
-"ChatConfirm_SelfStatus_Agreed" = "我的决定：已同意";
-"ChatConfirm_SelfStatus_Rejected" = "我的决定：已拒绝";
+"ChatConfirm_SelfStatus_Undecided" = "我在考虑";
+"ChatConfirm_SelfStatus_Agreed" = "我已同意";
+"ChatConfirm_SelfStatus_Rejected" = "我已拒绝";
 "ChatConfirm_SelfStatus_Lost" = "我已掉线";
-"ChatConfirm_PartnerStatus_Undecided" = "对方决定：考虑中";
-"ChatConfirm_PartnerStatus_Agreed" = "对方决定：已同意";
-"ChatConfirm_PartnerStatus_Rejected" = "对方决定：已拒绝";
-"ChatConfirm_PartnerStatus_Lost" = "对方已掉线";
+"ChatConfirm_PartnerStatus_Undecided" = "对方考虑";
+"ChatConfirm_PartnerStatus_Agreed" = "对方同意";
+"ChatConfirm_PartnerStatus_Rejected" = "对方拒绝";
+"ChatConfirm_PartnerStatus_Lost" = "对方掉线";
 "ChatConfirm_Action_Agree" = "同意";
 "ChatConfirm_Action_Reject" = "拒绝";
 
@@ -134,15 +134,16 @@
 "ChatVideo_PartnerStatus_Failed" = "对方视频：失败";
 "ChatVideo_PartnerStatus_Lost" = "对方已掉线";
 "ChatVideo_PartnerChatMessage" = "对方的小纸条";
-"ChatVideo_ChatMessageSendTip" = "写张小纸条传给对方";
+"ChatVideo_ChatMessageSendTip" = "写张纸条传给对方";
 "ChatVideo_SelfVideo" = "我的视频";
+"ChatVideo_ChatMessage" = "纸条";
 "ChatVideo_PartnerVideo" = "对方视频";
 "ChatVideo_Action_Send" = "发送";
-"ChatVideo_Action_End" = "结束聊天";
+"ChatVideo_Action_End" = "挂断";
 
 "ChatAssess_Title" = "评价对方";
-"ChatAssess_Action_Continue" = "评价并继续";
-"ChatAssess_Action_Finish" = "评价并离开";
+"ChatAssess_Action_Continue" = "继续寻找";
+"ChatAssess_Action_Finish" = "离开人海";
 "ChatAssess_Action_AddImpressLabel" = "新建";
 "ChatAssess_Action_DelImpressLabel" = "删除";
 "ChatAssess_Action_CopyImpressLabel" = "复制";
