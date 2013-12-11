@@ -94,22 +94,7 @@
     if(self = [super init]) {
         _messageBarQueue = [[NSMutableArray alloc] init];        
         _messageVisible = NO;
-        // Updated by RenHai
-        // {
-        if (IS_IPHONE5)
-        {
-            _messageBarOffset = [[UIApplication sharedApplication] statusBarFrame].size.height;
-        }
-        else if (IS_IPHONE4_OR_4S)
-        {
-            _messageBarOffset = [[UIApplication sharedApplication] statusBarFrame].size.height;
-        }
-        else if (IS_IPAD1_OR_2_OR_MINI)
-        {
-            _messageBarOffset = 0;
-        }
-//        _messageBarOffset = [[UIApplication sharedApplication] statusBarFrame].size.height;
-        // }
+        _messageBarOffset = [[UIApplication sharedApplication] statusBarFrame].size.height;
     }
     return self;
 }

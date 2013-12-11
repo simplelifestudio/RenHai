@@ -49,7 +49,7 @@
 
     _textField.layer.masksToBounds = YES;
     _textField.layer.borderColor = FLATUI_COLOR_TEXTFIELD_BORDER.CGColor;
-    _textField.layer.borderWidth = 1.0f;
+    _textField.layer.borderWidth = FLATUI_WIDTH_TEXTFIELD_BORDER;
     _textField.backgroundColor = FLATUI_COLOR_TEXTFIELD_BACKGROUND;
     
     [self _setupActionButtons];
@@ -117,14 +117,32 @@
     CGRect _keyboardRect = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect _oldFrame = self.frame;
     
+    CGFloat yOffset = 0;
+    yOffset = _keyboardRect.origin.y - _oldFrame.size.height;
+    if (![UIDevice isRunningOniOS7AndLater])
+    {
+        yOffset -= [UIApplication sharedApplication].statusBarFrame.size.height;
+    }
+    
     [UIView animateWithDuration:0.3
                                   delay:0
                                 options:UIViewAnimationOptionCurveEaseInOut
                              animations:^{
-                                 self.frame = CGRectMake(0, _keyboardRect.origin.y - _oldFrame.size.height, _oldFrame.size.width, _oldFrame.size.height);
+                                 self.frame = CGRectMake(0, yOffset, _oldFrame.size.width, _oldFrame.size.height);
                              } completion:nil];
     
-
+    DDLogVerbose(@"ChatMessageSender's frame = %f - %f - %f - %f", self.frame.origin.x, self.frame.origin.y, self.frame.size.width, self.frame.size.height);
+    
+    DDLogVerbose(@"ChatMessageSender superView's frame = %f - %f - %f - %f", self.superview.frame.origin.x, self.superview.frame.origin.y, self.superview.frame.size.width, self.superview.frame.size.height);
+    
+    DDLogVerbose(@"ChatMessageSender superView's superView's frame = %f - %f - %f - %f", self.superview.superview.frame.origin.x, self.superview.superview.frame.origin.y, self.superview.superview.frame.size.width, self.superview.superview.frame.size.height);
+    
+    CGPoint center = self.center;
+    DDLogVerbose(@"Center in view = %f - %f", center.x, center.y);
+    CGPoint superCenter = [self convertPoint:center toView:self.superview];
+    DDLogVerbose(@"Center in superView = %f - %f", superCenter.x, superCenter.y);
+    CGPoint superSuperCenter = [self convertPoint:center toView:self.superview.superview];
+    DDLogVerbose(@"Center in superSuperView = %f - %f", superSuperCenter.x, superSuperCenter.y);
 }
 
 - (void)_keyboardWillHide:(NSNotification*)notification
