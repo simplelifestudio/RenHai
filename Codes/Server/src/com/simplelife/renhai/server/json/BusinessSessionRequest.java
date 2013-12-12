@@ -293,8 +293,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 				break;
 			case ChatMessage:
 				chatMessage();
+				break;
 			default:
-				logger.error("Invalid operation type found: " + operationType.toString());
+				logger.error("Invalid operation type found: " + operationType.name());
 				break;
 		}
 	}

@@ -235,19 +235,25 @@ public class Impresscard implements IDbObject
 					if (assessedFlag)
 					{
 						int count = label.getAssessedCount();
-						logger.debug("Impress label<"+ labelName +"> of device <{}> was increased from " 
+						if (logger.isDebugEnabled())
+						{
+							logger.debug("Impress label<"+ labelName +"> of device <{}> was increased from " 
 								+ count + " to " + (count + 1), deviceWrapper.getDeviceIdentification());
+						}
 						label.setAssessedCount(count + 1);
 						label.setUpdateTime(System.currentTimeMillis());
 						//label.getGlobalimpresslabel().setGlobalAssessCount(label.getGlobalimpresslabel().getGlobalAssessCount() + 1);
-						DbLogger.increaseImpressAssessCount(tmpLabelName);
 					}
 					else
 					{
 						int count = label.getAssessCount();
-						logger.debug("Assessing count of <" + labelName + "> by device <{}> was increased from " 
+						if (logger.isDebugEnabled())
+						{
+							logger.debug("Assessing count of <" + labelName + "> by device <{}> was increased from " 
 								+ count + " to " + (count + 1), deviceWrapper.getDeviceIdentification());
+						}
 						label.setAssessCount(label.getAssessCount() + 1);
+						DbLogger.increaseImpressAssessCount(tmpLabelName);
 					}
 				}
 				return;

@@ -63,6 +63,8 @@ public interface IMockApp
 	/** */
 	public void chatConfirm(boolean agree);
 	
+	public void chatMessage();
+	
 	/** */
 	public void ping();
 	
