@@ -192,7 +192,6 @@ static NSTimeInterval s_labelDuration = LABELS_DURATION;
     [self dismissViewControllerAnimated:NO completion:nil];
     
     MainViewController_iPhone* mainViewController = _guiModule.mainViewController;
-    
     [CBUIUtils setRootController:mainViewController];
 }
 

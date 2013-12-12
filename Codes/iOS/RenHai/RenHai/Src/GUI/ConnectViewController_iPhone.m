@@ -192,6 +192,7 @@ ConnectStatus;
             [self dismissViewControllerAnimated:NO completion:^(){
                 if (rootVC == mainVC)
                 {
+                    mainVC.view.backgroundColor = FLATUI_COLOR_UIVIEW_BACKGROUND;
                     [mainVC resignPresentationModeEntirely:YES animated:NO completion:nil];
                 }
             }];

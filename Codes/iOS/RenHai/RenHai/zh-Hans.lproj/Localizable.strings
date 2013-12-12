@@ -28,7 +28,7 @@
 "Home_OnlineCount" = "在线人数";
 "Home_ChatCount" = "聊天人数";
 "Home_Banner_NoInfo" = "Alpha测试，意见建议请联系：simplelife.patrick@gmail.com";
-"Home_Banner_Maintenance" = "服务器安排维护：自 %@ 至 %@。";
+"Home_Banner_Maintenance" = "服务器维护预告：从%@到%@将暂停服务。";
 "Home_PressToEnterPool" = "点击开始";
 "Home_IsEnteringPool" = "正在进入";
 "Home_EnterPoolFailed" = "无法进入";
@@ -52,7 +52,7 @@
 "Impress_ChatTotalDuration" = "聊天时长";
 "Impress_ChatLossCount" = "掉线次数";
 
-"Interest_InterestLabels" = "我想的话题";
+"Interest_InterestLabels" = "我想聊的话题";
 "Interest_CurrentHotInterestLabels" = "当前热门话题";
 "Interest_Action_CloneServerInterestLabel" = "复制";
 "Interest_Action_RefreshServerInterestLabels" = "刷新";
