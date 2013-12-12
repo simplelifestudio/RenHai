@@ -218,7 +218,7 @@ ChoiceType;
                 {
                     labelName = NSLocalizedString(@"Impress_ChatTotalDuration", nil);
                     labelCount = impressCard.chatTotalDuration;
-                    labelCountStr = [CBDateUtils timeStringWithMilliseconds:labelCount];
+                    labelCountStr = [CBDateUtils timeStringHMSWithMilliseconds:labelCount];
                     break;
                 }
                 case 5:
@@ -271,6 +271,10 @@ ChoiceType;
     {
         cell.countLabel.text = @"";
     }
+    
+    cell.customBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUND;
+    cell.customSelectedBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUNDSELECTED;
+    cell.selected = NO;
     
     return cell;
 }

@@ -52,10 +52,6 @@
 
 @implementation InterestViewController_iPhone
 
-@synthesize interestLabelsView = _interestLabelsView;
-@synthesize serverInterestLabelsView = _serverInterestLabelsView;
-@synthesize pageControl = _pageControl;
-
 #pragma mark - Public Methods
 
 - (void)awakeFromNib
@@ -79,9 +75,8 @@
 {    
     [super viewDidAppear:animated];
     
-    [self _refreshInterestLabelsView];
-    
-    [self _refreshServerInterestLabelsView];
+    [self _deselectCollectionView:_interestLabelsView exceptIndexPath:nil];
+    [self _deselectCollectionView:_serverInterestLabelsView exceptIndexPath:nil];
 }
 
 #pragma mark - Private Methods
@@ -139,13 +134,6 @@
     _doubleTapGesturer.delegate = self;
     _doubleTapGesturer.numberOfTapsRequired = 2;
     [touchView addGestureRecognizer:_doubleTapGesturer];
-    
-//    _longPressGesturer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(_didLongPressed:)];
-//    _longPressGesturer.delegate = self;
-//    _longPressGesturer.minimumPressDuration = 1.0f;
-//    [touchView addGestureRecognizer:_longPressGesturer];
-//    
-//    [_singleTapGesturer requireGestureRecognizerToFail:_longPressGesturer];
 }
 
 -(void)_leftBarButtonItemClicked:(id)sender
@@ -164,9 +152,11 @@
 {
     _interestLabelsView.delegate = self;
     _interestLabelsView.dataSource = self;
+    _interestLabelsView.allowsMultipleSelection = NO;
     
     _serverInterestLabelsView.delegate = self;
     _serverInterestLabelsView.dataSource = self;
+    _serverInterestLabelsView.allowsMultipleSelection = NO;
     
     UINib* nib = [UINib nibWithNibName:NIB_COLLECTIONCELL_LABEL bundle:nil];
     [_interestLabelsView registerNib:nib forCellWithReuseIdentifier:COLLECTIONCELL_ID_INTERESTLABEL];
@@ -207,83 +197,56 @@
     }
 }
 
--(void)_deselectCollectionView:(UICollectionView*) collectionView
+-(RHCollectionLabelCell_iPhone*)_selectedCell:(UICollectionView*) collectionView
+{
+    RHCollectionLabelCell_iPhone* selectedCell = nil;
+    
+    NSArray* selectedIndexPathes = collectionView.indexPathsForVisibleItems;
+    for (NSIndexPath* indexPath in selectedIndexPathes)
+    {
+        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView cellForItemAtIndexPath:indexPath];
+        if (cell.selected)
+        {
+            selectedCell = cell;
+            break;
+        }
+    }
+    
+    return selectedCell;
+}
+
+-(void)_deselectCollectionView:(UICollectionView*) collectionView exceptIndexPath:(NSIndexPath*) exceptIndexPath
 {
     if (_interestLabelsView == collectionView)
     {
-        NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
+        NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForVisibleItems;
         for (NSIndexPath* indexPath in selectedIndexPathes)
         {
-            [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+            if (![indexPath isEqual:exceptIndexPath])
+            {
+                [_interestLabelsView cellForItemAtIndexPath:indexPath].selected = NO;
+            }
         }
         
         [self _refreshInterestLabelsHeaderViewActions];
     }
     else if (_serverInterestLabelsView == collectionView)
     {
-        NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
+        NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForVisibleItems;
         for (NSIndexPath* indexPath in selectedIndexPathes)
         {
-            [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-        }
-        
-        _allowCloneLabel = NO;
-        [self _refreshServerInterestLabelsHeaderViewActions];
-    }
-}
-
--(void)_didLongPressed:(UILongPressGestureRecognizer*) recognizer
-{
-    CGPoint locationTouch = [recognizer locationInView:self.view];
-    
-    if (CGRectContainsPoint(_interestLabelsView.frame, locationTouch))
-    {
-        locationTouch = [_interestLabelsView convertPoint:locationTouch fromView:self.view];
-        
-        NSIndexPath* indexPath = [_interestLabelsView indexPathForItemAtPoint:locationTouch];
-        if (nil == indexPath)
-        {
-            [self _deselectCollectionView:_interestLabelsView];
-        }
-        else
-        {
-            [_interestLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-            [self _refreshInterestLabelsHeaderViewActions];
-            
-            [self _deselectCollectionView:_serverInterestLabelsView];
-        }
-    }
-    else if (CGRectContainsPoint(_serverInterestLabelsView.frame, locationTouch))
-    {
-        locationTouch = [_serverInterestLabelsView convertPoint:locationTouch fromView:self.view];
-        
-        NSIndexPath* indexPath = [_serverInterestLabelsView indexPathForItemAtPoint:locationTouch];
-        if (nil == indexPath)
-        {
-            [self _deselectCollectionView:_serverInterestLabelsView];
-        }
-        else
-        {
-            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_serverInterestLabelsView cellForItemAtIndexPath:indexPath];
-            [_serverInterestLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-            
-            NSString* labelName = cell.labelName;
-            
-            RHDevice* device = _userDataModule.device;
-            RHProfile* profile = device.profile;
-            RHInterestCard* interestCard = profile.interestCard;
-            BOOL hasLabel = [interestCard isLabelExists:labelName];
-            BOOL isFull = (interestCard.labelList.count >= INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS);
-            _allowCloneLabel = (hasLabel || isFull) ? NO : YES;
-            
-            NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
-            for (NSIndexPath* indexPath in selectedIndexPathes)
+            if (![indexPath isEqual:exceptIndexPath])
             {
-                [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+                [_serverInterestLabelsView cellForItemAtIndexPath:indexPath].selected = NO;
             }
-            
-            [self _refreshServerInterestLabelsHeaderViewActions];
         }
+        
+        if (nil == exceptIndexPath)
+        {
+            _allowCloneLabel = NO;
+        }
+        
+        [self _refreshServerInterestLabelsHeaderViewActions];
     }
 }
 
@@ -303,62 +266,49 @@
         locationTouch = [_interestLabelsView convertPoint:locationTouch fromView:self.view];
         
         NSIndexPath* indexPath = [_interestLabelsView indexPathForItemAtPoint:locationTouch];
-        if (nil == indexPath)
+        
+        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_interestLabelsView cellForItemAtIndexPath:indexPath];
+        if (!cell.isSelected)
         {
-            [self _deselectCollectionView:_interestLabelsView];
+            cell.selected = YES;
         }
         else
         {
-            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_interestLabelsView cellForItemAtIndexPath:indexPath];
-            if (!cell.isSelected)
-            {
-                [_interestLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-            }
-            else
-            {
-                [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-            }
-            [self _refreshInterestLabelsHeaderViewActions];
+            cell.selected = NO;
         }
-
-        [self _deselectCollectionView:_serverInterestLabelsView];
+        
+        [self _deselectCollectionView:_interestLabelsView exceptIndexPath:indexPath];
+        [self _deselectCollectionView:_serverInterestLabelsView exceptIndexPath:nil];
     }
     else if (CGRectContainsPoint(_serverInterestLabelsView.frame, locationTouch))
     {
         locationTouch = [_serverInterestLabelsView convertPoint:locationTouch fromView:self.view];
         
         NSIndexPath* indexPath = [_serverInterestLabelsView indexPathForItemAtPoint:locationTouch];
-        if (nil == indexPath)
+        
+        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_serverInterestLabelsView cellForItemAtIndexPath:indexPath];
+        if (!cell.isSelected)
         {
-            [self _deselectCollectionView:_interestLabelsView];
-            [self _deselectCollectionView:_serverInterestLabelsView];
+            cell.selected = YES;
+            
+            NSString* labelName = cell.labelName;
+            
+            RHDevice* device = _userDataModule.device;
+            RHProfile* profile = device.profile;
+            RHInterestCard* interestCard = profile.interestCard;
+            BOOL hasLabel = [interestCard isLabelExists:labelName];
+            BOOL isFull = (interestCard.labelList.count >= INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS);
+            _allowCloneLabel = (hasLabel || isFull) ? NO : YES;
         }
         else
         {
-            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_serverInterestLabelsView cellForItemAtIndexPath:indexPath];
-            if (!cell.isSelected)
-            {
-                [_serverInterestLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-                
-                NSString* labelName = cell.labelName;
-                
-                RHDevice* device = _userDataModule.device;
-                RHProfile* profile = device.profile;
-                RHInterestCard* interestCard = profile.interestCard;
-                BOOL hasLabel = [interestCard isLabelExists:labelName];
-                BOOL isFull = (interestCard.labelList.count >= INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS);
-                _allowCloneLabel = (hasLabel || isFull) ? NO : YES;
-            }
-            else
-            {
-                [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-                _allowCloneLabel = NO;
-            }
+            cell.selected = NO;
             
-            [self _deselectCollectionView:_interestLabelsView];
-            
-            [self _refreshServerInterestLabelsHeaderViewActions];
+            _allowCloneLabel = NO;
         }
+        
+        [self _deselectCollectionView:_interestLabelsView exceptIndexPath:nil];
+        [self _deselectCollectionView:_serverInterestLabelsView exceptIndexPath:indexPath];
     }
 }
 
@@ -373,6 +323,10 @@
         NSIndexPath* indexPath = [_interestLabelsView indexPathForItemAtPoint:locationTouch];
         if (nil != indexPath)
         {
+            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_interestLabelsView cellForItemAtIndexPath:indexPath];
+            cell.selected = YES;
+            [self _deselectCollectionView:_interestLabelsView exceptIndexPath:indexPath];
+            
             NSUInteger section = indexPath.section;
             NSUInteger position = indexPath.item;
             
@@ -411,10 +365,14 @@
     RHInterestCard* interestCard = profile.interestCard;
     NSArray* labelList = interestCard.labelList;
     
-    NSArray* selectedCells = [_interestLabelsView indexPathsForSelectedItems];
-    if (0 < selectedCells.count && 1 < labelList.count)
+    NSArray* indexPathes = [_interestLabelsView indexPathsForVisibleItems];
+    for (NSIndexPath* indexPath in indexPathes)
     {
-        allowDeleteLabel = YES;
+        if ([_interestLabelsView cellForItemAtIndexPath:indexPath].selected)
+        {
+            allowDeleteLabel = YES;
+            break;
+        }
     }
     
     if (INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS <= labelList.count)
@@ -551,10 +509,13 @@
                 
                 RHInterestLabel* label = labelList[position];
                 labelName = label.labelName;
-                labelCount = label.globalMatchCount;
+                labelCount = label.labelOrder + 1;
                 
                 cell.textField.text = labelName;
-//                cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
+                cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
+                
+                cell.customBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUND;
+                cell.customSelectedBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUNDSELECTED;
                 
                 break;
             }
@@ -583,6 +544,9 @@
                 cell.textField.text = labelName;
                 cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
                 
+                cell.customBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_SERVER_BACKGROUND;
+                cell.customSelectedBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_SERVER_BACKGROUNDSELECTED;
+                
                 break;
             }
             default:
@@ -591,6 +555,8 @@
             }
         }
     }
+    
+    cell.selected = NO;
     
     return cell;
 }
@@ -735,7 +701,7 @@
             return;
         }
         
-        [self _deselectCollectionView:_interestLabelsView];
+        [self _deselectCollectionView:_interestLabelsView exceptIndexPath:toIndexPath];
         
         switch (fromSection)
         {
@@ -798,6 +764,8 @@
             }
         }
     }
+    
+
 }
 
 -(void) collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath
@@ -860,28 +828,14 @@
     RHProfile* profile = device.profile;
     RHInterestCard* interestCard = profile.interestCard;
     
-    NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
-    for (NSIndexPath* indexPath in selectedIndexPathes)
+    RHCollectionLabelCell_iPhone* cell = [self _selectedCell:_interestLabelsView];
+    if (nil != cell)
     {
-        NSUInteger section = indexPath.section;
-        
-        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_interestLabelsView cellForItemAtIndexPath:indexPath];
         NSString* labelName = cell.labelName;
-        switch (section)
-        {
-            case INTERESTLABELS_SECTION_INDEX_INTERESTLABELS:
-            {
-                [interestCard removeLabelByName:labelName];
-                break;
-            }
-            default:
-            {
-                break;
-            }
-        }
+        [interestCard removeLabelByName:labelName];
+        
+        [self _remoteUpdateInterestCard];
     }
-    
-    [self _remoteUpdateInterestCard];
 }
 
 #pragma mark - ServerInterestLabelsHeaderViewDelegate
@@ -897,16 +851,14 @@
     RHProfile* profile = device.profile;
     RHInterestCard* interestCard = profile.interestCard;
     
-    NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
-    for (NSIndexPath* indexPath in selectedIndexPathes)
+    RHCollectionLabelCell_iPhone* cell = [self _selectedCell:_serverInterestLabelsView];
+    if (nil != cell)
     {
-        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_serverInterestLabelsView cellForItemAtIndexPath:indexPath];
         NSString* labelName = cell.labelName;
-        
         [interestCard addLabel:labelName];
+        
+        [self _remoteUpdateInterestCard];
     }
-    
-    [self _remoteUpdateInterestCard];
     
     _allowCloneLabel = NO;
     [self _refreshServerInterestLabelsView];

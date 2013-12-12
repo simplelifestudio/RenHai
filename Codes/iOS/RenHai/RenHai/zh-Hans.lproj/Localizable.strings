@@ -50,9 +50,9 @@
 "Impress_AssessKey_Disgusting" = "差评";
 "Impress_ChatTotalCount" = "聊天次数";
 "Impress_ChatTotalDuration" = "聊天时长";
-"Impress_ChatLossCount" = "断线次数";
+"Impress_ChatLossCount" = "掉线次数";
 
-"Interest_InterestLabels" = "我感兴趣的话题";
+"Interest_InterestLabels" = "我想的话题";
 "Interest_CurrentHotInterestLabels" = "当前热门话题";
 "Interest_Action_CloneServerInterestLabel" = "复制";
 "Interest_Action_RefreshServerInterestLabels" = "刷新";
@@ -110,8 +110,8 @@
 "ChatWait_Action_Cancel" = "取消";
 
 "ChatConfirm_Title" = "根据\"%@\"找到对方";
-"ChatConfirm_ImpressAssesses" = "对方获得的评价";
-"ChatConfirm_ImpressLabels" = "对方获得的印象";
+"ChatConfirm_ImpressAssesses" = "对方已获的评价";
+"ChatConfirm_ImpressLabels" = "对方已获的印象";
 "ChatConfirm_SelfStatus_Undecided" = "我在考虑";
 "ChatConfirm_SelfStatus_Agreed" = "我已同意";
 "ChatConfirm_SelfStatus_Rejected" = "我已拒绝";

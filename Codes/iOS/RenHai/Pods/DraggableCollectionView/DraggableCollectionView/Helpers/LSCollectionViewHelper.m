@@ -239,17 +239,20 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             
             // Updated by RenHai
             // {
-            NSArray* selectedIndexPathes = self.collectionView.indexPathsForSelectedItems;
-            for (NSIndexPath* p in selectedIndexPathes)
-            {
-                [self.collectionView deselectItemAtIndexPath:p animated:NO];
-            }
-            [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-
-            NSArray* visibleCells = [self.collectionView visibleCells];
+            UICollectionViewCell* selectedCell = [self.collectionView cellForItemAtIndexPath:indexPath];
+            NSArray* visibleCells = self.collectionView.visibleCells;
             for (UICollectionViewCell* cell in visibleCells)
             {
-                cell.highlighted = YES;
+                if (cell == selectedCell)
+                {
+                    cell.selected = YES;
+                    cell.highlighted = YES;
+                }
+                else
+                {
+                    cell.selected = NO;
+                    cell.highlighted = YES;
+                }
             }
             // }
             
@@ -313,6 +316,7 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             NSArray* visibleCells = [self.collectionView visibleCells];
             for (UICollectionViewCell* cell in visibleCells)
             {
+                cell.selected = NO;
                 cell.highlighted = NO;
             }
             // }
