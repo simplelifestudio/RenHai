@@ -111,7 +111,7 @@
     return dayIntDiff;
 }
 
-+(NSString*) timeStringWithMilliseconds:(long long) milliseconds
++(NSString*) timeStringDHMSWithMilliseconds:(long long) milliseconds
 {
     long days = milliseconds / (1000 * 60 * 60 * 24);
     long hours = (milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
@@ -119,6 +119,16 @@
     long seconds = (milliseconds % (1000 * 60)) / 1000;
     
     NSString* str = [NSString stringWithFormat:@"%ld-%ld:%ld:%ld", days, hours, minutes, seconds];
+    return str;
+}
+
++(NSString*) timeStringHMSWithMilliseconds:(long long) milliseconds
+{
+    long hours = (milliseconds % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+    long minutes = (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
+    long seconds = (milliseconds % (1000 * 60)) / 1000;
+    
+    NSString* str = [NSString stringWithFormat:@"%ld:%ld:%ld", hours, minutes, seconds];
     return str;
 }
 

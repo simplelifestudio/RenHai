@@ -32,7 +32,9 @@
 
 +(NSInteger) dayDiffBetweenTwoDays:(NSDate*) dateA dateB:(NSDate*) dateB;
 
-+(NSString*) timeStringWithMilliseconds:(long long) milliseconds;
++(NSString*) timeStringDHMSWithMilliseconds:(long long) milliseconds;
+
++(NSString*) timeStringHMSWithMilliseconds:(long long) milliseconds;
 
 +(NSDate*) targetDateFromDate:(NSDate*) sourceDate sourceTimeZone:(NSTimeZone*) sourceTimeZone targetTimeZone:(NSTimeZone*) targetTimeZone;
 
