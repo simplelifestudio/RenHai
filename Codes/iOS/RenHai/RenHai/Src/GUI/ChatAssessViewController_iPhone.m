@@ -477,6 +477,31 @@
     return selectedCell;
 }
 
+-(void)_resetAssessLabelsViewCellAsDefault:(RHCollectionLabelCell_iPhone*) cell indexPath:(NSIndexPath*) indexPath
+{
+    NSString* name = _assessLabelNames[indexPath.row];
+    if ([name isEqualToString:MESSAGE_KEY_ASSESS_HAPPY])
+    {
+        cell.selected = YES;
+    }
+    else
+    {
+        cell.selected = NO;
+    }
+}
+
+-(void)_resetAssessLabelsViewAsDefault
+{
+    NSArray* indexPathes = _assessLabelsView.indexPathsForVisibleItems;
+    
+    for (NSIndexPath* indexPath in indexPathes)
+    {
+        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_assessLabelsView cellForItemAtIndexPath:indexPath];
+
+        [self _resetAssessLabelsViewCellAsDefault:cell indexPath:indexPath];
+    }
+}
+
 -(void)_deselectCollectionView:(UICollectionView*) collectionView exceptIndexPath:(NSIndexPath*) exceptIndexPath
 {
     if (_assessLabelsView == collectionView)
@@ -484,17 +509,7 @@
         NSArray* indexPathes = _assessLabelsView.indexPathsForVisibleItems;
         if (nil == exceptIndexPath)
         {
-            NSIndexPath* indexPath = indexPathes[0];
-            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_assessLabelsView cellForItemAtIndexPath:indexPath];
-            cell.selected = YES;
-            
-            for (NSIndexPath* path in indexPathes)
-            {
-                if (![path isEqual: indexPath])
-                {
-                    cell.selected = NO;
-                }
-            }
+            [self _resetAssessLabelsViewAsDefault];
         }
         else
         {
@@ -726,8 +741,6 @@
 
 -(void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSUInteger position = indexPath.item;
-    
     if (collectionView == _assessLabelsView)
     {
 
@@ -810,14 +823,16 @@
     
     if (cv == _assessLabelsView)
     {
+        cell.customBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUND;
+        cell.customSelectedBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUNDSELECTED;
+        
         NSString* labelName = nil;
         NSInteger labelCount = -1;
+
+        NSString* name = _assessLabelNames[position];
+        labelName = [RHImpressLabel assessLabelName:name];
         
-        if (0 < _assessLabelNames.count && position < _assessLabelNames.count)
-        {
-            NSString* name = _assessLabelNames[position];
-            labelName = [RHImpressLabel assessLabelName:name];
-        }
+        [self _resetAssessLabelsViewCellAsDefault:cell indexPath:indexPath];
         
         cell.textField.text = labelName;
         if (0 <= labelCount)
@@ -831,18 +846,6 @@
         
         cell.countLabel.hidden = YES;
         cell.textField.userInteractionEnabled = NO;
-        
-        cell.customBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUND;
-        cell.customSelectedBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUNDSELECTED;
-        
-        if (0 == position)
-        {
-            cell.selected = YES;
-        }
-        else
-        {
-            cell.selected = NO;
-        }
     }
     else if (cv == _addImpressLabelsView)
     {
@@ -899,8 +902,8 @@
             cell.countLabel.text = @"";
         }
         
-        cell.customBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_SERVER_BACKGROUND;
-        cell.customSelectedBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_SERVER_BACKGROUNDSELECTED;
+        cell.customBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUND;
+        cell.customSelectedBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUNDSELECTED;
         
         cell.selected = NO;
     }
