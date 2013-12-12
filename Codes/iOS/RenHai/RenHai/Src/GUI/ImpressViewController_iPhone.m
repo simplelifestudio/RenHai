@@ -45,9 +45,6 @@
 
 @implementation ImpressViewController_iPhone
 
-@synthesize assessLabelsView = _assessLabelsView;
-@synthesize impressLabelsView = _impressLabelsView;
-@synthesize pageControl = _pageControl;
 
 #pragma mark - Public Methods
 
@@ -180,7 +177,7 @@
                     {
                         labelName = NSLocalizedString(@"Impress_ChatTotalDuration", nil);
                         labelCount = impressCard.chatTotalDuration;
-                        labelCountStr = [CBDateUtils timeStringWithMilliseconds:labelCount];
+                        labelCountStr = [CBDateUtils timeStringHMSWithMilliseconds:labelCount];
                         break;
                     }
                     case 5:
@@ -254,6 +251,10 @@
     {
         cell.countLabel.text = @"";
     }
+    
+    cell.customBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUND;
+    cell.customSelectedBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUNDSELECTED;
+    cell.selected = NO;
     
     return cell;
 }

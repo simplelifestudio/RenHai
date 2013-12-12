@@ -73,19 +73,13 @@
 #define COCOAPODS_POD_AVAILABLE_JSQSystemSoundPlayer
 #define COCOAPODS_VERSION_MAJOR_JSQSystemSoundPlayer 1
 #define COCOAPODS_VERSION_MINOR_JSQSystemSoundPlayer 3
-#define COCOAPODS_VERSION_PATCH_JSQSystemSoundPlayer 0
+#define COCOAPODS_VERSION_PATCH_JSQSystemSoundPlayer 1
 
 // KXKiOS7ColorsAndGradients
 #define COCOAPODS_POD_AVAILABLE_KXKiOS7ColorsAndGradients
 #define COCOAPODS_VERSION_MAJOR_KXKiOS7ColorsAndGradients 1
 #define COCOAPODS_VERSION_MINOR_KXKiOS7ColorsAndGradients 0
 #define COCOAPODS_VERSION_PATCH_KXKiOS7ColorsAndGradients 0
-
-// MBProgressHUD
-#define COCOAPODS_POD_AVAILABLE_MBProgressHUD
-#define COCOAPODS_VERSION_MAJOR_MBProgressHUD 0
-#define COCOAPODS_VERSION_MINOR_MBProgressHUD 8
-#define COCOAPODS_VERSION_PATCH_MBProgressHUD 0
 
 // OBShapedButton
 #define COCOAPODS_POD_AVAILABLE_OBShapedButton

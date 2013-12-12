@@ -230,8 +230,8 @@ EnterOperationStatus;
     _bannerView.pauseInterval = 0; // seconds of pause before scrolling starts again
     _bannerView.scrollSpeed = 25; // pixels per second
     _bannerView.textAlignment = NSTextAlignmentCenter; // centers text when no auto-scrolling is applied
-    _bannerView.fadeLength = FLATUI_FONT_BIG;
-    _bannerView.font = [UIFont systemFontOfSize:FLATUI_FONT_BIG];
+    _bannerView.fadeLength = FLATUI_FONT_NORMAL;
+    _bannerView.font = [UIFont systemFontOfSize:FLATUI_FONT_NORMAL];
     _bannerView.scrollDirection = CBAutoScrollDirectionLeft;
     
     [_bannerView observeApplicationNotifications];

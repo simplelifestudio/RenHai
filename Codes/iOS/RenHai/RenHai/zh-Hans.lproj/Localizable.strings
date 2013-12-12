@@ -28,7 +28,7 @@
 "Home_OnlineCount" = "在线人数";
 "Home_ChatCount" = "聊天人数";
 "Home_Banner_NoInfo" = "Alpha测试，意见建议请联系：simplelife.patrick@gmail.com";
-"Home_Banner_Maintenance" = "服务器安排维护：自 %@ 至 %@。";
+"Home_Banner_Maintenance" = "服务器维护预告：从%@到%@将暂停服务。";
 "Home_PressToEnterPool" = "点击开始";
 "Home_IsEnteringPool" = "正在进入";
 "Home_EnterPoolFailed" = "无法进入";
@@ -50,9 +50,9 @@
 "Impress_AssessKey_Disgusting" = "差评";
 "Impress_ChatTotalCount" = "聊天次数";
 "Impress_ChatTotalDuration" = "聊天时长";
-"Impress_ChatLossCount" = "断线次数";
+"Impress_ChatLossCount" = "掉线次数";
 
-"Interest_InterestLabels" = "我感兴趣的话题";
+"Interest_InterestLabels" = "我想聊的话题";
 "Interest_CurrentHotInterestLabels" = "当前热门话题";
 "Interest_Action_CloneServerInterestLabel" = "复制";
 "Interest_Action_RefreshServerInterestLabels" = "刷新";
@@ -110,8 +110,8 @@
 "ChatWait_Action_Cancel" = "取消";
 
 "ChatConfirm_Title" = "根据\"%@\"找到对方";
-"ChatConfirm_ImpressAssesses" = "对方获得的评价";
-"ChatConfirm_ImpressLabels" = "对方获得的印象";
+"ChatConfirm_ImpressAssesses" = "对方已获的评价";
+"ChatConfirm_ImpressLabels" = "对方已获的印象";
 "ChatConfirm_SelfStatus_Undecided" = "我在考虑";
 "ChatConfirm_SelfStatus_Agreed" = "我已同意";
 "ChatConfirm_SelfStatus_Rejected" = "我已拒绝";

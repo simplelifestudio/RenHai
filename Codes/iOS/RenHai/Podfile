@@ -3,7 +3,6 @@ pod 'SSKeychain', '~> 1.2.1'
 pod 'SocketRocket', '~> 0.3.1-beta2'
 pod 'Reachability', '~> 3.1.1'
 pod 'AFNetworking', '~> 1.3.3'
-pod 'MBProgressHUD', '~> 0.8'
 pod 'OpenTokSDK-WebRTC'
 pod "FlatUIKit", :git => "https://github.com/Grouper/FlatUIKit.git"
 pod 'PKRevealController'

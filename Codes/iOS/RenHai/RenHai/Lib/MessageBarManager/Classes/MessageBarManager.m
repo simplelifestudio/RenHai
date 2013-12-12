@@ -94,7 +94,22 @@
     if(self = [super init]) {
         _messageBarQueue = [[NSMutableArray alloc] init];        
         _messageVisible = NO;
-        _messageBarOffset = [[UIApplication sharedApplication] statusBarFrame].size.height;
+        
+        // Updated by RenHai
+        // {
+        if (IS_IPAD1_OR_2_OR_MINI)
+        {
+            _messageBarOffset = 0;
+        }
+        else
+        {
+            _messageBarOffset = [[UIApplication sharedApplication] statusBarFrame].size.height;            
+        }
+        // }
+        
+        DDLogVerbose(@"[UIDevice currentResolution] = %d", [UIDevice currentResolution]);
+        
+//        _messageBarOffset = [[UIApplication sharedApplication] statusBarFrame].size.height;
     }
     return self;
 }
@@ -406,7 +421,7 @@ static UIColor *descriptionColor = nil;
             backgroundColor = FLATUI_COLOR_SUCCESS;
             break;
         case MessageBarMessageTypeInfo:
-            backgroundColor = FLATUI_COLOR_CHATMESSAGE;
+            backgroundColor = FLATUI_COLOR_CHATMESSAGE_BACKGROUND;
             break;
         default:
             break;

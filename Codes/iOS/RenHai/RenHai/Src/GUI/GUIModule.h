@@ -8,7 +8,6 @@
 
 #import "CBModuleAbstractImpl.h"
 #import "CBSharedInstance.h"
-#import "CBHUDAgent.h"
 
 #import "GUIStyle.h"
 
@@ -98,7 +97,7 @@
 
 #define HELPSCREEN_DISPLAY_SECONDS 9.0f
 
-#define SPLASHVIEW_HIDE 1
+#define SPLASHVIEW_HIDE 0
 #define HELPVIEW_ON_APPFIRSTLAUNCHED 0
 
 #define SCREEN_ALWAYS_ON 1
@@ -128,11 +127,6 @@ LEFTBAR_CELL_ID;
 @property (nonatomic, strong) HelpViewController_iPhone* helpViewController;
 @property (nonatomic, strong) WarningViewController_iPhone* warningViewController;
 @property (nonatomic, strong) ChatWizardController* chatWizardController;
-
-@property (strong, nonatomic) CBHUDAgent* HUDAgent;
-
--(void) showHUD:(NSString*) majorStauts minorStatus:(NSString*) minorStatus delay:(NSInteger)seconds;
--(void) showHUD:(NSString*) status delay:(NSInteger) seconds;
 
 -(BOOL) isNetworkActivityIndicatorVisible;
 -(void) setNetworkActivityIndicatorVisible:(BOOL) flag;

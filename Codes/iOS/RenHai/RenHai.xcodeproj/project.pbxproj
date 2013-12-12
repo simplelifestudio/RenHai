@@ -16,8 +16,6 @@
 		C50505C517D2BD4800DB6589 /* CBFileUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A117D2BD4800DB6589 /* CBFileUtils.m */; };
 		C50505C617D2BD4800DB6589 /* CBGZipUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A317D2BD4800DB6589 /* CBGZipUtils.m */; };
 		C50505C717D2BD4800DB6589 /* CBGZipUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A317D2BD4800DB6589 /* CBGZipUtils.m */; };
-		C50505C817D2BD4800DB6589 /* CBHUDAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A517D2BD4800DB6589 /* CBHUDAgent.m */; };
-		C50505C917D2BD4800DB6589 /* CBHUDAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A517D2BD4800DB6589 /* CBHUDAgent.m */; };
 		C50505CA17D2BD4800DB6589 /* CBMathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A817D2BD4800DB6589 /* CBMathUtils.m */; };
 		C50505CB17D2BD4800DB6589 /* CBMathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A817D2BD4800DB6589 /* CBMathUtils.m */; };
 		C50505CC17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505AB17D2BD4800DB6589 /* CBModuleAbstractImpl.m */; };
@@ -260,7 +258,6 @@
 		CD94DF051851918000C9CBC4 /* CBFileUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A117D2BD4800DB6589 /* CBFileUtils.m */; };
 		CD94DF061851918000C9CBC4 /* ImpressLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */; };
 		CD94DF071851918000C9CBC4 /* CBGZipUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A317D2BD4800DB6589 /* CBGZipUtils.m */; };
-		CD94DF081851918000C9CBC4 /* CBHUDAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A517D2BD4800DB6589 /* CBHUDAgent.m */; };
 		CD94DF091851918000C9CBC4 /* CBMathUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505A817D2BD4800DB6589 /* CBMathUtils.m */; };
 		CD94DF0A1851918000C9CBC4 /* CBModuleAbstractImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = C50505AB17D2BD4800DB6589 /* CBModuleAbstractImpl.m */; };
 		CD94DF0B1851918000C9CBC4 /* RHServerData.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051891802E055006158B8 /* RHServerData.m */; };
@@ -463,8 +460,6 @@
 		C50505A117D2BD4800DB6589 /* CBFileUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CBFileUtils.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C50505A217D2BD4800DB6589 /* CBGZipUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CBGZipUtils.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		C50505A317D2BD4800DB6589 /* CBGZipUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CBGZipUtils.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		C50505A417D2BD4800DB6589 /* CBHUDAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CBHUDAgent.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		C50505A517D2BD4800DB6589 /* CBHUDAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CBHUDAgent.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		C50505A617D2BD4800DB6589 /* CBLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CBLog.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		C50505A717D2BD4800DB6589 /* CBMathUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = CBMathUtils.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		C50505A817D2BD4800DB6589 /* CBMathUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; path = CBMathUtils.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
@@ -1015,8 +1010,6 @@
 				C50505A117D2BD4800DB6589 /* CBFileUtils.m */,
 				C50505A217D2BD4800DB6589 /* CBGZipUtils.h */,
 				C50505A317D2BD4800DB6589 /* CBGZipUtils.m */,
-				C50505A417D2BD4800DB6589 /* CBHUDAgent.h */,
-				C50505A517D2BD4800DB6589 /* CBHUDAgent.m */,
 				C50505A617D2BD4800DB6589 /* CBLog.h */,
 				C50505A717D2BD4800DB6589 /* CBMathUtils.h */,
 				C50505A817D2BD4800DB6589 /* CBMathUtils.m */,
@@ -1710,7 +1703,6 @@
 				C50505C417D2BD4800DB6589 /* CBFileUtils.m in Sources */,
 				CD736CEE1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */,
 				C50505C617D2BD4800DB6589 /* CBGZipUtils.m in Sources */,
-				C50505C817D2BD4800DB6589 /* CBHUDAgent.m in Sources */,
 				C50505CA17D2BD4800DB6589 /* CBMathUtils.m in Sources */,
 				C50505CC17D2BD4800DB6589 /* CBModuleAbstractImpl.m in Sources */,
 				CDC0518A1802E055006158B8 /* RHServerData.m in Sources */,
@@ -1806,7 +1798,6 @@
 				C50505C317D2BD4800DB6589 /* CBDateUtils.m in Sources */,
 				C50505C517D2BD4800DB6589 /* CBFileUtils.m in Sources */,
 				C50505C717D2BD4800DB6589 /* CBGZipUtils.m in Sources */,
-				C50505C917D2BD4800DB6589 /* CBHUDAgent.m in Sources */,
 				C50505CB17D2BD4800DB6589 /* CBMathUtils.m in Sources */,
 				CD3C04E8181FD1C0002B19A3 /* BusinessStatus.m in Sources */,
 				CD5D6CF418388A94002DEDAF /* RHProxy.m in Sources */,
@@ -1913,7 +1904,6 @@
 				CD94DF051851918000C9CBC4 /* CBFileUtils.m in Sources */,
 				CD94DF061851918000C9CBC4 /* ImpressLabelsHeaderView_iPhone.m in Sources */,
 				CD94DF071851918000C9CBC4 /* CBGZipUtils.m in Sources */,
-				CD94DF081851918000C9CBC4 /* CBHUDAgent.m in Sources */,
 				CD94DF091851918000C9CBC4 /* CBMathUtils.m in Sources */,
 				CD94DF0A1851918000C9CBC4 /* CBModuleAbstractImpl.m in Sources */,
 				CD94DF0B1851918000C9CBC4 /* RHServerData.m in Sources */,

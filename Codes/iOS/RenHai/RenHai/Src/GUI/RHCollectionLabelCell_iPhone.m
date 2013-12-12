@@ -64,21 +64,26 @@ static UIImage* sortIconImage;
 
 -(void) setSelected:(BOOL)selected
 {
+  NSString* str = selected ? @"YES" : @"NO";
+  DDLogVerbose(@"Label(%@)'s selected status:%@", self.labelName, str);
+    
     [super setSelected:selected];
+    
+    if (self.selected)
+    {
+        self.backgroundColor = _customSelectedBackgroundColor;
+    }
+    else
+    {
+        self.backgroundColor = _customBackgroundColor;
+    }
+    
     [self setNeedsDisplay];
 }
 
 -(void) drawRect:(CGRect)rect
 {
     [super drawRect:rect];
-    if (self.selected)
-    {
-        self.layer.borderColor = FLATUI_COLOR_COLLECTIONCELL_SELECTED.CGColor;
-    }
-    else
-    {
-        self.layer.borderColor = FLATUI_COLOR_COLLECTIONCELL.CGColor;
-    }
 }
 
 -(void) setCellMode:(CellMode)cellMode
@@ -187,9 +192,11 @@ static UIImage* sortIconImage;
     
     self.cellMode = CellMode_Normal;
     
-    self.layer.borderWidth = BORDER_WIDTH;
-    self.layer.borderColor = FLATUI_COLOR_COLLECTIONCELL.CGColor;
-    self.layer.cornerRadius = CORNER_RADIUS;
+//    self.layer.borderWidth = BORDER_WIDTH;
+//    self.layer.borderColor = FLATUI_COLOR_COLLECTIONCELL.CGColor;
+//    self.layer.cornerRadius = CORNER_RADIUS;
+    
+    self.backgroundColor = _customBackgroundColor;
 }
 
 #pragma mark - IBActions

@@ -24,6 +24,9 @@ CellMode;
 @property (nonatomic) CellMode cellMode;
 @property (nonatomic) BOOL shakeCell;
 
+@property (nonatomic, strong) UIColor* customBackgroundColor;
+@property (nonatomic, strong) UIColor* customSelectedBackgroundColor;
+
 - (IBAction)textFieldDoneEditing:(id)sender;
 
 - (NSString*) labelName;

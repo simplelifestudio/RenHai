@@ -10,7 +10,6 @@
 
 #import "AFNetworkActivityIndicatorManager.h"
 
-#import "CBHUDAgent.h"
 #import "CBUIUtils.h"
 #import "UIViewController+CBUIViewControlerExtends.h"
 #import "UINavigationController+CBNavigationControllerExtends.h"
@@ -55,9 +54,7 @@ SINGLETON(GUIModule)
 }
 
 -(void) releaseModule
-{
-    [_HUDAgent releaseResources];
-    
+{    
     [self _unregisterNotifications];
     
     [super releaseModule];
@@ -79,27 +76,6 @@ SINGLETON(GUIModule)
 -(void) processService
 {
     MODULE_DELAY    
-}
-
--(CBHUDAgent*) HUDAgent
-{
-    if (nil == _HUDAgent && nil != _mainViewController.view)
-    {
-        UIView* view = _mainViewController.view;
-        _HUDAgent = [[CBHUDAgent alloc] initWithUIView:view];
-    }
-    
-    return _HUDAgent;
-}
-
--(void) showHUD:(NSString *)status delay:(NSInteger)seconds
-{
-    [self showHUD:status minorStatus:nil delay:seconds];
-}
-
--(void) showHUD:(NSString*) majorStauts minorStatus:(NSString*) minorStatus delay:(NSInteger)seconds
-{
-    [self.HUDAgent showHUD:majorStauts minorStatus:minorStatus delay:seconds];
 }
 
 - (BOOL) isNetworkActivityIndicatorVisible

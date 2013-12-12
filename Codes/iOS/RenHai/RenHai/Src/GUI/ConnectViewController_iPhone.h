@@ -10,6 +10,7 @@
 
 @interface ConnectViewController_iPhone : UIViewController
 
+@property (weak, nonatomic) IBOutlet UILabel *statusbarLabel;
 @property (weak, nonatomic) IBOutlet UILabel *infoLabel;
 @property (weak, nonatomic) IBOutlet UITextView *infoTextView;
 @property (weak, nonatomic) IBOutlet UILabel *countLabel;

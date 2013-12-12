@@ -192,6 +192,7 @@ ConnectStatus;
             [self dismissViewControllerAnimated:NO completion:^(){
                 if (rootVC == mainVC)
                 {
+                    mainVC.view.backgroundColor = FLATUI_COLOR_UIVIEW_BACKGROUND;
                     [mainVC resignPresentationModeEntirely:YES animated:NO completion:nil];
                 }
             }];
@@ -224,8 +225,10 @@ ConnectStatus;
     _appDataModule = [AppDataModule sharedInstance];
     _statusModule = [BusinessStatusModule sharedInstance];
 
+    _statusbarLabel.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR_MAIN;
+    
     _isViewControllerVisible = NO;
-    _infoLabel.backgroundColor = FLATUI_COLOR_TINT_NAVIGATIONBAR;
+    _infoLabel.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR_MAIN;
     
     [self _resetInstance];
 
