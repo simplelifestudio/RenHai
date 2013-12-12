@@ -41,6 +41,8 @@
     
     _guiModule = [GUIModule sharedInstance];
     
+    self.view.backgroundColor = FLATUI_COLOR_UIVIEW_BACKGROUND;
+    
     self.animationDuration = 0.3;
 }
 
