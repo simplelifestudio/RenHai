@@ -238,7 +238,14 @@ public class Webrtcsession implements IDbObject
 	public void save(SqlSession session)
 	{
 		WebrtcsessionMapper mapper = session.getMapper(WebrtcsessionMapper.class);
-		mapper.insert(this);
+		if (this.getWebRtcSessionId() == null)
+		{
+			mapper.insert(this);
+		}
+		else
+		{
+			mapper.updateByPrimaryKey(this);
+		}
 	}
 	
 	public void updateToken(OpenTokSDK sdk)

@@ -354,19 +354,13 @@ public class MainFunction extends AbstractTestCase
 	@Test
 	public void testBehaviorMode() throws InterruptedException
 	{
-		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit");
-		app1.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
-		//app1.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
-		app1.connect(true);
+		MockApp.mockAppExecutePool.startService();
+        
+		MockApp app1 = new MockApp(demoDeviceSn, "NormalAndQuit", "ws://127.0.0.1/renhai/websocket");
 		
-		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndQuit");
-		app2.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
-		//app2.setWebsocketLink("ws://192.81.135.31/renhai/websocket");
-		app2.connect(true);
+		MockApp app2 = new MockApp(demoDeviceSn2, "NormalAndQuit", "ws://127.0.0.1/renhai/websocket");
 	
-		MockApp app3 = new MockApp("MonitorApp", "Monitor");
-		app3.setWebsocketLink("ws://127.0.0.1/renhai/websocket");
-		app3.connect(true);
+		//MockApp app3 = new MockApp("MonitorApp", "Monitor", "ws://127.0.0.1/renhai/websocket");
 		
 		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended
 				|| app2.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)

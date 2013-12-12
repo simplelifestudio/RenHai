@@ -75,7 +75,8 @@ public class MockAppConsts
 		AssessAndContinue(1009),
 		AssessAndQuit(1010),
 		BusinessSessionNotificationResponse(1011),
-		SessionUnbind(1012);
+		SessionUnbind(1012),
+		ChatMessage(1013);
 		
 		private int value ;
 		

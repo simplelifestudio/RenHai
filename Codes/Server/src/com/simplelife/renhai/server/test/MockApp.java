@@ -69,18 +69,12 @@ public class MockApp implements IMockApp, Runnable
 	
 	private class MonitorTask extends TimerTask
 	{
-		private MockApp mockApp;
-		public MonitorTask(MockApp mockApp)
-		{
-			this.mockApp = mockApp;
-		}
-		
 		@Override
 		public void run()
 		{
 			try
 			{
-				mockApp.sendServerDataSyncRequest();
+				sendServerDataSyncRequest();
 			}
 			catch(Exception e)
 			{
@@ -91,19 +85,17 @@ public class MockApp implements IMockApp, Runnable
 	
 	private class PingTask extends TimerTask
 	{
-		private MockApp mockApp;
-		public PingTask(MockApp mockApp)
+		public PingTask()
 		{
-			this.mockApp = mockApp;
-			Thread.currentThread().setName("MockPing" + DateUtil.getCurrentMiliseconds());
 		}
 		
 		@Override
 		public void run()
 		{
+			Thread.currentThread().setName("MockPing" + DateUtil.getCurrentMiliseconds());
 			try
 			{
-				mockApp.ping();
+				ping();
 			}
 			catch(Exception e)
 			{
@@ -111,25 +103,6 @@ public class MockApp implements IMockApp, Runnable
 			}
 		}
 	}
-	
-	/*
-	protected class ExecutionTask implements Runnable
-	{
-		private MockApp mockApp;
-		private JSONObject obj;
-		public ExecutionTask(MockApp mockApp, JSONObject obj)
-		{
-			this.mockApp = mockApp;
-			this.obj = obj;
-		}
-		
-		@Override
-		public void run()
-		{
-			mockApp.execute(obj);
-		}
-	}
-	*/
 	
 	protected class AutoReplyTask implements Runnable
 	{
@@ -226,6 +199,9 @@ public class MockApp implements IMockApp, Runnable
 				case SessionUnbind:
 					app.sessionUnbind();
 					break;
+				case ChatMessage:
+					app.chatMessage();
+					break;
 				default:
 					logger.error("Unknown message id");
 			}
@@ -251,9 +227,6 @@ public class MockApp implements IMockApp, Runnable
     protected Consts.BusinessType businessType;
     protected JSONObject lastReceivedCommand;
     
-    //protected Lock lock = new ReentrantLock();
-	//protected Condition condition = lock.newCondition();
-	
 	protected String deviceSn;
 	protected int deviceId;
 	protected String osVersion = MockApp.OSVersion;
@@ -272,7 +245,6 @@ public class MockApp implements IMockApp, Runnable
 	protected int chatCount = 0;
 	protected boolean isUsingRealSocket;
 	
-	//protected ConcurrentLinkedQueue<JSONObject> messageQueue = new ConcurrentLinkedQueue<>();
 	private MockMessageHandler inputMessageHandler = new MockMessageHandler(this, MockApp.mockAppExecutePool);
 	
 	protected int maxOnlineDeviceCount = 0;
@@ -456,12 +428,12 @@ public class MockApp implements IMockApp, Runnable
 
     public void startTimer()
     {
-    	this.pingTimer.scheduleAtFixedRate(new PingTask(this), GlobalSetting.TimeOut.PingInterval, GlobalSetting.TimeOut.PingInterval);
+    	this.pingTimer.scheduleAtFixedRate(new PingTask(), GlobalSetting.TimeOut.PingInterval, GlobalSetting.TimeOut.PingInterval);
     	
     	if (behaviorMode == MockAppBehaviorMode.Monitor)
     	{
     		monitorTimer = new Timer();
-    		monitorTimer.scheduleAtFixedRate(new MonitorTask(this), 1000, 1000);
+    		monitorTimer.scheduleAtFixedRate(new MonitorTask(), 1000, 1000);
     	}
     }
     
@@ -848,6 +820,15 @@ public class MockApp implements IMockApp, Runnable
 		connection.ping();
 	}
 	
+	@Override
+	public void chatMessage()
+	{
+		JSONObject operationInfoObj = new JSONObject();
+		String temp = "这是" + getDeviceSn() + "发来的消息：" + CommonFunctions.getRandomString(10);
+		operationInfoObj.put(JSONKey.ChatMessage, temp);
+		sendBusinessSessionRequest(Consts.OperationType.ChatMessage, operationInfoObj, "");
+	}
+	
 	/** */
 	private void assess(String impressLabelList, boolean continueFlag)
 	{
@@ -1222,13 +1203,21 @@ public class MockApp implements IMockApp, Runnable
 					}
 					else if (behaviorMode.ordinal() >= MockAppConsts.MockAppBehaviorMode.NoRequestOfAssess.ordinal())
 					{
+						int chatDuration = getRandomVideoChatDuration();
+						task = new AutoReplyTask(
+								MockAppRequest.ChatMessage, 
+								null, 
+								this,
+								5000,
+								null);
+						MockApp.mockAppExecutePool.execute(task);
+						
 						task = new AutoReplyTask(
 								MockAppRequest.EndChat, 
 								null, 
 								this,
-								getRandomVideoChatDuration(),
+								chatDuration,
 								MockAppConsts.MockAppBusinessStatus.EndChatReqSent);
-						//task.setName("EndChatRequest" + DateUtil.getCurrentMiliseconds());
 					}
 				}
 				else if (messageId == Consts.MessageId.BusinessSessionNotification)
