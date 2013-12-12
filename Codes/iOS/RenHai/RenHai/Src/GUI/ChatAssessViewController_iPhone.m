@@ -220,7 +220,7 @@
 
 -(void)_setupGesturers
 {
-    UIView* touchView = self.view;
+    UIView* touchView = _guiModule.chatWizardController.view;//self.view;
     
     _singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
     _singleTapGesturer.delegate = self;
