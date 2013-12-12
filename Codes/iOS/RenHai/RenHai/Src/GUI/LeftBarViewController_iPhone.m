@@ -11,6 +11,7 @@
 #import "CBUIUtils.h"
 
 #import "GUIModule.h"
+#import "AppDataModule.h"
 
 #import "LeftBarTableCell_iPhone.h"
 #import "LeftBarHeaderView_iPhone.h"
@@ -30,21 +31,12 @@
     NSInteger _selectedRow;
     
     GUIModule* _guiModule;
+    AppDataModule* _appDataModule;
 }
 
 @end
 
 @implementation LeftBarViewController_iPhone
-
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self)
-    {
-
-    }
-    return self;
-}
 
 - (void)viewDidLoad
 {
@@ -56,11 +48,11 @@
 - (void) _setupInstance
 {
     _guiModule = [GUIModule sharedInstance];
+    _appDataModule = [AppDataModule sharedInstance];
     
-    self.tableView.backgroundColor = FLATUI_COLOR_UIVIEW_BACKGROUND;
-    
-    UINib* nib = [UINib nibWithNibName:NIB_LEFTBARTABLECELL bundle:nil];
-    [self.tableView registerNib:nib forCellReuseIdentifier:NIB_LEFTBARTABLECELL];
+    [self _setupHeaderView];
+    [self _setupTableView];
+    [self _setupFooterView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -144,6 +136,12 @@
 //            cellText = NAVIGATIONBAR_TITLE_CONFIG;
 //            break;
 //        }
+        case LEFTBAR_CELL_HELP:
+        {
+            cellText = NAVIGATIONBAR_TITLE_HELP;
+            cell.titleLabel.alpha = 0.4;
+            break;
+        }
         default:
         {
             cellText = @"";
@@ -238,46 +236,70 @@
     
 }
 
--(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{    
-    LeftBarHeaderView_iPhone* headerView = [CBUIUtils componentFromNib:NIB_LeftBarHeaderView_iPhone owner:self options:nil];
-    headerView.backgroundColor = FLATUI_COLOR_UIVIEW_BACKGROUND;
-    return headerView;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    CGFloat navigationBarHeight = _guiModule.navigationController.navigationBar.frame.size.height;
-    
-    NSUInteger requireCount = 0;
-    if ([UIDevice isRunningOniOS7AndLater])
-    {
-        CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
-        requireCount = statusBarHeight + navigationBarHeight;
-    }
-    else
-    {
-        requireCount = navigationBarHeight;
-    }
-    
-    return requireCount;
-}
-
--(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-{
-    LeftBarFooterView_iPhone* footerView = [CBUIUtils componentFromNib:NIB_LeftBarFooterView_iPhone owner:self options:nil];
-    footerView.backgroundColor = FLATUI_COLOR_UIVIEW_BACKGROUND;
-    return footerView;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return HEIGHT_LeftBarFooterView;
-}
+//-(UIView*)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{    
+//    LeftBarHeaderView_iPhone* headerView = [CBUIUtils componentFromNib:NIB_LeftBarHeaderView_iPhone owner:self options:nil];
+//    headerView.backgroundColor = FLATUI_COLOR_UIVIEW_BACKGROUND;
+//    return headerView;
+//}
+//
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    CGFloat navigationBarHeight = _guiModule.navigationController.navigationBar.frame.size.height;
+//    
+//    NSUInteger requireCount = 0;
+//    if ([UIDevice isRunningOniOS7AndLater])
+//    {
+//        CGFloat statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
+//        requireCount = statusBarHeight + navigationBarHeight;
+//    }
+//    else
+//    {
+//        requireCount = navigationBarHeight;
+//    }
+//    
+//    return requireCount;
+//}
+//
+//-(UIView*)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+//{
+//    LeftBarFooterView_iPhone* footerView = [CBUIUtils componentFromNib:NIB_LeftBarFooterView_iPhone owner:self options:nil];
+//    footerView.backgroundColor = FLATUI_COLOR_UIVIEW_BACKGROUND;
+//    return footerView;
+//}
+//
+//- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+//{
+//    return HEIGHT_LeftBarFooterView;
+//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return HEIGHT_LeftBarCell;
+}
+
+#pragma mark - Private Methods
+
+- (void) _setupHeaderView
+{
+    
+}
+
+- (void) _setupTableView
+{
+    _tableView.backgroundColor = FLATUI_COLOR_UIVIEW_BACKGROUND;
+    
+    UINib* nib = [UINib nibWithNibName:NIB_LEFTBARTABLECELL bundle:nil];
+    [_tableView registerNib:nib forCellReuseIdentifier:NIB_LEFTBARTABLECELL];
+    
+    _tableView.delegate = self;
+    _tableView.dataSource = self;
+}
+
+- (void) _setupFooterView
+{
+    _orgLabel.text = NSLocalizedString(@"LeftBar_Organization", nil);
+    _verionLabel.text = [NSString stringWithFormat:NSLocalizedString(@"LeftBar_Version", nil), _appDataModule.appFullVerion];
 }
 
 @end

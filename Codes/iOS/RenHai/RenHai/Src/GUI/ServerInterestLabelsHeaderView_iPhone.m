@@ -10,13 +10,6 @@
 
 @implementation ServerInterestLabelsHeaderView_iPhone
 
-@synthesize headerTitleLabel = _headerTitleLabel;
-
-@synthesize refreshButton = _refreshButton;
-@synthesize cloneButton = _cloneButton;
-
-@synthesize operationDelegate = _operationDelegate;
-
 #pragma mark - Public Methods
 
 - (id)initWithFrame:(CGRect)frame
@@ -27,6 +20,20 @@
     
     }
     return self;
+}
+
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    
+    [self _setupInstance];
+}
+
+#pragma mark - Private Methods
+
+-(void) _setupInstance
+{
+
 }
 
 #pragma mark - IBActions

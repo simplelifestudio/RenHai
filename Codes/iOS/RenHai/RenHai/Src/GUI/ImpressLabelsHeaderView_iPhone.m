@@ -20,4 +20,18 @@
     return self;
 }
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    
+    [self _setupInstance];
+}
+
+#pragma mark - Private Methods
+
+-(void) _setupInstance
+{
+    
+}
+
 @end

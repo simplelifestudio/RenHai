@@ -24,6 +24,8 @@
 "LeftBar_Interest" = "话题";
 "LeftBar_Config" = "配置";
 "LeftBar_Help" = "帮助";
+"LeftBar_Organization" = "某某工作室";
+"LeftBar_Version" = "%@";
 
 "Home_OnlineCount" = "在线人数";
 "Home_ChatCount" = "聊天人数";
