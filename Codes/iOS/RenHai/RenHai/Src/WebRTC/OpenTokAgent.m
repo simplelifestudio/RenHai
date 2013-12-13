@@ -32,22 +32,44 @@
 {
     DDLogVerbose(@"#####WebRTC: App begins to connect OpenTok server.");
     
-    _session = [[OTSession alloc] initWithSessionId:sessionId delegate:self];
-    [_session connectWithApiKey:apiKey token:token];
+    @try
+    {
+        _session = [[OTSession alloc] initWithSessionId:sessionId delegate:self];
+        [_session connectWithApiKey:apiKey token:token];
+    }
+    @catch (NSException *exception)
+    {
+        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+    }
+    @finally
+    {
+        
+    }
     
     DDLogVerbose(@"#####WebRTC: App finishes to connect OpenTok server.");
 }
 
 -(void) disconnect
 {
-    if (_isUnpublishNecessary)
+    @try
     {
-        [self _unpublish];
+        if (_isUnpublishNecessary)
+        {
+            [self _unpublish];
+        }
+        
+        if (nil != _session)
+        {
+            [_session disconnect];
+        }
     }
-    
-    if (nil != _session)
+    @catch (NSException *exception)
     {
-        [_session disconnect];        
+        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+    }
+    @finally
+    {
+        
     }
 }
 
@@ -77,17 +99,39 @@
 
 -(void) mutePublisher:(BOOL) mute
 {
-    if (_isPublisherViewReady)
+    @try
     {
-        [_publisher setPublishAudio:!mute];
+        if (_isPublisherViewReady)
+        {
+            [_publisher setPublishAudio:!mute];
+        }
+    }
+    @catch (NSException *exception)
+    {
+        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+    }
+    @finally
+    {
+        
     }
 }
 
 -(void) muteSubscriber:(BOOL) mute
 {
-    if (_isSubscriberViewReady)
+    @try
     {
-        [_subscriber setSubscribeToAudio:!mute];
+        if (_isSubscriberViewReady)
+        {
+            [_subscriber setSubscribeToAudio:!mute];
+        }
+    }
+    @catch (NSException *exception)
+    {
+        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+    }
+    @finally
+    {
+        
     }
 }
 
