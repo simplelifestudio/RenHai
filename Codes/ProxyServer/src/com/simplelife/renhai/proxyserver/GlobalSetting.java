@@ -139,7 +139,7 @@ public class GlobalSetting
 			}
 			else
 			{
-				DefaultServer server = new DefaultServer(obj);
+				DefaultServer server = new DefaultServer(serverObj);
 				serverList.add(server);
 			}
 		}

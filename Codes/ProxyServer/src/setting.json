@@ -1,13 +1,13 @@
 {
-	"encrypt":0,
+	"encrypt":1,
 	"serverList":
 	[
 		{
 			"id":"testServer",
 			"appVersion":
 			{
-				"version":"0.3",
-				"build":1234 
+				"version":"0.1",
+				"build":10 
 			},
 			"status":
 			{
@@ -34,7 +34,7 @@
 			"appVersion":
 			{
 				"version":"1.0",
-				"build":1234
+				"build":1
 			},
 			"status":
 			{
