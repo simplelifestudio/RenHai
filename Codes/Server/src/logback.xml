@@ -31,15 +31,15 @@
 
     <logger name="com.simplelife.renhai.server.business.BusinessModule" level = "DEBUG" />
     <logger name="com.simplelife.renhai.server.db.DBModule" level = "DEBUG" />
-    <logger name="com.simplelife.renhai.server.websocket.WebSocketModule" level = "ERROR" />
+    <logger name="com.simplelife.renhai.server.websocket.WebSocketModule" level = "DEBUG" />
     <logger name="com.simplelife.renhai.server.test.MockApp" level = "DEBUG" />
 	<logger name="com.simplelife.renhai.server.json.JSONModule" level = "DEBUG" />
 	<logger name="org.apache.ibatis" level = "DEBUG" />
     <logger name="Ping" level = "ERROR" />
-	<logger name="DB" level = "ERROR" />
+	<logger name="DB" level = "DEBUG" />
     
     <root level="ERROR">
         <appender-ref ref="FILE" />
-        <appender-ref ref="STDOUT" />
+        <!--appender-ref ref="STDOUT" /-->
     </root>
 </configuration>

@@ -12,11 +12,11 @@ public class DefaultServer implements IServer
 		
 		if (obj.containsKey(JSONKey.Broadcast))
 		{
-			response.put(JSONKey.Broadcast, obj.get(JSONKey.Broadcast));
+			response.put(JSONKey.Broadcast, obj.getString(JSONKey.Broadcast));
 		}
 		else
 		{
-			response.put(JSONKey.Broadcast, "App版本太低，请升级到最新版本后重试。");
+			response.put(JSONKey.Broadcast, null);
 		}
 	}
 	

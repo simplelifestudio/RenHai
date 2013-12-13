@@ -56,7 +56,14 @@ public class NormalServer implements IServer
 		response.put(JSONKey.Id, id);
 		response.put(JSONKey.Broadcast, broadcast);
 		
+		response.put(JSONKey.Status, status.getResponse());
+		
 		ServiceStatus tmpStatus = status.getServiceStatus();
+		if (tmpStatus != ServiceStatus.Maintenance)
+		{
+			response.put(JSONKey.Address, address.getResponse());
+		}
+		/*
 		switch(tmpStatus)
 		{
 			case Maintenance:
@@ -73,6 +80,7 @@ public class NormalServer implements IServer
 				logger.error("Fatal error: abnormal service status");
 				break;
 		}
+		*/
 		
 		return response;
 	}
@@ -332,17 +340,24 @@ public class NormalServer implements IServer
 			timeZone = obj.getString(JSONKey.TimeZone);
 			beginTime = obj.getString(JSONKey.BeginTime);
 			endTime = obj.getString(JSONKey.EndTime);
-			
-			response.put(JSONKey.ServiceStatus, serviceStatus.getValue());
-			obj = new JSONObject();
-			obj.put(JSONKey.TimeZone, timeZone);
-			obj.put(JSONKey.BeginTime, beginTime);
-			obj.put(JSONKey.EndTime, endTime);
-			response.put(JSONKey.StatusPeriod, obj);
 		}
 		
 		public JSONObject getResponse()
 		{
+			response.clear();
+			if (this.getServiceStatus() == ServiceStatus.Normal)
+			{
+				response.put(JSONKey.ServiceStatus, ServiceStatus.Normal.getValue());
+			}
+			else
+			{
+				response.put(JSONKey.ServiceStatus, ServiceStatus.Maintenance.getValue());
+				JSONObject obj = new JSONObject();
+				obj.put(JSONKey.TimeZone, timeZone);
+				obj.put(JSONKey.BeginTime, beginTime);
+				obj.put(JSONKey.EndTime, endTime);
+				response.put(JSONKey.StatusPeriod, obj);
+			}
 			return response;
 		}
 	}
