@@ -27,4 +27,7 @@
 
 -(NSArray*) topImpressLabelList:(NSUInteger) top;
 
+-(float) chatLossRate;
+-(NSString*) chatLossRateString;
+
 @end

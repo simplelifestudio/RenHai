@@ -81,6 +81,18 @@
     return topList;
 }
 
+-(float) chatLossRate
+{
+    float rateVal = (float)_chatLossCount / _chatTotalCount;
+    rateVal = (rateVal * 10000) / 10000;
+    return rateVal;
+}
+
+-(NSString*) chatLossRateString
+{
+    return [NSString stringWithFormat:@"%.2f%%", self.chatLossRate * 100];
+}
+
 #pragma mark - Private Methods
 
 -(id) _getOCardId

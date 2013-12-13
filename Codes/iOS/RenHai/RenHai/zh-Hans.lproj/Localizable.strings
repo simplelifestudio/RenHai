@@ -53,6 +53,7 @@
 "Impress_ChatTotalCount" = "聊天次数";
 "Impress_ChatTotalDuration" = "聊天时长";
 "Impress_ChatLossCount" = "掉线次数";
+"Impress_ChatLossRate" = "掉线率";
 
 "Interest_InterestLabels" = "我想聊的话题";
 "Interest_CurrentHotInterestLabels" = "当前热门话题";
