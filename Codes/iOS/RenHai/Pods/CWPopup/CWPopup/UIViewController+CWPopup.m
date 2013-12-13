@@ -248,16 +248,37 @@ NSString const *CWUseBlurForPopup = @"CWUseBlurForPopup";
         if (self.useBlurForPopup) {
             [self addBlurView];
         } else {
-            UIView *fadeView = [UIView new];
+            // Updated by RenHai
+            // {
+//            UIView *fadeView = [UIView new];
+//            if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+//                fadeView.frame = [UIScreen mainScreen].bounds;
+//            } else {
+//                fadeView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
+//            }
+//            fadeView.backgroundColor = [UIColor blackColor];
+//            fadeView.alpha = 0.0f;
+//            [self.view addSubview:fadeView];
+//            objc_setAssociatedObject(self, &CWBlurViewKey, fadeView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+            UIImageView *fadeView = [UIImageView new];
             if (UIDeviceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
                 fadeView.frame = [UIScreen mainScreen].bounds;
             } else {
                 fadeView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
             }
-            fadeView.backgroundColor = [UIColor blackColor];
+            
+            CGSize imageSize = fadeView.frame.size;
+            UIGraphicsBeginImageContextWithOptions(imageSize, 0, [UIScreen mainScreen].scale);
+            [[UIColor colorWithRed:0 green:0 blue:0 alpha:1.0f] set];
+            UIRectFill(CGRectMake(0, 0, imageSize.width, imageSize.height));
+            UIImage *pressedColorImg = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            fadeView.image = pressedColorImg;
             fadeView.alpha = 0.0f;
             [self.view addSubview:fadeView];
             objc_setAssociatedObject(self, &CWBlurViewKey, fadeView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+            // }
         }
         UIView *blurView = objc_getAssociatedObject(self, &CWBlurViewKey);
 

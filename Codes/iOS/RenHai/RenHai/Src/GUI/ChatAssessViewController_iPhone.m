@@ -180,7 +180,7 @@
     
 //    _assessLabelPosition = 0;
     
-    _isLabelManaging = NO;
+    [self _setLabelManagingStatus:NO];
     
     [self _setupCollectionView];
     
@@ -674,8 +674,11 @@
                     
                     UIViewController* rootVC = [CBUIUtils getRootController];
                     RHLabelManageViewController_iPhone* labelManagerVC = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:labeName];
+                    rootVC.useBlurForPopup = YES;
                     [rootVC presentPopupViewController:labelManagerVC animated:YES completion:nil];
-                    _isLabelManaging = YES;
+
+                    [self _setLabelManagingStatus:YES];
+                    
                     break;
                 }
                 default:
@@ -742,6 +745,22 @@
     BOOL allowCloneLabel = _allowCloneLabel;
     
     _existImpressLabelsHeaderView.cloneButton.enabled = allowCloneLabel;
+}
+
+-(void)_setLabelManagingStatus:(BOOL) isManaging
+{
+    _isLabelManaging = isManaging;
+    
+    BOOL userInteractionEnabled = !isManaging;
+    
+    _assessLabelsHeaderView.userInteractionEnabled = userInteractionEnabled;
+    _assessLabelsView.userInteractionEnabled = userInteractionEnabled;
+    
+    _addImpressLabelsHeaderView.userInteractionEnabled = userInteractionEnabled;
+    _addImpressLabelsView.userInteractionEnabled = userInteractionEnabled;
+    
+    _existImpressLabelsHeaderView.userInteractionEnabled = userInteractionEnabled;
+    _existImpressLabelsView.userInteractionEnabled = userInteractionEnabled;
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -1040,7 +1059,7 @@
     if (rootVC.popupViewController != nil)
     {
         [rootVC dismissPopupViewControllerAnimated:YES completion:^{
-            _isLabelManaging = NO;
+            [self _setLabelManagingStatus:NO];
         }];
     }
 }
@@ -1056,8 +1075,10 @@
     
     UIViewController* rootVC = [CBUIUtils getRootController];
     RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
+    rootVC.useBlurForPopup = YES;
     [rootVC presentPopupViewController:labelManageVC animated:YES completion:nil];
-    _isLabelManaging = YES;
+
+    [self _setLabelManagingStatus:YES];
 }
 
 -(void) didDeleteImpressLabel

@@ -268,14 +268,14 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <subviews>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="公司名" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="lrS-z4-9vZ" userLabel="orgLabel">
-                                        <rect key="frame" x="19.999995231628279" y="10" width="100" height="21"/>
+                                        <rect key="frame" x="19.999996821084903" y="10" width="100" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="版本号" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ilN-Ik-Drn" userLabel="versionLabel">
-                                        <rect key="frame" x="19.999995231628279" y="35" width="100" height="21"/>
+                                        <rect key="frame" x="19.999996821084903" y="35" width="100" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -498,13 +498,13 @@
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="对方状态" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="sSi-M4-rkT" userLabel="partnerStatusLabel">
                                 <rect key="frame" x="210" y="390" width="100" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="本方状态" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="lbU-I5-e5V" userLabel="selfStatusLabel">
                                 <rect key="frame" x="10" y="390" width="100" height="60"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <nil key="highlightedColor"/>
                             </label>

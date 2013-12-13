@@ -87,7 +87,7 @@
     _userDataModule = [UserDataModule sharedInstance];
     _guiModule = [GUIModule sharedInstance];
     
-    _isLabelManaging = NO;
+    [self _setLabelManagingStatus:NO];
     
     [self _setupNavigationBar];
     [self _setupCollectionView];
@@ -351,7 +351,9 @@
                     RHLabelManageViewController_iPhone* labelManagerVC = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:oLabel.labelName];
                     rootVC.useBlurForPopup = YES;
                     [rootVC presentPopupViewController:labelManagerVC animated:YES completion:nil];
-                    _isLabelManaging = YES;
+
+                    [self _setLabelManagingStatus:YES];
+                    
                     break;
                 }
                 default:
@@ -413,6 +415,19 @@
     [_serverInterestLabelsView reloadData];
 
     [self _refreshServerInterestLabelsHeaderViewActions];
+}
+
+-(void)_setLabelManagingStatus:(BOOL) isManaging
+{
+    _isLabelManaging = isManaging;
+    
+    BOOL userInteractionEnabled = !isManaging;
+
+    _interestLabelsHeaderView.userInteractionEnabled = userInteractionEnabled;
+    _interestLabelsView.userInteractionEnabled = userInteractionEnabled;
+    
+    _serverInterestLabelsHeaderView.userInteractionEnabled = userInteractionEnabled;
+    _serverInterestLabelsView.userInteractionEnabled = userInteractionEnabled;
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -822,8 +837,9 @@
     UIViewController* rootVC = [CBUIUtils getRootController];
     RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
     rootVC.useBlurForPopup = YES;
-    _isLabelManaging = YES;
     [rootVC presentPopupViewController:labelManageVC animated:YES completion:nil];
+    
+    [self _setLabelManagingStatus:YES];
 }
 
 -(void) didDeleteInterestLabel
@@ -922,7 +938,7 @@
     if (rootVC.popupViewController != nil)
     {
         [rootVC dismissPopupViewControllerAnimated:YES completion:^{
-            _isLabelManaging = NO;
+            [self _setLabelManagingStatus:NO];
         }];
     }
 }

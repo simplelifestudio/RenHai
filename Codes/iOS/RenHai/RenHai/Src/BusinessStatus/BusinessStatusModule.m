@@ -931,7 +931,7 @@ SINGLETON(BusinessStatusModule)
                       // M5
                       case AppMessageIdentifier_MatchStart:
                       {
-                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          // IGNORE
                           break;
                       }
                       // M6
