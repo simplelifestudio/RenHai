@@ -314,6 +314,13 @@
 
 -(void)_didDoubleTapped:(UITapGestureRecognizer*) recognizer
 {
+    if (_isLabelManaging)
+    {
+        [self _dismissPopupViewController];
+        
+        return;
+    }
+    
     CGPoint locationTouch = [recognizer locationInView:self.view];
     
     if (CGRectContainsPoint(_interestLabelsView.frame, locationTouch))
@@ -342,6 +349,7 @@
                     
                     UIViewController* rootVC = [CBUIUtils getRootController];
                     RHLabelManageViewController_iPhone* labelManagerVC = [RHLabelManageViewController_iPhone modifyLabelManagerViewController:self label:oLabel.labelName];
+                    rootVC.useBlurForPopup = YES;
                     [rootVC presentPopupViewController:labelManagerVC animated:YES completion:nil];
                     _isLabelManaging = YES;
                     break;
@@ -813,6 +821,7 @@
     
     UIViewController* rootVC = [CBUIUtils getRootController];
     RHLabelManageViewController_iPhone* labelManageVC = [RHLabelManageViewController_iPhone newLabelManageViewController:self];
+    rootVC.useBlurForPopup = YES;
     _isLabelManaging = YES;
     [rootVC presentPopupViewController:labelManageVC animated:YES completion:nil];
 }

@@ -643,6 +643,13 @@
 
 -(void)_didDoubleTapped:(UITapGestureRecognizer*) recognizer
 {
+    if (_isLabelManaging)
+    {
+        [self _dismissPopupViewController];
+        
+        return;
+    }
+    
     CGPoint locationTouch = [recognizer locationInView:self.view];
     
     if (CGRectContainsPoint(_addImpressLabelsView.frame, locationTouch))

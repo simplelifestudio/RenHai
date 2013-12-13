@@ -64,8 +64,8 @@ static UIImage* sortIconImage;
 
 -(void) setSelected:(BOOL)selected
 {
-  NSString* str = selected ? @"YES" : @"NO";
-  DDLogVerbose(@"Label(%@)'s selected status:%@", self.labelName, str);
+//  NSString* str = selected ? @"YES" : @"NO";
+//  DDLogVerbose(@"Label(%@)'s selected status:%@", self.labelName, str);
     
     [super setSelected:selected];
     
