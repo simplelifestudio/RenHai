@@ -192,6 +192,16 @@
 		C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
 		CD07E419184DAC130066ED29 /* RHChatActionBar.m in Sources */ = {isa = PBXBuildFile; fileRef = CD07E418184DAC130066ED29 /* RHChatActionBar.m */; };
+		CD1637F0185AD44B009BB03D /* AntiIcon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637EF185AD44B009BB03D /* AntiIcon-120.png */; };
+		CD1637F1185AD44B009BB03D /* AntiIcon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637EF185AD44B009BB03D /* AntiIcon-120.png */; };
+		CD1637F6185ADC40009BB03D /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637F2185ADC40009BB03D /* Icon-76.png */; };
+		CD1637F7185ADC40009BB03D /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637F2185ADC40009BB03D /* Icon-76.png */; };
+		CD1637F8185ADC40009BB03D /* Icon-80.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637F3185ADC40009BB03D /* Icon-80.png */; };
+		CD1637F9185ADC40009BB03D /* Icon-80.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637F3185ADC40009BB03D /* Icon-80.png */; };
+		CD1637FA185ADC40009BB03D /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637F4185ADC40009BB03D /* Icon-120.png */; };
+		CD1637FB185ADC40009BB03D /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637F4185ADC40009BB03D /* Icon-120.png */; };
+		CD1637FC185ADC40009BB03D /* Icon-152.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637F5185ADC40009BB03D /* Icon-152.png */; };
+		CD1637FD185ADC40009BB03D /* Icon-152.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637F5185ADC40009BB03D /* Icon-152.png */; };
 		CD1DFB0918001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0A18001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */; };
@@ -632,6 +642,11 @@
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD07E417184DAC130066ED29 /* RHChatActionBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHChatActionBar.h; sourceTree = "<group>"; };
 		CD07E418184DAC130066ED29 /* RHChatActionBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHChatActionBar.m; sourceTree = "<group>"; };
+		CD1637EF185AD44B009BB03D /* AntiIcon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AntiIcon-120.png"; sourceTree = "<group>"; };
+		CD1637F2185ADC40009BB03D /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76.png"; sourceTree = "<group>"; };
+		CD1637F3185ADC40009BB03D /* Icon-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-80.png"; sourceTree = "<group>"; };
+		CD1637F4185ADC40009BB03D /* Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-120.png"; sourceTree = "<group>"; };
+		CD1637F5185ADC40009BB03D /* Icon-152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-152.png"; sourceTree = "<group>"; };
 		CD1C4A9917FAB763009642D3 /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-RenHaiGHUnitTest.a"; path = "Pods/build/Debug-iphoneos/libPods-RenHaiGHUnitTest.a"; sourceTree = "<group>"; };
 		CD1DFB0618001086006ED9A4 /* ConnectViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectViewController_iPhone.h; sourceTree = "<group>"; };
 		CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectViewController_iPhone.m; sourceTree = "<group>"; };
@@ -872,6 +887,11 @@
 		C55B441317CF587A009BB21B /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CD1637F2185ADC40009BB03D /* Icon-76.png */,
+				CD1637F3185ADC40009BB03D /* Icon-80.png */,
+				CD1637F4185ADC40009BB03D /* Icon-120.png */,
+				CD1637F5185ADC40009BB03D /* Icon-152.png */,
+				CD1637EF185AD44B009BB03D /* AntiIcon-120.png */,
 				CDFEA31A182A175600F0351D /* order.png */,
 				CDFEA31B182A175600F0351D /* order@2x.png */,
 				CD5633AE1827631600D2A9A6 /* close.png */,
@@ -1380,6 +1400,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD1637FA185ADC40009BB03D /* Icon-120.png in Resources */,
 				C55B43F617CF580A009BB21B /* InfoPlist.strings in Resources */,
 				C55B43FE17CF580A009BB21B /* Default.png in Resources */,
 				CDDBE35218548D1E001A1744 /* icon-info.png in Resources */,
@@ -1397,9 +1418,11 @@
 				C55B446917CF8632009BB21B /* iTunesArtwork in Resources */,
 				C593C41517D2F55B00C26367 /* MainStoryboard_iPhone.storyboard in Resources */,
 				C593C47217D4240800C26367 /* LeftBarHeaderView_iPhone.xib in Resources */,
+				CD1637F6185ADC40009BB03D /* Icon-76.png in Resources */,
 				CD5633B21827631600D2A9A6 /* close@2x.png in Resources */,
 				C593C47917D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */,
 				CDDBE34E18548D1E001A1744 /* icon-error.png in Resources */,
+				CD1637F8185ADC40009BB03D /* Icon-80.png in Resources */,
 				CDFEA326182A1E5C00F0351D /* ChatAssessExistImpressLabelsHeaderView_iPhone.xib in Resources */,
 				C596283917DA08AA009127E6 /* sidebar_menu_icon_landscape.png in Resources */,
 				CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */,
@@ -1425,6 +1448,8 @@
 				CD734AA717E83E3000EF6CD4 /* help_02.JPG in Resources */,
 				CDFEA322182A1E5C00F0351D /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD94DF961851933C00C9CBC4 /* RenHaiLocal-Info.plist in Resources */,
+				CD1637F0185AD44B009BB03D /* AntiIcon-120.png in Resources */,
+				CD1637FC185ADC40009BB03D /* Icon-152.png in Resources */,
 				CD734AA817E83E3000EF6CD4 /* help_03.JPG in Resources */,
 				CDDBE35618548D1E001A1744 /* icon-success.png in Resources */,
 				CDDBE35018548D1E001A1744 /* icon-error@2x.png in Resources */,
@@ -1483,11 +1508,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD1637F7185ADC40009BB03D /* Icon-76.png in Resources */,
 				CD94DF5E1851918000C9CBC4 /* InfoPlist.strings in Resources */,
+				CD1637F9185ADC40009BB03D /* Icon-80.png in Resources */,
 				CD94DF5F1851918000C9CBC4 /* Default.png in Resources */,
 				CDDBE35318548D1E001A1744 /* icon-info.png in Resources */,
 				CD94DF601851918000C9CBC4 /* Default@2x.png in Resources */,
 				CD94DF611851918000C9CBC4 /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */,
+				CD1637F1185AD44B009BB03D /* AntiIcon-120.png in Resources */,
 				CDDBE35918548D1E001A1744 /* icon-success@2x.png in Resources */,
 				CD94DF621851918000C9CBC4 /* Default-568h@2x.png in Resources */,
 				CD94DF631851918000C9CBC4 /* Icon-72.png in Resources */,
@@ -1503,6 +1531,7 @@
 				CD94DF6D1851918000C9CBC4 /* close@2x.png in Resources */,
 				CD94DF6E1851918000C9CBC4 /* LeftBarFooterView_iPhone.xib in Resources */,
 				CDDBE34F18548D1E001A1744 /* icon-error.png in Resources */,
+				CD1637FB185ADC40009BB03D /* Icon-120.png in Resources */,
 				CD94DF6F1851918000C9CBC4 /* ChatAssessExistImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD94DF701851918000C9CBC4 /* sidebar_menu_icon_landscape.png in Resources */,
 				CD94DF711851918000C9CBC4 /* ConnectViewController_iPhone.xib in Resources */,
@@ -1516,6 +1545,7 @@
 				CD94DF791851918000C9CBC4 /* enterbutton_highlighted@2x.png in Resources */,
 				CDDBE3621854ACA4001A1744 /* ChatMessageSendView_iPhone.xib in Resources */,
 				CD94DF7A1851918000C9CBC4 /* enterbutton_normal.png in Resources */,
+				CD1637FD185ADC40009BB03D /* Icon-152.png in Resources */,
 				CD94DF7B1851918000C9CBC4 /* enterbutton_normal@2x.png in Resources */,
 				CD94DF7C1851918000C9CBC4 /* order@2x.png in Resources */,
 				CD94DF7D1851918000C9CBC4 /* RHTableViewLabelCell_iPhone.xib in Resources */,

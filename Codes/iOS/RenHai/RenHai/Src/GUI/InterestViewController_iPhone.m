@@ -512,7 +512,7 @@
                 labelCount = label.labelOrder + 1;
                 
                 cell.textField.text = labelName;
-                cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
+//                cell.countLabel.text = [NSString stringWithFormat:@"%d", labelCount];
                 
                 cell.customBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUND;
                 cell.customSelectedBackgroundColor = FLATUI_COLOR_COLLECTIONCELL_APP_BACKGROUNDSELECTED;

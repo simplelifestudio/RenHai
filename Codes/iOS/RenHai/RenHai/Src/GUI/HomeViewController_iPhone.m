@@ -498,10 +498,16 @@ static float progress = 0.0;
                 [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_ChooseBusiness];
             }
             afterCompletionBlock:^(){
+                
+                NSTimeInterval timeout = 3;
+                
+                NSDate* startTimeStamp = [NSDate date];
+                NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
+                
                 [_reachLock lock];
                 while (![self _checkReachFlag])
                 {
-                    [_reachLock wait];
+                    [_reachLock waitUntilDate:endTimeStamp];
                 }
                 [self _updateReachFlag:NO];
                 
@@ -586,8 +592,8 @@ static float progress = 0.0;
 
 - (void) progressFinished
 {
-    [self _updateReachFlag:YES];
     [_reachLock lock];
+    [self _updateReachFlag:YES];
     [_reachLock signal];
     [_reachLock unlock];
 }

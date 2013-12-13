@@ -136,12 +136,12 @@
 //            cellText = NAVIGATIONBAR_TITLE_CONFIG;
 //            break;
 //        }
-        case LEFTBAR_CELL_HELP:
-        {
-            cellText = NAVIGATIONBAR_TITLE_HELP;
-            cell.titleLabel.alpha = 0.4;
-            break;
-        }
+//        case LEFTBAR_CELL_HELP:
+//        {
+//            cellText = NAVIGATIONBAR_TITLE_HELP;
+//            cell.titleLabel.alpha = 0.4;
+//            break;
+//        }
         default:
         {
             cellText = @"";
