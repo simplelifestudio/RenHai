@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LeftBarViewController_iPhone : UITableViewController <UITableViewDelegate>
+@interface LeftBarViewController_iPhone : UIViewController <UITableViewDelegate, UITableViewDataSource>
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *footerView;
+@property (weak, nonatomic) IBOutlet UIView *headerView;
+
+@property (weak, nonatomic) IBOutlet UILabel *orgLabel;
+@property (weak, nonatomic) IBOutlet UILabel *verionLabel;
 
 @end

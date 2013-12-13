@@ -27,6 +27,20 @@
     return self;
 }
 
+- (void)awakeFromNib
+{
+    [super awakeFromNib];
+    
+    [self _setupInstance];
+}
+
+#pragma mark - Private Methods
+
+-(void) _setupInstance
+{
+    
+}
+
 #pragma mark - IBActions
 
 - (IBAction)didPressCreateButton:(id)sender
