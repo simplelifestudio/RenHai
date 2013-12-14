@@ -27,6 +27,7 @@
 
 #define NOTIFICATION_ID_RHSERVERNOTIFICATION @"RHServerNotification"
 #define NOTIFICATION_ID_RHSERVERDISCONNECTED @"RHServerDisconnected"
+#define NOTIFICATION_ID_BUSINESSSTATUSABNORMAL @"RHServerStatusAbnormal"
 
 #define NOTIFICATION_ID_SESSIONBOUND @"RHServerSessionBound"
 #define NOTIFICATION_ID_OTHERSIDEAGREED @"RHServerSessionOtherAgreed"
@@ -34,6 +35,10 @@
 #define NOTIFICATION_ID_OTHERSIDELOST @"RHServerSessionOthersideLost"
 #define NOTIFICATION_ID_OTHERSIDEENDCHAT @"RHServerSessionOthersideEndChat"
 #define NOTIFICATION_ID_OTHERSIDECHATMESSAGE @"RHServerSessionOthersideChatMessage"
+
+#define NOTIFICATION_INFOID_APPMESSAGEID @"AppMessageId"
+#define NOTIFICATION_INFOID_SERVERNOTIFICATIONID @"ServerNotificationId"
+#define NOTIFICATION_INFOID_BUSINESSSTATUSID @"BusinessStatusId"
 
 @interface CommunicationModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 

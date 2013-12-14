@@ -50,14 +50,12 @@
     
     NSTimer* _alohaTimer;
     
-    volatile BOOL _selfEndChatFlag;
-    volatile BOOL _partnerEndChatFlag;
-    volatile BOOL _partnerLostFlag;
+    volatile BOOL _endChatFlag;
     
     volatile BOOL _isSelfDeciding;
     NSCondition* _decideLock;
     
-    volatile BOOL _isInitialized;
+    volatile BOOL _isWebRTCResouceAllocatedThisTime;
     
     volatile BOOL _isSelfVideoOpen;
     
@@ -102,6 +100,8 @@
     [super viewWillAppear:animated];
     
     [self resetPage];
+    
+    DDLogVerbose(@"#####ChatVideoView willAppear");
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -109,6 +109,8 @@
     [super viewWillDisappear:animated];
     
     [self pageWillUnload];
+    
+    DDLogVerbose(@"#####ChatVideoView willDisappear");        
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -116,6 +118,8 @@
     [super viewDidAppear:animated];
     
     [self pageWillLoad];
+    
+    DDLogVerbose(@"#####ChatVideoView didAppear");
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -167,12 +171,11 @@
     _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Prepairing", nil);
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Prepairing", nil);
     
-    _selfEndChatFlag = NO;
-    _partnerEndChatFlag = NO;
-    
-    _partnerLostFlag = NO;
+    _endChatFlag = NO;
     
     [self _resetSelfVieoToOpen];
+    
+    _isWebRTCResouceAllocatedThisTime = NO;
     
     _isSelfDeciding = NO;
     
@@ -236,7 +239,7 @@
 
 -(void) _setupInstance
 {
-    _isInitialized = YES;
+    _isWebRTCResouceAllocatedThisTime = NO;
     
     _guiModule = [GUIModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
@@ -551,6 +554,14 @@
             _isSelfDeciding = YES;
         }
         
+        if (_endChatFlag)
+        {
+            [_decideLock unlock];
+            return;
+        }
+        
+        DDLogVerbose(@"#####EndChat");
+        
         [NSThread sleepForTimeInterval:DELAY_ENDCHAT];
         
         RHBusinessSession* businessSession = _userDataModule.businessSession;
@@ -563,22 +574,20 @@
         
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
-                _selfEndChatFlag = YES;
+                _endChatFlag = YES;
                 [_statusModule recordAppMessage:AppMessageIdentifier_EndChat];
                 [self _moveToChatAssessView];
             }
             failureCompletionBlock:^(){
-                _selfEndChatFlag = NO;
+                _endChatFlag = NO;
                 [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_EndChat];
             }
             afterCompletionBlock:^(){
-
+                _isSelfDeciding = NO;
+                [_decideLock signal];
+                [_decideLock unlock];
             }
          ];
-        
-        _isSelfDeciding = NO;
-        [_decideLock signal];
-        [_decideLock unlock];
     }];
 }
 
@@ -606,9 +615,7 @@
                 [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_ChatMessage];
             }
             afterCompletionBlock:^(){
-              [CBAppUtils asyncProcessInMainThread:^(){
-                  
-              }];
+                
             }
          ];
     }];
@@ -717,25 +724,35 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void)_connectWebRTC
 {
-    [CBAppUtils asyncProcessInBackgroundThread:^(){
-        [_webRTCModule registerWebRTCDelegate:self];
+    if (!_isWebRTCResouceAllocatedThisTime)
+    {
+        DDLogVerbose(@"#####WebRTC Resource need be allocated this time.");
         
-        RHBusinessSession* businessSession = _userDataModule.businessSession;
-        RHWebRTC* webrtc = businessSession.webrtc;
-        
-        NSString* apiKey = [NSString stringWithFormat:@"%@", webrtc.apiKey];
-        NSString* sessionId = webrtc.sessionId;
-        NSString* token = webrtc.token;
-        
-        if (STATIC_OPENTOK_ACCOUNT)
-        {
-            apiKey = kApiKey;
-            sessionId = kSessionId;
-            token = kToken;
-        }
-        
-        [_webRTCModule connectAndPublishOnWebRTC:apiKey sessionId:sessionId token:token];
-    }];
+        [CBAppUtils asyncProcessInBackgroundThread:^(){
+            [_webRTCModule registerWebRTCDelegate:self];
+            
+            RHBusinessSession* businessSession = _userDataModule.businessSession;
+            RHWebRTC* webrtc = businessSession.webrtc;
+            
+            NSString* apiKey = [NSString stringWithFormat:@"%@", webrtc.apiKey];
+            NSString* sessionId = webrtc.sessionId;
+            NSString* token = webrtc.token;
+            
+            if (STATIC_OPENTOK_ACCOUNT)
+            {
+                apiKey = kApiKey;
+                sessionId = kSessionId;
+                token = kToken;
+            }
+            
+            [_webRTCModule connectAndPublishOnWebRTC:apiKey sessionId:sessionId token:token];
+        }];
+    }
+    else
+    {
+        DDLogVerbose(@"#####WebRTC Resource has been allocated this time.");
+        _isWebRTCResouceAllocatedThisTime = YES;
+    }
 }
 
 -(void)_disconnectWebRTC

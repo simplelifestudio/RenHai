@@ -23,7 +23,7 @@
 
 #import "CommunicationModule.h"
 
-@interface GUIModule()
+@interface GUIModule() <FUIAlertViewDelegate>
 {
     AFNetworkActivityIndicatorManager* _networkActivityIndicator;
     
@@ -164,11 +164,12 @@ SINGLETON(GUIModule)
 -(void) _registerNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_BUSINESSSTATUSABNORMAL object:nil];
 }
 
 -(void) _unregisterNotifications
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void) _onNotifications:(NSNotification*) notification
@@ -186,7 +187,26 @@ SINGLETON(GUIModule)
                 [_connectViewController popConnectView:rootVC animated:YES];                
             }
         }
+        else if ([notificationName isEqualToString:NOTIFICATION_ID_BUSINESSSTATUSABNORMAL])
+        {
+            NSDictionary* info = notification.userInfo;
+            NSNumber* oAppMessageId = [info objectForKey:NOTIFICATION_INFOID_APPMESSAGEID];
+            
+            NSNumber* oBusinessStatusId = [info objectForKey:NOTIFICATION_INFOID_BUSINESSSTATUSID];
+            
+            [self _popupAlertWithBusinessStatus:oBusinessStatusId.intValue andAppMessage:oAppMessageId.intValue];
+        }
     }
+}
+
+- (void) _popupAlertWithBusinessStatus:(BusinessStatusIdentifier) businessStatusId andAppMessage:(AppMessageIdentifier) appMessageId
+{
+    NSString* str = [NSString stringWithFormat:NSLocalizedString(@"Alert_AppMessage_In_BusinessStatus", nil), businessStatusId, appMessageId];
+    
+    [[MessageBarManager sharedInstance] showMessageWithTitle:NSLocalizedString(@"Alert_BusinessStatusAbnormal", nil)
+                                                 description:str
+                                                        type:MessageBarMessageTypeError
+                                                 forDuration:60];
 }
 
 -(void) _setupUIAppearance
@@ -207,6 +227,13 @@ SINGLETON(GUIModule)
 
     [[UINavigationBar appearance] setTintColor:FLATUI_COLOR_TINT_NAVIGATIONBAR];
     [[UIBarButtonItem appearance] setTintColor:FLATUI_COLOR_TINT_BARBUTTONITEM];
+}
+
+#pragma mark - FUIAlertViewDelegate
+
+- (void)alertView:(FUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
 }
 
 @end

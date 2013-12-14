@@ -345,7 +345,19 @@
     }
 
     jsonString = [CBJSONUtils toJSONString:jsonObject];
-    [_webSocket send:jsonString];
+    
+    @try
+    {
+        [_webSocket send:jsonString];
+    }
+    @catch (NSException *exception)
+    {
+        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+    }
+    @finally
+    {
+        
+    }
 }
 
 //-(void) _sendJSONStringToWebSocket:(NSString*) jsonString

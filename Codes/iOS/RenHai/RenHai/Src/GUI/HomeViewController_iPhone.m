@@ -499,15 +499,16 @@ static float progress = 0.0;
             }
             afterCompletionBlock:^(){
                 
-                NSTimeInterval timeout = 3;
-                
-                NSDate* startTimeStamp = [NSDate date];
-                NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
+//                NSTimeInterval timeout = 3;
+//                
+//                NSDate* startTimeStamp = [NSDate date];
+//                NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
                 
                 [_reachLock lock];
                 while (![self _checkReachFlag])
                 {
-                    [_reachLock waitUntilDate:endTimeStamp];
+//                    [_reachLock waitUntilDate:endTimeStamp];
+                    [_reachLock wait];
                 }
                 [self _updateReachFlag:NO];
                 

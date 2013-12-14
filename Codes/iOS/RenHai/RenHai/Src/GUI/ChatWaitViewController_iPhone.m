@@ -333,7 +333,6 @@ ChatWaitStatus;
                 [self _finishLeavingPool];
             }
          ];
-    
     }];
 }
 

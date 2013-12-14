@@ -186,32 +186,43 @@
     DDLogInfo(@"- hasAudio %@", (stream.hasAudio ? @"YES" : @"NO"));
     DDLogInfo(@"- hasVideo %@", (stream.hasVideo ? @"YES" : @"NO"));
     
-    BOOL flag1 = [stream.connection.connectionId isEqualToString: _session.connection.connectionId];
-    
-    if (!flag1)
+    @try
     {
-        if (!_subscriber)
+        BOOL flag1 = [stream.connection.connectionId isEqualToString: _session.connection.connectionId];
+        
+        if (!flag1)
         {
-            _subscriber = [[OTSubscriber alloc] initWithStream:stream delegate:self];
-            _subscriber.subscribeToAudio = YES;
-            _subscriber.subscribeToVideo = YES;
-            
+            if (!_subscriber)
+            {
+                _subscriber = [[OTSubscriber alloc] initWithStream:stream delegate:self];
+                _subscriber.subscribeToAudio = YES;
+                _subscriber.subscribeToVideo = YES;
+                
+                if (nil != _openTokDelegate)
+                {
+                    [_openTokDelegate sessionDidReceivePartnerStream];
+                }
+            }
+            DDLogInfo(@"WebRTC subscriber.session.sessionId: %@", _subscriber.session.sessionId);
+            DDLogInfo(@"- stream.streamId: %@", _subscriber.stream.streamId);
+            DDLogInfo(@"- subscribeToAudio %@", (_subscriber.subscribeToAudio ? @"YES" : @"NO"));
+            DDLogInfo(@"- subscribeToVideo %@", (_subscriber.subscribeToVideo ? @"YES" : @"NO"));
+        }
+        else
+        {
             if (nil != _openTokDelegate)
             {
-                [_openTokDelegate sessionDidReceivePartnerStream];
+                [_openTokDelegate sessionDidReceiveSelfStream];
             }
         }
-        DDLogInfo(@"WebRTC subscriber.session.sessionId: %@", _subscriber.session.sessionId);
-        DDLogInfo(@"- stream.streamId: %@", _subscriber.stream.streamId);
-        DDLogInfo(@"- subscribeToAudio %@", (_subscriber.subscribeToAudio ? @"YES" : @"NO"));
-        DDLogInfo(@"- subscribeToVideo %@", (_subscriber.subscribeToVideo ? @"YES" : @"NO"));
     }
-    else
+    @catch (NSException *exception)
     {
-        if (nil != _openTokDelegate)
-        {
-            [_openTokDelegate sessionDidReceiveSelfStream];
-        }
+        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+    }
+    @finally
+    {
+        
     }
 }
 
@@ -329,39 +340,72 @@
 
 -(void) _publish
 {
-    _publisher = [[OTPublisher alloc] initWithDelegate:self name:UIDevice.currentDevice.name];
-    _publisher.publishAudio = YES;
-    _publisher.publishVideo = YES;
-    [_session publish:_publisher];
-    _isPublisherViewReady = YES;
+    @try
+    {
+        _publisher = [[OTPublisher alloc] initWithDelegate:self name:UIDevice.currentDevice.name];
+        _publisher.publishAudio = YES;
+        _publisher.publishVideo = YES;
+        [_session publish:_publisher];
+        _isPublisherViewReady = YES;
+    }
+    @catch (NSException *exception)
+    {
+        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+    }
+    @finally
+    {
+        
+    }
 }
 
 -(void) _unpublish
 {
-    [_subscriber close];
-    _subscriber = nil;
-    
-    if (!_isUnpublishNecessary)
+    @try
     {
-        [_session unpublish:_publisher];
-        _publisher = nil;
+        [_subscriber close];
+        _subscriber = nil;
+        
+        if (!_isUnpublishNecessary)
+        {
+            [_session unpublish:_publisher];
+            _publisher = nil;
+        }
+        
+        _isSubscriberViewReady = NO;
+        _isPublisherViewReady = NO;
+        _isUnpublishNecessary = NO;
     }
-    
-    _isSubscriberViewReady = NO;
-    _isPublisherViewReady = NO;
-    _isUnpublishNecessary = NO;
+    @catch (NSException *exception)
+    {
+        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+    }
+    @finally
+    {
+        
+    }
 }
 
 - (void)_updateSubscriber
 {
-    for (NSString* streamId in _session.streams)
+    @try
     {
-        OTStream* stream = [_session.streams valueForKey:streamId];
-        if (stream.connection.connectionId != _session.connection.connectionId)
+        for (NSString* streamId in _session.streams)
         {
-            _subscriber = [[OTSubscriber alloc] initWithStream:stream delegate:self];
-            break;
+            OTStream* stream = [_session.streams valueForKey:streamId];
+            if (stream.connection.connectionId != _session.connection.connectionId)
+            {
+                _subscriber = [[OTSubscriber alloc] initWithStream:stream delegate:self];
+                break;
+            }
         }
+    }
+    @catch (NSException *exception)
+    {
+        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+    }
+    @finally
+    {
+        
     }
 }
 

@@ -317,9 +317,7 @@
 
             }
             afterCompletionBlock:^(){
-              [CBAppUtils asyncProcessInMainThread:^(){
-                  
-              }];
+    
             }
          ];
     }];

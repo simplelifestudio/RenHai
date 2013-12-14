@@ -13,6 +13,8 @@
 #import "CommunicationModule.h"
 #import "GUIStyle.h"
 
+#import "UIViewController+CBUIViewControlerExtends.h"
+
 @interface RHNavigationController ()
 {
     GUIModule* _guiModule;
@@ -86,7 +88,12 @@
         if (![_commModule isWebSocketConnected])
         {
             ConnectViewController_iPhone* _connectViewController = _guiModule.connectViewController;
-            [_connectViewController popConnectView:_guiModule.mainViewController animated:YES];
+
+            UIViewController* rootVC = [CBUIUtils getRootController];
+            if ([rootVC isVisible])
+            {
+                [_connectViewController popConnectView:rootVC animated:YES];
+            }
         }        
     }
 }

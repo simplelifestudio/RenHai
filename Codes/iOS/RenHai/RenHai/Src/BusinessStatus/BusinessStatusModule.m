@@ -90,7 +90,7 @@ SINGLETON(BusinessStatusModule)
     NSNumber* oAppMessageId = [NSNumber numberWithInt:appMessageId];
     
     NSNumber* lastAppMessageId = [_remoteStatusAbnormalRecords lastObject];
-    if (nil == lastAppMessageId && lastAppMessageId.intValue == oAppMessageId.intValue)
+    if (nil != lastAppMessageId && lastAppMessageId.intValue == oAppMessageId.intValue)
     {
         flag = YES;
     }
@@ -99,7 +99,7 @@ SINGLETON(BusinessStatusModule)
     
     if (flag)
     {
-        [self _triggerBusinessStatusErrorByRemoteStatusAbnormal];
+        [self _triggerBusinessStatusErrorByRemoteStatusAbnormal:appMessageId];
     }
 }
 
@@ -1375,11 +1375,17 @@ SINGLETON(BusinessStatusModule)
     [CBAppUtils assert:NO logFormatString:@"Error Server Notification:%d in BusinessStatus: %d", serverNotificationId, _currentBusinessStatus.identifier];
 }
 
--(void) _triggerBusinessStatusErrorByRemoteStatusAbnormal
+-(void) _triggerBusinessStatusErrorByRemoteStatusAbnormal:(AppMessageIdentifier) appMessageId
 {
-    DDLogError(@"Reached limit of remote business status abnormal, app is going to reconnect.");
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_RHSERVERDISCONNECTED object:self];
+    DDLogError(@"Reached limit of remote business status abnormal with App Message: %d", appMessageId);
+    
+//    [CBAppUtils assert:NO logFormatString:@"Reached limit of remote business status abnormal with App Message: %d", appMessageId];
+    
+    NSNumber* oBusinessStatusId = [NSNumber numberWithInt:_currentBusinessStatus.identifier];
+    NSNumber* oAppMessageId = [NSNumber numberWithInt:appMessageId];
+    
+    NSDictionary* info = [NSDictionary dictionaryWithObjects:@[oAppMessageId, oBusinessStatusId] forKeys:@[NOTIFICATION_INFOID_APPMESSAGEID, NOTIFICATION_INFOID_BUSINESSSTATUSID]];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_BUSINESSSTATUSABNORMAL object:self userInfo:info];
 }
 
 @end

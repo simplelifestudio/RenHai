@@ -570,13 +570,11 @@ ChoiceType;
                 [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_AgreeChat];
             }
             afterCompletionBlock:^(){
-
+                _isSelfDeciding = NO;
+                [_decideLock signal];
+                [_decideLock unlock];
             }
          ];
-        
-        _isSelfDeciding = NO;
-        [_decideLock signal];
-        [_decideLock unlock];
     }];
 }
 
@@ -618,13 +616,11 @@ ChoiceType;
                 [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_RejectChat];
             }
             afterCompletionBlock:^(){
-
+                _isSelfDeciding = NO;
+                [_decideLock signal];
+                [_decideLock unlock];
             }
          ];
-        
-        _isSelfDeciding = NO;
-        [_decideLock signal];
-        [_decideLock unlock];
     }];
 }
 
@@ -664,13 +660,13 @@ ChoiceType;
                     _selfUnbindSessionFlag = NO;
                     [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_UnbindSession];
                 }
-                afterCompletionBlock:nil
+                afterCompletionBlock:^(){
+                    _isSelfDeciding = NO;
+                    [_decideLock signal];
+                    [_decideLock unlock];
+                }
              ];
         }
-        
-        _isSelfDeciding = NO;
-        [_decideLock signal];
-        [_decideLock unlock];
     }];
 }
 

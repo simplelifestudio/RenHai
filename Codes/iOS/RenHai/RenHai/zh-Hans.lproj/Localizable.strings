@@ -18,6 +18,11 @@
 "Communication_WiFiConnected" = "WiFi已连接";
 "Communication_3G/GPRSConnected" = "3G/GPRS已连接";
 
+"Alert_RemoteCommFailure" = "远程通信失败";
+"Alert_BusinessStatusAbnormal" = "业务状态异常";
+"Alert_AppMessage_In_BusinessStatus" = "App消息码：%d；业务状态码：%d";
+"Alert_ServerNotification_In_BusinessStatus" = "Server通知码：%d；业务状态码：%d";
+
 "LeftBar_Home" = "人海";
 "LeftBar_Device" = "设备";
 "LeftBar_Impress" = "印象";
