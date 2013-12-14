@@ -29,7 +29,7 @@ import com.simplelife.renhai.server.business.pool.MessageHandler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMsgExecutorPool;
 import com.simplelife.renhai.server.business.pool.PingActionQueue;
-import com.simplelife.renhai.server.business.pool.PingLink;
+import com.simplelife.renhai.server.business.pool.TimeoutLink;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
@@ -90,27 +90,30 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     private MessageHandler inputMessageHandler;
     private MessageHandler outputMessageHandler;
     
-    private PingNode pingNode;
+    private AbstractTimeoutNode pingTimeoutNode;
     
     private MessageHandler changeStatusHandler;
+    
+    private SyncSendTimeoutNode syncSendingTimeoutNode;
     
     @Override
     public void updatePingTime()
     {
-    	pingNode.updatePingTime();
-    	if (pingNode.getNextNode() == null && pingNode.getPrevNode() == null)
+    	pingTimeoutNode.updateTime();
+    	if (pingTimeoutNode.getNextNode() == null && pingTimeoutNode.getPrevNode() == null)
     	{
     		// which means pingNode has been removed from PingLink
     		return;
     	}
     	
-    	PingActionQueue.instance.newAction(PingActionType.OnPing, pingNode);
+    	PingActionQueue.instance.newAction(PingActionType.OnPing, pingTimeoutNode);
     }
     
-    public PingNode getPingNode()
+    public AbstractTimeoutNode getPingNode()
     {
-    	return pingNode;
+    	return pingTimeoutNode;
     }
+    
     /**
      * Constructor of DeviceWrapper 
      * @param connection: connection for sending/receiving JSON messages
@@ -119,8 +122,8 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     {
     	this.webSocketConnection = connection;
     	this.businessStatus = DeviceStatus.Connected;
-    	pingNode = new PingNode(this);
-    	PingLink.instance.append(this);
+    	pingTimeoutNode = new PingTimeoutNode(GlobalSetting.TimeOut.PingTimeout, this);
+    	OnlineDevicePool.pingLink.append(pingTimeoutNode);
     	connection.bind(this);
     	inputMessageHandler = new MessageHandler(connection.getConnectionId(), InputMsgExecutorPool.instance);
         outputMessageHandler = new MessageHandler(connection.getConnectionId(), OutputMsgExecutorPool.instance);
@@ -255,7 +258,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     			
     			if (reason != StatusChangeReason.TimeoutOfPing)
     			{
-    				PingActionQueue.instance.newAction(PingActionType.DeviceRemoved, this.pingNode);
+    				PingActionQueue.instance.newAction(PingActionType.DeviceRemoved, this.pingTimeoutNode);
     			}
     			this.webSocketConnection.closeConnection();			// Close socket at last step
     			break;
@@ -263,7 +266,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     		case Connected:
     			if (reason == StatusChangeReason.NewConnection)
     			{
-    				PingLink.instance.append(this);
+    				OnlineDevicePool.pingLink.append(this.getPingNode());
     			}
     			else
     			{
@@ -395,7 +398,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     /** */
     public long getLastPingTime()
     {
-        return pingNode.getLastPingTime();
+        return pingTimeoutNode.getLastTime();
     }
     
      
@@ -465,6 +468,16 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 				&& messageId != Consts.MessageId.UnkownRequest)
     	{
     		this.updateActivityTime();
+    		
+    		if (syncSendingTimeoutNode != null)
+        	{
+        		if (syncSendingTimeoutNode.isWaiting(command.getMessageSn()))
+        		{
+        			OnlineDevicePool.syncSendingTimeoutLink.removeNode(syncSendingTimeoutNode);
+        			syncSendingTimeoutNode = null;
+        			outputMessageHandler.syncResponseReceived(this.getDeviceIdentification());
+        		}
+        	}
     	}
     	
     	if (this.ownerOnlinePool == null 
@@ -548,12 +561,18 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
         		logger.error("webSocketConnection == null");
         		return;
         	}
+        	
+        	syncSendingTimeoutNode = new SyncSendTimeoutNode(GlobalSetting.TimeOut.JSONMessageEcho * 1000, this, message.getMessageSn());
+        	OnlineDevicePool.syncSendingTimeoutLink.append(syncSendingTimeoutNode);
+        	webSocketConnection.asyncSendMessage(message);
+        	/*
         	AppJSONMessage appResponse = webSocketConnection.syncSendMessage(message);
         	
         	if (appResponse != null)
         	{
         		this.onJSONCommand(appResponse);
         	}
+        	*/
 		}
 		catch (IOException e)
 		{
@@ -561,16 +580,6 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 		}
     }
     
-    /*
-    @Override
-    public void syncSendMessage(ServerJSONMessage message)
-    {
-    	SyncSendMessageTask task = new SyncSendMessageTask(this, message);
-    	task.setName("SyncSendMsg" + DateUtil.getCurrentMiliseconds());
-    	task.start();
-    }
-    */
-
     @Override
     public void asyncSendMessage(ServerJSONMessage message)
     {
@@ -899,6 +908,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 	public void prepareResponse(ServerJSONMessage response)
 	{
 		outputMessageHandler.addMessage(response);
+		return;
 	}
 	
 	@Override
@@ -957,6 +967,12 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 		public int getDelayOfHandle()
 		{
 			return 0;
+		}
+		
+		@Override
+		public boolean isSyncMessage()
+		{
+			return false;
 		}
 	}
 }

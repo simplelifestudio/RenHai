@@ -1025,7 +1025,7 @@ public class MockApp implements IMockApp, Runnable
 		}
 
 		chatCount++;
-		if (chatCount > MockAppConsts.Setting.MaxChatCount)
+		if (chatCount >= MockAppConsts.Setting.MaxChatCount)
 		{
 			setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
 			return true;

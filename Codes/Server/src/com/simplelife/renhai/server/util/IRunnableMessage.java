@@ -20,4 +20,5 @@ public interface IRunnableMessage extends Runnable
 	String getMessageSn();
 	String getMsgOwnerInfo();
 	int getDelayOfHandle();
+	boolean isSyncMessage();
 }

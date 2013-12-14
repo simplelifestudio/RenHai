@@ -360,7 +360,7 @@ public class MainFunction extends AbstractTestCase
 		{
 			Thread.sleep(1000);
 		}
-		System.out.print("aaaaa");
+		MockApp.mockAppExecutePool.stopService();
 	}
 	
 	@Test
@@ -379,7 +379,7 @@ public class MainFunction extends AbstractTestCase
 		{
 			Thread.sleep(1000);
 		}
-		System.out.print("aaaaa");
+		MockApp.mockAppExecutePool.stopService();
 	}
 	
 	@Test

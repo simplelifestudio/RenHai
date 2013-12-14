@@ -52,6 +52,7 @@ public class GlobalSetting
 		
 		public static int PingInterval = 4 * 1000;
 		public static int CheckPingInterval = 1 * 1000;
+		public static int PingTimeout = PingInterval + PingInterval + CheckPingInterval;  
 		
 		public static int SaveStatistics = 600 * 1000;
 		public static int AdjustDeviceCount = 60 * 1000;
@@ -73,7 +74,7 @@ public class GlobalSetting
 		public static int OnlinePoolCapacity = 10000;
 		public static int RandomBusinessPoolCapacity = 0;
 		public static int InterestBusinessPoolCapacity = 10000;
-		public static int WebRTCSessionPoolCapacity = 500;
+		public static int WebRTCSessionPoolCapacity = 1500;
 		//public static int DefaultImpressLabelCount = 10;
 		public static int HotInterestLabelCount = 10;
 		
@@ -84,7 +85,7 @@ public class GlobalSetting
 		
 		public static int MaxImpressLabelCount = 20;
 		public static int InputMessageHandleThreads = 200;
-		public static int OutputMessageSendThreads = 800;
+		public static int OutputMessageSendThreads = 500;
 		public static int MessageQueueTime = 3 * 1000;
 		
 		public static int DelayOfSessionBound = 1000;

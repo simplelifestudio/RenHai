@@ -13,7 +13,7 @@ package com.simplelife.renhai.server.util;
 
 import java.nio.ByteBuffer;
 import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.business.device.PingNode;
+import com.simplelife.renhai.server.business.device.AbstractTimeoutNode;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Impresscard;
@@ -103,5 +103,5 @@ public interface IDeviceWrapper
     
     public void prepareResponse(ServerJSONMessage response);
     
-    public PingNode getPingNode();
+    public AbstractTimeoutNode getPingNode();
 }

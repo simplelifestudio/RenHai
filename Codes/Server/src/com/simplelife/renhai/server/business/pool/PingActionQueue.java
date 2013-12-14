@@ -11,7 +11,7 @@ package com.simplelife.renhai.server.business.pool;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.simplelife.renhai.server.business.device.PingNode;
+import com.simplelife.renhai.server.business.device.AbstractTimeoutNode;
 import com.simplelife.renhai.server.util.Consts.PingActionType;
 import com.simplelife.renhai.server.util.IProductor;
 import com.simplelife.renhai.server.util.Worker;
@@ -29,7 +29,7 @@ public class PingActionQueue implements IProductor
 	{
 		worker.setName("Ping");
 	}
-	public void newAction(PingActionType actionType, PingNode node)
+	public void newAction(PingActionType actionType, AbstractTimeoutNode node)
 	{
 		PingAction action = new PingAction(actionType, node);
 		queue.add(action);
@@ -49,9 +49,9 @@ public class PingActionQueue implements IProductor
 	private class PingAction implements Runnable
 	{
 		private PingActionType actionType;
-		private PingNode node;
+		private AbstractTimeoutNode node;
 		
-		public PingAction(PingActionType actionType, PingNode node)
+		public PingAction(PingActionType actionType, AbstractTimeoutNode node)
 		{
 			this.actionType = actionType;
 			this.node = node;
@@ -65,13 +65,13 @@ public class PingActionQueue implements IProductor
 				case Invalid:
 					break;
 				case OnPing:
-					PingLink.instance.moveToTail(node);
+					OnlineDevicePool.pingLink.moveToTail(node);
 					break;
 				case CheckInactivity:
-					PingLink.instance.checkInactivity();
+					OnlineDevicePool.pingLink.checkTimeout();
 					break;
 				case DeviceRemoved:
-					PingLink.instance.removeNode(node);
+					OnlineDevicePool.pingLink.removeNode(node);
 					break;
 			}
 		}
