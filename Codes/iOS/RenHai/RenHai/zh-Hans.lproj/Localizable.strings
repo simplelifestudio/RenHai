@@ -53,6 +53,7 @@
 "Impress_ChatTotalCount" = "聊天次数";
 "Impress_ChatTotalDuration" = "聊天时长";
 "Impress_ChatLossCount" = "掉线次数";
+"Impress_ChatLossRate" = "掉线率";
 
 "Interest_InterestLabels" = "我想聊的话题";
 "Interest_CurrentHotInterestLabels" = "当前热门话题";
@@ -74,7 +75,7 @@
 "Connect_CheckedMaintenance" = "维护";
 "Connect_CheckedMaintenance_Detail" = "服务器安排维护：\n自 %@ \n至 %@";
 "Connect_CheckFailed" = "失败";
-"Connect_CheckFailed_Detail" = "无法探测人海";
+"Connect_CheckFailed_Detail" = "无法定位人海";
 "Connect_Connecting" = "连接";
 "Connect_Connecting_Detail" = "正在连接人海...";
 "Connect_Connected" = "连接";
@@ -112,8 +113,8 @@
 "ChatWait_Action_Cancel" = "取消";
 
 "ChatConfirm_Title" = "根据\"%@\"找到对方";
-"ChatConfirm_ImpressAssesses" = "对方已获的评价";
-"ChatConfirm_ImpressLabels" = "对方已获的印象";
+"ChatConfirm_ImpressAssesses" = "对方获得的评价";
+"ChatConfirm_ImpressLabels" = "对方获得的印象";
 "ChatConfirm_SelfStatus_Undecided" = "我在考虑";
 "ChatConfirm_SelfStatus_Agreed" = "我已同意";
 "ChatConfirm_SelfStatus_Rejected" = "我已拒绝";

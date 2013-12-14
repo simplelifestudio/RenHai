@@ -42,7 +42,6 @@
     vc.manageMode = ManageMode_NewLabel;
     vc.manageDelegate = manageDelegate;
     vc.oldLabel = nil;
-    [vc setUseBlurForPopup:YES];
     
     return vc;
 }
@@ -55,7 +54,6 @@
     vc.manageMode = ManageMode_ModifyLabel;
     vc.manageDelegate = manageDelegate;
     vc.oldLabel = label;
-    [vc setUseBlurForPopup:YES];
     
     return vc;
 }

@@ -22,7 +22,7 @@
 #define DELAY_ENDCHAT 1.0f
 
 #define INTERVAL_TOOLBARDISPLAYTICK 1
-#define INTERVAL_CHATMESSAGE_DISPLAY 15
+#define INTERVAL_CHATMESSAGE_DISPLAY 10
 #define INTERVAL_ALOHA 60
 
 #define _TOOLBAR_DISPLAY_PERIOD 3
@@ -30,6 +30,8 @@
 #define BORDERWIDTH_VIDEOVIEW 2.5f;
 #define CORNERRADIUS_VIDEOVIEW 3.0f;
 #define BORDERCOLOR_VIDEOVIEW FLATUI_COLOR_MAJOR_F
+
+#define VOICE_MUTE 0
 
 #define NIB_CHATMESSAGESENDVIEW @"ChatMessageSendView_iPhone"
 
@@ -871,7 +873,9 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     _publisherView = agent.publisherView;
     if (nil != _publisherView)
     {
+#if VOICE_MUTE
         [agent mutePublisher:YES];
+#endif
         
         CGRect superFrame = _selfVideoView.frame;
         CGRect selfFrame = CGRectMake(0, 0, superFrame.size.width, superFrame.size.height);
@@ -924,7 +928,9 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     _subscriberView = agent.subscriberView;
     if (nil != _subscriberView)
     {
+#if VOICE_MUTE
         [agent muteSubscriber:YES];
+#endif
         
         CGRect superFrame = _parterVideoView.frame;
         CGRect selfFrame = CGRectMake(0, 0, superFrame.size.width, superFrame.size.height);

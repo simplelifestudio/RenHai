@@ -90,17 +90,12 @@ SINGLETON(BusinessStatusModule)
     NSNumber* oAppMessageId = [NSNumber numberWithInt:appMessageId];
     
     NSNumber* lastAppMessageId = [_remoteStatusAbnormalRecords lastObject];
-    if (nil != lastAppMessageId)
+    if (nil == lastAppMessageId && lastAppMessageId.intValue == oAppMessageId.intValue)
     {
-        if (lastAppMessageId.intValue == oAppMessageId.intValue)
-        {
-            flag = YES;
-        }
-        else
-        {
-            [_remoteStatusAbnormalRecords addObject:oAppMessageId];
-        }
+        flag = YES;
     }
+
+    [_remoteStatusAbnormalRecords addObject:oAppMessageId];
     
     if (flag)
     {
@@ -931,7 +926,7 @@ SINGLETON(BusinessStatusModule)
                       // M5
                       case AppMessageIdentifier_MatchStart:
                       {
-                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          // IGNORE
                           break;
                       }
                       // M6

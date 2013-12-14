@@ -182,8 +182,9 @@
                     }
                     case 5:
                     {
-                        labelName = NSLocalizedString(@"Impress_ChatLossCount", nil);
+                        labelName = NSLocalizedString(@"Impress_ChatLossRate", nil);
                         labelCount = impressCard.chatLossCount;
+                        labelCountStr = impressCard.chatLossRateString;
                         break;
                     }
                     default:
