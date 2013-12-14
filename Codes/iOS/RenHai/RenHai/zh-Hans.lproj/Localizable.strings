@@ -78,7 +78,7 @@
 "Connect_CheckedNormal" = "检测";
 "Connect_CheckedNormal_Detail" = "成功探测人海";
 "Connect_CheckedMaintenance" = "维护";
-"Connect_CheckedMaintenance_Detail" = "服务器安排维护：\n自 %@ \n至 %@";
+"Connect_CheckedMaintenance_Detail" = "服务器维护预告：\n自 %@ \n至 %@";
 "Connect_CheckFailed" = "失败";
 "Connect_CheckFailed_Detail" = "无法定位人海";
 "Connect_Connecting" = "连接";
@@ -132,14 +132,14 @@
 "ChatConfirm_Action_Reject" = "拒绝";
 
 "ChatVideo_Title" = "视频聊天";
-"ChatVideo_SelfStatus_Prepairing" = "我的视频：准备";
-"ChatVideo_SelfStatus_Connected" = "我的视频：连接";
-"ChatVideo_SelfStatus_Failed" = "我的视频：失败";
-"ChatVideo_SelfStatus_Disconnected" = "我的视频：断开";
-"ChatVideo_PartnerStatus_Prepairing" = "对方视频：准备";
-"ChatVideo_PartnerStatus_Connected" = "对方视频：连接";
-"ChatVideo_PartnerStatus_Disconnected" = "对方视频：关闭";
-"ChatVideo_PartnerStatus_Failed" = "对方视频：失败";
+"ChatVideo_SelfStatus_Prepairing" = "我正准备视频";
+"ChatVideo_SelfStatus_Connected" = "我正启动视频";
+"ChatVideo_SelfStatus_Failed" = "我的视频失败";
+"ChatVideo_SelfStatus_Disconnected" = "我已关闭视频";
+"ChatVideo_PartnerStatus_Prepairing" = "对方正准备视频";
+"ChatVideo_PartnerStatus_Connected" = "对方正连接视频";
+"ChatVideo_PartnerStatus_Disconnected" = "对方已挂断";
+"ChatVideo_PartnerStatus_Failed" = "对方视频失败";
 "ChatVideo_PartnerStatus_Lost" = "对方已掉线";
 "ChatVideo_PartnerChatMessage" = "对方的小纸条";
 "ChatVideo_ChatMessageSendTip" = "写张纸条传给对方";

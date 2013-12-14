@@ -15,7 +15,7 @@
 
 #define SERVICE_TARGET_WEBSOCKET @"websocketService"
 
-#define HEARTBEATPING_PERIOD 5.0
+#define HEARTBEATPING_PERIOD 4.0f
 
 #define NOTIFICATION_PREFIX_MESSAGEID @"MessageId_"
 
