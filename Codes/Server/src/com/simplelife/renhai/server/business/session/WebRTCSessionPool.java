@@ -47,7 +47,7 @@ public class WebRTCSessionPool extends AbstractPool
     private WebRTCSessionPool()
     {
     	//this.capacity = 100;
-    	this.capacity = GlobalSetting.BusinessSetting.OnlinePoolCapacity / 2;
+    	this.capacity = GlobalSetting.BusinessSetting.WebRTCSessionPoolCapacity;
     }
     
     public void recycleWetRTCSession(Webrtcsession session)

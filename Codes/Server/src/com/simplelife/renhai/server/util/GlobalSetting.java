@@ -50,7 +50,7 @@ public class GlobalSetting
 		
 		public static int OnlineDeviceConnection = 300 * 1000;
 		
-		public static int PingInterval = 5 * 1000;
+		public static int PingInterval = 4 * 1000;
 		public static int CheckPingInterval = 1 * 1000;
 		
 		public static int SaveStatistics = 600 * 1000;
@@ -70,10 +70,11 @@ public class GlobalSetting
 	
 	public static class BusinessSetting
 	{
-		public static int OnlinePoolCapacity = 1000;
+		public static int OnlinePoolCapacity = 10000;
 		public static int RandomBusinessPoolCapacity = 0;
-		public static int InterestBusinessPoolCapacity = 1000;
-		public static int DefaultImpressLabelCount = 10;
+		public static int InterestBusinessPoolCapacity = 10000;
+		public static int WebRTCSessionPoolCapacity = 500;
+		//public static int DefaultImpressLabelCount = 10;
 		public static int HotInterestLabelCount = 10;
 		
 		public static int Encrypt = 1;
@@ -166,9 +167,10 @@ public class GlobalSetting
 		
 		tmpObj = obj.getJSONObject(SettingFieldName.BusinessSetting);
 		BusinessSetting.OnlinePoolCapacity				= getIntValue(tmpObj, SettingFieldName.OnlinePoolCapacity);
+		BusinessSetting.WebRTCSessionPoolCapacity		= getIntValue(tmpObj, SettingFieldName.WebRTCSessionPoolCapacity);
 		BusinessSetting.RandomBusinessPoolCapacity		= getIntValue(tmpObj, SettingFieldName.RandomBusinessPoolCapacity);
 		BusinessSetting.InterestBusinessPoolCapacity	= getIntValue(tmpObj, SettingFieldName.InterestBusinessPoolCapacity);
-		BusinessSetting.DefaultImpressLabelCount		= getIntValue(tmpObj, SettingFieldName.DefaultImpressLabelCount);
+		//BusinessSetting.DefaultImpressLabelCount		= getIntValue(tmpObj, SettingFieldName.DefaultImpressLabelCount);
 		BusinessSetting.HotInterestLabelCount			= getIntValue(tmpObj, SettingFieldName.HotInterestLabelCount);
 		BusinessSetting.Encrypt							= getIntValue(tmpObj, SettingFieldName.Encrypt);
 		BusinessSetting.EncryptKey						= getStringValue(tmpObj, SettingFieldName.EncryptKey);
@@ -323,10 +325,12 @@ public class GlobalSetting
 			return false;
 		}
 		
+		/*
 		if(!checkField(tmpObj, SettingFieldName.DefaultImpressLabelCount))
 		{
 			return false;
 		}
+		*/
 		
 		if(!checkField(tmpObj, SettingFieldName.HotInterestLabelCount))
 		{

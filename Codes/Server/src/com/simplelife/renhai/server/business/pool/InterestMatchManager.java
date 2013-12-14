@@ -192,7 +192,7 @@ public class InterestMatchManager implements IProductor
 			
 			if (!matchFlag)
 			{
-				logger.debug("Add interest labels of device <{}> into interestLabelDeviceMap", device.getDeviceIdentification());
+				logger.debug("Can't find devices with same interest labels, add interest labels of device <{}> into interestLabelDeviceMap", device.getDeviceIdentification());
 				for (Interestlabelmap map : maps)
 				{
 					strLabel = map.getGlobalLabel().getInterestLabelName();
