@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.MessageHandler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.business.session.BusinessSessionEvent;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
@@ -26,6 +27,7 @@ import com.simplelife.renhai.server.db.Impresscard;
 import com.simplelife.renhai.server.db.Impresslabelmap;
 import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.BusinessSessionEventType;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
@@ -423,7 +425,9 @@ public class BusinessSessionRequest extends AppJSONMessage
 		
 		IBusinessSession session = deviceWrapper.getOwnerBusinessSession(); 
 
-		session.onAgreeChat(deviceWrapper);
+		//session.onAgreeChat(deviceWrapper);
+		session.newEvent(BusinessSessionEventType.AgreeChat, deviceWrapper, null);
+		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
 		if (deviceWrapper.getBusinessStatus() == Consts.DeviceStatus.SessionBound)
@@ -467,7 +471,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
-		deviceWrapper.getOwnerBusinessSession().onRejectChat(deviceWrapper);
+		//deviceWrapper.getOwnerBusinessSession().onRejectChat(deviceWrapper);
+		deviceWrapper.getOwnerBusinessSession().newEvent(BusinessSessionEventType.RejectChat, deviceWrapper, null);
 		deviceWrapper.changeBusinessStatus(DeviceStatus.BusinessChoosed, StatusChangeReason.AppRejectChat);
 		
 		response.addToBody(JSONKey.OperationType, Consts.OperationType.RejectChat.getValue());
@@ -486,7 +491,8 @@ public class BusinessSessionRequest extends AppJSONMessage
     			, deviceWrapper.getDevice().getProfile()
     			, deviceWrapper.getDeviceIdentification());
 		logger.debug("Device <{}> ended chat.", deviceWrapper.getDeviceIdentification());
-		deviceWrapper.getOwnerBusinessSession().onEndChat(deviceWrapper);
+		//deviceWrapper.getOwnerBusinessSession().onEndChat(deviceWrapper);
+		deviceWrapper.getOwnerBusinessSession().newEvent(BusinessSessionEventType.EndChat, deviceWrapper, null);
 		
 		ServerJSONMessage response = JSONFactory.createServerJSONMessage(this,
 				Consts.MessageId.BusinessSessionResponse);
@@ -674,7 +680,8 @@ public class BusinessSessionRequest extends AppJSONMessage
 			response.addToBody(JSONKey.BusinessSessionId, null);
 		}
 		
-		deviceWrapper.getOwnerBusinessSession().onChatMessage(deviceWrapper, chatMessage);
+		//deviceWrapper.getOwnerBusinessSession().onChatMessage(deviceWrapper, chatMessage);
+		deviceWrapper.getOwnerBusinessSession().newEvent(BusinessSessionEventType.ChatMessage, deviceWrapper, chatMessage);
 		
 		response.addToBody(JSONKey.OperationType, Consts.OperationType.ChatMessage.getValue());
 		response.addToBody(JSONKey.BusinessType, body.getString(JSONKey.BusinessType));

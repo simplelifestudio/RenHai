@@ -11,6 +11,7 @@ package com.simplelife.renhai.server.json;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.BusinessSessionEventType;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.JSONKey;
@@ -78,7 +79,8 @@ public class BusinessSessionNotificationResponse extends AppJSONMessage
 			case SessionBound:
 				if (deviceWrapper.getOwnerBusinessSession() != null)
 				{
-					deviceWrapper.getOwnerBusinessSession().onBindConfirm(deviceWrapper);
+					//deviceWrapper.getOwnerBusinessSession().onBindConfirm(deviceWrapper);
+					deviceWrapper.getOwnerBusinessSession().newEvent(BusinessSessionEventType.BindConfirm, deviceWrapper, null);
 				}
 				else
 				{

@@ -41,7 +41,7 @@ public class WebRTCSessionPool extends AbstractPool
     protected Timer timer = new Timer();
     public static final WebRTCSessionPool instance = new WebRTCSessionPool();
     private Logger logger = DBModule.instance.getLogger();
-    private Webrtcaccount account = null;
+    private Webrtcaccount curAccount = null;
     private int accountNum = -1;
     
     private WebRTCSessionPool()
@@ -70,7 +70,7 @@ public class WebRTCSessionPool extends AbstractPool
 		}
 		
 		Webrtcsession session = webRTCSessionList.remove(); 
-		logger.debug("WebRTC session <{}> is removed from pool per request by business session", session.getWebRtcSessionId());
+		logger.debug("WebRTC session <{}> is removed from pool per request by business session", session.getToken());
 		return session; 
     }
 
@@ -199,34 +199,34 @@ public class WebRTCSessionPool extends AbstractPool
 	public void checkExpiredToken()
 	{
 		logger.debug("Start to check expired token");
-		int accountId = this.getAccountIdByDate();
-		if (account == null)
+		int idOfToday = this.getAccountIdByDate();
+		if (curAccount == null)
 		{
 			// The first time
-			account = getAccount(accountId);
-			OpenTokSDK sdk = getOpenTokSDK(account);
-			loadFromDb(account, sdk);
+			curAccount = getAccount(idOfToday);
+			OpenTokSDK sdk = getOpenTokSDK(curAccount);
+			loadFromDb(curAccount, sdk);
 			return;
 		}
 		
-		if (accountId != account.getWebRTCAccountId())
+		if (idOfToday != curAccount.getWebRTCAccountId())
 		{
 			logger.debug("Clear tokens and load tokens of next account from DB");
 			clearPool();
 			
-			Webrtcaccount tmpAccount = getAccount(accountId);
+			Webrtcaccount tmpAccount = getAccount(idOfToday);
 			OpenTokSDK sdk = getOpenTokSDK(tmpAccount);
 			loadFromDb(tmpAccount, sdk);
 			
 			if (this.webRTCSessionList.isEmpty())
 			{
-				logger.error("Fatal Error: failed to load WebRTC tokens of account <{}>", accountId);
+				logger.error("Fatal Error: failed to load WebRTC tokens of account <{}>", idOfToday);
 				return;
 			}
-			account = tmpAccount;
+			curAccount = tmpAccount;
 		}
 		
-		OpenTokSDK sdk = getOpenTokSDK(account);
+		OpenTokSDK sdk = getOpenTokSDK(curAccount);
 		updateToken(sdk);
 	}
 

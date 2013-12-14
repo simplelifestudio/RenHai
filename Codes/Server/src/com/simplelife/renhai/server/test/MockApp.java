@@ -180,10 +180,10 @@ public class MockApp implements IMockApp, Runnable
 					app.endChat();
 					break;
 				case AssessAndContinue:
-					app.assessAndContinue("^#Happy#^,assessFromDevice" + deviceSn);
+					app.assessAndContinue("^#Happy#^,By" + deviceSn);
 					break;
 				case AssessAndQuit:
-					app.assessAndQuit("^#SoSo#^,assessFromDevice" + deviceSn);
+					app.assessAndQuit("^#SoSo#^,By" + deviceSn);
 					break;
 				case BusinessSessionNotificationResponse:
 					JSONObject body = receivedMessage.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
@@ -248,6 +248,9 @@ public class MockApp implements IMockApp, Runnable
 	private MockMessageHandler inputMessageHandler = new MockMessageHandler(this, MockApp.mockAppExecutePool);
 	
 	protected int maxOnlineDeviceCount = 0;
+	
+	protected String interestLabels;
+	
 	public boolean isUseRealSocket()
 	{
 		return isUsingRealSocket;
@@ -525,6 +528,12 @@ public class MockApp implements IMockApp, Runnable
     
     public MockApp(String deviceSn, String strBehaviorMode, String serverLink)
     {
+    	this(deviceSn, strBehaviorMode, serverLink, null);
+    }
+    
+    public MockApp(String deviceSn, String strBehaviorMode, String serverLink, String interestLabels)
+    {
+    	this.interestLabels = interestLabels;
     	this.deviceSn = deviceSn;
     	MockAppConsts.MockAppBehaviorMode tmpBehaviorMode = MockAppConsts.MockAppBehaviorMode.parseFromStringValue(strBehaviorMode);
     	
@@ -1203,21 +1212,12 @@ public class MockApp implements IMockApp, Runnable
 					}
 					else if (behaviorMode.ordinal() >= MockAppConsts.MockAppBehaviorMode.NoRequestOfAssess.ordinal())
 					{
-						int chatDuration = getRandomVideoChatDuration();
 						task = new AutoReplyTask(
 								MockAppRequest.ChatMessage, 
 								null, 
 								this,
 								5000,
-								null);
-						MockApp.mockAppExecutePool.execute(task);
-						
-						task = new AutoReplyTask(
-								MockAppRequest.EndChat, 
-								null, 
-								this,
-								chatDuration,
-								MockAppConsts.MockAppBusinessStatus.EndChatReqSent);
+								MockAppConsts.MockAppBusinessStatus.ChatMessageReqSent);
 					}
 				}
 				else if (messageId == Consts.MessageId.BusinessSessionNotification)
@@ -1237,6 +1237,32 @@ public class MockApp implements IMockApp, Runnable
 				}
 				break;
 			
+			case ChatMessageReqSent:
+				if (messageId == Consts.MessageId.BusinessSessionResponse)
+				{
+					int chatDuration = getRandomVideoChatDuration();
+					task = new AutoReplyTask(
+							MockAppRequest.EndChat, 
+							null, 
+							this,
+							chatDuration,
+							MockAppConsts.MockAppBusinessStatus.EndChatReqSent);
+				}
+				else if (messageId == Consts.MessageId.BusinessSessionNotification)
+				{
+					JSONObject body = obj.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
+					if (body.getInteger(JSONKey.OperationType) == Consts.NotificationType.OthersideRejected.getValue())
+					{
+						endBusiness();
+					}
+					replyNotification(obj, null);
+				}
+				else
+				{
+					logger.error("Received {} in status of ChatMessageReqSent", messageId.name());
+				}
+				break;
+				
 			case EndChatReqSent:
 				if (messageId == Consts.MessageId.BusinessSessionResponse)
 				{
@@ -1371,14 +1397,25 @@ public class MockApp implements IMockApp, Runnable
 	 */
 	public void syncDevice()
 	{
-		List<String> labels = new ArrayList<String>();
-		labels.add("音乐");
-		labels.add("看电影");
-		labels.add(this.getDeviceSn());
-		
-		if (System.currentTimeMillis() % 2 == 0)
+		List<String> labels = new ArrayList<String>();;
+		if (interestLabels == null)
 		{
-			labels.add(Consts.SolidInterestLabel.RenHai.getValue());
+			labels.add("音乐");
+			labels.add("看电影");
+			labels.add(this.getDeviceSn());
+			
+			if (System.currentTimeMillis() % 2 == 0)
+			{
+				labels.add(Consts.SolidInterestLabel.RenHai.getValue());
+			}
+		}
+		else
+		{
+			String[] labelArray = interestLabels.split(",");
+			for (int i = 0; i < labelArray.length; i++)
+			{
+				labels.add(labelArray[i]);
+			}
 		}
 		syncDevice(labels);
 	}

@@ -10,6 +10,7 @@
 package com.simplelife.renhai.server.test;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.simplelife.renhai.server.business.BusinessModule;
 
@@ -39,12 +40,18 @@ public class MockAppConsole
 	        String behaviorMode = args[3];
 	        //ExecutorService executeThreadPool = Executors.newFixedThreadPool(threadCount);
 
-	        ExecuteThread thread = new ExecuteThread("MA-Monitor", "Monitor", serverLink);
+	        ExecuteThread thread = new ExecuteThread("MA-Monitor", "Monitor", serverLink, 0, 0);
 	        thread.start();
+	        int indexInGroup = 1;
+	        
 	        for (int i = 0; i < threadCount; i++)
 	        {
+	        	if (threadCount > 4)
+	        	{
+	        		indexInGroup = i % 4 + 1;
+	        	}
 	        	System.out.println("Start to launch MockApp-" + i);
-	        	thread = new ExecuteThread("MA-" + i, behaviorMode, serverLink);
+	        	thread = new ExecuteThread("MA-" + i, behaviorMode, serverLink, i, indexInGroup);
 	        	thread.start();
 	        	System.out.println("MockApp-" + i + " launched successfully.");
 	        	Thread.sleep(threadInterval);
@@ -87,19 +94,25 @@ public class MockAppConsole
         private String name;
         private String behaviorMode;
         private String websocketLink;
-        private Logger logger = BusinessModule.instance.getLogger();
+        private int appIndex;
+        private int labelIndex;
         
-        public ExecuteThread(String name, String behaviorMode, String websocketLink)
+        private Logger logger = LoggerFactory.getLogger("MockAppConsole");
+        
+        public ExecuteThread(String name, String behaviorMode, String websocketLink, int appIndex, int labelIndex)
         {
             this.name = name;
             this.behaviorMode = behaviorMode;
             this.websocketLink = websocketLink;
+            this.appIndex = appIndex;
+            this.labelIndex = labelIndex;
         }
         
         @Override
         public void run()
         {
-            MockApp app = new MockApp(name, behaviorMode, websocketLink);
+        	String interestLabel = "MA_" + appIndex + "," + "GI_" + labelIndex;
+        	MockApp app = new MockApp(name, behaviorMode, websocketLink, interestLabel);
             while (app.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
             {
                 try

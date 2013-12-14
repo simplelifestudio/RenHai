@@ -44,6 +44,7 @@ import com.simplelife.renhai.server.json.ServerErrorResponse;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.BusinessSessionEventType;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.PingActionType;
@@ -346,7 +347,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     				switch(businessStatus)
         			{
         				case MatchStarted:
-        					ownerBusinessSession.onDeviceEnter(this);
+        					//ownerBusinessSession.onDeviceEnter(this);
         					businessPool.startChat(this);
         					break;
         				default:
@@ -417,7 +418,8 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     	
     	//logger.debug("===============13===============Device <{}>", this.getDeviceIdentification());
     	logger.debug("Unbind device <{}> from business session", getDeviceIdentification());
-    	ownerBusinessSession.onDeviceLeave(this, reason);
+    	//ownerBusinessSession.onDeviceLeave(this, reason);
+    	ownerBusinessSession.newEvent(BusinessSessionEventType.DeviceLeave, this, reason);
     	ownerBusinessSession = null;
     	//logger.debug("===============14===============Device <{}>", this.getDeviceIdentification());
     }
@@ -897,6 +899,12 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 	public void prepareResponse(ServerJSONMessage response)
 	{
 		outputMessageHandler.addMessage(response);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return getDeviceIdentification();
 	}
 	
 	private class DeviceStatusChangeTask implements IRunnableMessage

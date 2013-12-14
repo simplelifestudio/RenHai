@@ -15,6 +15,8 @@ import java.util.Collection;
 import java.util.List;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
+import com.simplelife.renhai.server.business.session.BusinessSessionEvent;
+import com.simplelife.renhai.server.util.Consts.BusinessSessionEventType;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
 
 
@@ -23,8 +25,6 @@ public interface IBusinessSession
 {
     /** */
     public void onDeviceLeave(IDeviceWrapper device, Consts.StatusChangeReason reason);
-    
-    public void onDeviceEnter(IDeviceWrapper device);
     
     /** */
     public boolean startSession(List<IDeviceWrapper> deviceList, JSONObject matchCondition);
@@ -48,6 +48,8 @@ public interface IBusinessSession
     public BusinessSessionStatus getStatus();
     
     public String getSessionId();
+    
+    public void newEvent(BusinessSessionEventType eventType, IDeviceWrapper device, Object operationInfo);
     
     /** */
     //public void onAssessAndContinue(IDeviceWrapper sourceDevice);

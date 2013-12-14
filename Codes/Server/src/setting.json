@@ -35,7 +35,7 @@
 		"lengthOfSessionId":16,
 		"lengthOfMessageSn":16,
 		
-		"maxImpressLabelCount":2,
+		"maxImpressLabelCount":20,
 		"inputMessageHandleThreads":200,
 		"outputMessageSendThreads":500,
 		"messageQueueTime":3000,

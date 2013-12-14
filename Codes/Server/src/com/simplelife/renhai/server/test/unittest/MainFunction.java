@@ -352,6 +352,18 @@ public class MainFunction extends AbstractTestCase
 	}
 	
 	@Test
+	public void testBehaviorMode2() throws InterruptedException
+	{
+		MockApp.mockAppExecutePool.startService();
+		MockApp app1 = new MockApp("MA-1", "NormalAndQuit", "ws://192.81.135.31/renhai/websocket");
+		while (app1.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
+		{
+			Thread.sleep(1000);
+		}
+		System.out.print("aaaaa");
+	}
+	
+	@Test
 	public void testBehaviorMode() throws InterruptedException
 	{
 		MockApp.mockAppExecutePool.startService();

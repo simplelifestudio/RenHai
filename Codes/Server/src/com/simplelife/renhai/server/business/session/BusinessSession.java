@@ -34,6 +34,7 @@ import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
+import com.simplelife.renhai.server.util.Consts.BusinessSessionEventType;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
 import com.simplelife.renhai.server.util.Consts.DeviceBusinessProgress;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
@@ -310,30 +311,33 @@ public class BusinessSession implements IBusinessSession
     	{
     		tempStr = triggerDevice.getDeviceIdentification();
     	}
-    	
-    	//logger.debug("===============1000===============Device <{}>", tempStr);
+        // logger.debug("===============1000===============Device <{}>", tempStr);
     	if (deviceList == null)
     	{
-    		//logger.debug("===============1001===============Device <{}>", tempStr);
+    		if (logger.isDebugEnabled())
+    		{
+    			String temp = "Cancel notification of " + notificationType.name() + " from device <{" + triggerDevice.getDeviceIdentification() + "}> due to deviceList is null";
+    			logger.debug(temp);
+    		}
     		return;
     	}
     	
-    	//logger.debug("===============1002===============Device <{}>", tempStr);
+    	// logger.debug("===============1002===============Device <{}>", tempStr);
     	String temp;
     	for (IDeviceWrapper device : deviceList)
     	{
-    		//logger.debug("===============1003===============Device <{}>", tempStr);
+    		// logger.debug("===============1003===============Device <{}>", tempStr);
     		if (device == triggerDevice)
 			{
-    			//logger.debug("===============1004===============Device <{}>", tempStr);
+    			// logger.debug("===============1004===============Device <{}>", tempStr);
 				continue;
 			}
 
-    		//logger.debug("===============1005===============Device <{}>", tempStr);
+    		// logger.debug("===============1005===============Device <{}>", tempStr);
 			Consts.DeviceBusinessProgress progress = progressMap.get(device.getDeviceIdentification()); 
 			if (progress.getValue() >= Consts.DeviceBusinessProgress.ChatEnded.getValue())
 			{
-				//logger.debug("===============1006===============Device <{}>", tempStr);
+				// logger.debug("===============1006===============Device <{}>", tempStr);
 				// Ignore devices who has entered phase of Assess or has left session
 				continue;
 			}
@@ -349,20 +353,20 @@ public class BusinessSession implements IBusinessSession
 				logger.debug(temp);
 			}
 			
-			//logger.debug("===============1007===============Device <{}>", tempStr);
+			// logger.debug("===============1007===============Device <{}>", tempStr);
 			if (operationInfoObj != null)
 			{
-				//logger.debug("===============1008===============Device <{}>", tempStr);
+				// logger.debug("===============1008===============Device <{}>", tempStr);
 				notifyDevice(device, notificationType, operationInfoObj);
-				//logger.debug("===============1009===============Device <{}>", tempStr);
+				// logger.debug("===============1009===============Device <{}>", tempStr);
 			}
 			else
 			{
-				//logger.debug("===============1010===============Device <{}>", tempStr);
+				// logger.debug("===============1010===============Device <{}>", tempStr);
 				JSONObject tmpObj;
 				if(triggerDevice == null ||  notificationType == NotificationType.SessionBound)
 				{
-					//logger.debug("===============1011===============Device <{}>", tempStr);
+					// logger.debug("===============1011===============Device <{}>", tempStr);
 					tmpObj = new JSONObject();
 					tmpObj.put(JSONKey.Device, getOperationInfoOfOtherDevices(device));
 				    
@@ -375,13 +379,15 @@ public class BusinessSession implements IBusinessSession
 				}
 				else
 				{
-					//logger.debug("===============1012===============Device <{}>", tempStr);
+					// logger.debug("===============1012===============Device <{}>", tempStr);
 					tmpObj = new JSONObject();
-					tmpObj.put(JSONKey.Device, getOperationInfoOfOtherDevices(device));
+					JSONObject deviceObj = new JSONObject();
+					deviceObj.put(JSONKey.DeviceSn, device.getDeviceIdentification());
+					tmpObj.put(JSONKey.Device, deviceObj);
 				}
-				//logger.debug("===============1013===============Device <{}>", tempStr);
+				// logger.debug("===============1013===============Device <{}>", tempStr);
 				notifyDevice(device, notificationType, tmpObj);
-				//logger.debug("===============1014===============Device <{}>", tempStr);
+				// logger.debug("===============1014===============Device <{}>", tempStr);
 			}
     	}
 	}
@@ -579,7 +585,7 @@ public class BusinessSession implements IBusinessSession
     	
     	if (progress != Consts.DeviceBusinessProgress.ChatAgreed)
     	{
-    		logger.error("Received confirmation EndChat from device <{}> but it's not in status of " + progress.name(), device.getDeviceIdentification());
+    		logger.error("Received EndChat from device <{}> but it's not in status of " + progress.name(), device.getDeviceIdentification());
     		return;
     	}
     	
@@ -619,6 +625,12 @@ public class BusinessSession implements IBusinessSession
     		logger.debug(sTemp);
     	}
     	progressMap.put(deviceSn, progress);
+    }
+    
+    public void newEvent(BusinessSessionEventType eventType, IDeviceWrapper device, Object operationInfo)
+    {
+    	BusinessSessionEvent event = new BusinessSessionEvent(eventType, device, operationInfo, this);
+    	messageHandler.addMessage(event);
     }
     
     @Override
@@ -672,7 +684,7 @@ public class BusinessSession implements IBusinessSession
     	
     	if (progress == null)
     	{
-    		logger.error("Fatal error that received confirmation RejectChat from device <{}> but there is no progress record for it!");
+    		logger.error("Fatal error that received confirmation RejectChat from device <{}> but there is no progress record for it!", device.getDeviceIdentification());
     		return;
     	}
     	
@@ -689,15 +701,75 @@ public class BusinessSession implements IBusinessSession
     }
 
     @Override
-    public void onDeviceEnter(IDeviceWrapper device)
-    {
-    	//this.deviceList.add(device);
-    }
-    
-    @Override
     public void onDeviceLeave(IDeviceWrapper device, Consts.StatusChangeReason reason)
     {
-    	messageHandler.addMessage(new DeviceLeaveTask(device, reason));
+    	//logger.debug("===============131===============Device <{}>, session id: " + getSessionId(), device.getDeviceIdentification());
+    	if (deviceList == null)
+    	{
+    		//logger.debug("===============132===============Device <{}>", device.getDeviceIdentification());
+    		return;
+    	}
+    	
+    	//logger.debug("===============133===============Device <{}>", device.getDeviceIdentification());
+    	//deviceList.remove(device);
+   		//progressMap.remove(device.getDeviceIdentification());
+    	//logger.debug("===============134===============Device <{}>", device.getDeviceIdentification());
+   		
+   		//device.unbindBusinessSession();
+		logger.debug("Device <{}> was removed from business session due to " + reason.name(), device.getDeviceIdentification());
+    	
+		if (reason == Consts.StatusChangeReason.TimeoutOfActivity
+				|| reason == Consts.StatusChangeReason.TimeoutOfPing
+				|| reason == Consts.StatusChangeReason.TimeoutOnSyncSending
+				|| reason == Consts.StatusChangeReason.WebSocketReconnect
+				|| reason == Consts.StatusChangeReason.WebsocketClosedByApp)
+		{
+			//logger.debug("===============135===============Device <{}>", device.getDeviceIdentification());
+			if (this.getStatus() == BusinessSessionStatus.VideoChat)
+			{
+				device.increaseChatLoss();
+			}
+			//logger.debug("===============136===============Device <{}>", device.getDeviceIdentification());
+			if (chatStartTime > 0)
+			{
+				//logger.debug("===============137===============Device <{}>", device.getDeviceIdentification());
+				int duration = (int) (System.currentTimeMillis() - chatStartTime);
+				device.increaseChatDuration(duration);
+				//logger.debug("===============138===============Device <{}>", device.getDeviceIdentification());
+			}
+			//logger.debug("===============139===============Device <{}>", device.getDeviceIdentification());
+			notifyDevices(device, NotificationType.OthersideLost, null);
+			//logger.debug("===============1391===============Device <{}>", device.getDeviceIdentification());
+			defaultGoodAssess(deviceList, device);
+			//logger.debug("===============1392===============Device <{}>", device.getDeviceIdentification());
+    	}
+		else if (reason == Consts.StatusChangeReason.AppLeaveBusiness)
+		{
+			//logger.debug("===============1393===============Device <{}>", device.getDeviceIdentification());
+			notifyDevices(device, NotificationType.OthersideRejected, null);
+		}
+		updateBusinessProgress(device.getDeviceIdentification(), DeviceBusinessProgress.Leaved);
+   		
+    
+		if (checkAllDevicesReach(DeviceBusinessProgress.Leaved))
+    	//if (deviceList == null || deviceList.isEmpty())
+    	{
+    		//logger.debug("===============1394===============Device <{}>", device.getDeviceIdentification());
+    		if (reason == StatusChangeReason.AssessAndContinue
+    				|| reason == StatusChangeReason.AssessAndQuit)
+    		{
+    			//logger.debug("===============1395===============Device <{}>", device.getDeviceIdentification());
+    			endReason = Consts.SessionEndReason.NormalEnd;
+    		}
+    		else
+    		{
+    			//logger.debug("===============1396===============Device <{}>", device.getDeviceIdentification());
+    			endReason = Consts.SessionEndReason.AllDeviceRemoved;
+    		}
+    		//logger.debug("===============1397===============Device <{}>", device.getDeviceIdentification());
+    		changeStatus(Consts.BusinessSessionStatus.Idle);
+    		return;
+    	}
     }
     
     @Override
@@ -769,123 +841,5 @@ public class BusinessSession implements IBusinessSession
 				return false;
 		}
 		return true;
-	}
-	
-	private class DeviceLeaveTask implements IRunnableMessage
-	{
-		private String messageSn = CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn);
-		private long queueTime;
-		private IDeviceWrapper device;
-		private StatusChangeReason reason;
-		
-		public DeviceLeaveTask(IDeviceWrapper device, Consts.StatusChangeReason reason)
-		{
-			this.device = device;
-			this.reason = reason;
-		}
-		
-		@Override
-		public void run()
-		{
-			//logger.debug("===============131===============Device <{}>, session id: " + getSessionId(), device.getDeviceIdentification());
-	    	if (deviceList == null)
-	    	{
-	    		//logger.debug("===============132===============Device <{}>", device.getDeviceIdentification());
-	    		return;
-	    	}
-	    	
-	    	//logger.debug("===============133===============Device <{}>", device.getDeviceIdentification());
-	    	//deviceList.remove(device);
-	   		//progressMap.remove(device.getDeviceIdentification());
-	    	updateBusinessProgress(device.getDeviceIdentification(), DeviceBusinessProgress.Leaved);
-	   		//logger.debug("===============134===============Device <{}>", device.getDeviceIdentification());
-	   		
-	   		//device.unbindBusinessSession();
-			logger.debug("Device <{}> was removed from business session due to " + reason.name(), device.getDeviceIdentification());
-	    	
-			if (reason == Consts.StatusChangeReason.TimeoutOfActivity
-					|| reason == Consts.StatusChangeReason.TimeoutOfPing
-					|| reason == Consts.StatusChangeReason.TimeoutOnSyncSending
-					|| reason == Consts.StatusChangeReason.WebSocketReconnect
-					|| reason == Consts.StatusChangeReason.WebsocketClosedByApp)
-			{
-				//logger.debug("===============135===============Device <{}>", device.getDeviceIdentification());
-				device.increaseChatLoss();
-				//logger.debug("===============136===============Device <{}>", device.getDeviceIdentification());
-				if (chatStartTime > 0)
-				{
-					//logger.debug("===============137===============Device <{}>", device.getDeviceIdentification());
-					int duration = (int) (System.currentTimeMillis() - chatStartTime);
-					device.increaseChatDuration(duration);
-					//logger.debug("===============138===============Device <{}>", device.getDeviceIdentification());
-				}
-				//logger.debug("===============139===============Device <{}>", device.getDeviceIdentification());
-				notifyDevices(device, NotificationType.OthersideLost, null);
-				//logger.debug("===============1391===============Device <{}>", device.getDeviceIdentification());
-				defaultGoodAssess(deviceList, device);
-				//logger.debug("===============1392===============Device <{}>", device.getDeviceIdentification());
-	    	}
-			else if (reason == Consts.StatusChangeReason.AppLeaveBusiness)
-			{
-				//logger.debug("===============1393===============Device <{}>", device.getDeviceIdentification());
-				notifyDevices(device, NotificationType.OthersideRejected, null);
-			}
-	    
-			if (checkAllDevicesReach(DeviceBusinessProgress.Leaved))
-	    	//if (deviceList == null || deviceList.isEmpty())
-	    	{
-	    		//logger.debug("===============1394===============Device <{}>", device.getDeviceIdentification());
-	    		if (reason == StatusChangeReason.AssessAndContinue
-	    				|| reason == StatusChangeReason.AssessAndQuit)
-	    		{
-	    			//logger.debug("===============1395===============Device <{}>", device.getDeviceIdentification());
-	    			endReason = Consts.SessionEndReason.NormalEnd;
-	    		}
-	    		else
-	    		{
-	    			//logger.debug("===============1396===============Device <{}>", device.getDeviceIdentification());
-	    			endReason = Consts.SessionEndReason.AllDeviceRemoved;
-	    		}
-	    		//logger.debug("===============1397===============Device <{}>", device.getDeviceIdentification());
-	    		changeStatus(Consts.BusinessSessionStatus.Idle);
-	    		return;
-	    	}
-		}
-
-		@Override
-		public int getQueueDuration()
-		{
-			return (int)(System.currentTimeMillis() - queueTime);
-		}
-
-		@Override
-		public void setQueueTime(long now)
-		{
-			queueTime = now;
-		}
-
-		@Override
-		public String getMessageName()
-		{
-			return "SessionDeviceLeaveTask";
-		}
-
-		@Override
-		public String getMessageSn()
-		{
-			return messageSn;
-		}
-
-		@Override
-		public String getMsgOwnerInfo()
-		{
-			return sessionId;
-		}
-
-		@Override
-		public int getDelayOfHandle()
-		{
-			return 0;
-		}
 	}
 }

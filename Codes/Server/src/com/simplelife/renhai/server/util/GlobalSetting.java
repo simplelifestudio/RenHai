@@ -151,7 +151,7 @@ public class GlobalSetting
 		TimeOut.Assess					= getIntValue(tmpObj, SettingFieldName.Assess);
 		TimeOut.CheckExpiredToken		= getIntValue(tmpObj, SettingFieldName.CheckExpiredToken);
 		TimeOut.FlushCacheToDB			= getIntValue(tmpObj, SettingFieldName.FlushCacheToDB);
-		TimeOut.CheckPingInterval			= getIntValue(tmpObj, SettingFieldName.DeviceInIdle);
+		//TimeOut.CheckPingInterval		= getIntValue(tmpObj, SettingFieldName.CheckPingInterval);
 		TimeOut.OnlineDeviceConnection	= getIntValue(tmpObj, SettingFieldName.OnlineDeviceConnection);
 		TimeOut.PingInterval			= getIntValue(tmpObj, SettingFieldName.PingInterval);
 		TimeOut.SaveStatistics			= getIntValue(tmpObj, SettingFieldName.SaveStatistics);

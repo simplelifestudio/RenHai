@@ -834,4 +834,38 @@ public class Consts
 			return null;
 		}
 	}
+	
+	public enum BusinessSessionEventType
+	{
+		Invalid(0), 
+		BindConfirm(1),
+		AgreeChat(2),
+		RejectChat(3),
+		ChatMessage(4),
+		DeviceLeave(6),
+		EndChat(6);
+		
+		private int value;
+		private BusinessSessionEventType(int value)
+		{
+			this.value = value;
+		}
+		
+		public int getValue()
+		{
+			return value;
+		}
+		
+		public static BusinessSessionEventType parseValue(int value)
+		{
+			for (BusinessSessionEventType item : values())
+			{
+				if (item.value == value)
+				{
+					return item;
+				}
+			}
+			return null;
+		}
+	}
 }

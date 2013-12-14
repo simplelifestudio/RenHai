@@ -40,13 +40,15 @@ public class MockAppConsts
 		AgreeChatResReceived(11),
 		RejectChatReqSent(10),			// same with AgreeChatReqSent 
 		RejectChatResReceived(11),
-		EndChatReqSent(12),
-		EndChatResReceived(13),
-		AssessReqSent(14),
-		AssessResReceived(15),
-		SessionUnbindReqSent(16),
-		SessionUnbindResReceived(17),
-		Ended(18);
+		ChatMessageReqSent(12),
+		ChatMessageResReceived(13),
+		EndChatReqSent(14),
+		EndChatResReceived(15),
+		AssessReqSent(16),
+		AssessResReceived(17),
+		SessionUnbindReqSent(18),
+		SessionUnbindResReceived(19),
+		Ended(20);
 		
 		private int value;
 		private MockAppBusinessStatus(int value)

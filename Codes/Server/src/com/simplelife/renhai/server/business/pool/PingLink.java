@@ -1,5 +1,7 @@
 package com.simplelife.renhai.server.business.pool;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +16,7 @@ public class PingLink
 	
 	private PingNode head;
 	private PingNode tail;
-	private volatile int count;
+	private AtomicInteger linkSize = new AtomicInteger(0);
 	private Logger logger = LoggerFactory.getLogger("Ping");
 	
 	
@@ -40,20 +42,26 @@ public class PingLink
 	
 	public int size()
 	{
-		return count;
+		return linkSize.get();
 	}
 	
 	public void append(IDeviceWrapper deviceWrapper)
 	{
 		PingNode node = deviceWrapper.getPingNode();
 		addToTail(node);
-		count++;
 	}
 	
 	
 	public void checkInactivity()
 	{
-		logger.debug("Start to check inactivity of Ping");
+		if (head == null)
+		{
+			return;
+		}
+		
+		long duration = System.currentTimeMillis() - head.getLastPingTime();
+		logger.debug("Start to check inactivity of Ping, link size: {}, duration of first node: " + duration, linkSize.get());
+		
 		int count = 0;
 		PingNode node = head;
 		PingNode nextNode = null;
@@ -114,11 +122,11 @@ public class PingLink
 		}
 		node.setNextNode(null);
 		node.setPrevNode(null);
-		count--;
+		linkSize.decrementAndGet();
 	}
 	public void removeNode(PingNode node)
 	{
-		logger.debug("Remove Ping node of device <{}>", node.getDeviceWrapper().getDeviceIdentification());
+		//logger.debug("Remove Ping node of device <{}>", node.getDeviceWrapper().getDeviceIdentification());
 		removeNode(node, true);
 	}
 	
@@ -160,5 +168,7 @@ public class PingLink
 		{
 			addToHead(node);
 		}
+		
+		linkSize.incrementAndGet();
 	}
 }
