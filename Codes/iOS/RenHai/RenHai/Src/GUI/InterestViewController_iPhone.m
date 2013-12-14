@@ -947,6 +947,8 @@
 
 -(void)_remoteUpdateInterestCard
 {
+    [_guiModule playSound:SOUNDID_LABELMANAGED];
+    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         RHDevice* device = _userDataModule.device;
         RHProfile* profile = device.profile;

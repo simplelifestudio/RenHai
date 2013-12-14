@@ -202,6 +202,32 @@
 		CD1637FB185ADC40009BB03D /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637F4185ADC40009BB03D /* Icon-120.png */; };
 		CD1637FC185ADC40009BB03D /* Icon-152.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637F5185ADC40009BB03D /* Icon-152.png */; };
 		CD1637FD185ADC40009BB03D /* Icon-152.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637F5185ADC40009BB03D /* Icon-152.png */; };
+		CD163809185C65F0009BB03D /* chatassess_continue.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD1637FE185C65F0009BB03D /* chatassess_continue.caf */; };
+		CD16380A185C65F0009BB03D /* chatassess_continue.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD1637FE185C65F0009BB03D /* chatassess_continue.caf */; };
+		CD16380B185C65F0009BB03D /* chatassess_quit.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD1637FF185C65F0009BB03D /* chatassess_quit.caf */; };
+		CD16380C185C65F0009BB03D /* chatassess_quit.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD1637FF185C65F0009BB03D /* chatassess_quit.caf */; };
+		CD16380D185C65F0009BB03D /* chatconfirm_accepted.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163800185C65F0009BB03D /* chatconfirm_accepted.caf */; };
+		CD16380E185C65F0009BB03D /* chatconfirm_accepted.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163800185C65F0009BB03D /* chatconfirm_accepted.caf */; };
+		CD16380F185C65F0009BB03D /* chatconfirm_rejected.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163801185C65F0009BB03D /* chatconfirm_rejected.caf */; };
+		CD163810185C65F0009BB03D /* chatconfirm_rejected.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163801185C65F0009BB03D /* chatconfirm_rejected.caf */; };
+		CD163811185C65F0009BB03D /* chatmessage_received.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163802185C65F0009BB03D /* chatmessage_received.caf */; };
+		CD163812185C65F0009BB03D /* chatmessage_received.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163802185C65F0009BB03D /* chatmessage_received.caf */; };
+		CD163813185C65F0009BB03D /* chatmessage_sent.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163803185C65F0009BB03D /* chatmessage_sent.caf */; };
+		CD163814185C65F0009BB03D /* chatmessage_sent.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163803185C65F0009BB03D /* chatmessage_sent.caf */; };
+		CD163815185C65F0009BB03D /* chatvideo_endchat.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163804185C65F0009BB03D /* chatvideo_endchat.caf */; };
+		CD163816185C65F0009BB03D /* chatvideo_endchat.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163804185C65F0009BB03D /* chatvideo_endchat.caf */; };
+		CD163817185C65F0009BB03D /* choosebusiness.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163805185C65F0009BB03D /* choosebusiness.caf */; };
+		CD163818185C65F0009BB03D /* choosebusiness.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163805185C65F0009BB03D /* choosebusiness.caf */; };
+		CD163819185C65F0009BB03D /* error.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163806185C65F0009BB03D /* error.caf */; };
+		CD16381A185C65F0009BB03D /* error.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163806185C65F0009BB03D /* error.caf */; };
+		CD16381B185C65F0009BB03D /* labelmanaged.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163807185C65F0009BB03D /* labelmanaged.caf */; };
+		CD16381C185C65F0009BB03D /* labelmanaged.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163807185C65F0009BB03D /* labelmanaged.caf */; };
+		CD16381D185C65F0009BB03D /* sessionbound.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163808185C65F0009BB03D /* sessionbound.caf */; };
+		CD16381E185C65F0009BB03D /* sessionbound.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163808185C65F0009BB03D /* sessionbound.caf */; };
+		CD163820185C6B66009BB03D /* chatvideo_chatmessage.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD16381F185C6B66009BB03D /* chatvideo_chatmessage.caf */; };
+		CD163821185C6B66009BB03D /* chatvideo_chatmessage.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD16381F185C6B66009BB03D /* chatvideo_chatmessage.caf */; };
+		CD163823185C735D009BB03D /* unchoosebusiness.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163822185C735D009BB03D /* unchoosebusiness.caf */; };
+		CD163824185C735D009BB03D /* unchoosebusiness.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163822185C735D009BB03D /* unchoosebusiness.caf */; };
 		CD1DFB0918001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0A18001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */; };
@@ -647,6 +673,19 @@
 		CD1637F3185ADC40009BB03D /* Icon-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-80.png"; sourceTree = "<group>"; };
 		CD1637F4185ADC40009BB03D /* Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-120.png"; sourceTree = "<group>"; };
 		CD1637F5185ADC40009BB03D /* Icon-152.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-152.png"; sourceTree = "<group>"; };
+		CD1637FE185C65F0009BB03D /* chatassess_continue.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chatassess_continue.caf; sourceTree = "<group>"; };
+		CD1637FF185C65F0009BB03D /* chatassess_quit.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chatassess_quit.caf; sourceTree = "<group>"; };
+		CD163800185C65F0009BB03D /* chatconfirm_accepted.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chatconfirm_accepted.caf; sourceTree = "<group>"; };
+		CD163801185C65F0009BB03D /* chatconfirm_rejected.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chatconfirm_rejected.caf; sourceTree = "<group>"; };
+		CD163802185C65F0009BB03D /* chatmessage_received.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chatmessage_received.caf; sourceTree = "<group>"; };
+		CD163803185C65F0009BB03D /* chatmessage_sent.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chatmessage_sent.caf; sourceTree = "<group>"; };
+		CD163804185C65F0009BB03D /* chatvideo_endchat.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chatvideo_endchat.caf; sourceTree = "<group>"; };
+		CD163805185C65F0009BB03D /* choosebusiness.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = choosebusiness.caf; sourceTree = "<group>"; };
+		CD163806185C65F0009BB03D /* error.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = error.caf; sourceTree = "<group>"; };
+		CD163807185C65F0009BB03D /* labelmanaged.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = labelmanaged.caf; sourceTree = "<group>"; };
+		CD163808185C65F0009BB03D /* sessionbound.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sessionbound.caf; sourceTree = "<group>"; };
+		CD16381F185C6B66009BB03D /* chatvideo_chatmessage.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chatvideo_chatmessage.caf; sourceTree = "<group>"; };
+		CD163822185C735D009BB03D /* unchoosebusiness.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = unchoosebusiness.caf; sourceTree = "<group>"; };
 		CD1C4A9917FAB763009642D3 /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-RenHaiGHUnitTest.a"; path = "Pods/build/Debug-iphoneos/libPods-RenHaiGHUnitTest.a"; sourceTree = "<group>"; };
 		CD1DFB0618001086006ED9A4 /* ConnectViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectViewController_iPhone.h; sourceTree = "<group>"; };
 		CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectViewController_iPhone.m; sourceTree = "<group>"; };
@@ -924,6 +963,19 @@
 		C55B441417CF587A009BB21B /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				CD163822185C735D009BB03D /* unchoosebusiness.caf */,
+				CD16381F185C6B66009BB03D /* chatvideo_chatmessage.caf */,
+				CD1637FE185C65F0009BB03D /* chatassess_continue.caf */,
+				CD1637FF185C65F0009BB03D /* chatassess_quit.caf */,
+				CD163800185C65F0009BB03D /* chatconfirm_accepted.caf */,
+				CD163801185C65F0009BB03D /* chatconfirm_rejected.caf */,
+				CD163802185C65F0009BB03D /* chatmessage_received.caf */,
+				CD163803185C65F0009BB03D /* chatmessage_sent.caf */,
+				CD163804185C65F0009BB03D /* chatvideo_endchat.caf */,
+				CD163805185C65F0009BB03D /* choosebusiness.caf */,
+				CD163806185C65F0009BB03D /* error.caf */,
+				CD163807185C65F0009BB03D /* labelmanaged.caf */,
+				CD163808185C65F0009BB03D /* sessionbound.caf */,
 			);
 			path = Sounds;
 			sourceTree = "<group>";
@@ -1400,6 +1452,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD163820185C6B66009BB03D /* chatvideo_chatmessage.caf in Resources */,
 				CD1637FA185ADC40009BB03D /* Icon-120.png in Resources */,
 				C55B43F617CF580A009BB21B /* InfoPlist.strings in Resources */,
 				C55B43FE17CF580A009BB21B /* Default.png in Resources */,
@@ -1411,6 +1464,7 @@
 				C55B445D17CF8632009BB21B /* Icon-72.png in Resources */,
 				CD736CF41817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */,
 				C55B445F17CF8632009BB21B /* Icon-Small-50.png in Resources */,
+				CD163823185C735D009BB03D /* unchoosebusiness.caf in Resources */,
 				C55B446117CF8632009BB21B /* Icon-Small.png in Resources */,
 				C55B446317CF8632009BB21B /* Icon-Small@2x.png in Resources */,
 				C55B446517CF8632009BB21B /* Icon.png in Resources */,
@@ -1422,9 +1476,16 @@
 				CD5633B21827631600D2A9A6 /* close@2x.png in Resources */,
 				C593C47917D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */,
 				CDDBE34E18548D1E001A1744 /* icon-error.png in Resources */,
+				CD16380D185C65F0009BB03D /* chatconfirm_accepted.caf in Resources */,
+				CD16380F185C65F0009BB03D /* chatconfirm_rejected.caf in Resources */,
 				CD1637F8185ADC40009BB03D /* Icon-80.png in Resources */,
+				CD16381B185C65F0009BB03D /* labelmanaged.caf in Resources */,
+				CD163817185C65F0009BB03D /* choosebusiness.caf in Resources */,
 				CDFEA326182A1E5C00F0351D /* ChatAssessExistImpressLabelsHeaderView_iPhone.xib in Resources */,
+				CD16381D185C65F0009BB03D /* sessionbound.caf in Resources */,
+				CD163815185C65F0009BB03D /* chatvideo_endchat.caf in Resources */,
 				C596283917DA08AA009127E6 /* sidebar_menu_icon_landscape.png in Resources */,
+				CD163809185C65F0009BB03D /* chatassess_continue.caf in Resources */,
 				CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */,
 				C596283B17DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png in Resources */,
 				CD5101A3182A856600E188A3 /* RHLabelManageViewController_iPhone.xib in Resources */,
@@ -1435,6 +1496,7 @@
 				C54DC8C717DC069900BBD498 /* enterbutton_highlighted.png in Resources */,
 				C54DC8C917DC069900BBD498 /* enterbutton_highlighted@2x.png in Resources */,
 				CDDBE3601854ACA4001A1744 /* ChatMessageSendView_iPhone.xib in Resources */,
+				CD16380B185C65F0009BB03D /* chatassess_quit.caf in Resources */,
 				C54DC8CB17DC069900BBD498 /* enterbutton_normal.png in Resources */,
 				C54DC8CD17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
 				CDFEA31D182A175600F0351D /* order@2x.png in Resources */,
@@ -1443,14 +1505,17 @@
 				CDA98258184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib in Resources */,
 				C53A7F1417DDFF79007C9068 /* RHCollectionLabelCell_iPhone.xib in Resources */,
 				CD32013C17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.xib in Resources */,
+				CD163813185C65F0009BB03D /* chatmessage_sent.caf in Resources */,
 				CDDBE35418548D1E001A1744 /* icon-info@2x.png in Resources */,
 				CD734AA617E83E3000EF6CD4 /* help_01.JPG in Resources */,
 				CD734AA717E83E3000EF6CD4 /* help_02.JPG in Resources */,
 				CDFEA322182A1E5C00F0351D /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib in Resources */,
+				CD163811185C65F0009BB03D /* chatmessage_received.caf in Resources */,
 				CD94DF961851933C00C9CBC4 /* RenHaiLocal-Info.plist in Resources */,
 				CD1637F0185AD44B009BB03D /* AntiIcon-120.png in Resources */,
 				CD1637FC185ADC40009BB03D /* Icon-152.png in Resources */,
 				CD734AA817E83E3000EF6CD4 /* help_03.JPG in Resources */,
+				CD163819185C65F0009BB03D /* error.caf in Resources */,
 				CDDBE35618548D1E001A1744 /* icon-success.png in Resources */,
 				CDDBE35018548D1E001A1744 /* icon-error@2x.png in Resources */,
 				CD5633B01827631600D2A9A6 /* close.png in Resources */,
@@ -1508,8 +1573,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD16380E185C65F0009BB03D /* chatconfirm_accepted.caf in Resources */,
+				CD16380A185C65F0009BB03D /* chatassess_continue.caf in Resources */,
 				CD1637F7185ADC40009BB03D /* Icon-76.png in Resources */,
 				CD94DF5E1851918000C9CBC4 /* InfoPlist.strings in Resources */,
+				CD163816185C65F0009BB03D /* chatvideo_endchat.caf in Resources */,
 				CD1637F9185ADC40009BB03D /* Icon-80.png in Resources */,
 				CD94DF5F1851918000C9CBC4 /* Default.png in Resources */,
 				CDDBE35318548D1E001A1744 /* icon-info.png in Resources */,
@@ -1521,20 +1589,24 @@
 				CD94DF631851918000C9CBC4 /* Icon-72.png in Resources */,
 				CD94DF641851918000C9CBC4 /* ImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD94DF651851918000C9CBC4 /* Icon-Small-50.png in Resources */,
+				CD163810185C65F0009BB03D /* chatconfirm_rejected.caf in Resources */,
 				CD94DF661851918000C9CBC4 /* Icon-Small.png in Resources */,
 				CD94DF671851918000C9CBC4 /* Icon-Small@2x.png in Resources */,
 				CD94DF681851918000C9CBC4 /* Icon.png in Resources */,
 				CD94DF691851918000C9CBC4 /* Icon@2x.png in Resources */,
 				CD94DF6A1851918000C9CBC4 /* iTunesArtwork in Resources */,
 				CD94DF6B1851918000C9CBC4 /* MainStoryboard_iPhone.storyboard in Resources */,
+				CD163818185C65F0009BB03D /* choosebusiness.caf in Resources */,
 				CD94DF6C1851918000C9CBC4 /* LeftBarHeaderView_iPhone.xib in Resources */,
 				CD94DF6D1851918000C9CBC4 /* close@2x.png in Resources */,
 				CD94DF6E1851918000C9CBC4 /* LeftBarFooterView_iPhone.xib in Resources */,
+				CD16380C185C65F0009BB03D /* chatassess_quit.caf in Resources */,
 				CDDBE34F18548D1E001A1744 /* icon-error.png in Resources */,
 				CD1637FB185ADC40009BB03D /* Icon-120.png in Resources */,
 				CD94DF6F1851918000C9CBC4 /* ChatAssessExistImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD94DF701851918000C9CBC4 /* sidebar_menu_icon_landscape.png in Resources */,
 				CD94DF711851918000C9CBC4 /* ConnectViewController_iPhone.xib in Resources */,
+				CD16381C185C65F0009BB03D /* labelmanaged.caf in Resources */,
 				CD94DF721851918000C9CBC4 /* sidebar_menu_icon_landscape@2x.png in Resources */,
 				CD94DF731851918000C9CBC4 /* RHLabelManageViewController_iPhone.xib in Resources */,
 				CD94DF741851918000C9CBC4 /* sidebar_menu_icon_portrait.png in Resources */,
@@ -1546,21 +1618,27 @@
 				CDDBE3621854ACA4001A1744 /* ChatMessageSendView_iPhone.xib in Resources */,
 				CD94DF7A1851918000C9CBC4 /* enterbutton_normal.png in Resources */,
 				CD1637FD185ADC40009BB03D /* Icon-152.png in Resources */,
+				CD16381A185C65F0009BB03D /* error.caf in Resources */,
 				CD94DF7B1851918000C9CBC4 /* enterbutton_normal@2x.png in Resources */,
 				CD94DF7C1851918000C9CBC4 /* order@2x.png in Resources */,
 				CD94DF7D1851918000C9CBC4 /* RHTableViewLabelCell_iPhone.xib in Resources */,
 				CD94DF7E1851918000C9CBC4 /* Localizable.strings in Resources */,
 				CD94DF7F1851918000C9CBC4 /* LeftBarTableCell_iPhone.xib in Resources */,
+				CD163812185C65F0009BB03D /* chatmessage_received.caf in Resources */,
 				CD94DF801851918000C9CBC4 /* RHCollectionLabelCell_iPhone.xib in Resources */,
+				CD16381E185C65F0009BB03D /* sessionbound.caf in Resources */,
 				CD94DF811851918000C9CBC4 /* RHTableViewSwitcherCell_iPhone.xib in Resources */,
 				CDDBE35518548D1E001A1744 /* icon-info@2x.png in Resources */,
 				CD94DF821851918000C9CBC4 /* help_01.JPG in Resources */,
 				CD94DF831851918000C9CBC4 /* help_02.JPG in Resources */,
 				CD94DF841851918000C9CBC4 /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD94DF851851918000C9CBC4 /* help_03.JPG in Resources */,
+				CD163821185C6B66009BB03D /* chatvideo_chatmessage.caf in Resources */,
 				CDDBE35718548D1E001A1744 /* icon-success.png in Resources */,
 				CDDBE35118548D1E001A1744 /* icon-error@2x.png in Resources */,
 				CD94DF861851918000C9CBC4 /* close.png in Resources */,
+				CD163824185C735D009BB03D /* unchoosebusiness.caf in Resources */,
+				CD163814185C65F0009BB03D /* chatmessage_sent.caf in Resources */,
 				CD94DF871851918000C9CBC4 /* help_04.JPG in Resources */,
 				CD94DF881851918000C9CBC4 /* help_05.JPG in Resources */,
 				CD94DF891851918000C9CBC4 /* help_06.JPG in Resources */,

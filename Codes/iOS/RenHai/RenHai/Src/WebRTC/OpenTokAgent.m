@@ -260,7 +260,7 @@
     
     if (nil != _openTokDelegate)
     {
-        [_openTokDelegate sessionDidPartnerDisConnected];
+        [_openTokDelegate sessionDidPartnerDisconnected];
     }
 }
 

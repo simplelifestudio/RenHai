@@ -590,6 +590,8 @@
         [commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
                 [_statusModule recordAppMessage:AppMessageIdentifier_ChatMessage];
+                
+                [_guiModule playSoundAndVibrate:SOUNDID_CHATMESSSAGE_SENT vibrate:YES];
             }
             failureCompletionBlock:^(){
                 [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_ChatMessage];
@@ -816,6 +818,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 {
     if (_isChatMessageEnabled)
     {
+        [_guiModule playSoundAndVibrate:SOUNDID_CHATMESSAGE_RECEIVED vibrate:YES];
+        
         RHBusinessSession* businessSession = _userDataModule.businessSession;
         RHChatMessage* chatMessage = [businessSession readChatMessage];
         
@@ -828,6 +832,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 - (void) _updateUIWhenChatEnd
 {
+    [_guiModule playSound:SOUNDID_CHATVIDEO_ENDCHAT];
+    
     [self _clockCancel];
     
     _isChatMessageEnabled = NO;
@@ -851,6 +857,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 - (IBAction)didPressChatMessageButton:(id)sender
 {
+    [_guiModule playSound:SOUNDID_CHATVIDEO_CHATMESSAGE];
+    
     [self _switchChatMessageSendViewOpenOrClose];
 }
 
@@ -876,7 +884,7 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Failed", nil);
     _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Failed", nil);
     
-    [self _updateUIWhenChatEnd];
+//    [self _updateUIWhenChatEnd];
 }
 
 -(void) sessionDidReceiveSelfStream
@@ -912,9 +920,9 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void) sessionDidDropPartnerStream;
 {
-    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Disconnected", nil);    
-    
-    [self _updateUIWhenChatEnd];
+//    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Disconnected", nil);    
+//    
+//    [self _updateUIWhenChatEnd];
 }
 
 -(void) sessionDidPartnerConnected
@@ -922,7 +930,7 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Connected", nil);
 }
 
--(void) sessionDidPartnerDisConnected
+-(void) sessionDidPartnerDisconnected
 {
     [self _updateUIWhenChatEnd];
 }
