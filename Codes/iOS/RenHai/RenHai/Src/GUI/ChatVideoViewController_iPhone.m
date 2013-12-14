@@ -55,8 +55,6 @@
     volatile BOOL _isSelfDeciding;
     NSCondition* _decideLock;
     
-    volatile BOOL _isWebRTCResouceAllocatedThisTime;
-    
     volatile BOOL _isSelfVideoOpen;
     
     UITapGestureRecognizer* _singleTapGesturer;
@@ -175,8 +173,6 @@
     
     [self _resetSelfVieoToOpen];
     
-    _isWebRTCResouceAllocatedThisTime = NO;
-    
     _isSelfDeciding = NO;
     
     _count = 0;
@@ -239,8 +235,6 @@
 
 -(void) _setupInstance
 {
-    _isWebRTCResouceAllocatedThisTime = NO;
-    
     _guiModule = [GUIModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
@@ -724,34 +718,30 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void)_connectWebRTC
 {
-    if (!_isWebRTCResouceAllocatedThisTime)
+    if (_statusModule.currentBusinessStatusIdentifier == BusinessStatusIdentifier_ChatAllAgreed)
     {
-        DDLogVerbose(@"#####WebRTC Resource need be allocated this time.");
-        
         [CBAppUtils asyncProcessInBackgroundThread:^(){
             [_webRTCModule registerWebRTCDelegate:self];
             
             RHBusinessSession* businessSession = _userDataModule.businessSession;
-            RHWebRTC* webrtc = businessSession.webrtc;
-            
-            NSString* apiKey = [NSString stringWithFormat:@"%@", webrtc.apiKey];
-            NSString* sessionId = webrtc.sessionId;
-            NSString* token = webrtc.token;
-            
-            if (STATIC_OPENTOK_ACCOUNT)
+            if (nil != businessSession)
             {
-                apiKey = kApiKey;
-                sessionId = kSessionId;
-                token = kToken;
+                RHWebRTC* webrtc = businessSession.webrtc;
+                
+                NSString* apiKey = [NSString stringWithFormat:@"%@", webrtc.apiKey];
+                NSString* sessionId = webrtc.sessionId;
+                NSString* token = webrtc.token;
+                
+                if (STATIC_OPENTOK_ACCOUNT)
+                {
+                    apiKey = kApiKey;
+                    sessionId = kSessionId;
+                    token = kToken;
+                }
+                
+                [_webRTCModule connectAndPublishOnWebRTC:apiKey sessionId:sessionId token:token];
             }
-            
-            [_webRTCModule connectAndPublishOnWebRTC:apiKey sessionId:sessionId token:token];
         }];
-    }
-    else
-    {
-        DDLogVerbose(@"#####WebRTC Resource has been allocated this time.");
-        _isWebRTCResouceAllocatedThisTime = YES;
     }
 }
 
