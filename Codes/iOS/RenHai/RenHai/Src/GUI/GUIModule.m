@@ -10,6 +10,8 @@
 
 #import "AFNetworkActivityIndicatorManager.h"
 
+#import <JSQSystemSoundPlayer.h>
+
 #import "CBUIUtils.h"
 #import "UIViewController+CBUIViewControlerExtends.h"
 #import "UINavigationController+CBNavigationControllerExtends.h"
@@ -23,7 +25,7 @@
 
 #import "CommunicationModule.h"
 
-@interface GUIModule()
+@interface GUIModule() <FUIAlertViewDelegate>
 {
     AFNetworkActivityIndicatorManager* _networkActivityIndicator;
     
@@ -98,6 +100,107 @@ SINGLETON(GUIModule)
     [[UIApplication sharedApplication] setIdleTimerDisabled:on];
 }
 
+-(void) playSoundAndVibrate:(RHSoundId) soundId vibrate:(BOOL) vibrate
+{
+    [self playSound:soundId];
+    
+    if (vibrate)
+    {
+        [[JSQSystemSoundPlayer sharedPlayer] playVibrateSound];
+    }
+}
+
+-(void) playSound:(RHSoundId) soundId
+{
+    NSString* soundFileName = nil;
+    
+    switch (soundId)
+    {
+        case SOUNDID_ERROR:
+        {
+            soundFileName = @"error";
+            break;
+        }
+        case SOUNDID_LABELMANAGED:
+        {
+            soundFileName = @"labelmanaged";
+            break;
+        }
+        case SOUNDID_CHOOSEBUSINESS:
+        {
+            soundFileName = @"choosebusiness";
+            break;
+        }
+        case SOUNDID_UNCHOOSEBUSINESS:
+        {
+            soundFileName = @"unchoosebusiness";
+            break;
+        }
+        case SOUNDID_SESSIONBOUND:
+        {
+            soundFileName = @"sessionbound";
+            break;
+        }
+        case SOUNDID_CHATCONFIRM_ACCEPTED:
+        {
+            soundFileName = @"chatconfirm_accepted";
+            break;
+        }
+        case SOUNDID_CHATCONFIRM_REJECTED:
+        {
+            soundFileName = @"chatconfirm_rejected";
+            break;
+        }
+        case SOUNDID_CHATMESSAGE_RECEIVED:
+        {
+            soundFileName = @"chatmessage_received";
+            break;
+        }
+        case SOUNDID_CHATMESSSAGE_SENT:
+        {
+            soundFileName = @"chatmessage_sent";
+            break;
+        }
+        case SOUNDID_CHATVIDEO_CHATMESSAGE:
+        {
+            soundFileName = @"chatvideo_chatmessage";
+            break;
+        }
+        case SOUNDID_CHATVIDEO_ENDCHAT:
+        {
+            soundFileName = @"chatvideo_endchat";
+            break;
+        }
+        case SOUNDID_CHATASSESS_CONTINUE:
+        {
+            soundFileName = @"chatassess_continue";
+            break;
+        }
+        case SOUNDID_CHATASSESS_QUIT:
+        {
+            soundFileName = @"chatassess_quit";
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
+    
+    if (nil != soundFileName)
+    {
+
+        [[JSQSystemSoundPlayer sharedPlayer] playSoundWithName:soundFileName
+                                                     extension:kJSQSystemSoundTypeCAF
+                                                    completion:^{
+                                                        
+                                                    }];
+        
+//        [[JSQSystemSoundPlayer sharedPlayer] playAlertSoundWithName:soundFileName
+//                                                          extension:kJSQSystemSoundTypeCAF];
+    }
+}
+
 #pragma mark - UIApplicationDelegate
 
 -(void)applicationWillResignActive:(UIApplication *)application
@@ -164,11 +267,12 @@ SINGLETON(GUIModule)
 -(void) _registerNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_BUSINESSSTATUSABNORMAL object:nil];
 }
 
 -(void) _unregisterNotifications
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 -(void) _onNotifications:(NSNotification*) notification
@@ -178,6 +282,8 @@ SINGLETON(GUIModule)
         NSString* notificationName = notification.name;
         if ([notificationName isEqualToString:NOTIFICATION_ID_RHSERVERDISCONNECTED])
         {
+            [self playSound:SOUNDID_ERROR];            
+
             [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
             
             UIViewController* rootVC = [CBUIUtils getRootController];
@@ -186,7 +292,28 @@ SINGLETON(GUIModule)
                 [_connectViewController popConnectView:rootVC animated:YES];                
             }
         }
+        else if ([notificationName isEqualToString:NOTIFICATION_ID_BUSINESSSTATUSABNORMAL])
+        {
+            NSDictionary* info = notification.userInfo;
+            NSNumber* oAppMessageId = [info objectForKey:NOTIFICATION_INFOID_APPMESSAGEID];
+            
+            NSNumber* oBusinessStatusId = [info objectForKey:NOTIFICATION_INFOID_BUSINESSSTATUSID];
+            
+            [self _popupAlertWithBusinessStatus:oBusinessStatusId.intValue andAppMessage:oAppMessageId.intValue];
+        }
     }
+}
+
+- (void) _popupAlertWithBusinessStatus:(BusinessStatusIdentifier) businessStatusId andAppMessage:(AppMessageIdentifier) appMessageId
+{
+//    [self playSound:SOUNDID_ERROR];
+//    
+//    NSString* str = [NSString stringWithFormat:NSLocalizedString(@"Alert_AppMessage_In_BusinessStatus", nil), businessStatusId, appMessageId];
+//    
+//    [[MessageBarManager sharedInstance] showMessageWithTitle:NSLocalizedString(@"Alert_BusinessStatusAbnormal", nil)
+//                                                 description:str
+//                                                        type:MessageBarMessageTypeError
+//                                                 forDuration:60];
 }
 
 -(void) _setupUIAppearance
@@ -207,6 +334,13 @@ SINGLETON(GUIModule)
 
     [[UINavigationBar appearance] setTintColor:FLATUI_COLOR_TINT_NAVIGATIONBAR];
     [[UIBarButtonItem appearance] setTintColor:FLATUI_COLOR_TINT_BARBUTTONITEM];
+}
+
+#pragma mark - FUIAlertViewDelegate
+
+- (void)alertView:(FUIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
 }
 
 @end

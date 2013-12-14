@@ -25,7 +25,7 @@ static NSString* const kToken = @"T1==cGFydG5lcl9pZD0zNDU2NjU2MiZzZGtfdmVyc2lvbj
 
 -(void) sessionDidDropPartnerStream;
 -(void) sessionDidPartnerConnected;
--(void) sessionDidPartnerDisConnected;
+-(void) sessionDidPartnerDisconnected;
 
 -(void) publisherDidFailWithError;
 

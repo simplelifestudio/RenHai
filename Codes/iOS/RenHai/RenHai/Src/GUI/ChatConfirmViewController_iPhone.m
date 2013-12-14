@@ -371,6 +371,8 @@ ChoiceType;
 {
     if (!_partnerAgreeChatFlag)
     {
+        [_guiModule playSound:SOUNDID_CHATCONFIRM_ACCEPTED];
+        
         _partnerAgreeChatFlag = YES;
         
         [self _updatePartnerChoiceStatus:ChoiceType_Agreed];
@@ -386,6 +388,8 @@ ChoiceType;
 {
     if (!_partnerRejectChatFlag)
     {
+        [_guiModule playSound:SOUNDID_CHATCONFIRM_REJECTED];
+        
         _partnerRejectChatFlag = YES;
         
         _agreeChatButton.hidden = YES;
@@ -403,6 +407,8 @@ ChoiceType;
 {
     if (!_partnerLostFlag)
     {
+        [_guiModule playSound:SOUNDID_CHATCONFIRM_REJECTED];
+        
         _partnerLostFlag = YES;
         
         _agreeChatButton.hidden = YES;
@@ -570,13 +576,11 @@ ChoiceType;
                 [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_AgreeChat];
             }
             afterCompletionBlock:^(){
-
+                _isSelfDeciding = NO;
+                [_decideLock signal];
+                [_decideLock unlock];
             }
          ];
-        
-        _isSelfDeciding = NO;
-        [_decideLock signal];
-        [_decideLock unlock];
     }];
 }
 
@@ -618,13 +622,11 @@ ChoiceType;
                 [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_RejectChat];
             }
             afterCompletionBlock:^(){
-
+                _isSelfDeciding = NO;
+                [_decideLock signal];
+                [_decideLock unlock];
             }
          ];
-        
-        _isSelfDeciding = NO;
-        [_decideLock signal];
-        [_decideLock unlock];
     }];
 }
 
@@ -664,13 +666,13 @@ ChoiceType;
                     _selfUnbindSessionFlag = NO;
                     [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_UnbindSession];
                 }
-                afterCompletionBlock:nil
+                afterCompletionBlock:^(){
+                    _isSelfDeciding = NO;
+                    [_decideLock signal];
+                    [_decideLock unlock];
+                }
              ];
         }
-        
-        _isSelfDeciding = NO;
-        [_decideLock signal];
-        [_decideLock unlock];
     }];
 }
 
@@ -697,14 +699,17 @@ ChoiceType;
     ServerNotificationIdentifier serverNotificationId = currentStatus.latestServerNotificationRecord;
     if (serverNotificationId == ServerNotificationIdentifier_OthersideAgreeChat)
     {
+        [_guiModule playSound:SOUNDID_CHATCONFIRM_ACCEPTED];
         [self onOthersideAgreed];
     }
     else if (serverNotificationId == ServerNotificationIdentifier_OthersideRejectChat)
     {
+        [_guiModule playSound:SOUNDID_CHATCONFIRM_REJECTED];
         [self onOthersideRejected];
     }
     else if (serverNotificationId == ServerNotificationIdentifier_OthersideLost)
     {
+        [_guiModule playSound:SOUNDID_CHATCONFIRM_REJECTED];        
         [self onOthersideLost];
     }
 }
@@ -798,11 +803,15 @@ ChoiceType;
 
 - (IBAction)didPressAgreeChatButton:(id)sender
 {
+    [_guiModule playSound:SOUNDID_CHATCONFIRM_ACCEPTED];
+    
     [self _remoteAgreeChat];
 }
 
 - (IBAction)didPressRejectChatButton:(id)sender
 {
+    [_guiModule playSound:SOUNDID_CHATCONFIRM_REJECTED];
+    
     [self _remoteRejectChat];
 }
 

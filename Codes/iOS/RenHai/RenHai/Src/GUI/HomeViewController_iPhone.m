@@ -24,8 +24,8 @@
 #define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
 #define INTERVAL_DATASYNC 5
 
-#define HALO_SPEED_FAST 6
-#define HALO_SPEED_SLOW 1.5
+#define HALO_SPEED_FAST 8
+#define HALO_SPEED_SLOW 2
 #define HALO_RADIUS_3_5 100
 #define HALO_RADIUS_4 120
 #define HALO_COLOR_FAST FLATUI_COLOR_MAJOR_A
@@ -499,15 +499,16 @@ static float progress = 0.0;
             }
             afterCompletionBlock:^(){
                 
-                NSTimeInterval timeout = 3;
-                
-                NSDate* startTimeStamp = [NSDate date];
-                NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
+//                NSTimeInterval timeout = 3;
+//                
+//                NSDate* startTimeStamp = [NSDate date];
+//                NSDate* endTimeStamp = [NSDate dateWithTimeInterval:timeout sinceDate:startTimeStamp];
                 
                 [_reachLock lock];
                 while (![self _checkReachFlag])
                 {
-                    [_reachLock waitUntilDate:endTimeStamp];
+//                    [_reachLock waitUntilDate:endTimeStamp];
+                    [_reachLock wait];
                 }
                 [self _updateReachFlag:NO];
                 
@@ -534,8 +535,6 @@ static float progress = 0.0;
 
 -(void)_finishEnterPool
 {
-    [NSThread sleepForTimeInterval:INTERVAL_ENTERBUTTON_TRACK];
-    
     MainViewController_iPhone* mainVC = _guiModule.mainViewController;
     [mainVC switchToChatScene];
 }
@@ -569,6 +568,8 @@ static float progress = 0.0;
 
 - (IBAction)onPressEnterButton:(id)sender
 {
+    [_guiModule playSound:SOUNDID_CHOOSEBUSINESS];
+    
     [self performSelector:@selector(_lockViewController) withObject:self afterDelay:0.0];
     
     [self performSelector:@selector(_startEnteringPool) withObject:self afterDelay:0.0];

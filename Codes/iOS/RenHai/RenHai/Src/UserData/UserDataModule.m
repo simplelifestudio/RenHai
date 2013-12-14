@@ -168,7 +168,7 @@ SINGLETON(UserDataModule)
 
 -(void) _initBusinessSessionData
 {
-    _businessSession = [[RHBusinessSession alloc] init];
+
 }
 
 #pragma mark - Private Methods
@@ -231,6 +231,8 @@ SINGLETON(UserDataModule)
         {
             case BusinessSessionNotificationType_SessionBound:
             {
+                _businessSession = [[RHBusinessSession alloc] init];
+                
                 NSDictionary* sessionDic = [messageBody objectForKey:MESSAGE_KEY_OPERATIONINFO];
                 _businessSession.businessSessionId = businessSessionId;
                 _businessSession.businessType = businessType;

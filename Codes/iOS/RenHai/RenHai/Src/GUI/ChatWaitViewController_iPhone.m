@@ -117,6 +117,8 @@ ChatWaitStatus;
 
 -(IBAction)didPressActionButton:(id)sender
 {
+    [_guiModule playSound:SOUNDID_UNCHOOSEBUSINESS];
+    
     [self _updateUIWithChatWaitStatus:ChatWaitStatus_Cancel];
     
     [self _startLeavingPool];
@@ -170,6 +172,8 @@ ChatWaitStatus;
 {
     if (!_didOnSessionBind && !_isDeciding)
     {
+        [_guiModule playSoundAndVibrate:SOUNDID_SESSIONBOUND vibrate:YES];
+        
         [self _updateUIWithChatWaitStatus:ChatWaitStatus_Matched];
         
         ChatWizardController* chatWizard = _guiModule.chatWizardController;
@@ -333,7 +337,6 @@ ChatWaitStatus;
                 [self _finishLeavingPool];
             }
          ];
-    
     }];
 }
 

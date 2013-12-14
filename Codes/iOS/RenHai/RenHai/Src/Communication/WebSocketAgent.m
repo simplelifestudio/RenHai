@@ -246,7 +246,7 @@
         NSString* encryptedString = (NSString*)[dic objectForKey:MESSAGE_KEY_ENVELOPE];
         NSString* decryptedString = [CBSecurityUtils decryptByDESAndDecodeByBase64:encryptedString key:MESSAGE_SECURITY_KEY];
 #if MESSAGE_LOG
-        DDLogVerbose(@"WebSocket Received Message Decrypted: \"%@\"", decryptedString);
+    DDLogVerbose(@"WebSocket Received Message Decrypted: \"%@\"", decryptedString);
 #endif
         dic = [CBJSONUtils toJSONObject:decryptedString];
     }
@@ -334,6 +334,11 @@
 {
     NSDictionary* jsonObject = message.toJSONObject;
     NSString* jsonString = message.toJSONString;
+
+#if MESSAGE_LOG
+    DDLogVerbose(@"WebSocket Is Sending Message Undecrypted: \"%@\"", jsonString);
+#endif
+    
     if ([self isMessageNeedEncrypt])
     {
         jsonString = [CBSecurityUtils encryptByDESAndEncodeByBase64:jsonString key:MESSAGE_SECURITY_KEY];
@@ -345,7 +350,23 @@
     }
 
     jsonString = [CBJSONUtils toJSONString:jsonObject];
-    [_webSocket send:jsonString];
+    
+#if MESSAGE_LOG
+    DDLogWarn(@"WebSocket Sent Message Decrypted: \"%@\"", jsonString);
+#endif
+    
+    @try
+    {
+        [_webSocket send:jsonString];
+    }
+    @catch (NSException *exception)
+    {
+        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+    }
+    @finally
+    {
+        
+    }
 }
 
 //-(void) _sendJSONStringToWebSocket:(NSString*) jsonString

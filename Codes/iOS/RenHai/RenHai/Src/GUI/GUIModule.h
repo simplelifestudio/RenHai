@@ -97,7 +97,7 @@
 
 #define HELPSCREEN_DISPLAY_SECONDS 9.0f
 
-#define SPLASHVIEW_HIDE 0
+#define SPLASHVIEW_HIDE 1
 #define HELPVIEW_ON_APPFIRSTLAUNCHED 0
 
 #define SCREEN_ALWAYS_ON 1
@@ -113,6 +113,24 @@ typedef enum
     LEFTBAR_CELL_COUNT
 }
 LEFTBAR_CELL_ID;
+
+typedef enum
+{
+    SOUNDID_ERROR = 0,
+    SOUNDID_LABELMANAGED,
+    SOUNDID_CHOOSEBUSINESS,
+    SOUNDID_UNCHOOSEBUSINESS,
+    SOUNDID_SESSIONBOUND,
+    SOUNDID_CHATCONFIRM_ACCEPTED,
+    SOUNDID_CHATCONFIRM_REJECTED,
+    SOUNDID_CHATMESSSAGE_SENT,
+    SOUNDID_CHATMESSAGE_RECEIVED,
+    SOUNDID_CHATVIDEO_CHATMESSAGE,
+    SOUNDID_CHATVIDEO_ENDCHAT,
+    SOUNDID_CHATASSESS_CONTINUE,
+    SOUNDID_CHATASSESS_QUIT,
+}
+RHSoundId;
 
 @interface GUIModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 
@@ -133,5 +151,8 @@ LEFTBAR_CELL_ID;
 -(void) setNetworkActivityIndicatorVisible:(BOOL) flag;
 
 -(void) keepScreenAlwaysOn:(BOOL) on;
+
+-(void) playSoundAndVibrate:(RHSoundId) soundId vibrate:(BOOL) vibrate;
+-(void) playSound:(RHSoundId) soundId;
 
 @end

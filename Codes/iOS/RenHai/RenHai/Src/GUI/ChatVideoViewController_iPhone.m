@@ -50,14 +50,10 @@
     
     NSTimer* _alohaTimer;
     
-    volatile BOOL _selfEndChatFlag;
-    volatile BOOL _partnerEndChatFlag;
-    volatile BOOL _partnerLostFlag;
+    volatile BOOL _endChatFlag;
     
     volatile BOOL _isSelfDeciding;
     NSCondition* _decideLock;
-    
-    volatile BOOL _isInitialized;
     
     volatile BOOL _isSelfVideoOpen;
     
@@ -102,6 +98,8 @@
     [super viewWillAppear:animated];
     
     [self resetPage];
+    
+    DDLogVerbose(@"#####ChatVideoView willAppear");
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -109,6 +107,8 @@
     [super viewWillDisappear:animated];
     
     [self pageWillUnload];
+    
+    DDLogVerbose(@"#####ChatVideoView willDisappear");        
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -116,6 +116,8 @@
     [super viewDidAppear:animated];
     
     [self pageWillLoad];
+    
+    DDLogVerbose(@"#####ChatVideoView didAppear");
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -167,10 +169,7 @@
     _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Prepairing", nil);
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Prepairing", nil);
     
-    _selfEndChatFlag = NO;
-    _partnerEndChatFlag = NO;
-    
-    _partnerLostFlag = NO;
+    _endChatFlag = NO;
     
     [self _resetSelfVieoToOpen];
     
@@ -217,14 +216,14 @@
 {
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Disconnected", nil);
     
-    [self _remoteEndChat];
+    [self _updateUIWhenChatEnd];
 }
 
 -(void) onOthersideLost
 {
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Lost", nil);
     
-    [self _remoteEndChat];
+    [self _updateUIWhenChatEnd];
 }
 
 -(void) onOthersideChatMessage
@@ -236,8 +235,6 @@
 
 -(void) _setupInstance
 {
-    _isInitialized = YES;
-    
     _guiModule = [GUIModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
@@ -508,7 +505,10 @@
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     _selfVideoButton.hidden = YES;
+
     _chatMessageButton.hidden = hidden;
+    _chatMessageButton.enabled = _isChatMessageEnabled;
+    
     _endChatButton.hidden = hidden;
     
     if (_subscriberView)
@@ -526,19 +526,6 @@
 
 -(void) _remoteEndChat
 {
-    [CBAppUtils asyncProcessInMainThread:^(){
-
-        _isChatMessageEnabled = NO;
-        [_sendChatMessageView resignFirstResponder];
-        
-        [[MessageBarManager sharedInstance] dismissAllMessages];
-        
-        _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Disconnected", nil);
-        [self _resetSelfVideoToClose];
-        
-        [self _setNavigationBarAndToolbarHidden:YES];
-    }];
-    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         
         [_decideLock lock];
@@ -551,7 +538,11 @@
             _isSelfDeciding = YES;
         }
         
-        [NSThread sleepForTimeInterval:DELAY_ENDCHAT];
+        if (_endChatFlag)
+        {
+            [_decideLock unlock];
+            return;
+        }
         
         RHBusinessSession* businessSession = _userDataModule.businessSession;
         NSString* businessSessionId = businessSession.businessSessionId;
@@ -563,22 +554,20 @@
         
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
-                _selfEndChatFlag = YES;
+                _endChatFlag = YES;
                 [_statusModule recordAppMessage:AppMessageIdentifier_EndChat];
                 [self _moveToChatAssessView];
             }
             failureCompletionBlock:^(){
-                _selfEndChatFlag = NO;
+                _endChatFlag = NO;
                 [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_EndChat];
             }
             afterCompletionBlock:^(){
-
+                _isSelfDeciding = NO;
+                [_decideLock signal];
+                [_decideLock unlock];
             }
          ];
-        
-        _isSelfDeciding = NO;
-        [_decideLock signal];
-        [_decideLock unlock];
     }];
 }
 
@@ -601,14 +590,14 @@
         [commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
                 [_statusModule recordAppMessage:AppMessageIdentifier_ChatMessage];
+                
+                [_guiModule playSoundAndVibrate:SOUNDID_CHATMESSSAGE_SENT vibrate:YES];
             }
             failureCompletionBlock:^(){
                 [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_ChatMessage];
             }
             afterCompletionBlock:^(){
-              [CBAppUtils asyncProcessInMainThread:^(){
-                  
-              }];
+                
             }
          ];
     }];
@@ -717,25 +706,31 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void)_connectWebRTC
 {
-    [CBAppUtils asyncProcessInBackgroundThread:^(){
-        [_webRTCModule registerWebRTCDelegate:self];
-        
-        RHBusinessSession* businessSession = _userDataModule.businessSession;
-        RHWebRTC* webrtc = businessSession.webrtc;
-        
-        NSString* apiKey = [NSString stringWithFormat:@"%@", webrtc.apiKey];
-        NSString* sessionId = webrtc.sessionId;
-        NSString* token = webrtc.token;
-        
-        if (STATIC_OPENTOK_ACCOUNT)
-        {
-            apiKey = kApiKey;
-            sessionId = kSessionId;
-            token = kToken;
-        }
-        
-        [_webRTCModule connectAndPublishOnWebRTC:apiKey sessionId:sessionId token:token];
-    }];
+    if (_statusModule.currentBusinessStatusIdentifier == BusinessStatusIdentifier_ChatAllAgreed)
+    {
+        [CBAppUtils asyncProcessInBackgroundThread:^(){
+            [_webRTCModule registerWebRTCDelegate:self];
+            
+            RHBusinessSession* businessSession = _userDataModule.businessSession;
+            if (nil != businessSession)
+            {
+                RHWebRTC* webrtc = businessSession.webrtc;
+                
+                NSString* apiKey = [NSString stringWithFormat:@"%@", webrtc.apiKey];
+                NSString* sessionId = webrtc.sessionId;
+                NSString* token = webrtc.token;
+                
+                if (STATIC_OPENTOK_ACCOUNT)
+                {
+                    apiKey = kApiKey;
+                    sessionId = kSessionId;
+                    token = kToken;
+                }
+                
+                [_webRTCModule connectAndPublishOnWebRTC:apiKey sessionId:sessionId token:token];
+            }
+        }];
+    }
 }
 
 -(void)_disconnectWebRTC
@@ -823,6 +818,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 {
     if (_isChatMessageEnabled)
     {
+        [_guiModule playSoundAndVibrate:SOUNDID_CHATMESSAGE_RECEIVED vibrate:YES];
+        
         RHBusinessSession* businessSession = _userDataModule.businessSession;
         RHChatMessage* chatMessage = [businessSession readChatMessage];
         
@@ -833,15 +830,35 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     }
 }
 
+- (void) _updateUIWhenChatEnd
+{
+    [_guiModule playSound:SOUNDID_CHATVIDEO_ENDCHAT];
+    
+    [self _clockCancel];
+    
+    _isChatMessageEnabled = NO;
+    [_sendChatMessageView resignFirstResponder];
+    
+    [[MessageBarManager sharedInstance] dismissAllMessages];
+    
+    //        [self _resetSelfVideoToClose];
+    
+    [self _setNavigationBarAndToolbarHidden:NO];
+}
+
 #pragma mark - IBActions
 
 - (IBAction)didPressEndChatButton:(id)sender
 {
+    [self _updateUIWhenChatEnd];
+    
     [self _remoteEndChat];
 }
 
 - (IBAction)didPressChatMessageButton:(id)sender
 {
+    [_guiModule playSound:SOUNDID_CHATVIDEO_CHATMESSAGE];
+    
     [self _switchChatMessageSendViewOpenOrClose];
 }
 
@@ -864,7 +881,10 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void) sessionDidFailWithError
 {
-    [self _remoteEndChat];
+    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Failed", nil);
+    _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Failed", nil);
+    
+//    [self _updateUIWhenChatEnd];
 }
 
 -(void) sessionDidReceiveSelfStream
@@ -900,7 +920,9 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void) sessionDidDropPartnerStream;
 {
-    [self _remoteEndChat];
+//    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Disconnected", nil);    
+//    
+//    [self _updateUIWhenChatEnd];
 }
 
 -(void) sessionDidPartnerConnected
@@ -908,11 +930,9 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Connected", nil);
 }
 
--(void) sessionDidPartnerDisConnected
+-(void) sessionDidPartnerDisconnected
 {
-    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Disconnected", nil);
-    
-    [self _remoteEndChat];
+    [self _updateUIWhenChatEnd];
 }
 
 -(void) publisherDidFailWithError;

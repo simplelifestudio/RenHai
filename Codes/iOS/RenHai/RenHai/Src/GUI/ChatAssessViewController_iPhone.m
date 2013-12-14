@@ -995,11 +995,15 @@
 
 - (IBAction)didPressContinueButton:(id)sender
 {
+    [_guiModule playSound:SOUNDID_CHATASSESS_CONTINUE];
+    
     [self _remoteUpdatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndContinue];
 }
 
 - (IBAction)didPressFinishButton:(id)sender
 {
+    [_guiModule playSound:SOUNDID_CHATASSESS_QUIT];
+    
     [self _remoteUpdatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndQuit];
 }
 
