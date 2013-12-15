@@ -20,7 +20,7 @@ import org.junit.Test;
 import com.simplelife.renhai.server.business.device.DeviceWrapper;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.PingActionQueue;
-import com.simplelife.renhai.server.business.pool.PingLink;
+import com.simplelife.renhai.server.business.pool.TimeoutLink;
 import com.simplelife.renhai.server.test.MockWebSocketConnection;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.Consts.PingActionType;
@@ -45,7 +45,7 @@ public class TestWorker
 	@Test
 	public void testPingLink()
 	{
-		PingLink link = PingLink.instance;
+		TimeoutLink link = OnlineDevicePool.pingLink;
 		assertTrue(link.size() == 0);
 		assertTrue(link.getHead() == null);
 		assertTrue(link.getTail() == null);
@@ -68,8 +68,8 @@ public class TestWorker
 		assertTrue(link.getHead() == null);
 		assertTrue(link.getTail() == null);
 		
-		link.append(device1);
-		link.append(device2);
+		link.append(device1.getPingNode());
+		link.append(device2.getPingNode());
 		assertTrue(link.size() == 2);
 		assertTrue(link.getHead() == device1.getPingNode());
 		assertTrue(link.getTail() == device2.getPingNode());

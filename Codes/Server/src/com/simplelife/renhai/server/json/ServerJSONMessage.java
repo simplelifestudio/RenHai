@@ -28,6 +28,7 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
 {
     private Logger logger = BusinessModule.instance.getLogger();
 
+    @Override
     public boolean isSyncMessage()
     {
     	return false;
@@ -173,7 +174,7 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     	}
     	
     }
-
+    
     @Override
     public String toString()
     {

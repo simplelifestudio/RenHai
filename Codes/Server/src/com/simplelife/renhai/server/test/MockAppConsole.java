@@ -9,6 +9,8 @@
 
 package com.simplelife.renhai.server.test;
 
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,27 +42,58 @@ public class MockAppConsole
 	        String behaviorMode = args[3];
 	        //ExecutorService executeThreadPool = Executors.newFixedThreadPool(threadCount);
 
-	        ExecuteThread thread = new ExecuteThread("MA-Monitor", "Monitor", serverLink, 0, 0);
+	        CopyOnWriteArrayList<MockApp> mockApps = new CopyOnWriteArrayList<>();
+	        ExecuteThread thread;
+	        thread = new ExecuteThread("MA-Monitor", "Monitor", serverLink, 0, 0, mockApps);
 	        thread.start();
 	        int indexInGroup = 1;
+	        int countPerGroup = 2;
 	        
+	        int modNum = threadCount % countPerGroup;
+	        if (modNum != 0)
+	        {
+	        	threadCount += (countPerGroup - modNum); 
+	        }
+	        
+	        int groupCount = threadCount / countPerGroup;
+	        MockApp app;
+	        String interestLabel;
 	        for (int i = 0; i < threadCount; i++)
 	        {
-	        	if (threadCount > 4)
-	        	{
-	        		indexInGroup = i % 4 + 1;
-	        	}
-	        	System.out.println("Start to launch MockApp-" + i);
-	        	thread = new ExecuteThread("MA-" + i, behaviorMode, serverLink, i, indexInGroup);
+	        	indexInGroup = i % groupCount + 1;
+	        	//System.out.println("Start to launch MockApp-" + i);
+	        	thread = new ExecuteThread("MA-" + i, behaviorMode, serverLink, i, indexInGroup, mockApps);
 	        	thread.start();
-	        	System.out.println("MockApp-" + i + " launched successfully.");
+	        	//System.out.println("MockApp-" + i + " launched successfully.");
+	        	//interestLabel = "MA_" + i + "," + "GI_" + indexInGroup;
+	        	//app = new MockApp("MA-" + i, behaviorMode, serverLink, interestLabel);
+	        	//mockApps.add(app);
 	        	Thread.sleep(threadInterval);
+	        }
+	        
+	        while (mockApps.size() > 0)
+	        {
+	        	Thread.sleep(1000);
+	        	System.out.println("Number of mockApps before check: "+ mockApps.size());
+	        	
+	        	for (int i = mockApps.size()-1; i >= 0; i--)
+	        	{
+	        		if (mockApps.get(i).getBusinessStatus() == MockAppConsts.MockAppBusinessStatus.Ended)
+	        		{
+	        			mockApps.remove(i);
+	        		}
+	        	}
+	        	System.out.println("Number of mockApps after check: "+ mockApps.size());
 	        }
         }
         catch(Exception e)
         {
         	e.printStackTrace();
         	printUsage();
+        }
+        finally
+        {
+        	MockApp.mockAppExecutePool.stopService();
         }
     }
     
@@ -96,16 +129,18 @@ public class MockAppConsole
         private String websocketLink;
         private int appIndex;
         private int labelIndex;
+        private CopyOnWriteArrayList<MockApp> mockApps;
         
         private Logger logger = LoggerFactory.getLogger("MockAppConsole");
         
-        public ExecuteThread(String name, String behaviorMode, String websocketLink, int appIndex, int labelIndex)
+        public ExecuteThread(String name, String behaviorMode, String websocketLink, int appIndex, int labelIndex, CopyOnWriteArrayList<MockApp> mockApps)
         {
             this.name = name;
             this.behaviorMode = behaviorMode;
             this.websocketLink = websocketLink;
             this.appIndex = appIndex;
             this.labelIndex = labelIndex;
+            this.mockApps = mockApps;
         }
         
         @Override
@@ -113,6 +148,8 @@ public class MockAppConsole
         {
         	String interestLabel = "MA_" + appIndex + "," + "GI_" + labelIndex;
         	MockApp app = new MockApp(name, behaviorMode, websocketLink, interestLabel);
+        	mockApps.add(app);
+        	/*
             while (app.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)
             {
                 try
@@ -129,6 +166,7 @@ public class MockAppConsole
             }
             logger.debug("MockApp: " + name + " ended");
             return;
+            */
         }
         
     }

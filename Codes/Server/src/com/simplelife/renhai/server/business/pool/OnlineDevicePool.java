@@ -47,11 +47,14 @@ public class OnlineDevicePool extends AbstractDevicePool
 	private Timer bannedTimer = new Timer();
 	private Timer statSaveTimer = new Timer();
 	private Timer adjustCountTimer = new Timer();
+	private Timer syncSendingCheckTimer = new Timer();
     private ConcurrentHashMap<String, IDeviceWrapper> connectedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     private HashMap<Consts.BusinessType, AbstractBusinessDevicePool> businessPoolMap = new HashMap<Consts.BusinessType, AbstractBusinessDevicePool>();
     private ConcurrentLinkedQueue<IDeviceWrapper> bannedDeviceList = new ConcurrentLinkedQueue<IDeviceWrapper> ();
     
     public final static OnlineDevicePool instance = new OnlineDevicePool();
+    public final static TimeoutLink pingLink = new TimeoutLink();
+    public final static TimeoutLink syncSendingTimeoutLink = new TimeoutLink();
     
     private OnlineDevicePool()
     {
@@ -163,6 +166,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	bannedTimer.scheduleAtFixedRate(new BannedCheckTask(), GlobalSetting.TimeOut.OnlineDeviceConnection, GlobalSetting.TimeOut.OnlineDeviceConnection);
     	statSaveTimer.scheduleAtFixedRate(new StatSaveTask(), GlobalSetting.TimeOut.SaveStatistics, GlobalSetting.TimeOut.SaveStatistics);
     	adjustCountTimer.scheduleAtFixedRate(new AdjustDeviceCountTask(), GlobalSetting.TimeOut.AdjustDeviceCount, GlobalSetting.TimeOut.AdjustDeviceCount);
+    	syncSendingCheckTimer.scheduleAtFixedRate(new SyncSendingCheckTask(), GlobalSetting.TimeOut.CheckPingInterval, GlobalSetting.TimeOut.CheckPingInterval);
     	businessPoolMap.get(Consts.BusinessType.Interest).startService();
     	logger.debug("Timers of online device pool started.");
     }
@@ -395,12 +399,13 @@ public class OnlineDevicePool extends AbstractDevicePool
     {
 		public InactiveCheckTask()
 		{
-			Thread.currentThread().setName("PingCheckTimer");
+			
 		}
 		
 		@Override
 		public void run()
 		{
+			Thread.currentThread().setName("PingCheckTimer");
 			try
 			{
 				PingActionQueue.instance.newAction(PingActionType.CheckInactivity, null);
@@ -412,16 +417,35 @@ public class OnlineDevicePool extends AbstractDevicePool
 		}
     }
 	
+	private class SyncSendingCheckTask extends TimerTask
+	{
+		@Override
+		public void run()
+		{
+			Thread.currentThread().setName("SyncSendingCheckTask");
+			try
+			{
+				OnlineDevicePool.syncSendingTimeoutLink.checkTimeout();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+		}
+		
+	}
+	
 	private class BannedCheckTask extends TimerTask
     {
 		public BannedCheckTask()
 		{
-			Thread.currentThread().setName("BanCheckTimer");
+			
 		}
 		
 		@Override
 		public void run()
 		{
+			Thread.currentThread().setName("BanCheckTimer");
 			try
 			{
 				//Session hibernateSesion = HibernateSessionFactory.getSession();
@@ -439,12 +463,13 @@ public class OnlineDevicePool extends AbstractDevicePool
     {
 		public StatSaveTask()
 		{
-			Thread.currentThread().setName("StatSaveTimer");
+			
 		}
 		
 		@Override
 		public void run()
 		{
+			Thread.currentThread().setName("StatSaveTimer");
 			try
 			{
 				OnlineDevicePool.instance.saveStatistics();

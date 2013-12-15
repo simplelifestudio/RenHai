@@ -364,4 +364,10 @@ public abstract class AppJSONMessage extends AbstractJSONMessage
 		}
 		return true;
 	}
+    
+    @Override
+    public boolean isSyncMessage()
+    {
+    	return false;
+    }
 }

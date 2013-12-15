@@ -41,21 +41,33 @@ public class RenHaiListener implements ServletContextListener
 		System.out.println("+----------------------------------------------------------+");
 		try
 		{
+			System.out.println("+----------------------------------------------------------+");
+			System.out.println("|                      Load DB Module                      |");
+			System.out.println("+----------------------------------------------------------+");
 			DBModule.instance.startService();
 			System.out.println("+----------------------------------------------------------+");
 			System.out.println("|                      DB Module Ready                     |");
 			System.out.println("+----------------------------------------------------------+");
 			
+			System.out.println("+----------------------------------------------------------+");
+			System.out.println("|                  Load Business Module                    |");
+			System.out.println("+----------------------------------------------------------+");
 			BusinessModule.instance.startService();
 			System.out.println("+----------------------------------------------------------+");
 			System.out.println("|                  Business Module Ready                   |");
 			System.out.println("+----------------------------------------------------------+");
 			
+			System.out.println("+----------------------------------------------------------+");
+			System.out.println("|                     Load JSON Module                     |");
+			System.out.println("+----------------------------------------------------------+");
 			JSONModule.instance.startService();
 			System.out.println("+----------------------------------------------------------+");
 			System.out.println("|                     JSON Module Ready                    |");
 			System.out.println("+----------------------------------------------------------+");
 			
+			System.out.println("+----------------------------------------------------------+");
+			System.out.println("|                   Load WebSocket Module                  |");
+			System.out.println("+----------------------------------------------------------+");
 			WebSocketModule.instance.startService();
 			System.out.println("+----------------------------------------------------------+");
 			System.out.println("|                   WebSocket Module Ready                 |");

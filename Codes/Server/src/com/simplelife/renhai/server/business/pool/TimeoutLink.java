@@ -5,22 +5,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.simplelife.renhai.server.business.device.PingNode;
+import com.simplelife.renhai.server.business.device.AbstractTimeoutNode;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 
-public class PingLink
+public class TimeoutLink
 {
-	public final static PingLink instance = new PingLink();
-	
-	private PingNode head;
-	private PingNode tail;
+	private AbstractTimeoutNode head;
+	private AbstractTimeoutNode tail;
 	private AtomicInteger linkSize = new AtomicInteger(0);
 	private Logger logger = LoggerFactory.getLogger("Ping");
 	
-	
-	private PingLink()
+	public TimeoutLink()
 	{
 		
 	}
@@ -28,14 +25,14 @@ public class PingLink
 	/**
 	 * @return the head
 	 */
-	public PingNode getHead()
+	public AbstractTimeoutNode getHead()
 	{
 		return head;
 	}
 	/**
 	 * @return the tail
 	 */
-	public PingNode getTail()
+	public AbstractTimeoutNode getTail()
 	{
 		return tail;
 	}
@@ -45,31 +42,28 @@ public class PingLink
 		return linkSize.get();
 	}
 	
-	public void append(IDeviceWrapper deviceWrapper)
+	public void append(AbstractTimeoutNode node)
 	{
-		PingNode node = deviceWrapper.getPingNode();
 		addToTail(node);
 	}
 	
 	
-	public void checkInactivity()
+	public void checkTimeout()
 	{
 		if (head == null)
 		{
 			return;
 		}
 		
-		long duration = System.currentTimeMillis() - head.getLastPingTime();
+		long duration = System.currentTimeMillis() - head.getLastTime();
 		logger.debug("Start to check inactivity of Ping, link size: {}, duration of first node: " + duration, linkSize.get());
 		
 		int count = 0;
-		PingNode node = head;
-		PingNode nextNode = null;
-		IDeviceWrapper deviceWrapper;
-		while(node != null && node.isPingTimeout())
+		AbstractTimeoutNode node = head;
+		AbstractTimeoutNode nextNode = null;
+		while(node != null && node.isTimeout())
 		{
-			deviceWrapper = node.getDeviceWrapper();
-			deviceWrapper.changeBusinessStatus(DeviceStatus.Disconnected, StatusChangeReason.TimeoutOfPing);
+			node.onTimeout();
 			nextNode = node.getNextNode();
 			this.removeNode(node);
 			node = nextNode;
@@ -82,20 +76,15 @@ public class PingLink
 		}
 	}
 	
-	private void removeNode(PingNode node, boolean printLog)
+	private void removeNode(AbstractTimeoutNode node, boolean printLog)
 	{
 		if (node == null)
 		{
 			return;
 		}
 		
-		if (printLog)
-		{
-			logger.debug("Remove Ping node of device <{}>", node.getDeviceWrapper().getDeviceIdentification());
-		}
-		
-		PingNode preNode = node.getPrevNode();
-		PingNode nextNode = node.getNextNode();
+		AbstractTimeoutNode preNode = node.getPrevNode();
+		AbstractTimeoutNode nextNode = node.getNextNode();
 		
 		if (preNode == null && nextNode == null & head != node)
 		{
@@ -124,15 +113,14 @@ public class PingLink
 		node.setPrevNode(null);
 		linkSize.decrementAndGet();
 	}
-	public void removeNode(PingNode node)
+	public void removeNode(AbstractTimeoutNode node)
 	{
 		//logger.debug("Remove Ping node of device <{}>", node.getDeviceWrapper().getDeviceIdentification());
 		removeNode(node, true);
 	}
 	
-	public void moveToTail(PingNode node)
+	public void moveToTail(AbstractTimeoutNode node)
 	{
-		logger.debug("Move Ping node of device <{}> to tail", node.getDeviceWrapper().getDeviceIdentification());
 		if (tail == node)
 		{
 			return;
@@ -142,7 +130,7 @@ public class PingLink
 		addToTail(node);
 	}
 	
-	private void addToHead(PingNode node)
+	private void addToHead(AbstractTimeoutNode node)
 	{
 		if (head != null)
 		{
@@ -153,7 +141,7 @@ public class PingLink
 		head = node;
 	}
 	
-	private void addToTail(PingNode node)
+	private void addToTail(AbstractTimeoutNode node)
 	{
 		if (tail != null)
 		{

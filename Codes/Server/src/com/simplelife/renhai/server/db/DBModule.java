@@ -14,6 +14,7 @@ package com.simplelife.renhai.server.db;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.LoggerFactory;
 
+import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.util.AbstractModule;
 import com.simplelife.renhai.server.util.DbObjectCache;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -50,7 +51,9 @@ public class DBModule extends AbstractModule
 	@Override
 	public void stopService()
 	{
+		DBModule.instance.getLogger().debug("Try to flush DB cache");
 		DAOWrapper.instance.flushToDB();
+		DBModule.instance.getLogger().debug("Flushing DB cache finished");
 		super.stopService();
 		DAOWrapper.instance.stopService();
 		GlobalSetting.stopService();

@@ -35,10 +35,11 @@ public class SettingFieldName
 	public final static String DeviceCacheCount                                = "deviceCacheCount";
 	public final static String BusinessSetting                                 = "businessSetting";
 	public final static String OnlinePoolCapacity                              = "onlinePoolCapacity";
+	public final static String WebRTCSessionPoolCapacity                       = "webRTCSessionPoolCapacity";
 	public final static String RandomBusinessPoolCapacity                      = "randomBusinessPoolCapacity";
 	public final static String InterestBusinessPoolCapacity                    = "interestBusinessPoolCapacity";
 
-	public final static String DefaultImpressLabelCount                        = "defaultImpressLabelCount";
+	//public final static String DefaultImpressLabelCount                        = "defaultImpressLabelCount";
 	public final static String HotInterestLabelCount                           = "hotInterestLabelCount";
 	public final static String Encrypt                                         = "encrypt";
 	public final static String EncryptKey                                      = "encryptKey";

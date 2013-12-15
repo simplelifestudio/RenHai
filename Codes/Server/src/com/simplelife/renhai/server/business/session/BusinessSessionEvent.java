@@ -117,5 +117,11 @@ public class BusinessSessionEvent implements IRunnableMessage
 	{
 		return 0;
 	}
+
+	@Override
+	public boolean isSyncMessage()
+	{
+		return false;
+	}
 	
 }
