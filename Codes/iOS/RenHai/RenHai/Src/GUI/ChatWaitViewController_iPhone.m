@@ -331,7 +331,7 @@ ChatWaitStatus;
             }
             failureCompletionBlock:^(){
                 _leavePoolFlag = NO;
-                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_UnbindSession];
+                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_UnbindSession];
             }
             afterCompletionBlock:^(){
                 [self _finishLeavingPool];
@@ -382,7 +382,7 @@ ChatWaitStatus;
             }
             failureCompletionBlock:^(){
                 _matchStartFlag = NO;
-                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_MatchStart];
+                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_MatchStart];
             }
             afterCompletionBlock:nil
          ];

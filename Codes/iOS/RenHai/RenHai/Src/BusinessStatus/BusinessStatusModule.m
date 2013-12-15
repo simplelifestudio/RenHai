@@ -81,7 +81,7 @@ SINGLETON(BusinessStatusModule)
     [_currentBusinessStatus recordServerNotification:serverNotificationId];
 }
 
--(void) recordRemoteStatusAbnormal:(AppMessageIdentifier) appMessageId
+-(void) recordCommunicateAbnormal:(AppMessageIdentifier) appMessageId
 {
     DDLogWarn(@"Recorded remote status abnormal caused by app message: %d", appMessageId);
 
@@ -96,6 +96,7 @@ SINGLETON(BusinessStatusModule)
     }
 
     [_remoteStatusAbnormalRecords addObject:oAppMessageId];
+    [_remoteStatusAbnormalRecords removeAllObjects];
     
     if (flag)
     {
@@ -153,79 +154,79 @@ SINGLETON(BusinessStatusModule)
                     // M2
                     case AppMessageIdentifier_AppDataSync:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     // M3
                     case AppMessageIdentifier_ServerDataSync:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     // M4
                     case AppMessageIdentifier_ChooseBusiness:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     // M5
                     case AppMessageIdentifier_MatchStart:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     // M6
                     case AppMessageIdentifier_AgreeChat:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     // M7
                     case AppMessageIdentifier_RejectChat:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     // M8
                     case AppMessageIdentifier_EndChat:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     // M9
                     case AppMessageIdentifier_AssessAndContinue:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     // M10
                     case AppMessageIdentifier_AssessAndQuit:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     // M11
                     case AppMessageIdentifier_UnbindSession:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     // M12
                     case AppMessageIdentifier_Aloha:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     // M13
                     case AppMessageIdentifier_UnchooseBusiness:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     // M14
                     case AppMessageIdentifier_ChatMessage:
                     {
-                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                        // IGNORE
                         break;
                     }
                     default:
@@ -241,37 +242,37 @@ SINGLETON(BusinessStatusModule)
                     // E0
                     case ServerNotificationIdentifier_SessionBound:
                     {
-                        [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                        // IGNORE
                         break;
                     }
                     // E1
                     case ServerNotificationIdentifier_OthersideAgreeChat:
                     {
-                        [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                        // IGNORE
                         break;
                     }
                     // E2
                     case ServerNotificationIdentifier_OthersideRejectChat:
                     {
-                        [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                        // IGNORE
                         break;
                     }
                     // E3
                     case ServerNotificationIdentifier_OthersideEndChat:
                     {
-                        [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                        // IGNORE
                         break;
                     }
                     // E4
                     case ServerNotificationIdentifier_OthersideLost:
                     {
-                        [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                        // IGNORE
                         break;
                     }
                     // E5
                     case ServerNotificationIdentifier_OthersideChatMessage:
                     {
-                        [self _triggerBusinessStatusErrorByServerNotification:serverNotificationId];
+                        // IGNORE
                         break;
                     }
                     default:
@@ -1377,7 +1378,7 @@ SINGLETON(BusinessStatusModule)
 
 -(void) _triggerBusinessStatusErrorByRemoteStatusAbnormal:(AppMessageIdentifier) appMessageId
 {
-    DDLogError(@"Reached limit of remote business status abnormal with App Message: %d", appMessageId);
+    DDLogError(@"Reached limit of remote communication abnormal with App Message: %d and Business Status:%d", appMessageId, _currentBusinessStatus.identifier);
     
 //    [CBAppUtils assert:NO logFormatString:@"Reached limit of remote business status abnormal with App Message: %d", appMessageId];
     
@@ -1385,7 +1386,7 @@ SINGLETON(BusinessStatusModule)
     NSNumber* oAppMessageId = [NSNumber numberWithInt:appMessageId];
     
     NSDictionary* info = [NSDictionary dictionaryWithObjects:@[oAppMessageId, oBusinessStatusId] forKeys:@[NOTIFICATION_INFOID_APPMESSAGEID, NOTIFICATION_INFOID_BUSINESSSTATUSID]];
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_BUSINESSSTATUSABNORMAL object:self userInfo:info];
+    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_REMOTECOMMUNICATIONABNORMAL object:self userInfo:info];
 }
 
 @end

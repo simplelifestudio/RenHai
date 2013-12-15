@@ -573,7 +573,7 @@ ChoiceType;
             }
             failureCompletionBlock:^(){
                 _selfAgreeChatFlag = NO;
-                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_AgreeChat];
+                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_AgreeChat];
             }
             afterCompletionBlock:^(){
                 _isSelfDeciding = NO;
@@ -619,7 +619,7 @@ ChoiceType;
             }
             failureCompletionBlock:^(){
                 _selfRejectChatFlag = NO;
-                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_RejectChat];
+                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_RejectChat];
             }
             afterCompletionBlock:^(){
                 _isSelfDeciding = NO;
@@ -664,7 +664,7 @@ ChoiceType;
                 }
                 failureCompletionBlock:^(){
                     _selfUnbindSessionFlag = NO;
-                    [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_UnbindSession];
+                    [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_UnbindSession];
                 }
                 afterCompletionBlock:^(){
                     _isSelfDeciding = NO;

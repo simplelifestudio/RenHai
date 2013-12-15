@@ -13,6 +13,7 @@
 #import "GUIModule.h"
 #import "GUIStyle.h"
 #import "UserDataModule.h"
+#import "BusinessStatusModule.h"
 #import "CommunicationModule.h"
 
 #import "RHCollectionLabelCell_iPhone.h"
@@ -37,6 +38,7 @@
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
+    BusinessStatusModule* _statusModule;
     
     NSTimer* _dataSyncTimer;
 }
@@ -347,6 +349,7 @@
     _guiModule = [GUIModule sharedInstance];
     _userDataModule = [UserDataModule sharedInstance];
     _commModule = [CommunicationModule sharedInstance];
+    _statusModule = [BusinessStatusModule sharedInstance];
     
     [self _setupNavigationBar];
     [self _setupCollectionView];
@@ -424,6 +427,7 @@
                 }
             }
             failureCompletionBlock:^(){
+                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_AppDataSync];
             }
             afterCompletionBlock:^(){
             }

@@ -557,7 +557,7 @@
             }
             failureCompletionBlock:^(){
                 _endChatFlag = NO;
-                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_EndChat];
+                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_EndChat];
             }
             afterCompletionBlock:^(){
                 _isSelfDeciding = NO;
@@ -591,7 +591,7 @@
                 [_guiModule playSoundAndVibrate:SOUNDID_CHATMESSSAGE_SENT vibrate:YES];
             }
             failureCompletionBlock:^(){
-                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_ChatMessage];
+                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_ChatMessage];
             }
             afterCompletionBlock:^(){
                 

@@ -396,7 +396,7 @@
             }
             failureCompletionBlock:^(){
                 _assessSuccessFlag = NO;
-                [_statusModule recordRemoteStatusAbnormal:appMessageId];
+                [_statusModule recordCommunicateAbnormal:appMessageId];
             }
             afterCompletionBlock:^(){
                 [CBAppUtils asyncProcessInMainThread:^(){

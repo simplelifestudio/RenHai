@@ -366,7 +366,9 @@ static float progress = 0.0;
                 
             }
         }
-        failureCompletionBlock:nil
+        failureCompletionBlock:^(){
+            [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_ServerDataSync];
+        }
         afterCompletionBlock:nil
      ];
 }
@@ -495,7 +497,7 @@ static float progress = 0.0;
             failureCompletionBlock:^(){
                 [self _updateEnterPoolFlag:NO];
                 
-                [_statusModule recordRemoteStatusAbnormal:AppMessageIdentifier_ChooseBusiness];
+                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_ChooseBusiness];
             }
             afterCompletionBlock:^(){
                 

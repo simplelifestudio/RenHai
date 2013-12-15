@@ -10,6 +10,8 @@
 
 #import "UserDataModule.h"
 #import "CommunicationModule.h"
+#import "BusinessStatusModule.h"
+
 #import "GUIModule.h"
 #import "GUIStyle.h"
 
@@ -35,6 +37,7 @@
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
     CommunicationModule* _commModule;
+    BusinessStatusModule* _statusModule;
     
     InterestLabelsHeaderView_iPhone* _interestLabelsHeaderView;
     ServerInterestLabelsHeaderView_iPhone* _serverInterestLabelsHeaderView;
@@ -977,12 +980,13 @@
                  }
              }
              failureCompletionBlock:^(){
+                 [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_AppDataSync];
              }
              afterCompletionBlock:^(){
-                   [CBAppUtils asyncProcessInMainThread:^(){
-                       [self _refreshInterestLabelsView];
-                   }];
-               }
+                [CBAppUtils asyncProcessInMainThread:^(){
+                   [self _refreshInterestLabelsView];
+                }];
+             }
          ];
     }];
 }
@@ -1016,6 +1020,7 @@
                 }
             }
             failureCompletionBlock:^(){
+                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_ServerDataSync];
             }
             afterCompletionBlock:^(){
             }
