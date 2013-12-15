@@ -604,6 +604,7 @@ ConnectStatus;
     }
     else
     {
+        [_guiModule playSound:SOUNDID_ERROR];
         [self _updateUIWithConnectStatus:ConnectStatus_ConnectFailed];
     }
     

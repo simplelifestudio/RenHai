@@ -211,6 +211,9 @@
     _finishButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
     [_finishButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_finishButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
+    
+    [_continueButton setExclusiveTouch:YES];    
+    [_finishButton setExclusiveTouch:YES];
 }
 
 - (void) _setupNavigationBar

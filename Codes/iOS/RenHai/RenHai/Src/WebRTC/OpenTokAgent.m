@@ -30,8 +30,6 @@
 
 -(void) connectWithAPIKey:(NSString*) apiKey sessionId:(NSString*) sessionId token:(NSString*) token
 {
-    DDLogVerbose(@"#####WebRTC: App begins to connect OpenTok server.");
-    
     @try
     {
         _session = [[OTSession alloc] initWithSessionId:sessionId delegate:self];
@@ -45,8 +43,6 @@
     {
         
     }
-    
-    DDLogVerbose(@"#####WebRTC: App finishes to connect OpenTok server.");
 }
 
 -(void) disconnect

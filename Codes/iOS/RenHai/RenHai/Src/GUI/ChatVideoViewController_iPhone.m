@@ -31,7 +31,7 @@
 #define CORNERRADIUS_VIDEOVIEW 3.0f;
 #define BORDERCOLOR_VIDEOVIEW FLATUI_COLOR_MAJOR_F
 
-#define VOICE_MUTE 0
+#define VOICE_MUTE 1
 
 #define NIB_CHATMESSAGESENDVIEW @"ChatMessageSendView_iPhone"
 
@@ -56,6 +56,8 @@
     NSCondition* _decideLock;
     
     volatile BOOL _isSelfVideoOpen;
+    
+    volatile BOOL _webRTCEndFlag;
     
     UITapGestureRecognizer* _singleTapGesturer;
     UITapGestureRecognizer* _doubleTapGesturer;
@@ -98,8 +100,6 @@
     [super viewWillAppear:animated];
     
     [self resetPage];
-    
-    DDLogVerbose(@"#####ChatVideoView willAppear");
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -107,8 +107,6 @@
     [super viewWillDisappear:animated];
     
     [self pageWillUnload];
-    
-    DDLogVerbose(@"#####ChatVideoView willDisappear");        
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -116,8 +114,6 @@
     [super viewDidAppear:animated];
     
     [self pageWillLoad];
-    
-    DDLogVerbose(@"#####ChatVideoView didAppear");
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -174,6 +170,8 @@
     [self _resetSelfVieoToOpen];
     
     _isSelfDeciding = NO;
+    
+    _webRTCEndFlag = NO;
     
     _count = 0;
     [_countLabel setText:[NSString stringWithFormat:@"%d", _count]];
@@ -252,8 +250,10 @@
     _selfVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
     _selfVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
     
-    _isChatMessageEnabled = NO;
+    _webRTCEndFlag = NO;
     
+    _isChatMessageEnabled = NO;
+
     [self _setupGesturers];
     
     [self _setupNavigationBar];
@@ -316,6 +316,10 @@
     _endChatButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
     [_endChatButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_endChatButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
+    
+    [_selfVideoButton setExclusiveTouch:YES];
+    [_chatMessageButton setExclusiveTouch:YES];
+    [_endChatButton setExclusiveTouch:YES];
 }
 
 -(void) _setupGesturers
@@ -525,22 +529,6 @@
 {
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         
-        [_decideLock lock];
-        if (_isSelfDeciding)
-        {
-            [_decideLock wait];
-        }
-        else
-        {
-            _isSelfDeciding = YES;
-        }
-        
-        if (_endChatFlag)
-        {
-            [_decideLock unlock];
-            return;
-        }
-        
         RHBusinessSession* businessSession = _userDataModule.businessSession;
         NSString* businessSessionId = businessSession.businessSessionId;
         RHBusinessType businessType = businessSession.businessType;
@@ -551,18 +539,13 @@
         
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
-                _endChatFlag = YES;
                 [_statusModule recordAppMessage:AppMessageIdentifier_EndChat];
                 [self _moveToChatAssessView];
             }
             failureCompletionBlock:^(){
-                _endChatFlag = NO;
                 [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_EndChat];
             }
             afterCompletionBlock:^(){
-                _isSelfDeciding = NO;
-                [_decideLock signal];
-                [_decideLock unlock];
             }
          ];
     }];
@@ -677,7 +660,6 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void) _remoteAloha
 {
-//    DDLogVerbose(@"#####ChatVideo-Aloha");
 //    [_commModule alohaRequest:_userDataModule.device];
 }
 
@@ -836,21 +818,30 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 - (void) _updateUIWhenChatVideoEnd
 {
-    [_guiModule playSound:SOUNDID_CHATVIDEO_ENDCHAT];
-    [_subscriberView removeFromSuperview];
-    
-    [self _clockCancel];
-    
-    _isChatMessageEnabled = NO;
-    [_sendChatMessageView resignFirstResponder];
-    
-    [[MessageBarManager sharedInstance] dismissAllMessages];
-    
-    //        [self _resetSelfVideoToClose];
-    
-    [self _setNavigationBarAndToolbarHidden:NO];
-    
-    [self _unregisterGeturers];
+    @synchronized(self)
+    {
+        if (!_webRTCEndFlag)
+        {
+            _webRTCEndFlag = YES;
+            
+            [_guiModule playSound:SOUNDID_CHATVIDEO_ENDCHAT];
+            
+            [_subscriberView removeFromSuperview];
+            
+            [self _clockCancel];
+            
+            _isChatMessageEnabled = NO;
+            [_sendChatMessageView resignFirstResponder];
+            
+            [[MessageBarManager sharedInstance] dismissAllMessages];
+            
+            //        [self _resetSelfVideoToClose];
+            
+            [self _setNavigationBarAndToolbarHidden:NO];
+            
+            [self _unregisterGeturers];
+        }
+    }
 }
 
 - (void) _registerGesturers
@@ -897,15 +888,19 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void) sessionDidDisconnect
 {
-
+    DDLogVerbose(@"@@@@@sessionDidDisconnect");
+    
+    [self _updateUIWhenChatVideoEnd];
 }
 
 -(void) sessionDidFailWithError
 {
+    DDLogVerbose(@"@@@@@sessionDidFailWithError");
+    
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Failed", nil);
     _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Failed", nil);
     
-//    [self _updateUIWhenChatEnd];
+    [self _updateUIWhenChatVideoEnd];
 }
 
 -(void) sessionDidReceiveSelfStream
@@ -941,9 +936,11 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void) sessionDidDropPartnerStream;
 {
+    DDLogVerbose(@"@@@@@sessionDidDropPartnerStream");
+    
 //    _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Disconnected", nil);    
 //    
-//    [self _updateUIWhenChatEnd];
+    [self _updateUIWhenChatVideoEnd];
 }
 
 -(void) sessionDidPartnerConnected
@@ -953,11 +950,15 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void) sessionDidPartnerDisconnected
 {
+    DDLogVerbose(@"@@@@@sessionDidPartnerDisconnected");
+    
     [self _updateUIWhenChatVideoEnd];
 }
 
 -(void) publisherDidFailWithError;
 {
+    DDLogVerbose(@"@@@@@publisherDidFailWithError");
+    
     _selfStatusLabel.text = NSLocalizedString(@"ChatVideo_SelfStatus_Failed", nil);
 }
 
@@ -995,6 +996,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void) subscriberDidFailWithError
 {
+    DDLogVerbose(@"@@@@@subscriberDidFailWithError");
+    
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Failed", nil);
 }
 

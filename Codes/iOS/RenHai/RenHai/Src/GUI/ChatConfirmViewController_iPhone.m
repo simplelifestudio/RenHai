@@ -46,6 +46,13 @@ typedef enum
 }
 ChoiceType;
 
+typedef enum
+{
+    ChoiceProcessStatus_Standby = 0,
+    ChoiceProcessStatus_Done
+}
+ChoiceProcessStatus;
+
 @interface ChatConfirmViewController_iPhone ()
 {
     GUIModule* _guiModule;
@@ -65,8 +72,7 @@ ChoiceType;
     volatile BOOL _partnerRejectChatFlag;
     volatile BOOL _partnerLostFlag;
     
-    volatile BOOL _isSelfDeciding;
-    NSCondition* _decideLock;
+    NSConditionLock* _choiceLock;
 }
 
 @end
@@ -336,7 +342,7 @@ ChoiceType;
     _partnerRejectChatFlag = NO;
     _partnerLostFlag = NO;
     
-    _isSelfDeciding = NO;
+    _choiceLock = [[NSConditionLock alloc] initWithCondition:ChoiceProcessStatus_Standby];
     
     _agreeChatButton.hidden = NO;
     _rejectChatButton.hidden = NO;
@@ -392,12 +398,7 @@ ChoiceType;
         
         _partnerRejectChatFlag = YES;
         
-        _agreeChatButton.hidden = YES;
-        _rejectChatButton.hidden = YES;
-        
         [self _updatePartnerChoiceStatus:ChoiceType_Rejected];
-        
-        [self _clockCancel];
         
         [self _remoteUnbindSession];
     }
@@ -411,12 +412,7 @@ ChoiceType;
         
         _partnerLostFlag = YES;
         
-        _agreeChatButton.hidden = YES;
-        _rejectChatButton.hidden = YES;
-        
         [self _updatePartnerChoiceStatus:ChoiceType_Lost];
-        
-        [self _clockCancel];
         
         [self _remoteUnbindSession];
     }
@@ -431,9 +427,6 @@ ChoiceType;
     _commModule = [CommunicationModule sharedInstance];
     _appDataModule = [AppDataModule sharedInstance];
     _statusModule = [BusinessStatusModule sharedInstance];
-    
-    _isSelfDeciding = NO;
-    _decideLock = [[NSCondition alloc] init];
     
     [self _setupCollectionView];
 
@@ -461,6 +454,9 @@ ChoiceType;
     _rejectChatButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
     [_rejectChatButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
     [_rejectChatButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
+    
+    [_agreeChatButton setExclusiveTouch:YES];
+    [_rejectChatButton setExclusiveTouch:YES];
 }
 
 - (void) _setupNavigationBar
@@ -536,97 +532,141 @@ ChoiceType;
 
 -(void)_remoteAgreeChat
 {
-    _agreeChatButton.hidden = YES;
-    _rejectChatButton.hidden = YES;
-
-    [self _updateSelfChocieStatus:ChoiceType_Agreed];
-    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         
-        [_decideLock lock];
-        if (_isSelfDeciding)
+        [CBAppUtils asyncProcessInMainThread:^(){
+            _agreeChatButton.hidden = YES;
+            _rejectChatButton.hidden = YES;
+        }];
+        
+        DDLogVerbose(@"_remoteAgreeChat #1");
+        [_choiceLock lock];
+        
+        DDLogVerbose(@"_remoteAgreeChat #2");
+        if (_choiceLock.condition == ChoiceProcessStatus_Done)
         {
-            [_decideLock wait];
+            DDLogVerbose(@"_remoteAgreeChat #3A");
+            [_choiceLock unlock];
+        }
+        else if (_choiceLock.condition == ChoiceProcessStatus_Standby)
+        {
+            DDLogVerbose(@"_remoteAgreeChat #3B");
+            RHBusinessSession* businessSession = _userDataModule.businessSession;
+            NSString* businessSessionId = businessSession.businessSessionId;
+            RHBusinessType businessType = businessSession.businessType;
+            
+            RHDevice* device = _userDataModule.device;
+            
+            RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:BusinessSessionRequestType_AgreeChat device:device info:nil];
+            
+            [_commModule businessSessionRequest:requestMessage
+                successCompletionBlock:^(){
+                    
+                    [CBAppUtils asyncProcessInMainThread:^(){
+                        [self _updateSelfChocieStatus:ChoiceType_Agreed];
+                    }];
+                    
+                    [_choiceLock unlockWithCondition:ChoiceProcessStatus_Done];
+                    DDLogVerbose(@"_remoteAgreeChat #3BA");
+                    
+                    _selfAgreeChatFlag = YES;
+                    [_statusModule recordAppMessage:AppMessageIdentifier_AgreeChat];
+                    
+                    if (_partnerAgreeChatFlag)
+                    {
+                        [self _moveToChatVideoView];
+                    }
+                }
+                failureCompletionBlock:^(){
+                    _selfAgreeChatFlag = NO;
+                    [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_AgreeChat];
+                    
+                    [_choiceLock unlockWithCondition:ChoiceProcessStatus_Standby];
+                    DDLogVerbose(@"_remoteAgreeChat #3BB");
+                    
+                    [CBAppUtils asyncProcessInMainThread:^(){
+                        _agreeChatButton.hidden = NO;
+                        _rejectChatButton.hidden = NO;
+                    }];
+                }
+                afterCompletionBlock:^(){
+
+                }
+             ];
         }
         else
         {
-            _isSelfDeciding = YES;
+            DDLogVerbose(@"_remoteAgreeChat #3C");
+            [_choiceLock unlock];
         }
-        
-        RHBusinessSession* businessSession = _userDataModule.businessSession;
-        NSString* businessSessionId = businessSession.businessSessionId;
-        RHBusinessType businessType = businessSession.businessType;
-        
-        RHDevice* device = _userDataModule.device;
-        
-        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:BusinessSessionRequestType_AgreeChat device:device info:nil];
-        
-        [_commModule businessSessionRequest:requestMessage
-            successCompletionBlock:^(){
-                _selfAgreeChatFlag = YES;
-                [_statusModule recordAppMessage:AppMessageIdentifier_AgreeChat];
-
-                if (_partnerAgreeChatFlag)
-                {
-                  [self _moveToChatVideoView];
-                }
-            }
-            failureCompletionBlock:^(){
-                _selfAgreeChatFlag = NO;
-                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_AgreeChat];
-            }
-            afterCompletionBlock:^(){
-                _isSelfDeciding = NO;
-                [_decideLock signal];
-                [_decideLock unlock];
-            }
-         ];
     }];
 }
 
 - (void) _remoteRejectChat
 {
-    _agreeChatButton.hidden = YES;
-    _rejectChatButton.hidden = YES;
-
-    [self _updateSelfChocieStatus:ChoiceType_Rejected];
-    
     [CBAppUtils asyncProcessInBackgroundThread:^(){
-    
-        [_decideLock lock];
-        if (_isSelfDeciding)
+
+        [CBAppUtils asyncProcessInMainThread:^(){
+            _agreeChatButton.hidden = YES;
+            _rejectChatButton.hidden = YES;
+        }];
+        
+        DDLogVerbose(@"_remoteRejectChat #1");
+        [_choiceLock lock];
+        DDLogVerbose(@"_remoteRejectChat #2");
+        if (_choiceLock.condition == ChoiceProcessStatus_Done)
         {
-            [_decideLock wait];
+            DDLogVerbose(@"_remoteRejectChat #3A");
+            [_choiceLock unlock];
+        }
+        else if (_choiceLock.condition == ChoiceProcessStatus_Standby)
+        {
+            DDLogVerbose(@"_remoteRejectChat #3B");
+            RHBusinessSession* businessSession = _userDataModule.businessSession;
+            NSString* businessSessionId = businessSession.businessSessionId;
+            RHBusinessType businessType = businessSession.businessType;
+            
+            RHDevice* device = _userDataModule.device;
+            
+            RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:BusinessSessionRequestType_RejectChat device:device info:nil];
+            
+            [_commModule businessSessionRequest:requestMessage
+                 successCompletionBlock:^(){
+                     [CBAppUtils asyncProcessInMainThread:^(){
+                         [self _updateSelfChocieStatus:ChoiceType_Rejected];
+                     }];
+                     
+                     _selfRejectChatFlag = YES;
+                     
+                     [_choiceLock unlockWithCondition:ChoiceProcessStatus_Done];
+                     DDLogVerbose(@"_remoteRejectChat #3BA");
+                     
+                     [_statusModule recordAppMessage:AppMessageIdentifier_RejectChat];
+                     [self _moveToChatWaitView];
+                 }
+                 failureCompletionBlock:^(){
+                     _selfRejectChatFlag = NO;
+                     
+                     [_choiceLock unlockWithCondition:ChoiceProcessStatus_Standby];
+                     DDLogVerbose(@"_remoteRejectChat #3BB");
+                     
+                     [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_RejectChat];
+                     
+                     [CBAppUtils asyncProcessInMainThread:^(){
+                         _agreeChatButton.hidden = NO;
+                         _rejectChatButton.hidden = NO;
+                     }];
+                 }
+                 afterCompletionBlock:^(){
+                     
+                 }
+             ];
         }
         else
         {
-            _isSelfDeciding = YES;
+            [_choiceLock unlock];
+            DDLogVerbose(@"_remoteRejectChat #3C");
         }
-        
-        RHBusinessSession* businessSession = _userDataModule.businessSession;
-        NSString* businessSessionId = businessSession.businessSessionId;
-        RHBusinessType businessType = businessSession.businessType;
-        
-        RHDevice* device = _userDataModule.device;
-        
-        RHMessage* requestMessage = [RHMessage newBusinessSessionRequestMessage:businessSessionId businessType:businessType operationType:BusinessSessionRequestType_RejectChat device:device info:nil];
-        
-        [_commModule businessSessionRequest:requestMessage
-            successCompletionBlock:^(){
-                _selfRejectChatFlag = YES;
-                [_statusModule recordAppMessage:AppMessageIdentifier_RejectChat];
-                [self _moveToChatWaitView];
-            }
-            failureCompletionBlock:^(){
-                _selfRejectChatFlag = NO;
-                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_RejectChat];
-            }
-            afterCompletionBlock:^(){
-                _isSelfDeciding = NO;
-                [_decideLock signal];
-                [_decideLock unlock];
-            }
-         ];
     }];
 }
 
@@ -634,20 +674,19 @@ ChoiceType;
 {
     [CBAppUtils asyncProcessInBackgroundThread:^(){
         
-        [_decideLock lock];
-        if (_isSelfDeciding)
-        {
-            [_decideLock wait];
-        }
-        else
-        {
-            _isSelfDeciding = YES;
-        }
+        DDLogVerbose(@"_remoteUnbindSession #1");
+        [_choiceLock lock];
+
+        [CBAppUtils asyncProcessInMainThread:^(){
+            _agreeChatButton.hidden = YES;
+            _rejectChatButton.hidden = YES;
+            [self _clockCancel];
+        }];
+        
+        [NSThread sleepForTimeInterval:DELAY_UNBINDSESSION];
         
         if (!_selfRejectChatFlag)
         {
-            [NSThread sleepForTimeInterval:DELAY_UNBINDSESSION];
-            
             RHBusinessSession* businessSession = _userDataModule.businessSession;
             NSString* businessSessionId = businessSession.businessSessionId;
             RHBusinessType businessType = businessSession.businessType;
@@ -661,18 +700,26 @@ ChoiceType;
                     _selfUnbindSessionFlag = YES;
                     [_statusModule recordAppMessage:AppMessageIdentifier_UnbindSession];
                     [self _moveToChatWaitView];
+                    
+                    DDLogVerbose(@"_remoteUnbindSession #2A");
                 }
                 failureCompletionBlock:^(){
                     _selfUnbindSessionFlag = NO;
                     [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_UnbindSession];
+                    
+                    [_choiceLock unlock];
+                    DDLogVerbose(@"_remoteUnbindSession #2B");
+
+                    [self _remoteUnbindSession];
                 }
                 afterCompletionBlock:^(){
-                    _isSelfDeciding = NO;
-                    [_decideLock signal];
-                    [_decideLock unlock];
+
                 }
              ];
         }
+        
+        [_choiceLock unlockWithCondition:ChoiceProcessStatus_Done];
+        DDLogVerbose(@"_remoteUnbindSession #3");
     }];
 }
 

@@ -134,10 +134,10 @@
 "ChatConfirm_Action_Reject" = "拒绝";
 
 "ChatVideo_Title" = "视频聊天";
-"ChatVideo_SelfStatus_Prepairing" = "我正准备视频";
-"ChatVideo_SelfStatus_Connected" = "我正启动视频";
-"ChatVideo_SelfStatus_Failed" = "我的视频失败";
-"ChatVideo_SelfStatus_Disconnected" = "我已关闭视频";
+"ChatVideo_SelfStatus_Prepairing" = "我的视频";
+"ChatVideo_SelfStatus_Connected" = "我的视频";
+"ChatVideo_SelfStatus_Failed" = "我的视频";
+"ChatVideo_SelfStatus_Disconnected" = "我的视频";
 "ChatVideo_PartnerStatus_Prepairing" = "对方正准备视频";
 "ChatVideo_PartnerStatus_Connected" = "对方正连接视频";
 "ChatVideo_PartnerStatus_Disconnected" = "对方已挂断";

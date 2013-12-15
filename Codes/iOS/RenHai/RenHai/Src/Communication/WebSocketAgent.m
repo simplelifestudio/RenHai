@@ -20,7 +20,7 @@
 #define PING_TEXT @"#####RenHai-App-Ping#####"
 #define PONG_LOG 0
 #define PING_ACTIVATE 1
-#define MESSAGE_LOG 1
+#define MESSAGE_LOG 0
 #define SERVERNOTIFICATION_LOG 0
 
 #define MESSAGE_ENCRYPT_NECESSARY 1
@@ -276,8 +276,6 @@
             }
             case MessageType_ServerNotification:
             {
-                DDLogInfo(@"Received Server Notification: %@", jsonMessage.toJSONString);
-                
                 if (jsonMessage.messageId == MessageId_BusinessSessionNotification)
                 {
                     RHMessage* responseMessage = [RHMessage newBusinessSessionNotificationResponseMessage:jsonMessage device:_userDataModule.device];

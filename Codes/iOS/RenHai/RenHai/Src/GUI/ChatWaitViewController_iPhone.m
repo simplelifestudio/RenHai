@@ -466,8 +466,6 @@ ChatWaitStatus;
 
 -(void) _remoteAloha
 {
-    DDLogVerbose(@"#####ChatWait-Aloha");
-    
     [_commModule alohaRequest:_userDataModule.device];
 }
 
