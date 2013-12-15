@@ -107,6 +107,8 @@
 "Connect_AppDataUpdatedFailed_Detail" = "无法更新我的信息";
 "Connect_Action_Retry" = "重试";
 "Connect_DefaultFirstImpressLabel" = "人海";
+"Connect_Cancel" = "中止";
+"Connect_Cancel_Detail" = "操作已中止，请重试";
 
 "ChatWait_WaitForMatch" = "正在寻找";
 "ChatWait_WaitForMatch_Detail" = "茫茫人海，知音何在";

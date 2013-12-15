@@ -121,6 +121,11 @@ SINGLETON(GUIModule)
             soundFileName = @"error";
             break;
         }
+        case SOUNDID_CONNECT_RETRY:
+        {
+            soundFileName = @"connect_retry";
+            break;
+        }
         case SOUNDID_LABELMANAGED:
         {
             soundFileName = @"labelmanaged";

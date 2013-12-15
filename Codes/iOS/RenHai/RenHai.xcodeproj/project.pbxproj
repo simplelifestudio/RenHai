@@ -228,6 +228,8 @@
 		CD163821185C6B66009BB03D /* chatvideo_chatmessage.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD16381F185C6B66009BB03D /* chatvideo_chatmessage.caf */; };
 		CD163823185C735D009BB03D /* unchoosebusiness.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163822185C735D009BB03D /* unchoosebusiness.caf */; };
 		CD163824185C735D009BB03D /* unchoosebusiness.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163822185C735D009BB03D /* unchoosebusiness.caf */; };
+		CD163826185D3DE2009BB03D /* connect_retry.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163825185D3DE2009BB03D /* connect_retry.caf */; };
+		CD163827185D3DE2009BB03D /* connect_retry.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163825185D3DE2009BB03D /* connect_retry.caf */; };
 		CD1DFB0918001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0A18001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */; };
@@ -686,6 +688,7 @@
 		CD163808185C65F0009BB03D /* sessionbound.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sessionbound.caf; sourceTree = "<group>"; };
 		CD16381F185C6B66009BB03D /* chatvideo_chatmessage.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chatvideo_chatmessage.caf; sourceTree = "<group>"; };
 		CD163822185C735D009BB03D /* unchoosebusiness.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = unchoosebusiness.caf; sourceTree = "<group>"; };
+		CD163825185D3DE2009BB03D /* connect_retry.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = connect_retry.caf; sourceTree = "<group>"; };
 		CD1C4A9917FAB763009642D3 /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-RenHaiGHUnitTest.a"; path = "Pods/build/Debug-iphoneos/libPods-RenHaiGHUnitTest.a"; sourceTree = "<group>"; };
 		CD1DFB0618001086006ED9A4 /* ConnectViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectViewController_iPhone.h; sourceTree = "<group>"; };
 		CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectViewController_iPhone.m; sourceTree = "<group>"; };
@@ -963,6 +966,7 @@
 		C55B441417CF587A009BB21B /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				CD163825185D3DE2009BB03D /* connect_retry.caf */,
 				CD163822185C735D009BB03D /* unchoosebusiness.caf */,
 				CD16381F185C6B66009BB03D /* chatvideo_chatmessage.caf */,
 				CD1637FE185C65F0009BB03D /* chatassess_continue.caf */,
@@ -1500,6 +1504,7 @@
 				C54DC8CB17DC069900BBD498 /* enterbutton_normal.png in Resources */,
 				C54DC8CD17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
 				CDFEA31D182A175600F0351D /* order@2x.png in Resources */,
+				CD163826185D3DE2009BB03D /* connect_retry.caf in Resources */,
 				C54DC8E617DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.xib in Resources */,
 				C54DC8EF17DD5ECE00BBD498 /* Localizable.strings in Resources */,
 				CDA98258184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib in Resources */,
@@ -1587,6 +1592,7 @@
 				CDDBE35918548D1E001A1744 /* icon-success@2x.png in Resources */,
 				CD94DF621851918000C9CBC4 /* Default-568h@2x.png in Resources */,
 				CD94DF631851918000C9CBC4 /* Icon-72.png in Resources */,
+				CD163827185D3DE2009BB03D /* connect_retry.caf in Resources */,
 				CD94DF641851918000C9CBC4 /* ImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD94DF651851918000C9CBC4 /* Icon-Small-50.png in Resources */,
 				CD163810185C65F0009BB03D /* chatconfirm_rejected.caf in Resources */,
