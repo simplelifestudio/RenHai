@@ -210,7 +210,7 @@ SINGLETON(GUIModule)
 
 -(void)applicationWillResignActive:(UIApplication *)application
 {
-    
+
 }
 
 -(void)applicationDidEnterBackground:(UIApplication *)application
@@ -220,6 +220,7 @@ SINGLETON(GUIModule)
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
+
 }
 
 -(void)applicationWillEnterForeground:(UIApplication *)application
@@ -272,7 +273,7 @@ SINGLETON(GUIModule)
 -(void) _registerNotifications
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_BUSINESSSTATUSABNORMAL object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_REMOTECOMMUNICATIONABNORMAL object:nil];
 }
 
 -(void) _unregisterNotifications
@@ -287,24 +288,25 @@ SINGLETON(GUIModule)
         NSString* notificationName = notification.name;
         if ([notificationName isEqualToString:NOTIFICATION_ID_RHSERVERDISCONNECTED])
         {
-            [self playSound:SOUNDID_ERROR];            
-
-            [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
-            
             UIViewController* rootVC = [CBUIUtils getRootController];
             if ([rootVC isVisible])
             {
                 [_connectViewController popConnectView:rootVC animated:YES];                
             }
         }
-        else if ([notificationName isEqualToString:NOTIFICATION_ID_BUSINESSSTATUSABNORMAL])
+        else if ([notificationName isEqualToString:NOTIFICATION_ID_REMOTECOMMUNICATIONABNORMAL])
         {
-            NSDictionary* info = notification.userInfo;
-            NSNumber* oAppMessageId = [info objectForKey:NOTIFICATION_INFOID_APPMESSAGEID];
-            
-            NSNumber* oBusinessStatusId = [info objectForKey:NOTIFICATION_INFOID_BUSINESSSTATUSID];
-            
-            [self _popupAlertWithBusinessStatus:oBusinessStatusId.intValue andAppMessage:oAppMessageId.intValue];
+//            NSDictionary* info = notification.userInfo;
+//            NSNumber* oAppMessageId = [info objectForKey:NOTIFICATION_INFOID_APPMESSAGEID];
+//            
+//            NSNumber* oBusinessStatusId = [info objectForKey:NOTIFICATION_INFOID_BUSINESSSTATUSID];
+//            
+//            [self _popupAlertWithBusinessStatus:oBusinessStatusId.intValue andAppMessage:oAppMessageId.intValue];
+            UIViewController* rootVC = [CBUIUtils getRootController];
+            if ([rootVC isVisible])
+            {
+                [_connectViewController popConnectView:rootVC animated:YES];
+            }
         }
     }
 }
