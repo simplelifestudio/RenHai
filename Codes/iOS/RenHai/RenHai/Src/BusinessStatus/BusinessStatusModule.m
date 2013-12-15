@@ -298,7 +298,7 @@ SINGLETON(BusinessStatusModule)
                       // M1
                       case AppMessageIdentifier_Connect:
                       {
-                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          // IGNORE
                           break;
                       }
                       // M2
@@ -449,13 +449,13 @@ SINGLETON(BusinessStatusModule)
                       // M1
                       case AppMessageIdentifier_Connect:
                       {
-                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          // IGNORE
                           break;
                       }
                       // M2
                       case AppMessageIdentifier_AppDataSync:
                       {
-                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          // IGNORE
                           break;
                       }
                       // M3

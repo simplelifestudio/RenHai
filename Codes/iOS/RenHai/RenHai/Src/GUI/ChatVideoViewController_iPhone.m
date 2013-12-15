@@ -182,7 +182,7 @@
     self.navigationItem.title = NSLocalizedString(@"ChatVideo_Title", nil);
     [self.navigationItem setHidesBackButton:YES];
     
-    _isChatMessageEnabled = YES;
+    _isChatMessageEnabled = NO;
     [_sendChatMessageView resignFirstResponder];
 }
 
@@ -216,14 +216,14 @@
 {
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Disconnected", nil);
     
-    [self _updateUIWhenChatEnd];
+    [self _updateUIWhenChatVideoEnd];
 }
 
 -(void) onOthersideLost
 {
     _partnerStatusLabel.text = NSLocalizedString(@"ChatVideo_PartnerStatus_Lost", nil);
     
-    [self _updateUIWhenChatEnd];
+    [self _updateUIWhenChatVideoEnd];
 }
 
 -(void) onOthersideChatMessage
@@ -252,7 +252,7 @@
     _selfVideoView.layer.borderWidth = BORDERWIDTH_VIDEOVIEW;
     _selfVideoView.layer.cornerRadius = CORNERRADIUS_VIDEOVIEW;
     
-    _isChatMessageEnabled = YES;
+    _isChatMessageEnabled = NO;
     
     [self _setupGesturers];
     
@@ -323,17 +323,14 @@
     _singleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didSingleTapped:)];
     _singleTapGesturer.delegate = self;
     _singleTapGesturer.numberOfTapsRequired = 1;
-    [_maskView addGestureRecognizer:_singleTapGesturer];
     
     _doubleTapGesturer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(_didDoubleTapped:)];
     _doubleTapGesturer.delegate = self;
     _doubleTapGesturer.numberOfTapsRequired = 2;
-    [_maskView addGestureRecognizer:_doubleTapGesturer];
     
     _panGesturer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(_didPanned:)];
     [_panGesturer setMaximumNumberOfTouches:1];
     [_panGesturer setMinimumNumberOfTouches:1];
-    [_maskView addGestureRecognizer:_panGesturer];
     
     [_singleTapGesturer requireGestureRecognizerToFail:_doubleTapGesturer];
     [_singleTapGesturer requireGestureRecognizerToFail:_panGesturer];
@@ -830,9 +827,17 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     }
 }
 
-- (void) _updateUIWhenChatEnd
+- (void) _updateUIWhenChatVideoStart
+{
+    _isChatMessageEnabled = YES;
+    
+    [self _registerGesturers];
+}
+
+- (void) _updateUIWhenChatVideoEnd
 {
     [_guiModule playSound:SOUNDID_CHATVIDEO_ENDCHAT];
+    [_subscriberView removeFromSuperview];
     
     [self _clockCancel];
     
@@ -844,13 +849,29 @@ static NSInteger _kToolbarDisplaySeconds = 0;
     //        [self _resetSelfVideoToClose];
     
     [self _setNavigationBarAndToolbarHidden:NO];
+    
+    [self _unregisterGeturers];
+}
+
+- (void) _registerGesturers
+{
+    [_maskView addGestureRecognizer:_singleTapGesturer];
+    [_maskView addGestureRecognizer:_doubleTapGesturer];
+    [_maskView addGestureRecognizer:_panGesturer];
+}
+
+- (void) _unregisterGeturers
+{
+    [_maskView removeGestureRecognizer:_singleTapGesturer];
+    [_maskView removeGestureRecognizer:_doubleTapGesturer];
+    [_maskView removeGestureRecognizer:_panGesturer];
 }
 
 #pragma mark - IBActions
 
 - (IBAction)didPressEndChatButton:(id)sender
 {
-    [self _updateUIWhenChatEnd];
+    [self _updateUIWhenChatVideoEnd];
     
     [self _remoteEndChat];
 }
@@ -932,7 +953,7 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void) sessionDidPartnerDisconnected
 {
-    [self _updateUIWhenChatEnd];
+    [self _updateUIWhenChatVideoEnd];
 }
 
 -(void) publisherDidFailWithError;
@@ -960,6 +981,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
         [_parterVideoView bringSubviewToFront:_selfVideoView];
         
         [self _clockCancel];
+        
+        [self _updateUIWhenChatVideoStart];
     }
     
     DDLogVerbose(@"#####WebRTC: Subscriber finishes to connect streaming.");

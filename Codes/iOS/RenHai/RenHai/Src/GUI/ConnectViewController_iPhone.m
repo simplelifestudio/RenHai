@@ -43,7 +43,8 @@ typedef enum
     ConnectStatus_AppDataUpdateFailed,
     ConnectStatus_ServerDataSyncing,
     ConnectStatus_ServerDataSynced,
-    ConnectStatus_ServerDataSyncFailed
+    ConnectStatus_ServerDataSyncFailed,
+    ConnectStatus_Cancel
 }
 ConnectStatus;
 
@@ -62,6 +63,8 @@ ConnectStatus;
     
     volatile BOOL _isViewControllerVisible;
  
+    volatile BOOL _isOperationQueueCancelled;
+    
     NSOperationQueue* _operationQueue;
     volatile BOOL _isProxyDataSyncSuccess;
     volatile BOOL _isConnectServerSuccess;
@@ -118,15 +121,19 @@ ConnectStatus;
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    
     _isViewControllerVisible = YES;
     
-    [super viewDidAppear:animated];
+    [self _registerNotifications];
     
     [self _fireOperationQueue];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [self _unregisterNotifications];
+    
     _isViewControllerVisible = NO;
     
     [super viewDidDisappear:animated];
@@ -160,7 +167,7 @@ ConnectStatus;
         }
         
         [presentingViewController presentViewController:self animated:NO completion:^(){
-            
+
         }];
     }
 }
@@ -172,7 +179,10 @@ ConnectStatus;
         {
             UIViewController* rootVC = [CBUIUtils getRootController];
             MainViewController_iPhone* mainVC = _guiModule.mainViewController;
-//            [mainVC dismissPopupViewControllerAnimated:NO completion:nil];
+            if (mainVC != rootVC)
+            {
+                [mainVC switchToMainScene];
+            }
             [rootVC dismissPopupViewControllerAnimated:NO completion:nil];
             
             [self _clockCancel];
@@ -197,10 +207,6 @@ ConnectStatus;
                 }
             }];
             
-            if (rootVC != mainVC)
-            {
-                [CBUIUtils setRootController:mainVC];
-            }
             [mainVC switchToMainScene];
             
             [self _resetInstance];
@@ -212,6 +218,8 @@ ConnectStatus;
 
 - (IBAction)didPressActionButton:(id)sender
 {
+    [_guiModule playSound:SOUNDID_CONNECT_RETRY];
+    
     [self _fireOperationQueue];
 }
 
@@ -229,6 +237,8 @@ ConnectStatus;
     
     _isViewControllerVisible = NO;
     _infoLabel.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR_MAIN;
+    
+    _isOperationQueueCancelled = NO;
     
     [self _resetInstance];
 
@@ -310,6 +320,9 @@ ConnectStatus;
                 infoDetailText = NSLocalizedString(@"Connect_Ready_Detail", nil);
                 isActionButtonHide = YES;
                 isTextClear = YES;
+                
+                _isOperationQueueCancelled = NO;
+                
                 break;
             }
             case ConnectStatus_ProxySyncing:
@@ -429,6 +442,16 @@ ConnectStatus;
                 infoText = NSLocalizedString(@"Connect_ServerDataSyncFailed", nil);
                 infoDetailText = NSLocalizedString(@"Connect_ServerDataSyncFailed_Detail", nil);
                 isActionButtonHide = NO;
+                break;
+            }
+            case ConnectStatus_Cancel:
+            {
+                infoText = NSLocalizedString(@"Connect_Cancel", nil);
+                infoDetailText = NSLocalizedString(@"Connect_Cancel_Detail", nil);
+                isActionButtonHide = NO;
+                
+                [self _timerStop];
+                
                 break;
             }
             default:
@@ -558,7 +581,12 @@ ConnectStatus;
            [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncFailed];
             _isProxyDataSyncSuccess = NO;
         }
-        afterCompletionBlock:nil
+        afterCompletionBlock:^(){
+            if (_isOperationQueueCancelled)
+            {
+                [self _updateUIWithConnectStatus:ConnectStatus_Cancel];
+            }
+        }
      ];
 }
 
@@ -581,6 +609,11 @@ ConnectStatus;
     else
     {
         [self _updateUIWithConnectStatus:ConnectStatus_ConnectFailed];
+    }
+    
+    if (_isOperationQueueCancelled)
+    {
+        [self _updateUIWithConnectStatus:ConnectStatus_Cancel];
     }
 }
 
@@ -632,7 +665,12 @@ ConnectStatus;
             [self _updateUIWithConnectStatus:ConnectStatus_AppDataSyncFailed];
             [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
         }
-        afterCompletionBlock:nil
+        afterCompletionBlock:^(){
+            if (_isOperationQueueCancelled)
+            {
+                [self _updateUIWithConnectStatus:ConnectStatus_Cancel];
+            }
+        }
      ];
 }
 
@@ -659,38 +697,45 @@ ConnectStatus;
     RHMessage* requestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:device info:nil];
     
     [_commModule appDataSyncRequest:requestMessage
-             successCompletionBlock:^(NSDictionary* deviceDic){
-                 deviceDic = [deviceDic objectForKey:MESSAGE_KEY_DEVICE];
-                 NSDictionary* profileDic = [deviceDic objectForKey:MESSAGE_KEY_PROFILE];
-                 NSDictionary* interestCardDic = [profileDic objectForKey:MESSAGE_KEY_INTERESTCARD];
-                 @try
-                 {
-                     [interestCard fromJSONObject:interestCardDic];
-                     
-                     [_userDataModule saveUserData];
-                     
-                     [self _updateUIWithConnectStatus:ConnectStatus_AppDataUpdated];
-                     
-                     _isAppDataUpdateSuccess = YES;
-                 }
-                 @catch (NSException *exception)
-                 {
-                     DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
-                     
-                     [self _updateUIWithConnectStatus:ConnectStatus_AppDataUpdateFailed];
-                     
-                     _isAppDataUpdateSuccess = NO;
-                 }
-                 @finally
-                 {
-                     
-                 }
-             }
-             failureCompletionBlock:^(){
-                 [self _updateUIWithConnectStatus:ConnectStatus_AppDataUpdateFailed];
-                 [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
-             }
-             afterCompletionBlock:nil
+        successCompletionBlock:^(NSDictionary* deviceDic){
+            deviceDic = [deviceDic objectForKey:MESSAGE_KEY_DEVICE];
+            NSDictionary* profileDic = [deviceDic objectForKey:MESSAGE_KEY_PROFILE];
+            NSDictionary* interestCardDic = [profileDic objectForKey:MESSAGE_KEY_INTERESTCARD];
+            @try
+            {
+                [interestCard fromJSONObject:interestCardDic];
+
+                [_userDataModule saveUserData];
+
+                [self _updateUIWithConnectStatus:ConnectStatus_AppDataUpdated];
+
+                _isAppDataUpdateSuccess = YES;
+            }
+            @catch (NSException *exception)
+            {
+                DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+
+                [self _updateUIWithConnectStatus:ConnectStatus_AppDataUpdateFailed];
+
+                _isAppDataUpdateSuccess = NO;
+                
+                [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
+            }
+            @finally
+            {
+             
+            }
+        }
+        failureCompletionBlock:^(){
+         [self _updateUIWithConnectStatus:ConnectStatus_AppDataUpdateFailed];
+         [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
+        }
+        afterCompletionBlock:^(){
+           if (_isOperationQueueCancelled)
+           {
+               [self _updateUIWithConnectStatus:ConnectStatus_Cancel];
+           }
+        }
      ];
 }
 
@@ -737,7 +782,12 @@ ConnectStatus;
             
             [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];            
         }
-        afterCompletionBlock:nil
+        afterCompletionBlock:^(){
+            if (_isOperationQueueCancelled)
+            {
+                [self _updateUIWithConnectStatus:ConnectStatus_Cancel];
+            }
+        }
      ];
 }
 
@@ -779,6 +829,16 @@ ConnectStatus;
     [_operationQueue addOperation:_timerStartOperation];
 }
 
+- (void) _dismissOperationQueue
+{
+    _isOperationQueueCancelled = YES;
+    
+    if (nil != _operationQueue)
+    {
+        [_operationQueue cancelAllOperations];
+    }
+}
+
 - (void) _updateInfoTextView:(NSString*) info
 {
     [CBAppUtils asyncProcessInMainThread:^(){
@@ -810,6 +870,19 @@ ConnectStatus;
         _consoleInfo = [NSMutableString string];
         [self _updateInfoTextView:nil];
     }];
+}
+
+-(void)_registerNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(_dismissOperationQueue)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+}
+
+-(void)_unregisterNotifications
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - ScreenOrientation Methods
