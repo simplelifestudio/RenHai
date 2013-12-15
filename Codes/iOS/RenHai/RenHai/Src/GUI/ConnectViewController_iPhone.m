@@ -167,10 +167,7 @@ ConnectStatus;
         }
         
         [presentingViewController presentViewController:self animated:NO completion:^(){
-            if (rootVC != _guiModule.mainViewController)
-            {
-                [_guiModule.mainViewController switchToMainScene];
-            }
+
         }];
     }
 }
@@ -182,6 +179,10 @@ ConnectStatus;
         {
             UIViewController* rootVC = [CBUIUtils getRootController];
             MainViewController_iPhone* mainVC = _guiModule.mainViewController;
+            if (mainVC != rootVC)
+            {
+                [mainVC switchToMainScene];
+            }
             [rootVC dismissPopupViewControllerAnimated:NO completion:nil];
             
             [self _clockCancel];
