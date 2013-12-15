@@ -12,6 +12,7 @@
 #import "CBDateUtils.h"
 #import "UINavigationController+CBNavigationControllerExtends.h"
 #import "UIViewController+CWPopup.h"
+#import "UIViewController+CBUIViewControlerExtends.h"
 
 #import "GUIModule.h"
 #import "CommunicationModule.h"
@@ -60,8 +61,6 @@ ConnectStatus;
     NSUInteger _count;
     NSInvocationOperation* _timerStartOperation;
     NSInvocationOperation* _timerStopOperation;
-    
-    volatile BOOL _isViewControllerVisible;
  
     volatile BOOL _isOperationQueueCancelled;
     
@@ -123,8 +122,6 @@ ConnectStatus;
 {
     [super viewDidAppear:animated];
     
-    _isViewControllerVisible = YES;
-    
     [self _registerNotifications];
     
     [self _fireOperationQueue];
@@ -133,8 +130,6 @@ ConnectStatus;
 - (void)viewDidDisappear:(BOOL)animated
 {
     [self _unregisterNotifications];
-    
-    _isViewControllerVisible = NO;
     
     [super viewDidDisappear:animated];
 }
@@ -146,13 +141,15 @@ ConnectStatus;
 
 - (void) popConnectView:(UIViewController*) presentingViewController animated:(BOOL) animated
 {
-    if (!_isViewControllerVisible)
+    if (![self isVisible])
     {
         [NSThread sleepForTimeInterval:DELAY_POP];
+     
+        [_guiModule playSound:SOUNDID_ERROR];
+        [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
         
         UIViewController* rootVC = [CBUIUtils getRootController];
-        
-        presentingViewController = (nil != presentingViewController) ? presentingViewController : rootVC;
+//        presentingViewController = (nil != presentingViewController) ? presentingViewController : rootVC;
         
         __block CALayer* keyLayer = [UIApplication sharedApplication].keyWindow.layer;
         
@@ -165,8 +162,8 @@ ConnectStatus;
             [keyLayer addAnimation:transition forKey:kCATransition];
             transition.removedOnCompletion = YES;
         }
-        
-        [presentingViewController presentViewController:self animated:NO completion:^(){
+
+        [rootVC presentViewController:self animated:NO completion:^(){
 
         }];
     }
@@ -175,14 +172,14 @@ ConnectStatus;
 - (void) dismissConnectView:(BOOL) animated
 {
     [CBAppUtils asyncProcessInMainThread:^(){
-        if (_isViewControllerVisible)
+        if ([self isVisible])
         {
             UIViewController* rootVC = [CBUIUtils getRootController];
             MainViewController_iPhone* mainVC = _guiModule.mainViewController;
-            if (mainVC != rootVC)
-            {
-                [mainVC switchToMainScene];
-            }
+//            if (mainVC != rootVC)
+//            {
+//                [mainVC switchToMainScene];
+//            }
             [rootVC dismissPopupViewControllerAnimated:NO completion:nil];
             
             [self _clockCancel];
@@ -235,7 +232,6 @@ ConnectStatus;
 
     _statusbarLabel.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR_MAIN;
     
-    _isViewControllerVisible = NO;
     _infoLabel.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR_MAIN;
     
     _isOperationQueueCancelled = NO;
