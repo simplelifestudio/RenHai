@@ -431,7 +431,11 @@ SINGLETON(CommunicationModule)
 
 -(void)applicationWillEnterForeground:(UIApplication *)application
 {
-    
+    if (![self isWebSocketConnected])
+    {
+        NSNotification* notification = [NSNotification notificationWithName:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil userInfo:nil];
+        [[NSNotificationCenter defaultCenter] postNotification:notification];
+    }
 }
 
 @end
