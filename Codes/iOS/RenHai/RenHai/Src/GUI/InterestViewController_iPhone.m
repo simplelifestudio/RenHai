@@ -579,6 +579,7 @@
         }
     }
     
+    cell.highlighted = NO;
     cell.selected = NO;
     
     return cell;
