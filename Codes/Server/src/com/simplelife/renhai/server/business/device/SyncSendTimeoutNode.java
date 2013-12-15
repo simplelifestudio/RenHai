@@ -24,7 +24,7 @@ public class SyncSendTimeoutNode extends AbstractTimeoutNode
 	@Override
 	public void onTimeout()
 	{
-		if (logger.isDebugEnabled())
+		if (logger.isWarnEnabled())
 		{
 			String temp = "Device <"+ deviceWrapper.getDeviceIdentification() +"> has no response for message with SN: " + messageSn;
 			logger.warn(temp);

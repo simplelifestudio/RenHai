@@ -68,9 +68,9 @@ public class MessageHandler implements Runnable
 	{
 		syncPauseFlag = false;
 		
-		logger.debug("==================1 before lock in syncResponseReceived() of device <{}>", deviceSn);
+		//logger.debug("==================1 before lock in syncResponseReceived() of device <{}>", deviceSn);
 		queueLock.lock();
-		logger.debug("==================2 after lock in syncResponseReceived() of device <{}>", deviceSn);
+		//logger.debug("==================2 after lock in syncResponseReceived() of device <{}>", deviceSn);
 		if (!messageQueue.isEmpty())
 		{
 			executeLock.lock();
@@ -81,9 +81,9 @@ public class MessageHandler implements Runnable
 			}
 			executeLock.unlock();
 		}
-		logger.debug("==================3 before unlock in syncResponseReceived() of device <{}>", deviceSn);
+		//logger.debug("==================3 before unlock in syncResponseReceived() of device <{}>", deviceSn);
 		queueLock.unlock();
-		logger.debug("==================4 after unlock in syncResponseReceived() of device <{}>", deviceSn);
+		//logger.debug("==================4 after unlock in syncResponseReceived() of device <{}>", deviceSn);
 	}
 	
 	public void addMessage(IRunnableMessage message)
@@ -109,9 +109,9 @@ public class MessageHandler implements Runnable
 			return;
 		}
 		
-		logger.debug("==================1 before lock in addMessage() of device <{}>", message.getMsgOwnerInfo());
+		//logger.debug("==================1 before lock in addMessage() of device <{}>", message.getMsgOwnerInfo());
 		queueLock.lock();
-		logger.debug("==================2 after lock in addMessage() of device <{}>", message.getMsgOwnerInfo());
+		//logger.debug("==================2 after lock in addMessage() of device <{}>", message.getMsgOwnerInfo());
 		messageQueue.add(message);
 
 		// Execution of message will resume after response of synchronized message was received 
@@ -121,13 +121,15 @@ public class MessageHandler implements Runnable
 			if (!executeFlag)
 			{
 				executeFlag = true;
+				//logger.debug("==================before execute, message {} of device <"+ message.getMsgOwnerInfo() +"> request execution", message.getMessageSn());
 				executor.execute(this);
+				//logger.debug("==================after execute, message {} of device <"+ message.getMsgOwnerInfo() +">", message.getMessageSn());
 			}
 			executeLock.unlock();
 		}
-		logger.debug("==================3 before unlock in addMessage() of device <{}>", message.getMsgOwnerInfo());
+		//logger.debug("==================3 before unlock in addMessage() of device <{}>", message.getMsgOwnerInfo());
 		queueLock.unlock();
-		logger.debug("==================4 after unlock in addMessage() of device <{}>", message.getMsgOwnerInfo());
+		//logger.debug("==================4 after unlock in addMessage() of device <{}>", message.getMsgOwnerInfo());
 	}
 
 	@Override
@@ -137,17 +139,21 @@ public class MessageHandler implements Runnable
 		queueLock.lock();
 		
 		IRunnableMessage message;
-		while(!messageQueue.isEmpty() && !syncPauseFlag)
+		while(!messageQueue.isEmpty())
 		{
 			message = messageQueue.remove();
 			queueLock.unlock();
 			try
 			{
+				//logger.debug("==================1 before execute " + message.getMessageName()+ " of device <{}>", message.getMsgOwnerInfo());
 				executeMessage(message);
+				//logger.debug("==================2 after execute " + message.getMessageName()+ " of device <{}>", message.getMsgOwnerInfo());
 				if (message.isSyncMessage())
 				{
 					// Pause execution of message until response of synchronized notification received
-					syncPauseFlag = true;
+					//logger.debug("Interrupt message sending of device <{}> due to synchronized waiting", message.getMsgOwnerInfo());
+					//syncPauseFlag = true;
+					Thread.sleep(15);
 				}
 			}
 			catch(Exception e)

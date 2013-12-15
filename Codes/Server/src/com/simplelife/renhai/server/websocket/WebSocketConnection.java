@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -37,7 +38,9 @@ import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.IProductor;
 import com.simplelife.renhai.server.util.JSONKey;
+import com.simplelife.renhai.server.util.Worker;
 
 
 /** */
@@ -57,6 +60,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     protected String connectionId;
     protected Logger logger = WebSocketModule.instance.getLogger();
     protected boolean isConnectionOpen = false;
+
     
     /**
 	 * @return the remoteIPAddress

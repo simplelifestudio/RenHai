@@ -71,6 +71,7 @@ public class MockAppConsole
 	        	Thread.sleep(threadInterval);
 	        }
 	        
+	        Thread.sleep(3000);
 	        while (mockApps.size() > 0)
 	        {
 	        	Thread.sleep(1000);

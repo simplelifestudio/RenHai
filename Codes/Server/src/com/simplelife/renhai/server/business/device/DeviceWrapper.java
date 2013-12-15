@@ -16,6 +16,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -94,7 +95,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     
     private MessageHandler changeStatusHandler;
     
-    private SyncSendTimeoutNode syncSendingTimeoutNode;
+    private CopyOnWriteArrayList<SyncSendTimeoutNode> syncSendingTimeoutNodeList = new CopyOnWriteArrayList<>();
     
     @Override
     public void updatePingTime()
@@ -446,6 +447,23 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     }
 
 
+    private void removeTimeoutNode(String messageSn)
+    {
+    	if (syncSendingTimeoutNodeList.isEmpty())
+    	{
+    		return;
+    	}
+    	
+    	for (SyncSendTimeoutNode node : syncSendingTimeoutNodeList)
+    	{
+    		if (node.isWaiting(messageSn))
+    		{
+    			OnlineDevicePool.syncSendingTimeoutLink.removeNode(node);
+    			syncSendingTimeoutNodeList.remove(node);
+    			return;
+    		}
+    	}
+    }
     @Override
     public void onJSONCommand(AppJSONMessage command)
     {
@@ -469,14 +487,9 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     	{
     		this.updateActivityTime();
     		
-    		if (syncSendingTimeoutNode != null)
+    		if (!syncSendingTimeoutNodeList.isEmpty())
         	{
-        		if (syncSendingTimeoutNode.isWaiting(command.getMessageSn()))
-        		{
-        			OnlineDevicePool.syncSendingTimeoutLink.removeNode(syncSendingTimeoutNode);
-        			syncSendingTimeoutNode = null;
-        			outputMessageHandler.syncResponseReceived(this.getDeviceIdentification());
-        		}
+    			removeTimeoutNode(command.getMessageSn());
         	}
     	}
     	
@@ -562,8 +575,9 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
         		return;
         	}
         	
-        	syncSendingTimeoutNode = new SyncSendTimeoutNode(GlobalSetting.TimeOut.JSONMessageEcho * 1000, this, message.getMessageSn());
-        	OnlineDevicePool.syncSendingTimeoutLink.append(syncSendingTimeoutNode);
+        	SyncSendTimeoutNode node = new SyncSendTimeoutNode(GlobalSetting.TimeOut.JSONMessageEcho * 1000, this, message.getMessageSn());
+        	OnlineDevicePool.syncSendingTimeoutLink.append(node);
+        	this.syncSendingTimeoutNodeList.add(node);
         	webSocketConnection.asyncSendMessage(message);
         	/*
         	AppJSONMessage appResponse = webSocketConnection.syncSendMessage(message);
