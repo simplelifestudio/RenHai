@@ -7,7 +7,9 @@ rem call 00_LogAnalyzeTool.py renhai.log InterestScheduler.txt "InterestSchedule
 rem call 00_LogAnalyzeTool.py renhai.log RandomScheduler.txt "RandomScheduler"
 
 call 00_LogAnalyzeTool.py MockApp.txt app_error.txt "[ERROR],timeout,[WARN ]"
-rem call 00_LogAnalyzeTool.py renhai.log match.txt "===================="
+call 00_LogAnalyzeTool.py MockApp.txt mockappcount.txt "Number of mockApps"
+call 00_LogAnalyzeTool.py renhai.log match.txt "Success to match devices bases on label"
+call 00_LogAnalyzeTool.py renhai.log Disconnected.txt "to Disconnected"
 rem call 00_LogAnalyzeTool.py renhai.log online.txt "\"online\":"
 rem call 00_LogAnalyzeTool.py renhai.log MatchStart.txt "<MatchStart>,Enter startSession"
 rem call 00_LogAnalyzeTool.py renhai.log WaitMatch.txt "waiting for match:"
