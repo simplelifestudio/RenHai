@@ -75,11 +75,16 @@
 }
 
 -(void) viewDidAppear:(BOOL)animated
-{    
+{
     [super viewDidAppear:animated];
     
     [self _deselectCollectionView:_interestLabelsView exceptIndexPath:nil];
     [self _deselectCollectionView:_serverInterestLabelsView exceptIndexPath:nil];
+    
+    if (_isLabelManaging)
+    {
+        [self _dismissPopupViewController];
+    }
 }
 
 #pragma mark - Private Methods
@@ -942,9 +947,10 @@
     if (rootVC.popupViewController != nil)
     {
         [rootVC dismissPopupViewControllerAnimated:YES completion:^{
-            [self _setLabelManagingStatus:NO];
+
         }];
     }
+    [self _setLabelManagingStatus:NO];
 }
 
 #pragma mark - Remote Operations

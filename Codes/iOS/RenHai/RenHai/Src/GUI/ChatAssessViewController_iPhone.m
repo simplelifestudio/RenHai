@@ -1066,9 +1066,11 @@
     if (rootVC.popupViewController != nil)
     {
         [rootVC dismissPopupViewControllerAnimated:YES completion:^{
-            [self _setLabelManagingStatus:NO];
+
         }];
     }
+    
+    [self _setLabelManagingStatus:NO];
 }
 
 #pragma mark - ChatAssessAddImpressLabelsHeaderViewDelegate
