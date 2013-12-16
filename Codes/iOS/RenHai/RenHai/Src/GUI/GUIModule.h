@@ -53,7 +53,7 @@
 
 #define NIB_CONNECTVIEWCONTROLLER @"ConnectViewController_iPhone"
 
-#define LEFTBAR_WIDTH_IPHONE 140
+#define LEFTBAR_WIDTH_IPHONE 200
 
 #define NAVIGATIONBAR_TITLE_HOME NSLocalizedString(@"LeftBar_Home", nil)
 #define NAVIGATIONBAR_TITLE_DEVICE NSLocalizedString(@"LeftBar_Device", nil)
@@ -97,7 +97,7 @@
 
 #define HELPSCREEN_DISPLAY_SECONDS 9.0f
 
-#define SPLASHVIEW_HIDE 1
+#define SPLASHVIEW_HIDE 0
 #define HELPVIEW_ON_APPFIRSTLAUNCHED 0
 
 #define SCREEN_ALWAYS_ON 1

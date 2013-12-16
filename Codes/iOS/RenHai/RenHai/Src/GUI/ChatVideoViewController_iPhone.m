@@ -31,7 +31,7 @@
 #define CORNERRADIUS_VIDEOVIEW 3.0f;
 #define BORDERCOLOR_VIDEOVIEW FLATUI_COLOR_MAJOR_F
 
-#define VOICE_MUTE 1
+#define VOICE_MUTE 0
 
 #define NIB_CHATMESSAGESENDVIEW @"ChatMessageSendView_iPhone"
 
@@ -827,6 +827,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
             [_guiModule playSound:SOUNDID_CHATVIDEO_ENDCHAT];
             
             [_subscriberView removeFromSuperview];
+            
+            [_publisherView removeFromSuperview];
             
             [self _clockCancel];
             
