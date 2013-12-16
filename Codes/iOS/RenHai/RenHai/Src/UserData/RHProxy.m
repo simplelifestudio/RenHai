@@ -50,6 +50,10 @@
         {
             _serverId = serverId;
         }
+        else
+        {
+            _serverId = nil;
+        }
         
         NSDictionary* statusDic = [dic objectForKey:MESSAGE_KEY_STATUS];
         if (nil != statusDic)
@@ -57,12 +61,20 @@
             _status = [[RHStatus alloc] init];
             [_status fromJSONObject:statusDic];
         }
+        else
+        {
+            _status = nil;
+        }
         
         NSDictionary* addressDic = [dic objectForKey:MESSAGE_KEY_ADDRESS];
         if (nil != addressDic)
         {
             _address = [[RHAddress alloc] init];
             [_address fromJSONObject:addressDic];
+        }
+        else
+        {
+            _address = nil;
         }
         
         NSString* broadcast = (NSString*)[dic objectForKey:MESSAGE_KEY_BROADCAST];

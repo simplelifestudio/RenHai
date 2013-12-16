@@ -65,7 +65,6 @@
 //#else
 //    remotePath = @"ws://192.81.135.31:80/renhai/websocket";
 //#endif
-    
     if (nil != remotePath)
     {
         _webSocket = [[SRWebSocket alloc] initWithURLRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:remotePath]]];

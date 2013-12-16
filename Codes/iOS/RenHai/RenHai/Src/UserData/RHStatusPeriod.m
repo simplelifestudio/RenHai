@@ -105,18 +105,33 @@
     if (nil != dic)
     {
         NSString* timeZoneStr = [dic objectForKey:MESSAGE_KEY_TIMEZONE];
-        _timeZone = [NSTimeZone timeZoneWithAbbreviation:timeZoneStr];
+        if (nil != timeZoneStr)
+        {
+            _timeZone = [NSTimeZone timeZoneWithAbbreviation:timeZoneStr];
+        }
+        else
+        {
+            _timeZone = nil;
+        }
 
         NSString* beginTimeStr = [dic objectForKey:MESSAGE_KEY_BEGINTIME];
         if (nil != beginTimeStr)
         {
             _beginTime = [CBDateUtils dateFromStringWithFormat:beginTimeStr andFormat:STANDARD_DATE_TIME_FORMAT];
         }
+        else
+        {
+            _beginTime = nil;
+        }
 
         NSString* endTimeStr = [dic objectForKey:MESSAGE_KEY_ENDTIME];
         if (nil != endTimeStr)
         {
             _endTime = [CBDateUtils dateFromStringWithFormat:endTimeStr andFormat:STANDARD_DATE_TIME_FORMAT];
+        }
+        else
+        {
+            _endTime = nil;
         }
     }
 }
