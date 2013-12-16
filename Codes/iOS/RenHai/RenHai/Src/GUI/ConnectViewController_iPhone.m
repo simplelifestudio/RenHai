@@ -141,6 +141,12 @@ ConnectStatus;
 
 - (void) popConnectView:(UIViewController*) presentingViewController animated:(BOOL) animated
 {
+//    WelcomeViewController_iPhone* welcomeVC = _guiModule.welcomeViewController;
+//    if ([welcomeVC isVisible])
+//    {
+//        [welcomeVC dismissWelcome];
+//    }
+    
     if (![self isVisible])
     {
         [NSThread sleepForTimeInterval:DELAY_POP];

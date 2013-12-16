@@ -123,6 +123,8 @@ EnterOperationStatus;
     _reachFlag = NO;
     _reachLock = [[NSCondition alloc] init];
     
+    _helpButton.enabled = YES;
+    
     [self _setupNavigationBar];
     [self _setupView];
     
@@ -288,7 +290,7 @@ EnterOperationStatus;
     _enterButton.highlighted = NO;
     _enterButton.enabled = YES;
 //    _enterLabel.hidden = NO;
-    _helpButton.enabled = NO;
+    _helpButton.enabled = YES;
     _versionLabel.enabled = YES;
     
     [_guiModule.mainViewController enableGesturers];
@@ -580,9 +582,11 @@ static float progress = 0.0;
 - (IBAction)onPressHelpButton:(id)sender
 {
     RHNavigationController* navigationVC = _guiModule.navigationController;
-    HelpViewController_iPhone* helpVC = _guiModule.helpViewController;
+    UIViewController* helpVC = _guiModule.helpViewController;
+//    [helpVC resetDisplayStatus];
     
-    [helpVC resetDisplayStatus];
+    helpVC = _guiModule.welcomeViewController;
+    
     [navigationVC presentViewController:helpVC animated:YES completion:nil];
 }
 

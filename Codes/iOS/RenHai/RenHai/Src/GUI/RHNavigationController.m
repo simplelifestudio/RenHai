@@ -81,7 +81,9 @@
     BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
     if (!isAppLaunchedBefore && HELPVIEW_ON_APPFIRSTLAUNCHED)
     {
-        [self presentViewController:_guiModule.helpViewController animated:YES completion:nil];
+        UIViewController* helpVC = _guiModule.helpViewController;
+        helpVC = _guiModule.welcomeViewController;
+        [self presentViewController:helpVC animated:YES completion:nil];
     }
     else
     {

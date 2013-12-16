@@ -23,10 +23,13 @@
 "Alert_AppMessage_In_BusinessStatus" = "App消息码：%d；业务状态码：%d";
 "Alert_ServerNotification_In_BusinessStatus" = "Server通知码：%d；业务状态码：%d";
 
-"LeftBar_Home" = "人海";
+"Welcome_Action_Ok" = "确认";
+"Welcome_Title" = "测试版说明";
+
+"LeftBar_Home" = "我的人海";
 "LeftBar_Device" = "设备";
-"LeftBar_Impress" = "印象";
-"LeftBar_Interest" = "话题";
+"LeftBar_Impress" = "我的印象";
+"LeftBar_Interest" = "我的话题";
 "LeftBar_Config" = "配置";
 "LeftBar_Help" = "帮助";
 "LeftBar_Organization" = "简单生活工作室® 2013";

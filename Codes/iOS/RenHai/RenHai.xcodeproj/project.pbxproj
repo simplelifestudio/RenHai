@@ -230,6 +230,8 @@
 		CD163824185C735D009BB03D /* unchoosebusiness.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163822185C735D009BB03D /* unchoosebusiness.caf */; };
 		CD163826185D3DE2009BB03D /* connect_retry.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163825185D3DE2009BB03D /* connect_retry.caf */; };
 		CD163827185D3DE2009BB03D /* connect_retry.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163825185D3DE2009BB03D /* connect_retry.caf */; };
+		CD16382A185EAC68009BB03D /* WelcomeViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD163829185EAC68009BB03D /* WelcomeViewController_iPhone.m */; };
+		CD16382B185EAC68009BB03D /* WelcomeViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD163829185EAC68009BB03D /* WelcomeViewController_iPhone.m */; };
 		CD1DFB0918001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0A18001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */; };
@@ -689,6 +691,8 @@
 		CD16381F185C6B66009BB03D /* chatvideo_chatmessage.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = chatvideo_chatmessage.caf; sourceTree = "<group>"; };
 		CD163822185C735D009BB03D /* unchoosebusiness.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = unchoosebusiness.caf; sourceTree = "<group>"; };
 		CD163825185D3DE2009BB03D /* connect_retry.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = connect_retry.caf; sourceTree = "<group>"; };
+		CD163828185EAC68009BB03D /* WelcomeViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController_iPhone.h; sourceTree = "<group>"; };
+		CD163829185EAC68009BB03D /* WelcomeViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController_iPhone.m; sourceTree = "<group>"; };
 		CD1C4A9917FAB763009642D3 /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-RenHaiGHUnitTest.a"; path = "Pods/build/Debug-iphoneos/libPods-RenHaiGHUnitTest.a"; sourceTree = "<group>"; };
 		CD1DFB0618001086006ED9A4 /* ConnectViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectViewController_iPhone.h; sourceTree = "<group>"; };
 		CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectViewController_iPhone.m; sourceTree = "<group>"; };
@@ -1194,6 +1198,8 @@
 				C593C44A17D329E100C26367 /* ConfigViewController_iPhone.m */,
 				C593C44D17D329F300C26367 /* HelpViewController_iPhone.h */,
 				C593C44E17D329F300C26367 /* HelpViewController_iPhone.m */,
+				CD163828185EAC68009BB03D /* WelcomeViewController_iPhone.h */,
+				CD163829185EAC68009BB03D /* WelcomeViewController_iPhone.m */,
 				CD34DCAD180A7BC5003BBE06 /* ChatWizardController.h */,
 				CD34DCAE180A7BC5003BBE06 /* ChatWizardController.m */,
 				C593C45117D32A8300C26367 /* ChatWaitViewController_iPhone.h */,
@@ -1877,6 +1883,7 @@
 				C5945F5B17D56DDF0084BB10 /* CBJSONUtils.m in Sources */,
 				CD07E419184DAC130066ED29 /* RHChatActionBar.m in Sources */,
 				C594602A17D6C7C90084BB10 /* HTTPAgent.m in Sources */,
+				CD16382A185EAC68009BB03D /* WelcomeViewController_iPhone.m in Sources */,
 				C594603117D6CEA60084BB10 /* WebSocketAgent.m in Sources */,
 				C594603517D7352F0084BB10 /* RHMessage.m in Sources */,
 				CDBE9E29183457D700005405 /* RHMatchedCondition.m in Sources */,
@@ -2078,6 +2085,7 @@
 				CD94DF401851918000C9CBC4 /* CBJSONUtils.m in Sources */,
 				CD94DF411851918000C9CBC4 /* RHChatActionBar.m in Sources */,
 				CD94DF421851918000C9CBC4 /* HTTPAgent.m in Sources */,
+				CD16382B185EAC68009BB03D /* WelcomeViewController_iPhone.m in Sources */,
 				CD94DF431851918000C9CBC4 /* WebSocketAgent.m in Sources */,
 				CD94DF441851918000C9CBC4 /* RHMessage.m in Sources */,
 				CD94DF451851918000C9CBC4 /* RHMatchedCondition.m in Sources */,

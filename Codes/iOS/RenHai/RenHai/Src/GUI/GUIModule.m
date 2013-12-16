@@ -257,7 +257,7 @@ SINGLETON(GUIModule)
     _helpViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_HELP_IPHONE];
     _configViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CONFIG_IPHONE];
     _warningViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_WARNING_IPHONE];
-    
+    _welcomeViewController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_WELCOME_IPHONE];
     _chatWizardController = [storyboard instantiateViewControllerWithIdentifier:STORYBOARD_ID_CHATWIZARD];
     
     [self _assembleMainViewController];
