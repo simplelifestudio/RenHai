@@ -362,7 +362,7 @@ SINGLETON(BusinessStatusModule)
                       // M11
                       case AppMessageIdentifier_UnbindSession:
                       {
-                          [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
+                          // IGNORE
                           break;
                       }
                       // M12
