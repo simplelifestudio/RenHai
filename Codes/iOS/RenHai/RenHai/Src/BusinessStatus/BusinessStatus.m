@@ -52,7 +52,7 @@ typedef void (^ServerNotificationHandleBlock)(ServerNotificationIdentifier);
 -(void) recordAppMessage:(AppMessageIdentifier) appMessageId
 {
     NSNumber* oId = [NSNumber numberWithInt:appMessageId];
-    @synchronized(_appMessageRecords)
+    @synchronized(self)
     {
         [_appMessageRecords addObject:oId];
     }
@@ -63,7 +63,7 @@ typedef void (^ServerNotificationHandleBlock)(ServerNotificationIdentifier);
 -(void) recordServerNotification:(ServerNotificationIdentifier) serverNotificationId
 {
     NSNumber* oId = [NSNumber numberWithInt:serverNotificationId];
-    @synchronized(_serverNotificationRecords)
+    @synchronized(self)
     {
         [_serverNotificationRecords addObject:oId];
     }
@@ -134,14 +134,10 @@ typedef void (^ServerNotificationHandleBlock)(ServerNotificationIdentifier);
 
 -(void) clearAllRecords
 {
-    @synchronized(_appMessageRecords)
+    @synchronized(self)
     {
         [_appMessageRecords removeAllObjects];
-    }
-    
-    @synchronized(_serverNotificationRecords)
-    {
-        [_serverNotificationRecords removeAllObjects];        
+        [_serverNotificationRecords removeAllObjects];
     }
 }
 

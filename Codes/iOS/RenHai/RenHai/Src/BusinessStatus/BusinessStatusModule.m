@@ -18,7 +18,7 @@
     
     NSMutableDictionary* _businessStatusMap;
     
-    NSMutableArray* _remoteStatusAbnormalRecords;
+    NSMutableArray* _remoteCommunicationAbnormalRecords;
 }
 
 @end
@@ -37,7 +37,7 @@ SINGLETON(BusinessStatusModule)
     
     [self _initBusinessStatusMap];
     
-    _remoteStatusAbnormalRecords = [NSMutableArray array];
+    _remoteCommunicationAbnormalRecords = [NSMutableArray array];
 }
 
 -(void) releaseModule
@@ -89,14 +89,17 @@ SINGLETON(BusinessStatusModule)
     
     NSNumber* oAppMessageId = [NSNumber numberWithInt:appMessageId];
     
-    NSNumber* lastAppMessageId = [_remoteStatusAbnormalRecords lastObject];
-    if (nil != lastAppMessageId && lastAppMessageId.intValue == oAppMessageId.intValue)
+    @synchronized(_remoteCommunicationAbnormalRecords)
     {
-        flag = YES;
+        NSNumber* lastAppMessageId = [_remoteCommunicationAbnormalRecords lastObject];
+        if (nil != lastAppMessageId && lastAppMessageId.intValue == oAppMessageId.intValue)
+        {
+            flag = YES;
+        }
+        
+        [_remoteCommunicationAbnormalRecords addObject:oAppMessageId];
+        [_remoteCommunicationAbnormalRecords removeAllObjects];
     }
-
-    [_remoteStatusAbnormalRecords addObject:oAppMessageId];
-    [_remoteStatusAbnormalRecords removeAllObjects];
     
     if (flag)
     {
@@ -154,7 +157,7 @@ SINGLETON(BusinessStatusModule)
                     // M2
                     case AppMessageIdentifier_AppDataSync:
                     {
-                        // IGNORE
+                        [self _triggerBusinessStatusErrorByAppMessage:appMessageId];
                         break;
                     }
                     // M3
