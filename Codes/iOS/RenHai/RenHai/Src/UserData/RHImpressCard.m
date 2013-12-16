@@ -83,7 +83,7 @@
 
 -(float) chatLossRate
 {
-    float rateVal = (float)_chatLossCount / _chatTotalCount;
+    float rateVal = (0 == _chatTotalCount) ? 0 : (float)_chatLossCount / _chatTotalCount;
     rateVal = (rateVal * 10000) / 10000;
     return rateVal;
 }
