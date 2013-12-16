@@ -937,6 +937,8 @@
         cell.selected = NO;
     }
     
+    cell.highlighted = NO;
+    
     return cell;
 }
 
