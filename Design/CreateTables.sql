@@ -416,8 +416,8 @@ CREATE TABLE `webrtcaccount` (
 -- ----------------------------
 -- Records of webrtcaccount
 -- ----------------------------
-INSERT INTO `webrtcaccount` VALUES ('1', '34556802', '7a94109e525016628a92a1dcc392e5bdc0f27e7e', 'chenchongpan@163.com', '123456');
-INSERT INTO `webrtcaccount` VALUES ('2', '34566562', '286f54790e39b8861de42f0f27112c7988c46c62', 'motodexter@gmail.com', '123456');
+INSERT INTO `webrtcaccount` VALUES ('1', '34566562', '286f54790e39b8861de42f0f27112c7988c46c62', 'motodexter@gmail.com', '123456');
+INSERT INTO `webrtcaccount` VALUES ('2', '34556802', '7a94109e525016628a92a1dcc392e5bdc0f27e7e', 'chenchongpan@163.com', '123456');
 
 -- ----------------------------
 -- Table structure for `webrtcsession`

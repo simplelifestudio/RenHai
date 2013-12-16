@@ -74,7 +74,7 @@ public class GlobalSetting
 		public static int OnlinePoolCapacity = 10000;
 		public static int RandomBusinessPoolCapacity = 0;
 		public static int InterestBusinessPoolCapacity = 10000;
-		public static int WebRTCSessionPoolCapacity = 1500;
+		public static int WebRTCSessionPoolCapacity = 500;
 		//public static int DefaultImpressLabelCount = 10;
 		public static int HotInterestLabelCount = 10;
 		
@@ -90,8 +90,8 @@ public class GlobalSetting
 		
 		public static int DelayOfSessionBound = 1000;
 		
-		public static int OpenTokKey = 34556802;
-		public static String OpenTokSecret = "7a94109e525016628a92a1dcc392e5bdc0f27e7e";
+		public static int OpenTokKey = 34566562;
+		public static String OpenTokSecret = "286f54790e39b8861de42f0f27112c7988c46c62";
 		public static long OpenTokTokenExpiration = 29 * 24 * 3600;			// Opentok has changed the expiration time to second instead of millisecond!
 		public static long OpenTokTokenDuration = 2 * 3600 * 1000;			// Longest duration for using token (video chat)
 		public static long AccountCheckInterval = 60 * 1000;				// Longest duration for using token (video chat)

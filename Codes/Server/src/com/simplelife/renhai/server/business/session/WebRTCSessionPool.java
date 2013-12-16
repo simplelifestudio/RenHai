@@ -97,6 +97,11 @@ public class WebRTCSessionPool extends AbstractPool
     		return -1;
     	}
     	
+    	if (accountNum == 1)
+    	{
+    		return 1;
+    	}
+    	
     	Calendar cal = Calendar.getInstance();
     	int day = cal.get(Calendar.DAY_OF_YEAR);
     	
@@ -133,7 +138,7 @@ public class WebRTCSessionPool extends AbstractPool
     */
     
     /** */
-    public boolean loadFromDb(Webrtcaccount account, OpenTokSDK sdk)
+    public boolean loadFromDb(Webrtcaccount account)
     {
     	SqlSession session = DAOWrapper.instance.getSession();
     	logger.debug("Load WebRTC tokens from DB...");
@@ -147,6 +152,16 @@ public class WebRTCSessionPool extends AbstractPool
 		if (list.size() < this.capacity)
 		{
 			int appendCount = capacity - list.size();
+			
+			if (logger.isDebugEnabled())
+			{
+				logger.debug("Try to create {} tokens over internet, account details: ", appendCount);
+				logger.debug("Account key: {}", account.getAccountKey());
+				logger.debug("Account secret: {}", account.getAccountSecret());
+				logger.debug("Login account: {}", account.getLoginAccount());
+			}
+			
+			OpenTokSDK sdk = getOpenTokSDK(account);
 			for (int i = 0; i < appendCount; i++)
 			{
 				webRTCSessionList.add(createWebRTCSession(account, sdk));
@@ -204,8 +219,7 @@ public class WebRTCSessionPool extends AbstractPool
 		{
 			// The first time
 			curAccount = getAccount(idOfToday);
-			OpenTokSDK sdk = getOpenTokSDK(curAccount);
-			loadFromDb(curAccount, sdk);
+			loadFromDb(curAccount);
 			return;
 		}
 		
@@ -215,8 +229,7 @@ public class WebRTCSessionPool extends AbstractPool
 			clearPool();
 			
 			Webrtcaccount tmpAccount = getAccount(idOfToday);
-			OpenTokSDK sdk = getOpenTokSDK(tmpAccount);
-			loadFromDb(tmpAccount, sdk);
+			loadFromDb(tmpAccount);
 			
 			if (this.webRTCSessionList.isEmpty())
 			{
