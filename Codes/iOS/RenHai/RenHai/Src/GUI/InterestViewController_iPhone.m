@@ -81,6 +81,9 @@
     [self _deselectCollectionView:_interestLabelsView exceptIndexPath:nil];
     [self _deselectCollectionView:_serverInterestLabelsView exceptIndexPath:nil];
     
+    [self _refreshInterestLabelsView];
+    [self _refreshServerInterestLabelsView];
+    
     if (_isLabelManaging)
     {
         [self _dismissPopupViewController];
@@ -386,7 +389,7 @@
     NSArray* indexPathes = [_interestLabelsView indexPathsForVisibleItems];
     for (NSIndexPath* indexPath in indexPathes)
     {
-        if ([_interestLabelsView cellForItemAtIndexPath:indexPath].selected)
+        if ([_interestLabelsView cellForItemAtIndexPath:indexPath].selected && 1 < labelList.count)
         {
             allowDeleteLabel = YES;
             break;
@@ -470,7 +473,7 @@
                 RHProfile* profile = device.profile;
                 RHInterestCard* interestCard = profile.interestCard;
                 NSArray* interestLabels = interestCard.labelList;
-                
+                DDLogVerbose(@"interestLabels.count = %d", interestLabels.count);
                 itemsCount = (interestLabels.count <= INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS) ? interestLabels.count : INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS;
                 
                 break;
@@ -523,7 +526,7 @@
     RHProfile* profile = device.profile;
     RHInterestCard* interestCard = profile.interestCard;
     RHServerData* server = _userDataModule.server;
-
+    
     NSUInteger section = indexPath.section;
     NSUInteger position = indexPath.item;
     
@@ -537,6 +540,7 @@
                 NSInteger labelCount = 0;
                 
                 NSArray* labelList = interestCard.labelList;
+                DDLogVerbose(@"labelList.count = %d", labelList.count);
                 
                 RHInterestLabel* label = labelList[position];
                 labelName = label.labelName;

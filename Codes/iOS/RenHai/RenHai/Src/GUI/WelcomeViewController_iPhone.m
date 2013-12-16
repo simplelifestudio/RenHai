@@ -96,6 +96,8 @@
 
 - (IBAction)didPressActionButton:(id)sender
 {
+    [_guiModule playSound:SOUNDID_CONNECT_RETRY];    
+    
     [self dismissWelcome];
 }
 
@@ -121,6 +123,8 @@
 - (void) _formatFlatUI
 {
     _infoLabel.text = NSLocalizedString(@"Welcome_Title", nil);
+    _textView.text = NSLocalizedString(@"Welcome_Text", nil);
+    _textView.font = [UIFont flatFontOfSize:FLATUI_FONT_NORMAL];
 }
 
 - (void) _setupActionButtons
