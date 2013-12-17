@@ -147,11 +147,10 @@ ConnectStatus;
 //        [welcomeVC dismissWelcome];
 //    }
     
+    [NSThread sleepForTimeInterval:DELAY_POP];
+    
     if (![self isVisible])
     {
-        [NSThread sleepForTimeInterval:DELAY_POP];
-     
-        [_guiModule playSound:SOUNDID_ERROR];
         [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
         
         UIViewController* rootVC = [CBUIUtils getRootController];
@@ -610,7 +609,6 @@ ConnectStatus;
     }
     else
     {
-        [_guiModule playSound:SOUNDID_ERROR];
         [self _updateUIWithConnectStatus:ConnectStatus_ConnectFailed];
     }
     

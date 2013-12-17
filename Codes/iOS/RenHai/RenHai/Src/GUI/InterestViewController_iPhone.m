@@ -473,7 +473,7 @@
                 RHProfile* profile = device.profile;
                 RHInterestCard* interestCard = profile.interestCard;
                 NSArray* interestLabels = interestCard.labelList;
-                DDLogVerbose(@"interestLabels.count = %d", interestLabels.count);
+
                 itemsCount = (interestLabels.count <= INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS) ? interestLabels.count : INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS;
                 
                 break;
@@ -540,7 +540,6 @@
                 NSInteger labelCount = 0;
                 
                 NSArray* labelList = interestCard.labelList;
-                DDLogVerbose(@"labelList.count = %d", labelList.count);
                 
                 RHInterestLabel* label = labelList[position];
                 labelName = label.labelName;

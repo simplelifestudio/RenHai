@@ -59,13 +59,11 @@ SINGLETON(WebRTCModule)
 
 -(void) connectAndPublishOnWebRTC:(NSString*) apiKey sessionId:(NSString*) sessionId token:(NSString*) token
 {
-    DDLogVerbose(@"#####connectAndPublishOnWebRTC");
     [_openTokAgent connectWithAPIKey:apiKey sessionId:sessionId token:token];
 }
 
 -(void) unpublishAndDisconnectOnWebRTC
 {
-    DDLogVerbose(@"#####unpublishAndDisconnectOnWebRTC");
     [_openTokAgent disconnect];
 }
 
