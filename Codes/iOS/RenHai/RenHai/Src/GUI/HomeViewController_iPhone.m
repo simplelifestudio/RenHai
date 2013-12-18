@@ -109,6 +109,11 @@ EnterOperationStatus;
     [super viewWillDisappear:animated];
 }
 
+-(void) dealloc
+{
+    [self _deactivateDataSyncTimer];
+}
+
 #pragma mark - Private Methods
 
 -(void)_setupInstance

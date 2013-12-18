@@ -113,6 +113,12 @@ ChatWaitStatus;
     [super didReceiveMemoryWarning];
 }
 
+-(void) dealloc
+{
+    [self _deactivateAlohaTimer];
+    [self _clockCancel];
+}
+
 #pragma mark - IBActions
 
 -(IBAction)didPressActionButton:(id)sender

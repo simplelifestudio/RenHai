@@ -96,8 +96,6 @@
 
 - (IBAction)didPressActionButton:(id)sender
 {
-    [_guiModule playSound:SOUNDID_CONNECT_RETRY];
-    
     [self dismissWelcome];
 }
 
