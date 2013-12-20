@@ -129,6 +129,11 @@ ChoiceProcessStatus;
     [super didReceiveMemoryWarning];
 }
 
+-(void) dealloc
+{
+    [self _clockCancel];
+}
+
 #pragma mark - UICollectionViewDelegate
 
 #pragma mark - UICollectionViewDataSource

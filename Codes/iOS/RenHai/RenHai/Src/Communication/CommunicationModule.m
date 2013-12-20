@@ -326,8 +326,8 @@ SINGLETON(CommunicationModule)
     }
     else
     {
-        GUIModule* guiModule = [GUIModule sharedInstance];
-        [guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];
+//        GUIModule* guiModule = [GUIModule sharedInstance];
+//        [guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];
         
         if (nil != failureCompletionBlock)
         {

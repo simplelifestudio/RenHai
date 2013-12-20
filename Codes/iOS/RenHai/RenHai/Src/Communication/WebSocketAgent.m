@@ -20,10 +20,18 @@
 #define PING_TEXT @"#####RenHai-App-Ping#####"
 #define PONG_LOG 0
 #define PING_ACTIVATE 1
-#define MESSAGE_LOG 0
+
 #define SERVERNOTIFICATION_LOG 0
 
 #define MESSAGE_ENCRYPT_NECESSARY 1
+
+#ifdef DEBUG
+#define MESSAGE_LOG_ENCRYPT 0
+#define MESSAGE_LOG_DECRYPT 1
+#else
+#define MESSAGE_LOG_ENCRYPT 1
+#define MESSAGE_LOG_DECRYPT 0
+#endif
 
 @interface WebSocketAgent()
 {
@@ -234,7 +242,7 @@
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message;
 {
-#if MESSAGE_LOG
+#if MESSAGE_LOG_ENCRYPT
     DDLogWarn(@"WebSocket Received Message Uncrypted: \"%@\"", message);
 #endif
     
@@ -244,7 +252,7 @@
     {
         NSString* encryptedString = (NSString*)[dic objectForKey:MESSAGE_KEY_ENVELOPE];
         NSString* decryptedString = [CBSecurityUtils decryptByDESAndDecodeByBase64:encryptedString key:MESSAGE_SECURITY_KEY];
-#if MESSAGE_LOG
+#if MESSAGE_LOG_DECRYPT
     DDLogVerbose(@"WebSocket Received Message Decrypted: \"%@\"", decryptedString);
 #endif
         dic = [CBJSONUtils toJSONObject:decryptedString];
@@ -311,7 +319,7 @@
 {
 #if PONG_LOG
     NSString* str = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
-    DDLogInfo(@"WebSocket Received Pong \"%@\"", str);
+    DDLogVerbose(@"WebSocket Received Pong \"%@\"", str);
 #endif
 }
 

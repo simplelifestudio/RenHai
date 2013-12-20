@@ -130,6 +130,11 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)dealloc
+{
+    [self _clockCancel];
+}
+
 #pragma mark - ChatWizardPage
 
 -(void) resetPage
@@ -466,11 +471,11 @@
 {
     RHCollectionLabelCell_iPhone* selectedCell = nil;
     
-    NSArray* indexPathes = collectionView.indexPathsForVisibleItems;
-    for (NSIndexPath* indexPath in indexPathes)
+    NSArray* selectedIndexPathes = collectionView.indexPathsForSelectedItems;
+    for (NSIndexPath* indexPath in selectedIndexPathes)
     {
         RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView cellForItemAtIndexPath:indexPath];
-        if (cell.selected)
+        if (nil != cell)
         {
             selectedCell = cell;
             break;
@@ -485,11 +490,11 @@
     NSString* name = _assessLabelNames[indexPath.row];
     if ([name isEqualToString:MESSAGE_KEY_ASSESS_HAPPY])
     {
-        cell.selected = YES;
+        [_assessLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
     }
     else
     {
-        cell.selected = NO;
+        [_assessLabelsView deselectItemAtIndexPath:indexPath animated:NO];
     }
 }
 
@@ -509,7 +514,7 @@
 {
     if (_assessLabelsView == collectionView)
     {
-        NSArray* indexPathes = _assessLabelsView.indexPathsForVisibleItems;
+        NSArray* indexPathes = _assessLabelsView.indexPathsForSelectedItems;
         if (nil == exceptIndexPath)
         {
             [self _resetAssessLabelsViewAsDefault];
@@ -518,15 +523,9 @@
         {
             for (NSIndexPath* indexPath in indexPathes)
             {
-                RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_assessLabelsView cellForItemAtIndexPath:indexPath];
                 if (![indexPath isEqual:exceptIndexPath])
                 {
-                    cell.selected = NO;
-                }
-                else
-                {
-                    DDLogVerbose(@"Selected cell's labelName: %@", cell.labelName);
-                    cell.selected = YES;
+                    [_assessLabelsView deselectItemAtIndexPath:indexPath animated:NO];
                 }
             }
         }
@@ -535,12 +534,12 @@
     }
     else if (_addImpressLabelsView == collectionView)
     {
-        NSArray* indexPathes = _addImpressLabelsView.indexPathsForVisibleItems;
+        NSArray* indexPathes = _addImpressLabelsView.indexPathsForSelectedItems;
         for (NSIndexPath* indexPath in indexPathes)
         {
             if (![indexPath isEqual:exceptIndexPath])
             {
-                [_addImpressLabelsView cellForItemAtIndexPath:indexPath].selected = NO;
+                [_addImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
             }
         }
         
@@ -548,12 +547,12 @@
     }
     else if (_existImpressLabelsView == collectionView)
     {
-        NSArray* indexPathes = _existImpressLabelsView.indexPathsForVisibleItems;
+        NSArray* indexPathes = _existImpressLabelsView.indexPathsForSelectedItems;
         for (NSIndexPath* indexPath in indexPathes)
         {
             if (![indexPath isEqual:exceptIndexPath])
             {
-                [_existImpressLabelsView cellForItemAtIndexPath:indexPath].selected = NO;
+                [_existImpressLabelsView deselectItemAtIndexPath:indexPath animated:NO];
             }
         }
         
@@ -587,11 +586,9 @@
         locationTouch = [_assessLabelsView convertPoint:locationTouch fromView:self.view];
         
         NSIndexPath* indexPath = [_assessLabelsView indexPathForItemAtPoint:locationTouch];
+        [_assessLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
         
         [self _deselectCollectionView:_assessLabelsView exceptIndexPath:indexPath];
-
-        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_assessLabelsView cellForItemAtIndexPath:indexPath];
-        cell.selected = YES;
         
         [self _refreshAssessLabelsViewActions];
     }
@@ -600,17 +597,7 @@
         locationTouch = [_addImpressLabelsView convertPoint:locationTouch fromView:self.view];
         
         NSIndexPath* indexPath = [_addImpressLabelsView indexPathForItemAtPoint:locationTouch];
-
-        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_addImpressLabelsView cellForItemAtIndexPath:indexPath];
-        if (!cell.isSelected)
-        {
-            cell.selected = YES;
-        }
-        else
-        {
-            cell.selected = NO;
-        }
-        
+        [_addImpressLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
         
         [self _deselectCollectionView:_addImpressLabelsView exceptIndexPath:indexPath];
         [self _deselectCollectionView:_existImpressLabelsView exceptIndexPath:nil];
@@ -621,11 +608,11 @@
         
         NSIndexPath* indexPath = [_existImpressLabelsView indexPathForItemAtPoint:locationTouch];
 
-        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_existImpressLabelsView cellForItemAtIndexPath:indexPath];
-        if (!cell.isSelected)
+        [_existImpressLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        RHCollectionLabelCell_iPhone* cell = [self _selectedCell:_existImpressLabelsView];
+        
+        if (nil != cell)
         {
-            cell.selected = YES;
-            
             NSString* labelName = cell.labelName;
             
             BOOL hasLabel = [_addImpressLabelNames containsObject:labelName];
@@ -634,8 +621,6 @@
         }
         else
         {
-            cell.selected = NO;
-            
             _allowCloneLabel = NO;
         }
         
@@ -662,8 +647,6 @@
         NSIndexPath* indexPath = [_addImpressLabelsView indexPathForItemAtPoint:locationTouch];
         if (nil != indexPath)
         {
-            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_addImpressLabelsView cellForItemAtIndexPath:indexPath];
-            cell.selected = YES;
             [self _deselectCollectionView:_addImpressLabelsView exceptIndexPath:indexPath];
             
             NSUInteger section = indexPath.section;
@@ -697,6 +680,8 @@
 {
     [_assessLabelsView reloadData];
     
+    [self _resetAssessLabelsViewAsDefault];
+    
     [self _refreshAssessLabelsViewActions];
 }
 
@@ -717,14 +702,14 @@
     BOOL allowCreateLabel = YES;
     BOOL allowDeleteLabel = NO;
     
-    NSArray* indexPathes = [_addImpressLabelsView indexPathsForVisibleItems];
-    for (NSIndexPath* indexPath in indexPathes)
+    NSArray* indexPathes = [_addImpressLabelsView indexPathsForSelectedItems];
+    if (0 < indexPathes.count)
     {
-        if ([_addImpressLabelsView cellForItemAtIndexPath:indexPath].selected)
-        {
-            allowDeleteLabel = YES;
-            break;
-        }
+        allowDeleteLabel = YES;
+    }
+    else
+    {
+        allowDeleteLabel = NO;
     }
     
     if (ADDIMPRESSLABELSVIEW_SECTION_ITEMCOUNT_ADDIMPRESSLABELS <= _addImpressLabelNames.count)
@@ -874,7 +859,8 @@
         }
         
         cell.countLabel.hidden = YES;
-        cell.textField.userInteractionEnabled = NO;
+        
+        cell.selected = NO;
     }
     else if (cv == _addImpressLabelsView)
     {

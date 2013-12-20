@@ -32,6 +32,8 @@
 #define SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_3_5 9
 #define SERVERINTERESTLABELS_SECTION_ITEMCOUNT_SERVERINTERESTLABELS_4 12
 
+#define CELL_SELECTING_ZOOMRATE 1.5f
+
 @interface InterestViewController_iPhone () <InterestLabelsHeaderViewDelegate, ServerInterestLabelsHeaderViewDelegate, RHLabelManageDelegate, UIGestureRecognizerDelegate>
 {
     GUIModule* _guiModule;
@@ -212,11 +214,11 @@
 {
     RHCollectionLabelCell_iPhone* selectedCell = nil;
     
-    NSArray* selectedIndexPathes = collectionView.indexPathsForVisibleItems;
+    NSArray* selectedIndexPathes = collectionView.indexPathsForSelectedItems;
     for (NSIndexPath* indexPath in selectedIndexPathes)
     {
         RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[collectionView cellForItemAtIndexPath:indexPath];
-        if (cell.selected)
+        if (nil != cell)
         {
             selectedCell = cell;
             break;
@@ -230,12 +232,12 @@
 {
     if (_interestLabelsView == collectionView)
     {
-        NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForVisibleItems;
+        NSArray* selectedIndexPathes = _interestLabelsView.indexPathsForSelectedItems;
         for (NSIndexPath* indexPath in selectedIndexPathes)
         {
             if (![indexPath isEqual:exceptIndexPath])
             {
-                [_interestLabelsView cellForItemAtIndexPath:indexPath].selected = NO;
+                [_interestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
             }
         }
         
@@ -243,12 +245,12 @@
     }
     else if (_serverInterestLabelsView == collectionView)
     {
-        NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForVisibleItems;
+        NSArray* selectedIndexPathes = _serverInterestLabelsView.indexPathsForSelectedItems;
         for (NSIndexPath* indexPath in selectedIndexPathes)
         {
             if (![indexPath isEqual:exceptIndexPath])
             {
-                [_serverInterestLabelsView cellForItemAtIndexPath:indexPath].selected = NO;
+                [_serverInterestLabelsView deselectItemAtIndexPath:indexPath animated:NO];
             }
         }
         
@@ -277,16 +279,7 @@
         locationTouch = [_interestLabelsView convertPoint:locationTouch fromView:self.view];
         
         NSIndexPath* indexPath = [_interestLabelsView indexPathForItemAtPoint:locationTouch];
-        
-        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_interestLabelsView cellForItemAtIndexPath:indexPath];
-        if (!cell.isSelected)
-        {
-            cell.selected = YES;
-        }
-        else
-        {
-            cell.selected = NO;
-        }
+        [_interestLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
         
         [self _deselectCollectionView:_interestLabelsView exceptIndexPath:indexPath];
         [self _deselectCollectionView:_serverInterestLabelsView exceptIndexPath:nil];
@@ -296,12 +289,10 @@
         locationTouch = [_serverInterestLabelsView convertPoint:locationTouch fromView:self.view];
         
         NSIndexPath* indexPath = [_serverInterestLabelsView indexPathForItemAtPoint:locationTouch];
-        
-        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_serverInterestLabelsView cellForItemAtIndexPath:indexPath];
-        if (!cell.isSelected)
+        [_serverInterestLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        RHCollectionLabelCell_iPhone* cell = [self _selectedCell:_serverInterestLabelsView];
+        if (nil != cell)
         {
-            cell.selected = YES;
-            
             NSString* labelName = cell.labelName;
             
             RHDevice* device = _userDataModule.device;
@@ -313,8 +304,6 @@
         }
         else
         {
-            cell.selected = NO;
-            
             _allowCloneLabel = NO;
         }
         
@@ -341,8 +330,6 @@
         NSIndexPath* indexPath = [_interestLabelsView indexPathForItemAtPoint:locationTouch];
         if (nil != indexPath)
         {
-            RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_interestLabelsView cellForItemAtIndexPath:indexPath];
-            cell.selected = YES;
             [self _deselectCollectionView:_interestLabelsView exceptIndexPath:indexPath];
             
             NSUInteger section = indexPath.section;
@@ -386,10 +373,10 @@
     RHInterestCard* interestCard = profile.interestCard;
     NSArray* labelList = interestCard.labelList;
     
-    NSArray* indexPathes = [_interestLabelsView indexPathsForVisibleItems];
+    NSArray* indexPathes = [_interestLabelsView indexPathsForSelectedItems];
     for (NSIndexPath* indexPath in indexPathes)
     {
-        if ([_interestLabelsView cellForItemAtIndexPath:indexPath].selected && 1 < labelList.count)
+        if (1 < labelList.count)
         {
             allowDeleteLabel = YES;
             break;
@@ -473,7 +460,7 @@
                 RHProfile* profile = device.profile;
                 RHInterestCard* interestCard = profile.interestCard;
                 NSArray* interestLabels = interestCard.labelList;
-                DDLogVerbose(@"interestLabels.count = %d", interestLabels.count);
+
                 itemsCount = (interestLabels.count <= INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS) ? interestLabels.count : INTERESTLABELS_SECTION_ITEMCOUNT_INTERESTLABELS;
                 
                 break;
@@ -540,7 +527,6 @@
                 NSInteger labelCount = 0;
                 
                 NSArray* labelList = interestCard.labelList;
-                DDLogVerbose(@"labelList.count = %d", labelList.count);
                 
                 RHInterestLabel* label = labelList[position];
                 labelName = label.labelName;
@@ -763,7 +749,7 @@
 
 - (CGAffineTransform)collectionView:(UICollectionView *)collectionView transformForDraggingItemAtIndexPath:(NSIndexPath *)indexPath duration:(NSTimeInterval *)duration
 {
-    return CGAffineTransformMakeScale(1.25f, 1.25f);
+    return CGAffineTransformMakeScale(CELL_SELECTING_ZOOMRATE, CELL_SELECTING_ZOOMRATE);
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -788,6 +774,9 @@
     }
     else if (collectionView == _serverInterestLabelsView)
     {
+        RHCollectionLabelCell_iPhone* cell = (RHCollectionLabelCell_iPhone*)[_serverInterestLabelsView cellForItemAtIndexPath:indexPath];
+        DDLogVerbose(@"didSelectItemAtIndexPath:%@", cell.labelName);
+
         switch (section)
         {
             case SERVERINTERESTLABELS_SECTION_INDEX_SERVERINTERESTLABELS:

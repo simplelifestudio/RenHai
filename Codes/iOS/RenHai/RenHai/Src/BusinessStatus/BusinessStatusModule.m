@@ -87,18 +87,11 @@ SINGLETON(BusinessStatusModule)
 
     BOOL flag = NO;
     
-    NSNumber* oAppMessageId = [NSNumber numberWithInt:appMessageId];
-    
-    @synchronized(_remoteCommunicationAbnormalRecords)
+    [self _increaseCommunicateAbnormalRecords];
+    if (kCommunicateAbnormalCount >= LIMIT_REMOTESTATUSABNORMAL)
     {
-        NSNumber* lastAppMessageId = [_remoteCommunicationAbnormalRecords lastObject];
-        if (nil != lastAppMessageId && lastAppMessageId.intValue == oAppMessageId.intValue)
-        {
-            flag = YES;
-        }
-        
-        [_remoteCommunicationAbnormalRecords addObject:oAppMessageId];
-        [_remoteCommunicationAbnormalRecords removeAllObjects];
+        flag = YES;
+        [self _clearCommunicateAbnormalRecords];
     }
     
     if (flag)
@@ -1362,6 +1355,10 @@ SINGLETON(BusinessStatusModule)
 -(void) _updateBusinessStatus:(BusinessStatusIdentifier) identifier
 {
     DDLogWarn(@"BusinessStatus changed from: %d to :%d", _currentBusinessStatus.identifier, identifier);
+    if (_currentBusinessStatus.identifier == BusinessStatusIdentifier_Disconnected)
+    {
+        [self _clearCommunicateAbnormalRecords];
+    }
     
     NSString* identifierString = [NSString stringWithFormat:@"%d", identifier];
     BusinessStatus* status = [_businessStatusMap objectForKey:identifierString];
@@ -1390,6 +1387,23 @@ SINGLETON(BusinessStatusModule)
     
     NSDictionary* info = [NSDictionary dictionaryWithObjects:@[oAppMessageId, oBusinessStatusId] forKeys:@[NOTIFICATION_INFOID_APPMESSAGEID, NOTIFICATION_INFOID_BUSINESSSTATUSID]];
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_REMOTECOMMUNICATIONABNORMAL object:self userInfo:info];
+}
+
+static volatile NSUInteger kCommunicateAbnormalCount = 0;
+-(void) _increaseCommunicateAbnormalRecords
+{
+    @synchronized(_remoteCommunicationAbnormalRecords)
+    {
+        kCommunicateAbnormalCount++;
+    }
+}
+
+-(void) _clearCommunicateAbnormalRecords
+{
+    @synchronized(_remoteCommunicationAbnormalRecords)
+    {
+        kCommunicateAbnormalCount = 0;
+    }
 }
 
 @end

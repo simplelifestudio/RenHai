@@ -287,7 +287,7 @@ SINGLETON(GUIModule)
     {
         NSString* notificationName = notification.name;
         if ([notificationName isEqualToString:NOTIFICATION_ID_RHSERVERDISCONNECTED])
-        {
+        {            
             UIViewController* rootVC = [CBUIUtils getRootController];
             if ([rootVC isVisible])
             {
@@ -296,12 +296,6 @@ SINGLETON(GUIModule)
         }
         else if ([notificationName isEqualToString:NOTIFICATION_ID_REMOTECOMMUNICATIONABNORMAL])
         {
-//            NSDictionary* info = notification.userInfo;
-//            NSNumber* oAppMessageId = [info objectForKey:NOTIFICATION_INFOID_APPMESSAGEID];
-//            
-//            NSNumber* oBusinessStatusId = [info objectForKey:NOTIFICATION_INFOID_BUSINESSSTATUSID];
-//            
-//            [self _popupAlertWithBusinessStatus:oBusinessStatusId.intValue andAppMessage:oAppMessageId.intValue];
             UIViewController* rootVC = [CBUIUtils getRootController];
             if ([rootVC isVisible])
             {

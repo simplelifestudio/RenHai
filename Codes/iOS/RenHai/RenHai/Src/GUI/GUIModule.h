@@ -97,12 +97,17 @@
 
 #define HELPSCREEN_DISPLAY_SECONDS 9.0f
 
-#define SPLASHVIEW_HIDE 0
 #define HELPVIEW_ON_APPFIRSTLAUNCHED 1
 
 #define SCREEN_ALWAYS_ON 1
 
 #define LEFTBAR_WIDTH_IPHONE 200
+
+#ifdef DEBUG
+#define SPLASHVIEW_HIDE 1
+#else
+#define SPLASHVIEW_HIDE 0
+#endif
 
 typedef enum
 {

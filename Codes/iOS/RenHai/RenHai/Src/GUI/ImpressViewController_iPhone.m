@@ -75,6 +75,11 @@
     [super viewWillDisappear:animated];
 }
 
+-(void) dealloc
+{
+    [self _deactivateDataSyncTimer];
+}
+
 #pragma mark - UICollectionViewDelegate
 
 #pragma mark - UICollectionViewDataSource
