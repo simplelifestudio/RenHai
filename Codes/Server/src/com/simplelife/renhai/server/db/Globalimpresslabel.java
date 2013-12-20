@@ -112,7 +112,15 @@ public class Globalimpresslabel implements IDbObject
 		}
 		else
 		{
-			mapper.insert(this);
+			IDbObject label = mapper.selectByStringKey(impressLabelName);
+			if (label == null)
+			{
+				mapper.insert(this);
+			}
+			else
+			{
+				mapper.updateByPrimaryKey(this);
+			}
 		}
 	}
 	
