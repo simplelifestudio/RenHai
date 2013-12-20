@@ -240,20 +240,16 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             // Updated by RenHai
             // {
             UICollectionViewCell* selectedCell = [self.collectionView cellForItemAtIndexPath:indexPath];
-            NSArray* visibleCells = self.collectionView.visibleCells;
-            for (UICollectionViewCell* cell in visibleCells)
+            
+            NSArray* selectedIndexPathes = self.collectionView.indexPathsForSelectedItems;
+            for (NSIndexPath* p in selectedIndexPathes)
             {
-                if (cell == selectedCell)
-                {
-                    cell.selected = YES;
-                    cell.highlighted = YES;
-                }
-                else
-                {
-                    cell.selected = NO;
-                    cell.highlighted = YES;
-                }
+                [self.collectionView deselectItemAtIndexPath:p animated:NO];
+                UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:p];
+                cell.highlighted = NO;
             }
+            [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+            selectedCell.highlighted = YES;
             // }
             
             // Create mock cell to drag around
@@ -313,13 +309,13 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
             
             // Updated by RenHai
             // {
-            NSArray* visibleCells = [self.collectionView visibleCells];
-            for (UICollectionViewCell* cell in visibleCells)
+            NSArray* selectedIndexPathes = self.collectionView.indexPathsForSelectedItems;
+            for (NSIndexPath* p in selectedIndexPathes)
             {
-                cell.selected = NO;
+                [self.collectionView deselectItemAtIndexPath:p animated:NO];
+                UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:p];
                 cell.highlighted = NO;
             }
-            // }
             
             // Reset
             [self invalidatesScrollTimer];
