@@ -23,7 +23,7 @@ public class MockAppConsole
 {
     public static void main(String[] args)
     {
-        if (args.length != 4)
+        if (args.length != 6)
         {
             printUsage();
             return;
@@ -40,12 +40,19 @@ public class MockAppConsole
 	        
 	        String serverLink = args[2];
 	        String behaviorMode = args[3];
+	        
+	        arg = args[4];
+	        int startIndex = Integer.parseInt(arg);
+	        
+	        arg = args[5];
+	        int chatCount = Integer.parseInt(arg);
 	        //ExecutorService executeThreadPool = Executors.newFixedThreadPool(threadCount);
 
 	        CopyOnWriteArrayList<MockApp> mockApps = new CopyOnWriteArrayList<>();
 	        ExecuteThread thread;
-	        thread = new ExecuteThread("MA-Monitor", "Monitor", serverLink, 0, 0, mockApps);
-	        thread.start();
+	        //thread = new ExecuteThread("MA-Monitor-" + startIndex, "Monitor", serverLink, 0, 0, mockApps);
+	        //thread.start();
+	        
 	        int indexInGroup = 1;
 	        int countPerGroup = 2;
 	        
@@ -56,13 +63,13 @@ public class MockAppConsole
 	        }
 	        
 	        int groupCount = threadCount / countPerGroup;
-	        MockApp app;
-	        String interestLabel;
-	        for (int i = 0; i < threadCount; i++)
+	        
+	        int endIndex = startIndex + threadCount;
+	        for (int i = startIndex; i < endIndex; i++)
 	        {
-	        	indexInGroup = i % groupCount + 1;
-	        	//System.out.println("Start to launch MockApp-" + i);
-	        	thread = new ExecuteThread("MA-" + i, behaviorMode, serverLink, i, indexInGroup, mockApps);
+	        	indexInGroup = i % groupCount + 1 + startIndex;
+	        	System.out.println("Start to launch MockApp-" + i);
+	        	thread = new ExecuteThread("MA-" + i, behaviorMode, serverLink, i, indexInGroup, mockApps, chatCount);
 	        	thread.start();
 	        	//System.out.println("MockApp-" + i + " launched successfully.");
 	        	//interestLabel = "MA_" + i + "," + "GI_" + indexInGroup;
@@ -72,19 +79,22 @@ public class MockAppConsole
 	        }
 	        
 	        Thread.sleep(3000);
+	        MockApp app;
 	        while (mockApps.size() > 0)
 	        {
 	        	Thread.sleep(1000);
-	        	System.out.println("Number of mockApps before check: "+ mockApps.size());
+	        	//System.out.println("Number of mockApps before check: "+ mockApps.size());
 	        	
 	        	for (int i = mockApps.size()-1; i >= 0; i--)
 	        	{
-	        		if (mockApps.get(i).getBusinessStatus() == MockAppConsts.MockAppBusinessStatus.Ended)
+	        		app = mockApps.get(i); 
+	        		if (app.getBusinessStatus() == MockAppConsts.MockAppBusinessStatus.Ended)
 	        		{
+	        			System.out.println(app.getDeviceSn() + " is ended.");
 	        			mockApps.remove(i);
 	        		}
 	        	}
-	        	System.out.println("Number of mockApps after check: "+ mockApps.size());
+	        	//System.out.println("Number of mockApps after check: "+ mockApps.size());
 	        }
         }
         catch(Exception e)
@@ -131,10 +141,11 @@ public class MockAppConsole
         private int appIndex;
         private int labelIndex;
         private CopyOnWriteArrayList<MockApp> mockApps;
+        private int chatCount;
         
         private Logger logger = LoggerFactory.getLogger("MockAppConsole");
         
-        public ExecuteThread(String name, String behaviorMode, String websocketLink, int appIndex, int labelIndex, CopyOnWriteArrayList<MockApp> mockApps)
+        public ExecuteThread(String name, String behaviorMode, String websocketLink, int appIndex, int labelIndex, CopyOnWriteArrayList<MockApp> mockApps, int chatCount)
         {
             this.name = name;
             this.behaviorMode = behaviorMode;
@@ -142,13 +153,14 @@ public class MockAppConsole
             this.appIndex = appIndex;
             this.labelIndex = labelIndex;
             this.mockApps = mockApps;
+            this.chatCount = chatCount;
         }
         
         @Override
         public void run()
         {
-        	String interestLabel = "MA_" + appIndex + "," + "GI_" + labelIndex;
-        	MockApp app = new MockApp(name, behaviorMode, websocketLink, interestLabel);
+        	String interestLabel = "Ä£Äâ," + "MA_" + appIndex + "," + "GI_" + labelIndex;
+        	MockApp app = new MockApp(name, behaviorMode, websocketLink, interestLabel, chatCount);
         	mockApps.add(app);
         	/*
             while (app.getBusinessStatus() != MockAppConsts.MockAppBusinessStatus.Ended)

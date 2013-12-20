@@ -724,28 +724,20 @@ public class BusinessSession implements IBusinessSession
 				|| reason == Consts.StatusChangeReason.WebSocketReconnect
 				|| reason == Consts.StatusChangeReason.WebsocketClosedByApp)
 		{
-			//logger.debug("===============135===============Device <{}>", device.getDeviceIdentification());
 			if (this.getStatus() == BusinessSessionStatus.VideoChat)
 			{
 				device.increaseChatLoss();
 			}
-			//logger.debug("===============136===============Device <{}>", device.getDeviceIdentification());
 			if (chatStartTime > 0)
 			{
-				//logger.debug("===============137===============Device <{}>", device.getDeviceIdentification());
 				int duration = (int) (System.currentTimeMillis() - chatStartTime);
 				device.increaseChatDuration(duration);
-				//logger.debug("===============138===============Device <{}>", device.getDeviceIdentification());
 			}
-			//logger.debug("===============139===============Device <{}>", device.getDeviceIdentification());
 			notifyDevices(device, NotificationType.OthersideLost, null);
-			//logger.debug("===============1391===============Device <{}>", device.getDeviceIdentification());
 			defaultGoodAssess(deviceList, device);
-			//logger.debug("===============1392===============Device <{}>", device.getDeviceIdentification());
     	}
 		else if (reason == Consts.StatusChangeReason.AppLeaveBusiness)
 		{
-			//logger.debug("===============1393===============Device <{}>", device.getDeviceIdentification());
 			notifyDevices(device, NotificationType.OthersideRejected, null);
 		}
 		updateBusinessProgress(device.getDeviceIdentification(), DeviceBusinessProgress.Leaved);
@@ -754,19 +746,15 @@ public class BusinessSession implements IBusinessSession
 		if (checkAllDevicesReach(DeviceBusinessProgress.Leaved))
     	//if (deviceList == null || deviceList.isEmpty())
     	{
-    		//logger.debug("===============1394===============Device <{}>", device.getDeviceIdentification());
     		if (reason == StatusChangeReason.AssessAndContinue
     				|| reason == StatusChangeReason.AssessAndQuit)
     		{
-    			//logger.debug("===============1395===============Device <{}>", device.getDeviceIdentification());
     			endReason = Consts.SessionEndReason.NormalEnd;
     		}
     		else
     		{
-    			//logger.debug("===============1396===============Device <{}>", device.getDeviceIdentification());
     			endReason = Consts.SessionEndReason.AllDeviceRemoved;
     		}
-    		//logger.debug("===============1397===============Device <{}>", device.getDeviceIdentification());
     		changeStatus(Consts.BusinessSessionStatus.Idle);
     		return;
     	}

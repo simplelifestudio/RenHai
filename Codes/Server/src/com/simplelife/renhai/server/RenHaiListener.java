@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.json.JSONModule;
+import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.websocket.WebSocketModule;
 
 /**
@@ -41,6 +42,8 @@ public class RenHaiListener implements ServletContextListener
 		System.out.println("+----------------------------------------------------------+");
 		try
 		{
+			GlobalSetting.checkSettingFile();
+			
 			System.out.println("+----------------------------------------------------------+");
 			System.out.println("|                      Load DB Module                      |");
 			System.out.println("+----------------------------------------------------------+");

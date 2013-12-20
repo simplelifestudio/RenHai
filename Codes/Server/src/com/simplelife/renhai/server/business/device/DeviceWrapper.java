@@ -123,8 +123,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     {
     	this.webSocketConnection = connection;
     	this.businessStatus = DeviceStatus.Connected;
-    	pingTimeoutNode = new PingTimeoutNode(GlobalSetting.TimeOut.PingTimeout, this);
-    	OnlineDevicePool.pingLink.append(pingTimeoutNode);
+    	pingTimeoutNode = new PingTimeoutNode(GlobalSetting.TimeOut.PingTimeout, this, OnlineDevicePool.pingLink);
     	connection.bind(this);
     	inputMessageHandler = new MessageHandler(connection.getConnectionId(), InputMsgExecutorPool.instance);
         outputMessageHandler = new MessageHandler(connection.getConnectionId(), OutputMsgExecutorPool.instance);
@@ -575,8 +574,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
         		return;
         	}
         	
-        	SyncSendTimeoutNode node = new SyncSendTimeoutNode(GlobalSetting.TimeOut.JSONMessageEcho * 1000, this, message.getMessageSn());
-        	OnlineDevicePool.syncSendingTimeoutLink.append(node);
+        	SyncSendTimeoutNode node = new SyncSendTimeoutNode(GlobalSetting.TimeOut.JSONMessageEcho * 1000, this, message.getMessageSn(), OnlineDevicePool.syncSendingTimeoutLink);
         	this.syncSendingTimeoutNodeList.add(node);
         	webSocketConnection.asyncSendMessage(message);
         	/*

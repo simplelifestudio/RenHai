@@ -16,7 +16,7 @@
 	{
 		"maxRecordCountForFlush":30,
 		"cacheCompressBuffer":30,
-		"maxRecordCountForDiscard":1000,
+		"maxRecordCountForDiscard":1500,
 		"globalImpressLabelCacheCount":1000,
 		"globalInterestLabelCacheCount":1000,
 		"deviceCacheCount":10000
@@ -25,7 +25,7 @@
 	"businessSetting":
 	{
 		"onlinePoolCapacity":10000,
-		"webRTCSessionPoolCapacity":500,
+		"webRTCSessionPoolCapacity":1500,
 		"randomBusinessPoolCapacity":0,
 		"interestBusinessPoolCapacity":10000,
 		"hotInterestLabelCount":10,

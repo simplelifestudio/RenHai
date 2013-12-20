@@ -1,16 +1,21 @@
 package com.simplelife.renhai.server.business.device;
 
+import com.simplelife.renhai.server.business.pool.TimeoutLink;
+
 
 public abstract class AbstractTimeoutNode
 {
-	private AbstractTimeoutNode prevNode;
-	private AbstractTimeoutNode nextNode;
-    private long lastTime;
-    private int timeoutThreshold;
+	protected AbstractTimeoutNode prevNode;
+	protected AbstractTimeoutNode nextNode;
+	protected long lastTime;
+	protected int timeoutThreshold;
+	protected TimeoutLink ownerLink;
 
-    public AbstractTimeoutNode(int timeoutThreshold)
+    public AbstractTimeoutNode(int timeoutThreshold, TimeoutLink ownerLink)
     {
     	this.timeoutThreshold = timeoutThreshold;
+    	this.ownerLink = ownerLink;
+    	ownerLink.append(this);
     }
     
 	/**

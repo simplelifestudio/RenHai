@@ -43,6 +43,8 @@ public class WebRTCSessionPool extends AbstractPool
     private Logger logger = DBModule.instance.getLogger();
     private Webrtcaccount curAccount = null;
     private int accountNum = -1;
+    private int dayOfCurAccount = 0;
+    private int curAccountId = 0;
     
     private WebRTCSessionPool()
     {
@@ -81,7 +83,7 @@ public class WebRTCSessionPool extends AbstractPool
     	checkExpiredToken();
     }
     
-    private int getAccountIdByDate()
+    private int getAccountIdOfToday()
     {
     	if (accountNum == -1)
     	{
@@ -101,12 +103,23 @@ public class WebRTCSessionPool extends AbstractPool
     	{
     		return 1;
     	}
-    	
+
     	Calendar cal = Calendar.getInstance();
     	int day = cal.get(Calendar.DAY_OF_YEAR);
-    	
-    	int accountId = day % accountNum + 1;
-    	return accountId;
+    	if (day != dayOfCurAccount)
+    	{
+    		// Range of curAccountId: 1 to accountNum
+    		int tmpId = curAccountId;
+    		curAccountId++;
+    		if (curAccountId > accountNum)
+        	{
+        		curAccountId = 1;
+        	}
+    		logger.debug("WebRTC account ID was changed from " + tmpId + " to " + curAccountId + ", value of dayOfCurAccount is changed from "+ dayOfCurAccount +"to" + day);
+        	dayOfCurAccount = day;
+    	}
+
+    	return curAccountId;
     }
     
     public void stopService()
@@ -214,7 +227,7 @@ public class WebRTCSessionPool extends AbstractPool
 	public void checkExpiredToken()
 	{
 		logger.debug("Start to check expired token");
-		int idOfToday = this.getAccountIdByDate();
+		int idOfToday = this.getAccountIdOfToday();
 		if (curAccount == null)
 		{
 			// The first time
@@ -225,7 +238,7 @@ public class WebRTCSessionPool extends AbstractPool
 		
 		if (idOfToday != curAccount.getWebRTCAccountId())
 		{
-			logger.debug("Clear tokens and load tokens of next account from DB");
+			logger.debug("Clear tokens and load tokens of next account from DB, account ID of today: {}", idOfToday);
 			clearPool();
 			
 			Webrtcaccount tmpAccount = getAccount(idOfToday);

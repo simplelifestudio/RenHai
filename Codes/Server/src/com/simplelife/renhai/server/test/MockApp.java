@@ -243,6 +243,7 @@ public class MockApp implements IMockApp, Runnable
 	protected MockAppConsts.MockAppBusinessStatus businessStatus = MockAppConsts.MockAppBusinessStatus.Invalid;
 	
 	protected int chatCount = 0;
+	protected int maxChatCount = 3;
 	protected boolean isUsingRealSocket;
 	
 	private MockMessageHandler inputMessageHandler = new MockMessageHandler(this, MockApp.mockAppExecutePool);
@@ -533,8 +534,15 @@ public class MockApp implements IMockApp, Runnable
     
     public MockApp(String deviceSn, String strBehaviorMode, String serverLink, String interestLabels)
     {
+    	this(deviceSn, strBehaviorMode, serverLink, interestLabels, MockAppConsts.Setting.MaxChatCount);
+    }
+    
+    public MockApp(String deviceSn, String strBehaviorMode, String serverLink, String interestLabels, int maxChatCount)
+    {
     	this.interestLabels = interestLabels;
     	this.deviceSn = deviceSn;
+    	this.maxChatCount = maxChatCount;
+
     	MockAppConsts.MockAppBehaviorMode tmpBehaviorMode = MockAppConsts.MockAppBehaviorMode.parseFromStringValue(strBehaviorMode);
     	
     	if (tmpBehaviorMode == MockAppConsts.MockAppBehaviorMode.Invalid)
@@ -1025,7 +1033,7 @@ public class MockApp implements IMockApp, Runnable
 		}
 
 		chatCount++;
-		if (chatCount >= MockAppConsts.Setting.MaxChatCount)
+		if (chatCount >= maxChatCount)
 		{
 			setBusinessStatus(MockAppConsts.MockAppBusinessStatus.Ended);
 			return true;
@@ -1514,7 +1522,10 @@ public class MockApp implements IMockApp, Runnable
 		if (status == MockAppConsts.MockAppBusinessStatus.Ended)
 		{
 			stopTimer();
-			connection.closeConnection();
+			if (connection != null)
+			{
+				connection.closeConnection();
+			}
 		}
 		logger.debug("MockApp <{}> changed status to " + status.name(), deviceSn);
 	}

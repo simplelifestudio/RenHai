@@ -63,7 +63,11 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	@Override
 	public void onClose(int arg0, String arg1, boolean arg2)
 	{
-		getConnection().close(arg0);
+		if (getConnection() != null)
+		{
+			getConnection().close(arg0);
+		}
+		
 		if (mockApp != null)
 		{
 			mockApp.onClose();
@@ -118,6 +122,18 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 		this.disabled = false;
 	}
 
+	
+	private WebSocket getWebsocketConnection()
+	{
+		if (getConnection() == null)
+		{
+			if (mockApp != null)
+			{
+				this.connect();
+			}
+		}
+		return getConnection();
+	}
 
 	@Override
 	public void onTextMessage(String message)
@@ -192,11 +208,15 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	{
 		return null;
 	}
-
+	
 	@Override
 	public void ping()
 	{
-		getConnection().sendFrame(pingFrameData);
+		WebSocket webSocket = getWebsocketConnection(); 
+		if (webSocket != null)
+		{
+			webSocket.sendFrame(pingFrameData);
+		}
 	}
 	
 	@Override
@@ -207,9 +227,13 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	
 	public void onWebsocketMessageFragment( WebSocket conn, Framedata frame ) 
 	{
-		FrameBuilder builder = (FrameBuilder) frame;
-		builder.setTransferemasked( true );
-		getConnection().sendFrame( frame );
+		WebSocket webSocket = getWebsocketConnection(); 
+		if (webSocket != null)
+		{
+			FrameBuilder builder = (FrameBuilder) frame;
+			builder.setTransferemasked( true );
+			webSocket.sendFrame( frame );
+		}
 	}
 	
 	public void closeConnection()
@@ -220,12 +244,12 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
 	@Override
 	public boolean isOpen()
 	{
-		if (getConnection() == null)
+		WebSocket webSocket = getWebsocketConnection(); 
+		if (webSocket != null)
 		{
-			return false;
+			return webSocket.isOpen();
 		}
-		
-		return getConnection().isOpen();
+		return false;
 	}
 
 	@Override
@@ -303,7 +327,12 @@ public class RenHaiWebSocketClient extends WebSocketClient implements IMockConne
     	
     	lastSentMessage = jsonObject;
     	String message = JSON.toJSONString(lastSentMessage, SerializerFeature.WriteMapNullValue);
-    	getConnection().send(message);
+    	
+    	WebSocket webSocket = getWebsocketConnection(); 
+		if (webSocket != null)
+		{
+			webSocket.send(message);
+		}
     	logger.debug("Sent message over WebSocket: \n{}", message);
 	}
 }

@@ -326,7 +326,8 @@ public class Consts
 		SessionBoundAcked(2), 
 		ChatAgreed(3), 
 		ChatEnded(4),
-		Leaved(5);
+		AssessProvided(5),
+		Leaved(6);
 		
 		private int value;
 		private DeviceBusinessProgress(int value)
@@ -842,7 +843,7 @@ public class Consts
 		AgreeChat(2),
 		RejectChat(3),
 		ChatMessage(4),
-		DeviceLeave(6),
+		DeviceLeave(5),
 		EndChat(6);
 		
 		private int value;

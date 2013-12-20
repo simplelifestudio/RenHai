@@ -52,11 +52,12 @@ public class TimeoutLink
 	{
 		if (head == null)
 		{
+			linkSize.set(0);
 			return;
 		}
 		
 		long duration = System.currentTimeMillis() - head.getLastTime();
-		logger.debug("Start to check inactivity of Ping, link size: {}, duration of first node: " + duration, linkSize.get());
+		logger.debug("Start to check timeout nodes, link size: {}, last update of first node: " + duration, linkSize.get());
 		
 		int count = 0;
 		AbstractTimeoutNode node = head;

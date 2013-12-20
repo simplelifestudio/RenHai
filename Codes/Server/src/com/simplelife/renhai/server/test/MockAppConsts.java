@@ -17,11 +17,11 @@ public class MockAppConsts
 	public static class Setting
 	{
 		public static int ChatConfirmDuration = 3 * 1000;
-		public static int VideoChatDurationMin = 10 * 1000;
-		public static int VideoChatDurationMax = 30 * 1000;
+		public static int VideoChatDurationMin = 30 * 1000;
+		public static int VideoChatDurationMax = 60 * 1000;
 		public static int AssessDuration = 10 * 1000;
 		
-		public static int MaxChatCount = 3;
+		public static int MaxChatCount = 10000;
 	}
 	
 	public enum MockAppBusinessStatus
