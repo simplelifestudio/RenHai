@@ -51,6 +51,12 @@
 #define COCOAPODS_VERSION_MINOR_DraggableCollectionView 1
 #define COCOAPODS_VERSION_PATCH_DraggableCollectionView 0
 
+// EAIntroView
+#define COCOAPODS_POD_AVAILABLE_EAIntroView
+#define COCOAPODS_VERSION_MAJOR_EAIntroView 2
+#define COCOAPODS_VERSION_MINOR_EAIntroView 0
+#define COCOAPODS_VERSION_PATCH_EAIntroView 0
+
 // FlatUIKit
 #define COCOAPODS_POD_AVAILABLE_FlatUIKit
 #define COCOAPODS_VERSION_MAJOR_FlatUIKit 1
@@ -78,8 +84,8 @@
 // JSQSystemSoundPlayer
 #define COCOAPODS_POD_AVAILABLE_JSQSystemSoundPlayer
 #define COCOAPODS_VERSION_MAJOR_JSQSystemSoundPlayer 1
-#define COCOAPODS_VERSION_MINOR_JSQSystemSoundPlayer 3
-#define COCOAPODS_VERSION_PATCH_JSQSystemSoundPlayer 1
+#define COCOAPODS_VERSION_MINOR_JSQSystemSoundPlayer 4
+#define COCOAPODS_VERSION_PATCH_JSQSystemSoundPlayer 0
 
 // KXKiOS7ColorsAndGradients
 #define COCOAPODS_POD_AVAILABLE_KXKiOS7ColorsAndGradients
