@@ -22,7 +22,9 @@ See [AVAudioPlayer](https://developer.apple.com/library/ios/DOCUMENTATION/AVFoun
 ## Features
 
 * Play sound effects and alert sounds with a single line of code
-* "Play" vibration (if available)
+* "Play" vibration (if available on device)
+* Block-based completion handlers
+* Integration with `NSUserDefaults` to globally toggle sound effects in your app
 * Sweet and efficient memory management
 * Caches sounds (`SystemSoundID` objects) and purges on memory warning
 
@@ -63,6 +65,12 @@ String constants for file extensions provided for you:
 * `kJSQSystemSoundTypeAIF`
 * `kJSQSystemSoundTypeAIFF`
 * `kJSQSystemSoundTypeWAV`
+
+Need a setting in your app's preferences to toggle sound effects on/off? `JSQSystemSoundPlayer` can do that, too! There's no need to ever check the saved settings (`[JSQSystemSoundPlayer sharedPlayer].on`) before you play a sound effect. Just play a sound like in the example above. `JSQSystemSoundPlayer` respects whatever setting has been previously saved.
+
+````objective-c
+[[JSQSystemSoundPlayer sharedPlayer] toggleSoundPlayerOn:YES];
+````
 
 Also see the included demo project: `SoundPlayerDemo.xcodeproj`
 
@@ -118,9 +126,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-[docsLink]:http://cocoadocs.org/docsets/JSQSystemSoundPlayer/1.3.1
+[docsLink]:http://cocoadocs.org/docsets/JSQSystemSoundPlayer/1.4.0
 [imgLink]:https://raw.github.com/jessesquires/JSQSystemSoundPlayer/master/Screenshots/screenshot.png
 
-
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/jessesquires/jsqsystemsoundplayer/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
