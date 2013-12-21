@@ -3,20 +3,20 @@
 	"serverList":
 	[
 		{
-			"id":"testServer",
+			"id":"normalServer",
 			"appVersion":
 			{
-				"version":"0.1",
-				"build":10 
+				"version":"0.2",
+				"build":0
 			},
 			"status":
 			{
-				"serviceStatus":1,
+				"serviceStatus":0,
 				"statusPeriod":
 				{
 					"timeZone":"GMT+0800",
-					"beginTime":"2013-01-01 10:00:00",
-					"endTime":"2013-01-01 10:30:00"
+					"beginTime":"2013-12-20 23:00:00",
+					"endTime":"2013-12-20 23:59:00"
 				}
 			},
 			"address":
@@ -26,14 +26,14 @@
 				"port":80,
 				"path":"/renhai/websocket"
 			},
-			"broadcast":"这是TestServer系统广播消息"
+			"broadcast":"感谢参与人海产品测试，人海官方微信/微博帐号即将开放。"
 		},
 		
 		{
-			"id":"normalServer",
+			"id":"testServer",
 			"appVersion":
 			{
-				"version":"1.0",
+				"version":"0.1",
 				"build":1
 			},
 			"status":
@@ -51,13 +51,13 @@
 				"protocol":"ws",
 				"ip":"192.81.135.31",
 				"port":80,
-				"path":"/renhai/websocket"
+				"path":"/renhai_test/websocket"
 			},
-			"broadcast":"这是NormalServer的系统广播消息"
+			"broadcast":"这是testServer的系统广播消息"
 		},
 		{
 			"id":"default",
-			"broadcast":"App版本太低，请升级到最新版后重试，谢谢！"
+			"broadcast":"App版本太低\n请升级到最新版后重试"
 		}
 	]
 }

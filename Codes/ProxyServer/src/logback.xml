@@ -9,9 +9,9 @@
     </appender>
     
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">  
-        <file>../logs/renhai.log</file>
+        <file>../logs/renhaiproxy.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>../logs/renhai_%d{yyyyMMdd}.log.zip</FileNamePattern>
+            <FileNamePattern>../logs/renhaiproxy_%d{yyyyMMdd}.log.zip</FileNamePattern>
         </rollingPolicy>
 	   
 	<!--rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">

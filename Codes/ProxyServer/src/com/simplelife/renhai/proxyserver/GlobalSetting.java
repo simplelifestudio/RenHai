@@ -35,7 +35,7 @@ public class GlobalSetting
 	private final String settingFileName = "setting.json";
 	private long lastFileDate = 0;
 	private Logger logger = LoggerFactory.getLogger(GlobalSetting.class);
-	private int encrypt;
+	private int encrypt = 1;
 	private Timer timer = new Timer();
 	
 	private ArrayList<IServer> serverList = new ArrayList<>();
