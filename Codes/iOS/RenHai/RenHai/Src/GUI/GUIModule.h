@@ -23,6 +23,8 @@
 #import "WarningViewController_iPhone.h"
 #import "ConfigViewController_iPhone.h"
 #import "WelcomeViewController_iPhone.h"
+#import "UserAgreementViewController_iPhone.h"
+#import "UserIntroductionViewController_iPhone.h"
 
 #import "ChatWizardController.h"
 
@@ -45,6 +47,8 @@
 #define STORYBOARD_ID_HELP_IPHONE @"help_iphone"
 #define STORYBOARD_ID_WARNING_IPHONE @"warning_iphone"
 #define STORYBOARD_ID_WELCOME_IPHONE @"welcome_iphone"
+#define STORYBOARD_ID_USERAGREEMENT_IPHONE @"useragreement_iphone"
+#define STORYBOARD_ID_USERINTRODUCTION_IPHONE @"userintroduction_iphone"
 
 #define STORYBOARD_ID_CHATWIZARD @"chatwizard"
 #define STORYBOARD_ID_CHATWAIT_IPHONE @"chatwait_iphone"
@@ -155,6 +159,9 @@ RHSoundId;
 @property (nonatomic, strong) WarningViewController_iPhone* warningViewController;
 @property (nonatomic, strong) ChatWizardController* chatWizardController;
 @property (nonatomic, strong) WelcomeViewController_iPhone* welcomeViewController;
+@property (nonatomic, strong) UserAgreementViewController_iPhone* userAgreementViewController;
+@property (nonatomic, strong) UserIntroductionViewController_iPhone* userIntroductionViewController;
+
 
 -(BOOL) isNetworkActivityIndicatorVisible;
 -(void) setNetworkActivityIndicatorVisible:(BOOL) flag;

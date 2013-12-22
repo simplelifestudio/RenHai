@@ -192,6 +192,14 @@
 		C59E2C1917D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = C59E2C1717D9ABA5000234A0 /* MainViewController_iPhone.m */; };
 		C5D1214817CF9C570064C68A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C5D1214517CF9C570064C68A /* AppDelegate.m */; };
 		CD07E419184DAC130066ED29 /* RHChatActionBar.m in Sources */ = {isa = PBXBuildFile; fileRef = CD07E418184DAC130066ED29 /* RHChatActionBar.m */; };
+		CD1114B51866AAF70091C83F /* UserAgreementViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1114B41866AAF70091C83F /* UserAgreementViewController_iPhone.m */; };
+		CD1114B61866AAF70091C83F /* UserAgreementViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1114B41866AAF70091C83F /* UserAgreementViewController_iPhone.m */; };
+		CD1114B91866ACC80091C83F /* UserIntroductionViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1114B81866ACC80091C83F /* UserIntroductionViewController_iPhone.m */; };
+		CD1114BA1866ACC80091C83F /* UserIntroductionViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1114B81866ACC80091C83F /* UserIntroductionViewController_iPhone.m */; };
+		CD1114C51866CA110091C83F /* UserIntroductionPage_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1114C41866CA110091C83F /* UserIntroductionPage_iPhone.m */; };
+		CD1114C61866CA110091C83F /* UserIntroductionPage_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1114C41866CA110091C83F /* UserIntroductionPage_iPhone.m */; };
+		CD1114CB1866CA9A0091C83F /* UserIntroductionPage_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1114CA1866CA9A0091C83F /* UserIntroductionPage_iPhone.xib */; };
+		CD1114CC1866CA9A0091C83F /* UserIntroductionPage_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1114CA1866CA9A0091C83F /* UserIntroductionPage_iPhone.xib */; };
 		CD1637F0185AD44B009BB03D /* AntiIcon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637EF185AD44B009BB03D /* AntiIcon-120.png */; };
 		CD1637F1185AD44B009BB03D /* AntiIcon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637EF185AD44B009BB03D /* AntiIcon-120.png */; };
 		CD1637F6185ADC40009BB03D /* Icon-76.png in Resources */ = {isa = PBXBuildFile; fileRef = CD1637F2185ADC40009BB03D /* Icon-76.png */; };
@@ -664,6 +672,13 @@
 		C5D1214517CF9C570064C68A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = AppDelegate.m; path = RenHai/AppDelegate.m; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		CD07E417184DAC130066ED29 /* RHChatActionBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHChatActionBar.h; sourceTree = "<group>"; };
 		CD07E418184DAC130066ED29 /* RHChatActionBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHChatActionBar.m; sourceTree = "<group>"; };
+		CD1114B31866AAF70091C83F /* UserAgreementViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserAgreementViewController_iPhone.h; sourceTree = "<group>"; };
+		CD1114B41866AAF70091C83F /* UserAgreementViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserAgreementViewController_iPhone.m; sourceTree = "<group>"; };
+		CD1114B71866ACC80091C83F /* UserIntroductionViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserIntroductionViewController_iPhone.h; sourceTree = "<group>"; };
+		CD1114B81866ACC80091C83F /* UserIntroductionViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserIntroductionViewController_iPhone.m; sourceTree = "<group>"; };
+		CD1114C31866CA110091C83F /* UserIntroductionPage_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserIntroductionPage_iPhone.h; sourceTree = "<group>"; };
+		CD1114C41866CA110091C83F /* UserIntroductionPage_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserIntroductionPage_iPhone.m; sourceTree = "<group>"; };
+		CD1114CA1866CA9A0091C83F /* UserIntroductionPage_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserIntroductionPage_iPhone.xib; sourceTree = "<group>"; };
 		CD1637EF185AD44B009BB03D /* AntiIcon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AntiIcon-120.png"; sourceTree = "<group>"; };
 		CD1637F2185ADC40009BB03D /* Icon-76.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-76.png"; sourceTree = "<group>"; };
 		CD1637F3185ADC40009BB03D /* Icon-80.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-80.png"; sourceTree = "<group>"; };
@@ -1184,6 +1199,13 @@
 				C593C44E17D329F300C26367 /* HelpViewController_iPhone.m */,
 				CD163828185EAC68009BB03D /* WelcomeViewController_iPhone.h */,
 				CD163829185EAC68009BB03D /* WelcomeViewController_iPhone.m */,
+				CD1114B31866AAF70091C83F /* UserAgreementViewController_iPhone.h */,
+				CD1114B41866AAF70091C83F /* UserAgreementViewController_iPhone.m */,
+				CD1114B71866ACC80091C83F /* UserIntroductionViewController_iPhone.h */,
+				CD1114B81866ACC80091C83F /* UserIntroductionViewController_iPhone.m */,
+				CD1114C31866CA110091C83F /* UserIntroductionPage_iPhone.h */,
+				CD1114C41866CA110091C83F /* UserIntroductionPage_iPhone.m */,
+				CD1114CA1866CA9A0091C83F /* UserIntroductionPage_iPhone.xib */,
 				CD34DCAD180A7BC5003BBE06 /* ChatWizardController.h */,
 				CD34DCAE180A7BC5003BBE06 /* ChatWizardController.m */,
 				C593C45117D32A8300C26367 /* ChatWaitViewController_iPhone.h */,
@@ -1454,6 +1476,7 @@
 				C55B440017CF580A009BB21B /* Default@2x.png in Resources */,
 				CDDA9FAB1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */,
 				CDDBE35818548D1E001A1744 /* icon-success@2x.png in Resources */,
+				CD1114CB1866CA9A0091C83F /* UserIntroductionPage_iPhone.xib in Resources */,
 				C55B440217CF580A009BB21B /* Default-568h@2x.png in Resources */,
 				C55B445D17CF8632009BB21B /* Icon-72.png in Resources */,
 				CD736CF41817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */,
@@ -1613,6 +1636,7 @@
 				CD1637FD185ADC40009BB03D /* Icon-152.png in Resources */,
 				CD16381A185C65F0009BB03D /* error.caf in Resources */,
 				CD94DF7B1851918000C9CBC4 /* enterbutton_normal@2x.png in Resources */,
+				CD1114CC1866CA9A0091C83F /* UserIntroductionPage_iPhone.xib in Resources */,
 				CD94DF7C1851918000C9CBC4 /* order@2x.png in Resources */,
 				CD94DF7D1851918000C9CBC4 /* RHTableViewLabelCell_iPhone.xib in Resources */,
 				CD94DF7E1851918000C9CBC4 /* Localizable.strings in Resources */,
@@ -1813,6 +1837,7 @@
 				C50505D817D2BD4800DB6589 /* CBUIUtils.m in Sources */,
 				CD1DFB0918001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */,
 				C50505DA17D2BD4800DB6589 /* CBUncaughtExceptionHandler.m in Sources */,
+				CD1114B91866ACC80091C83F /* UserIntroductionViewController_iPhone.m in Sources */,
 				C50505DC17D2BD4800DB6589 /* UIColor+CBColors.m in Sources */,
 				C50505E217D2C53A00DB6589 /* LoggerModule.m in Sources */,
 				CD3C04E7181FD1C0002B19A3 /* BusinessStatus.m in Sources */,
@@ -1831,6 +1856,7 @@
 				CDDBE34C18548D1E001A1744 /* MessageBarManager.m in Sources */,
 				CD5633B61827FBD300D2A9A6 /* ChatAssessAddImpressLabelsHeaderView_iPhone.m in Sources */,
 				C593C44317D329BF00C26367 /* ImpressViewController_iPhone.m in Sources */,
+				CD1114C51866CA110091C83F /* UserIntroductionPage_iPhone.m in Sources */,
 				C593C44717D329D200C26367 /* InterestViewController_iPhone.m in Sources */,
 				C593C44B17D329E100C26367 /* ConfigViewController_iPhone.m in Sources */,
 				C593C44F17D329F300C26367 /* HelpViewController_iPhone.m in Sources */,
@@ -1863,6 +1889,7 @@
 				C594603117D6CEA60084BB10 /* WebSocketAgent.m in Sources */,
 				C594603517D7352F0084BB10 /* RHMessage.m in Sources */,
 				CDBE9E29183457D700005405 /* RHMatchedCondition.m in Sources */,
+				CD1114B51866AAF70091C83F /* UserAgreementViewController_iPhone.m in Sources */,
 				C59E2C1817D9ABA6000234A0 /* MainViewController_iPhone.m in Sources */,
 				C596284317DA1C8B009127E6 /* RHNavigationController.m in Sources */,
 				C54DC8D517DC11A000BBD498 /* CEPlayer.m in Sources */,
@@ -2015,6 +2042,7 @@
 				CD94DF141851918000C9CBC4 /* CBUIUtils.m in Sources */,
 				CD94DF151851918000C9CBC4 /* ConnectViewController_iPhone.m in Sources */,
 				CD94DF161851918000C9CBC4 /* CBUncaughtExceptionHandler.m in Sources */,
+				CD1114BA1866ACC80091C83F /* UserIntroductionViewController_iPhone.m in Sources */,
 				CD94DF171851918000C9CBC4 /* UIColor+CBColors.m in Sources */,
 				CD94DF181851918000C9CBC4 /* LoggerModule.m in Sources */,
 				CD94DF191851918000C9CBC4 /* BusinessStatus.m in Sources */,
@@ -2033,6 +2061,7 @@
 				CDDBE34D18548D1E001A1744 /* MessageBarManager.m in Sources */,
 				CD94DF261851918000C9CBC4 /* ChatAssessAddImpressLabelsHeaderView_iPhone.m in Sources */,
 				CD94DF271851918000C9CBC4 /* ImpressViewController_iPhone.m in Sources */,
+				CD1114C61866CA110091C83F /* UserIntroductionPage_iPhone.m in Sources */,
 				CD94DF281851918000C9CBC4 /* InterestViewController_iPhone.m in Sources */,
 				CD94DF291851918000C9CBC4 /* ConfigViewController_iPhone.m in Sources */,
 				CD94DF2A1851918000C9CBC4 /* HelpViewController_iPhone.m in Sources */,
@@ -2065,6 +2094,7 @@
 				CD94DF431851918000C9CBC4 /* WebSocketAgent.m in Sources */,
 				CD94DF441851918000C9CBC4 /* RHMessage.m in Sources */,
 				CD94DF451851918000C9CBC4 /* RHMatchedCondition.m in Sources */,
+				CD1114B61866AAF70091C83F /* UserAgreementViewController_iPhone.m in Sources */,
 				CD94DF461851918000C9CBC4 /* MainViewController_iPhone.m in Sources */,
 				CD94DF471851918000C9CBC4 /* RHNavigationController.m in Sources */,
 				CD94DF481851918000C9CBC4 /* CEPlayer.m in Sources */,
