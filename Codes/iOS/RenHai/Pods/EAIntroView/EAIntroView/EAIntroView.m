@@ -408,7 +408,13 @@ float easeOutValue(float value) {
 
 - (void)notifyDelegateWithPreviousPage:(NSInteger)previousPageIndex andCurrentPage:(NSInteger)currentPageIndex {
     if(currentPageIndex!=_currentPageIndex && currentPageIndex < _pages.count) {
-        [_pages[previousPageIndex] pageDidDisappear];
+        // Updated by RenHai
+        // {
+        if (0 <= previousPageIndex && previousPageIndex < _pages.count)
+        {
+            [_pages[previousPageIndex] pageDidDisappear];
+        }
+        // }
         [_pages[currentPageIndex] pageDidAppear];
         if ([(id)self.delegate respondsToSelector:@selector(intro:pageAppeared:withIndex:)]) {
             [self.delegate intro:self pageAppeared:_pages[currentPageIndex] withIndex:currentPageIndex];
