@@ -180,10 +180,10 @@ public class MockApp implements IMockApp, Runnable
 					app.endChat();
 					break;
 				case AssessAndContinue:
-					app.assessAndContinue("^#Happy#^,By" + deviceSn);
+					app.assessAndContinue("^#Happy#^,By" + deviceSn + ",A-" + DateUtil.getCurrentMiliseconds());
 					break;
 				case AssessAndQuit:
-					app.assessAndQuit("^#SoSo#^,By" + deviceSn);
+					app.assessAndQuit("^#SoSo#^,By" + deviceSn + ",A-" + DateUtil.getCurrentMiliseconds());
 					break;
 				case BusinessSessionNotificationResponse:
 					JSONObject body = receivedMessage.getJSONObject(JSONKey.JsonEnvelope).getJSONObject(JSONKey.Body);
