@@ -78,11 +78,24 @@
 
 -(void) _arrangeConnectViewController
 {
+    UIViewController* rootVC = [CBUIUtils getRootController];
+    
     BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
     if (!isAppLaunchedBefore && HELPVIEW_ON_APPFIRSTLAUNCHED)
     {
-        UIViewController* vc = _guiModule.userAgreementViewController;
-        [self presentViewController:vc animated:NO completion:nil];
+        BOOL isUserAgreementAccepted = [_appDataModule isUserAgreementAccepted];
+        if (isUserAgreementAccepted)
+        {
+            UIViewController* vc = _guiModule.userIntroductionViewController;
+            [rootVC presentViewController:vc animated:NO completion:nil];
+        }
+        else
+        {
+            [_appDataModule recordUserAgreementAccepted];
+            
+            UIViewController* vc = _guiModule.userAgreementViewController;
+            [rootVC presentViewController:vc animated:NO completion:nil];
+        }
     }
     else
     {

@@ -35,6 +35,10 @@
 -(void) recordAppLaunchedBefore;
 -(void) resetAppLaunchedBefore;
 
+-(BOOL) isUserAgreementAccepted;
+-(void) recordUserAgreementAccepted;
+-(void) resetUserAgreementAccepted;
+
 #pragma mark - Device
 -(NSString*) deviceSn;
 -(NSString*) deviceModel;

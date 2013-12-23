@@ -60,16 +60,6 @@
 
 - (void)dismissUserAgreement
 {
-    BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
-    if (!isAppLaunchedBefore)
-    {
-        [_appDataModule recordAppLaunchedBefore];
-    }
-    else
-    {
-        
-    }
-    
     [self dismissViewControllerAnimated:NO completion:nil];
 }
 
@@ -103,14 +93,14 @@
 
 #pragma mark - FTCoreTextViewDelegate
 
-- (void)coreTextView:(FTCoreTextView *)coreTextView receivedTouchOnData:(NSDictionary *)data
+- (void)coreTextView:(FTCoreTextView *)acoreTextView receivedTouchOnData:(NSDictionary *)data
 {
-    
-}
-
-- (void)coreTextViewfinishedRendering:(FTCoreTextView *)coreTextView
-{
-    
+    NSURL *url = [data objectForKey:FTCoreTextDataURL];
+        
+    if (url)
+    {
+        [[UIApplication sharedApplication] openURL:url];
+    }
 }
 
 #pragma mark - Private Methods
@@ -153,7 +143,14 @@
     _textView.text = text;
     FTCoreTextStyle* style = [FTCoreTextStyle styleWithName:FTCoreTextTagDefault];
     style.font = [UIFont systemFontOfSize:FLATUI_FONT_NORMAL];
-    [_textView addStyle:style];
+    
+    FTCoreTextStyle *aStyle = [FTCoreTextStyle styleWithName:FTCoreTextTagLink];
+    aStyle.name = @"a";
+    aStyle.underlined = NO;
+    aStyle.color = [UIColor blueColor];
+    [_textView changeDefaultTag:FTCoreTextTagLink toTag:@"a"];
+    
+    [_textView addStyles:@[style, aStyle]];    
 }
 
 - (void) _setupActionButtons

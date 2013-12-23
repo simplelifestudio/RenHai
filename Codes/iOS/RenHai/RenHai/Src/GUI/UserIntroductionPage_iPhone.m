@@ -8,24 +8,54 @@
 
 #import "UserIntroductionPage_iPhone.h"
 
+#import "CBStringUtils.h"
+
+#import "GUIStyle.h"
+
 @implementation UserIntroductionPage_iPhone
 
-- (id)initWithFrame:(CGRect)frame
+#pragma mark - Public Methods
+
+- (void)awakeFromNib
 {
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
+    [super awakeFromNib];
+    
+    [self _setupInstance];
 }
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect
+-(void) installTitle:(NSString*) title
 {
-    // Drawing code
+    _titleLabel.text = title;
 }
-*/
+
+-(void) installImage:(NSString*) imageFileName
+{
+    UIImage* image = [UIImage imageNamed:imageFileName];
+    _imageView.image = image;
+}
+
+-(void) installText:(NSString*) textFileName
+{
+    NSString* text = [CBStringUtils textFromTextFileNamed:textFileName];
+    _textView.text = text;
+
+    FTCoreTextStyle* style = [FTCoreTextStyle styleWithName:FTCoreTextTagDefault];
+    style.font = [UIFont systemFontOfSize:FLATUI_FONT_NORMAL];
+    
+    FTCoreTextStyle *liStyle = [FTCoreTextStyle styleWithName:FTCoreTextTagBullet];
+    liStyle.name = @"li";
+    liStyle.paragraphInset = UIEdgeInsetsMake(0, 14.0f, 0, 0);
+    
+    [_textView changeDefaultTag:FTCoreTextTagBullet toTag:@"li"];
+    
+    [_textView addStyles:@[style, liStyle]];
+}
+
+#pragma mark - Private Methods
+
+-(void) _setupInstance
+{
+
+}
 
 @end
