@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.simplelife.renhai.server.db.ProfileMapper">
+    <resultMap id="BaseResultMap" type="com.simplelife.renhai.server.db.Profile">
+        <id column="profileId" property="profileId" jdbcType="INTEGER"/>
+        <result column="deviceId" property="deviceId" jdbcType="INTEGER"/>
+        <result column="serviceStatus" property="serviceStatus" jdbcType="CHAR"/>
+        <result column="unbanDate" property="unbanDate" jdbcType="BIGINT"/>
+        <result column="lastActivityTime" property="lastActivityTime" jdbcType="BIGINT"/>
+        <result column="createTime" property="createTime" jdbcType="BIGINT"/>
+        <result column="active" property="active" jdbcType="CHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    profileId, deviceId, serviceStatus, unbanDate, lastActivityTime, createTime, active
+  </sql>
+    <select id="selectByDeviceId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select 
+    <include refid="Base_Column_List" />
+    from profile
+    where deviceId = #{deviceId,jdbcType=INTEGER}
+  </select>
+    <insert id="insert" parameterType="com.simplelife.renhai.server.db.Profile" 
+		useGeneratedKeys="true" keyProperty="profileId">
+    insert into profile (deviceId, serviceStatus, 
+      unbanDate, lastActivityTime, createTime, 
+      active)
+    values (#{deviceId,jdbcType=INTEGER}, #{serviceStatus,jdbcType=CHAR}, 
+      #{unbanDate,jdbcType=BIGINT}, #{lastActivityTime,jdbcType=BIGINT}, #{createTime,jdbcType=BIGINT}, 
+      #{active,jdbcType=CHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.simplelife.renhai.server.db.Profile">
+    update profile
+    set deviceId = #{deviceId,jdbcType=INTEGER},
+      serviceStatus = #{serviceStatus,jdbcType=CHAR},
+      unbanDate = #{unbanDate,jdbcType=BIGINT},
+      lastActivityTime = #{lastActivityTime,jdbcType=BIGINT},
+      createTime = #{createTime,jdbcType=BIGINT},
+      active = #{active,jdbcType=CHAR}
+    where profileId = #{profileId,jdbcType=INTEGER}
+  </update>
+</mapper>
