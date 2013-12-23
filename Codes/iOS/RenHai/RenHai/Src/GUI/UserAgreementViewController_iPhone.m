@@ -67,12 +67,14 @@
 
 - (IBAction)didPressAcceptButton:(id)sender
 {
+    [_appDataModule recordUserAgreementAccepted];    
+    
     [self dismissUserAgreement];
 }
 
 - (IBAction)didPressDeclineButton:(id)sender
 {
-    [_appDataModule resetAppLaunchedBefore];
+    [_appDataModule resetUserAgreementAccepted];
     
     [CBAppUtils exitApp];
 }

@@ -91,8 +91,6 @@
         }
         else
         {
-            [_appDataModule recordUserAgreementAccepted];
-            
             UIViewController* vc = _guiModule.userAgreementViewController;
             [rootVC presentViewController:vc animated:NO completion:nil];
         }
