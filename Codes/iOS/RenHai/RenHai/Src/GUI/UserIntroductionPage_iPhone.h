@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#import <FTCoreTextView.h>
+
 @interface UserIntroductionPage_iPhone : UIView
+
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet FTCoreTextView *textView;
 
 @end

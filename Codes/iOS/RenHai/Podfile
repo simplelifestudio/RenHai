@@ -16,6 +16,7 @@ pod 'KXKiOS7ColorsAndGradients', '~> 1.0.0'
 pod 'JSMessagesViewController'
 pod 'PulsingHalo'
 pod 'EAIntroView', '~> 2.0.0'
+pod 'FTCoreText'
 
 target :RenHaiGHUnitTest do
         pod 'GHUnitIOS', '~> 0.5.8'

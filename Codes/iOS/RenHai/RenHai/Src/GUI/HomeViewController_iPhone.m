@@ -587,12 +587,11 @@ static float progress = 0.0;
 - (IBAction)onPressHelpButton:(id)sender
 {
     RHNavigationController* navigationVC = _guiModule.navigationController;
-    UIViewController* helpVC = _guiModule.helpViewController;
+    UIViewController* vc = _guiModule.helpViewController;
 //    [helpVC resetDisplayStatus];
+    vc = _guiModule.userAgreementViewController;
     
-    helpVC = _guiModule.welcomeViewController;
-    
-    [navigationVC presentViewController:helpVC animated:YES completion:nil];
+    [navigationVC presentViewController:vc animated:YES completion:nil];
 }
 
 #pragma mark - CBRoundProgressViewDelegate

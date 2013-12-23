@@ -8,7 +8,27 @@
 
 #import "UserAgreementViewController_iPhone.h"
 
-@interface UserAgreementViewController_iPhone ()
+#import "CBUIUtils.h"
+#import "CBDateUtils.h"
+#import "CBStringUtils.h"
+#import "UINavigationController+CBNavigationControllerExtends.h"
+#import "UIViewController+CWPopup.h"
+#import "UIViewController+CBUIViewControlerExtends.h"
+
+#import "GUIModule.h"
+#import "CommunicationModule.h"
+#import "UserDataModule.h"
+#import "AppDataModule.h"
+#import "BusinessStatusModule.h"
+
+@interface UserAgreementViewController_iPhone () <UIScrollViewDelegate, FTCoreTextViewDelegate>
+{
+    GUIModule* _guiModule;
+    CommunicationModule* _commModule;
+    UserDataModule* _userDataModule;
+    AppDataModule* _appDataModule;
+    BusinessStatusModule* _statusModule;
+}
 
 @end
 
@@ -29,6 +49,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self _setupInstance];
 }
 
 - (void)didReceiveMemoryWarning
@@ -36,6 +58,116 @@
     [super didReceiveMemoryWarning];
 }
 
+- (void)dismissUserAgreement
+{
+    BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
+    if (!isAppLaunchedBefore)
+    {
+        [_appDataModule recordAppLaunchedBefore];
+    }
+    else
+    {
+        
+    }
+    
+    [self dismissViewControllerAnimated:NO completion:nil];
+}
+
+#pragma mark - IBActions
+
+- (IBAction)didPressAcceptButton:(id)sender
+{
+    [self dismissUserAgreement];
+}
+
+- (IBAction)didPressDeclineButton:(id)sender
+{
+    [_appDataModule resetAppLaunchedBefore];
+    
+    [CBAppUtils exitApp];
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGPoint contentOffsetPoint = _scrollView.contentOffset;
+
+    CGRect frame = _scrollView.frame;
+    
+    if (contentOffsetPoint.y == _scrollView.contentSize.height - frame.size.height || _scrollView.contentSize.height < frame.size.height)
+    {
+        _acceptButton.enabled = YES;
+    }
+}
+
+#pragma mark - FTCoreTextViewDelegate
+
+- (void)coreTextView:(FTCoreTextView *)coreTextView receivedTouchOnData:(NSDictionary *)data
+{
+    
+}
+
+- (void)coreTextViewfinishedRendering:(FTCoreTextView *)coreTextView
+{
+    
+}
+
 #pragma mark - Private Methods
+
+- (void) _setupInstance
+{
+    _guiModule = [GUIModule sharedInstance];
+    _commModule = [CommunicationModule sharedInstance];
+    _userDataModule = [UserDataModule sharedInstance];
+    _appDataModule = [AppDataModule sharedInstance];
+    _statusModule = [BusinessStatusModule sharedInstance];
+
+    _statusbarLabel.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR_MAIN;
+    _titleLabel.backgroundColor = FLATUI_COLOR_NAVIGATIONBAR_MAIN;
+    
+    _scrollView.delegate = self;
+    _textView.delegate = self;
+    
+    [self _setupActionButtons];
+    
+    [self _formatFlatUI];
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    
+	[_textView fitToSuggestedHeight];
+    
+    [_scrollView setContentSize:CGSizeMake(CGRectGetWidth(_scrollView.bounds), CGRectGetMaxY(_textView.frame))];
+}
+
+- (void) _formatFlatUI
+{
+    _titleLabel.text = NSLocalizedString(@"UserAgreement_Title", nil);
+//    _textView.text = NSLocalizedString(@"UserAgreement_Text", nil);
+//    _textView.font = [UIFont flatFontOfSize:FLATUI_FONT_NORMAL];
+    
+    NSString* text = [CBStringUtils textFromTextFileNamed:@"useragreement.html"];
+    _textView.text = text;
+    FTCoreTextStyle* style = [FTCoreTextStyle styleWithName:FTCoreTextTagDefault];
+    style.font = [UIFont systemFontOfSize:FLATUI_FONT_NORMAL];
+    [_textView addStyle:style];
+}
+
+- (void) _setupActionButtons
+{
+    _acceptButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+    [_acceptButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
+    [_acceptButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
+    [_acceptButton setTitle:NSLocalizedString(@"UserAgreement_Action_Accept", nil) forState:UIControlStateNormal];
+    _acceptButton.enabled = YES;
+
+    _declineButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
+    [_declineButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
+    [_declineButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
+    [_declineButton setTitle:NSLocalizedString(@"UserAgreement_Action_Decline", nil) forState:UIControlStateNormal];
+}
 
 @end

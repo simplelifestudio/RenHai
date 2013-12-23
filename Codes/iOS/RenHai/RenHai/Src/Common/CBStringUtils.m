@@ -173,4 +173,12 @@
     return ceil(number);
 }
 
++(NSString*)textFromTextFileNamed:(NSString *)filename
+{
+    NSString *name = [filename stringByDeletingPathExtension];
+    NSString *extension = [filename pathExtension];
+    
+    return [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:name ofType:extension] encoding:NSUTF8StringEncoding error:nil];
+}
+
 @end

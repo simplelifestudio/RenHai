@@ -33,6 +33,7 @@
 #pragma mark - App
 -(BOOL) isAppLaunchedBefore;
 -(void) recordAppLaunchedBefore;
+-(void) resetAppLaunchedBefore;
 
 #pragma mark - Device
 -(NSString*) deviceSn;

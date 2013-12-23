@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UserIntroductionViewController_iPhone : UIViewController
+#import <EAIntroView.h>
+
+@interface UserIntroductionViewController_iPhone : UIViewController <EAIntroDelegate>
 
 @end

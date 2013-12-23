@@ -127,13 +127,19 @@ SINGLETON(AppDataModule)
     {
         flag = YES;
     }
-    
+
     return flag;
 }
 
 -(void) recordAppLaunchedBefore
 {
     NSString* sVal = @"YES";
+    [self setValueForKeyInPersistentDomain:sVal forKey:APPDATA_KEY_APPLAUNCHEDBEFORE inPersistentDomain:PERSISTENTDOMAIN_APPDATA];
+}
+
+-(void) resetAppLaunchedBefore
+{
+    NSString* sVal = @"NO";
     [self setValueForKeyInPersistentDomain:sVal forKey:APPDATA_KEY_APPLAUNCHEDBEFORE inPersistentDomain:PERSISTENTDOMAIN_APPDATA];
 }
 

@@ -36,4 +36,6 @@
 
 +(NSUInteger)calculateTextNumber:(NSString *) text;
 
++(NSString*)textFromTextFileNamed:(NSString *)filename;
+
 @end

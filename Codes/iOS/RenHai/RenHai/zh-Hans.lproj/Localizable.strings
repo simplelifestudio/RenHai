@@ -36,6 +36,12 @@
 "LeftBar_Organization" = "简单生活工作室® 2013";
 "LeftBar_Version" = "%@";
 
+"UserAgreement_Title" = "用户协议";
+"UserAgreement_Action_Accept" = "同意";
+"UserAgreement_Action_Decline" = "拒绝";
+
+"UserIntroduction_Action_Skip" = "跳过";
+
 "Home_OnlineCount" = "在线人数";
 "Home_ChatCount" = "聊天人数";
 "Home_Banner_NoInfo" = "Alpha测试，意见建议请联系：simplelife.patrick@gmail.com";

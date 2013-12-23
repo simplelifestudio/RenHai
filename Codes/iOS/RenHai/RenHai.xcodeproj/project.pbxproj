@@ -427,6 +427,8 @@
 		CD94DF861851918000C9CBC4 /* close.png in Resources */ = {isa = PBXBuildFile; fileRef = CD5633AE1827631600D2A9A6 /* close.png */; };
 		CD94DF961851933C00C9CBC4 /* RenHaiLocal-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CD94DF951851933C00C9CBC4 /* RenHaiLocal-Info.plist */; };
 		CD94DF971851933C00C9CBC4 /* RenHaiLocal-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CD94DF951851933C00C9CBC4 /* RenHaiLocal-Info.plist */; };
+		CD98ADC218682733009B77FE /* useragreement.html in Resources */ = {isa = PBXBuildFile; fileRef = CD98ADC118682733009B77FE /* useragreement.html */; };
+		CD98ADC318682733009B77FE /* useragreement.html in Resources */ = {isa = PBXBuildFile; fileRef = CD98ADC118682733009B77FE /* useragreement.html */; };
 		CDA98255184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA98254184F0B9300D95896 /* LeftBarTableCell_iPhone.m */; };
 		CDA98256184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDA98254184F0B9300D95896 /* LeftBarTableCell_iPhone.m */; };
 		CDA98258184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDA98257184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib */; };
@@ -750,6 +752,7 @@
 		CD94DEF61851614E00C9CBC4 /* RHStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHStatus.m; sourceTree = "<group>"; };
 		CD94DF901851918100C9CBC4 /* RenHaiLocal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHaiLocal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD94DF951851933C00C9CBC4 /* RenHaiLocal-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "RenHaiLocal-Info.plist"; sourceTree = "<group>"; };
+		CD98ADC118682733009B77FE /* useragreement.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = useragreement.html; sourceTree = "<group>"; };
 		CDA98253184F0B9300D95896 /* LeftBarTableCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeftBarTableCell_iPhone.h; sourceTree = "<group>"; };
 		CDA98254184F0B9300D95896 /* LeftBarTableCell_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LeftBarTableCell_iPhone.m; sourceTree = "<group>"; };
 		CDA98257184F0BBD00D95896 /* LeftBarTableCell_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LeftBarTableCell_iPhone.xib; sourceTree = "<group>"; };
@@ -927,6 +930,7 @@
 		C55B441217CF587A009BB21B /* Res */ = {
 			isa = PBXGroup;
 			children = (
+				CD98ADBD1867E102009B77FE /* Texts */,
 				C55B441317CF587A009BB21B /* Images */,
 				C55B441417CF587A009BB21B /* Sounds */,
 			);
@@ -1326,6 +1330,14 @@
 			path = BusinessStatus;
 			sourceTree = "<group>";
 		};
+		CD98ADBD1867E102009B77FE /* Texts */ = {
+			isa = PBXGroup;
+			children = (
+				CD98ADC118682733009B77FE /* useragreement.html */,
+			);
+			path = Texts;
+			sourceTree = "<group>";
+		};
 		CDDBE34118548D1E001A1744 /* MessageBarManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -1484,6 +1496,7 @@
 				CD163823185C735D009BB03D /* unchoosebusiness.caf in Resources */,
 				C55B446117CF8632009BB21B /* Icon-Small.png in Resources */,
 				C55B446317CF8632009BB21B /* Icon-Small@2x.png in Resources */,
+				CD98ADC218682733009B77FE /* useragreement.html in Resources */,
 				C55B446517CF8632009BB21B /* Icon.png in Resources */,
 				C55B446717CF8632009BB21B /* Icon@2x.png in Resources */,
 				C55B446917CF8632009BB21B /* iTunesArtwork in Resources */,
@@ -1638,6 +1651,7 @@
 				CD94DF7B1851918000C9CBC4 /* enterbutton_normal@2x.png in Resources */,
 				CD1114CC1866CA9A0091C83F /* UserIntroductionPage_iPhone.xib in Resources */,
 				CD94DF7C1851918000C9CBC4 /* order@2x.png in Resources */,
+				CD98ADC318682733009B77FE /* useragreement.html in Resources */,
 				CD94DF7D1851918000C9CBC4 /* RHTableViewLabelCell_iPhone.xib in Resources */,
 				CD94DF7E1851918000C9CBC4 /* Localizable.strings in Resources */,
 				CD94DF7F1851918000C9CBC4 /* LeftBarTableCell_iPhone.xib in Resources */,

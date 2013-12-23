@@ -81,9 +81,8 @@
     BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
     if (!isAppLaunchedBefore && HELPVIEW_ON_APPFIRSTLAUNCHED)
     {
-        UIViewController* helpVC = _guiModule.helpViewController;
-        helpVC = _guiModule.welcomeViewController;
-        [self presentViewController:helpVC animated:YES completion:nil];
+        UIViewController* vc = _guiModule.userAgreementViewController;
+        [self presentViewController:vc animated:NO completion:nil];
     }
     else
     {
@@ -94,7 +93,7 @@
             UIViewController* rootVC = [CBUIUtils getRootController];
             if ([rootVC isVisible])
             {
-                [_connectViewController popConnectView:rootVC animated:YES];
+                [_connectViewController popConnectView:rootVC animated:NO];
             }
         }        
     }

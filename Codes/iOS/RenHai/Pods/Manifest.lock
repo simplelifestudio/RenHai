@@ -12,6 +12,7 @@ PODS:
   - EAIntroView (2.0.0)
   - FlatUIKit (1.2)
   - FloatingClouds (0.1.1)
+  - FTCoreText (1.0)
   - GHUnitIOS (0.5.8)
   - JSMessagesViewController (3.4.0):
     - JSQSystemSoundPlayer
@@ -34,6 +35,7 @@ DEPENDENCIES:
   - EAIntroView (~> 2.0.0)
   - FlatUIKit (from `https://github.com/Grouper/FlatUIKit.git`)
   - FloatingClouds (from `https://github.com/satgi/FloatingCloudsView.git`)
+  - FTCoreText
   - GHUnitIOS (~> 0.5.8)
   - JSMessagesViewController
   - KXKiOS7ColorsAndGradients (~> 1.0.0)
@@ -60,6 +62,7 @@ SPEC CHECKSUMS:
   EAIntroView: fe7769195d4af0fcb1bf6ad1c104e8749c2ead22
   FlatUIKit: 43b2acaa6f4ef57539b51b00e4ce62d506e33e11
   FloatingClouds: b8c30238701afd1c815d93793c50f5945ffc1edb
+  FTCoreText: dd9eb531def3446e2a63da907d4152ae5d9ffbab
   GHUnitIOS: 23167e22b8abe162d71f86bd4bda7550e53414cb
   JSMessagesViewController: f01a5fcbaa20ad7758a4cb350677a0a55aa02bf6
   JSQSystemSoundPlayer: 28ccd01a92a0cebc6de6361e8499011b4cb6dab7
