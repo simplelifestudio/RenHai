@@ -141,7 +141,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		}
     		else
     		{
-    			logger.error("Device with id <> shall be in queueDeviceMap but it can't be found in queueDeviceMap!", id);
+    			logger.error("Device with id <{}> shall be in queueDeviceMap but it can't be found in queueDeviceMap!", id);
     		}
     	}
     	else

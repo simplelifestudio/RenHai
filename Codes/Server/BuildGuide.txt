@@ -1,0 +1,11 @@
+1. 下载Maven
+
+
+2. 配置
+MAVEN_HOME           C:\maven
+MAVEN                %MAVEN_HOME%\bin
+
+3. 添加websocket包到本地Maven库
+
+
+4. 编译

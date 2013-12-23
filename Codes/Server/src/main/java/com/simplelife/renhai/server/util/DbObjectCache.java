@@ -130,7 +130,7 @@ public class DbObjectCache<T>
 		try
 		{
 			session = DAOWrapper.instance.getSession();
-			ICachableMapper mapper = session.getMapper(mapperClass);
+			ICachableMapper mapper = (ICachableMapper) session.getMapper(mapperClass);
 			obj = (T) mapper.selectByStringKey(key);
 			if (obj != null)
 			{

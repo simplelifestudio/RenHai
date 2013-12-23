@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Class-Path: E:/work/tomcat/lib
+Main-Class: com.simplelife.renhai.server.test.MockAppConsole
