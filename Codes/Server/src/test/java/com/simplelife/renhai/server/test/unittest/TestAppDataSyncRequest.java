@@ -33,6 +33,7 @@ import com.simplelife.renhai.server.util.JSONKey;
  */
 public class TestAppDataSyncRequest extends AbstractTestCase
 {
+	/*
 	//private JSONObject wholeObj = new JSONObject();
 	private JSONObject envelope = new JSONObject();
 	private JSONObject header = new JSONObject();
@@ -591,5 +592,8 @@ public class TestAppDataSyncRequest extends AbstractTestCase
 		DAOWrapper.instance.flushToDB();
 		Thread.sleep(3000);
 	}
-	
+	*/
+	public void testModifyInterestLabel() throws InterruptedException
+	{
+	}
 }

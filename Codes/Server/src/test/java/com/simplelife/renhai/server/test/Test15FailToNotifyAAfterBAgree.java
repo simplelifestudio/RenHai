@@ -36,10 +36,12 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		/*
 		super.setUp();
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp1 = createNewMockApp(demoDeviceSn);
 		mockApp2 = createNewMockApp(demoDeviceSn2);
+		*/
 	}
 	
 	/**
@@ -48,14 +50,17 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 	@After
 	public void tearDown() throws Exception
 	{
+		/*
 		deleteDevice(mockApp1);
 		deleteDevice(mockApp2);
 		super.tearDown();
+		*/
 	}
 	
 	@Test
 	public void test() throws InterruptedException
 	{
+		/*
 		OnlineDevicePool onlinePool = OnlineDevicePool.instance;
 		AbstractBusinessDevicePool businessPool = onlinePool.getBusinessPool(businessType);
 		BusinessSessionPool sessionPool = BusinessSessionPool.instance;
@@ -180,5 +185,6 @@ public class Test15FailToNotifyAAfterBAgree extends AbstractTestCase
 		
 		// Step_28 µ÷ÓÃ£ºB DeviceWrapper::getBusinessStatus
 		//assertEquals(Consts.BusinessStatus.MatchCache, deviceWrapper2.getBusinessStatus());
+		*/
 	}
 }

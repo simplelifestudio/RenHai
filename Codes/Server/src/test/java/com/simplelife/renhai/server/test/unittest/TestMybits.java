@@ -33,6 +33,7 @@ import com.simplelife.renhai.server.db.Profile;
  */
 public class TestMybits
 {
+	/*
 	@Test
 	public void testExecuteSql()
 	{
@@ -144,5 +145,9 @@ public class TestMybits
 		{
 			e.printStackTrace();
 		}
+	}
+	*/
+	public void testInsert()
+	{
 	}
 }

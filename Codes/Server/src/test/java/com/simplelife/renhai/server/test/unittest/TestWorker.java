@@ -30,6 +30,7 @@ import com.simplelife.renhai.server.util.Consts.PingActionType;
  */
 public class TestWorker
 {
+	/*
 	@Test
 	public void testPingActionQueue() throws InterruptedException
 	{
@@ -102,5 +103,9 @@ public class TestWorker
 			Thread.sleep(500);
 		}
 		System.out.println("finished");
+	}
+	*/
+	public void testPing() throws InterruptedException
+	{
 	}
 }

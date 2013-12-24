@@ -70,6 +70,7 @@ import com.simplelife.renhai.server.websocket.WebSocketModule;
  */
 public class MainFunction extends AbstractTestCase
 {
+	/*
 	private final String manualMode = MockAppConsts.MockAppBehaviorMode.Manual.name();
 	
 	@Test
@@ -276,7 +277,7 @@ public class MainFunction extends AbstractTestCase
 		MockApp mockApp1 = new MockApp("deviceSn", manualMode, true);
 		mockApp1.syncDevice();
 		mockApp1.disconnect();
-		*/
+		
 		
 		MockApp mockApp1 = new MockApp("deviceSn", manualMode);
 		mockApp1.syncDevice();
@@ -432,7 +433,7 @@ public class MainFunction extends AbstractTestCase
 				deviceMap.remove("Key3");
 			}
 		}
-		*/
+		
 		
 		while (entryKeyIterator.hasNext())
 		{
@@ -695,4 +696,5 @@ public class MainFunction extends AbstractTestCase
 		deviceWrapper = OnlineDevicePool.instance.getDevice(demoDeviceSn);
 		System.out.print(JSON.toJSONString(deviceWrapper.toJSONObject(), true));
 	}
+	*/
 }

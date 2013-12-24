@@ -28,20 +28,25 @@ public class Test01KeepWebsocket extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		/*
 		super.setUp();
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
+		*/
 	}
 	
 	@After
 	public void tearDown() throws Exception
 	{
+		/*
 		deleteDevice(mockApp);
 		super.tearDown();
+		*/
 	}
 	
 	@Test
 	public void test() throws InterruptedException
 	{
+		/*
 		new MockWebSocketConnection();
 		
 		// Step_02 调用：OnlineDevicePool::getCount
@@ -69,5 +74,6 @@ public class Test01KeepWebsocket extends AbstractTestCase
 		
 		// Step_08 调用设备的getLastPingTime()
 		assertTrue(lastPingTime < device.getLastPingTime());
+		*/
 	}
 }

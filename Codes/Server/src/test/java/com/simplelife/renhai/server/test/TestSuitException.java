@@ -19,6 +19,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses(
 { 
+	/*
 	Test04SyncDeviceNormal.class, 
 	Test08TimeoutAfterSyncDevice.class, 
 	Test09TimeoutWaitForMatch.class,
@@ -31,6 +32,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	Test16TimeoutNotifyAAfterBAgree.class, 
 	Test17ChatALoseConnection.class,
 	Test18AssessALoseConnection.class 
+	*/
 }
 )
 public class TestSuitException

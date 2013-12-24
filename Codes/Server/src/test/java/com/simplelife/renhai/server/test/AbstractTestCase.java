@@ -48,18 +48,22 @@ public abstract class AbstractTestCase extends TestCase
 	
 	public void setUp() throws Exception
 	{
+		/*
 		BusinessModule.instance.startService();
 		DBModule.instance.startService();
 		JSONModule.instance.startService();
 		WebSocketModule.instance.startService();
+		*/
 	}
 	
 	public void tearDown() throws Exception
 	{
+		/*
 		BusinessModule.instance.stopService();
 		DBModule.instance.stopService();
 		JSONModule.instance.stopService();
 		WebSocketModule.instance.stopService();
+		*/
 	}
 	
 	public Device createNewDevice(String deviceSn)

@@ -19,8 +19,10 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses(
 {
+	/*
 	Test01KeepWebsocket.class, 
 	Test02CreateRealConnection.class 
+	*/
 }
 )
 public class TestSuitWebSocket

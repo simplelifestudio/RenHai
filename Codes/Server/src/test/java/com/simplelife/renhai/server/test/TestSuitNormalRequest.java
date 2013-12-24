@@ -19,6 +19,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses(
 {
+	/*
 	Test05SyncDeviceForbidden.class,
 	Test06SyncDeviceUnForbidden.class,
 	Test07MaxOnlineDevicePool.class,
@@ -28,6 +29,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	Test22Assess.class,
 	Test23NormalProcessAndStatistics.class,
 	Test24MaxBusinessDevicePool.class 
+	*/
 }
 )
 public class TestSuitNormalRequest
