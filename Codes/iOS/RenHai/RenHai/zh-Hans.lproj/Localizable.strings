@@ -49,6 +49,7 @@
 "Home_PressToEnterPool" = "点击开始";
 "Home_IsEnteringPool" = "正在进入";
 "Home_EnterPoolFailed" = "无法进入";
+"Home_Help" = "帮助";
 
 "Device_DeviceModel" = "设备类型";
 "Device_OSVersion" = "系统平台";

@@ -11,6 +11,7 @@
 #import "UserIntroductionPage_iPhone.h"
 
 #import "AppDataModule.h"
+#import "GUIModule.h"
 
 @interface UserIntroductionViewController_iPhone ()
 {
@@ -77,27 +78,45 @@
 {
     _appDataModule = [AppDataModule sharedInstance];
     
-    EAIntroPage* page01 = [EAIntroPage pageWithCustomViewFromNibNamed:@"UserIntroductionPage_iPhone"];
+    EAIntroPage* page01 = [EAIntroPage pageWithCustomViewFromNibNamed:NIB_USERINTRODUCTIONVIEWCONTROLLER];
     UserIntroductionPage_iPhone* customView01 = (UserIntroductionPage_iPhone*)page01.customView;
-    [customView01 installTitle:@"XXXXX"];
     [customView01 installImage:@"help_01.png"];
-    [customView01 installText:@"help_01.txt"];
+//    [customView01 installTitle:@"XXXXX"];    
+//    [customView01 installText:@"help_01.txt"];
 
-    EAIntroPage* page02 = [EAIntroPage pageWithCustomViewFromNibNamed:@"UserIntroductionPage_iPhone"];
+    EAIntroPage* page02 = [EAIntroPage pageWithCustomViewFromNibNamed:NIB_USERINTRODUCTIONVIEWCONTROLLER];
     UserIntroductionPage_iPhone* customView02 = (UserIntroductionPage_iPhone*)page02.customView;
     [customView02 installImage:@"help_02.png"];
-    [customView02 installText:@"help_02"];
     
-    EAIntroPage* page03 = [EAIntroPage pageWithCustomViewFromNibNamed:@"UserIntroductionPage_iPhone"];
+    EAIntroPage* page03 = [EAIntroPage pageWithCustomViewFromNibNamed:NIB_USERINTRODUCTIONVIEWCONTROLLER];
     UserIntroductionPage_iPhone* customView03 = (UserIntroductionPage_iPhone*)page03.customView;
     [customView03 installImage:@"help_03.png"];
-    [customView03 installText:@"help_03"];
     
-    _introView = [[EAIntroView alloc] initWithFrame:self.view.bounds andPages:@[page01, page02, page03]];
+    EAIntroPage* page04 = [EAIntroPage pageWithCustomViewFromNibNamed:NIB_USERINTRODUCTIONVIEWCONTROLLER];
+    UserIntroductionPage_iPhone* customView04 = (UserIntroductionPage_iPhone*)page04.customView;
+    [customView04 installImage:@"help_04.png"];
+    
+    EAIntroPage* page05 = [EAIntroPage pageWithCustomViewFromNibNamed:NIB_USERINTRODUCTIONVIEWCONTROLLER];
+    UserIntroductionPage_iPhone* customView05 = (UserIntroductionPage_iPhone*)page05.customView;
+    [customView05 installImage:@"help_05.png"];
+    
+    EAIntroPage* page06 = [EAIntroPage pageWithCustomViewFromNibNamed:NIB_USERINTRODUCTIONVIEWCONTROLLER];
+    UserIntroductionPage_iPhone* customView06 = (UserIntroductionPage_iPhone*)page06.customView;
+    [customView06 installImage:@"help_06.png"];
+    
+    EAIntroPage* page07 = [EAIntroPage pageWithCustomViewFromNibNamed:NIB_USERINTRODUCTIONVIEWCONTROLLER];
+    UserIntroductionPage_iPhone* customView07 = (UserIntroductionPage_iPhone*)page07.customView;
+    [customView07 installImage:@"help_07.png"];
+    
+    EAIntroPage* page08 = [EAIntroPage pageWithCustomViewFromNibNamed:NIB_USERINTRODUCTIONVIEWCONTROLLER];
+    UserIntroductionPage_iPhone* customView08 = (UserIntroductionPage_iPhone*)page08.customView;
+    [customView08 installImage:@"help_08.png"];
+    
+    _introView = [[EAIntroView alloc] initWithFrame:self.view.bounds andPages:@[page01, page02, page03, page04, page05, page06, page07, page08]];
     [_introView setDelegate:self];
     [_introView.skipButton setTitle:NSLocalizedString(@"UserIntroduction_Action_Skip", nil) forState:UIControlStateNormal];
-    [_introView.skipButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    [_introView.pageControl setBackgroundColor:[UIColor redColor]];
+    [_introView.skipButton setTitleColor:FLATUI_COLOR_BUTTONROLLBACK forState:UIControlStateNormal];
+    [_introView.pageControl setBackgroundColor:FLATUI_COLOR_USERINTRODUCTION_PAGECONTROL];
     _introView.pageControl.alpha = 0.5f;
     _introView.pageControlY = 20;
 }

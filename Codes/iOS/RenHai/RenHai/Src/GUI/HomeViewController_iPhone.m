@@ -129,6 +129,10 @@ EnterOperationStatus;
     _reachLock = [[NSCondition alloc] init];
     
     _helpButton.enabled = YES;
+//    _helpButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+//    [_helpButton setTitle:NSLocalizedString(@"Home_Help", nil) forState:UIControlStateNormal];
+//    [_helpButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
+//    [_helpButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
     
     [self _setupNavigationBar];
     [self _setupView];
@@ -335,7 +339,7 @@ static float progress = 0.0;
         
         _dataSyncTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_DATASYNC target:self selector:@selector(_remoteServerDataSync) userInfo:nil repeats:YES];
         NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
-        [currentRunLoop addTimer:_dataSyncTimer forMode:NSDefaultRunLoopMode];
+        [currentRunLoop addTimer:_dataSyncTimer forMode:NSRunLoopCommonModes];
         [currentRunLoop run];
     }];
 }
