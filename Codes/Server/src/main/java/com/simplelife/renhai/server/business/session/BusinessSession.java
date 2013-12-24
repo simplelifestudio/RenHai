@@ -17,7 +17,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.apache.catalina.Globals;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;

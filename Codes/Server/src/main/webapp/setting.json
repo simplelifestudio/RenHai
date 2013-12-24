@@ -41,8 +41,8 @@
 		"messageQueueTime":3000,
 		"delayOfSessionBound":1000,
 		
-		"openTokKey":34556802,
-		"openTokSecret":"7a94109e525016628a92a1dcc392e5bdc0f27e7e",
+		"openTokKey":34566562,
+		"openTokSecret":"286f54790e39b8861de42f0f27112c7988c46c62",
 		"openTokTokenExpiration":2505600,
 		"openTokTokenDuration":7200000
 	} 

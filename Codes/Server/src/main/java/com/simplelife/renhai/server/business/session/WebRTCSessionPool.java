@@ -115,7 +115,7 @@ public class WebRTCSessionPool extends AbstractPool
         	{
         		curAccountId = 1;
         	}
-    		logger.debug("WebRTC account ID was changed from " + tmpId + " to " + curAccountId + ", value of dayOfCurAccount is changed from "+ dayOfCurAccount +"to" + day);
+    		logger.debug("WebRTC account ID was changed from " + tmpId + " to " + curAccountId + ", value of dayOfCurAccount is changed from "+ dayOfCurAccount +" to " + day);
         	dayOfCurAccount = day;
     	}
 
@@ -210,10 +210,10 @@ public class WebRTCSessionPool extends AbstractPool
     	session.close();
     	if (account == null)
     	{
-    		logger.error("Fatal Error: WebRTC account with id {} can't be found in DB, default account will be used.");
-    		account = new Webrtcaccount();
-    		account.setAccountKey(GlobalSetting.BusinessSetting.OpenTokKey);
-    		account.setAccountSecret(GlobalSetting.BusinessSetting.OpenTokSecret);
+    		logger.error("Fatal Error: WebRTC account with id {} can't be found in DB, default account will be used.", accountId);
+    		//account = new Webrtcaccount();
+    		//account.setAccountKey(GlobalSetting.BusinessSetting.OpenTokKey);
+    		//account.setAccountSecret(GlobalSetting.BusinessSetting.OpenTokSecret);
     	}
     	return account;
 	}
@@ -232,6 +232,11 @@ public class WebRTCSessionPool extends AbstractPool
 		{
 			// The first time
 			curAccount = getAccount(idOfToday);
+			if (curAccount == null)
+			{
+				logger.error("Fatal error: failed to load WebRTC Token due to account is null by ID {}, it's the first load", idOfToday);
+				return;
+			}
 			loadFromDb(curAccount);
 			return;
 		}
@@ -242,6 +247,12 @@ public class WebRTCSessionPool extends AbstractPool
 			clearPool();
 			
 			Webrtcaccount tmpAccount = getAccount(idOfToday);
+			if (tmpAccount == null)
+			{
+				logger.error("Fatal error: failed to load WebRTC Token due to account is null by ID {}", idOfToday);
+				return;
+			}
+			
 			loadFromDb(tmpAccount);
 			
 			if (this.webRTCSessionList.isEmpty())
