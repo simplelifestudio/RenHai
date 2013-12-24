@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC"/>
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver"/>
+				<property name="url" value="jdbc:mysql://127.0.0.1:3306/renhai_test?useUnicode=true&amp;characterEncoding=UTF-8"/>
+				<property name="username" value="simplelifeadmin"/>
+				<property name="password" value="1qazZSE$4rfv"/>
+				<property name="poolMaximumActiveConnections" value="90"/>
+				<property name="poolMaximumIdleConnections" value="90"/>
+				<property name="poolPingEnabled" value="true"/>
+				<property name="poolPingQuery" value="select moduleNo from systemmodule where 1=2"/>
+				<property name="poolPingConnectionsNotUsedFor" value="3600000"/>
+			</dataSource>
+		</environment>
+	</environments>
+
+	<mappers>
+		<mapper resource="com/simplelife/renhai/server/db/DeviceMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/InterestlabelmapMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/WebrtcsessionMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/SystemstatisticsMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/SystemoperationlogMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/StatisticsitemMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/SessionrecordMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/SessionprofilemapMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/ProfileoperationlogMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/ProfileMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/InterestcardMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/ImpresslabelmapMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/HotinterestlabelstatisticsMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/GlobalinterestlabelMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/GlobalimpresslabelMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/DevicecardMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/ImpresscardMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/WebrtcaccountMapper.xml"/>
+	</mappers>
+</configuration>
