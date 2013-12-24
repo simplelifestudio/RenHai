@@ -10,6 +10,7 @@
 
 #import "CBUIUtils.h"
 #import "CBDateUtils.h"
+#import "CBNetworkUtils.h"
 #import "UINavigationController+CBNavigationControllerExtends.h"
 #import "UIViewController+CWPopup.h"
 #import "UIViewController+CBUIViewControlerExtends.h"
@@ -28,6 +29,7 @@
 typedef enum
 {
     ConnectStatus_Ready = 0,
+    ConnectStatus_NeedWiFi,
     ConnectStatus_ProxySyncing,
     ConnectStatus_ProxySyncedNormal,
     ConnectStatus_ProxySyncedMaintenance_BeforePeriod,
@@ -326,6 +328,13 @@ ConnectStatus;
                 
                 break;
             }
+            case ConnectStatus_NeedWiFi:
+            {
+                infoText = NSLocalizedString(@"Connect_NeedWiFi", nil);
+                infoDetailText = NSLocalizedString(@"Connect_NeedWiFi_Detail", nil);
+                isActionButtonHide = NO;
+                break;
+            }
             case ConnectStatus_ProxySyncing:
             {
                 infoText = NSLocalizedString(@"Connect_Checking", nil);
@@ -500,7 +509,14 @@ ConnectStatus;
 {
     [self _resetInstance];
     
-    [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncing];
+    if (![CBNetworkUtils isWiFiEnabled])
+    {
+        [self _updateUIWithConnectStatus:ConnectStatus_NeedWiFi];
+        _isProxyDataSyncSuccess = NO;
+        return;
+    }
+    
+    [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncing];    
 
     RHMessage* requestMessage = [RHMessage newProxyDataSyncRequest];
     [_commModule proxyDataSyncRequest:requestMessage

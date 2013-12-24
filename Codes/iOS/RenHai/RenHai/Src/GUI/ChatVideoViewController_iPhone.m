@@ -577,7 +577,7 @@
             successCompletionBlock:^(){
                 [_statusModule recordAppMessage:AppMessageIdentifier_ChatMessage];
                 
-                [_guiModule playSoundAndVibrate:SOUNDID_CHATMESSSAGE_SENT vibrate:YES];
+                [_guiModule playSound:SOUNDID_CHATMESSSAGE_SENT];
             }
             failureCompletionBlock:^(){
                 [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_ChatMessage];

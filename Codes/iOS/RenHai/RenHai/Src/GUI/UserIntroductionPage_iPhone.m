@@ -41,14 +41,8 @@
 
     FTCoreTextStyle* style = [FTCoreTextStyle styleWithName:FTCoreTextTagDefault];
     style.font = [UIFont systemFontOfSize:FLATUI_FONT_NORMAL];
-    
-    FTCoreTextStyle *liStyle = [FTCoreTextStyle styleWithName:FTCoreTextTagBullet];
-    liStyle.name = @"li";
-    liStyle.paragraphInset = UIEdgeInsetsMake(0, 14.0f, 0, 0);
-    
-    [_textView changeDefaultTag:FTCoreTextTagBullet toTag:@"li"];
-    
-    [_textView addStyles:@[style, liStyle]];
+
+    [_textView addStyles:@[style]];
 }
 
 #pragma mark - Private Methods
