@@ -1388,7 +1388,7 @@ SINGLETON(BusinessStatusModule)
     NSDictionary* info = [NSDictionary dictionaryWithObjects:@[oAppMessageId, oBusinessStatusId] forKeys:@[NOTIFICATION_INFOID_APPMESSAGEID, NOTIFICATION_INFOID_BUSINESSSTATUSID]];
     [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_REMOTECOMMUNICATIONABNORMAL object:self userInfo:info];
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_RHSERVERDISCONNECTED object:self userInfo:info];
+//    [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_RHSERVERDISCONNECTED object:self userInfo:info];
 }
 
 static volatile NSUInteger kCommunicateAbnormalCount = 0;

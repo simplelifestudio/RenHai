@@ -292,15 +292,16 @@ SINGLETON(GUIModule)
         if ([notificationName isEqualToString:NOTIFICATION_ID_RHSERVERDISCONNECTED])
         {            
             UIViewController* rootVC = [CBUIUtils getRootController];
-            if ([rootVC isVisible])
+            if (![_connectViewController isVisible])
             {
                 [_connectViewController popConnectView:rootVC animated:YES];                
             }
         }
         else if ([notificationName isEqualToString:NOTIFICATION_ID_REMOTECOMMUNICATIONABNORMAL])
         {
+            [NSThread sleepForTimeInterval:0.1f];
             UIViewController* rootVC = [CBUIUtils getRootController];
-            if ([rootVC isVisible])
+            if (![_connectViewController isVisible])
             {
                 [_connectViewController popConnectView:rootVC animated:YES];
             }
