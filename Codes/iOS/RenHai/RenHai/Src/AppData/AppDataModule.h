@@ -39,6 +39,10 @@
 -(void) recordUserAgreementAccepted;
 -(void) resetUserAgreementAccepted;
 
+-(BOOL) isUserIntroductionRead;
+-(void) recordUserIntroductionRead;
+-(void) resetUserIntroductionRead;
+
 #pragma mark - Device
 -(NSString*) deviceSn;
 -(NSString*) deviceModel;

@@ -12,6 +12,7 @@
 #import "AppDataModule.h"
 #import "CommunicationModule.h"
 #import "GUIStyle.h"
+#import "CBUIUtils.h"
 
 @interface HelpViewController_iPhone ()
 {
@@ -66,7 +67,7 @@
     [self _refreshPageControlButtonsStatus];
 }
 
-- (void)resetDisplayStatus
+- (void)_resetDisplayStatus
 {
     _pageControl.currentPage = 0;
     
@@ -270,10 +271,10 @@
 
 -(void) _close
 {
-    BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
-    if (!isAppLaunchedBefore)
+    BOOL isUserIntroductionRead = [_appDataModule isUserIntroductionRead];
+    if (!isUserIntroductionRead)
     {
-        [_appDataModule recordAppLaunchedBefore];
+        [_appDataModule recordUserIntroductionRead];
     }
     else
     {
@@ -281,7 +282,7 @@
     }
     
     [self dismissViewControllerAnimated:YES completion:^(){
-        [self resetDisplayStatus];
+        [self _resetDisplayStatus];
     }];
 }
 
@@ -321,10 +322,12 @@
 
 -(void) _refreshPageControlButtonsStatus
 {
+    BOOL isUserIntroductionRead = [_appDataModule isUserIntroductionRead];
+    
     NSInteger pageNum = _pageControl.currentPage;
     if (0 == pageNum)
     {
-        [_closeButton setHidden:YES];
+        [_closeButton setHidden:YES && !isUserIntroductionRead];
         [_closeButton setTitle:NSLocalizedString(@"Help_Action_Skip", nil) forState:UIControlStateNormal];
         _closeButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
     }
@@ -336,7 +339,7 @@
     }
     else
     {
-        [_closeButton setHidden:YES];
+        [_closeButton setHidden:YES && !isUserIntroductionRead];
         [_closeButton setTitle:NSLocalizedString(@"Help_Action_Skip", nil) forState:UIControlStateNormal];
         _closeButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
     }

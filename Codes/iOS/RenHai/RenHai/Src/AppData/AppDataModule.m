@@ -16,6 +16,7 @@
 #define PERSISTENTDOMAIN_APPDATA @"com.simplelife.RenHai.appdata"
 #define APPDATA_KEY_APPLAUNCHEDBEFORE @"appLaunchedBefore"
 #define APPDATA_KEY_USERAGREEMENTACCEPTED @"userAgreementAccepted"
+#define APPDATA_KEY_USERINTRODUCTIONREAD @"userIntroductionRead"
 
 @interface AppDataModule()
 {
@@ -167,6 +168,31 @@ SINGLETON(AppDataModule)
 {
     NSString* sVal = @"NO";
     [self setValueForKeyInPersistentDomain:sVal forKey:APPDATA_KEY_USERAGREEMENTACCEPTED inPersistentDomain:PERSISTENTDOMAIN_APPDATA];
+}
+
+-(BOOL) isUserIntroductionRead
+{
+    BOOL flag = NO;
+    
+    id value = [self getValueForKeyInPersistentDomain:APPDATA_KEY_USERINTRODUCTIONREAD inPersistentDomain:PERSISTENTDOMAIN_APPDATA];
+    if ([value isEqualToString:@"YES"])
+    {
+        flag = YES;
+    }
+    
+    return flag;
+}
+
+-(void) recordUserIntroductionRead
+{
+    NSString* sVal = @"YES";
+    [self setValueForKeyInPersistentDomain:sVal forKey:APPDATA_KEY_USERINTRODUCTIONREAD inPersistentDomain:PERSISTENTDOMAIN_APPDATA];
+}
+
+-(void) resetUserIntroductionRead
+{
+    NSString* sVal = @"NO";
+    [self setValueForKeyInPersistentDomain:sVal forKey:APPDATA_KEY_USERINTRODUCTIONREAD inPersistentDomain:PERSISTENTDOMAIN_APPDATA];
 }
 
 #pragma mark - Device

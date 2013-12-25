@@ -10,11 +10,16 @@
 
 #import "CBUIUtils.h"
 #import "GUIModule.h"
+#import "CommunicationModule.h"
+#import "AppDataModule.h"
 #import "UINavigationController+CBNavigationControllerExtends.h"
+#import "UIViewController+CBUIViewControlerExtends.h"
 
 @interface MainViewController_iPhone ()
 {
     GUIModule* _guiModule;
+    CommunicationModule* _commModule;
+    AppDataModule* _appDataModule;
 }
 
 @end
@@ -40,8 +45,8 @@
     [self setMinimumWidth:LEFTBAR_WIDTH_IPHONE maximumWidth:LEFTBAR_WIDTH_IPHONE forViewController:self.leftViewController];
     
     _guiModule = [GUIModule sharedInstance];
-    
-    self.animationDuration = 0.3;
+    _commModule = [CommunicationModule sharedInstance];
+    _appDataModule = [AppDataModule sharedInstance];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -49,37 +54,81 @@
     [super viewWillAppear:animated];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
 
--(void) switchToMainScene
+-(void) switchToMainScene:(MainSceneStatus) mainSceneStatus
 {
+    BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
+    if (!isAppLaunchedBefore)
+    {
+        [_appDataModule recordAppLaunchedBefore];
+    }
+    else
+    {
+        
+    }
+    
     RHNavigationController* navigationVC = _guiModule.navigationController;
     navigationVC.navigationBarHidden = NO;
     navigationVC.navigationBar.translucent = NO;
     
-    HomeViewController_iPhone* homeVC = _guiModule.homeViewController;
-
+    UIViewController* vc = nil;
+    
+    switch (mainSceneStatus)
+    {
+        case MAINSCENESTATUS_HOME:
+        {
+            vc = _guiModule.homeViewController;
+            break;
+        }
+        case MAINSCENESTATUS_IMPRESS:
+        {
+            vc = _guiModule.impressViewController;
+            break;
+        }
+        case MAINSCENESTATUS_INTEREST:
+        {
+            vc = _guiModule.interestViewController;
+            break;
+        }
+        default:
+        {
+            vc = _guiModule.homeViewController;
+            break;
+        }
+    }
+    
     [self setLeftViewController:_guiModule.leftbarViewController];
     [self setRightViewController:nil];
     [self setFrontViewController:navigationVC];
-
+    
     UIViewController* topVC = navigationVC.topViewController;
-    if (topVC != homeVC)
+    if (topVC != vc)
     {
-        if ([navigationVC containsViewController:homeVC])
+        if ([navigationVC containsViewController:vc])
         {
-            [navigationVC popToViewController:homeVC animated:NO];
+            [navigationVC popToViewController:vc animated:NO];
         }
         else
         {
-            [navigationVC pushViewController:homeVC animated:NO];
+            [navigationVC pushViewController:vc animated:NO];
         }
     }
     
     [CBUIUtils setRootController:self];
+}
+
+-(void) switchToMainScene
+{
+    [self switchToMainScene:MAINSCENESTATUS_HOME];
 }
 
 -(void) switchToChatScene

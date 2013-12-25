@@ -19,6 +19,4 @@
 - (IBAction)onClickCloseButton:(id)sender;
 - (IBAction)onPageTurn:(id)sender;
 
-- (void)resetDisplayStatus;
-
 @end

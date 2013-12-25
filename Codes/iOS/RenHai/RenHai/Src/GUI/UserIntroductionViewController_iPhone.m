@@ -123,10 +123,10 @@
 
 - (void)_dismiss
 {
-    BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
-    if (!isAppLaunchedBefore)
+    BOOL isUserIntroductionRead = [_appDataModule isUserIntroductionRead];
+    if (!isUserIntroductionRead)
     {
-        [_appDataModule recordAppLaunchedBefore];
+        [_appDataModule recordUserIntroductionRead];
     }
     else
     {

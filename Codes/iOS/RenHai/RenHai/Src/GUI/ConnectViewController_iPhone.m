@@ -149,7 +149,7 @@ ConnectStatus;
 //        [welcomeVC dismissWelcome];
 //    }
     
-    [NSThread sleepForTimeInterval:DELAY_POP];
+//    [NSThread sleepForTimeInterval:DELAY_POP];
     
     if (![self isVisible])
     {
@@ -160,7 +160,7 @@ ConnectStatus;
         
         __block CALayer* keyLayer = [UIApplication sharedApplication].keyWindow.layer;
         
-        if (animated)
+        if (NO)
         {
             CATransition* transition = [CATransition animation];
             transition.duration = ANIMATION_POP;
@@ -170,7 +170,7 @@ ConnectStatus;
             transition.removedOnCompletion = YES;
         }
 
-        [rootVC presentViewController:self animated:NO completion:^(){
+        [rootVC presentViewController:self animated:animated completion:^(){
 
         }];
     }
@@ -183,17 +183,12 @@ ConnectStatus;
         {
             UIViewController* rootVC = [CBUIUtils getRootController];
             MainViewController_iPhone* mainVC = _guiModule.mainViewController;
-//            if (mainVC != rootVC)
-//            {
-//                [mainVC switchToMainScene];
-//            }
-            [rootVC dismissPopupViewControllerAnimated:NO completion:nil];
             
             [self _clockCancel];
             
             __block CALayer* keyLayer = [UIApplication sharedApplication].keyWindow.layer;
             
-            if (animated)
+            if (NO)
             {
                 CATransition* transition = [CATransition animation];
                 transition.duration = ANIMATION_DISMISS;
@@ -203,7 +198,7 @@ ConnectStatus;
                 transition.removedOnCompletion = YES;
             }
             
-            [self dismissViewControllerAnimated:NO completion:^(){
+            [self dismissViewControllerAnimated:animated completion:^(){
                 if (rootVC == mainVC)
                 {
                     mainVC.view.backgroundColor = FLATUI_COLOR_UIVIEW_BACKGROUND;

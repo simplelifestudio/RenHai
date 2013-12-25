@@ -8,9 +8,20 @@
 
 #import "PKRevealController.h"
 
+typedef enum
+{
+    MAINSCENESTATUS_HOME = 0,
+    MAINSCENESTATUS_IMPRESS,
+    MAINSCENESTATUS_INTEREST,
+    MAINSCENESTATUS_COUNT
+}
+MainSceneStatus;
+
 @interface MainViewController_iPhone : PKRevealController <UINavigationControllerDelegate>
 
 -(void) switchToMainScene;
+-(void) switchToMainScene:(MainSceneStatus) mainSceneStatus;
+
 -(void) switchToChatScene;
 
 -(void) enableGesturers;
