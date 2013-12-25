@@ -143,37 +143,30 @@ ConnectStatus;
 
 - (void) popConnectView:(UIViewController*) presentingViewController animated:(BOOL) animated
 {
-//    WelcomeViewController_iPhone* welcomeVC = _guiModule.welcomeViewController;
-//    if ([welcomeVC isVisible])
-//    {
-//        [welcomeVC dismissWelcome];
-//    }
-    
-//    [NSThread sleepForTimeInterval:DELAY_POP];
-    
-    if (![self isVisible])
-    {
-        [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
-        
-        UIViewController* rootVC = [CBUIUtils getRootController];
-//        presentingViewController = (nil != presentingViewController) ? presentingViewController : rootVC;
-        
-        __block CALayer* keyLayer = [UIApplication sharedApplication].keyWindow.layer;
-        
-        if (NO)
+    [CBAppUtils asyncProcessInMainThread:^(){
+        if (![self isVisible])
         {
-            CATransition* transition = [CATransition animation];
-            transition.duration = ANIMATION_POP;
-            transition.type = kCATransitionMoveIn;
-            transition.subtype = kCATransitionFromTop;
-            [keyLayer addAnimation:transition forKey:kCATransition];
-            transition.removedOnCompletion = YES;
-        }
-
-        [rootVC presentViewController:self animated:animated completion:^(){
-
-        }];
-    }
+            [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
+            
+            UIViewController* rootVC = [CBUIUtils getRootController];
+            
+            __block CALayer* keyLayer = [UIApplication sharedApplication].keyWindow.layer;
+            
+            if (NO)
+            {
+                CATransition* transition = [CATransition animation];
+                transition.duration = ANIMATION_POP;
+                transition.type = kCATransitionMoveIn;
+                transition.subtype = kCATransitionFromTop;
+                [keyLayer addAnimation:transition forKey:kCATransition];
+                transition.removedOnCompletion = YES;
+            }
+            
+            [rootVC presentViewController:self animated:animated completion:^(){
+                
+            }];
+        }    
+    }];
 }
 
 - (void) dismissConnectView:(BOOL) animated
