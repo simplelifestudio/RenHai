@@ -78,14 +78,14 @@ EnterOperationStatus;
     [super viewWillAppear:animated];
     
     [self _updateBannerView];
+    
+    [self _updateUIWithServerData];
+    [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Ready];
 }
 
 -(void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    [self _updateUIWithServerData];
-    [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Ready];
     
     [self _activateDataSyncTimer];
     
