@@ -332,12 +332,12 @@ ChatWaitStatus;
         
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
-                _leavePoolFlag = YES;
-                [_statusModule recordAppMessage:AppMessageIdentifier_UnbindSession];
+                _leavePoolFlag = NO;
+                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_UnchooseBusiness];
             }
             failureCompletionBlock:^(){
                 _leavePoolFlag = NO;
-                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_UnbindSession];
+                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_UnchooseBusiness];
             }
             afterCompletionBlock:^(){
                 [self _finishLeavingPool];
