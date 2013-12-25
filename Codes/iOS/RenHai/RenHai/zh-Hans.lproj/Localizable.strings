@@ -42,6 +42,9 @@
 
 "UserIntroduction_Action_Skip" = "跳过";
 
+"Help_Action_Skip" = "跳过";
+"Help_Action_Close" = "关闭";
+
 "Home_OnlineCount" = "在线人数";
 "Home_ChatCount" = "聊天人数";
 "Home_Banner_NoInfo" = "Alpha测试，意见建议请联系：simplelife.patrick@gmail.com";

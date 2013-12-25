@@ -86,7 +86,7 @@
         BOOL isUserAgreementAccepted = [_appDataModule isUserAgreementAccepted];
         if (isUserAgreementAccepted)
         {
-            UIViewController* vc = _guiModule.userIntroductionViewController;
+            UIViewController* vc = _guiModule.helpViewController;
             [rootVC presentViewController:vc animated:NO completion:nil];
         }
         else

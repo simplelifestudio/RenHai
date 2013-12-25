@@ -591,7 +591,7 @@ static float progress = 0.0;
 - (IBAction)onPressHelpButton:(id)sender
 {
     UIViewController* rootVC = [CBUIUtils getRootController];
-    UIViewController* vc = _guiModule.userIntroductionViewController;
+    UIViewController* vc = _guiModule.helpViewController;
     [rootVC presentViewController:vc animated:YES completion:nil];
 }
 
