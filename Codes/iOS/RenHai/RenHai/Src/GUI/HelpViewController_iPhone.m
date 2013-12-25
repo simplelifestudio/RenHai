@@ -343,6 +343,8 @@
         [_closeButton setTitle:NSLocalizedString(@"Help_Action_Skip", nil) forState:UIControlStateNormal];
         _closeButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
     }
+    
+    _closeButton.alpha = 0.6f;
 }
 
 @end

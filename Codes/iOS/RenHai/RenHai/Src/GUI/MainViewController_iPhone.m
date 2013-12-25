@@ -66,16 +66,6 @@
 
 -(void) switchToMainScene:(MainSceneStatus) mainSceneStatus
 {
-    BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
-    if (!isAppLaunchedBefore)
-    {
-        [_appDataModule recordAppLaunchedBefore];
-    }
-    else
-    {
-        
-    }
-    
     RHNavigationController* navigationVC = _guiModule.navigationController;
     navigationVC.navigationBarHidden = NO;
     navigationVC.navigationBar.translucent = NO;
@@ -109,6 +99,18 @@
     [self setLeftViewController:_guiModule.leftbarViewController];
     [self setRightViewController:nil];
     [self setFrontViewController:navigationVC];
+    
+    BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
+    if (!isAppLaunchedBefore)
+    {
+        [_appDataModule recordAppLaunchedBefore];
+        
+        vc = _guiModule.interestViewController;
+    }
+    else
+    {
+        
+    }
     
     UIViewController* topVC = navigationVC.topViewController;
     if (topVC != vc)
