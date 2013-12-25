@@ -332,8 +332,8 @@ ChatWaitStatus;
         
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
-                _leavePoolFlag = NO;
-                [_statusModule recordCommunicateAbnormal:AppMessageIdentifier_UnchooseBusiness];
+                _leavePoolFlag = YES;
+                [_statusModule recordAppMessage:AppMessageIdentifier_UnchooseBusiness];
             }
             failureCompletionBlock:^(){
                 _leavePoolFlag = NO;

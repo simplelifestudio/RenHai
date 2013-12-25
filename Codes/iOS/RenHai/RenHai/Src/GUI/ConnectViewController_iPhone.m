@@ -22,6 +22,8 @@
 #import "BusinessStatusModule.h"
 
 #define DELAY_POP 0.5f
+#define DELAY_DISMISS 0.5f
+
 #define DELAY_STATUS_UPDATE 0.15f
 #define ANIMATION_POP 0.5f
 #define ANIMATION_DISMISS 0.5f
@@ -143,6 +145,20 @@ ConnectStatus;
 
 - (void) popConnectView:(UIViewController*) presentingViewController animated:(BOOL) animated
 {
+    BOOL isUserAgreementVCVisible = [_guiModule.userAgreementViewController isVisible];
+    BOOL isUserIntroductionVCVisible = [_guiModule.helpViewController isVisible];
+    BOOL isConnectVCVisible = [self isVisible];
+    if (isUserAgreementVCVisible || isUserIntroductionVCVisible || isConnectVCVisible)
+    {
+        return;
+    }
+    
+    BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
+    if (isAppLaunchedBefore)
+    {
+        [NSThread sleepForTimeInterval:DELAY_POP];
+    }
+    
     [CBAppUtils asyncProcessInMainThread:^(){
         if (![self isVisible])
         {
@@ -151,8 +167,7 @@ ConnectStatus;
             UIViewController* rootVC = [CBUIUtils getRootController];
             
             __block CALayer* keyLayer = [UIApplication sharedApplication].keyWindow.layer;
-            
-            if (NO)
+            if (animated)
             {
                 CATransition* transition = [CATransition animation];
                 transition.duration = ANIMATION_POP;
@@ -162,15 +177,17 @@ ConnectStatus;
                 transition.removedOnCompletion = YES;
             }
             
-            [rootVC presentViewController:self animated:animated completion:^(){
+            [rootVC presentViewController:self animated:NO completion:^(){
                 
             }];
-        }    
+        }
     }];
 }
 
 - (void) dismissConnectView:(BOOL) animated
 {
+    [NSThread sleepForTimeInterval:DELAY_DISMISS];
+    
     [CBAppUtils asyncProcessInMainThread:^(){
         if ([self isVisible])
         {
@@ -181,7 +198,7 @@ ConnectStatus;
             
             __block CALayer* keyLayer = [UIApplication sharedApplication].keyWindow.layer;
             
-            if (NO)
+            if (animated)
             {
                 CATransition* transition = [CATransition animation];
                 transition.duration = ANIMATION_DISMISS;
@@ -191,7 +208,7 @@ ConnectStatus;
                 transition.removedOnCompletion = YES;
             }
             
-            [self dismissViewControllerAnimated:animated completion:^(){
+            [self dismissViewControllerAnimated:NO completion:^(){
                 if (rootVC == mainVC)
                 {
                     mainVC.view.backgroundColor = FLATUI_COLOR_UIVIEW_BACKGROUND;
