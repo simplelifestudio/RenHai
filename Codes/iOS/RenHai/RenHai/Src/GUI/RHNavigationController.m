@@ -92,12 +92,12 @@
         if (isUserAgreementAccepted)
         {
             UIViewController* vc = _guiModule.helpViewController;
-            [rootVC presentViewController:vc animated:NO completion:nil];
+            [rootVC presentViewController:vc animated:YES completion:nil];
         }
         else
         {
             UIViewController* vc = _guiModule.userAgreementViewController;
-            [rootVC presentViewController:vc animated:NO completion:nil];
+            [rootVC presentViewController:vc animated:YES completion:nil];
         }
     }
     else
@@ -107,7 +107,7 @@
             ConnectViewController_iPhone* _connectViewController = _guiModule.connectViewController;
             if ([rootVC isVisible])
             {
-                [_connectViewController popConnectView:rootVC animated:NO];
+                [_connectViewController popConnectView:rootVC animated:YES];
             }
         }        
     }
