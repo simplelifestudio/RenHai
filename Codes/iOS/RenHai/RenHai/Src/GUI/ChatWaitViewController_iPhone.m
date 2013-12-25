@@ -52,7 +52,7 @@ ChatWaitStatus;
     volatile BOOL _matchStartFlag;
     volatile BOOL _didOnSessionBind;
     
-    volatile BOOL _isDeciding;
+    volatile BOOL _isLeaving;
     
     volatile BOOL _hasRequestedMatchStart;
 }
@@ -140,7 +140,7 @@ ChatWaitStatus;
     _matchStartFlag = NO;
     _didOnSessionBind = NO;
     
-    _isDeciding = NO;
+    _isLeaving = NO;
     
     _hasRequestedMatchStart = NO;
     
@@ -176,7 +176,7 @@ ChatWaitStatus;
 
 -(void) onSessionBound
 {
-    if (!_didOnSessionBind && !_isDeciding)
+    if (!_didOnSessionBind && !_isLeaving)
     {
         [_guiModule playSoundAndVibrate:SOUNDID_SESSIONBOUND vibrate:YES];
         
@@ -320,7 +320,7 @@ ChatWaitStatus;
 
 - (void) _startLeavingPool
 {
-    _isDeciding = YES;
+    _isLeaving = YES;
     
     _actionButton.hidden = YES;
     
@@ -333,7 +333,7 @@ ChatWaitStatus;
         [_commModule businessSessionRequest:requestMessage
             successCompletionBlock:^(){
                 _leavePoolFlag = YES;
-                [_statusModule recordAppMessage:AppMessageIdentifier_UnchooseBusiness];
+                [_statusModule recordAppMessage:AppMessageIdentifier_UnbindSession];
             }
             failureCompletionBlock:^(){
                 _leavePoolFlag = NO;
@@ -357,7 +357,7 @@ ChatWaitStatus;
         }
         else
         {
-
+            _isLeaving = NO;
         }
         
         _actionButton.hidden = NO;
@@ -366,6 +366,11 @@ ChatWaitStatus;
 
 -(void)_remoteRequestMatchStart
 {
+    if (_isLeaving)
+    {
+        return;
+    }
+    
     if (_hasRequestedMatchStart && _matchStartFlag)
     {
         return;
