@@ -169,6 +169,9 @@ EnterOperationStatus;
     
     [_enterButton setImage:[UIImage imageNamed:@"enterbutton_highlighted.png"] forState:UIControlStateHighlighted];
     
+    _helpButton.exclusiveTouch = YES;
+    _enterButton.exclusiveTouch = YES;
+    
     _haloLayer = [PulsingHaloLayer layer];
     _haloLayer.pulseInterval = 0;
     _haloLayer.position = _enterButton.center;
