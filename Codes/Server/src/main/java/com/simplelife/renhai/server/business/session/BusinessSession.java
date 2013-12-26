@@ -289,6 +289,7 @@ public class BusinessSession implements IBusinessSession
     		if (device == triggerDevice)
 			{
 				card.updateOrAppendImpressLabel(device, Consts.SolidImpressLabel.Good.getValue(), false);
+				device.increaseChatCount();
 			}
     		else
     		{
@@ -486,7 +487,7 @@ public class BusinessSession implements IBusinessSession
     			{
     				chatStartTime = System.currentTimeMillis();
     				chatEndTime = 0;
-    				notifyIncreaseChatCount();
+    				//notifyIncreaseChatCount();
     			}
     			else
     			{

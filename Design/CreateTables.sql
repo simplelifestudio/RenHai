@@ -233,6 +233,7 @@ INSERT INTO `operationcode` VALUES ('25', '1101', 'System', '空闲状态超时�
 INSERT INTO `operationcode` VALUES ('26', '1102', 'System', '消息响应超时，释放设备');
 INSERT INTO `operationcode` VALUES ('27', '1103', 'System', '周期性保存数据到数据库');
 INSERT INTO `operationcode` VALUES ('28', '1104', 'System', '周期性更新WebRTC Session');
+INSERT INTO `operationcode` VALUES ('29', '1024', 'User', '业务会话请求 BusinessSessionRequest - 退出业务会话');
 
 -- ----------------------------
 -- Table structure for `profile`

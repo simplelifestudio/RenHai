@@ -786,6 +786,7 @@ public class Consts
 		BusinessResponse_1021(1021),
 		BroadcastNotification_1022(1022),
 		ChatMessage_1023(1023),
+		BusinessRequestUnbindSession_1024(1024),
 		WebsocketTimeout_1100(1100),
 		DeviceInIdleTimeout_1101(1101),
 		SyncMessageTimeout_1102(1102),
