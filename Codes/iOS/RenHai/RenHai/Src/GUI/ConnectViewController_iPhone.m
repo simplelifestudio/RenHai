@@ -10,6 +10,7 @@
 
 #import "CBUIUtils.h"
 #import "CBDateUtils.h"
+#import "CBNetworkUtils.h"
 #import "UINavigationController+CBNavigationControllerExtends.h"
 #import "UIViewController+CWPopup.h"
 #import "UIViewController+CBUIViewControlerExtends.h"
@@ -21,6 +22,8 @@
 #import "BusinessStatusModule.h"
 
 #define DELAY_POP 0.5f
+#define DELAY_DISMISS 0.5f
+
 #define DELAY_STATUS_UPDATE 0.15f
 #define ANIMATION_POP 0.5f
 #define ANIMATION_DISMISS 0.5f
@@ -28,6 +31,7 @@
 typedef enum
 {
     ConnectStatus_Ready = 0,
+    ConnectStatus_NeedWiFi,
     ConnectStatus_ProxySyncing,
     ConnectStatus_ProxySyncedNormal,
     ConnectStatus_ProxySyncedMaintenance_BeforePeriod,
@@ -141,51 +145,54 @@ ConnectStatus;
 
 - (void) popConnectView:(UIViewController*) presentingViewController animated:(BOOL) animated
 {
-//    WelcomeViewController_iPhone* welcomeVC = _guiModule.welcomeViewController;
-//    if ([welcomeVC isVisible])
-//    {
-//        [welcomeVC dismissWelcome];
-//    }
-    
-    [NSThread sleepForTimeInterval:DELAY_POP];
-    
-    if (![self isVisible])
+    BOOL isUserAgreementVCVisible = [_guiModule.userAgreementViewController isVisible];
+    BOOL isUserIntroductionVCVisible = [_guiModule.helpViewController isVisible];
+    BOOL isConnectVCVisible = [self isVisible];
+    if (isUserAgreementVCVisible || isUserIntroductionVCVisible || isConnectVCVisible)
     {
-        [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
-        
-        UIViewController* rootVC = [CBUIUtils getRootController];
-//        presentingViewController = (nil != presentingViewController) ? presentingViewController : rootVC;
-        
-        __block CALayer* keyLayer = [UIApplication sharedApplication].keyWindow.layer;
-        
-        if (animated)
-        {
-            CATransition* transition = [CATransition animation];
-            transition.duration = ANIMATION_POP;
-            transition.type = kCATransitionMoveIn;
-            transition.subtype = kCATransitionFromTop;
-            [keyLayer addAnimation:transition forKey:kCATransition];
-            transition.removedOnCompletion = YES;
-        }
-
-        [rootVC presentViewController:self animated:NO completion:^(){
-
-        }];
+        return;
     }
+    
+    BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
+    if (isAppLaunchedBefore)
+    {
+        [NSThread sleepForTimeInterval:DELAY_POP];
+    }
+    
+    [CBAppUtils asyncProcessInMainThread:^(){
+        if (![self isVisible])
+        {
+            [_statusModule recordAppMessage:AppMessageIdentifier_Disconnect];
+            
+            UIViewController* rootVC = [CBUIUtils getRootController];
+            
+            __block CALayer* keyLayer = [UIApplication sharedApplication].keyWindow.layer;
+            if (animated)
+            {
+                CATransition* transition = [CATransition animation];
+                transition.duration = ANIMATION_POP;
+                transition.type = kCATransitionMoveIn;
+                transition.subtype = kCATransitionFromTop;
+                [keyLayer addAnimation:transition forKey:kCATransition];
+                transition.removedOnCompletion = YES;
+            }
+            
+            [rootVC presentViewController:self animated:NO completion:^(){
+                
+            }];
+        }
+    }];
 }
 
 - (void) dismissConnectView:(BOOL) animated
 {
+    [NSThread sleepForTimeInterval:DELAY_DISMISS];
+    
     [CBAppUtils asyncProcessInMainThread:^(){
         if ([self isVisible])
         {
             UIViewController* rootVC = [CBUIUtils getRootController];
             MainViewController_iPhone* mainVC = _guiModule.mainViewController;
-//            if (mainVC != rootVC)
-//            {
-//                [mainVC switchToMainScene];
-//            }
-            [rootVC dismissPopupViewControllerAnimated:NO completion:nil];
             
             [self _clockCancel];
             
@@ -324,6 +331,13 @@ ConnectStatus;
                 
                 _isOperationQueueCancelled = NO;
                 
+                break;
+            }
+            case ConnectStatus_NeedWiFi:
+            {
+                infoText = NSLocalizedString(@"Connect_NeedWiFi", nil);
+                infoDetailText = NSLocalizedString(@"Connect_NeedWiFi_Detail", nil);
+                isActionButtonHide = NO;
                 break;
             }
             case ConnectStatus_ProxySyncing:
@@ -500,7 +514,14 @@ ConnectStatus;
 {
     [self _resetInstance];
     
-    [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncing];
+    if (![CBNetworkUtils isWiFiEnabled])
+    {
+        [self _updateUIWithConnectStatus:ConnectStatus_NeedWiFi];
+        _isProxyDataSyncSuccess = NO;
+        return;
+    }
+    
+    [self _updateUIWithConnectStatus:ConnectStatus_ProxySyncing];    
 
     RHMessage* requestMessage = [RHMessage newProxyDataSyncRequest];
     [_commModule proxyDataSyncRequest:requestMessage
@@ -694,6 +715,16 @@ ConnectStatus;
     RHProfile* profile = device.profile;
     RHInterestCard* interestCard = profile.interestCard;
     [interestCard addLabel:NSLocalizedString(@"Connect_DefaultFirstImpressLabel", nil)];
+#warning DIRTY
+    NSArray* defaultLabels = @[@"数码", @"美食", @"旅游", @"摄影", @"音乐", @"电影", @"美剧", @"韩剧", @"明星", @"足球", @"NBA", @"春节", @"圣诞节", @"体育", @"时尚", @"科技", @"人文", @"国家地理", @"历史", @"编程", @"八卦", @"杂谈", @"新闻", @"读书", @"IT互联网", @"古典艺术", @"80后", @"90后", @"70后", @"网游", @"星座", @"大学生", @"设计", @"购物", @"教育", @"爱自由", @"动漫", @"健康养生", @"创业", @"宠物", @"微博", @"医学", @"法律", @"商业", @"会计", @"英语", @"咖啡", @"茶", @"马拉松", @"汽车"];
+    int defautLabelsCount = defaultLabels.count;
+    while (5 >= interestCard.labelList.count)
+    {
+        int randomIndex = arc4random_uniform(defautLabelsCount);
+        DDLogVerbose(@"#####randomIndex:%d", randomIndex);
+        NSString* randomLabelName = defaultLabels[randomIndex];
+        [interestCard addLabel:randomLabelName];
+    }
     
     RHMessage* requestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:device info:nil];
     

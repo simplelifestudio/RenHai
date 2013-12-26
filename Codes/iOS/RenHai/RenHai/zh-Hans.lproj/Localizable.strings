@@ -42,6 +42,9 @@
 
 "UserIntroduction_Action_Skip" = "跳过";
 
+"Help_Action_Skip" = "跳过";
+"Help_Action_Close" = "关闭";
+
 "Home_OnlineCount" = "在线人数";
 "Home_ChatCount" = "聊天人数";
 "Home_Banner_NoInfo" = "Alpha测试，意见建议请联系：simplelife.patrick@gmail.com";
@@ -49,6 +52,7 @@
 "Home_PressToEnterPool" = "点击开始";
 "Home_IsEnteringPool" = "正在进入";
 "Home_EnterPoolFailed" = "无法进入";
+"Home_Help" = "帮助";
 
 "Device_DeviceModel" = "设备类型";
 "Device_OSVersion" = "系统平台";
@@ -83,6 +87,8 @@
 
 "Connect_Ready" = "准备";
 "Connect_Ready_Detail" = "正在检查网络...";
+"Connect_NeedWiFi" = "检测";
+"Connect_NeedWiFi_Detail" = "请先连接WiFi网络";
 "Connect_Checking" = "检测";
 "Connect_Checking_Detail" = "正在探测人海...";
 "Connect_CheckedNormal" = "检测";

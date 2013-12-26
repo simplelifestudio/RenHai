@@ -22,7 +22,7 @@
 #import <PulsingHalo/PulsingHaloLayer.h>
 
 #define INTERVAL_ENTERBUTTON_TRACK CIRCLE_ANIMATION_DISPLAY
-#define INTERVAL_DATASYNC 1
+#define INTERVAL_DATASYNC 3
 
 #define HALO_SPEED_FAST 8
 #define HALO_SPEED_SLOW 2
@@ -78,14 +78,14 @@ EnterOperationStatus;
     [super viewWillAppear:animated];
     
     [self _updateBannerView];
+    
+    [self _updateUIWithServerData];
+    [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Ready];
 }
 
 -(void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    [self _updateUIWithServerData];
-    [self _updateUIWithEnterOperationStatus:EnterOperationStatus_Ready];
     
     [self _activateDataSyncTimer];
     
@@ -129,6 +129,10 @@ EnterOperationStatus;
     _reachLock = [[NSCondition alloc] init];
     
     _helpButton.enabled = YES;
+//    _helpButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
+//    [_helpButton setTitle:NSLocalizedString(@"Home_Help", nil) forState:UIControlStateNormal];
+//    [_helpButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
+//    [_helpButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
     
     [self _setupNavigationBar];
     [self _setupView];
@@ -164,6 +168,9 @@ EnterOperationStatus;
     _versionLabel.text = _appDataModule.appFullVerion;
     
     [_enterButton setImage:[UIImage imageNamed:@"enterbutton_highlighted.png"] forState:UIControlStateHighlighted];
+    
+    _helpButton.exclusiveTouch = YES;
+    _enterButton.exclusiveTouch = YES;
     
     _haloLayer = [PulsingHaloLayer layer];
     _haloLayer.pulseInterval = 0;
@@ -335,7 +342,7 @@ static float progress = 0.0;
         
         _dataSyncTimer = [[NSTimer alloc] initWithFireDate:[NSDate distantPast] interval:INTERVAL_DATASYNC target:self selector:@selector(_remoteServerDataSync) userInfo:nil repeats:YES];
         NSRunLoop* currentRunLoop = [NSRunLoop currentRunLoop];
-        [currentRunLoop addTimer:_dataSyncTimer forMode:NSDefaultRunLoopMode];
+        [currentRunLoop addTimer:_dataSyncTimer forMode:NSRunLoopCommonModes];
         [currentRunLoop run];
     }];
 }
@@ -587,7 +594,7 @@ static float progress = 0.0;
 - (IBAction)onPressHelpButton:(id)sender
 {
     UIViewController* rootVC = [CBUIUtils getRootController];
-    UIViewController* vc = _guiModule.userIntroductionViewController;
+    UIViewController* vc = _guiModule.helpViewController;
     [rootVC presentViewController:vc animated:YES completion:nil];
 }
 

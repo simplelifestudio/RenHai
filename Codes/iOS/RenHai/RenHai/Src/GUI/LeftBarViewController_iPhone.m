@@ -17,6 +17,8 @@
 #import "LeftBarHeaderView_iPhone.h"
 #import "LeftBarFooterView_iPhone.h"
 
+#import "MainViewController_iPhone.h"
+
 #define NIB_LeftBarHeaderView_iPhone @"LeftBarHeaderView_iPhone"
 
 #define NIB_LeftBarFooterView_iPhone @"LeftBarFooterView_iPhone"
@@ -65,27 +67,19 @@
     UIViewController* presentingVC = frontVC.visibleViewController;
     if (presentingVC == _guiModule.homeViewController)
     {
-        _selectedRow = LEFTBAR_CELL_HOME;
+        _selectedRow = MAINSCENESTATUS_HOME;
     }
-//    else if (presentingVC == _guiModule.deviceViewController)
-//    {
-//        _selectedRow = LEFTBAR_CELL_DEVICE;
-//    }
     else if (presentingVC == _guiModule.impressViewController)
     {
-        _selectedRow = LEFTBAR_CELL_IMPRESS;
+        _selectedRow = MAINSCENESTATUS_IMPRESS;
     }
     else if (presentingVC == _guiModule.interestViewController)
     {
-        _selectedRow = LEFTBAR_CELL_INTEREST;
+        _selectedRow = MAINSCENESTATUS_INTEREST;
     }
-//    else if (presentingVC == _guiModule.configViewController)
-//    {
-//        _selectedRow = LEFTBAR_CELL_CONFIG;
-//    }
     else
     {
-        _selectedRow = LEFTBAR_CELL_HOME;
+        _selectedRow = MAINSCENESTATUS_HOME;
     }
     
     [self.tableView reloadData];
@@ -100,7 +94,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return LEFTBAR_CELL_COUNT;
+    return MAINSCENESTATUS_COUNT;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -111,37 +105,21 @@
     NSInteger row = indexPath.row;
     switch (row)
     {
-        case LEFTBAR_CELL_HOME:
+        case MAINSCENESTATUS_HOME:
         {
             cellText = NAVIGATIONBAR_TITLE_HOME;
             break;
         }
-//        case LEFTBAR_CELL_DEVICE:
-//        {
-//            cellText = NAVIGATIONBAR_TITLE_DEVICE;
-//            break;
-//        }
-        case LEFTBAR_CELL_IMPRESS:
+        case MAINSCENESTATUS_IMPRESS:
         {
             cellText = NAVIGATIONBAR_TITLE_IMPRESS;
             break;
         }
-        case LEFTBAR_CELL_INTEREST:
+        case MAINSCENESTATUS_INTEREST:
         {
             cellText = NAVIGATIONBAR_TITLE_INTEREST;
             break;
         }
-//        case LEFTBAR_CELL_CONFIG:
-//        {
-//            cellText = NAVIGATIONBAR_TITLE_CONFIG;
-//            break;
-//        }
-//        case LEFTBAR_CELL_HELP:
-//        {
-//            cellText = NAVIGATIONBAR_TITLE_HELP;
-//            cell.titleLabel.alpha = 0.4;
-//            break;
-//        }
         default:
         {
             cellText = @"";
@@ -183,50 +161,42 @@
 
     switch (row)
     {
-        case LEFTBAR_CELL_HOME:
+        case MAINSCENESTATUS_HOME:
         {
+            HomeViewController_iPhone* vc = _guiModule.homeViewController;
             [navigationVC popToRootViewControllerAnimated:NO];
-            if (navigationVC.visibleViewController != _guiModule.homeViewController)
+            if (navigationVC.visibleViewController != vc)
             {
-                [navigationVC pushViewController:_guiModule.homeViewController animated:NO];
+                [navigationVC pushViewController:vc animated:NO];
             }
             [mainVC showViewController:navigationVC animated:YES completion:nil];
             
             break;
         }
-//        case LEFTBAR_CELL_DEVICE:
-//        {
-//            [navigationVC popToRootViewControllerAnimated:NO];
-//            [navigationVC pushViewController:_guiModule.deviceViewController animated:NO];
-//            [mainVC showViewController:navigationVC animated:YES completion:nil];
-//            
-//            break;
-//        }
-        case LEFTBAR_CELL_IMPRESS:
+        case MAINSCENESTATUS_IMPRESS:
         {
+            ImpressViewController_iPhone* vc = _guiModule.impressViewController;
             [navigationVC popToRootViewControllerAnimated:NO];
-            [navigationVC pushViewController:_guiModule.impressViewController animated:NO];
+            if (navigationVC.visibleViewController != vc)
+            {
+                [navigationVC pushViewController:vc animated:NO];
+            }
             [mainVC showViewController:navigationVC animated:YES completion:nil];
             
             break;
         }
-        case LEFTBAR_CELL_INTEREST:
+        case MAINSCENESTATUS_INTEREST:
         {
-            InterestViewController_iPhone* interestVC = _guiModule.interestViewController;
+            InterestViewController_iPhone* vc = _guiModule.interestViewController;
             [navigationVC popToRootViewControllerAnimated:NO];
-            [navigationVC pushViewController:interestVC animated:NO];
+            if (navigationVC.visibleViewController != vc)
+            {
+                [navigationVC pushViewController:vc animated:NO];
+            }
             [mainVC showViewController:navigationVC animated:YES completion:nil];
             
             break;
         }
-//        case LEFTBAR_CELL_CONFIG:
-//        {
-//            [navigationVC popToRootViewControllerAnimated:NO];
-//            [navigationVC pushViewController:_guiModule.configViewController animated:NO];
-//            [mainVC showViewController:navigationVC animated:YES completion:nil];
-//            
-//            break;
-//        }
         default:
         {
             

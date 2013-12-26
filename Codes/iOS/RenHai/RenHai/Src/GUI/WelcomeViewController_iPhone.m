@@ -79,16 +79,6 @@
 
 - (void)dismissWelcome
 {
-    BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
-    if (!isAppLaunchedBefore)
-    {
-        [_appDataModule recordAppLaunchedBefore];
-    }
-    else
-    {
-        
-    }
-    
     [self dismissViewControllerAnimated:TRUE completion:nil];
 }
 

@@ -100,11 +100,21 @@
     [super viewWillAppear:animated];
     
     [self resetPage];
+    
+    if (_isLabelManaging)
+    {
+        [self _dismissPopupViewController];
+    }
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+-(void) viewWillDisappear:(BOOL)animated
 {
-    [super viewWillDisappear:animated];
+    [super viewWillAppear:animated];
+    
+    if (_isLabelManaging)
+    {
+        [self _dismissPopupViewController];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated

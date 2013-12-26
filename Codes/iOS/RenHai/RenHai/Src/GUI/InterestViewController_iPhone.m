@@ -92,6 +92,16 @@
     }
 }
 
+-(void) viewWillDisappear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (_isLabelManaging)
+    {
+        [self _dismissPopupViewController];
+    }
+}
+
 #pragma mark - Private Methods
 
 -(void)_setupInstance

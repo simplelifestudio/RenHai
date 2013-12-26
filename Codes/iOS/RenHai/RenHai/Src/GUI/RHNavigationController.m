@@ -47,11 +47,16 @@
     [self _arrangeRootViewController];
 }
 
+-(void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
 -(void) viewDidAppear:(BOOL)animated
 {
-    [self _arrangeConnectViewController];
-    
     [super viewDidAppear:animated];
+    
+    [self _arrangeConnectViewController];
 }
 
 - (void)didReceiveMemoryWarning
@@ -80,31 +85,29 @@
 {
     UIViewController* rootVC = [CBUIUtils getRootController];
     
-    BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
-    if (!isAppLaunchedBefore && HELPVIEW_ON_APPFIRSTLAUNCHED)
+    BOOL isUserIntroductionRead = [_appDataModule isUserIntroductionRead];
+    if (!isUserIntroductionRead && HELPVIEW_ON_APPFIRSTLAUNCHED)
     {
         BOOL isUserAgreementAccepted = [_appDataModule isUserAgreementAccepted];
         if (isUserAgreementAccepted)
         {
-            UIViewController* vc = _guiModule.userIntroductionViewController;
-            [rootVC presentViewController:vc animated:NO completion:nil];
+            UIViewController* vc = _guiModule.helpViewController;
+            [rootVC presentViewController:vc animated:YES completion:nil];
         }
         else
         {
             UIViewController* vc = _guiModule.userAgreementViewController;
-            [rootVC presentViewController:vc animated:NO completion:nil];
+            [rootVC presentViewController:vc animated:YES completion:nil];
         }
     }
     else
-    {
+    {        
         if (![_commModule isWebSocketConnected])
         {
             ConnectViewController_iPhone* _connectViewController = _guiModule.connectViewController;
-
-            UIViewController* rootVC = [CBUIUtils getRootController];
             if ([rootVC isVisible])
             {
-                [_connectViewController popConnectView:rootVC animated:NO];
+                [_connectViewController popConnectView:rootVC animated:YES];
             }
         }        
     }

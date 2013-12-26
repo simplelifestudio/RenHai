@@ -12,6 +12,7 @@
 #import "AppDataModule.h"
 #import "CommunicationModule.h"
 #import "GUIStyle.h"
+#import "CBUIUtils.h"
 
 @interface HelpViewController_iPhone ()
 {
@@ -66,7 +67,7 @@
     [self _refreshPageControlButtonsStatus];
 }
 
-- (void)resetDisplayStatus
+- (void)_resetDisplayStatus
 {
     _pageControl.currentPage = 0;
     
@@ -166,14 +167,16 @@
 
 -(void)_initArray
 {
-    UIImage* helpImage1 = [UIImage imageNamed:@"help_01.JPG"];
-    UIImage* helpImage2 = [UIImage imageNamed:@"help_02.JPG"];
-    UIImage* helpImage3 = [UIImage imageNamed:@"help_03.JPG"];
-    UIImage* helpImage4 = [UIImage imageNamed:@"help_04.JPG"];
-    UIImage* helpImage5 = [UIImage imageNamed:@"help_05.JPG"];
-    UIImage* helpImage6 = [UIImage imageNamed:@"help_06.JPG"];
+    UIImage* helpImage1 = [UIImage imageNamed:@"help_01.png"];
+    UIImage* helpImage2 = [UIImage imageNamed:@"help_02.png"];
+    UIImage* helpImage3 = [UIImage imageNamed:@"help_03.png"];
+    UIImage* helpImage4 = [UIImage imageNamed:@"help_04.png"];
+    UIImage* helpImage5 = [UIImage imageNamed:@"help_05.png"];
+    UIImage* helpImage6 = [UIImage imageNamed:@"help_06.png"];
+    UIImage* helpImage7 = [UIImage imageNamed:@"help_07.png"];
+    UIImage* helpImage8 = [UIImage imageNamed:@"help_08.png"];
     
-    _imageArray = [NSArray arrayWithObjects: helpImage1, helpImage2, helpImage3, helpImage4, helpImage5, helpImage6, nil];
+    _imageArray = [NSArray arrayWithObjects: helpImage1, helpImage2, helpImage3, helpImage4, helpImage5, helpImage6, helpImage7, helpImage8, nil];
 }
 
 -(void)_configHelpViewUI
@@ -206,7 +209,11 @@
     [_helpView addSubview:_pageControl];
     [_pageControl addTarget:self action:@selector(onPageTurn:)forControlEvents:UIControlEventValueChanged];
     
-    _closeButton.backgroundColor = FLATUI_COLOR_BUTTONROLLBACK;
+    _closeButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
+    [_closeButton setTitle:NSLocalizedString(@"Help_Action_Close", nil) forState:UIControlStateNormal];
+    [_closeButton setTitleColor:FLATUI_COLOR_TEXT_INFO forState:UIControlStateNormal];
+    [_closeButton setTitleColor:FLATUI_COLOR_BUTTONTITLE forState:UIControlStateHighlighted];
+    
     [_helpView addSubview:_closeButton];
     
     [self _registerGestureRecognizers];
@@ -264,17 +271,19 @@
 
 -(void) _close
 {
-    BOOL isAppLaunchedBefore = [_appDataModule isAppLaunchedBefore];
-    if (!isAppLaunchedBefore)
+    BOOL isUserIntroductionRead = [_appDataModule isUserIntroductionRead];
+    if (!isUserIntroductionRead)
     {
-        [_appDataModule recordAppLaunchedBefore];
+        [_appDataModule recordUserIntroductionRead];
     }
     else
     {
-
+        
     }
-
-    [self dismissViewControllerAnimated:TRUE completion:nil];
+    
+    [self dismissViewControllerAnimated:YES completion:^(){
+        [self _resetDisplayStatus];
+    }];
 }
 
 -(void)_scrollToPrevPage:(id)sender
@@ -313,19 +322,29 @@
 
 -(void) _refreshPageControlButtonsStatus
 {
+    BOOL isUserIntroductionRead = [_appDataModule isUserIntroductionRead];
+    
     NSInteger pageNum = _pageControl.currentPage;
     if (0 == pageNum)
     {
-        [_closeButton setHidden:YES];
+        [_closeButton setHidden:YES && !isUserIntroductionRead];
+        [_closeButton setTitle:NSLocalizedString(@"Help_Action_Skip", nil) forState:UIControlStateNormal];
+        _closeButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
     }
     else if(pageNum == _imageArray.count - 1)
     {
         [_closeButton setHidden:NO];
+        [_closeButton setTitle:NSLocalizedString(@"Help_Action_Close", nil) forState:UIControlStateNormal];
+        _closeButton.buttonColor = FLATUI_COLOR_BUTTONPROCESS;
     }
     else
     {
-        [_closeButton setHidden:YES];
+        [_closeButton setHidden:YES && !isUserIntroductionRead];
+        [_closeButton setTitle:NSLocalizedString(@"Help_Action_Skip", nil) forState:UIControlStateNormal];
+        _closeButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
     }
+    
+//    _closeButton.alpha = 0.x6f;
 }
 
 @end

@@ -288,22 +288,16 @@ SINGLETON(GUIModule)
 {
     if (nil != notification)
     {
+        UIViewController* rootVC = [CBUIUtils getRootController];
+        
         NSString* notificationName = notification.name;
         if ([notificationName isEqualToString:NOTIFICATION_ID_RHSERVERDISCONNECTED])
         {            
-            UIViewController* rootVC = [CBUIUtils getRootController];
-            if ([rootVC isVisible])
-            {
-                [_connectViewController popConnectView:rootVC animated:YES];                
-            }
+            [_connectViewController popConnectView:rootVC animated:YES];
         }
         else if ([notificationName isEqualToString:NOTIFICATION_ID_REMOTECOMMUNICATIONABNORMAL])
         {
-            UIViewController* rootVC = [CBUIUtils getRootController];
-            if ([rootVC isVisible])
-            {
-                [_connectViewController popConnectView:rootVC animated:YES];
-            }
+            [_connectViewController popConnectView:rootVC animated:YES];
         }
     }
 }

@@ -64,28 +64,24 @@ SINGLETON(CommunicationModule)
     NetworkStatus status = [curReach currentReachabilityStatus];
     [curReach connectionRequired];
 
-//    GUIModule* guiModule = [GUIModule sharedInstance];
-    
+    BOOL needReconnect = NO;
     switch (status)
     {
         case NotReachable:
         {
-//            [guiModule showHUD:NSLocalizedString(@"Communication_InternetDisconnected", nil) delay:_HUD_DISPLAY];
-            
+            needReconnect = YES;
             DDLogWarn(@"App's reachability changed to 'NotReachable'.");
             break;
         }
         case ReachableViaWiFi:
         {
-//            [guiModule showHUD:NSLocalizedString(@"Communication_WiFiConnected", nil) delay:_HUD_DISPLAY];
-            
+            needReconnect = NO;
             DDLogWarn(@"App's reachability changed to 'ReachableViaWiFi'.");
             break;
         }
         case ReachableViaWWAN:
         {
-//            [guiModule showHUD:NSLocalizedString(@"Communication_3G/GPRSConnected", nil) delay:_HUD_DISPLAY];
-            
+            needReconnect = YES;
             DDLogWarn(@"App's reachability changed to 'ReachableViaWWAN'.");
             break;
         }
@@ -94,6 +90,9 @@ SINGLETON(CommunicationModule)
             break;
         }
     }
+    
+    NSNotification* notification = [NSNotification notificationWithName:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil userInfo:nil];
+    [[NSNotificationCenter defaultCenter] postNotification:notification];    
 }
 
 -(void) releaseModule
@@ -216,8 +215,8 @@ SINGLETON(CommunicationModule)
     }
     else
     {
-        GUIModule* guiModule = [GUIModule sharedInstance];
-        [guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];
+//        GUIModule* guiModule = [GUIModule sharedInstance];
+//        [guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];
         
         if (nil != failureCompletionBlock)
         {
@@ -274,8 +273,8 @@ SINGLETON(CommunicationModule)
     }
     else
     {
-        GUIModule* guiModule = [GUIModule sharedInstance];
-        [guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];
+//        GUIModule* guiModule = [GUIModule sharedInstance];
+//        [guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];
         
         if (nil != failureCompletionBlock)
         {
@@ -397,8 +396,8 @@ SINGLETON(CommunicationModule)
     }
     else
     {
-        GUIModule* guiModule = [GUIModule sharedInstance];
-        [guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];
+//        GUIModule* guiModule = [GUIModule sharedInstance];
+//        [guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];
         
         if (nil != failureCompletionBlock)
         {

@@ -244,6 +244,22 @@
 		CD1DFB0A18001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */; };
 		CD1DFB0C18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */; };
+		CD230C3A1869CC8F003ACA40 /* help_01.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C321869CC8F003ACA40 /* help_01.psd */; };
+		CD230C3B1869CC8F003ACA40 /* help_01.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C321869CC8F003ACA40 /* help_01.psd */; };
+		CD230C3C1869CC8F003ACA40 /* help_02.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C331869CC8F003ACA40 /* help_02.psd */; };
+		CD230C3D1869CC8F003ACA40 /* help_02.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C331869CC8F003ACA40 /* help_02.psd */; };
+		CD230C3E1869CC8F003ACA40 /* help_03.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C341869CC8F003ACA40 /* help_03.psd */; };
+		CD230C3F1869CC8F003ACA40 /* help_03.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C341869CC8F003ACA40 /* help_03.psd */; };
+		CD230C401869CC8F003ACA40 /* help_04.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C351869CC8F003ACA40 /* help_04.psd */; };
+		CD230C411869CC8F003ACA40 /* help_04.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C351869CC8F003ACA40 /* help_04.psd */; };
+		CD230C421869CC8F003ACA40 /* help_05.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C361869CC8F003ACA40 /* help_05.psd */; };
+		CD230C431869CC8F003ACA40 /* help_05.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C361869CC8F003ACA40 /* help_05.psd */; };
+		CD230C441869CC8F003ACA40 /* help_06.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C371869CC8F003ACA40 /* help_06.psd */; };
+		CD230C451869CC8F003ACA40 /* help_06.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C371869CC8F003ACA40 /* help_06.psd */; };
+		CD230C461869CC8F003ACA40 /* help_07.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C381869CC8F003ACA40 /* help_07.psd */; };
+		CD230C471869CC8F003ACA40 /* help_07.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C381869CC8F003ACA40 /* help_07.psd */; };
+		CD230C481869CC8F003ACA40 /* help_08.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C391869CC8F003ACA40 /* help_08.psd */; };
+		CD230C491869CC8F003ACA40 /* help_08.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C391869CC8F003ACA40 /* help_08.psd */; };
 		CD26650D17F41DD20070934F /* UserDataModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = CD26650C17F41DD20070934F /* UserDataModuleTest.m */; };
 		CD32013A17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
 		CD32013B17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
@@ -726,6 +742,14 @@
 		CD1DFB0618001086006ED9A4 /* ConnectViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectViewController_iPhone.h; sourceTree = "<group>"; };
 		CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectViewController_iPhone.m; sourceTree = "<group>"; };
 		CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ConnectViewController_iPhone.xib; sourceTree = "<group>"; };
+		CD230C321869CC8F003ACA40 /* help_01.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_01.psd; sourceTree = "<group>"; };
+		CD230C331869CC8F003ACA40 /* help_02.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_02.psd; sourceTree = "<group>"; };
+		CD230C341869CC8F003ACA40 /* help_03.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_03.psd; sourceTree = "<group>"; };
+		CD230C351869CC8F003ACA40 /* help_04.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_04.psd; sourceTree = "<group>"; };
+		CD230C361869CC8F003ACA40 /* help_05.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_05.psd; sourceTree = "<group>"; };
+		CD230C371869CC8F003ACA40 /* help_06.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_06.psd; sourceTree = "<group>"; };
+		CD230C381869CC8F003ACA40 /* help_07.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_07.psd; sourceTree = "<group>"; };
+		CD230C391869CC8F003ACA40 /* help_08.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_08.psd; sourceTree = "<group>"; };
 		CD26650B17F41DD20070934F /* UserDataModuleTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserDataModuleTest.h; sourceTree = "<group>"; };
 		CD26650C17F41DD20070934F /* UserDataModuleTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserDataModuleTest.m; sourceTree = "<group>"; };
 		CD32013717E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = RHTableViewSwitcherCell_iPhone.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -970,6 +994,14 @@
 		C55B441317CF587A009BB21B /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CD230C321869CC8F003ACA40 /* help_01.psd */,
+				CD230C331869CC8F003ACA40 /* help_02.psd */,
+				CD230C341869CC8F003ACA40 /* help_03.psd */,
+				CD230C351869CC8F003ACA40 /* help_04.psd */,
+				CD230C361869CC8F003ACA40 /* help_05.psd */,
+				CD230C371869CC8F003ACA40 /* help_06.psd */,
+				CD230C381869CC8F003ACA40 /* help_07.psd */,
+				CD230C391869CC8F003ACA40 /* help_08.psd */,
 				CD98ADC718687120009B77FE /* help_01.png */,
 				CD98ADC818687120009B77FE /* help_02.png */,
 				CD98ADC918687120009B77FE /* help_03.png */,
@@ -1521,14 +1553,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD163820185C6B66009BB03D /* chatvideo_chatmessage.caf in Resources */,
+				CD230C421869CC8F003ACA40 /* help_05.psd in Resources */,
 				CD98ADD318687120009B77FE /* help_03.png in Resources */,
 				CD1637FA185ADC40009BB03D /* Icon-120.png in Resources */,
 				C55B43F617CF580A009BB21B /* InfoPlist.strings in Resources */,
 				C55B43FE17CF580A009BB21B /* Default.png in Resources */,
 				CDDBE35218548D1E001A1744 /* icon-info.png in Resources */,
 				C55B440017CF580A009BB21B /* Default@2x.png in Resources */,
+				CD230C3E1869CC8F003ACA40 /* help_03.psd in Resources */,
 				CDDA9FAB1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */,
 				CDDBE35818548D1E001A1744 /* icon-success@2x.png in Resources */,
+				CD230C3A1869CC8F003ACA40 /* help_01.psd in Resources */,
 				CD1114CB1866CA9A0091C83F /* UserIntroductionPage_iPhone.xib in Resources */,
 				C55B440217CF580A009BB21B /* Default-568h@2x.png in Resources */,
 				C55B445D17CF8632009BB21B /* Icon-72.png in Resources */,
@@ -1555,7 +1590,10 @@
 				CD16381B185C65F0009BB03D /* labelmanaged.caf in Resources */,
 				CD98ADD718687120009B77FE /* help_05.png in Resources */,
 				CD163817185C65F0009BB03D /* choosebusiness.caf in Resources */,
+				CD230C401869CC8F003ACA40 /* help_04.psd in Resources */,
+				CD230C441869CC8F003ACA40 /* help_06.psd in Resources */,
 				CD98ADDB18687120009B77FE /* help_07.png in Resources */,
+				CD230C3C1869CC8F003ACA40 /* help_02.psd in Resources */,
 				CDFEA326182A1E5C00F0351D /* ChatAssessExistImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD16381D185C65F0009BB03D /* sessionbound.caf in Resources */,
 				CD163815185C65F0009BB03D /* chatvideo_endchat.caf in Resources */,
@@ -1590,9 +1628,11 @@
 				CD98ADE0186882F1009B77FE /* help_01.html in Resources */,
 				CDFEA322182A1E5C00F0351D /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD163811185C65F0009BB03D /* chatmessage_received.caf in Resources */,
+				CD230C481869CC8F003ACA40 /* help_08.psd in Resources */,
 				CD98ADCF18687120009B77FE /* help_01.png in Resources */,
 				CD94DF961851933C00C9CBC4 /* RenHaiLocal-Info.plist in Resources */,
 				CD1637F0185AD44B009BB03D /* AntiIcon-120.png in Resources */,
+				CD230C461869CC8F003ACA40 /* help_07.psd in Resources */,
 				CD1637FC185ADC40009BB03D /* Icon-152.png in Resources */,
 				CD163819185C65F0009BB03D /* error.caf in Resources */,
 				CDDBE35618548D1E001A1744 /* icon-success.png in Resources */,
@@ -1650,6 +1690,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD230C3B1869CC8F003ACA40 /* help_01.psd in Resources */,
 				CD16380E185C65F0009BB03D /* chatconfirm_accepted.caf in Resources */,
 				CD16380A185C65F0009BB03D /* chatassess_continue.caf in Resources */,
 				CD1637F7185ADC40009BB03D /* Icon-76.png in Resources */,
@@ -1662,6 +1703,7 @@
 				CDDBE35318548D1E001A1744 /* icon-info.png in Resources */,
 				CD94DF601851918000C9CBC4 /* Default@2x.png in Resources */,
 				CD94DF611851918000C9CBC4 /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */,
+				CD230C471869CC8F003ACA40 /* help_07.psd in Resources */,
 				CD1637F1185AD44B009BB03D /* AntiIcon-120.png in Resources */,
 				CDDBE35918548D1E001A1744 /* icon-success@2x.png in Resources */,
 				CD94DF621851918000C9CBC4 /* Default-568h@2x.png in Resources */,
@@ -1679,6 +1721,7 @@
 				CD94DF6B1851918000C9CBC4 /* MainStoryboard_iPhone.storyboard in Resources */,
 				CD163818185C65F0009BB03D /* choosebusiness.caf in Resources */,
 				CD94DF6C1851918000C9CBC4 /* LeftBarHeaderView_iPhone.xib in Resources */,
+				CD230C431869CC8F003ACA40 /* help_05.psd in Resources */,
 				CD94DF6D1851918000C9CBC4 /* close@2x.png in Resources */,
 				CD94DF6E1851918000C9CBC4 /* LeftBarFooterView_iPhone.xib in Resources */,
 				CD16380C185C65F0009BB03D /* chatassess_quit.caf in Resources */,
@@ -1693,6 +1736,8 @@
 				CD16381C185C65F0009BB03D /* labelmanaged.caf in Resources */,
 				CD94DF721851918000C9CBC4 /* sidebar_menu_icon_landscape@2x.png in Resources */,
 				CD94DF731851918000C9CBC4 /* RHLabelManageViewController_iPhone.xib in Resources */,
+				CD230C411869CC8F003ACA40 /* help_04.psd in Resources */,
+				CD230C451869CC8F003ACA40 /* help_06.psd in Resources */,
 				CD94DF741851918000C9CBC4 /* sidebar_menu_icon_portrait.png in Resources */,
 				CD94DF751851918000C9CBC4 /* order.png in Resources */,
 				CD94DF761851918000C9CBC4 /* InterestLabelsHeaderView_iPhone.xib in Resources */,
@@ -1707,7 +1752,9 @@
 				CD94DF7B1851918000C9CBC4 /* enterbutton_normal@2x.png in Resources */,
 				CD98ADD218687120009B77FE /* help_02.png in Resources */,
 				CD1114CC1866CA9A0091C83F /* UserIntroductionPage_iPhone.xib in Resources */,
+				CD230C3D1869CC8F003ACA40 /* help_02.psd in Resources */,
 				CD94DF7C1851918000C9CBC4 /* order@2x.png in Resources */,
+				CD230C491869CC8F003ACA40 /* help_08.psd in Resources */,
 				CD98ADC318682733009B77FE /* useragreement.html in Resources */,
 				CD94DF7D1851918000C9CBC4 /* RHTableViewLabelCell_iPhone.xib in Resources */,
 				CD94DF7E1851918000C9CBC4 /* Localizable.strings in Resources */,
@@ -1727,6 +1774,7 @@
 				CD98ADDA18687120009B77FE /* help_06.png in Resources */,
 				CD94DF861851918000C9CBC4 /* close.png in Resources */,
 				CD163824185C735D009BB03D /* unchoosebusiness.caf in Resources */,
+				CD230C3F1869CC8F003ACA40 /* help_03.psd in Resources */,
 				CD163814185C65F0009BB03D /* chatmessage_sent.caf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
