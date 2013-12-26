@@ -93,6 +93,19 @@
     return [NSString stringWithFormat:@"%.2f%%", self.chatLossRate * 100];
 }
 
+-(NSUInteger) chatTotalCount
+{
+    NSUInteger count = 0;
+    
+    for (int i = 0; i < 3; i++)
+    {
+        RHImpressLabel* assessLabel = _assessLabelList[i];
+        count += assessLabel.assessedCount;
+    }
+    
+    return count;
+}
+
 #pragma mark - Private Methods
 
 -(id) _getOCardId
