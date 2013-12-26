@@ -715,6 +715,16 @@ ConnectStatus;
     RHProfile* profile = device.profile;
     RHInterestCard* interestCard = profile.interestCard;
     [interestCard addLabel:NSLocalizedString(@"Connect_DefaultFirstImpressLabel", nil)];
+#warning DIRTY
+    NSArray* defaultLabels = @[@"数码", @"美食", @"旅游", @"摄影", @"音乐", @"电影", @"美剧", @"韩剧", @"明星", @"足球", @"NBA", @"春节", @"圣诞节", @"体育", @"时尚", @"科技", @"人文", @"国家地理", @"历史", @"编程", @"八卦", @"杂谈", @"新闻", @"读书", @"IT互联网", @"古典艺术", @"80后", @"90后", @"70后", @"网游", @"星座", @"大学生", @"设计", @"购物", @"教育", @"爱自由", @"动漫", @"健康养生", @"创业", @"宠物", @"微博", @"医学", @"法律", @"商业", @"会计", @"英语", @"咖啡", @"茶", @"马拉松", @"汽车"];
+    int defautLabelsCount = defaultLabels.count;
+    while (5 >= interestCard.labelList.count)
+    {
+        int randomIndex = arc4random_uniform(defautLabelsCount);
+        DDLogVerbose(@"#####randomIndex:%d", randomIndex);
+        NSString* randomLabelName = defaultLabels[randomIndex];
+        [interestCard addLabel:randomLabelName];
+    }
     
     RHMessage* requestMessage = [RHMessage newAppDataSyncRequestMessage:AppDataSyncRequestType_InterestCardSync device:device info:nil];
     

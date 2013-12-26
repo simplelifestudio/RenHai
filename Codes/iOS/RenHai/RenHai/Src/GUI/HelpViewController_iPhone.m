@@ -344,7 +344,7 @@
         _closeButton.buttonColor = FLATUI_COLOR_BUTTONROLLBACK;
     }
     
-    _closeButton.alpha = 0.6f;
+//    _closeButton.alpha = 0.x6f;
 }
 
 @end
