@@ -13,18 +13,24 @@ public abstract class AbstractTimeoutNode
 
     public AbstractTimeoutNode(int timeoutThreshold, TimeoutLink ownerLink)
     {
-    	this.timeoutThreshold = timeoutThreshold;
+    	setTimeoutThreshold(timeoutThreshold);
     	this.ownerLink = ownerLink;
     	ownerLink.append(this);
     }
     
-	/**
+    /**
 	 * @return the prevNode
 	 */
 	public AbstractTimeoutNode getPrevNode()
 	{
 		return prevNode;
 	}
+	
+	public void setTimeoutThreshold(int timeoutThreshold)
+	{
+		this.timeoutThreshold = timeoutThreshold;
+	}
+	
 	/**
 	 * @param prevNode the prevNode to set
 	 */

@@ -401,6 +401,10 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
         return pingTimeoutNode.getLastTime();
     }
     
+    public void updatePingThreshold(int pingThreshold)
+    {
+    	pingTimeoutNode.setTimeoutThreshold(pingThreshold);
+    }
      
     /** */
     public void unbindBusinessSession(StatusChangeReason reason)
