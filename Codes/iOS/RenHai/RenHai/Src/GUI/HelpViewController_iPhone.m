@@ -167,14 +167,37 @@
 
 -(void)_initArray
 {
-    UIImage* helpImage1 = [UIImage imageNamed:@"help_01.png"];
-    UIImage* helpImage2 = [UIImage imageNamed:@"help_02.png"];
-    UIImage* helpImage3 = [UIImage imageNamed:@"help_03.png"];
-    UIImage* helpImage4 = [UIImage imageNamed:@"help_04.png"];
-    UIImage* helpImage5 = [UIImage imageNamed:@"help_05.png"];
-    UIImage* helpImage6 = [UIImage imageNamed:@"help_06.png"];
-    UIImage* helpImage7 = [UIImage imageNamed:@"help_07.png"];
-    UIImage* helpImage8 = [UIImage imageNamed:@"help_08.png"];
+    UIImage* helpImage1 = nil;
+    UIImage* helpImage2 = nil;
+    UIImage* helpImage3 = nil;
+    UIImage* helpImage4 = nil;
+    UIImage* helpImage5 = nil;
+    UIImage* helpImage6 = nil;
+    UIImage* helpImage7 = nil;
+    UIImage* helpImage8 = nil;
+    
+    if (IS_IPHONE5)
+    {
+        helpImage1 = [UIImage imageNamed:@"help_01.png"];
+        helpImage2 = [UIImage imageNamed:@"help_02.png"];
+        helpImage3 = [UIImage imageNamed:@"help_03.png"];
+        helpImage4 = [UIImage imageNamed:@"help_04.png"];
+        helpImage5 = [UIImage imageNamed:@"help_05.png"];
+        helpImage6 = [UIImage imageNamed:@"help_06.png"];
+        helpImage7 = [UIImage imageNamed:@"help_07.png"];
+        helpImage8 = [UIImage imageNamed:@"help_08.png"];
+    }
+    else
+    {
+        helpImage1 = [UIImage imageNamed:@"help_01_35.png"];
+        helpImage2 = [UIImage imageNamed:@"help_02_35.png"];
+        helpImage3 = [UIImage imageNamed:@"help_03_35.png"];
+        helpImage4 = [UIImage imageNamed:@"help_04_35.png"];
+        helpImage5 = [UIImage imageNamed:@"help_05_35.png"];
+        helpImage6 = [UIImage imageNamed:@"help_06_35.png"];
+        helpImage7 = [UIImage imageNamed:@"help_07_35.png"];
+        helpImage8 = [UIImage imageNamed:@"help_08_35.png"];
+    }
     
     _imageArray = [NSArray arrayWithObjects: helpImage1, helpImage2, helpImage3, helpImage4, helpImage5, helpImage6, helpImage7, helpImage8, nil];
 }

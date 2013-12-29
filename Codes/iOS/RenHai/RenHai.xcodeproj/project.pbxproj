@@ -306,6 +306,60 @@
 		CD7EE477185309AD0091EA7A /* RHChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CD7EE476185309AD0091EA7A /* RHChatMessage.m */; };
 		CD7EE478185309AD0091EA7A /* RHChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CD7EE476185309AD0091EA7A /* RHChatMessage.m */; };
 		CD7EE479185309AD0091EA7A /* RHChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CD7EE476185309AD0091EA7A /* RHChatMessage.m */; };
+		CD7F19C3186FEFBF006AFFDA /* help_01_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B2186FEFBF006AFFDA /* help_01_35.png */; };
+		CD7F19C4186FEFBF006AFFDA /* help_01_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B2186FEFBF006AFFDA /* help_01_35.png */; };
+		CD7F19C5186FEFBF006AFFDA /* help_01_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B3186FEFBF006AFFDA /* help_01_35.psd */; };
+		CD7F19C6186FEFBF006AFFDA /* help_01_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B3186FEFBF006AFFDA /* help_01_35.psd */; };
+		CD7F19C7186FEFBF006AFFDA /* help_02_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B4186FEFBF006AFFDA /* help_02_35.png */; };
+		CD7F19C8186FEFBF006AFFDA /* help_02_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B4186FEFBF006AFFDA /* help_02_35.png */; };
+		CD7F19C9186FEFBF006AFFDA /* help_02_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B5186FEFBF006AFFDA /* help_02_35.psd */; };
+		CD7F19CA186FEFBF006AFFDA /* help_02_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B5186FEFBF006AFFDA /* help_02_35.psd */; };
+		CD7F19CB186FEFBF006AFFDA /* help_03_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B6186FEFBF006AFFDA /* help_03_35.png */; };
+		CD7F19CC186FEFBF006AFFDA /* help_03_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B6186FEFBF006AFFDA /* help_03_35.png */; };
+		CD7F19CD186FEFBF006AFFDA /* help_03_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B7186FEFBF006AFFDA /* help_03_35.psd */; };
+		CD7F19CE186FEFBF006AFFDA /* help_03_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B7186FEFBF006AFFDA /* help_03_35.psd */; };
+		CD7F19CF186FEFBF006AFFDA /* help_04_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B8186FEFBF006AFFDA /* help_04_35.png */; };
+		CD7F19D0186FEFBF006AFFDA /* help_04_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B8186FEFBF006AFFDA /* help_04_35.png */; };
+		CD7F19D1186FEFBF006AFFDA /* help_04_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B9186FEFBF006AFFDA /* help_04_35.psd */; };
+		CD7F19D2186FEFBF006AFFDA /* help_04_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B9186FEFBF006AFFDA /* help_04_35.psd */; };
+		CD7F19D3186FEFBF006AFFDA /* help_05_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BA186FEFBF006AFFDA /* help_05_35.png */; };
+		CD7F19D4186FEFBF006AFFDA /* help_05_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BA186FEFBF006AFFDA /* help_05_35.png */; };
+		CD7F19D5186FEFBF006AFFDA /* help_05_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BB186FEFBF006AFFDA /* help_05_35.psd */; };
+		CD7F19D6186FEFBF006AFFDA /* help_05_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BB186FEFBF006AFFDA /* help_05_35.psd */; };
+		CD7F19D7186FEFBF006AFFDA /* help_06_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BC186FEFBF006AFFDA /* help_06_35.png */; };
+		CD7F19D8186FEFBF006AFFDA /* help_06_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BC186FEFBF006AFFDA /* help_06_35.png */; };
+		CD7F19D9186FEFBF006AFFDA /* help_06_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BD186FEFBF006AFFDA /* help_06_35.psd */; };
+		CD7F19DA186FEFBF006AFFDA /* help_06_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BD186FEFBF006AFFDA /* help_06_35.psd */; };
+		CD7F19DB186FEFBF006AFFDA /* help_07_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BE186FEFBF006AFFDA /* help_07_35.png */; };
+		CD7F19DC186FEFBF006AFFDA /* help_07_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BE186FEFBF006AFFDA /* help_07_35.png */; };
+		CD7F19DD186FEFBF006AFFDA /* help_07_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BF186FEFBF006AFFDA /* help_07_35.psd */; };
+		CD7F19DE186FEFBF006AFFDA /* help_07_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BF186FEFBF006AFFDA /* help_07_35.psd */; };
+		CD7F19DF186FEFBF006AFFDA /* help_08_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19C0186FEFBF006AFFDA /* help_08_35.png */; };
+		CD7F19E0186FEFBF006AFFDA /* help_08_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19C0186FEFBF006AFFDA /* help_08_35.png */; };
+		CD7F19E1186FEFBF006AFFDA /* help_08_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19C1186FEFBF006AFFDA /* help_08_35.psd */; };
+		CD7F19E2186FEFBF006AFFDA /* help_08_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19C1186FEFBF006AFFDA /* help_08_35.psd */; };
+		CD7F19E3186FEFBF006AFFDA /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19C2186FEFBF006AFFDA /* Icon-1024.png */; };
+		CD7F19E4186FEFBF006AFFDA /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19C2186FEFBF006AFFDA /* Icon-1024.png */; };
+		CD7F19F0186FEFE3006AFFDA /* 01.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19E6186FEFE3006AFFDA /* 01.png */; };
+		CD7F19F1186FEFE3006AFFDA /* 01.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19E6186FEFE3006AFFDA /* 01.png */; };
+		CD7F19F2186FEFE3006AFFDA /* 01_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19E7186FEFE3006AFFDA /* 01_35.png */; };
+		CD7F19F3186FEFE3006AFFDA /* 01_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19E7186FEFE3006AFFDA /* 01_35.png */; };
+		CD7F19F4186FEFE3006AFFDA /* 02.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19E8186FEFE3006AFFDA /* 02.png */; };
+		CD7F19F5186FEFE3006AFFDA /* 02.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19E8186FEFE3006AFFDA /* 02.png */; };
+		CD7F19F6186FEFE3006AFFDA /* 02_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19E9186FEFE3006AFFDA /* 02_35.png */; };
+		CD7F19F7186FEFE3006AFFDA /* 02_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19E9186FEFE3006AFFDA /* 02_35.png */; };
+		CD7F19F8186FEFE3006AFFDA /* 03.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19EA186FEFE3006AFFDA /* 03.png */; };
+		CD7F19F9186FEFE3006AFFDA /* 03.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19EA186FEFE3006AFFDA /* 03.png */; };
+		CD7F19FA186FEFE3006AFFDA /* 03_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19EB186FEFE3006AFFDA /* 03_35.png */; };
+		CD7F19FB186FEFE3006AFFDA /* 03_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19EB186FEFE3006AFFDA /* 03_35.png */; };
+		CD7F19FC186FEFE3006AFFDA /* 04.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19EC186FEFE3006AFFDA /* 04.png */; };
+		CD7F19FD186FEFE3006AFFDA /* 04.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19EC186FEFE3006AFFDA /* 04.png */; };
+		CD7F19FE186FEFE3006AFFDA /* 04_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19ED186FEFE3006AFFDA /* 04_35.png */; };
+		CD7F19FF186FEFE3006AFFDA /* 04_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19ED186FEFE3006AFFDA /* 04_35.png */; };
+		CD7F1A00186FEFE3006AFFDA /* 05.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19EE186FEFE3006AFFDA /* 05.png */; };
+		CD7F1A01186FEFE3006AFFDA /* 05.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19EE186FEFE3006AFFDA /* 05.png */; };
+		CD7F1A02186FEFE3006AFFDA /* 05_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19EF186FEFE3006AFFDA /* 05_35.png */; };
+		CD7F1A03186FEFE3006AFFDA /* 05_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19EF186FEFE3006AFFDA /* 05_35.png */; };
 		CD94DEF71851614E00C9CBC4 /* RHStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = CD94DEF61851614E00C9CBC4 /* RHStatus.m */; };
 		CD94DEF81851614E00C9CBC4 /* RHStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = CD94DEF61851614E00C9CBC4 /* RHStatus.m */; };
 		CD94DEFC1851918000C9CBC4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B43F717CF580A009BB21B /* main.m */; };
@@ -792,6 +846,33 @@
 		CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImpressLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
 		CD7EE475185309AD0091EA7A /* RHChatMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHChatMessage.h; sourceTree = "<group>"; };
 		CD7EE476185309AD0091EA7A /* RHChatMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHChatMessage.m; sourceTree = "<group>"; };
+		CD7F19B2186FEFBF006AFFDA /* help_01_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_01_35.png; sourceTree = "<group>"; };
+		CD7F19B3186FEFBF006AFFDA /* help_01_35.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_01_35.psd; sourceTree = "<group>"; };
+		CD7F19B4186FEFBF006AFFDA /* help_02_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_02_35.png; sourceTree = "<group>"; };
+		CD7F19B5186FEFBF006AFFDA /* help_02_35.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_02_35.psd; sourceTree = "<group>"; };
+		CD7F19B6186FEFBF006AFFDA /* help_03_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_03_35.png; sourceTree = "<group>"; };
+		CD7F19B7186FEFBF006AFFDA /* help_03_35.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_03_35.psd; sourceTree = "<group>"; };
+		CD7F19B8186FEFBF006AFFDA /* help_04_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_04_35.png; sourceTree = "<group>"; };
+		CD7F19B9186FEFBF006AFFDA /* help_04_35.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_04_35.psd; sourceTree = "<group>"; };
+		CD7F19BA186FEFBF006AFFDA /* help_05_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_05_35.png; sourceTree = "<group>"; };
+		CD7F19BB186FEFBF006AFFDA /* help_05_35.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_05_35.psd; sourceTree = "<group>"; };
+		CD7F19BC186FEFBF006AFFDA /* help_06_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_06_35.png; sourceTree = "<group>"; };
+		CD7F19BD186FEFBF006AFFDA /* help_06_35.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_06_35.psd; sourceTree = "<group>"; };
+		CD7F19BE186FEFBF006AFFDA /* help_07_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_07_35.png; sourceTree = "<group>"; };
+		CD7F19BF186FEFBF006AFFDA /* help_07_35.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_07_35.psd; sourceTree = "<group>"; };
+		CD7F19C0186FEFBF006AFFDA /* help_08_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = help_08_35.png; sourceTree = "<group>"; };
+		CD7F19C1186FEFBF006AFFDA /* help_08_35.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = help_08_35.psd; sourceTree = "<group>"; };
+		CD7F19C2186FEFBF006AFFDA /* Icon-1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-1024.png"; sourceTree = "<group>"; };
+		CD7F19E6186FEFE3006AFFDA /* 01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 01.png; sourceTree = "<group>"; };
+		CD7F19E7186FEFE3006AFFDA /* 01_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 01_35.png; sourceTree = "<group>"; };
+		CD7F19E8186FEFE3006AFFDA /* 02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 02.png; sourceTree = "<group>"; };
+		CD7F19E9186FEFE3006AFFDA /* 02_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 02_35.png; sourceTree = "<group>"; };
+		CD7F19EA186FEFE3006AFFDA /* 03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 03.png; sourceTree = "<group>"; };
+		CD7F19EB186FEFE3006AFFDA /* 03_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 03_35.png; sourceTree = "<group>"; };
+		CD7F19EC186FEFE3006AFFDA /* 04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 04.png; sourceTree = "<group>"; };
+		CD7F19ED186FEFE3006AFFDA /* 04_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 04_35.png; sourceTree = "<group>"; };
+		CD7F19EE186FEFE3006AFFDA /* 05.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 05.png; sourceTree = "<group>"; };
+		CD7F19EF186FEFE3006AFFDA /* 05_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 05_35.png; sourceTree = "<group>"; };
 		CD94DEF51851614E00C9CBC4 /* RHStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHStatus.h; sourceTree = "<group>"; };
 		CD94DEF61851614E00C9CBC4 /* RHStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHStatus.m; sourceTree = "<group>"; };
 		CD94DF901851918100C9CBC4 /* RenHaiLocal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHaiLocal.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -994,6 +1075,24 @@
 		C55B441317CF587A009BB21B /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				CD7F19E5186FEFE3006AFFDA /* Snapshots */,
+				CD7F19B2186FEFBF006AFFDA /* help_01_35.png */,
+				CD7F19B3186FEFBF006AFFDA /* help_01_35.psd */,
+				CD7F19B4186FEFBF006AFFDA /* help_02_35.png */,
+				CD7F19B5186FEFBF006AFFDA /* help_02_35.psd */,
+				CD7F19B6186FEFBF006AFFDA /* help_03_35.png */,
+				CD7F19B7186FEFBF006AFFDA /* help_03_35.psd */,
+				CD7F19B8186FEFBF006AFFDA /* help_04_35.png */,
+				CD7F19B9186FEFBF006AFFDA /* help_04_35.psd */,
+				CD7F19BA186FEFBF006AFFDA /* help_05_35.png */,
+				CD7F19BB186FEFBF006AFFDA /* help_05_35.psd */,
+				CD7F19BC186FEFBF006AFFDA /* help_06_35.png */,
+				CD7F19BD186FEFBF006AFFDA /* help_06_35.psd */,
+				CD7F19BE186FEFBF006AFFDA /* help_07_35.png */,
+				CD7F19BF186FEFBF006AFFDA /* help_07_35.psd */,
+				CD7F19C0186FEFBF006AFFDA /* help_08_35.png */,
+				CD7F19C1186FEFBF006AFFDA /* help_08_35.psd */,
+				CD7F19C2186FEFBF006AFFDA /* Icon-1024.png */,
 				CD230C321869CC8F003ACA40 /* help_01.psd */,
 				CD230C331869CC8F003ACA40 /* help_02.psd */,
 				CD230C341869CC8F003ACA40 /* help_03.psd */,
@@ -1400,6 +1499,23 @@
 			path = BusinessStatus;
 			sourceTree = "<group>";
 		};
+		CD7F19E5186FEFE3006AFFDA /* Snapshots */ = {
+			isa = PBXGroup;
+			children = (
+				CD7F19E6186FEFE3006AFFDA /* 01.png */,
+				CD7F19E7186FEFE3006AFFDA /* 01_35.png */,
+				CD7F19E8186FEFE3006AFFDA /* 02.png */,
+				CD7F19E9186FEFE3006AFFDA /* 02_35.png */,
+				CD7F19EA186FEFE3006AFFDA /* 03.png */,
+				CD7F19EB186FEFE3006AFFDA /* 03_35.png */,
+				CD7F19EC186FEFE3006AFFDA /* 04.png */,
+				CD7F19ED186FEFE3006AFFDA /* 04_35.png */,
+				CD7F19EE186FEFE3006AFFDA /* 05.png */,
+				CD7F19EF186FEFE3006AFFDA /* 05_35.png */,
+			);
+			path = Snapshots;
+			sourceTree = "<group>";
+		};
 		CD98ADBD1867E102009B77FE /* Texts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1556,11 +1672,16 @@
 				CD230C421869CC8F003ACA40 /* help_05.psd in Resources */,
 				CD98ADD318687120009B77FE /* help_03.png in Resources */,
 				CD1637FA185ADC40009BB03D /* Icon-120.png in Resources */,
+				CD7F19FA186FEFE3006AFFDA /* 03_35.png in Resources */,
+				CD7F19C5186FEFBF006AFFDA /* help_01_35.psd in Resources */,
+				CD7F1A02186FEFE3006AFFDA /* 05_35.png in Resources */,
 				C55B43F617CF580A009BB21B /* InfoPlist.strings in Resources */,
+				CD7F19D5186FEFBF006AFFDA /* help_05_35.psd in Resources */,
 				C55B43FE17CF580A009BB21B /* Default.png in Resources */,
 				CDDBE35218548D1E001A1744 /* icon-info.png in Resources */,
 				C55B440017CF580A009BB21B /* Default@2x.png in Resources */,
 				CD230C3E1869CC8F003ACA40 /* help_03.psd in Resources */,
+				CD7F19C9186FEFBF006AFFDA /* help_02_35.psd in Resources */,
 				CDDA9FAB1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */,
 				CDDBE35818548D1E001A1744 /* icon-success@2x.png in Resources */,
 				CD230C3A1869CC8F003ACA40 /* help_01.psd in Resources */,
@@ -1577,15 +1698,20 @@
 				C55B446717CF8632009BB21B /* Icon@2x.png in Resources */,
 				C55B446917CF8632009BB21B /* iTunesArtwork in Resources */,
 				C593C41517D2F55B00C26367 /* MainStoryboard_iPhone.storyboard in Resources */,
+				CD7F19DD186FEFBF006AFFDA /* help_07_35.psd in Resources */,
+				CD7F19CB186FEFBF006AFFDA /* help_03_35.png in Resources */,
 				C593C47217D4240800C26367 /* LeftBarHeaderView_iPhone.xib in Resources */,
 				CD1637F6185ADC40009BB03D /* Icon-76.png in Resources */,
 				CD5633B21827631600D2A9A6 /* close@2x.png in Resources */,
 				C593C47917D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */,
 				CD98ADDD18687120009B77FE /* help_08.png in Resources */,
 				CDDBE34E18548D1E001A1744 /* icon-error.png in Resources */,
+				CD7F19D9186FEFBF006AFFDA /* help_06_35.psd in Resources */,
 				CD16380D185C65F0009BB03D /* chatconfirm_accepted.caf in Resources */,
 				CD16380F185C65F0009BB03D /* chatconfirm_rejected.caf in Resources */,
+				CD7F19C7186FEFBF006AFFDA /* help_02_35.png in Resources */,
 				CD1637F8185ADC40009BB03D /* Icon-80.png in Resources */,
+				CD7F19CF186FEFBF006AFFDA /* help_04_35.png in Resources */,
 				CD98ADE318688587009B77FE /* help_01.txt in Resources */,
 				CD16381B185C65F0009BB03D /* labelmanaged.caf in Resources */,
 				CD98ADD718687120009B77FE /* help_05.png in Resources */,
@@ -1593,28 +1719,41 @@
 				CD230C401869CC8F003ACA40 /* help_04.psd in Resources */,
 				CD230C441869CC8F003ACA40 /* help_06.psd in Resources */,
 				CD98ADDB18687120009B77FE /* help_07.png in Resources */,
+				CD7F19C3186FEFBF006AFFDA /* help_01_35.png in Resources */,
 				CD230C3C1869CC8F003ACA40 /* help_02.psd in Resources */,
 				CDFEA326182A1E5C00F0351D /* ChatAssessExistImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD16381D185C65F0009BB03D /* sessionbound.caf in Resources */,
 				CD163815185C65F0009BB03D /* chatvideo_endchat.caf in Resources */,
+				CD7F19FE186FEFE3006AFFDA /* 04_35.png in Resources */,
 				C596283917DA08AA009127E6 /* sidebar_menu_icon_landscape.png in Resources */,
 				CD163809185C65F0009BB03D /* chatassess_continue.caf in Resources */,
 				CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */,
+				CD7F1A00186FEFE3006AFFDA /* 05.png in Resources */,
 				C596283B17DA08AA009127E6 /* sidebar_menu_icon_landscape@2x.png in Resources */,
+				CD7F19DF186FEFBF006AFFDA /* help_08_35.png in Resources */,
 				CD5101A3182A856600E188A3 /* RHLabelManageViewController_iPhone.xib in Resources */,
 				C596283D17DA08AA009127E6 /* sidebar_menu_icon_portrait.png in Resources */,
+				CD7F19E3186FEFBF006AFFDA /* Icon-1024.png in Resources */,
+				CD7F19FC186FEFE3006AFFDA /* 04.png in Resources */,
+				CD7F19DB186FEFBF006AFFDA /* help_07_35.png in Resources */,
 				CDFEA31C182A175600F0351D /* order.png in Resources */,
 				CDDA9FA8182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib in Resources */,
 				C596283F17DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png in Resources */,
 				C54DC8C717DC069900BBD498 /* enterbutton_highlighted.png in Resources */,
 				CD98ADD918687120009B77FE /* help_06.png in Resources */,
+				CD7F19D1186FEFBF006AFFDA /* help_04_35.psd in Resources */,
 				C54DC8C917DC069900BBD498 /* enterbutton_highlighted@2x.png in Resources */,
 				CDDBE3601854ACA4001A1744 /* ChatMessageSendView_iPhone.xib in Resources */,
 				CD16380B185C65F0009BB03D /* chatassess_quit.caf in Resources */,
 				CD98ADD118687120009B77FE /* help_02.png in Resources */,
 				C54DC8CB17DC069900BBD498 /* enterbutton_normal.png in Resources */,
+				CD7F19F2186FEFE3006AFFDA /* 01_35.png in Resources */,
 				C54DC8CD17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
+				CD7F19E1186FEFBF006AFFDA /* help_08_35.psd in Resources */,
 				CDFEA31D182A175600F0351D /* order@2x.png in Resources */,
+				CD7F19CD186FEFBF006AFFDA /* help_03_35.psd in Resources */,
+				CD7F19F8186FEFE3006AFFDA /* 03.png in Resources */,
+				CD7F19D7186FEFBF006AFFDA /* help_06_35.png in Resources */,
 				CD98ADD518687120009B77FE /* help_04.png in Resources */,
 				CD163826185D3DE2009BB03D /* connect_retry.caf in Resources */,
 				CD37AE57185EF075003F40F4 /* AntiIcon-160.png in Resources */,
@@ -1626,17 +1765,21 @@
 				CD163813185C65F0009BB03D /* chatmessage_sent.caf in Resources */,
 				CDDBE35418548D1E001A1744 /* icon-info@2x.png in Resources */,
 				CD98ADE0186882F1009B77FE /* help_01.html in Resources */,
+				CD7F19F0186FEFE3006AFFDA /* 01.png in Resources */,
 				CDFEA322182A1E5C00F0351D /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD163811185C65F0009BB03D /* chatmessage_received.caf in Resources */,
 				CD230C481869CC8F003ACA40 /* help_08.psd in Resources */,
+				CD7F19D3186FEFBF006AFFDA /* help_05_35.png in Resources */,
 				CD98ADCF18687120009B77FE /* help_01.png in Resources */,
 				CD94DF961851933C00C9CBC4 /* RenHaiLocal-Info.plist in Resources */,
 				CD1637F0185AD44B009BB03D /* AntiIcon-120.png in Resources */,
 				CD230C461869CC8F003ACA40 /* help_07.psd in Resources */,
 				CD1637FC185ADC40009BB03D /* Icon-152.png in Resources */,
 				CD163819185C65F0009BB03D /* error.caf in Resources */,
+				CD7F19F4186FEFE3006AFFDA /* 02.png in Resources */,
 				CDDBE35618548D1E001A1744 /* icon-success.png in Resources */,
 				CDDBE35018548D1E001A1744 /* icon-error@2x.png in Resources */,
+				CD7F19F6186FEFE3006AFFDA /* 02_35.png in Resources */,
 				CD37AE54185EEF1D003F40F4 /* AntiIcon-80.png in Resources */,
 				CD5633B01827631600D2A9A6 /* close.png in Resources */,
 			);
@@ -1691,6 +1834,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD230C3B1869CC8F003ACA40 /* help_01.psd in Resources */,
+				CD7F19D4186FEFBF006AFFDA /* help_05_35.png in Resources */,
 				CD16380E185C65F0009BB03D /* chatconfirm_accepted.caf in Resources */,
 				CD16380A185C65F0009BB03D /* chatassess_continue.caf in Resources */,
 				CD1637F7185ADC40009BB03D /* Icon-76.png in Resources */,
@@ -1701,26 +1845,40 @@
 				CD98ADD018687120009B77FE /* help_01.png in Resources */,
 				CD94DF5F1851918000C9CBC4 /* Default.png in Resources */,
 				CDDBE35318548D1E001A1744 /* icon-info.png in Resources */,
+				CD7F19C6186FEFBF006AFFDA /* help_01_35.psd in Resources */,
 				CD94DF601851918000C9CBC4 /* Default@2x.png in Resources */,
 				CD94DF611851918000C9CBC4 /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */,
+				CD7F19FF186FEFE3006AFFDA /* 04_35.png in Resources */,
 				CD230C471869CC8F003ACA40 /* help_07.psd in Resources */,
+				CD7F19F9186FEFE3006AFFDA /* 03.png in Resources */,
 				CD1637F1185AD44B009BB03D /* AntiIcon-120.png in Resources */,
+				CD7F19DC186FEFBF006AFFDA /* help_07_35.png in Resources */,
 				CDDBE35918548D1E001A1744 /* icon-success@2x.png in Resources */,
 				CD94DF621851918000C9CBC4 /* Default-568h@2x.png in Resources */,
 				CD94DF631851918000C9CBC4 /* Icon-72.png in Resources */,
 				CD163827185D3DE2009BB03D /* connect_retry.caf in Resources */,
 				CD94DF641851918000C9CBC4 /* ImpressLabelsHeaderView_iPhone.xib in Resources */,
+				CD7F19F7186FEFE3006AFFDA /* 02_35.png in Resources */,
+				CD7F19FD186FEFE3006AFFDA /* 04.png in Resources */,
 				CD98ADD818687120009B77FE /* help_05.png in Resources */,
+				CD7F1A03186FEFE3006AFFDA /* 05_35.png in Resources */,
 				CD94DF651851918000C9CBC4 /* Icon-Small-50.png in Resources */,
+				CD7F19C8186FEFBF006AFFDA /* help_02_35.png in Resources */,
+				CD7F19F1186FEFE3006AFFDA /* 01.png in Resources */,
 				CD163810185C65F0009BB03D /* chatconfirm_rejected.caf in Resources */,
 				CD94DF661851918000C9CBC4 /* Icon-Small.png in Resources */,
 				CD94DF671851918000C9CBC4 /* Icon-Small@2x.png in Resources */,
+				CD7F19DE186FEFBF006AFFDA /* help_07_35.psd in Resources */,
+				CD7F19DA186FEFBF006AFFDA /* help_06_35.psd in Resources */,
 				CD94DF681851918000C9CBC4 /* Icon.png in Resources */,
 				CD94DF691851918000C9CBC4 /* Icon@2x.png in Resources */,
 				CD94DF6A1851918000C9CBC4 /* iTunesArtwork in Resources */,
+				CD7F19FB186FEFE3006AFFDA /* 03_35.png in Resources */,
 				CD94DF6B1851918000C9CBC4 /* MainStoryboard_iPhone.storyboard in Resources */,
 				CD163818185C65F0009BB03D /* choosebusiness.caf in Resources */,
+				CD7F19D0186FEFBF006AFFDA /* help_04_35.png in Resources */,
 				CD94DF6C1851918000C9CBC4 /* LeftBarHeaderView_iPhone.xib in Resources */,
+				CD7F19E0186FEFBF006AFFDA /* help_08_35.png in Resources */,
 				CD230C431869CC8F003ACA40 /* help_05.psd in Resources */,
 				CD94DF6D1851918000C9CBC4 /* close@2x.png in Resources */,
 				CD94DF6E1851918000C9CBC4 /* LeftBarFooterView_iPhone.xib in Resources */,
@@ -1736,21 +1894,27 @@
 				CD16381C185C65F0009BB03D /* labelmanaged.caf in Resources */,
 				CD94DF721851918000C9CBC4 /* sidebar_menu_icon_landscape@2x.png in Resources */,
 				CD94DF731851918000C9CBC4 /* RHLabelManageViewController_iPhone.xib in Resources */,
+				CD7F19E2186FEFBF006AFFDA /* help_08_35.psd in Resources */,
 				CD230C411869CC8F003ACA40 /* help_04.psd in Resources */,
 				CD230C451869CC8F003ACA40 /* help_06.psd in Resources */,
 				CD94DF741851918000C9CBC4 /* sidebar_menu_icon_portrait.png in Resources */,
 				CD94DF751851918000C9CBC4 /* order.png in Resources */,
 				CD94DF761851918000C9CBC4 /* InterestLabelsHeaderView_iPhone.xib in Resources */,
 				CD94DF771851918000C9CBC4 /* sidebar_menu_icon_portrait@2x.png in Resources */,
+				CD7F19CA186FEFBF006AFFDA /* help_02_35.psd in Resources */,
 				CD94DF781851918000C9CBC4 /* enterbutton_highlighted.png in Resources */,
 				CD94DF791851918000C9CBC4 /* enterbutton_highlighted@2x.png in Resources */,
+				CD7F19D8186FEFBF006AFFDA /* help_06_35.png in Resources */,
 				CDDBE3621854ACA4001A1744 /* ChatMessageSendView_iPhone.xib in Resources */,
 				CD94DF7A1851918000C9CBC4 /* enterbutton_normal.png in Resources */,
 				CD1637FD185ADC40009BB03D /* Icon-152.png in Resources */,
 				CD98ADE418688587009B77FE /* help_01.txt in Resources */,
 				CD16381A185C65F0009BB03D /* error.caf in Resources */,
+				CD7F19CC186FEFBF006AFFDA /* help_03_35.png in Resources */,
 				CD94DF7B1851918000C9CBC4 /* enterbutton_normal@2x.png in Resources */,
+				CD7F1A01186FEFE3006AFFDA /* 05.png in Resources */,
 				CD98ADD218687120009B77FE /* help_02.png in Resources */,
+				CD7F19CE186FEFBF006AFFDA /* help_03_35.psd in Resources */,
 				CD1114CC1866CA9A0091C83F /* UserIntroductionPage_iPhone.xib in Resources */,
 				CD230C3D1869CC8F003ACA40 /* help_02.psd in Resources */,
 				CD94DF7C1851918000C9CBC4 /* order@2x.png in Resources */,
@@ -1764,15 +1928,21 @@
 				CD37AE58185EF075003F40F4 /* AntiIcon-160.png in Resources */,
 				CD94DF801851918000C9CBC4 /* RHCollectionLabelCell_iPhone.xib in Resources */,
 				CD16381E185C65F0009BB03D /* sessionbound.caf in Resources */,
+				CD7F19E4186FEFBF006AFFDA /* Icon-1024.png in Resources */,
+				CD7F19F5186FEFE3006AFFDA /* 02.png in Resources */,
 				CD94DF811851918000C9CBC4 /* RHTableViewSwitcherCell_iPhone.xib in Resources */,
 				CDDBE35518548D1E001A1744 /* icon-info@2x.png in Resources */,
 				CD94DF841851918000C9CBC4 /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD163821185C6B66009BB03D /* chatvideo_chatmessage.caf in Resources */,
 				CDDBE35718548D1E001A1744 /* icon-success.png in Resources */,
 				CDDBE35118548D1E001A1744 /* icon-error@2x.png in Resources */,
+				CD7F19D6186FEFBF006AFFDA /* help_05_35.psd in Resources */,
+				CD7F19D2186FEFBF006AFFDA /* help_04_35.psd in Resources */,
 				CD98ADDC18687120009B77FE /* help_07.png in Resources */,
 				CD98ADDA18687120009B77FE /* help_06.png in Resources */,
+				CD7F19F3186FEFE3006AFFDA /* 01_35.png in Resources */,
 				CD94DF861851918000C9CBC4 /* close.png in Resources */,
+				CD7F19C4186FEFBF006AFFDA /* help_01_35.png in Resources */,
 				CD163824185C735D009BB03D /* unchoosebusiness.caf in Resources */,
 				CD230C3F1869CC8F003ACA40 /* help_03.psd in Resources */,
 				CD163814185C65F0009BB03D /* chatmessage_sent.caf in Resources */,
