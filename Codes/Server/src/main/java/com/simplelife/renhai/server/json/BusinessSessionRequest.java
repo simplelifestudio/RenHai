@@ -567,7 +567,14 @@ public class BusinessSessionRequest extends AppJSONMessage
 		JSONObject tempLabelObj = assessLabels.getJSONObject(0); 
 		tempLabel = tempLabelObj.getString(JSONKey.ImpressLabelName);
 		
-		targetDeviceWrapper.increaseChatCount();
+		//targetDeviceWrapper.increaseChatCount();
+		synchronized (targetCard)
+		{
+			int count = targetCard.getChatTotalCount();
+			logger.debug("Chat total count of device <{}> was increased from " + count + " to " + (count+1), targetDevice.getDeviceSn());
+			targetCard.setChatTotalCount(count + 1);
+		}
+		
 		targetCard.updateOrAppendImpressLabel(deviceWrapper, tempLabel, true);
 		sourceCard.updateOrAppendImpressLabel(deviceWrapper, tempLabel, false);
 		

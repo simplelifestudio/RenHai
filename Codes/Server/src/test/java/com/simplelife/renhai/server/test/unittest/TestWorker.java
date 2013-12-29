@@ -23,7 +23,6 @@ import com.simplelife.renhai.server.business.pool.PingActionQueue;
 import com.simplelife.renhai.server.business.pool.TimeoutLink;
 import com.simplelife.renhai.server.test.MockWebSocketConnection;
 import com.simplelife.renhai.server.util.GlobalSetting;
-import com.simplelife.renhai.server.util.Consts.PingActionType;
 
 /**
  * 

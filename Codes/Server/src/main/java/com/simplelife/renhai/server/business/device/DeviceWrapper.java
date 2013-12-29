@@ -29,7 +29,6 @@ import com.simplelife.renhai.server.business.pool.InputMsgExecutorPool;
 import com.simplelife.renhai.server.business.pool.MessageHandler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.OutputMsgExecutorPool;
-import com.simplelife.renhai.server.business.pool.PingActionQueue;
 import com.simplelife.renhai.server.business.pool.TimeoutLink;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
@@ -48,7 +47,7 @@ import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionEventType;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
-import com.simplelife.renhai.server.util.Consts.PingActionType;
+import com.simplelife.renhai.server.util.Consts.TimeoutActionType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -107,7 +106,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     		return;
     	}
     	
-    	PingActionQueue.instance.newAction(PingActionType.OnPing, pingTimeoutNode);
+    	OnlineDevicePool.pingLink.moveToTail(pingTimeoutNode);
     }
     
     public AbstractTimeoutNode getPingNode()
@@ -258,7 +257,8 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     			
     			if (reason != StatusChangeReason.TimeoutOfPing)
     			{
-    				PingActionQueue.instance.newAction(PingActionType.DeviceRemoved, this.pingTimeoutNode);
+    				OnlineDevicePool.pingLink.removeNode(pingTimeoutNode);
+    				//PingActionQueue.instance.newAction(TimeoutActionType.RemoveNode, this.pingTimeoutNode);
     			}
     			this.webSocketConnection.closeConnection();			// Close socket at last step
     			break;

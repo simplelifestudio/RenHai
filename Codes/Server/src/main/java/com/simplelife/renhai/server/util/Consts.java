@@ -806,15 +806,16 @@ public class Consts
 		}
 	}
 	
-	public enum PingActionType
+	public enum TimeoutActionType
 	{
 		Invalid(0), 
-		OnPing(1),
-		CheckInactivity(2),
-		DeviceRemoved(3);
+		MoveToTail(1),
+		CheckTimeout(2),
+		RemoveNode(3),
+		AppendToTail(4);
 		
 		private int value;
-		private PingActionType(int value)
+		private TimeoutActionType(int value)
 		{
 			this.value = value;
 		}
@@ -824,9 +825,9 @@ public class Consts
 			return value;
 		}
 		
-		public static PingActionType parseValue(int value)
+		public static TimeoutActionType parseValue(int value)
 		{
-			for (PingActionType item : values())
+			for (TimeoutActionType item : values())
 			{
 				if (item.value == value)
 				{

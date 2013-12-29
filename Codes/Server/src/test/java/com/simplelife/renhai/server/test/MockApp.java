@@ -63,7 +63,7 @@ public class MockApp implements IMockApp, Runnable
 		@Override
 		public void startService()
 		{
-			executeThreadPool = Executors.newFixedThreadPool(GlobalSetting.BusinessSetting.OutputMessageSendThreads);
+			executeThreadPool = Executors.newFixedThreadPool(1500);
 		}
 	};
 	
@@ -728,7 +728,8 @@ public class MockApp implements IMockApp, Runnable
 		
 		if (operationType == NotificationType.OthersideLost)
 		{
-			setBusinessStatus(MockAppBusinessStatus.Ended);
+			endBusiness();
+			//setBusinessStatus(MockAppBusinessStatus.Ended);
 		}
 	}
 	

@@ -153,7 +153,7 @@ public class MessageHandler implements Runnable
 					// Pause execution of message until response of synchronized notification received
 					//logger.debug("Interrupt message sending of device <{}> due to synchronized waiting", message.getMsgOwnerInfo());
 					//syncPauseFlag = true;
-					Thread.sleep(15);
+					//Thread.sleep(15);
 				}
 			}
 			catch(Exception e)

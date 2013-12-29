@@ -18,6 +18,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.apache.ibatis.session.AutoMappingBehavior;
 
 import com.simplelife.renhai.server.business.device.AbstractLabel;
 import com.simplelife.renhai.server.db.Interestlabelmap;
@@ -30,7 +33,7 @@ import com.simplelife.renhai.server.util.IDeviceWrapper;
 public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
 {
     /** */
-    private ConcurrentHashMap<String, Integer> labelDeviceCountMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, AtomicInteger> labelDeviceCountMap = new ConcurrentHashMap<>();
     private InterestMatchManager matchManager = new InterestMatchManager(this);
     
     public void startService()
@@ -62,12 +65,12 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		return labelList;
     	}
     	
-    	Set<Entry<String, Integer>> entrySet = labelDeviceCountMap.entrySet();
-    	for (Entry<String, Integer> entry : entrySet)
+    	Set<Entry<String, AtomicInteger>> entrySet = labelDeviceCountMap.entrySet();
+    	for (Entry<String, AtomicInteger> entry : entrySet)
     	{
     		HotLabel hotLabel = new HotLabel();
     		hotLabel.setLabelName(entry.getKey());
-    		hotLabel.setProfileCount(entry.getValue());
+    		hotLabel.setProfileCount(entry.getValue().get());
     		
     		labelList.add(hotLabel);
     	}
@@ -135,7 +138,7 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		String strLabel = label.getGlobalLabel().getInterestLabelName();
     		if (this.labelDeviceCountMap.containsKey(strLabel))
     		{
-    			Integer count = labelDeviceCountMap.get(strLabel);
+    			AtomicInteger count = labelDeviceCountMap.get(strLabel);
     			synchronized (count)
 				{
     				if (count == null)
@@ -144,8 +147,8 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     					continue;
     				}
     				
-					count--;
-					if (count <= 0)
+					count.decrementAndGet();
+					if (count.get() <= 0)
 	    			{
 						labelDeviceCountMap.remove(strLabel);
 	    			}
@@ -171,11 +174,11 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		String strLabel = label.getGlobalLabel().getInterestLabelName();
     		if (this.labelDeviceCountMap.containsKey(strLabel))
     		{
-    			labelDeviceCountMap.put(strLabel, labelDeviceCountMap.get(strLabel) + 1);
+    			labelDeviceCountMap.get(strLabel).incrementAndGet();
     		}
     		else
     		{
-    			labelDeviceCountMap.put(strLabel, 1);
+    			labelDeviceCountMap.put(strLabel, new AtomicInteger(1));
     		}
     	}
     }

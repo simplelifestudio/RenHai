@@ -1,14 +1,18 @@
 package com.simplelife.renhai.server.business.pool;
 
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.simplelife.renhai.server.business.device.AbstractTimeoutNode;
-import com.simplelife.renhai.server.util.Consts.DeviceStatus;
-import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.log.FileLogger;
+import com.simplelife.renhai.server.util.Consts.TimeoutActionType;
+import com.simplelife.renhai.server.util.IProductor;
+import com.simplelife.renhai.server.util.Worker;
 
 public class TimeoutLink
 {
@@ -16,10 +20,25 @@ public class TimeoutLink
 	private AbstractTimeoutNode tail;
 	private AtomicInteger linkSize = new AtomicInteger(0);
 	private Logger logger = LoggerFactory.getLogger("Ping");
+	private TimeoutActionQueue actionQueue = new TimeoutActionQueue();
+	private Timer timeoutCheckTimer = new Timer();
+	private int timeoutCheckInterval;
 	
-	public TimeoutLink()
+	public TimeoutLink(int timeoutCheckInterval)
 	{
-		
+		this.timeoutCheckInterval = timeoutCheckInterval;
+	}
+	
+	public void startService()
+	{
+		timeoutCheckTimer.scheduleAtFixedRate(new TimeoutCheckTask(), timeoutCheckInterval, timeoutCheckInterval);
+		actionQueue.startService();
+	}
+	
+	public void stopService()
+	{
+		timeoutCheckTimer.cancel();
+		actionQueue.stopService();
 	}
 	
 	/**
@@ -44,11 +63,11 @@ public class TimeoutLink
 	
 	public void append(AbstractTimeoutNode node)
 	{
-		addToTail(node);
+		actionQueue.newAction(TimeoutActionType.AppendToTail, node);
 	}
 	
 	
-	public void checkTimeout()
+	public void executeCheckTimeout()
 	{
 		if (head == null)
 		{
@@ -114,13 +133,28 @@ public class TimeoutLink
 		node.setPrevNode(null);
 		linkSize.decrementAndGet();
 	}
-	public void removeNode(AbstractTimeoutNode node)
+	
+	private void executeRemoveNode(AbstractTimeoutNode node)
 	{
-		//logger.debug("Remove Ping node of device <{}>", node.getDeviceWrapper().getDeviceIdentification());
 		removeNode(node, true);
 	}
 	
+	public void removeNode(AbstractTimeoutNode node)
+	{
+		actionQueue.newAction(TimeoutActionType.RemoveNode, node);
+	}
+	
+	public void checkTimeout()
+	{
+		actionQueue.newAction(TimeoutActionType.CheckTimeout, null);
+	}
+	
 	public void moveToTail(AbstractTimeoutNode node)
+	{
+		actionQueue.newAction(TimeoutActionType.MoveToTail, node);
+	}
+	
+	private void executeMoveToTail(AbstractTimeoutNode node)
 	{
 		if (tail == node)
 		{
@@ -128,7 +162,7 @@ public class TimeoutLink
 		}
 		
 		removeNode(node, false);
-		addToTail(node);
+		executeAddToTail(node);
 	}
 	
 	private void addToHead(AbstractTimeoutNode node)
@@ -142,7 +176,7 @@ public class TimeoutLink
 		head = node;
 	}
 	
-	private void addToTail(AbstractTimeoutNode node)
+	private void executeAddToTail(AbstractTimeoutNode node)
 	{
 		if (tail != null)
 		{
@@ -159,5 +193,100 @@ public class TimeoutLink
 		}
 		
 		linkSize.incrementAndGet();
+	}
+	
+	private class TimeoutAction implements Runnable
+	{
+		private TimeoutActionType actionType;
+		private AbstractTimeoutNode node;
+		
+		public TimeoutAction(TimeoutActionType actionType, AbstractTimeoutNode node)
+		{
+			this.actionType = actionType;
+			this.node = node;
+		}
+		
+		@Override
+		public void run()
+		{
+			switch(actionType)
+			{
+				case Invalid:
+					break;
+				case MoveToTail:
+					executeMoveToTail(node);
+					break;
+				case CheckTimeout:
+					executeCheckTimeout();
+					break;
+				case RemoveNode:
+					executeRemoveNode(node);
+					break;
+				case AppendToTail:
+					executeAddToTail(node);
+					break;
+			}
+		}
+	}
+	
+	private class TimeoutCheckTask extends TimerTask
+	{
+		@Override
+		public void run()
+		{
+			Thread.currentThread().setName("TimeoutCheckTask");
+			try
+			{
+				checkTimeout();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
+		}
+		
+	}
+	
+	private class TimeoutActionQueue implements IProductor
+	{
+		//public final static PingActionQueue instance = new PingActionQueue();
+		private ConcurrentLinkedQueue<TimeoutAction> queue = new ConcurrentLinkedQueue<>();
+		private Worker worker = new Worker(this);
+		
+		public TimeoutActionQueue()
+		{
+			worker.setName("Ping");
+		}
+		
+		public void newAction(TimeoutActionType actionType, AbstractTimeoutNode node)
+		{
+			TimeoutAction action = new TimeoutAction(actionType, node);
+			queue.add(action);
+			worker.resumeExecution();
+		}
+		
+		public void startService()
+		{
+			worker.startExecution();
+		}
+		
+		public void stopService()
+		{
+			worker.stopExecution();
+		}
+			
+		
+
+		@Override
+		public boolean hasWork()
+		{
+			return !queue.isEmpty();
+		}
+		
+		@Override
+		public Runnable getWork()
+		{
+			return queue.remove();
+		}
 	}
 }

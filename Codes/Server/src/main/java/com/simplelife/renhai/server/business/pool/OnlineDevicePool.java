@@ -30,7 +30,7 @@ import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
-import com.simplelife.renhai.server.util.Consts.PingActionType;
+import com.simplelife.renhai.server.util.Consts.TimeoutActionType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
@@ -43,18 +43,16 @@ public class OnlineDevicePool extends AbstractDevicePool
 {
 	private Logger logger = BusinessModule.instance.getLogger();
 	protected ConcurrentHashMap<String, IDeviceWrapper> appDataSyncedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
-	private Timer inactiveTimer = new Timer();
 	private Timer bannedTimer = new Timer();
 	private Timer statSaveTimer = new Timer();
 	private Timer adjustCountTimer = new Timer();
-	private Timer syncSendingCheckTimer = new Timer();
-    private ConcurrentHashMap<String, IDeviceWrapper> connectedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
+	private ConcurrentHashMap<String, IDeviceWrapper> connectedDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     private HashMap<Consts.BusinessType, AbstractBusinessDevicePool> businessPoolMap = new HashMap<Consts.BusinessType, AbstractBusinessDevicePool>();
     private ConcurrentLinkedQueue<IDeviceWrapper> bannedDeviceList = new ConcurrentLinkedQueue<IDeviceWrapper> ();
     
     public final static OnlineDevicePool instance = new OnlineDevicePool();
-    public final static TimeoutLink pingLink = new TimeoutLink();
-    public final static TimeoutLink syncSendingTimeoutLink = new TimeoutLink();
+    public final static TimeoutLink pingLink = new TimeoutLink(GlobalSetting.TimeOut.CheckPingInterval);
+    public final static TimeoutLink syncSendingTimeoutLink = new TimeoutLink(GlobalSetting.TimeOut.CheckPingInterval);
     
     private OnlineDevicePool()
     {
@@ -162,18 +160,21 @@ public class OnlineDevicePool extends AbstractDevicePool
     
     public void startService()
     {
-    	inactiveTimer.scheduleAtFixedRate(new InactiveCheckTask(), GlobalSetting.TimeOut.CheckPingInterval, GlobalSetting.TimeOut.CheckPingInterval);
+    	//inactiveTimer.scheduleAtFixedRate(new InactiveCheckTask(), GlobalSetting.TimeOut.CheckPingInterval, GlobalSetting.TimeOut.CheckPingInterval);
     	bannedTimer.scheduleAtFixedRate(new BannedCheckTask(), GlobalSetting.TimeOut.OnlineDeviceConnection, GlobalSetting.TimeOut.OnlineDeviceConnection);
     	statSaveTimer.scheduleAtFixedRate(new StatSaveTask(), GlobalSetting.TimeOut.SaveStatistics, GlobalSetting.TimeOut.SaveStatistics);
     	adjustCountTimer.scheduleAtFixedRate(new AdjustDeviceCountTask(), GlobalSetting.TimeOut.AdjustDeviceCount, GlobalSetting.TimeOut.AdjustDeviceCount);
-    	syncSendingCheckTimer.scheduleAtFixedRate(new SyncSendingCheckTask(), GlobalSetting.TimeOut.CheckPingInterval, GlobalSetting.TimeOut.CheckPingInterval);
+    	//syncSendingCheckTimer.scheduleAtFixedRate(new SyncSendingCheckTask(), GlobalSetting.TimeOut.CheckPingInterval, GlobalSetting.TimeOut.CheckPingInterval);
     	businessPoolMap.get(Consts.BusinessType.Interest).startService();
+    	pingLink.startService();
+    	syncSendingTimeoutLink.startService();
     	logger.debug("Timers of online device pool started.");
     }
     
     public void stopService()
     {
-    	inactiveTimer.cancel();
+    	pingLink.stopService();
+    	syncSendingTimeoutLink.stopService();
     	bannedTimer.cancel();
     	statSaveTimer.cancel();
     	adjustCountTimer.cancel();
@@ -408,7 +409,8 @@ public class OnlineDevicePool extends AbstractDevicePool
 			Thread.currentThread().setName("PingCheckTimer");
 			try
 			{
-				PingActionQueue.instance.newAction(PingActionType.CheckInactivity, null);
+				pingLink.checkTimeout();
+				//PingActionQueue.instance.newAction(TimeoutActionType.CheckTimeout, null);
 			}
 			catch(Exception e)
 			{
@@ -416,24 +418,6 @@ public class OnlineDevicePool extends AbstractDevicePool
 			}
 		}
     }
-	
-	private class SyncSendingCheckTask extends TimerTask
-	{
-		@Override
-		public void run()
-		{
-			Thread.currentThread().setName("SyncSendingCheckTask");
-			try
-			{
-				OnlineDevicePool.syncSendingTimeoutLink.checkTimeout();
-			}
-			catch(Exception e)
-			{
-				FileLogger.printStackTrace(e);
-			}
-		}
-		
-	}
 	
 	private class BannedCheckTask extends TimerTask
     {
