@@ -360,6 +360,7 @@
 		CD7F1A01186FEFE3006AFFDA /* 05.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19EE186FEFE3006AFFDA /* 05.png */; };
 		CD7F1A02186FEFE3006AFFDA /* 05_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19EF186FEFE3006AFFDA /* 05_35.png */; };
 		CD7F1A03186FEFE3006AFFDA /* 05_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19EF186FEFE3006AFFDA /* 05_35.png */; };
+		CD7F1A05186FF6AF006AFFDA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD7F1A04186FF6AF006AFFDA /* Images.xcassets */; };
 		CD94DEF71851614E00C9CBC4 /* RHStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = CD94DEF61851614E00C9CBC4 /* RHStatus.m */; };
 		CD94DEF81851614E00C9CBC4 /* RHStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = CD94DEF61851614E00C9CBC4 /* RHStatus.m */; };
 		CD94DEFC1851918000C9CBC4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C55B43F717CF580A009BB21B /* main.m */; };
@@ -873,6 +874,7 @@
 		CD7F19ED186FEFE3006AFFDA /* 04_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 04_35.png; sourceTree = "<group>"; };
 		CD7F19EE186FEFE3006AFFDA /* 05.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 05.png; sourceTree = "<group>"; };
 		CD7F19EF186FEFE3006AFFDA /* 05_35.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 05_35.png; sourceTree = "<group>"; };
+		CD7F1A04186FF6AF006AFFDA /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		CD94DEF51851614E00C9CBC4 /* RHStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHStatus.h; sourceTree = "<group>"; };
 		CD94DEF61851614E00C9CBC4 /* RHStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHStatus.m; sourceTree = "<group>"; };
 		CD94DF901851918100C9CBC4 /* RenHaiLocal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RenHaiLocal.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1029,6 +1031,7 @@
 				C5F8936D17CFA136003EF1B3 /* Logger */,
 				C55B441117CF587A009BB21B /* Lib */,
 				C55B441217CF587A009BB21B /* Res */,
+				CD7F1A04186FF6AF006AFFDA /* Images.xcassets */,
 				C55B43F217CF580A009BB21B /* Supporting Files */,
 			);
 			path = RenHai;
@@ -1669,6 +1672,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CD163820185C6B66009BB03D /* chatvideo_chatmessage.caf in Resources */,
+				CD7F1A05186FF6AF006AFFDA /* Images.xcassets in Resources */,
 				CD230C421869CC8F003ACA40 /* help_05.psd in Resources */,
 				CD98ADD318687120009B77FE /* help_03.png in Resources */,
 				CD1637FA185ADC40009BB03D /* Icon-120.png in Resources */,
@@ -2447,7 +2451,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: DENG KE (R229UE6C87)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: DENG KE (R229UE6C87)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2462,6 +2467,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "5AE50A40-6EE1-45DD-91DA-6BC7EA36D654";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2479,7 +2485,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: DENG KE (3QC6PDN9W4)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: DENG KE (3QC6PDN9W4)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -2487,6 +2494,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PROVISIONING_PROFILE = "45A9704B-59F8-4972-A054-47E85009F746";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2497,6 +2505,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE6EB6DB7AC443EFBAAD45CD /* Pods.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = RenHai/RenHai.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: DENG KE (R229UE6C87)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: DENG KE (R229UE6C87)";
@@ -2523,6 +2533,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BE6EB6DB7AC443EFBAAD45CD /* Pods.xcconfig */;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_ENTITLEMENTS = RenHai/RenHai.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: DENG KE (R229UE6C87)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: DENG KE (R229UE6C87)";
