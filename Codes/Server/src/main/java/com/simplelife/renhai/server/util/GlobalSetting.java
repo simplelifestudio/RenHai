@@ -71,10 +71,10 @@ public class GlobalSetting
 	
 	public static class BusinessSetting
 	{
-		public static int OnlinePoolCapacity = 10000;
+		public static int OnlinePoolCapacity = 4000;
 		public static int RandomBusinessPoolCapacity = 0;
-		public static int InterestBusinessPoolCapacity = 10000;
-		public static int WebRTCSessionPoolCapacity = 500;
+		public static int InterestBusinessPoolCapacity = 4000;
+		public static int WebRTCSessionPoolCapacity = 1500;
 		//public static int DefaultImpressLabelCount = 10;
 		public static int HotInterestLabelCount = 10;
 		
@@ -84,8 +84,8 @@ public class GlobalSetting
 		public static int LengthOfMessageSn = 16;
 		
 		public static int MaxImpressLabelCount = 20;
-		public static int InputMessageHandleThreads = 200;
-		public static int OutputMessageSendThreads = 800;
+		public static int InputMessageHandleThreads = 1200;
+		//public static int OutputMessageSendThreads = 1200;
 		public static int MessageQueueTime = 3 * 1000;
 		
 		public static int DelayOfSessionBound = 1000;
@@ -167,10 +167,10 @@ public class GlobalSetting
 		DBSetting.DeviceCacheCount					= getIntValue(tmpObj, SettingFieldName.DeviceCacheCount);
 		
 		tmpObj = obj.getJSONObject(SettingFieldName.BusinessSetting);
-		BusinessSetting.OnlinePoolCapacity				= getIntValue(tmpObj, SettingFieldName.OnlinePoolCapacity);
-		BusinessSetting.WebRTCSessionPoolCapacity		= getIntValue(tmpObj, SettingFieldName.WebRTCSessionPoolCapacity);
-		BusinessSetting.RandomBusinessPoolCapacity		= getIntValue(tmpObj, SettingFieldName.RandomBusinessPoolCapacity);
-		BusinessSetting.InterestBusinessPoolCapacity	= getIntValue(tmpObj, SettingFieldName.InterestBusinessPoolCapacity);
+		//BusinessSetting.OnlinePoolCapacity				= getIntValue(tmpObj, SettingFieldName.OnlinePoolCapacity);
+		//BusinessSetting.WebRTCSessionPoolCapacity		= getIntValue(tmpObj, SettingFieldName.WebRTCSessionPoolCapacity);
+		//BusinessSetting.RandomBusinessPoolCapacity		= getIntValue(tmpObj, SettingFieldName.RandomBusinessPoolCapacity);
+		//BusinessSetting.InterestBusinessPoolCapacity	= getIntValue(tmpObj, SettingFieldName.InterestBusinessPoolCapacity);
 		//BusinessSetting.DefaultImpressLabelCount		= getIntValue(tmpObj, SettingFieldName.DefaultImpressLabelCount);
 		BusinessSetting.HotInterestLabelCount			= getIntValue(tmpObj, SettingFieldName.HotInterestLabelCount);
 		BusinessSetting.Encrypt							= getIntValue(tmpObj, SettingFieldName.Encrypt);
@@ -178,12 +178,12 @@ public class GlobalSetting
 		BusinessSetting.LengthOfSessionId				= getIntValue(tmpObj, SettingFieldName.LengthOfSessionId);
 		BusinessSetting.LengthOfMessageSn				= getIntValue(tmpObj, SettingFieldName.LengthOfMessageSn);
 		BusinessSetting.MaxImpressLabelCount			= getIntValue(tmpObj, SettingFieldName.MaxImpressLabelCount);
-		BusinessSetting.InputMessageHandleThreads		= getIntValue(tmpObj, SettingFieldName.InputMessageHandleThreads);
-		BusinessSetting.OutputMessageSendThreads		= getIntValue(tmpObj, SettingFieldName.OutputMessageSendThreads);
+		//BusinessSetting.InputMessageHandleThreads		= getIntValue(tmpObj, SettingFieldName.InputMessageHandleThreads);
+		//BusinessSetting.OutputMessageSendThreads		= getIntValue(tmpObj, SettingFieldName.OutputMessageSendThreads);
 		BusinessSetting.MessageQueueTime				= getIntValue(tmpObj, SettingFieldName.MessageQueueTime);
 		BusinessSetting.DelayOfSessionBound				= getIntValue(tmpObj, SettingFieldName.DelayOfSessionBound);
-		BusinessSetting.OpenTokKey						= getIntValue(tmpObj, SettingFieldName.OpenTokKey);
-		BusinessSetting.OpenTokSecret					= getStringValue(tmpObj, SettingFieldName.OpenTokSecret);
+		//BusinessSetting.OpenTokKey						= getIntValue(tmpObj, SettingFieldName.OpenTokKey);
+		//BusinessSetting.OpenTokSecret					= getStringValue(tmpObj, SettingFieldName.OpenTokSecret);
 		BusinessSetting.OpenTokTokenExpiration			= getIntValue(tmpObj, SettingFieldName.OpenTokTokenExpiration);
 		BusinessSetting.OpenTokTokenDuration			= getIntValue(tmpObj, SettingFieldName.OpenTokTokenDuration);
 	}

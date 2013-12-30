@@ -56,7 +56,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     /** */
     protected IDeviceWrapper connectionOwner;
     protected String remoteIPAddress;
-    protected ConcurrentHashMap<String, SyncController> syncMap = new ConcurrentHashMap<String, SyncController>();
+    //protected ConcurrentHashMap<String, SyncController> syncMap = new ConcurrentHashMap<String, SyncController>();
     protected String connectionId;
     protected Logger logger = WebSocketModule.instance.getLogger();
     protected boolean isConnectionOpen = false;
@@ -235,18 +235,19 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 
 		String messageSn = appMessage.getMessageSn();
     	//logger.debug("Received message: {}", appMessage.getMessageId().name());
-    	if (!syncMap.containsKey(messageSn))
-    	{
-			logger.debug("New request message from device <{}> with MessageSn: " + messageSn, connectionOwner.getDeviceIdentification());
+    	//if (!syncMap.containsKey(messageSn))
+    	//{
+			//logger.debug("New request message from device <{}> with MessageSn: " + messageSn, connectionOwner.getDeviceIdentification());
 			connectionOwner.onJSONCommand(appMessage);
-    	}
-    	else
-    	{
-    		logger.debug("Response of synchronized notification from device <{}>", connectionOwner.getDeviceIdentification());
-    		signalForSyncSend(messageSn, appMessage);
-    	}
+    	//}
+    	//else
+    	//{
+    	//	logger.debug("Response of synchronized notification from device <{}>", connectionOwner.getDeviceIdentification());
+    	//	signalForSyncSend(messageSn, appMessage);
+    	//}
     }
     
+    /*
     public void signalForSyncSend(String messageSn, AppJSONMessage appMessage)
     {
     	SyncController controller = syncMap.get(messageSn);
@@ -259,6 +260,7 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		controller.condition.signal();
 		controller.lock.unlock();
     }
+    */
     
     /** */
     @Override
@@ -401,8 +403,9 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     }
     
     /** */
-    protected AppJSONMessage syncSendMessage(String messageSn, ServerJSONMessage message)
+    protected void syncSendMessage(String messageSn, ServerJSONMessage message)
     {
+    	/*
     	if (!syncMap.containsKey(messageSn))
     	{
     		logger.error("messageSn <" + messageSn+"> is not saved in syncMap!");
@@ -410,19 +413,14 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
     	
     	SyncController controller = syncMap.get(messageSn);
     	controller.lock.lock(); 
-	    	
+	    */
     	boolean exceptionOcurred = false;
     	try
     	{
     		logger.debug("Send synchronized message to device <{}>, MessageSn: " + messageSn, this.connectionOwner.getDeviceIdentification());
     		sendMessage(message);
-    		controller.condition.await(GlobalSetting.TimeOut.JSONMessageEcho, TimeUnit.SECONDS);
+    		//controller.condition.await(GlobalSetting.TimeOut.JSONMessageEcho, TimeUnit.SECONDS);
     	}
-		catch (InterruptedException e)
-		{
-			FileLogger.printStackTrace(e);
-			exceptionOcurred = true;
-		}
 		catch (IOException e)
 		{
 			FileLogger.printStackTrace(e);
@@ -430,9 +428,10 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 		}
     	finally
     	{
-    		controller.lock.unlock();
+    		//controller.lock.unlock();
     	}
     	
+    	/*
     	if (exceptionOcurred)
     	{
     		logger.debug("Exception occurred on Websocket connection");
@@ -451,21 +450,24 @@ public class WebSocketConnection extends MessageInbound implements IBaseConnecti
 	    	}
     	}
     	return controller.message;
+    	*/
     }
     
     /** */
     public AppJSONMessage syncSendMessage(ServerJSONMessage message)
     {
-    	SyncController controller = new SyncController();
-    	String messageSn = message.getMessageSn();
-    	logger.debug("Add {} to synchronized sending map", messageSn);
-    	syncMap.put(messageSn, controller);
+    	//SyncController controller = new SyncController();
+    	//String messageSn = message.getMessageSn();
+    	//logger.debug("Add {} to synchronized sending map", messageSn);
+    	//syncMap.put(messageSn, controller);
     	
-    	AppJSONMessage appMessage = syncSendMessage(messageSn, message);
+    	//AppJSONMessage appMessage = syncSendMessage(messageSn, message);
 
-    	logger.debug("Remove {} from synchronized sending map", messageSn);
-    	syncMap.remove(messageSn);
-    	return appMessage;
+    	//logger.debug("Remove {} from synchronized sending map", messageSn);
+    	//syncMap.remove(messageSn);
+    	//return appMessage;
+    	this.asyncSendMessage(message);
+    	return null;
     }
 
 	@Override

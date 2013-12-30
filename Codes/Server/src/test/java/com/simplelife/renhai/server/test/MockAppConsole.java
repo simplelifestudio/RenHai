@@ -80,6 +80,7 @@ public class MockAppConsole
 	        
 	        Thread.sleep(3000);
 	        MockApp app;
+	        int loseCount = 0;
 	        while (mockApps.size() > 0)
 	        {
 	        	Thread.sleep(1000);
@@ -90,8 +91,9 @@ public class MockAppConsole
 	        		app = mockApps.get(i); 
 	        		if (app.getBusinessStatus() == MockAppConsts.MockAppBusinessStatus.Ended)
 	        		{
-	        			System.out.println(app.getDeviceSn() + " is ended.");
+	        			loseCount++;
 	        			mockApps.remove(i);
+	        			System.out.println(app.getDeviceSn() + " is ended, total count lost devices: " + loseCount);
 	        		}
 	        	}
 	        	//System.out.println("Number of mockApps after check: "+ mockApps.size());

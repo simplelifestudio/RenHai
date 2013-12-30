@@ -16,12 +16,14 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
+import com.simplelife.renhai.server.business.pool.InputMsgExecutorPool;
 import com.simplelife.renhai.server.business.pool.MessageHandler;
 import com.simplelife.renhai.server.business.pool.OutputMsgExecutorPool;
 import com.simplelife.renhai.server.db.DAOWrapper;
@@ -59,6 +61,7 @@ public class BusinessSession implements IBusinessSession
 	private long chatEndTime;
 	private long sessionEndTime;
 	private Webrtcsession webRTCSession;
+	private AtomicBoolean webRTCSessionRecycleFlag = new AtomicBoolean(false);
 	private JSONObject matchCondition;
 	
 	private Consts.SessionEndReason endReason = Consts.SessionEndReason.Invalid;
@@ -71,7 +74,7 @@ public class BusinessSession implements IBusinessSession
 	
 	private Consts.BusinessSessionStatus status = Consts.BusinessSessionStatus.Idle;
 	
-	private MessageHandler messageHandler = new MessageHandler(sessionId, OutputMsgExecutorPool.instance);
+	private MessageHandler messageHandler = new MessageHandler(sessionId, InputMsgExecutorPool.instance);
 	
 	public BusinessSession()
 	{
@@ -127,6 +130,8 @@ public class BusinessSession implements IBusinessSession
     		return false;
     	}
     	
+    	webRTCSessionRecycleFlag.set(false);
+    	
     	Consts.DeviceStatus status;
     	int size = deviceList.size();
     	
@@ -168,12 +173,21 @@ public class BusinessSession implements IBusinessSession
     	
    		progressMap.clear();
    		
-   		WebRTCSessionPool.instance.recycleWetRTCSession(webRTCSession);
    		matchCondition = null;
+   		recycleWebRTCSession();
     	
     	saveSessionRecord();
     	unbindBusinessDevicePool();
     	BusinessSessionPool.instance.recycleBusinessSession(this);
+    }
+    
+    private void recycleWebRTCSession()
+    {
+    	if (webRTCSessionRecycleFlag.compareAndSet(false, true))
+		{
+			WebRTCSessionPool.instance.recycleWetRTCSession(webRTCSession);
+			webRTCSession = null;
+		}
     }
     
     private void saveSessionRecord()
@@ -740,9 +754,12 @@ public class BusinessSession implements IBusinessSession
 		{
 			notifyDevices(device, NotificationType.OthersideRejected, null);
 		}
+		
 		updateBusinessProgress(device.getDeviceIdentification(), DeviceBusinessProgress.Leaved);
    		
-    
+		// Recycle WebRTC session after any of device leaved 
+		recycleWebRTCSession();
+		
 		if (checkAllDevicesReach(DeviceBusinessProgress.Leaved))
     	//if (deviceList == null || deviceList.isEmpty())
     	{

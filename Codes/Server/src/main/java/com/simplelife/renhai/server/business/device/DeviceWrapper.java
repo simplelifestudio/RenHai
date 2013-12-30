@@ -28,8 +28,6 @@ import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.InputMsgExecutorPool;
 import com.simplelife.renhai.server.business.pool.MessageHandler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.business.pool.OutputMsgExecutorPool;
-import com.simplelife.renhai.server.business.pool.TimeoutLink;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
@@ -47,7 +45,6 @@ import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionEventType;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
-import com.simplelife.renhai.server.util.Consts.TimeoutActionType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -125,7 +122,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     	pingTimeoutNode = new PingTimeoutNode(GlobalSetting.TimeOut.PingTimeout, this, OnlineDevicePool.pingLink);
     	connection.bind(this);
     	inputMessageHandler = new MessageHandler(connection.getConnectionId(), InputMsgExecutorPool.instance);
-        outputMessageHandler = new MessageHandler(connection.getConnectionId(), OutputMsgExecutorPool.instance);
+        outputMessageHandler = new MessageHandler(connection.getConnectionId(), InputMsgExecutorPool.instance);
         changeStatusHandler = new  MessageHandler(connection.getConnectionId(), InputMsgExecutorPool.instance);
     }
 

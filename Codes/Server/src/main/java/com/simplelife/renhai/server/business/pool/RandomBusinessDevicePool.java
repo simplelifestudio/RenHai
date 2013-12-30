@@ -37,6 +37,7 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 		String deviceSn = device.getDeviceIdentification();
 		matchStartedDeviceMap.remove(deviceSn);
 		sessionBoundDeviceMap.put(deviceSn, device);
+		chatCount.incrementAndGet();
 	}
 	
 	@Override
@@ -58,6 +59,7 @@ public class RandomBusinessDevicePool extends AbstractBusinessDevicePool
 		{
 			existFlag = true;
 			sessionBoundDeviceMap.remove(sn);
+			chatCount.decrementAndGet();
 		}
 		
 		if (existFlag)
