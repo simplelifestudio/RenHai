@@ -621,7 +621,7 @@ public class BusinessSessionRequest extends AppJSONMessage
 			
 			DbLogger.saveProfileLog(Consts.OperationCode.BusinessRequestAssessContinue_1019
 	    			, deviceWrapper.getDevice().getProfile()
-	    			, targetDevice.getProfile().getProfileId().toString());
+	    			, targetDevice.getDeviceSn());
 		}
 		
 		if (!isDeviceInPool)

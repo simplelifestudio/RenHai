@@ -41,18 +41,20 @@ public class GlobalSetting
 	
 	public static class TimeOut
 	{
-		public static int JSONMessageEcho = 9;
+		public static int JSONMessageEcho = 60;
+		public static int PingTimeout = 60 * 1000;
+		
 		public static int ChatConfirm = 15 * 1000;
 		public static int Assess = 60;
 		public static int CheckExpiredToken = 3600;
 		
-		public static int FlushCacheToDB = 30 * 1000;
+		public static int FlushCacheToDB = 60 * 1000;
 		
 		public static int OnlineDeviceConnection = 300 * 1000;
 		
 		public static int PingInterval = 4 * 1000;
 		public static int CheckPingInterval = 1 * 1000;
-		public static int PingTimeout = PingInterval + PingInterval + CheckPingInterval;  
+		public static int ChatConfirmTimeout = PingInterval + PingInterval + CheckPingInterval;  
 		
 		public static int SaveStatistics = 600 * 1000;
 		public static int AdjustDeviceCount = 60 * 1000;
@@ -60,22 +62,22 @@ public class GlobalSetting
 	
 	public static class DBSetting
 	{
-		public static int MaxRecordCountForFlush = 30;
+		public static int MaxRecordCountForFlush = 100;
 		public static int CacheCompressBuffer = 30;
 		public static int MaxRecordCountForDiscard = 1000;
 		
 		public static int GlobalImpressLabelCacheCount = 1000;
 		public static int GlobalInterestLabelCacheCount = 1000;
-		public static int DeviceCacheCount = 10000;
+		public static int DeviceCacheCount = 5000;
 	}
 	
 	public static class BusinessSetting
 	{
-		public static int OnlinePoolCapacity = 4000;
+		public static int OnlinePoolCapacity = 5000;
 		public static int RandomBusinessPoolCapacity = 0;
-		public static int InterestBusinessPoolCapacity = 4000;
-		public static int WebRTCSessionPoolCapacity = 1500;
-		//public static int DefaultImpressLabelCount = 10;
+		public static int InterestBusinessPoolCapacity = 5000;
+		public static int WebRTCSessionPoolCapacity = 2500; 
+		//public static int DefaultImpressLabelCount = 10; 
 		public static int HotInterestLabelCount = 10;
 		
 		public static int Encrypt = 1;
@@ -148,7 +150,7 @@ public class GlobalSetting
 		
 		logger.debug("Start to update setting from file {}", fileName);
 		JSONObject tmpObj = obj.getJSONObject(SettingFieldName.TimeOut);
-		TimeOut.JSONMessageEcho			= getIntValue(tmpObj, SettingFieldName.JSONMessageEcho);
+		//TimeOut.JSONMessageEcho			= getIntValue(tmpObj, SettingFieldName.JSONMessageEcho);
 		TimeOut.ChatConfirm				= getIntValue(tmpObj, SettingFieldName.ChatConfirm);
 		TimeOut.Assess					= getIntValue(tmpObj, SettingFieldName.Assess);
 		TimeOut.CheckExpiredToken		= getIntValue(tmpObj, SettingFieldName.CheckExpiredToken);
@@ -311,6 +313,7 @@ public class GlobalSetting
 		}
 
 		tmpObj = obj.getJSONObject(SettingFieldName.BusinessSetting);
+		/*
 		if(!checkField(tmpObj, SettingFieldName.OnlinePoolCapacity))
 		{
 			return false;
@@ -326,7 +329,6 @@ public class GlobalSetting
 			return false;
 		}
 		
-		/*
 		if(!checkField(tmpObj, SettingFieldName.DefaultImpressLabelCount))
 		{
 			return false;

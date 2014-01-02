@@ -62,35 +62,42 @@ public class Worker extends Thread
 	@Override
 	public void run()
 	{
-		isRunning = true;
-		while(continueFlag)
+		try
 		{
-			if (productor.hasWork())
+			isRunning = true;
+			while(continueFlag)
 			{
-				Runnable work = productor.getWork();
-				if (work != null)
+				if (productor.hasWork())
 				{
-					work.run();
+					Runnable work = productor.getWork();
+					if (work != null)
+					{
+						work.run();
+					}
+				}
+				else
+				{
+					try
+					{
+						lock.lock();
+						isRunning = false;
+						condition.await();
+						isRunning = true;
+					}
+					catch (InterruptedException e)
+					{
+						FileLogger.printStackTrace(e);
+					}
+					finally
+					{
+						lock.unlock();
+					}
 				}
 			}
-			else
-			{
-				try
-				{
-					lock.lock();
-					isRunning = false;
-					condition.await();
-					isRunning = true;
-				}
-				catch (InterruptedException e)
-				{
-					FileLogger.printStackTrace(e);
-				}
-				finally
-				{
-					lock.unlock();
-				}
-			}
+		}
+		catch(Exception e)
+		{
+			FileLogger.printStackTrace(e);
 		}
 	}
 }

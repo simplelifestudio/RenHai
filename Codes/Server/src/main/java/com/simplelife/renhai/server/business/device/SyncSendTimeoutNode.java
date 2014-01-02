@@ -7,6 +7,8 @@ import com.simplelife.renhai.server.business.pool.TimeoutLink;
 import com.simplelife.renhai.server.json.AppJSONMessage;
 import com.simplelife.renhai.server.json.TimeoutRequest;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
+import com.simplelife.renhai.server.util.Consts.DeviceStatus;
+import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 
 public class SyncSendTimeoutNode extends AbstractTimeoutNode
 {
@@ -14,9 +16,9 @@ public class SyncSendTimeoutNode extends AbstractTimeoutNode
 	private IDeviceWrapper deviceWrapper;
 	private Logger logger = BusinessModule.instance.getLogger();
 	
-	public SyncSendTimeoutNode(int timeoutThreshold, IDeviceWrapper deviceWrapper, String messageSn, TimeoutLink ownerLink)
+	public SyncSendTimeoutNode(int timeoutThreshold, IDeviceWrapper deviceWrapper, String messageSn)
 	{
-		super(timeoutThreshold, ownerLink);
+		super(timeoutThreshold);
 		this.deviceWrapper = deviceWrapper;
 		this.messageSn = messageSn;
 		updateTime();
@@ -25,6 +27,7 @@ public class SyncSendTimeoutNode extends AbstractTimeoutNode
 	@Override
 	public void onTimeout()
 	{
+		/*
 		if (logger.isWarnEnabled())
 		{
 			String temp = "Device <"+ deviceWrapper.getDeviceIdentification() +"> has no response for message with SN: " + messageSn;
@@ -32,6 +35,8 @@ public class SyncSendTimeoutNode extends AbstractTimeoutNode
 		}
 		AppJSONMessage request = new TimeoutRequest(messageSn);
 		deviceWrapper.onJSONCommand(request);
+		*/
+		deviceWrapper.changeBusinessStatus(DeviceStatus.Disconnected, StatusChangeReason.TimeoutOnSyncSending);
 	}
 	
 	public boolean isWaiting(String messageSn)

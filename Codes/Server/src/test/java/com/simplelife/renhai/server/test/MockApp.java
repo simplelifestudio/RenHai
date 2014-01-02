@@ -216,7 +216,7 @@ public class MockApp implements IMockApp, Runnable
 	protected IMockConnection connection;
 	protected Logger logger = LoggerFactory.getLogger(MockApp.class);
 
-    protected int sessionId;
+    //protected int sessionId;
     protected Timer pingTimer = new Timer();
     protected Timer monitorTimer;
     
@@ -683,7 +683,16 @@ public class MockApp implements IMockApp, Runnable
 			
 			if (response == null)
 			{
-				logger.error("MockApp <" + deviceSn + ">: server has no response for message\n{}", JSON.toJSONString(envelopeObj, true));
+				String tmpStr = envelopeObj.getString(JSONKey.JsonEnvelope);
+				try
+				{
+					tmpStr = SecurityUtils.decryptByDESAndDecodeByBase64(tmpStr, GlobalSetting.BusinessSetting.EncryptKey);
+				}
+				catch (Exception e)
+				{
+					FileLogger.printStackTrace(e);
+				}
+				logger.error("MockApp <" + deviceSn + ">: server has no response for message\n{}", tmpStr);
 				setBusinessStatus(MockAppBusinessStatus.Ended);
 				return;
 			}
@@ -959,6 +968,7 @@ public class MockApp implements IMockApp, Runnable
 			if (messageType == Consts.NotificationType.SessionBound.getValue())
 			{
 				targetDeviceObject = JSON.parseObject(body.getString(JSONKey.OperationInfo));
+				businessSessionId = body.getString(JSONKey.BusinessSessionId);
 			}
 		}
 		
@@ -1048,9 +1058,13 @@ public class MockApp implements IMockApp, Runnable
 	
 	private int getRandomVideoChatDuration()
 	{
+		/*
 		Random random = new Random();
-		int result = random.nextInt(MockAppConsts.Setting.VideoChatDurationMax);
-		return result + MockAppConsts.Setting.VideoChatDurationMin;
+		int result = random.nextInt(300);
+		return result + 30;
+		*/
+		int index = Math.abs(this.businessSessionId.hashCode()) % MockAppConsts.chatDuration.length;
+		return MockAppConsts.chatDuration[index];
 	}
 	
 	private void prepareSending(Consts.MessageId messageId, JSONObject obj)
@@ -1076,7 +1090,8 @@ public class MockApp implements IMockApp, Runnable
 		{
 			logger.debug("MockApp <"+ deviceSn + "> received notification: " + receivedOperationType.name());
 			if (receivedOperationType == Consts.NotificationType.OthersideAgreed
-					|| receivedOperationType == Consts.NotificationType.OthersideEndChat)
+					|| receivedOperationType == Consts.NotificationType.OthersideEndChat
+					|| receivedOperationType == Consts.NotificationType.OthersideChatMessage)
 			{
 				replyNotification(obj, null);
 				return;

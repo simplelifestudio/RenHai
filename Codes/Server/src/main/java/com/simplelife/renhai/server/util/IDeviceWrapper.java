@@ -104,4 +104,8 @@ public interface IDeviceWrapper
     public void prepareResponse(ServerJSONMessage response);
     
     public AbstractTimeoutNode getPingNode();
+    
+    public void enterChatConfirm();
+    
+    public void leaveChatConfirm();
 }

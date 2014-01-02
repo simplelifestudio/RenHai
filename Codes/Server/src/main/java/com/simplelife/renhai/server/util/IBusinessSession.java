@@ -18,6 +18,7 @@ import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.session.BusinessSessionEvent;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionEventType;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionStatus;
+import com.simplelife.renhai.server.util.Consts.NotificationType;
 
 
 /** */
@@ -68,9 +69,13 @@ public interface IBusinessSession
     
     public void unbindBusinessDevicePool();
     
-    public void notifyDevices(IDeviceWrapper triggerDevice, Consts.NotificationType notificationType, JSONObject operationInfoObj);
+    public void notifyDevices(IDeviceWrapper triggerDevice, NotificationType notificationType, JSONObject operationInfoObj);
+    
+    public void notifyDevice(IDeviceWrapper device, NotificationType notificationType, JSONObject operationInfoObj);
     
     public boolean checkProgressForRequest(IDeviceWrapper device, Consts.OperationType operationType);
+    
+    public boolean checkProgressForNotification(IDeviceWrapper device, NotificationType notificationType, JSONObject operationInfoObj);
     
     public Consts.DeviceBusinessProgress getProgressOfDevice(IDeviceWrapper device);
 }

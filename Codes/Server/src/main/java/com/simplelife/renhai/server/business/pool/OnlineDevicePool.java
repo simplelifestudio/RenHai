@@ -53,6 +53,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     public final static OnlineDevicePool instance = new OnlineDevicePool();
     public final static TimeoutLink pingLink = new TimeoutLink(GlobalSetting.TimeOut.CheckPingInterval);
     public final static TimeoutLink syncSendingTimeoutLink = new TimeoutLink(GlobalSetting.TimeOut.CheckPingInterval);
+    public final static TimeoutLink chatConfirmTimeoutLink = new TimeoutLink(GlobalSetting.TimeOut.CheckPingInterval);
     
     private OnlineDevicePool()
     {
@@ -390,10 +391,17 @@ public class OnlineDevicePool extends AbstractDevicePool
 		@Override
 		public void run()
 		{
-			logger.debug("Adjust device count of pools");
-			OnlineDevicePool.instance.adjustDeviceCount();
-			AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(BusinessType.Interest);
-			pool.adjustDeviceCount();
+			try
+			{
+				logger.debug("Adjust device count of pools");
+				OnlineDevicePool.instance.adjustDeviceCount();
+				AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(BusinessType.Interest);
+				pool.adjustDeviceCount();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
 	}
 	private class InactiveCheckTask extends TimerTask
@@ -406,9 +414,9 @@ public class OnlineDevicePool extends AbstractDevicePool
 		@Override
 		public void run()
 		{
-			Thread.currentThread().setName("PingCheckTimer");
 			try
 			{
+				Thread.currentThread().setName("PingCheckTimer");
 				pingLink.checkTimeout();
 				//PingActionQueue.instance.newAction(TimeoutActionType.CheckTimeout, null);
 			}
