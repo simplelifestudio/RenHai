@@ -63,7 +63,9 @@
 - 配置Tomcat：
   把Test\tomcat\server.xml复制到tomcat\conf下
   Windows：tomcat\bin\startup.bat，开头增加set JAVA_OPTS=-XX:NewSize=128m -XX:MaxNewSize=250m -XX:PermSize=128m -XX:MaxPermSize=512m -Xms900m -Xmx900m
-  Linux：修改catalina.sh，开头增加JAVA_OPTS="$JAVA_OPTS -Xms512m -Xmx512m -XX:PermSize=64m -XX:MaxPermSize=128m"
+  Linux：修改catalina.sh，开头增加JAVA_OPTS="-server -Xms512m -Xmx512m -Xss128k -XX:PermSize=64M -XX:MaxNewSize=256m -XX:MaxPermSize=128m -Djava.awt.headless=true"
+  (注：内存要小心优化，上述内存配置主要针对linode server内存为1G的机器)
+
 
 - 设置Linux文件打开数（只需要在Linux上操作）
   查看：ulimit -a
