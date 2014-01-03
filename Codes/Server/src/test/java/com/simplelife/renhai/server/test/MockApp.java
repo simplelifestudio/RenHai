@@ -63,7 +63,7 @@ public class MockApp implements IMockApp, Runnable
 		@Override
 		public void startService()
 		{
-			executeThreadPool = Executors.newFixedThreadPool(1500);
+			executeThreadPool = Executors.newFixedThreadPool(3000);
 		}
 	};
 	
@@ -1060,11 +1060,14 @@ public class MockApp implements IMockApp, Runnable
 	{
 		/*
 		Random random = new Random();
-		int result = random.nextInt(300);
+		int result = random.nextInt(270);
 		return result + 30;
 		*/
-		int index = Math.abs(this.businessSessionId.hashCode()) % MockAppConsts.chatDuration.length;
-		return MockAppConsts.chatDuration[index];
+		
+		char firstChar = businessSessionId.charAt(0);
+		int index = firstChar % 10;
+		//return MockAppConsts.chatDuration[index];
+		return index + 30;
 	}
 	
 	private void prepareSending(Consts.MessageId messageId, JSONObject obj)

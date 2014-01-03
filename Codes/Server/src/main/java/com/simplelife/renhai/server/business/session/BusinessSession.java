@@ -906,12 +906,15 @@ public class BusinessSession implements IBusinessSession
 					return false;
 				}
 				break;
+			case SessionBoundNotified:
+				//logger.error("Received " + operationType.name() + " from " + device.getDeviceIdentification() + " at progress of SessionBoundNotified");
+				return false;
 			/*
 			case AssessFinished:
 				return false;
 			*/
 			default:
-				logger.error("Invalid business progress:{}", progress.name());
+				logger.error("Invalid business progress:{} of device " + device.getDeviceIdentification(), progress.name());
 				return false;
 		}
 		return true;
