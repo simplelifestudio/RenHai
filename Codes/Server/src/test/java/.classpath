@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="E:/work/git/renhai/Codes/Server/lib/juit/junit-4.10.jar"/>
+	<classpathentry kind="lib" path="E:/work/git/renhai/Codes/Server/lib/log/logback-classic-1.0.13.jar"/>
+	<classpathentry kind="lib" path="E:/work/git/renhai/Codes/Server/lib/log/logback-core-1.0.13.jar"/>
+	<classpathentry kind="lib" path="E:/work/git/renhai/Codes/Server/lib/log/slf4j-api-1.7.5.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/renhai_maven"/>
+	<classpathentry kind="lib" path="E:/work/git/renhai/Codes/Server/lib/json/fastjson-1.1.37.jar"/>
+	<classpathentry kind="lib" path="E:/work/git/renhai/Codes/Server/lib/hibernate/mybatis-3.2.3.jar"/>
+	<classpathentry kind="lib" path="E:/work/git/renhai/Codes/Server/lib/hibernate/mysql-connector-java-5.1.25-bin.jar"/>
+	<classpathentry kind="lib" path="E:/work/git/renhai/Codes/Server/lib/websocketclient/java_websocket.jar"/>
+	<classpathentry kind="lib" path="E:/work/git/renhai/Codes/Server/lib/opentok/opentok.jar"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/Administrator/.m2/repository/org/apache/tomcat/tomcat-coyote/7.0.42/tomcat-coyote-7.0.42.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

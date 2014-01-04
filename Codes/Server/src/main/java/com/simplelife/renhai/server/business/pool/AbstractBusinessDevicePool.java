@@ -12,6 +12,7 @@
 package com.simplelife.renhai.server.business.pool;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 
@@ -35,7 +36,8 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     protected ConcurrentHashMap<String, IDeviceWrapper> sessionBoundDeviceMap = new ConcurrentHashMap<String, IDeviceWrapper>();
     
     protected final int deviceCountPerSession = 2;
-
+    
+    protected AtomicInteger chatCount = new AtomicInteger(0); 
     
     public abstract void startService();
     public abstract void stopService();
@@ -116,7 +118,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     public void onDeviceEnter(IDeviceWrapper device)
     {
     	businessChoosedDeviceMap.put(device.getDeviceIdentification(), device);
-    	deviceCount.addAndGet(1);
+    	deviceCount.incrementAndGet();
     	logger.debug("Device <{}> has entered " + businessType.name() + " pool, device count after enter: " + this.getDeviceCount(), device.getDeviceIdentification());
     }
     
@@ -138,7 +140,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     		return;
     	}
     	
-    	deviceCount.addAndGet(-1);
+    	deviceCount.decrementAndGet();
     	if (matchStartedDeviceMap.containsKey(sn))
     	{
 	    	matchStartedDeviceMap.remove(sn);
@@ -149,6 +151,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
     	if (sessionBoundDeviceMap.containsKey(sn))
     	{
 	    	sessionBoundDeviceMap.remove(sn);
+	    	chatCount.decrementAndGet();
 	    	logger.debug("Device <{}> was removed from sessionBoundDeviceMap of " + this.businessType.name() + " Device Pool caused by " + reason.name(), sn);
 	    	return;
     	}
@@ -204,7 +207,8 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 	
 	public int getDeviceCountInChat()
 	{
-		return sessionBoundDeviceMap.size();
+		return chatCount.get();
+		//return sessionBoundDeviceMap.size();
 	}
 	
 	@Override
@@ -213,5 +217,7 @@ public abstract class AbstractBusinessDevicePool extends AbstractDevicePool impl
 		deviceCount.set(businessChoosedDeviceMap.size() 
 				+ matchStartedDeviceMap.size() 
 				+ sessionBoundDeviceMap.size()); 
+		
+		chatCount.set(sessionBoundDeviceMap.size());
 	}
 }

@@ -253,7 +253,7 @@ public class Impresscard implements IDbObject
 								+ count + " to " + (count + 1), deviceWrapper.getDeviceIdentification());
 						}
 						label.setAssessCount(label.getAssessCount() + 1);
-						DbLogger.increaseImpressAssessCount(tmpLabelName);
+						DbLogger.increaseImpressAssessCount(labelName);
 					}
 				}
 				return;

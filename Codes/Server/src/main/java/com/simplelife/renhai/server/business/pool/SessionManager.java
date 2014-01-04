@@ -21,6 +21,7 @@ import com.simplelife.renhai.server.business.session.BusinessSessionPool;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.log.DbLogger;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.IProductor;
@@ -90,39 +91,46 @@ public class SessionManager implements IProductor
 		@Override
 		public void run()
 		{
-			logger.debug("Run of SessionCoordinator, deviceFoundInterest: {}", deviceFoundInterest);
-			IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
-			if (session == null)
+			try
 			{
-				logger.debug("No availabel business session.");
-				return;
+				logger.debug("Run of SessionCoordinator, deviceFoundInterest: {}", deviceFoundInterest);
+				IBusinessSession session = BusinessSessionPool.instance.getBusinessSession();
+				if (session == null)
+				{
+					logger.debug("No availabel business session.");
+					return;
+				}
+				
+				session.bindBusinessDevicePool(pool);
+				
+				JSONObject obj = null;
+				Globalinterestlabel label = DBModule.instance.interestLabelCache.getObject(deviceFoundInterest);
+				if (label != null)
+				{
+					obj = new JSONObject();
+					obj.put(JSONKey.GlobalInterestLabelId, label.getGlobalInterestLabelId());
+					obj.put(JSONKey.InterestLabelName, label.getInterestLabelName());
+					obj.put(JSONKey.GlobalMatchCount, label.getGlobalMatchCount());
+				}
+				else
+				{
+					logger.error("Fatal error, global interest label {} can not be found when trying to start session", deviceFoundInterest);
+					return;
+				}
+				
+				if (session.startSession(selectedDeviceList, obj))
+				{
+					DbLogger.increaseInterestMatchCount(deviceFoundInterest);
+					increaseMatchCount(selectedDeviceList, deviceFoundInterest);
+				}
+				else
+				{
+					recycleDevice(selectedDeviceList);
+				}
 			}
-			
-			session.bindBusinessDevicePool(pool);
-			
-			JSONObject obj = null;
-			Globalinterestlabel label = DBModule.instance.interestLabelCache.getObject(deviceFoundInterest);
-			if (label != null)
+			catch(Exception e)
 			{
-				obj = new JSONObject();
-				obj.put(JSONKey.GlobalInterestLabelId, label.getGlobalInterestLabelId());
-				obj.put(JSONKey.InterestLabelName, label.getInterestLabelName());
-				obj.put(JSONKey.GlobalMatchCount, label.getGlobalMatchCount());
-			}
-			else
-			{
-				logger.error("Fatal error, global interest label {} can not be found when trying to start session", deviceFoundInterest);
-				return;
-			}
-			
-			if (session.startSession(selectedDeviceList, obj))
-			{
-				DbLogger.increaseInterestMatchCount(deviceFoundInterest);
-				increaseMatchCount(selectedDeviceList, deviceFoundInterest);
-			}
-			else
-			{
-				recycleDevice(selectedDeviceList);
+				FileLogger.printStackTrace(e);
 			}
 		}
 		

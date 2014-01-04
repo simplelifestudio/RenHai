@@ -16,12 +16,14 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
+import com.simplelife.renhai.server.business.pool.InputMsgExecutorPool;
 import com.simplelife.renhai.server.business.pool.MessageHandler;
 import com.simplelife.renhai.server.business.pool.OutputMsgExecutorPool;
 import com.simplelife.renhai.server.db.DAOWrapper;
@@ -59,6 +61,7 @@ public class BusinessSession implements IBusinessSession
 	private long chatEndTime;
 	private long sessionEndTime;
 	private Webrtcsession webRTCSession;
+	private AtomicBoolean webRTCSessionRecycleFlag = new AtomicBoolean(false);
 	private JSONObject matchCondition;
 	
 	private Consts.SessionEndReason endReason = Consts.SessionEndReason.Invalid;
@@ -71,7 +74,7 @@ public class BusinessSession implements IBusinessSession
 	
 	private Consts.BusinessSessionStatus status = Consts.BusinessSessionStatus.Idle;
 	
-	private MessageHandler messageHandler = new MessageHandler(sessionId, OutputMsgExecutorPool.instance);
+	private MessageHandler eventHandler = new MessageHandler(sessionId, InputMsgExecutorPool.instance);
 	
 	public BusinessSession()
 	{
@@ -127,6 +130,8 @@ public class BusinessSession implements IBusinessSession
     		return false;
     	}
     	
+    	webRTCSessionRecycleFlag.set(false);
+    	
     	Consts.DeviceStatus status;
     	int size = deviceList.size();
     	
@@ -168,12 +173,21 @@ public class BusinessSession implements IBusinessSession
     	
    		progressMap.clear();
    		
-   		WebRTCSessionPool.instance.recycleWetRTCSession(webRTCSession);
    		matchCondition = null;
+   		recycleWebRTCSession();
     	
     	saveSessionRecord();
     	unbindBusinessDevicePool();
     	BusinessSessionPool.instance.recycleBusinessSession(this);
+    }
+    
+    private void recycleWebRTCSession()
+    {
+    	if (webRTCSessionRecycleFlag.compareAndSet(false, true))
+		{
+			WebRTCSessionPool.instance.recycleWetRTCSession(webRTCSession);
+			webRTCSession = null;
+		}
     }
     
     private void saveSessionRecord()
@@ -251,6 +265,7 @@ public class BusinessSession implements IBusinessSession
     	}
     	
     	notifyDevices(null, Consts.NotificationType.SessionBound, null);
+    	//newEvent(BusinessSessionEventType.NotifySessionBound, null, null);
     	return true;
     }
     
@@ -302,6 +317,7 @@ public class BusinessSession implements IBusinessSession
     		Consts.NotificationType notificationType,
     		JSONObject operationInfoObj)
     {
+    	/*
     	String tempStr;
     	if (triggerDevice == null)
     	{
@@ -311,7 +327,8 @@ public class BusinessSession implements IBusinessSession
     	{
     		tempStr = triggerDevice.getDeviceIdentification();
     	}
-        // logger.debug("===============1000===============Device <{}>", tempStr);
+    	*/
+    	
     	if (deviceList == null)
     	{
     		if (logger.isDebugEnabled())
@@ -322,26 +339,20 @@ public class BusinessSession implements IBusinessSession
     		return;
     	}
     	
-    	// logger.debug("===============1002===============Device <{}>", tempStr);
     	String temp;
     	for (IDeviceWrapper device : deviceList)
     	{
-    		// logger.debug("===============1003===============Device <{}>", tempStr);
     		if (device == triggerDevice)
 			{
-    			// logger.debug("===============1004===============Device <{}>", tempStr);
 				continue;
 			}
 
-    		// logger.debug("===============1005===============Device <{}>", tempStr);
-			Consts.DeviceBusinessProgress progress = progressMap.get(device.getDeviceIdentification()); 
-			if (progress.getValue() >= Consts.DeviceBusinessProgress.ChatEnded.getValue())
+			// Check if status of device is allowed for notification
+			if (!checkProgressForNotification(device, notificationType, operationInfoObj))
 			{
-				// logger.debug("===============1006===============Device <{}>", tempStr);
-				// Ignore devices who has entered phase of Assess or has left session
 				continue;
 			}
-
+			
 			// create notification for each device, to avoid conflict of multi-thread on devices
 			if (logger.isDebugEnabled())
 			{
@@ -353,20 +364,15 @@ public class BusinessSession implements IBusinessSession
 				logger.debug(temp);
 			}
 			
-			// logger.debug("===============1007===============Device <{}>", tempStr);
 			if (operationInfoObj != null)
 			{
-				// logger.debug("===============1008===============Device <{}>", tempStr);
-				notifyDevice(device, notificationType, operationInfoObj);
-				// logger.debug("===============1009===============Device <{}>", tempStr);
+				createNotifyEvent(device, notificationType, operationInfoObj);
 			}
 			else
 			{
-				// logger.debug("===============1010===============Device <{}>", tempStr);
 				JSONObject tmpObj;
 				if(triggerDevice == null ||  notificationType == NotificationType.SessionBound)
 				{
-					// logger.debug("===============1011===============Device <{}>", tempStr);
 					tmpObj = new JSONObject();
 					tmpObj.put(JSONKey.Device, getOperationInfoOfOtherDevices(device));
 				    
@@ -376,26 +382,68 @@ public class BusinessSession implements IBusinessSession
 				    rtcObj.put(JSONKey.Token, this.webRTCSession.getToken());
 				    tmpObj.put(JSONKey.Webrtc, rtcObj);
 				    tmpObj.put(JSONKey.MatchedCondition, this.matchCondition);
+				  
+				    updateBusinessProgress(device.getDeviceIdentification(), DeviceBusinessProgress.SessionBoundNotified);
 				}
 				else
 				{
-					// logger.debug("===============1012===============Device <{}>", tempStr);
 					tmpObj = new JSONObject();
 					JSONObject deviceObj = new JSONObject();
 					deviceObj.put(JSONKey.DeviceSn, device.getDeviceIdentification());
 					tmpObj.put(JSONKey.Device, deviceObj);
 				}
-				// logger.debug("===============1013===============Device <{}>", tempStr);
-				notifyDevice(device, notificationType, tmpObj);
-				// logger.debug("===============1014===============Device <{}>", tempStr);
+				
+				createNotifyEvent(device, notificationType, tmpObj);
 			}
     	}
 	}
     
+    private void createNotifyEvent(IDeviceWrapper device, 
+    		Consts.NotificationType notificationType,
+    		JSONObject operationInfoObj)
+    {
+    	switch(notificationType)
+		{
+			case OthersideAgreed:
+				newEvent(BusinessSessionEventType.NotifyOthersideAgreed, device, operationInfoObj);
+				break;
+			case OthersideChatMessage:
+				newEvent(BusinessSessionEventType.NotifyOthersideChatMessage, device, operationInfoObj);
+				break;
+			case OthersideEndChat:
+				newEvent(BusinessSessionEventType.NotifyOthersideEndChat, device, operationInfoObj);
+				break;
+			case OthersideLost:
+				newEvent(BusinessSessionEventType.NotifyOthersideLost, device, operationInfoObj);
+				break;
+			case OthersideRejected:
+				newEvent(BusinessSessionEventType.NotifyOthersideRejected, device, operationInfoObj);
+				break;
+			case SessionBound:
+				newEvent(BusinessSessionEventType.NotifySessionBound, device, operationInfoObj);
+				break;
+			case Invalid:
+				logger.error("Invalid notification type found for device <{}>", device.getDeviceIdentification());
+				break;
+		}
+    }
+    
+    @Override
     public void notifyDevice(IDeviceWrapper device, 
     		NotificationType notificationType, 
     		JSONObject operationInfoObj)
     {
+    	if (device == null)
+    	{
+    		logger.warn("Null DeviceWrapper found when trying to notify {}", notificationType.name());
+    		return;
+    	}
+    	else if (device.getDevice() == null)
+    	{
+    		logger.warn("Null device found when trying to notify {} about " + notificationType.name(), device.getDeviceIdentification());
+    		return;
+    	}
+    	
     	ServerJSONMessage notify = JSONFactory.createServerJSONMessage(null, Consts.MessageId.BusinessSessionNotification);
     	JSONObject header = notify.getHeader(); 
 		header.put(JSONKey.MessageSn, CommonFunctions.getRandomString(GlobalSetting.BusinessSetting.LengthOfMessageSn));
@@ -414,11 +462,8 @@ public class BusinessSession implements IBusinessSession
 			notify.setDelayOfHandle(GlobalSetting.BusinessSetting.DelayOfSessionBound);
 		}
     	
-    	//logger.debug("===============10131===============Device <{}>", device.getDeviceIdentification());
     	notify.setDeviceWrapper(device);
-    	//logger.debug("===============10132===============Device <{}>", device.getDeviceIdentification());
 		device.prepareResponse(notify);
-		//logger.debug("===============10133===============Device <{}>", device.getDeviceIdentification());
     }
     
     private JSONObject getOperationInfoOfOtherDevices(IDeviceWrapper deviceToBeExcluded)
@@ -543,7 +588,7 @@ public class BusinessSession implements IBusinessSession
     	}
     	*/
     	
-    	if (progress != Consts.DeviceBusinessProgress.Init)
+    	if (progress != Consts.DeviceBusinessProgress.SessionBoundNotified)
     	{
     		logger.error("Received confirmation SessionBound from device <{}> but its business progress is " + progress.name(), device.getDeviceIdentification());
     		return;
@@ -569,6 +614,8 @@ public class BusinessSession implements IBusinessSession
     	{
     		logger.debug("Device <{}> responded but not all devices responded.", device.getDeviceIdentification());
     	}
+		
+		device.enterChatConfirm();
     }
     
     /** */
@@ -630,7 +677,7 @@ public class BusinessSession implements IBusinessSession
     public void newEvent(BusinessSessionEventType eventType, IDeviceWrapper device, Object operationInfo)
     {
     	BusinessSessionEvent event = new BusinessSessionEvent(eventType, device, operationInfo, this);
-    	messageHandler.addMessage(event);
+    	eventHandler.addMessage(event);
     }
     
     @Override
@@ -661,6 +708,11 @@ public class BusinessSession implements IBusinessSession
     	{
     		logger.debug("All devices agreed chat after device <{}> agreed", device.getDeviceIdentification());
     		changeStatus(Consts.BusinessSessionStatus.VideoChat);
+    		
+    		for (IDeviceWrapper tmpDevice : deviceList)
+    		{
+    			tmpDevice.leaveChatConfirm();
+    		}
     	}
     	else
     	{
@@ -703,17 +755,13 @@ public class BusinessSession implements IBusinessSession
     @Override
     public void onDeviceLeave(IDeviceWrapper device, Consts.StatusChangeReason reason)
     {
-    	//logger.debug("===============131===============Device <{}>, session id: " + getSessionId(), device.getDeviceIdentification());
     	if (deviceList == null)
     	{
-    		//logger.debug("===============132===============Device <{}>", device.getDeviceIdentification());
     		return;
     	}
     	
-    	//logger.debug("===============133===============Device <{}>", device.getDeviceIdentification());
     	//deviceList.remove(device);
    		//progressMap.remove(device.getDeviceIdentification());
-    	//logger.debug("===============134===============Device <{}>", device.getDeviceIdentification());
    		
    		//device.unbindBusinessSession();
 		logger.debug("Device <{}> was removed from business session due to " + reason.name(), device.getDeviceIdentification());
@@ -733,16 +781,20 @@ public class BusinessSession implements IBusinessSession
 				int duration = (int) (System.currentTimeMillis() - chatStartTime);
 				device.increaseChatDuration(duration);
 			}
-			notifyDevices(device, NotificationType.OthersideLost, null);
+			
 			defaultGoodAssess(deviceList, device);
+			notifyDevices(device, NotificationType.OthersideLost, null);
     	}
 		else if (reason == Consts.StatusChangeReason.AppLeaveBusiness)
 		{
 			notifyDevices(device, NotificationType.OthersideRejected, null);
 		}
+		
 		updateBusinessProgress(device.getDeviceIdentification(), DeviceBusinessProgress.Leaved);
    		
-    
+		// Recycle WebRTC session after any of device leaved 
+		recycleWebRTCSession();
+		
 		if (checkAllDevicesReach(DeviceBusinessProgress.Leaved))
     	//if (deviceList == null || deviceList.isEmpty())
     	{
@@ -784,6 +836,40 @@ public class BusinessSession implements IBusinessSession
 		}
 		return progress;
 	}
+	
+	@Override
+	public boolean checkProgressForNotification(IDeviceWrapper device, NotificationType notificationType, JSONObject operationInfoObj)
+	{
+		DeviceBusinessProgress progress = this.getProgressOfDevice(device);
+		if (progress == DeviceBusinessProgress.Invalid)
+		{
+			logger.error("It's trying to check notification for Device <{}> but its progress is invalid", device.getDeviceIdentification());
+			return false;
+		}
+		
+		if (progress.getValue() >= Consts.DeviceBusinessProgress.ChatEnded.getValue())
+		{
+			// Cancel notification if device has ended chat or leaved session
+			return false;
+		}
+		
+		if (notificationType != NotificationType.SessionBound)
+		{
+			// It's not allowed to send Othersidexxx before notifying SessionBound
+			if (progress.ordinal() < DeviceBusinessProgress.SessionBoundNotified.ordinal())
+			{
+				if (!eventHandler.isEmpty())
+				{
+					// Currently, it's designed to cover case of OthersideLost occurred before notification of SessionBound
+					// Create new notification event to notify after notification of SessionBound 
+					this.createNotifyEvent(device, notificationType, operationInfoObj);
+				}
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	@Override
 	public boolean checkProgressForRequest(IDeviceWrapper device, OperationType operationType)
 	{
@@ -820,12 +906,15 @@ public class BusinessSession implements IBusinessSession
 					return false;
 				}
 				break;
+			case SessionBoundNotified:
+				//logger.error("Received " + operationType.name() + " from " + device.getDeviceIdentification() + " at progress of SessionBoundNotified");
+				return false;
 			/*
 			case AssessFinished:
 				return false;
 			*/
 			default:
-				logger.error("Invalid business progress:{}", progress.name());
+				logger.error("Invalid business progress:{} of device " + device.getDeviceIdentification(), progress.name());
 				return false;
 		}
 		return true;

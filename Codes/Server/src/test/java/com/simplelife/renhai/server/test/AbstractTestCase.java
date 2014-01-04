@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import junit.framework.TestCase;
 
+import com.simplelife.renhai.server.RenHaiListener;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
@@ -22,6 +23,7 @@ import com.simplelife.renhai.server.db.Interestcard;
 import com.simplelife.renhai.server.db.Profile;
 import com.simplelife.renhai.server.json.JSONModule;
 import com.simplelife.renhai.server.business.BusinessModule;
+import com.simplelife.renhai.server.business.pool.InputMsgExecutorPool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
@@ -48,6 +50,7 @@ public abstract class AbstractTestCase extends TestCase
 	
 	public void setUp() throws Exception
 	{
+		InputMsgExecutorPool.instance.startService();
 		/*
 		BusinessModule.instance.startService();
 		DBModule.instance.startService();

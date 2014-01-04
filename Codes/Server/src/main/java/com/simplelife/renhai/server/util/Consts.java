@@ -323,11 +323,12 @@ public class Consts
 	{
 		Invalid(0), 
 		Init(1), 
-		SessionBoundAcked(2), 
-		ChatAgreed(3), 
-		ChatEnded(4),
-		AssessProvided(5),
-		Leaved(6);
+		SessionBoundNotified(2),
+		SessionBoundAcked(3), 
+		ChatAgreed(4), 
+		ChatEnded(5),
+		AssessProvided(6),
+		Leaved(7);
 		
 		private int value;
 		private DeviceBusinessProgress(int value)
@@ -840,13 +841,20 @@ public class Consts
 	
 	public enum BusinessSessionEventType
 	{
-		Invalid(0), 
+		Invalid(0),
 		BindConfirm(1),
-		AgreeChat(2),
-		RejectChat(3),
-		ChatMessage(4),
-		DeviceLeave(5),
-		EndChat(6);
+		RejectChat(2),
+		AgreeChat(3),
+		DeviceLeave(4),
+		EndChat(5),
+		ChatMessage(6),
+		NotifySessionBound(7),
+		NotifyOthersideRejected(8),
+		NotifyOthersideAgreed(9),
+		NotifyOthersideLost(10),
+		NotifyOthersideEndChat(11),
+		NotifyOthersideChatMessage(12);
+		
 		
 		private int value;
 		private BusinessSessionEventType(int value)

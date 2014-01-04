@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.db.Interestlabelmap;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.IProductor;
 import com.simplelife.renhai.server.util.Worker;
@@ -151,7 +152,14 @@ public class InterestMatchManager implements IProductor
 		@Override
 		public void run()
 		{
-			removeInterestIndex(device);
+			try
+			{
+				removeInterestIndex(device);
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
 	}
 	
@@ -169,35 +177,41 @@ public class InterestMatchManager implements IProductor
 		@Override
 		public void run()
 		{
-			Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-			logger.debug("Run of MatchCoordinator for device <{}>", device.getDeviceIdentification());
-			Collection<Interestlabelmap> maps = device
-					.getDevice()
-					.getProfile()
-					.getInterestCard()
-					.getInterestLabelMapSet();
-			
-			String strLabel;
-			boolean matchFlag = false;
-			for (Interestlabelmap map : maps)
+			try
 			{
-				strLabel = map.getGlobalLabel().getInterestLabelName();
-				if (match(strLabel))
-				{
-					logger.debug("Success to match devices bases on label: {}", strLabel);
-					matchFlag = true;
-					break;
-				}
-			}
-			
-			if (!matchFlag)
-			{
-				logger.debug("Can't find devices with same interest labels, add interest labels of device <{}> into interestLabelDeviceMap", device.getDeviceIdentification());
+				Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+				logger.debug("Run of MatchCoordinator for device <{}>", device.getDeviceIdentification());
+				Collection<Interestlabelmap> maps = device.getDevice().getProfile().getInterestCard()
+						.getInterestLabelMapSet();
+				
+				String strLabel;
+				boolean matchFlag = false;
 				for (Interestlabelmap map : maps)
 				{
 					strLabel = map.getGlobalLabel().getInterestLabelName();
-					interestLabelDeviceMap.put(strLabel, device);
+					if (match(strLabel))
+					{
+						logger.debug("Success to match devices bases on label: {}", strLabel);
+						matchFlag = true;
+						break;
+					}
 				}
+				
+				if (!matchFlag)
+				{
+					logger.debug(
+							"Can't find devices with same interest labels, add interest labels of device <{}> into interestLabelDeviceMap",
+							device.getDeviceIdentification());
+					for (Interestlabelmap map : maps)
+					{
+						strLabel = map.getGlobalLabel().getInterestLabelName();
+						interestLabelDeviceMap.put(strLabel, device);
+					}
+				}
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
 			}
 		}
 		

@@ -112,7 +112,16 @@ public class Globalinterestlabel implements IDbObject
 		}
 		else
 		{
-			mapper.insert(this);
+			Globalinterestlabel label = (Globalinterestlabel) mapper.selectByStringKey(interestLabelName);
+			if (label == null)
+			{
+				mapper.insert(this);
+			}
+			else
+			{
+				mapper.updateByPrimaryKey(this);
+				this.globalInterestLabelId = label.getGlobalInterestLabelId();
+			}
 		}
 	}
 	

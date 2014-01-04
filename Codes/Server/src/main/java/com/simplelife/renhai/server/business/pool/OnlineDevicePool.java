@@ -53,6 +53,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     public final static OnlineDevicePool instance = new OnlineDevicePool();
     public final static TimeoutLink pingLink = new TimeoutLink(GlobalSetting.TimeOut.CheckPingInterval);
     public final static TimeoutLink syncSendingTimeoutLink = new TimeoutLink(GlobalSetting.TimeOut.CheckPingInterval);
+    public final static TimeoutLink chatConfirmTimeoutLink = new TimeoutLink(GlobalSetting.TimeOut.CheckPingInterval);
     
     private OnlineDevicePool()
     {
@@ -100,7 +101,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	
     	String id = connection.getConnectionId();
     	connectedDeviceMap.put(id, deviceWrapper);
-    	deviceCount.addAndGet(1);
+    	deviceCount.incrementAndGet();
     	
     	logger.debug("Save connection {} in OnlineDevicePool", id);
     	return deviceWrapper;
@@ -134,7 +135,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     		if (connectedDeviceMap.containsKey(id))
     		{
 	    		connectedDeviceMap.remove(id);
-	    		deviceCount.addAndGet(-1);
+	    		deviceCount.decrementAndGet();
 	    		logger.debug("Device <{}> was removed from queueDeviceMap of online device pool, device count after remove: " + getDeviceCount(), id);
     		}
     		else
@@ -223,7 +224,7 @@ public class OnlineDevicePool extends AbstractDevicePool
     	if (deviceSn == null || deviceSn.length() == 0)
     	{
     		logger.error("Fatal error that device on connection {} has empty deviceSn", connectionId);
-    		deviceCount.addAndGet(-1);
+    		deviceCount.decrementAndGet();
     		return;
     	}
     	appDataSyncedDeviceMap.put(deviceWrapper.getDeviceIdentification(), deviceWrapper);
@@ -277,7 +278,7 @@ public class OnlineDevicePool extends AbstractDevicePool
 	{
 		logger.debug("Device <{}> was identified as banned device", device.getDeviceIdentification());
 		connectedDeviceMap.remove(device.getConnection().getConnectionId());
-		deviceCount.addAndGet(-1);
+		deviceCount.decrementAndGet();
 		bannedDeviceList.add(device);
 	}
 	
@@ -390,10 +391,17 @@ public class OnlineDevicePool extends AbstractDevicePool
 		@Override
 		public void run()
 		{
-			logger.debug("Adjust device count of pools");
-			OnlineDevicePool.instance.adjustDeviceCount();
-			AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(BusinessType.Interest);
-			pool.adjustDeviceCount();
+			try
+			{
+				logger.debug("Adjust device count of pools");
+				OnlineDevicePool.instance.adjustDeviceCount();
+				AbstractBusinessDevicePool pool = OnlineDevicePool.instance.getBusinessPool(BusinessType.Interest);
+				pool.adjustDeviceCount();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
 	}
 	private class InactiveCheckTask extends TimerTask
@@ -406,9 +414,9 @@ public class OnlineDevicePool extends AbstractDevicePool
 		@Override
 		public void run()
 		{
-			Thread.currentThread().setName("PingCheckTimer");
 			try
 			{
+				Thread.currentThread().setName("PingCheckTimer");
 				pingLink.checkTimeout();
 				//PingActionQueue.instance.newAction(TimeoutActionType.CheckTimeout, null);
 			}

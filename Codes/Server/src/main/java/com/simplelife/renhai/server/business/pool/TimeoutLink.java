@@ -151,11 +151,21 @@ public class TimeoutLink
 	
 	public void moveToTail(AbstractTimeoutNode node)
 	{
+		if (node == null)
+		{
+			return;
+		}
+		
 		actionQueue.newAction(TimeoutActionType.MoveToTail, node);
 	}
 	
 	private void executeMoveToTail(AbstractTimeoutNode node)
 	{
+		if (node == null)
+		{
+			return;
+		}
+		
 		if (tail == node)
 		{
 			return;
@@ -209,22 +219,29 @@ public class TimeoutLink
 		@Override
 		public void run()
 		{
-			switch(actionType)
+			try
 			{
-				case Invalid:
-					break;
-				case MoveToTail:
-					executeMoveToTail(node);
-					break;
-				case CheckTimeout:
-					executeCheckTimeout();
-					break;
-				case RemoveNode:
-					executeRemoveNode(node);
-					break;
-				case AppendToTail:
-					executeAddToTail(node);
-					break;
+				switch(actionType)
+				{
+					case Invalid:
+						break;
+					case MoveToTail:
+						executeMoveToTail(node);
+						break;
+					case CheckTimeout:
+						executeCheckTimeout();
+						break;
+					case RemoveNode:
+						executeRemoveNode(node);
+						break;
+					case AppendToTail:
+						executeAddToTail(node);
+						break;
+				}
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
 			}
 		}
 	}

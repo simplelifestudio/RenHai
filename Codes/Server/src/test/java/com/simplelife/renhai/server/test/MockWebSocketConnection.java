@@ -150,7 +150,7 @@ public class MockWebSocketConnection extends WebSocketConnection implements IMoc
     	lastSentMessage = jsonObject;
     	controller.lock.lock(); 
 	    	
-    	boolean exceptionOcurred = false;
+    	boolean exceptionOcurred = false; 
     	try
     	{
     		logger.debug("Send synchronized message to device <{}>, MessageSn: " + messageSn, mockApp.getDeviceSn());

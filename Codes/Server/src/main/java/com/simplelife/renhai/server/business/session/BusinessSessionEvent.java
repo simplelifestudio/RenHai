@@ -1,10 +1,13 @@
 package com.simplelife.renhai.server.business.session;
 
+import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionEventType;
+import com.simplelife.renhai.server.util.Consts.NotificationType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.CommonFunctions;
+import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -78,6 +81,24 @@ public class BusinessSessionEvent implements IRunnableMessage
 				break;
 			case Invalid:
 				BusinessModule.instance.getLogger().error("Fatal error: invalid business session event type, session ID: {}", this.getMsgOwnerInfo());
+				break;
+			case NotifySessionBound:
+				session.notifyDevice(device, NotificationType.SessionBound, (JSONObject)operationInfo);
+				break;
+			case NotifyOthersideLost:
+				session.notifyDevice(device, NotificationType.OthersideLost, (JSONObject)operationInfo);
+				break;
+			case NotifyOthersideAgreed:
+				session.notifyDevice(device, NotificationType.OthersideAgreed, (JSONObject)operationInfo);
+				break;
+			case NotifyOthersideChatMessage:
+				session.notifyDevice(device, NotificationType.OthersideChatMessage, (JSONObject)operationInfo);
+				break;
+			case NotifyOthersideEndChat:
+				session.notifyDevice(device, NotificationType.OthersideEndChat, (JSONObject)operationInfo);
+				break;
+			case NotifyOthersideRejected:
+				session.notifyDevice(device, NotificationType.OthersideRejected, (JSONObject)operationInfo);
 				break;
 		}
 	}

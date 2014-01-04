@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.db.Device;
+import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -150,29 +151,35 @@ public abstract class ServerJSONMessage extends AbstractJSONMessage implements I
     @Override
     public void run()
     {
-    	if (deviceWrapper == null)
+    	try
     	{
-    		logger.error("DeviceWrapper of ServerJSONMessage is null! message Id: {}", this.header.getString(JSONKey.MessageId));
-    		return;
+	    	if (deviceWrapper == null)
+	    	{
+	    		logger.error("DeviceWrapper of ServerJSONMessage is null! message Id: {}", this.header.getString(JSONKey.MessageId));
+	    		return;
+	    	}
+	    	
+	    	// Update current time again before sending
+	    	//addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
+	    	int duration = this.getQueueDuration();
+	    	if (duration > GlobalSetting.BusinessSetting.MessageQueueTime)
+	    	{
+	    		logger.warn("Response with SN {} was queued " + duration + "ms ago, consider increasing size of output message execution thread pool.", this.getMessageSn());
+	    	}
+	    	
+	    	if (this.isSyncMessage())
+	    	{
+	    		deviceWrapper.syncSendMessage(this);
+	    	}
+	    	else
+	    	{
+	    		deviceWrapper.asyncSendMessage(this);
+	    	}
     	}
-    	
-    	// Update current time again before sending
-    	//addToHeader(JSONKey.TimeStamp, DateUtil.getNow());
-    	int duration = this.getQueueDuration();
-    	if (duration > GlobalSetting.BusinessSetting.MessageQueueTime)
-    	{
-    		logger.warn("Response with SN {} was queued " + duration + "ms ago, consider increasing size of output message execution thread pool.", this.getMessageSn());
-    	}
-    	
-    	if (this.isSyncMessage())
-    	{
-    		deviceWrapper.syncSendMessage(this);
-    	}
-    	else
-    	{
-    		deviceWrapper.asyncSendMessage(this);
-    	}
-    	
+		catch(Exception e)
+		{
+			FileLogger.printStackTrace(e);
+		}
     }
     
     @Override

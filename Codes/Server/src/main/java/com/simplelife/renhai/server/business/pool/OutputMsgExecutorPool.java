@@ -15,6 +15,6 @@ public class OutputMsgExecutorPool extends AbstractMsgExecutorPool
 	@Override
 	public void startService()
 	{
-		executeThreadPool = Executors.newFixedThreadPool(GlobalSetting.BusinessSetting.OutputMessageSendThreads);
+		//executeThreadPool = Executors.newFixedThreadPool(GlobalSetting.BusinessSetting.OutputMessageSendThreads);
 	}
 }

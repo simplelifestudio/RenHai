@@ -41,18 +41,20 @@ public class GlobalSetting
 	
 	public static class TimeOut
 	{
-		public static int JSONMessageEcho = 9;
+		public static int JSONMessageEcho = 60;
+		public static int PingTimeout = 60 * 1000;
+		
 		public static int ChatConfirm = 15 * 1000;
 		public static int Assess = 60;
 		public static int CheckExpiredToken = 3600;
 		
-		public static int FlushCacheToDB = 30 * 1000;
+		public static int FlushCacheToDB = 60 * 1000;
 		
 		public static int OnlineDeviceConnection = 300 * 1000;
 		
 		public static int PingInterval = 4 * 1000;
 		public static int CheckPingInterval = 1 * 1000;
-		public static int PingTimeout = PingInterval + PingInterval + CheckPingInterval;  
+		public static int ChatConfirmTimeout = PingInterval + PingInterval + CheckPingInterval;  
 		
 		public static int SaveStatistics = 600 * 1000;
 		public static int AdjustDeviceCount = 60 * 1000;
@@ -60,22 +62,22 @@ public class GlobalSetting
 	
 	public static class DBSetting
 	{
-		public static int MaxRecordCountForFlush = 30;
+		public static int MaxRecordCountForFlush = 100;
 		public static int CacheCompressBuffer = 30;
 		public static int MaxRecordCountForDiscard = 1000;
 		
 		public static int GlobalImpressLabelCacheCount = 1000;
 		public static int GlobalInterestLabelCacheCount = 1000;
-		public static int DeviceCacheCount = 10000;
+		public static int DeviceCacheCount = 5000;
 	}
 	
 	public static class BusinessSetting
 	{
-		public static int OnlinePoolCapacity = 10000;
+		public static int OnlinePoolCapacity = 5000;
 		public static int RandomBusinessPoolCapacity = 0;
-		public static int InterestBusinessPoolCapacity = 10000;
-		public static int WebRTCSessionPoolCapacity = 500;
-		//public static int DefaultImpressLabelCount = 10;
+		public static int InterestBusinessPoolCapacity = 5000;
+		public static int WebRTCSessionPoolCapacity = 2500; 
+		//public static int DefaultImpressLabelCount = 10; 
 		public static int HotInterestLabelCount = 10;
 		
 		public static int Encrypt = 1;
@@ -84,8 +86,8 @@ public class GlobalSetting
 		public static int LengthOfMessageSn = 16;
 		
 		public static int MaxImpressLabelCount = 20;
-		public static int InputMessageHandleThreads = 200;
-		public static int OutputMessageSendThreads = 800;
+		public static int InputMessageHandleThreads = 1200;
+		//public static int OutputMessageSendThreads = 1200;
 		public static int MessageQueueTime = 3 * 1000;
 		
 		public static int DelayOfSessionBound = 1000;
@@ -148,7 +150,7 @@ public class GlobalSetting
 		
 		logger.debug("Start to update setting from file {}", fileName);
 		JSONObject tmpObj = obj.getJSONObject(SettingFieldName.TimeOut);
-		TimeOut.JSONMessageEcho			= getIntValue(tmpObj, SettingFieldName.JSONMessageEcho);
+		//TimeOut.JSONMessageEcho			= getIntValue(tmpObj, SettingFieldName.JSONMessageEcho);
 		TimeOut.ChatConfirm				= getIntValue(tmpObj, SettingFieldName.ChatConfirm);
 		TimeOut.Assess					= getIntValue(tmpObj, SettingFieldName.Assess);
 		TimeOut.CheckExpiredToken		= getIntValue(tmpObj, SettingFieldName.CheckExpiredToken);
@@ -167,10 +169,10 @@ public class GlobalSetting
 		DBSetting.DeviceCacheCount					= getIntValue(tmpObj, SettingFieldName.DeviceCacheCount);
 		
 		tmpObj = obj.getJSONObject(SettingFieldName.BusinessSetting);
-		BusinessSetting.OnlinePoolCapacity				= getIntValue(tmpObj, SettingFieldName.OnlinePoolCapacity);
-		BusinessSetting.WebRTCSessionPoolCapacity		= getIntValue(tmpObj, SettingFieldName.WebRTCSessionPoolCapacity);
-		BusinessSetting.RandomBusinessPoolCapacity		= getIntValue(tmpObj, SettingFieldName.RandomBusinessPoolCapacity);
-		BusinessSetting.InterestBusinessPoolCapacity	= getIntValue(tmpObj, SettingFieldName.InterestBusinessPoolCapacity);
+		//BusinessSetting.OnlinePoolCapacity				= getIntValue(tmpObj, SettingFieldName.OnlinePoolCapacity);
+		//BusinessSetting.WebRTCSessionPoolCapacity		= getIntValue(tmpObj, SettingFieldName.WebRTCSessionPoolCapacity);
+		//BusinessSetting.RandomBusinessPoolCapacity		= getIntValue(tmpObj, SettingFieldName.RandomBusinessPoolCapacity);
+		//BusinessSetting.InterestBusinessPoolCapacity	= getIntValue(tmpObj, SettingFieldName.InterestBusinessPoolCapacity);
 		//BusinessSetting.DefaultImpressLabelCount		= getIntValue(tmpObj, SettingFieldName.DefaultImpressLabelCount);
 		BusinessSetting.HotInterestLabelCount			= getIntValue(tmpObj, SettingFieldName.HotInterestLabelCount);
 		BusinessSetting.Encrypt							= getIntValue(tmpObj, SettingFieldName.Encrypt);
@@ -178,12 +180,12 @@ public class GlobalSetting
 		BusinessSetting.LengthOfSessionId				= getIntValue(tmpObj, SettingFieldName.LengthOfSessionId);
 		BusinessSetting.LengthOfMessageSn				= getIntValue(tmpObj, SettingFieldName.LengthOfMessageSn);
 		BusinessSetting.MaxImpressLabelCount			= getIntValue(tmpObj, SettingFieldName.MaxImpressLabelCount);
-		BusinessSetting.InputMessageHandleThreads		= getIntValue(tmpObj, SettingFieldName.InputMessageHandleThreads);
-		BusinessSetting.OutputMessageSendThreads		= getIntValue(tmpObj, SettingFieldName.OutputMessageSendThreads);
+		//BusinessSetting.InputMessageHandleThreads		= getIntValue(tmpObj, SettingFieldName.InputMessageHandleThreads);
+		//BusinessSetting.OutputMessageSendThreads		= getIntValue(tmpObj, SettingFieldName.OutputMessageSendThreads);
 		BusinessSetting.MessageQueueTime				= getIntValue(tmpObj, SettingFieldName.MessageQueueTime);
 		BusinessSetting.DelayOfSessionBound				= getIntValue(tmpObj, SettingFieldName.DelayOfSessionBound);
-		BusinessSetting.OpenTokKey						= getIntValue(tmpObj, SettingFieldName.OpenTokKey);
-		BusinessSetting.OpenTokSecret					= getStringValue(tmpObj, SettingFieldName.OpenTokSecret);
+		//BusinessSetting.OpenTokKey						= getIntValue(tmpObj, SettingFieldName.OpenTokKey);
+		//BusinessSetting.OpenTokSecret					= getStringValue(tmpObj, SettingFieldName.OpenTokSecret);
 		BusinessSetting.OpenTokTokenExpiration			= getIntValue(tmpObj, SettingFieldName.OpenTokTokenExpiration);
 		BusinessSetting.OpenTokTokenDuration			= getIntValue(tmpObj, SettingFieldName.OpenTokTokenDuration);
 	}
@@ -311,6 +313,7 @@ public class GlobalSetting
 		}
 
 		tmpObj = obj.getJSONObject(SettingFieldName.BusinessSetting);
+		/*
 		if(!checkField(tmpObj, SettingFieldName.OnlinePoolCapacity))
 		{
 			return false;
@@ -326,7 +329,6 @@ public class GlobalSetting
 			return false;
 		}
 		
-		/*
 		if(!checkField(tmpObj, SettingFieldName.DefaultImpressLabelCount))
 		{
 			return false;

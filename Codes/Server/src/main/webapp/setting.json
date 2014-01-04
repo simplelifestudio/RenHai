@@ -1,7 +1,7 @@
 {
 	"timeOut":
 	{
-		"jsonMessageEcho":9,
+		"jsonMessageEcho":60,
 		"chatConfirm":15000,
 		"assess":60,
 		"checkExpiredToken":3600,
@@ -24,10 +24,6 @@
 	
 	"businessSetting":
 	{
-		"onlinePoolCapacity":10000,
-		"webRTCSessionPoolCapacity":1500,
-		"randomBusinessPoolCapacity":0,
-		"interestBusinessPoolCapacity":10000,
 		"hotInterestLabelCount":10,
 
 		"encrypt":1,

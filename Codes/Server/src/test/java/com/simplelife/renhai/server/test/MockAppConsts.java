@@ -14,11 +14,12 @@ package com.simplelife.renhai.server.test;
  */
 public class MockAppConsts
 {
+	public final static int chatDuration[] = {30, 40, 50, 70, 100, 120, 180, 240, 300, 500};
 	public static class Setting
 	{
 		public static int ChatConfirmDuration = 3 * 1000;
-		public static int VideoChatDurationMin = 30 * 1000;
-		public static int VideoChatDurationMax = 60 * 1000;
+		//public static int VideoChatDurationMin = 30 * 1000;
+		//public static int VideoChatDurationMax = 3000 * 1000;
 		public static int AssessDuration = 10 * 1000;
 		
 		public static int MaxChatCount = 10000;

@@ -82,7 +82,14 @@ public class DAOWrapper implements IProductor
 		@Override
 		public void run()
 		{
-			DAOWrapper.instance.flushToDB();
+			try
+			{
+				DAOWrapper.instance.flushToDB();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
 	}
 	
@@ -96,7 +103,14 @@ public class DAOWrapper implements IProductor
 		@Override
 		public void run()
 		{
-			worker.resumeExecution();
+			try
+			{
+				worker.resumeExecution();
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
 	}
 	

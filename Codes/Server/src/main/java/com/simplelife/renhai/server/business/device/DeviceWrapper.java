@@ -28,8 +28,6 @@ import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.InputMsgExecutorPool;
 import com.simplelife.renhai.server.business.pool.MessageHandler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.business.pool.OutputMsgExecutorPool;
-import com.simplelife.renhai.server.business.pool.TimeoutLink;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.Device;
 import com.simplelife.renhai.server.db.Devicecard;
@@ -47,7 +45,6 @@ import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.BusinessSessionEventType;
 import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
-import com.simplelife.renhai.server.util.Consts.TimeoutActionType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
@@ -91,6 +88,7 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     private MessageHandler outputMessageHandler;
     
     private AbstractTimeoutNode pingTimeoutNode;
+    private AbstractTimeoutNode chatConfirmTimeoutNode;
     
     private MessageHandler changeStatusHandler;
     
@@ -107,6 +105,29 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     	}
     	
     	OnlineDevicePool.pingLink.moveToTail(pingTimeoutNode);
+    	
+    	if (this.chatConfirmTimeoutNode != null)
+    	{
+    		OnlineDevicePool.chatConfirmTimeoutLink.moveToTail(chatConfirmTimeoutNode);
+    	}
+    }
+    
+    public void enterChatConfirm()
+    {
+    	/*
+    	chatConfirmTimeoutNode = new PingTimeoutNode(GlobalSetting.TimeOut.ChatConfirmTimeout, this);
+    	OnlineDevicePool.chatConfirmTimeoutLink.append(chatConfirmTimeoutNode);
+    	logger.debug("Device <{}> entered phase of ChatConfirm", this.getDeviceIdentification());
+    	*/
+    }
+    
+    public void leaveChatConfirm()
+    {
+    	/*
+    	OnlineDevicePool.chatConfirmTimeoutLink.removeNode(chatConfirmTimeoutNode);
+    	chatConfirmTimeoutNode = null;
+    	logger.debug("Device <{}> leaved phase of ChatConfirm", this.getDeviceIdentification());
+    	*/
     }
     
     public AbstractTimeoutNode getPingNode()
@@ -122,10 +143,12 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     {
     	this.webSocketConnection = connection;
     	this.businessStatus = DeviceStatus.Connected;
-    	pingTimeoutNode = new PingTimeoutNode(GlobalSetting.TimeOut.PingTimeout, this, OnlineDevicePool.pingLink);
+    	pingTimeoutNode = new PingTimeoutNode(GlobalSetting.TimeOut.PingTimeout, this);
+    	OnlineDevicePool.pingLink.append(pingTimeoutNode);
+    	
     	connection.bind(this);
     	inputMessageHandler = new MessageHandler(connection.getConnectionId(), InputMsgExecutorPool.instance);
-        outputMessageHandler = new MessageHandler(connection.getConnectionId(), OutputMsgExecutorPool.instance);
+        outputMessageHandler = new MessageHandler(connection.getConnectionId(), InputMsgExecutorPool.instance);
         changeStatusHandler = new  MessageHandler(connection.getConnectionId(), InputMsgExecutorPool.instance);
     }
 
@@ -190,7 +213,6 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					DAOWrapper.instance.cache(this.getDevice());
     					break;
     				case SessionBound:
-    					//logger.debug("===============1===============Device <{}>", this.getDeviceIdentification());
     					try
     					{
     						unbindBusinessSession(reason);
@@ -199,7 +221,6 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					{
     						FileLogger.printStackTrace(e);
     					}
-    					//logger.debug("===============2===============Device <{}>", this.getDeviceIdentification());
     					try
     					{
     						businessPool.onDeviceLeave(this, reason);
@@ -208,7 +229,6 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					{
     						FileLogger.printStackTrace(e);
     					}
-    					//logger.debug("===============3===============Device <{}>", this.getDeviceIdentification());
     					try
     					{
     						ownerOnlinePool.deleteDevice(this, reason);
@@ -217,7 +237,6 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					{
     						FileLogger.printStackTrace(e);
     					}
-    					//logger.debug("===============4===============Device <{}>", this.getDeviceIdentification());
     					try
     					{
     						unbindOnlineDevicePool();				// No request is accepted from now on
@@ -226,7 +245,6 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					{
     						FileLogger.printStackTrace(e);
     					}
-    					//logger.debug("===============5===============Device <{}>", this.getDeviceIdentification());
     					try
     					{
     						device.getProfile().setLastActivityTime(lastActivityTime);
@@ -235,7 +253,6 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					{
     						FileLogger.printStackTrace(e);
     					}
-    					//logger.debug("===============6===============Device <{}>", this.getDeviceIdentification());
     					try
     					{
     						DAOWrapper.instance.cache(this.getDevice());
@@ -244,7 +261,6 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     					{
     						FileLogger.printStackTrace(e);
     					}
-    					//logger.debug("===============7===============Device <{}>", this.getDeviceIdentification());
     					break;
     					
     				case Disconnected:
@@ -409,26 +425,22 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
     /** */
     public void unbindBusinessSession(StatusChangeReason reason)
     {
-    	//logger.debug("===============11===============Device <{}>", this.getDeviceIdentification());
     	if (this.businessStatus != Consts.DeviceStatus.SessionBound)
     	{
     		logger.debug("Device <{}> is not in status of SessionBound, return directly");
     		return;
     	}
     	
-    	//logger.debug("===============12===============Device <{}>", this.getDeviceIdentification());
     	if (ownerBusinessSession == null)
     	{
     		logger.debug("ownerBusinessSession of Device <{}> is null, return directly");
     		return;
     	}
     	
-    	//logger.debug("===============13===============Device <{}>", this.getDeviceIdentification());
     	logger.debug("Unbind device <{}> from business session", getDeviceIdentification());
     	//ownerBusinessSession.onDeviceLeave(this, reason);
     	ownerBusinessSession.newEvent(BusinessSessionEventType.DeviceLeave, this, reason);
     	ownerBusinessSession = null;
-    	//logger.debug("===============14===============Device <{}>", this.getDeviceIdentification());
     }
     
     /** */
@@ -578,7 +590,9 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
         		return;
         	}
         	
-        	SyncSendTimeoutNode node = new SyncSendTimeoutNode(GlobalSetting.TimeOut.JSONMessageEcho * 1000, this, message.getMessageSn(), OnlineDevicePool.syncSendingTimeoutLink);
+        	SyncSendTimeoutNode node = new SyncSendTimeoutNode(GlobalSetting.TimeOut.JSONMessageEcho * 1000, this, message.getMessageSn());
+        	OnlineDevicePool.syncSendingTimeoutLink.append(node);
+        	
         	this.syncSendingTimeoutNodeList.add(node);
         	webSocketConnection.asyncSendMessage(message);
         	/*
@@ -946,7 +960,14 @@ public class DeviceWrapper implements IDeviceWrapper, Comparable<IDeviceWrapper>
 		@Override
 		public void run()
 		{
-			serialChangeBusinessStatus(targetStatus, reason);
+			try
+			{
+				serialChangeBusinessStatus(targetStatus, reason);
+			}
+			catch(Exception e)
+			{
+				FileLogger.printStackTrace(e);
+			}
 		}
 
 		@Override

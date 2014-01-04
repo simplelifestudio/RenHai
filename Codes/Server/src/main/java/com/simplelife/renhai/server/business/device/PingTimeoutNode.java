@@ -8,16 +8,16 @@ import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 public class PingTimeoutNode extends AbstractTimeoutNode
 {
 	private IDeviceWrapper deviceWrapper;
-	public PingTimeoutNode(int timeoutThreshold, IDeviceWrapper deviceWrapper, TimeoutLink ownerLink)
+	public PingTimeoutNode(int timeoutThreshold, IDeviceWrapper deviceWrapper)
 	{
-		this(timeoutThreshold, ownerLink);
+		this(timeoutThreshold);
 		this.deviceWrapper = deviceWrapper;
 		updateTime();
 	}
 	
-	private PingTimeoutNode(int timeoutThreshold, TimeoutLink ownerLink)
+	private PingTimeoutNode(int timeoutThreshold)
 	{
-		super(timeoutThreshold, ownerLink);
+		super(timeoutThreshold);
 	}
 
 	@Override
