@@ -28,6 +28,12 @@
 #define ANIMATION_POP 0.5f
 #define ANIMATION_DISMISS 0.5f
 
+#ifdef DEBUG
+#define ENABLE_3G 1
+#else
+#define ENABLE_3G 0
+#endif
+
 typedef enum
 {
     ConnectStatus_Ready = 0,
@@ -514,7 +520,7 @@ ConnectStatus;
 {
     [self _resetInstance];
     
-    if (![CBNetworkUtils isWiFiEnabled])
+    if (!ENABLE_3G && ![CBNetworkUtils isWiFiEnabled])
     {
         [self _updateUIWithConnectStatus:ConnectStatus_NeedWiFi];
         _isProxyDataSyncSuccess = NO;
