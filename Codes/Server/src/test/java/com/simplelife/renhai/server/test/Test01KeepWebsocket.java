@@ -28,26 +28,22 @@ public class Test01KeepWebsocket extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
-		/*
-		super.setUp();
-		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
-		*/
+		//super.setUp();
+		//System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 	}
 	
 	@After
 	public void tearDown() throws Exception
 	{
-		/*
-		deleteDevice(mockApp);
-		super.tearDown();
-		*/
+		//deleteDevice(mockApp);
+		//super.tearDown();
 	}
 	
 	@Test
 	public void test() throws InterruptedException
 	{
 		/*
-		new MockWebSocketConnection();
+		//new MockWebSocketConnection();
 		
 		// Step_02 µ÷ÓÃ£ºOnlineDevicePool::getCount
 		OnlineDevicePool pool = OnlineDevicePool.instance;

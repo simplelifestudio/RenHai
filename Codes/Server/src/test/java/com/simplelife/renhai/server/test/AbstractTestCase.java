@@ -50,10 +50,9 @@ public abstract class AbstractTestCase extends TestCase
 	
 	public void setUp() throws Exception
 	{
-		InputMsgExecutorPool.instance.startService();
 		/*
-		BusinessModule.instance.startService();
 		DBModule.instance.startService();
+		BusinessModule.instance.startService();
 		JSONModule.instance.startService();
 		WebSocketModule.instance.startService();
 		*/
@@ -62,8 +61,8 @@ public abstract class AbstractTestCase extends TestCase
 	public void tearDown() throws Exception
 	{
 		/*
-		BusinessModule.instance.stopService();
 		DBModule.instance.stopService();
+		BusinessModule.instance.stopService();
 		JSONModule.instance.stopService();
 		WebSocketModule.instance.stopService();
 		*/

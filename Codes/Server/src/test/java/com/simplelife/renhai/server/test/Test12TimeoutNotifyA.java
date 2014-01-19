@@ -33,10 +33,12 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 	@Before
 	public void setUp() throws Exception
 	{
+		/*
 		super.setUp();
 		System.out.print("==================Start of " + this.getClass().getName() + "=================\n");
 		mockApp1 = createNewMockApp(demoDeviceSn);
 		mockApp2 = createNewMockApp(demoDeviceSn2);
+		*/
 	}
 	
 	/**
@@ -45,9 +47,11 @@ public class Test12TimeoutNotifyA extends AbstractTestCase
 	@After
 	public void tearDown() throws Exception
 	{
+		/*
 		deleteDevice(mockApp1);
 		deleteDevice(mockApp2);
 		super.tearDown();
+		*/
 	}
 	
 	@Test

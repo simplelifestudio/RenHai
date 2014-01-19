@@ -10,6 +10,9 @@
 package com.simplelife.renhai.server.json;
 
 import java.util.LinkedList;
+
+import org.apache.ibatis.session.SqlSession;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
@@ -17,7 +20,9 @@ import com.simplelife.renhai.server.business.pool.HotLabel;
 import com.simplelife.renhai.server.business.pool.InterestBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.RandomBusinessDevicePool;
+import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
+import com.simplelife.renhai.server.db.DeviceMapper;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
@@ -169,6 +174,23 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		{
 			responseObj.put(JSONKey.InterestChat, interestPool.getDeviceCountInChat());
 		}
+	}
+	
+	private void queryManagementStat(ServerJSONMessage response)
+	{
+		JSONObject responseObj = new JSONObject();
+		response.addToBody(JSONKey.ManagementData, responseObj);
+		
+		SqlSession session = DAOWrapper.instance.getSession();
+		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
+		int registerDeviceCount = mapper.countAll();
+		responseObj.put(JSONKey.RegisterDeviceCount, registerDeviceCount);
+		responseObj.put(JSONKey.TopInterestLabels, registerDeviceCount);
+		responseObj.put(JSONKey.TopImpressLabels, registerDeviceCount);
+		responseObj.put(JSONKey.DeviceCountByModel, registerDeviceCount);
+		responseObj.put(JSONKey.DeviceCountByOS, registerDeviceCount);
+		responseObj.put(JSONKey.TotalChatCount, registerDeviceCount);
+		responseObj.put(JSONKey.TotalChatDuration, registerDeviceCount);
 	}
 	
 	private void queryDeviceSummary(ServerJSONMessage response, 

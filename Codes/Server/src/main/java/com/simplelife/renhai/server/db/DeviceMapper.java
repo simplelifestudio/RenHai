@@ -7,4 +7,5 @@ public interface DeviceMapper extends ICachableMapper{
     int insert(Device record);
     //Device selectByDeviceSn(String deviceSn);
     Device selectByStringKey(String deviceSn);
+	int countAll();
 }

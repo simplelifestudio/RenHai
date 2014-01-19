@@ -110,6 +110,16 @@ public class JSONKey
 	public final static String MatchedCondition				= "matchedCondition";
 	public final static String Webrtc						= "webrtc";
 	public final static String ApiKey						= "apiKey";
+	
 	public final static String Token						= "token";
 	public final static String ChatMessage					= "chatMessage";
+	public final static String ManagementData				= "managementData";
+	public final static String RegisterDeviceCount			= "registerDeviceCount";
+	public final static String TopInterestLabels			= "topInterestLabels";
+	
+	public final static String TopImpressLabels				= "topImpressLabels";
+	public final static String DeviceCountByModel			= "deviceCountByModel";
+	public final static String DeviceCountByOS				= "deviceCountByOS";
+	public final static String TotalChatCount				= "totalChatCount";
+	public final static String TotalChatDuration			= "totalChatDuration";
 }
