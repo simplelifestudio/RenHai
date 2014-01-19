@@ -244,21 +244,13 @@
 		CD1DFB0A18001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */; };
 		CD1DFB0C18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */; };
-		CD230C3A1869CC8F003ACA40 /* help_01.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C321869CC8F003ACA40 /* help_01.psd */; };
 		CD230C3B1869CC8F003ACA40 /* help_01.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C321869CC8F003ACA40 /* help_01.psd */; };
-		CD230C3C1869CC8F003ACA40 /* help_02.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C331869CC8F003ACA40 /* help_02.psd */; };
 		CD230C3D1869CC8F003ACA40 /* help_02.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C331869CC8F003ACA40 /* help_02.psd */; };
-		CD230C3E1869CC8F003ACA40 /* help_03.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C341869CC8F003ACA40 /* help_03.psd */; };
 		CD230C3F1869CC8F003ACA40 /* help_03.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C341869CC8F003ACA40 /* help_03.psd */; };
-		CD230C401869CC8F003ACA40 /* help_04.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C351869CC8F003ACA40 /* help_04.psd */; };
 		CD230C411869CC8F003ACA40 /* help_04.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C351869CC8F003ACA40 /* help_04.psd */; };
-		CD230C421869CC8F003ACA40 /* help_05.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C361869CC8F003ACA40 /* help_05.psd */; };
 		CD230C431869CC8F003ACA40 /* help_05.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C361869CC8F003ACA40 /* help_05.psd */; };
-		CD230C441869CC8F003ACA40 /* help_06.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C371869CC8F003ACA40 /* help_06.psd */; };
 		CD230C451869CC8F003ACA40 /* help_06.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C371869CC8F003ACA40 /* help_06.psd */; };
-		CD230C461869CC8F003ACA40 /* help_07.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C381869CC8F003ACA40 /* help_07.psd */; };
 		CD230C471869CC8F003ACA40 /* help_07.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C381869CC8F003ACA40 /* help_07.psd */; };
-		CD230C481869CC8F003ACA40 /* help_08.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C391869CC8F003ACA40 /* help_08.psd */; };
 		CD230C491869CC8F003ACA40 /* help_08.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD230C391869CC8F003ACA40 /* help_08.psd */; };
 		CD26650D17F41DD20070934F /* UserDataModuleTest.m in Sources */ = {isa = PBXBuildFile; fileRef = CD26650C17F41DD20070934F /* UserDataModuleTest.m */; };
 		CD32013A17E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD32013817E7E4DD00270A50 /* RHTableViewSwitcherCell_iPhone.m */; };
@@ -308,35 +300,27 @@
 		CD7EE479185309AD0091EA7A /* RHChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = CD7EE476185309AD0091EA7A /* RHChatMessage.m */; };
 		CD7F19C3186FEFBF006AFFDA /* help_01_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B2186FEFBF006AFFDA /* help_01_35.png */; };
 		CD7F19C4186FEFBF006AFFDA /* help_01_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B2186FEFBF006AFFDA /* help_01_35.png */; };
-		CD7F19C5186FEFBF006AFFDA /* help_01_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B3186FEFBF006AFFDA /* help_01_35.psd */; };
 		CD7F19C6186FEFBF006AFFDA /* help_01_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B3186FEFBF006AFFDA /* help_01_35.psd */; };
 		CD7F19C7186FEFBF006AFFDA /* help_02_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B4186FEFBF006AFFDA /* help_02_35.png */; };
 		CD7F19C8186FEFBF006AFFDA /* help_02_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B4186FEFBF006AFFDA /* help_02_35.png */; };
-		CD7F19C9186FEFBF006AFFDA /* help_02_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B5186FEFBF006AFFDA /* help_02_35.psd */; };
 		CD7F19CA186FEFBF006AFFDA /* help_02_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B5186FEFBF006AFFDA /* help_02_35.psd */; };
 		CD7F19CB186FEFBF006AFFDA /* help_03_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B6186FEFBF006AFFDA /* help_03_35.png */; };
 		CD7F19CC186FEFBF006AFFDA /* help_03_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B6186FEFBF006AFFDA /* help_03_35.png */; };
-		CD7F19CD186FEFBF006AFFDA /* help_03_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B7186FEFBF006AFFDA /* help_03_35.psd */; };
 		CD7F19CE186FEFBF006AFFDA /* help_03_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B7186FEFBF006AFFDA /* help_03_35.psd */; };
 		CD7F19CF186FEFBF006AFFDA /* help_04_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B8186FEFBF006AFFDA /* help_04_35.png */; };
 		CD7F19D0186FEFBF006AFFDA /* help_04_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B8186FEFBF006AFFDA /* help_04_35.png */; };
-		CD7F19D1186FEFBF006AFFDA /* help_04_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B9186FEFBF006AFFDA /* help_04_35.psd */; };
 		CD7F19D2186FEFBF006AFFDA /* help_04_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19B9186FEFBF006AFFDA /* help_04_35.psd */; };
 		CD7F19D3186FEFBF006AFFDA /* help_05_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BA186FEFBF006AFFDA /* help_05_35.png */; };
 		CD7F19D4186FEFBF006AFFDA /* help_05_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BA186FEFBF006AFFDA /* help_05_35.png */; };
-		CD7F19D5186FEFBF006AFFDA /* help_05_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BB186FEFBF006AFFDA /* help_05_35.psd */; };
 		CD7F19D6186FEFBF006AFFDA /* help_05_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BB186FEFBF006AFFDA /* help_05_35.psd */; };
 		CD7F19D7186FEFBF006AFFDA /* help_06_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BC186FEFBF006AFFDA /* help_06_35.png */; };
 		CD7F19D8186FEFBF006AFFDA /* help_06_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BC186FEFBF006AFFDA /* help_06_35.png */; };
-		CD7F19D9186FEFBF006AFFDA /* help_06_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BD186FEFBF006AFFDA /* help_06_35.psd */; };
 		CD7F19DA186FEFBF006AFFDA /* help_06_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BD186FEFBF006AFFDA /* help_06_35.psd */; };
 		CD7F19DB186FEFBF006AFFDA /* help_07_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BE186FEFBF006AFFDA /* help_07_35.png */; };
 		CD7F19DC186FEFBF006AFFDA /* help_07_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BE186FEFBF006AFFDA /* help_07_35.png */; };
-		CD7F19DD186FEFBF006AFFDA /* help_07_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BF186FEFBF006AFFDA /* help_07_35.psd */; };
 		CD7F19DE186FEFBF006AFFDA /* help_07_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19BF186FEFBF006AFFDA /* help_07_35.psd */; };
 		CD7F19DF186FEFBF006AFFDA /* help_08_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19C0186FEFBF006AFFDA /* help_08_35.png */; };
 		CD7F19E0186FEFBF006AFFDA /* help_08_35.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19C0186FEFBF006AFFDA /* help_08_35.png */; };
-		CD7F19E1186FEFBF006AFFDA /* help_08_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19C1186FEFBF006AFFDA /* help_08_35.psd */; };
 		CD7F19E2186FEFBF006AFFDA /* help_08_35.psd in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19C1186FEFBF006AFFDA /* help_08_35.psd */; };
 		CD7F19E3186FEFBF006AFFDA /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19C2186FEFBF006AFFDA /* Icon-1024.png */; };
 		CD7F19E4186FEFBF006AFFDA /* Icon-1024.png in Resources */ = {isa = PBXBuildFile; fileRef = CD7F19C2186FEFBF006AFFDA /* Icon-1024.png */; };
@@ -1634,7 +1618,6 @@
 				ORGANIZATIONNAME = "Simplelife Studio";
 				TargetAttributes = {
 					C55B43E717CF580A009BB21B = {
-						DevelopmentTeam = 3QC6PDN9W4;
 						SystemCapabilities = {
 							com.apple.iCloud = {
 								enabled = 1;
@@ -1673,22 +1656,16 @@
 			files = (
 				CD163820185C6B66009BB03D /* chatvideo_chatmessage.caf in Resources */,
 				CD7F1A05186FF6AF006AFFDA /* Images.xcassets in Resources */,
-				CD230C421869CC8F003ACA40 /* help_05.psd in Resources */,
 				CD98ADD318687120009B77FE /* help_03.png in Resources */,
 				CD1637FA185ADC40009BB03D /* Icon-120.png in Resources */,
 				CD7F19FA186FEFE3006AFFDA /* 03_35.png in Resources */,
-				CD7F19C5186FEFBF006AFFDA /* help_01_35.psd in Resources */,
 				CD7F1A02186FEFE3006AFFDA /* 05_35.png in Resources */,
 				C55B43F617CF580A009BB21B /* InfoPlist.strings in Resources */,
-				CD7F19D5186FEFBF006AFFDA /* help_05_35.psd in Resources */,
 				C55B43FE17CF580A009BB21B /* Default.png in Resources */,
 				CDDBE35218548D1E001A1744 /* icon-info.png in Resources */,
 				C55B440017CF580A009BB21B /* Default@2x.png in Resources */,
-				CD230C3E1869CC8F003ACA40 /* help_03.psd in Resources */,
-				CD7F19C9186FEFBF006AFFDA /* help_02_35.psd in Resources */,
 				CDDA9FAB1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */,
 				CDDBE35818548D1E001A1744 /* icon-success@2x.png in Resources */,
-				CD230C3A1869CC8F003ACA40 /* help_01.psd in Resources */,
 				CD1114CB1866CA9A0091C83F /* UserIntroductionPage_iPhone.xib in Resources */,
 				C55B440217CF580A009BB21B /* Default-568h@2x.png in Resources */,
 				C55B445D17CF8632009BB21B /* Icon-72.png in Resources */,
@@ -1702,7 +1679,6 @@
 				C55B446717CF8632009BB21B /* Icon@2x.png in Resources */,
 				C55B446917CF8632009BB21B /* iTunesArtwork in Resources */,
 				C593C41517D2F55B00C26367 /* MainStoryboard_iPhone.storyboard in Resources */,
-				CD7F19DD186FEFBF006AFFDA /* help_07_35.psd in Resources */,
 				CD7F19CB186FEFBF006AFFDA /* help_03_35.png in Resources */,
 				C593C47217D4240800C26367 /* LeftBarHeaderView_iPhone.xib in Resources */,
 				CD1637F6185ADC40009BB03D /* Icon-76.png in Resources */,
@@ -1710,7 +1686,6 @@
 				C593C47917D42B7500C26367 /* LeftBarFooterView_iPhone.xib in Resources */,
 				CD98ADDD18687120009B77FE /* help_08.png in Resources */,
 				CDDBE34E18548D1E001A1744 /* icon-error.png in Resources */,
-				CD7F19D9186FEFBF006AFFDA /* help_06_35.psd in Resources */,
 				CD16380D185C65F0009BB03D /* chatconfirm_accepted.caf in Resources */,
 				CD16380F185C65F0009BB03D /* chatconfirm_rejected.caf in Resources */,
 				CD7F19C7186FEFBF006AFFDA /* help_02_35.png in Resources */,
@@ -1720,11 +1695,8 @@
 				CD16381B185C65F0009BB03D /* labelmanaged.caf in Resources */,
 				CD98ADD718687120009B77FE /* help_05.png in Resources */,
 				CD163817185C65F0009BB03D /* choosebusiness.caf in Resources */,
-				CD230C401869CC8F003ACA40 /* help_04.psd in Resources */,
-				CD230C441869CC8F003ACA40 /* help_06.psd in Resources */,
 				CD98ADDB18687120009B77FE /* help_07.png in Resources */,
 				CD7F19C3186FEFBF006AFFDA /* help_01_35.png in Resources */,
-				CD230C3C1869CC8F003ACA40 /* help_02.psd in Resources */,
 				CDFEA326182A1E5C00F0351D /* ChatAssessExistImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD16381D185C65F0009BB03D /* sessionbound.caf in Resources */,
 				CD163815185C65F0009BB03D /* chatvideo_endchat.caf in Resources */,
@@ -1745,7 +1717,6 @@
 				C596283F17DA08AA009127E6 /* sidebar_menu_icon_portrait@2x.png in Resources */,
 				C54DC8C717DC069900BBD498 /* enterbutton_highlighted.png in Resources */,
 				CD98ADD918687120009B77FE /* help_06.png in Resources */,
-				CD7F19D1186FEFBF006AFFDA /* help_04_35.psd in Resources */,
 				C54DC8C917DC069900BBD498 /* enterbutton_highlighted@2x.png in Resources */,
 				CDDBE3601854ACA4001A1744 /* ChatMessageSendView_iPhone.xib in Resources */,
 				CD16380B185C65F0009BB03D /* chatassess_quit.caf in Resources */,
@@ -1753,9 +1724,7 @@
 				C54DC8CB17DC069900BBD498 /* enterbutton_normal.png in Resources */,
 				CD7F19F2186FEFE3006AFFDA /* 01_35.png in Resources */,
 				C54DC8CD17DC069900BBD498 /* enterbutton_normal@2x.png in Resources */,
-				CD7F19E1186FEFBF006AFFDA /* help_08_35.psd in Resources */,
 				CDFEA31D182A175600F0351D /* order@2x.png in Resources */,
-				CD7F19CD186FEFBF006AFFDA /* help_03_35.psd in Resources */,
 				CD7F19F8186FEFE3006AFFDA /* 03.png in Resources */,
 				CD7F19D7186FEFBF006AFFDA /* help_06_35.png in Resources */,
 				CD98ADD518687120009B77FE /* help_04.png in Resources */,
@@ -1772,12 +1741,10 @@
 				CD7F19F0186FEFE3006AFFDA /* 01.png in Resources */,
 				CDFEA322182A1E5C00F0351D /* ChatAssessAddImpressLabelsHeaderView_iPhone.xib in Resources */,
 				CD163811185C65F0009BB03D /* chatmessage_received.caf in Resources */,
-				CD230C481869CC8F003ACA40 /* help_08.psd in Resources */,
 				CD7F19D3186FEFBF006AFFDA /* help_05_35.png in Resources */,
 				CD98ADCF18687120009B77FE /* help_01.png in Resources */,
 				CD94DF961851933C00C9CBC4 /* RenHaiLocal-Info.plist in Resources */,
 				CD1637F0185AD44B009BB03D /* AntiIcon-120.png in Resources */,
-				CD230C461869CC8F003ACA40 /* help_07.psd in Resources */,
 				CD1637FC185ADC40009BB03D /* Icon-152.png in Resources */,
 				CD163819185C65F0009BB03D /* error.caf in Resources */,
 				CD7F19F4186FEFE3006AFFDA /* 02.png in Resources */,
@@ -2451,8 +2418,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: DENG KE (R229UE6C87)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: DENG KE (R229UE6C87)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2467,7 +2434,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "5AE50A40-6EE1-45DD-91DA-6BC7EA36D654";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2485,16 +2452,17 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: DENG KE (3QC6PDN9W4)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: DENG KE (3QC6PDN9W4)";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "45A9704B-59F8-4972-A054-47E85009F746";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2507,9 +2475,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_ENTITLEMENTS = RenHai/RenHai.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: DENG KE (R229UE6C87)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: DENG KE (R229UE6C87)";
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -2525,6 +2493,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -2535,9 +2504,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_ENTITLEMENTS = RenHai/RenHai.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Developer: DENG KE (R229UE6C87)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: DENG KE (R229UE6C87)";
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -2555,6 +2524,7 @@
 				PROVISIONING_PROFILE = "";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				TARGETED_DEVICE_FAMILY = 1;
+				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
