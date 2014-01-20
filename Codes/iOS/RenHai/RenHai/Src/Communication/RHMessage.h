@@ -263,9 +263,10 @@ AppDataSyncRequestType;
 typedef enum
 {
     ServerDataSyncRequestType_TotalSync = 0,
+    ServerDataSyncRequestType_DeviceAllSync,
     ServerDataSyncRequestType_DeviceCountSync,
     ServerDataSyncRequestType_DeviceCapacitySync,
-    ServerDataSyncRequestType_InterestLabelListSync
+    ServerDataSyncRequestType_InterestLabelListSync,
 }
 ServerDataSyncRequestType;
 

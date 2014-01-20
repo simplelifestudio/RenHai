@@ -360,7 +360,7 @@ static float progress = 0.0;
 {
     RHDevice* device = _userDataModule.device;
     
-    RHMessage* requestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_TotalSync device:device info:nil];
+    RHMessage* requestMessage = [RHMessage newServerDataSyncRequestMessage:ServerDataSyncRequestType_DeviceAllSync device:device info:nil];
     
     [_commModule serverDataSyncRequest:requestMessage
         successCompletionBlock:^(NSDictionary* serverDic){

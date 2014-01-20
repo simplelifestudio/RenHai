@@ -458,6 +458,40 @@
             
             break;
         }
+        case ServerDataSyncRequestType_DeviceAllSync:
+        {
+            NSMutableDictionary* deviceCount = [NSMutableDictionary dictionary];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_ONLINE];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_RANDOM];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_INTEREST];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_CHAT];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_RANDOMCHAT];
+            [deviceCount setObject:oNull forKey:MESSAGE_KEY_INTERESTCHAT];
+            [messageBody setObject:deviceCount forKey:MESSAGE_KEY_DEVICECOUNT];
+            
+            NSMutableDictionary* deviceCapacity = [NSMutableDictionary dictionary];
+            [deviceCapacity setObject:oNull forKey:MESSAGE_KEY_ONLINE];
+            [deviceCapacity setObject:oNull forKey:MESSAGE_KEY_RANDOM];
+            [deviceCapacity setObject:oNull forKey:MESSAGE_KEY_INTEREST];
+            [messageBody setObject:deviceCapacity forKey:MESSAGE_KEY_DEVICECAPACITY];
+            
+            id oCurrent = [NSNumber numberWithInt:MESSAGE_VAL_CURRENT];
+            id oStartTime = oNull;
+            id oEndTime = oNull;
+            if (nil != info)
+            {
+                NSNumber* obj = [info objectForKey:MESSAGE_KEY_CURRENT];
+                oCurrent = (nil != obj) ? obj : oNull;
+                
+                obj = [info objectForKey:MESSAGE_KEY_STARTTIME];
+                oStartTime = (nil != obj) ? obj : oNull;
+                
+                obj = [info objectForKey:MESSAGE_KEY_ENDTIME];
+                oEndTime = (nil != obj) ? obj : oNull;
+            }
+            
+            break;
+        }
         case ServerDataSyncRequestType_DeviceCountSync:
         {
             NSMutableDictionary* deviceCount = [NSMutableDictionary dictionary];
