@@ -377,7 +377,7 @@ public class BusinessSession implements IBusinessSession
 					tmpObj.put(JSONKey.Device, getOperationInfoOfOtherDevices(device));
 				    
 				    JSONObject rtcObj = new JSONObject();
-				    rtcObj.put(JSONKey.ApiKey, GlobalSetting.BusinessSetting.OpenTokKey);
+				    rtcObj.put(JSONKey.ApiKey, WebRTCSessionPool.instance.getWebRTCAccountKey());
 				    rtcObj.put(JSONKey.SessionId, this.webRTCSession.getWebrtcsession());
 				    rtcObj.put(JSONKey.Token, this.webRTCSession.getToken());
 				    tmpObj.put(JSONKey.Webrtc, rtcObj);
