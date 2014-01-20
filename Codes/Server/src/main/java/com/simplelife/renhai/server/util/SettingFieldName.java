@@ -59,4 +59,5 @@ public class SettingFieldName
 	
 	public final static String CacheCompressBuffer                             = "cacheCompressBuffer";
 	public final static String OpenTokAccountNumber                            = "openTokAccountNumber";
+	public final static String FilterKeys			                           = "filterKeys";
 }

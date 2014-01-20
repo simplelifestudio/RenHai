@@ -185,6 +185,8 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
 		int registerDeviceCount = mapper.countAll();
 		responseObj.put(JSONKey.RegisterDeviceCount, registerDeviceCount);
+		
+		
 		responseObj.put(JSONKey.TopInterestLabels, registerDeviceCount);
 		responseObj.put(JSONKey.TopImpressLabels, registerDeviceCount);
 		responseObj.put(JSONKey.DeviceCountByModel, registerDeviceCount);

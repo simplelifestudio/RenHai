@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.ibatis.session.AutoMappingBehavior;
 
+import com.simplelife.renhai.server.business.KeywordFilter;
 import com.simplelife.renhai.server.business.device.AbstractLabel;
 import com.simplelife.renhai.server.db.Interestlabelmap;
 import com.simplelife.renhai.server.util.Consts;
@@ -82,7 +83,8 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     		labelList.removeLast();
     		removeCount--;
     	}
-        return labelList;
+    	KeywordFilter.filterHotLabel(labelList);
+    	return labelList;
     }
     
     /** */

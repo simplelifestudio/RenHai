@@ -23,7 +23,9 @@ import org.slf4j.Logger;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
+import com.simplelife.renhai.server.business.KeywordFilter;
 import com.simplelife.renhai.server.log.FileLogger;
+import com.sun.org.apache.xalan.internal.xsltc.dom.FilteredStepIterator;
 
 
 /** */
@@ -76,7 +78,7 @@ public class GlobalSetting
 		public static int OnlinePoolCapacity = 5000;
 		public static int RandomBusinessPoolCapacity = 0;
 		public static int InterestBusinessPoolCapacity = 5000;
-		public static int WebRTCSessionPoolCapacity = 2500; 
+		public static int WebRTCSessionPoolCapacity = 2500;
 		//public static int DefaultImpressLabelCount = 10; 
 		public static int HotInterestLabelCount = 10;
 		
@@ -188,6 +190,9 @@ public class GlobalSetting
 		//BusinessSetting.OpenTokSecret					= getStringValue(tmpObj, SettingFieldName.OpenTokSecret);
 		BusinessSetting.OpenTokTokenExpiration			= getIntValue(tmpObj, SettingFieldName.OpenTokTokenExpiration);
 		BusinessSetting.OpenTokTokenDuration			= getIntValue(tmpObj, SettingFieldName.OpenTokTokenDuration);
+		
+		String tmpStr = getStringValue(tmpObj, SettingFieldName.FilterKeys);
+		KeywordFilter.init(tmpStr);
 	}
 	
 	private static String getStringValue(JSONObject obj, String fieldName)
@@ -405,6 +410,10 @@ public class GlobalSetting
 			return false;
 		}
 		
+		if(!checkField(tmpObj, SettingFieldName.FilterKeys))
+		{
+			return false;
+		}
 		return true;
 	}
 	

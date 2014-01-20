@@ -52,6 +52,16 @@ public class WebRTCSessionPool extends AbstractPool
     	this.capacity = GlobalSetting.BusinessSetting.WebRTCSessionPoolCapacity;
     }
     
+    public Integer getWebRTCAccountKey()
+    {
+    	if (curAccount == null)
+    	{
+    		return null;
+    	}
+    	
+    	return curAccount.getAccountKey();
+    }
+    
     public void recycleWetRTCSession(Webrtcsession session)
     {
     	if (session == null)
@@ -92,6 +102,7 @@ public class WebRTCSessionPool extends AbstractPool
     		WebrtcaccountMapper mapper = session.getMapper(WebrtcaccountMapper.class);
     		accountNum = mapper.countAll();
     		session.close();
+    		logger.debug("Update number of WebRTC accounts in DB");
     	}
     	
     	if (accountNum == 0)
@@ -102,6 +113,7 @@ public class WebRTCSessionPool extends AbstractPool
     	
     	if (accountNum == 1)
     	{
+    		logger.debug("There is only one WebRTC account");
     		return 1;
     	}
 
@@ -114,9 +126,13 @@ public class WebRTCSessionPool extends AbstractPool
     		curAccountId++;
     		if (curAccountId > accountNum)
         	{
-        		curAccountId = 1;
+    			curAccountId = 1;
         	}
-    		logger.debug("WebRTC account ID was changed from " + tmpId + " to " + curAccountId + ", value of dayOfCurAccount is changed from "+ dayOfCurAccount +" to " + day);
+    		
+    		if (logger.isDebugEnabled())
+    		{
+    			logger.debug("WebRTC account ID was changed from " + tmpId + " to " + curAccountId + ", value of dayOfCurAccount is changed from "+ dayOfCurAccount +" to " + day);
+    		}
         	dayOfCurAccount = day;
     	}
 
@@ -175,11 +191,13 @@ public class WebRTCSessionPool extends AbstractPool
 				logger.debug("Login account: {}", account.getLoginAccount());
 			}
 			
+			logger.debug("Before creating sessions from OpenTok, get sdk by account: {}", account.getLoginAccount());
 			OpenTokSDK sdk = getOpenTokSDK(account);
 			for (int i = 0; i < appendCount; i++)
 			{
 				webRTCSessionList.add(createWebRTCSession(account, sdk));
 			}
+			logger.error("After creating sessions from OpenTok, {} sessions created", appendCount);
 		}
 		
 		logger.debug("Finished loading {} WebRTC tokens from DB, start to update tokens if needed.", webRTCSessionList.size());
@@ -229,8 +247,10 @@ public class WebRTCSessionPool extends AbstractPool
 	{
 		logger.debug("Start to check expired token");
 		int idOfToday = this.getAccountIdOfToday();
+		
 		if (curAccount == null)
 		{
+			logger.error("It's the first time of system running, try to get log");
 			// The first time
 			curAccount = getAccount(idOfToday);
 			if (curAccount == null)
@@ -238,7 +258,10 @@ public class WebRTCSessionPool extends AbstractPool
 				logger.error("Fatal error: failed to load WebRTC Token due to account is null by ID {}, it's the first load", idOfToday);
 				return;
 			}
+			
+			logger.debug("Before loadFromDb(curAccount), account: {}", curAccount.getLoginAccount());
 			loadFromDb(curAccount);
+			logger.debug("After loadFromDb(curAccount), account: {}", curAccount.getLoginAccount());
 			return;
 		}
 		
@@ -254,18 +277,26 @@ public class WebRTCSessionPool extends AbstractPool
 				return;
 			}
 			
+			logger.debug("Before loading WebRTC sessions from DB, account: {}", tmpAccount.getLoginAccount());
 			loadFromDb(tmpAccount);
+			logger.debug("After loading WebRTC sessions from DB, account: {}", tmpAccount.getLoginAccount());
 			
 			if (this.webRTCSessionList.isEmpty())
 			{
 				logger.error("Fatal Error: failed to load WebRTC tokens of account <{}>", idOfToday);
 				return;
 			}
+			if (logger.isDebugEnabled())
+			{
+				logger.debug("WebRTC account was changed from " + curAccount.getLoginAccount() + " to " + tmpAccount.getLoginAccount());
+			}
 			curAccount = tmpAccount;
 		}
 		
 		OpenTokSDK sdk = getOpenTokSDK(curAccount);
+		logger.debug("Before updateToken(sdk), get SDK by account: {}", curAccount.getLoginAccount());
 		updateToken(sdk);
+		logger.debug("After updateToken(sdk), account: {}", curAccount.getLoginAccount());
 	}
 
 	private void updateToken(OpenTokSDK sdk)
