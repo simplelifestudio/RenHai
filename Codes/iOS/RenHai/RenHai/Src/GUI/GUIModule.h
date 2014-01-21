@@ -88,6 +88,8 @@
 
 #define NIB_LABELMANAGEVIEWCONTROLLER @"RHLabelManageViewController_iPhone"
 
+#define NIB_ALERTVIEWCONTROLLER @"RHAlertViewController_iPhone"
+
 #define NIB_USERINTRODUCTIONVIEWCONTROLLER @"UserIntroductionPage_iPhone"
 
 #define DELAY_UIREFRESHCONTROL_SHOW 0
@@ -160,5 +162,8 @@ RHSoundId;
 
 -(void) playSoundAndVibrate:(RHSoundId) soundId vibrate:(BOOL) vibrate;
 -(void) playSound:(RHSoundId) soundId;
+
+-(void) showAppMessage:(MessageBarMessageType) messageType messageTitle:(NSString*) messageTitle messageText:(NSString*) messageText visibleDuration:(CGFloat) visibleDuration callBackBlock:(void (^)())callbackBlock;
+-(void) dismissAllAppMessages;
 
 @end

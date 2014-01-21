@@ -98,6 +98,10 @@ SINGLETON(BusinessStatusModule)
     {
         [self _triggerBusinessStatusErrorByRemoteStatusAbnormal:appMessageId];
     }
+    else
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:NOTIFICATION_ID_RHNETWORKPOOR object:self userInfo:nil];
+    }
 }
 
 #pragma mark - UIApplicationDelegate
