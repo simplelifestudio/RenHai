@@ -11,10 +11,6 @@
 #import "CBModuleAbstractImpl.h"
 #import "CBSharedInstance.h"
 
-#define NAMESPACE_APP @"com.simplelife.RenHai"
-#define NAMESPACE_APP_CONST_CHARS "com.simplelife.RenHai"
-#define MODULE_DELAY usleep(100000);
-
 #define BUNDLE_KEY_SHORTVERSION @"CFBundleShortVersionString"
 #define BUNDLE_KEY_BUNDLEVERSION @"CFBundleVersion"
 

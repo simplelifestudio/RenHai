@@ -210,7 +210,6 @@ SINGLETON(GUIModule)
 
 -(void) showAppMessage:(MessageBarMessageType) messageType messageTitle:(NSString*) messageTitle messageText:(NSString*) messageText visibleDuration:(CGFloat) visibleDuration callBackBlock:(void (^)())callbackBlock
 {
-    [self playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];    
     MessageBarManager* messageMgr = [MessageBarManager sharedInstance];
     [messageMgr showMessageWithTitle:messageTitle description:messageText type:messageType forDuration:visibleDuration callback:callbackBlock];
 }

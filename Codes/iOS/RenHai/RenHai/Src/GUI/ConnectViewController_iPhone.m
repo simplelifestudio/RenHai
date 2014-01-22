@@ -151,6 +151,8 @@ ConnectStatus;
 
 - (void) popConnectView:(UIViewController*) presentingViewController animated:(BOOL) animated
 {
+    [_guiModule dismissAllAppMessages];
+    
     BOOL isUserAgreementVCVisible = [_guiModule.userAgreementViewController isVisible];
     BOOL isUserIntroductionVCVisible = [_guiModule.helpViewController isVisible];
     BOOL isConnectVCVisible = [self isVisible];
@@ -192,6 +194,8 @@ ConnectStatus;
 
 - (void) dismissConnectView:(BOOL) animated
 {
+    [_guiModule dismissAllAppMessages];    
+    
     [NSThread sleepForTimeInterval:DELAY_DISMISS];
     
     [CBAppUtils asyncProcessInMainThread:^(){
@@ -227,6 +231,8 @@ ConnectStatus;
             [self _resetInstance];
         }
     }];
+    
+    DDLogWarn(@"DeviceSN: %@", _appDataModule.deviceSn);
 }
 
 #pragma mark - IBAction Methods

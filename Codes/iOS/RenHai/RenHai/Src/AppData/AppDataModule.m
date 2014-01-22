@@ -198,11 +198,13 @@ SINGLETON(AppDataModule)
 #pragma mark - Device
 -(NSString*) deviceSn
 {
-    NSString* idfv = [SSKeychain passwordForService:KEYCHAIN_SERVICE_DEVICE account:KEYCHAIN_ACCOUNT_IDFV];
+    NSString* bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
+    
+    NSString* idfv = [SSKeychain passwordForService:bundleIdentifier account:KEYCHAIN_ACCOUNT_IDFV];
     if (nil == idfv)
     {
         idfv = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
-        [SSKeychain setPassword:idfv forService:KEYCHAIN_SERVICE_DEVICE account:KEYCHAIN_ACCOUNT_IDFV];
+        [SSKeychain setPassword:idfv forService:bundleIdentifier account:KEYCHAIN_ACCOUNT_IDFV];
     }
     return idfv;
 }
