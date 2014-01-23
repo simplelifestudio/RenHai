@@ -682,11 +682,24 @@ static NSInteger _kToolbarDisplaySeconds = 0;
                                                  name:UIApplicationDidEnterBackgroundNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_activateToolbarDisplayTimer) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_frontCameraTurnedInvalid) name:NOTIFICATION_ID_FRONTCAMERAINVALID object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_frontCameraTurnedValid) name:NOTIFICATION_ID_FRONTCAMERAVALID object:nil];
 }
 
 -(void)_unregisterNotifications
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)_frontCameraTurnedValid
+{
+    [_webRTCModule pauseSubscriber:NO];
+}
+
+-(void)_frontCameraTurnedInvalid
+{
+    [_webRTCModule pauseSubscriber:YES];
 }
 
 -(void)_connectWebRTC

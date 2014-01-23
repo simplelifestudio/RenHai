@@ -228,7 +228,7 @@ SINGLETON(GUIModule)
 
 -(void)applicationDidEnterBackground:(UIApplication *)application
 {
-
+    [self dismissAllAppMessages];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -238,7 +238,7 @@ SINGLETON(GUIModule)
 
 -(void)applicationWillEnterForeground:(UIApplication *)application
 {
-
+    
 }
 
 #pragma mark - Private Methods

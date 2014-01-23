@@ -14,7 +14,6 @@
 #define BUNDLE_KEY_SHORTVERSION @"CFBundleShortVersionString"
 #define BUNDLE_KEY_BUNDLEVERSION @"CFBundleVersion"
 
-#define KEYCHAIN_SERVICE_DEVICE NAMESPACE_APP
 #define KEYCHAIN_ACCOUNT_IDFV @"idfv"
 
 @interface AppDataModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>

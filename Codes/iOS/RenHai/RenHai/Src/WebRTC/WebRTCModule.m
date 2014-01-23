@@ -77,6 +77,26 @@ SINGLETON(WebRTCModule)
     _openTokAgent.openTokDelegate = nil;
 }
 
+-(void) mutePublisher:(BOOL) mute
+{
+    [_openTokAgent mutePublisher:mute];
+}
+
+-(void) muteSubscriber:(BOOL) mute
+{
+    [_openTokAgent muteSubscriber:mute];
+}
+
+-(void) pausePublisher:(BOOL) pause
+{
+    [_openTokAgent pausePublisher:pause];
+}
+
+-(void) pauseSubscriber:(BOOL) pause
+{
+    [_openTokAgent pauseSubscriber:pause];
+}
+
 #pragma mark - UIApplicationDelegate
 
 -(void)applicationWillResignActive:(UIApplication *)application

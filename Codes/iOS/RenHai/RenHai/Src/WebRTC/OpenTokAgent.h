@@ -45,6 +45,9 @@ static NSString* const kToken = @"T1==cGFydG5lcl9pZD0zNDU2NjU2MiZzZGtfdmVyc2lvbj
 -(OTVideoView*) publisherView;
 -(OTVideoView*) subscriberView;
 
+-(void) pausePublisher:(BOOL) pause;
+-(void) pauseSubscriber:(BOOL) pause;
+
 -(void) mutePublisher:(BOOL) mute;
 -(void) muteSubscriber:(BOOL) mute;
 

@@ -23,4 +23,10 @@
 -(void) registerWebRTCDelegate:(id<OpenTokDelegate>) delegate;
 -(void) unregisterWebRTCDelegate;
 
+-(void) mutePublisher:(BOOL) mute;
+-(void) muteSubscriber:(BOOL) mute;
+
+-(void) pausePublisher:(BOOL) pause;
+-(void) pauseSubscriber:(BOOL) pause;
+
 @end

@@ -93,6 +93,44 @@
     return view;
 }
 
+-(void) pausePublisher:(BOOL) pause
+{
+    @try
+    {
+        if (_isPublisherViewReady)
+        {
+            [_publisher setPublishVideo:!pause];
+        }
+    }
+    @catch (NSException *exception)
+    {
+        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+    }
+    @finally
+    {
+        
+    }
+}
+
+-(void) pauseSubscriber:(BOOL) pause
+{
+    @try
+    {
+        if (_isSubscriberViewReady)
+        {
+            [_subscriber setSubscribeToVideo:!pause];
+        }
+    }
+    @catch (NSException *exception)
+    {
+        DDLogError(@"Caught Exception: %@", exception.callStackSymbols);
+    }
+    @finally
+    {
+        
+    }
+}
+
 -(void) mutePublisher:(BOOL) mute
 {
     @try

@@ -1059,6 +1059,7 @@
     BOOL hasAssessed = [self _hasAssessed];
     if (!hasAssessed)
     {
+        [_guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];
         [_guiModule showAppMessage:MessageBarMessageTypeError messageTitle:NSLocalizedString(@"Alert_Title", nil) messageText:NSLocalizedString(@"Alert_AssessRequired",nil) visibleDuration:INTERVAL_ALERTMESSAGE_DISPLAY callBackBlock:^(){
         }];
         
@@ -1068,6 +1069,7 @@
     BOOL hasImpressLabelAdded = [self _hasImpressLabelAdded];
     if (!hasImpressLabelAdded)
     {
+        [_guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];        
         [_guiModule showAppMessage:MessageBarMessageTypeError messageTitle:NSLocalizedString(@"Alert_Title", nil) messageText:NSLocalizedString(@"Alert_OneImpressRequired",nil) visibleDuration:INTERVAL_ALERTMESSAGE_DISPLAY callBackBlock:^(){
         }];
         
