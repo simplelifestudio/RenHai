@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.simplelife.renhai.server.db.StatisticsMapper" >
+  <resultMap id="CountResultMap" type="com.simplelife.renhai.server.util.ComparableResult" >
+    <result column="fieldName" property="field" jdbcType="VARCHAR" />
+    <result column="fieldCount" property="count" jdbcType="BIGINT" />
+  </resultMap>
+
+  <select id="selectDeviceCountByModel" resultMap="CountResultMap">
+    select 
+    deviceModel as fieldName, count(deviceModel) as fieldCount
+    from devicecard
+    group by fieldName
+    order by fieldCount desc
+  </select>
+  
+  <select id="selectDeviceCountByOS" resultMap="CountResultMap">
+    select 
+    osVersion as fieldName, count(osVersion) as fieldCount
+    from devicecard
+    group by fieldName
+    order by fieldCount desc
+  </select>
+
+  <select id="selectTopImpressLabels" resultMap="CountResultMap" parameterType="java.lang.Integer"  useCache="true">
+    select 
+    impressLabelName as fieldName, globalAssessCount as fieldCount
+    from globalimpresslabel
+    order by fieldCount desc
+    limit #{labelCount,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectTopInterestLabels" resultMap="CountResultMap" parameterType="java.lang.Integer" useCache="true">
+    select 
+    interestLabelName as fieldName, globalMatchCount as fieldCount
+    from globalinterestlabel
+    order by fieldCount desc
+    limit #{labelCount,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectRegisterDeviceCount" resultType="java.lang.Integer" >
+    select count(*) from device
+  </select>
+
+  <select id="selectTotalChatCount" resultType="java.lang.Long" >
+    select sum(chatTotalCount) from impresscard
+  </select>
+
+  <select id="selectTotalChatDuration" resultType="java.lang.Long" >
+    select sum(chatTotalDuration) from impresscard
+  </select>
+</mapper>

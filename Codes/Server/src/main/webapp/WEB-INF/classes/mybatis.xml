@@ -39,5 +39,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="com/simplelife/renhai/server/db/DevicecardMapper.xml"/>
 		<mapper resource="com/simplelife/renhai/server/db/ImpresscardMapper.xml"/>
 		<mapper resource="com/simplelife/renhai/server/db/WebrtcaccountMapper.xml"/>
+		<mapper resource="com/simplelife/renhai/server/db/StatisticsMapper.xml"/>
 	</mappers>
 </configuration>

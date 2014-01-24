@@ -16,17 +16,21 @@ import org.apache.ibatis.session.SqlSession;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
-import com.simplelife.renhai.server.business.pool.HotLabel;
 import com.simplelife.renhai.server.business.pool.InterestBusinessDevicePool;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.business.pool.RandomBusinessDevicePool;
 import com.simplelife.renhai.server.db.DAOWrapper;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.db.DeviceMapper;
+import com.simplelife.renhai.server.db.GlobalimpresslabelMapper;
 import com.simplelife.renhai.server.db.Globalinterestlabel;
+import com.simplelife.renhai.server.db.GlobalinterestlabelMapper;
+import com.simplelife.renhai.server.db.StatisticsMapper;
+import com.simplelife.renhai.server.util.ComparableResult;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.Consts.MessageId;
 import com.simplelife.renhai.server.util.CommonFunctions;
+import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.JSONKey;
 
@@ -174,25 +178,84 @@ public class ServerDataSyncRequest extends AppJSONMessage
 		{
 			responseObj.put(JSONKey.InterestChat, interestPool.getDeviceCountInChat());
 		}
+		
+		if (countObj.containsKey(JSONKey.ManagementData))
+		{
+			queryManagementStat(responseObj);
+		}
 	}
 	
-	private void queryManagementStat(ServerJSONMessage response)
+	private void queryManagementStat(JSONObject response)
 	{
 		JSONObject responseObj = new JSONObject();
-		response.addToBody(JSONKey.ManagementData, responseObj);
+		response.put(JSONKey.ManagementData, responseObj);
 		
 		SqlSession session = DAOWrapper.instance.getSession();
-		DeviceMapper mapper = session.getMapper(DeviceMapper.class);
-		int registerDeviceCount = mapper.countAll();
+		StatisticsMapper mapper = session.getMapper(StatisticsMapper.class);
+		
+		queryRegisterDeviceCount(mapper, responseObj);
+		queryTopInterestLabels(mapper, responseObj);
+		queryTopImpressLabels(mapper, responseObj);
+		queryDeviceCountByModel(mapper, responseObj);
+		queryDeviceCountByOS(mapper, responseObj);
+		queryTotalChatCount(mapper, responseObj);
+		queryTotalChatDuration(mapper, responseObj);
+		
+		session.close();
+	}
+	
+	private void queryTotalChatDuration(StatisticsMapper mapper, JSONObject responseObj)
+	{
+		long count = mapper.selectTotalChatDuration();
+		responseObj.put(JSONKey.TotalChatDuration, count);
+	}
+	
+	private void queryTotalChatCount(StatisticsMapper mapper, JSONObject responseObj)
+	{
+		long count = mapper.selectTotalChatCount();
+		responseObj.put(JSONKey.TotalChatCount, count);
+	}
+	
+	private void queryDeviceCountByOS(StatisticsMapper mapper, JSONObject responseObj)
+	{
+		LinkedList<ComparableResult> objects = mapper.selectDeviceCountByOS();
+		addComparableObjets(JSONKey.DeviceCountByOS, objects, responseObj);
+	}
+	
+	private void queryDeviceCountByModel(StatisticsMapper mapper, JSONObject responseObj)
+	{
+		LinkedList<ComparableResult> objects = mapper.selectDeviceCountByModel();
+		addComparableObjets(JSONKey.DeviceCountByModel, objects, responseObj);
+	}
+	
+	private void queryTopImpressLabels(StatisticsMapper mapper, JSONObject responseObj)
+	{
+		LinkedList<ComparableResult> objects = mapper.selectTopImpressLabels(GlobalSetting.BusinessSetting.MaxImpressLabelCount);
+		addComparableObjets(JSONKey.TopImpressLabels, objects, responseObj);
+	}
+	
+	private void queryTopInterestLabels(StatisticsMapper mapper, JSONObject responseObj)
+	{
+		LinkedList<ComparableResult> objects = mapper.selectTopInterestLabels(GlobalSetting.BusinessSetting.MaxImpressLabelCount);
+		addComparableObjets(JSONKey.TopInterestLabels, objects, responseObj);
+	}
+	
+	private void addComparableObjets(String jsonKey, LinkedList<ComparableResult> objects, JSONObject responseObj)
+	{
+		//JSONArray array = new JSONArray();
+		JSONObject obj = new JSONObject();
+		responseObj.put(jsonKey, obj);
+		
+		for (ComparableResult object : objects)
+		{
+			obj.put(object.toString(), object.getCount());
+		}
+	}
+	
+	private void queryRegisterDeviceCount(StatisticsMapper mapper, JSONObject responseObj)
+	{
+		int registerDeviceCount = mapper.selectRegisterDeviceCount();
 		responseObj.put(JSONKey.RegisterDeviceCount, registerDeviceCount);
-		
-		
-		responseObj.put(JSONKey.TopInterestLabels, registerDeviceCount);
-		responseObj.put(JSONKey.TopImpressLabels, registerDeviceCount);
-		responseObj.put(JSONKey.DeviceCountByModel, registerDeviceCount);
-		responseObj.put(JSONKey.DeviceCountByOS, registerDeviceCount);
-		responseObj.put(JSONKey.TotalChatCount, registerDeviceCount);
-		responseObj.put(JSONKey.TotalChatDuration, registerDeviceCount);
 	}
 	
 	private void queryDeviceSummary(ServerJSONMessage response, 
@@ -219,20 +282,22 @@ public class ServerDataSyncRequest extends AppJSONMessage
 			int labelCount = hotObj.getIntValue(JSONKey.Current);
 			JSONArray hotLabelObj = new JSONArray();
 			hotObj.put(JSONKey.Current, hotLabelObj);
-			LinkedList<HotLabel> labels = interestPool.getHotInterestLabel(labelCount);
+			LinkedList<ComparableResult> labels = interestPool.getHotInterestLabel(labelCount);
 			
 			JSONObject tempLabelObj;
 			Globalinterestlabel globalLabel;
-			HotLabel label;
+			ComparableResult label;
+			String labelName;
 			while(!labels.isEmpty())
 			{
 				label = labels.removeLast();
-				globalLabel = DBModule.instance.interestLabelCache.getObject(label.getLabelName());
+				labelName = label.toString();
+				globalLabel = DBModule.instance.interestLabelCache.getObject(labelName);
 				tempLabelObj = new JSONObject();
 				tempLabelObj.put(JSONKey.GlobalInterestLabelId, globalLabel.getGlobalInterestLabelId());
-				tempLabelObj.put(JSONKey.InterestLabelName, label.getLabelName());
+				tempLabelObj.put(JSONKey.InterestLabelName, labelName);
 				tempLabelObj.put(JSONKey.GlobalMatchCount, globalLabel.getGlobalMatchCount());
-				tempLabelObj.put(JSONKey.CurrentProfileCount, label.getProfileCount());
+				tempLabelObj.put(JSONKey.CurrentProfileCount, label.getCount());
 				//tempLabelObj.put(JSONKey.LabelOrder, null);
 				//tempLabelObj.put(JSONKey.MatchCount, null);
 				//tempLabelObj.put(JSONKey.ValidFlag, null);

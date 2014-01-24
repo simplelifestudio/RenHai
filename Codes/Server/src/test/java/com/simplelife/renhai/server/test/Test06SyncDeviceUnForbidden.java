@@ -10,19 +10,9 @@
 package com.simplelife.renhai.server.test;
 
 
-import org.apache.ibatis.session.SqlSession;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.db.DAOWrapper;
-import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.Profile;
-import com.simplelife.renhai.server.db.ProfileMapper;
-import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.DateUtil;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 
 /**

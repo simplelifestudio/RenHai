@@ -9,25 +9,6 @@
 
 package com.simplelife.renhai.server.test.unittest;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.util.Collection;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import org.junit.Test;
-
-import com.simplelife.renhai.server.db.DBModule;
-import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.DeviceMapper;
-import com.simplelife.renhai.server.db.Devicecard;
-import com.simplelife.renhai.server.db.Globalimpresslabel;
-import com.simplelife.renhai.server.db.Globalinterestlabel;
-import com.simplelife.renhai.server.db.Impresslabelmap;
-import com.simplelife.renhai.server.db.Interestlabelmap;
-import com.simplelife.renhai.server.db.Profile;
-
 /**
  * 
  */

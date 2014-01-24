@@ -21,11 +21,11 @@ import java.util.TimerTask;
 import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.business.KeywordFilter;
 import com.simplelife.renhai.server.log.FileLogger;
-import com.sun.org.apache.xalan.internal.xsltc.dom.FilteredStepIterator;
 
 
 /** */
@@ -191,8 +191,8 @@ public class GlobalSetting
 		BusinessSetting.OpenTokTokenExpiration			= getIntValue(tmpObj, SettingFieldName.OpenTokTokenExpiration);
 		BusinessSetting.OpenTokTokenDuration			= getIntValue(tmpObj, SettingFieldName.OpenTokTokenDuration);
 		
-		String tmpStr = getStringValue(tmpObj, SettingFieldName.FilterKeys);
-		KeywordFilter.init(tmpStr);
+		JSONArray array = tmpObj.getJSONArray(SettingFieldName.FilterKeys);
+		KeywordFilter.init(array);
 	}
 	
 	private static String getStringValue(JSONObject obj, String fieldName)

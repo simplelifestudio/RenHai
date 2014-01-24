@@ -14,12 +14,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.simplelife.renhai.server.business.pool.AbstractBusinessDevicePool;
-import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.business.session.BusinessSessionPool;
-import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
-
 
 /**
  * 

@@ -7,7 +7,6 @@ import com.simplelife.renhai.server.util.Consts.BusinessSessionEventType;
 import com.simplelife.renhai.server.util.Consts.NotificationType;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;
 import com.simplelife.renhai.server.util.CommonFunctions;
-import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBusinessSession;
 import com.simplelife.renhai.server.util.IDeviceWrapper;

@@ -14,9 +14,6 @@ package com.simplelife.renhai.server.websocket;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -31,16 +28,13 @@ import com.simplelife.renhai.server.json.ConnectionErrorEvent;
 import com.simplelife.renhai.server.json.InvalidRequest;
 import com.simplelife.renhai.server.json.JSONFactory;
 import com.simplelife.renhai.server.json.ServerJSONMessage;
-import com.simplelife.renhai.server.json.TimeoutRequest;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IBaseConnection;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
-import com.simplelife.renhai.server.util.IProductor;
 import com.simplelife.renhai.server.util.JSONKey;
-import com.simplelife.renhai.server.util.Worker;
 
 
 /** */

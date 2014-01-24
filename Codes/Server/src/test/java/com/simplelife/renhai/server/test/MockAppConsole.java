@@ -14,8 +14,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.simplelife.renhai.server.business.BusinessModule;
-
 /**
  * 
  */

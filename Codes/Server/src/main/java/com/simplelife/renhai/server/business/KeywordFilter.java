@@ -6,13 +6,14 @@ import java.util.HashSet;
 
 import org.slf4j.Logger;
 
-import com.simplelife.renhai.server.business.pool.HotLabel;
+import com.alibaba.fastjson.JSONArray;
+import com.simplelife.renhai.server.util.ComparableResult;
 
 public class KeywordFilter
 {
 	private static HashSet<String> keywordSet;
 	
-	public static void init(String keywordString)
+	public static void init(JSONArray array)
 	{
 		if (keywordSet == null)
 		{
@@ -20,18 +21,18 @@ public class KeywordFilter
 		}
 		
 		keywordSet.clear();
-		String[] tmpArray = keywordString.split(",");
 		
-		if (tmpArray.length == 0)
+		int size = array.size(); 
+		if (size == 0)
 		{
 			return;
 		}
 		
-		for (int i = tmpArray.length-1; i >= 0; i--)
+		for (int i = size-1; i >= 0; i--)
 		{
-			keywordSet.add(tmpArray[i]);
+			keywordSet.add(array.getString(i));
 		}
-		BusinessModule.instance.getLogger().debug("Update filter keys as: {}", keywordString);
+		BusinessModule.instance.getLogger().debug("Updated {} filter keys", size);
 	}
 	
 	public static boolean isFilteredKeyword(String keyword)
@@ -43,7 +44,7 @@ public class KeywordFilter
 		return false;
 	}
 	
-	public static void filterHotLabel(Collection<HotLabel> keywordList)
+	public static void filterHotLabel(Collection<ComparableResult> keywordList)
 	{
 		Logger logger = BusinessModule.instance.getLogger();
 		if (keywordList == null)
@@ -56,13 +57,13 @@ public class KeywordFilter
 			return;
 		}
 		
-		ArrayList<HotLabel> tmpCol = new ArrayList<>();
+		ArrayList<ComparableResult> tmpCol = new ArrayList<>();
 		tmpCol.addAll(keywordList);
-		HotLabel tmpLabel;
+		ComparableResult tmpLabel;
 		for (int i = tmpCol.size()-1; i>=0; i--)
 		{
 			tmpLabel = tmpCol.get(i);
-			if (isFilteredKeyword(tmpLabel.getLabelName()))
+			if (isFilteredKeyword(tmpLabel.toString()))
 			{
 				tmpCol.remove(i);
 			}

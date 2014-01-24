@@ -14,15 +14,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.Devicecard;
-import com.simplelife.renhai.server.db.Impresscard;
-import com.simplelife.renhai.server.db.Interestcard;
-import com.simplelife.renhai.server.util.CommonFunctions;
-import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
-
 
 /**
  * TC_04 新设备首次同步/已有正常状态设备同步/已进入业务后同步/数据库异常

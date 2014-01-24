@@ -9,60 +9,7 @@
 
 package com.simplelife.renhai.server.test.unittest;
 
-import java.net.URI;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.session.SqlSession;
-import org.java_websocket.drafts.Draft_17;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.simplelife.renhai.server.business.BusinessModule;
-import com.simplelife.renhai.server.business.device.DeviceWrapper;
-import com.simplelife.renhai.server.business.pool.InputMsgExecutorPool;
-import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.business.pool.OutputMsgExecutorPool;
-import com.simplelife.renhai.server.db.DAOWrapper;
-import com.simplelife.renhai.server.db.DBModule;
-import com.simplelife.renhai.server.db.Device;
-import com.simplelife.renhai.server.db.DeviceMapper;
-import com.simplelife.renhai.server.db.Devicecard;
-import com.simplelife.renhai.server.db.Globalinterestlabel;
-import com.simplelife.renhai.server.db.GlobalinterestlabelMapper;
-import com.simplelife.renhai.server.db.Interestlabelmap;
-import com.simplelife.renhai.server.db.Profile;
-import com.simplelife.renhai.server.db.Webrtcsession;
-import com.simplelife.renhai.server.db.WebrtcsessionMapper;
-import com.simplelife.renhai.server.json.AlohaRequest;
-import com.simplelife.renhai.server.json.AppJSONMessage;
-import com.simplelife.renhai.server.json.JSONFactory;
-import com.simplelife.renhai.server.json.JSONModule;
-import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.test.AbstractTestCase;
-import com.simplelife.renhai.server.test.MockApp;
-import com.simplelife.renhai.server.test.MockAppConsts;
-import com.simplelife.renhai.server.test.MockWebSocketConnection;
-import com.simplelife.renhai.server.test.RenHaiWebSocketClient;
-import com.simplelife.renhai.server.util.Consts;
-import com.simplelife.renhai.server.util.Consts.BusinessType;
-import com.simplelife.renhai.server.util.DateUtil;
-import com.simplelife.renhai.server.util.DbObjectCache;
-import com.simplelife.renhai.server.util.GlobalSetting;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
-import com.simplelife.renhai.server.util.JSONKey;
-import com.simplelife.renhai.server.websocket.SecurityUtils;
-import com.simplelife.renhai.server.websocket.WebSocketConnection;
-import com.simplelife.renhai.server.websocket.WebSocketModule;
 
 
 /**

@@ -1,6 +1,5 @@
 package com.simplelife.renhai.server.business.device;
 
-import com.simplelife.renhai.server.business.pool.TimeoutLink;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.Consts.DeviceStatus;
 import com.simplelife.renhai.server.util.Consts.StatusChangeReason;

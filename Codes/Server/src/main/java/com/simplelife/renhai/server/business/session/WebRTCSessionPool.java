@@ -250,7 +250,7 @@ public class WebRTCSessionPool extends AbstractPool
 		
 		if (curAccount == null)
 		{
-			logger.error("It's the first time of system running, try to get log");
+			logger.debug("It's the first time of system running, try to load WebRTC account from DB");
 			// The first time
 			curAccount = getAccount(idOfToday);
 			if (curAccount == null)

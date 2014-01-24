@@ -12,8 +12,6 @@ package com.simplelife.renhai.server;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
-import org.slf4j.LoggerFactory;
-
 import com.simplelife.renhai.server.business.BusinessModule;
 import com.simplelife.renhai.server.db.DBModule;
 import com.simplelife.renhai.server.json.JSONModule;

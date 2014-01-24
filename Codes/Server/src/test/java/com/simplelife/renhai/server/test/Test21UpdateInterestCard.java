@@ -15,10 +15,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
 import com.simplelife.renhai.server.db.Interestcard;
-import com.simplelife.renhai.server.db.DAOWrapper;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
 
 /**
  * 

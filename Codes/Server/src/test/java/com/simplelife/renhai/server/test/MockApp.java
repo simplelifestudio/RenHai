@@ -10,22 +10,16 @@
 
 package com.simplelife.renhai.server.test;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import org.apache.ibatis.scripting.xmltags.SetSqlNode;
 import org.java_websocket.drafts.Draft_17;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,11 +28,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.business.pool.AbstractMsgExecutorPool;
-import com.simplelife.renhai.server.business.pool.InputMsgExecutorPool;
-import com.simplelife.renhai.server.business.pool.MessageHandler;
 import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.json.JSONFactory;
-import com.simplelife.renhai.server.json.ServerJSONMessage;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.test.MockAppConsts.MockAppBehaviorMode;
 import com.simplelife.renhai.server.test.MockAppConsts.MockAppBusinessStatus;
@@ -49,7 +39,6 @@ import com.simplelife.renhai.server.util.Consts.BusinessType;
 import com.simplelife.renhai.server.util.Consts.NotificationType;
 import com.simplelife.renhai.server.util.DateUtil;
 import com.simplelife.renhai.server.util.GlobalSetting;
-import com.simplelife.renhai.server.util.IDeviceWrapper;
 import com.simplelife.renhai.server.util.IMockApp;
 import com.simplelife.renhai.server.util.IMockConnection;
 import com.simplelife.renhai.server.util.JSONKey;
@@ -436,9 +425,19 @@ public class MockApp implements IMockApp, Runnable
     	
     	if (behaviorMode == MockAppBehaviorMode.Monitor)
     	{
-    		monitorTimer = new Timer();
-    		monitorTimer.scheduleAtFixedRate(new MonitorTask(), 1000, 1000);
+    		startMonitorTimer(1000);
     	}
+    }
+    
+    public void startMonitorTimer(int interval)
+    {
+    	if (monitorTimer != null)
+    	{
+    		monitorTimer.cancel();
+    	}
+    	
+    	monitorTimer = new Timer();
+		monitorTimer.scheduleAtFixedRate(new MonitorTask(), 1000, interval);
     }
     
     public void stopTimer()
@@ -623,12 +622,13 @@ public class MockApp implements IMockApp, Runnable
 		
 		// Add command body
 		JSONObject deviceCountObj = new JSONObject();
-		//deviceCountObj.put(JSONKey.Online, null);
+		deviceCountObj.put(JSONKey.Online, 1);
 		//deviceCountObj.put(JSONKey.Random, null);
-		//deviceCountObj.put(JSONKey.Interest, null);
-		//deviceCountObj.put(JSONKey.Chat, null);
+		deviceCountObj.put(JSONKey.Interest, 1);
+		//deviceCountObj.put(JSONKey.Chat, 1);
 		//deviceCountObj.put(JSONKey.RandomChat, null);
-		//deviceCountObj.put(JSONKey.InterestChat, null);
+		deviceCountObj.put(JSONKey.InterestChat, 1);
+		deviceCountObj.put(JSONKey.ManagementData, 1);
 		
 		JSONObject deviceCapacityObj = new JSONObject();
 		//deviceCapacityObj.put(JSONKey.Online, null);
@@ -997,8 +997,7 @@ public class MockApp implements IMockApp, Runnable
 	private void saveMonitorData(JSONObject body)
 	{
 		JSONObject deviceCountObj = body.getJSONObject(JSONKey.DeviceCount);
-		int chat = deviceCountObj.getIntValue(JSONKey.Chat);
-		int interest = deviceCountObj.getIntValue(JSONKey.Interest);
+		JSONObject managementDataObj = deviceCountObj.getJSONObject(JSONKey.ManagementData);
 		int online = deviceCountObj.getIntValue(JSONKey.Online);
 		
 		if (maxOnlineDeviceCount < online)
@@ -1008,19 +1007,129 @@ public class MockApp implements IMockApp, Runnable
 		
 		try
 		{
-			FileWriter fw = new FileWriter("./monitor.txt", true);
-			fw.write(DateUtil.getNow() + "\t" + online + "\t" + interest + "\t" + chat + "\t" + (interest - chat) + "\r\n");
+			boolean newFile = false;
+			File file = new File("./device.csv");
+			if (!file.exists())
+			{
+				newFile = true;
+			}
+			
+			FileWriter fw = new FileWriter("./device.csv", true);
+			if (newFile)
+			{
+				fw.write("Date, OnlineDevice, OnlineInterestDevice, OnlineChatDevice, MaxOnlineDevice, RegisterDevice, TotalChatCount, TotalChatDuration\r\n");
+			}
+			
+			int chat = deviceCountObj.getIntValue(JSONKey.Chat);
+			int interest = deviceCountObj.getIntValue(JSONKey.Interest);
+			int registerDevice = managementDataObj.getIntValue(JSONKey.RegisterDeviceCount);
+			long totalChatCount = managementDataObj.getLongValue(JSONKey.TotalChatCount);
+			long totalChatDuration = managementDataObj.getLongValue(JSONKey.TotalChatDuration);
+			
+			fw.write(DateUtil.getNow() 
+					+ "," + online + "," 
+					+ interest + "," 
+					+ chat + "," 
+					+ maxOnlineDeviceCount + "," 
+					+ registerDevice + ","
+					+ totalChatCount + ","
+					+ totalChatDuration + ","
+					+ "\r\n");
 			fw.close();
+			
+			fw = new FileWriter("./device_model.csv", true);
+			JSONObject deviceModelObj = managementDataObj.getJSONObject(JSONKey.DeviceCountByModel);
+			fw.write(DateUtil.getNow() + ",");
+			fw.write(formatJSONStringForCSV(deviceModelObj));
+			fw.write("\r\n");
+			fw.close();
+			
+			fw = new FileWriter("./device_os.csv", true);
+			JSONObject deviceOSObj = managementDataObj.getJSONObject(JSONKey.DeviceCountByOS);
+			fw.write(DateUtil.getNow() + ",");
+			fw.write(formatJSONStringForCSV(deviceOSObj));
+			fw.write("\r\n");
+			fw.close();
+			
+			fw = new FileWriter("./impress_label.csv", true);
+			JSONObject topImpressObj = managementDataObj.getJSONObject(JSONKey.TopImpressLabels);
+			fw.write(DateUtil.getNow() + ",");
+			fw.write(formatJSONStringForCSV(topImpressObj));
+			fw.write("\r\n");
+			fw.close();
+			
+			fw = new FileWriter("./interest_label.csv", true);
+			JSONObject topInterestObj = managementDataObj.getJSONObject(JSONKey.TopInterestLabels);
+			fw.write(DateUtil.getNow() + ",");
+			fw.write(formatJSONStringForCSV(topInterestObj));
+			fw.write("\r\n");
+			fw.close();
+			
 		}
 		catch (IOException e)
 		{
 			FileLogger.printStackTrace(e);
 		}
 		
+		/*
 		if (online == 1 && maxOnlineDeviceCount > 1)
 		{
 			this.setBusinessStatus(MockAppBusinessStatus.Ended);
 		}
+		*/
+	}
+	
+	private String formatJSONStringForCSV(JSONObject obj)
+	{
+		String temp = obj.toJSONString();
+		StringBuilder result = new StringBuilder();
+		int size = temp.length();
+		char curChar;
+		boolean inColon = false;
+		for (int i = 0; i < size; i++)
+		{
+			curChar = temp.charAt(i);
+			
+			if (curChar == '\"')
+			{
+				inColon = !inColon;
+			}
+			else if (curChar == ',')
+			{
+				if (inColon)
+				{
+					result.append('_');
+				}
+				else
+				{
+					result.append(curChar);
+				}
+			}
+			else if (curChar == ' ')
+			{
+				if (inColon)
+				{
+					result.append('_');
+				}
+				else
+				{
+					result.append(curChar);
+				}
+			}
+			else if (curChar == ':')
+			{
+				result.append(',');
+			}
+			else if (curChar == '{' || curChar == '}')
+			{
+				// do nothing
+			}
+			else
+			{
+				result.append(curChar);
+			}
+		}
+		return result.toString();
 	}
 	
 	private void replyNotification(JSONObject lastReceivedCommand, MockAppBusinessStatus nextStatus)

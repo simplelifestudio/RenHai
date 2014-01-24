@@ -14,17 +14,15 @@ package com.simplelife.renhai.server.business.pool;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.ibatis.session.AutoMappingBehavior;
-
 import com.simplelife.renhai.server.business.KeywordFilter;
 import com.simplelife.renhai.server.business.device.AbstractLabel;
 import com.simplelife.renhai.server.db.Interestlabelmap;
+import com.simplelife.renhai.server.util.ComparableResult;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
@@ -58,9 +56,9 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
      * @param count: count of hot interest label to be returned
      * @return: link of hot interest label
      */
-    public LinkedList<HotLabel> getHotInterestLabel(int count)
+    public LinkedList<ComparableResult> getHotInterestLabel(int count)
     {
-    	LinkedList<HotLabel> labelList = new LinkedList<HotLabel>();
+    	LinkedList<ComparableResult> labelList = new LinkedList<ComparableResult>();
     	if (count <= 0)
     	{
     		return labelList;
@@ -69,9 +67,9 @@ public class InterestBusinessDevicePool extends AbstractBusinessDevicePool
     	Set<Entry<String, AtomicInteger>> entrySet = labelDeviceCountMap.entrySet();
     	for (Entry<String, AtomicInteger> entry : entrySet)
     	{
-    		HotLabel hotLabel = new HotLabel();
-    		hotLabel.setLabelName(entry.getKey());
-    		hotLabel.setProfileCount(entry.getValue().get());
+    		ComparableResult hotLabel = new ComparableResult();
+    		hotLabel.setField(entry.getKey());
+    		hotLabel.setCount(entry.getValue().get());
     		
     		labelList.add(hotLabel);
     	}

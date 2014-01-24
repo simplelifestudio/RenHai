@@ -11,15 +11,12 @@
 
 package com.simplelife.renhai.server.json;
 
-import org.slf4j.Logger;
-
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.log.FileLogger;
 import com.simplelife.renhai.server.util.CommonFunctions;
 import com.simplelife.renhai.server.util.Consts;
 import com.simplelife.renhai.server.util.GlobalSetting;
 import com.simplelife.renhai.server.util.IDeviceWrapper;
-import com.simplelife.renhai.server.util.IRunnableMessage;
 import com.simplelife.renhai.server.util.JSONKey;
 
 

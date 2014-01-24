@@ -9,20 +9,6 @@
 
 package com.simplelife.renhai.server.test.unittest;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import org.junit.Test;
-
-import com.simplelife.renhai.server.business.device.DeviceWrapper;
-import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
-import com.simplelife.renhai.server.business.pool.TimeoutLink;
-import com.simplelife.renhai.server.test.MockWebSocketConnection;
-import com.simplelife.renhai.server.util.GlobalSetting;
-
 /**
  * 
  */

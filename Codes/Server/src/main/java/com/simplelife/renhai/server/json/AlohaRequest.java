@@ -9,8 +9,6 @@
 
 package com.simplelife.renhai.server.json;
 
-import org.slf4j.Logger;
-
 import com.alibaba.fastjson.JSONObject;
 import com.simplelife.renhai.server.log.DbLogger;
 import com.simplelife.renhai.server.util.Consts;
