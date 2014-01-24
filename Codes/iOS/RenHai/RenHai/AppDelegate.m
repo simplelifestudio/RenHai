@@ -16,6 +16,7 @@
 #import "UserDataModule.h"
 #import "BusinessStatusModule.h"
 #import "WebRTCModule.h"
+#import "HardwareModule.h"
 #import "GUIModule.h"
 
 @implementation AppDelegate
@@ -38,7 +39,7 @@
     [_moduleManager registerModule:appDataModule];
     
     id<CBModule> communicationModule = [CommunicationModule sharedInstance];
-    communicationModule.moduleWeightFactor = 0.2;
+    communicationModule.moduleWeightFactor = 0.1;
     [_moduleManager registerModule:communicationModule];
     
     id<CBModule> userDataModule = [UserDataModule sharedInstance];
@@ -56,6 +57,10 @@
     id<CBModule> guiModule = [GUIModule sharedInstance];
     guiModule.moduleWeightFactor = 0.3;
     [_moduleManager registerModule:guiModule];
+    
+    id<CBModule> hardwareModule = [HardwareModule sharedInstance];
+    hardwareModule.moduleWeightFactor = 0.1;
+    [_moduleManager registerModule:hardwareModule];
     
     DDLogVerbose(@"App Sandbox Path: %@", NSHomeDirectory());
     

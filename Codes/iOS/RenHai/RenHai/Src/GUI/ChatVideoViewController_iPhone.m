@@ -22,7 +22,7 @@
 #define DELAY_ENDCHAT 1.0f
 
 #define INTERVAL_TOOLBARDISPLAYTICK 1
-#define INTERVAL_CHATMESSAGE_DISPLAY 10
+#define INTERVAL_CHATMESSAGE_DISPLAY 5
 #define INTERVAL_ALOHA 60
 
 #define _TOOLBAR_DISPLAY_PERIOD 3
@@ -682,11 +682,24 @@ static NSInteger _kToolbarDisplaySeconds = 0;
                                                  name:UIApplicationDidEnterBackgroundNotification
                                                object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_activateToolbarDisplayTimer) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_frontCameraTurnedInvalid) name:NOTIFICATION_ID_FRONTCAMERAINVALID object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_frontCameraTurnedValid) name:NOTIFICATION_ID_FRONTCAMERAVALID object:nil];
 }
 
 -(void)_unregisterNotifications
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)_frontCameraTurnedValid
+{
+    [_webRTCModule pauseSubscriber:NO];
+}
+
+-(void)_frontCameraTurnedInvalid
+{
+    [_webRTCModule pauseSubscriber:YES];
 }
 
 -(void)_connectWebRTC
@@ -808,10 +821,8 @@ static NSInteger _kToolbarDisplaySeconds = 0;
         RHBusinessSession* businessSession = _userDataModule.businessSession;
         RHChatMessage* chatMessage = [businessSession readChatMessage];
         
-        [[MessageBarManager sharedInstance] showMessageWithTitle:NSLocalizedString(@"ChatVideo_PartnerChatMessage", nil)
-                                                     description:chatMessage.text
-                                                            type:MessageBarMessageTypeInfo
-                                                     forDuration:INTERVAL_CHATMESSAGE_DISPLAY];
+        [_guiModule showAppMessage:MessageBarMessageTypeInfo messageTitle:NSLocalizedString(@"ChatVideo_PartnerChatMessage", nil) messageText:chatMessage.text visibleDuration:INTERVAL_CHATMESSAGE_DISPLAY callBackBlock:^(){
+        }];
     }
 }
 
@@ -841,7 +852,7 @@ static NSInteger _kToolbarDisplaySeconds = 0;
             _isChatMessageEnabled = NO;
             [_sendChatMessageView resignFirstResponder];
             
-            [[MessageBarManager sharedInstance] dismissAllMessages];
+            [_guiModule dismissAllAppMessages];
             
             //        [self _resetSelfVideoToClose];
             

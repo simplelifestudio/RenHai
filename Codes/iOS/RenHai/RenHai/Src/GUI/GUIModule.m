@@ -25,6 +25,8 @@
 
 #import "CommunicationModule.h"
 
+#define INTERVAL_ALERTMESSAGE_DISPLAY 1.5f
+
 @interface GUIModule() <FUIAlertViewDelegate>
 {
     AFNetworkActivityIndicatorManager* _networkActivityIndicator;
@@ -206,6 +208,17 @@ SINGLETON(GUIModule)
     }
 }
 
+-(void) showAppMessage:(MessageBarMessageType) messageType messageTitle:(NSString*) messageTitle messageText:(NSString*) messageText visibleDuration:(CGFloat) visibleDuration callBackBlock:(void (^)())callbackBlock
+{
+    MessageBarManager* messageMgr = [MessageBarManager sharedInstance];
+    [messageMgr showMessageWithTitle:messageTitle description:messageText type:messageType forDuration:visibleDuration callback:callbackBlock];
+}
+
+-(void) dismissAllAppMessages
+{
+    [[MessageBarManager sharedInstance] dismissAllMessages];
+}
+
 #pragma mark - UIApplicationDelegate
 
 -(void)applicationWillResignActive:(UIApplication *)application
@@ -215,7 +228,7 @@ SINGLETON(GUIModule)
 
 -(void)applicationDidEnterBackground:(UIApplication *)application
 {
-
+    [self dismissAllAppMessages];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -225,7 +238,7 @@ SINGLETON(GUIModule)
 
 -(void)applicationWillEnterForeground:(UIApplication *)application
 {
-
+    
 }
 
 #pragma mark - Private Methods
@@ -277,6 +290,7 @@ SINGLETON(GUIModule)
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_RHSERVERDISCONNECTED object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_REMOTECOMMUNICATIONABNORMAL object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onNotifications:) name:NOTIFICATION_ID_RHNETWORKPOOR object:nil];
 }
 
 -(void) _unregisterNotifications
@@ -298,6 +312,10 @@ SINGLETON(GUIModule)
         else if ([notificationName isEqualToString:NOTIFICATION_ID_REMOTECOMMUNICATIONABNORMAL])
         {
             [_connectViewController popConnectView:rootVC animated:YES];
+        }
+        else if ([notificationName isEqualToString:NOTIFICATION_ID_RHNETWORKPOOR])
+        {
+            [self showAppMessage:MessageBarMessageTypeError messageTitle:NSLocalizedString(@"Common_Warning", nil) messageText:NSLocalizedString(@"Common_NetworkPoor", nil) visibleDuration:INTERVAL_ALERTMESSAGE_DISPLAY callBackBlock:nil];
         }
     }
 }

@@ -13,6 +13,8 @@
 "Common_Normal" = "正常";
 "Common_Banned" = "禁言";
 "Common_Invalid" = "无效";
+"Common_Warning" = "警告";
+"Common_NetworkPoor" = "网络情况不佳";
 
 "Communication_InternetDisconnected" = "网络已断开";
 "Communication_WiFiConnected" = "WiFi已连接";
@@ -182,3 +184,8 @@
 "LabelManage_Action_Save" = "保存";
 "LabelManage_Action_Cancel" = "取消";
 "LabelManage_LengthLimit" = "5个汉字内有效";
+
+"Alert_Title" = "提示";
+"Alert_Action_Ack" = "确认";
+"Alert_OneImpressRequired" = "至少为对方标一个印象";
+"Alert_AssessRequired" = "请先评价对方";

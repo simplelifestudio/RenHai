@@ -240,6 +240,8 @@
 		CD163827185D3DE2009BB03D /* connect_retry.caf in Resources */ = {isa = PBXBuildFile; fileRef = CD163825185D3DE2009BB03D /* connect_retry.caf */; };
 		CD16382A185EAC68009BB03D /* WelcomeViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD163829185EAC68009BB03D /* WelcomeViewController_iPhone.m */; };
 		CD16382B185EAC68009BB03D /* WelcomeViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD163829185EAC68009BB03D /* WelcomeViewController_iPhone.m */; };
+		CD180E841890A9DA00A93EAC /* HardwareModule.m in Sources */ = {isa = PBXBuildFile; fileRef = CD180E831890A9DA00A93EAC /* HardwareModule.m */; };
+		CD180E851890A9DA00A93EAC /* HardwareModule.m in Sources */ = {isa = PBXBuildFile; fileRef = CD180E831890A9DA00A93EAC /* HardwareModule.m */; };
 		CD1DFB0918001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0A18001086006ED9A4 /* ConnectViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */; };
 		CD1DFB0B18001086006ED9A4 /* ConnectViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD1DFB0818001086006ED9A4 /* ConnectViewController_iPhone.xib */; };
@@ -528,6 +530,10 @@
 		CDC0519B1805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC051991805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m */; };
 		CDC0519E18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC0519D18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m */; };
 		CDC0519F18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC0519D18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m */; };
+		CDC7416A188E0B40008A6E8D /* RHAlertViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC74168188E0B40008A6E8D /* RHAlertViewController_iPhone.m */; };
+		CDC7416B188E0B40008A6E8D /* RHAlertViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CDC74168188E0B40008A6E8D /* RHAlertViewController_iPhone.m */; };
+		CDC7416C188E0B40008A6E8D /* RHAlertViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDC74169188E0B40008A6E8D /* RHAlertViewController_iPhone.xib */; };
+		CDC7416D188E0B40008A6E8D /* RHAlertViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDC74169188E0B40008A6E8D /* RHAlertViewController_iPhone.xib */; };
 		CDDA9FA8182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDA9FA7182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib */; };
 		CDDA9FA9182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDA9FA7182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib */; };
 		CDDA9FAB1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CDDA9FAA1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib */; };
@@ -777,6 +783,8 @@
 		CD163825185D3DE2009BB03D /* connect_retry.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = connect_retry.caf; sourceTree = "<group>"; };
 		CD163828185EAC68009BB03D /* WelcomeViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WelcomeViewController_iPhone.h; sourceTree = "<group>"; };
 		CD163829185EAC68009BB03D /* WelcomeViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WelcomeViewController_iPhone.m; sourceTree = "<group>"; };
+		CD180E821890A9DA00A93EAC /* HardwareModule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HardwareModule.h; sourceTree = "<group>"; };
+		CD180E831890A9DA00A93EAC /* HardwareModule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HardwareModule.m; sourceTree = "<group>"; };
 		CD1C4A9917FAB763009642D3 /* libPods-RenHaiGHUnitTest.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-RenHaiGHUnitTest.a"; path = "Pods/build/Debug-iphoneos/libPods-RenHaiGHUnitTest.a"; sourceTree = "<group>"; };
 		CD1DFB0618001086006ED9A4 /* ConnectViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConnectViewController_iPhone.h; sourceTree = "<group>"; };
 		CD1DFB0718001086006ED9A4 /* ConnectViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConnectViewController_iPhone.m; sourceTree = "<group>"; };
@@ -897,6 +905,9 @@
 		CDC051991805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+CBNavigationControllerExtends.m"; sourceTree = "<group>"; };
 		CDC0519C18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+CBUIViewControlerExtends.h"; sourceTree = "<group>"; };
 		CDC0519D18058FF6006158B8 /* UIViewController+CBUIViewControlerExtends.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+CBUIViewControlerExtends.m"; sourceTree = "<group>"; };
+		CDC74167188E0B40008A6E8D /* RHAlertViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHAlertViewController_iPhone.h; sourceTree = "<group>"; };
+		CDC74168188E0B40008A6E8D /* RHAlertViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHAlertViewController_iPhone.m; sourceTree = "<group>"; };
+		CDC74169188E0B40008A6E8D /* RHAlertViewController_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RHAlertViewController_iPhone.xib; sourceTree = "<group>"; };
 		CDDA9FA7182349DA00E9EAFC /* InterestLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = InterestLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
 		CDDA9FAA1825344B00E9EAFC /* ServerInterestLabelsHeaderView_iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ServerInterestLabelsHeaderView_iPhone.xib; sourceTree = "<group>"; };
 		CDDBE33A1853FD6B001A1744 /* ChatMessageViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChatMessageViewController_iPhone.h; sourceTree = "<group>"; };
@@ -1218,6 +1229,7 @@
 				CD3C04DC181F9055002B19A3 /* BusinessStatus */,
 				C5F8936B17CFA136003EF1B3 /* Communication */,
 				C5F8936F17CFA136003EF1B3 /* WebRTC */,
+				CD180E811890A9B600A93EAC /* Hardware */,
 				C5F8936C17CFA136003EF1B3 /* GUI */,
 			);
 			path = Src;
@@ -1399,6 +1411,9 @@
 				CD51019E182A856600E188A3 /* RHLabelManageViewController_iPhone.h */,
 				CD51019F182A856600E188A3 /* RHLabelManageViewController_iPhone.m */,
 				CD5101A0182A856600E188A3 /* RHLabelManageViewController_iPhone.xib */,
+				CDC74167188E0B40008A6E8D /* RHAlertViewController_iPhone.h */,
+				CDC74168188E0B40008A6E8D /* RHAlertViewController_iPhone.m */,
+				CDC74169188E0B40008A6E8D /* RHAlertViewController_iPhone.xib */,
 				CD07E417184DAC130066ED29 /* RHChatActionBar.h */,
 				CD07E418184DAC130066ED29 /* RHChatActionBar.m */,
 			);
@@ -1473,6 +1488,15 @@
 				CDBE9E2E1834D74800005405 /* OpenTokAgent.m */,
 			);
 			path = WebRTC;
+			sourceTree = "<group>";
+		};
+		CD180E811890A9B600A93EAC /* Hardware */ = {
+			isa = PBXGroup;
+			children = (
+				CD180E821890A9DA00A93EAC /* HardwareModule.h */,
+				CD180E831890A9DA00A93EAC /* HardwareModule.m */,
+			);
+			path = Hardware;
 			sourceTree = "<group>";
 		};
 		CD3C04DC181F9055002B19A3 /* BusinessStatus */ = {
@@ -1557,7 +1581,7 @@
 				C55B43E617CF580A009BB21B /* Resources */,
 				146995957BB44944A99B64BD /* Copy Pods Resources */,
 				C55B445317CF5D9A009BB21B /* ShellScript */,
-				CDAEF04F17E7020900AD52B5 /* ShellScript */,
+				CDC74170188E8AEA008A6E8D /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1750,6 +1774,7 @@
 				CD7F19F4186FEFE3006AFFDA /* 02.png in Resources */,
 				CDDBE35618548D1E001A1744 /* icon-success.png in Resources */,
 				CDDBE35018548D1E001A1744 /* icon-error@2x.png in Resources */,
+				CDC7416C188E0B40008A6E8D /* RHAlertViewController_iPhone.xib in Resources */,
 				CD7F19F6186FEFE3006AFFDA /* 02_35.png in Resources */,
 				CD37AE54185EEF1D003F40F4 /* AntiIcon-80.png in Resources */,
 				CD5633B01827631600D2A9A6 /* close.png in Resources */,
@@ -1814,6 +1839,7 @@
 				CD37AE55185EEF1D003F40F4 /* AntiIcon-80.png in Resources */,
 				CD1637F9185ADC40009BB03D /* Icon-80.png in Resources */,
 				CD98ADD018687120009B77FE /* help_01.png in Resources */,
+				CDC7416D188E0B40008A6E8D /* RHAlertViewController_iPhone.xib in Resources */,
 				CD94DF5F1851918000C9CBC4 /* Default.png in Resources */,
 				CDDBE35318548D1E001A1744 /* icon-info.png in Resources */,
 				CD7F19C6186FEFBF006AFFDA /* help_01_35.psd in Resources */,
@@ -2041,29 +2067,29 @@
 		};
 		CD94DF8C1851918000C9CBC4 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${INFOPLIST_FILE}\"";
+			shellScript = "# xcode-build-bump.sh\n# @desc Auto-increment the build number every time the project is run.\n# @usage\n# 1. Select: your Target in Xcode\n# 2. Select: Build Phases Tab\n# 3. Select: Add Build Phase -> Add Run Script\n# 4. Paste code below in to new \"Run Script\" section\n# 5. Drag the \"Run Script\" below \"Link Binaries With Libraries\"\n# 6. Insure that your starting build number is set to a whole integer and not a float (e.g. 1, not 1.0)\n\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
 		};
-		CDAEF04F17E7020900AD52B5 /* ShellScript */ = {
+		CDC74170188E8AEA008A6E8D /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${INFOPLIST_FILE}\"";
+			shellScript = "# xcode-build-bump.sh\n# @desc Auto-increment the build number every time the project is run.\n# @usage\n# 1. Select: your Target in Xcode\n# 2. Select: Build Phases Tab\n# 3. Select: Add Build Phase -> Add Run Script\n# 4. Paste code below in to new \"Run Script\" section\n# 5. Drag the \"Run Script\" below \"Link Binaries With Libraries\"\n# 6. Insure that your starting build number is set to a whole integer and not a float (e.g. 1, not 1.0)\n\nbuildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2079,6 +2105,7 @@
 				CD6D8CD118434A6A00C2330D /* RHDataUtils.m in Sources */,
 				CD5D6CFB1838923D002DEDAF /* RHStatusPeriod.m in Sources */,
 				CDA98255184F0B9300D95896 /* LeftBarTableCell_iPhone.m in Sources */,
+				CDC7416A188E0B40008A6E8D /* RHAlertViewController_iPhone.m in Sources */,
 				C50505C017D2BD4800DB6589 /* CBAppUtils.m in Sources */,
 				CDBE9E2F1834D74800005405 /* OpenTokAgent.m in Sources */,
 				CDDBE35C1854AAED001A1744 /* ChatMessageSendView_iPhone.m in Sources */,
@@ -2160,6 +2187,7 @@
 				C54DC8D917DC11A000BBD498 /* CBRoundProgressView.m in Sources */,
 				CD3C04DF181F906B002B19A3 /* BusinessStatusModule.m in Sources */,
 				C54DC8E417DC73DE00BBD498 /* RHTableViewLabelCell_iPhone.m in Sources */,
+				CD180E841890A9DA00A93EAC /* HardwareModule.m in Sources */,
 				C54DC8EA17DC926900BBD498 /* UIDevice+CBDeviceExtends.m in Sources */,
 				C53A7F1117DDFF3B007C9068 /* RHCollectionLabelCell_iPhone.m in Sources */,
 				C580526D17E1E565003D9F88 /* InterestLabelsHeaderView_iPhone.m in Sources */,
@@ -2284,6 +2312,7 @@
 				CD94DEFF1851918000C9CBC4 /* RHDataUtils.m in Sources */,
 				CD94DF001851918000C9CBC4 /* RHStatusPeriod.m in Sources */,
 				CD94DF011851918000C9CBC4 /* LeftBarTableCell_iPhone.m in Sources */,
+				CDC7416B188E0B40008A6E8D /* RHAlertViewController_iPhone.m in Sources */,
 				CD94DF021851918000C9CBC4 /* CBAppUtils.m in Sources */,
 				CD94DF031851918000C9CBC4 /* OpenTokAgent.m in Sources */,
 				CDDBE35E1854AAED001A1744 /* ChatMessageSendView_iPhone.m in Sources */,
@@ -2365,6 +2394,7 @@
 				CD94DF4A1851918000C9CBC4 /* CBRoundProgressView.m in Sources */,
 				CD94DF4B1851918000C9CBC4 /* BusinessStatusModule.m in Sources */,
 				CD94DF4C1851918000C9CBC4 /* RHTableViewLabelCell_iPhone.m in Sources */,
+				CD180E851890A9DA00A93EAC /* HardwareModule.m in Sources */,
 				CD94DF4D1851918000C9CBC4 /* UIDevice+CBDeviceExtends.m in Sources */,
 				CD94DF4E1851918000C9CBC4 /* RHCollectionLabelCell_iPhone.m in Sources */,
 				CD94DF4F1851918000C9CBC4 /* InterestLabelsHeaderView_iPhone.m in Sources */,
@@ -2434,7 +2464,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "5AE50A40-6EE1-45DD-91DA-6BC7EA36D654";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -2462,7 +2492,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "5AE50A40-6EE1-45DD-91DA-6BC7EA36D654";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -2491,7 +2521,7 @@
 				INFOPLIST_FILE = "RenHai/RenHai-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "5AE50A40-6EE1-45DD-91DA-6BC7EA36D654";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;
@@ -2521,8 +2551,8 @@
 				INFOPLIST_FILE = "RenHai/RenHai-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "5AE50A40-6EE1-45DD-91DA-6BC7EA36D654";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "5AE50A40-6EE1-45DD-91DA-6BC7EA36D654";
 				TARGETED_DEVICE_FAMILY = 1;
 				VALID_ARCHS = "arm64 armv7 armv7s";
 				WRAPPER_EXTENSION = app;

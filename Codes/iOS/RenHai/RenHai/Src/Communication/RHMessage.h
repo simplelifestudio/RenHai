@@ -130,7 +130,7 @@
 
 // InterestLabelList
 #define MESSAGE_KEY_CURRENT @"current"
-#define MESSAGE_VAL_CURRENT 60
+#define MESSAGE_VAL_CURRENT 30
 #define MESSAGE_KEY_HISTORY @"history"
 #define MESSAGE_KEY_STARTTIME @"startTime"
 #define MESSAGE_KEY_ENDTIME @"endTime"
@@ -263,9 +263,10 @@ AppDataSyncRequestType;
 typedef enum
 {
     ServerDataSyncRequestType_TotalSync = 0,
+    ServerDataSyncRequestType_DeviceAllSync,
     ServerDataSyncRequestType_DeviceCountSync,
     ServerDataSyncRequestType_DeviceCapacitySync,
-    ServerDataSyncRequestType_InterestLabelListSync
+    ServerDataSyncRequestType_InterestLabelListSync,
 }
 ServerDataSyncRequestType;
 

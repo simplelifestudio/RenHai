@@ -328,7 +328,7 @@ static float progress = 0.0;
 }
 
 -(void)_enterButtonTimerFinished
-{
+{    
     [_enterButtonTimer invalidate];
     
     progress = 0.0;

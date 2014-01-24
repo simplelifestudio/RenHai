@@ -19,6 +19,8 @@
 
 #import "RHCollectionLabelCell_iPhone.h"
 #import "RHLabelManageViewController_iPhone.h"
+#import "RHAlertViewController_iPhone.h"
+
 #import "ChatAssessAddImpressLabelsHeaderView_iPhone.h"
 #import "ChatAssessExistImpressLabelsHeaderView_iPhone.h"
 
@@ -38,9 +40,11 @@
 
 #define DELAY_REFRESH 0.5f
 
+#define INTERVAL_ALERTMESSAGE_DISPLAY 1.5f
+
 #define COUNTDOWN_SECONDS 300
 
-@interface ChatAssessViewController_iPhone () <ChatAssessAddImpressLabelsHeaderViewDelegate, ChatAssessExistImpressLabelsHeaderViewDelegate, RHLabelManageDelegate, UIGestureRecognizerDelegate>
+@interface ChatAssessViewController_iPhone () <ChatAssessAddImpressLabelsHeaderViewDelegate, ChatAssessExistImpressLabelsHeaderViewDelegate, RHLabelManageDelegate, UIGestureRecognizerDelegate, RHAlertDelegate>
 {
     GUIModule* _guiModule;
     UserDataModule* _userDataModule;
@@ -497,15 +501,17 @@
 
 -(void)_resetAssessLabelsViewCellAsDefault:(RHCollectionLabelCell_iPhone*) cell indexPath:(NSIndexPath*) indexPath
 {
-    NSString* name = _assessLabelNames[indexPath.row];
-    if ([name isEqualToString:MESSAGE_KEY_ASSESS_HAPPY])
-    {
-        [_assessLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-    }
-    else
-    {
-        [_assessLabelsView deselectItemAtIndexPath:indexPath animated:NO];
-    }
+//    NSString* name = _assessLabelNames[indexPath.row];
+//    if ([name isEqualToString:MESSAGE_KEY_ASSESS_HAPPY])
+//    {
+//        [_assessLabelsView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+//    }
+//    else
+//    {
+//        [_assessLabelsView deselectItemAtIndexPath:indexPath animated:NO];
+//    }
+    
+    [_assessLabelsView deselectItemAtIndexPath:indexPath animated:NO];
 }
 
 -(void)_resetAssessLabelsViewAsDefault
@@ -745,6 +751,11 @@
     _existImpressLabelsHeaderView.cloneButton.enabled = allowCloneLabel;
 }
 
+- (void) _refreshChatAssessActions
+{
+    
+}
+
 -(void)_setLabelManagingStatus:(BOOL) isManaging
 {
     _isLabelManaging = isManaging;
@@ -759,6 +770,28 @@
     
     _existImpressLabelsHeaderView.userInteractionEnabled = userInteractionEnabled;
     _existImpressLabelsView.userInteractionEnabled = userInteractionEnabled;
+}
+
+-(BOOL) _hasAssessed
+{
+    BOOL flag = NO;
+    
+    NSArray* indexPathes = _assessLabelsView.indexPathsForSelectedItems;
+    if (0 < indexPathes.count)
+    {
+        flag = YES;
+    }
+    
+    return flag;
+}
+
+-(BOOL) _hasImpressLabelAdded
+{
+    BOOL flag = NO;
+    
+    flag = (0 < _addImpressLabelNames.count) ? YES : NO;
+    
+    return flag;
 }
 
 #pragma mark - UICollectionViewDelegate
@@ -996,15 +1029,55 @@
 
 - (IBAction)didPressContinueButton:(id)sender
 {
-    [_guiModule playSound:SOUNDID_CHATASSESS_CONTINUE];
+    BOOL hasAssessed = [self _hasAssessed];
+    if (!hasAssessed)
+    {
+        [_guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];
+        [_guiModule showAppMessage:MessageBarMessageTypeError messageTitle:NSLocalizedString(@"Alert_Title", nil) messageText:NSLocalizedString(@"Alert_AssessRequired",nil) visibleDuration:INTERVAL_ALERTMESSAGE_DISPLAY callBackBlock:^(){
+        }];
+        
+        return;
+    }
     
+    BOOL hasImpressLabelAdded = [self _hasImpressLabelAdded];
+    if (!hasImpressLabelAdded)
+    {
+        [_guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];        
+        [_guiModule showAppMessage:MessageBarMessageTypeError messageTitle:NSLocalizedString(@"Alert_Title", nil) messageText:NSLocalizedString(@"Alert_OneImpressRequired",nil) visibleDuration:INTERVAL_ALERTMESSAGE_DISPLAY callBackBlock:^(){
+        }];
+        
+        return;
+    }
+    
+    [_guiModule dismissAllAppMessages];
+    [_guiModule playSound:SOUNDID_CHATASSESS_CONTINUE];
     [self _remoteUpdatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndContinue];
 }
 
 - (IBAction)didPressFinishButton:(id)sender
 {
-    [_guiModule playSound:SOUNDID_CHATASSESS_QUIT];
+    BOOL hasAssessed = [self _hasAssessed];
+    if (!hasAssessed)
+    {
+        [_guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];
+        [_guiModule showAppMessage:MessageBarMessageTypeError messageTitle:NSLocalizedString(@"Alert_Title", nil) messageText:NSLocalizedString(@"Alert_AssessRequired",nil) visibleDuration:INTERVAL_ALERTMESSAGE_DISPLAY callBackBlock:^(){
+        }];
+        
+        return;
+    }
     
+    BOOL hasImpressLabelAdded = [self _hasImpressLabelAdded];
+    if (!hasImpressLabelAdded)
+    {
+        [_guiModule playSoundAndVibrate:SOUNDID_ERROR vibrate:YES];        
+        [_guiModule showAppMessage:MessageBarMessageTypeError messageTitle:NSLocalizedString(@"Alert_Title", nil) messageText:NSLocalizedString(@"Alert_OneImpressRequired",nil) visibleDuration:INTERVAL_ALERTMESSAGE_DISPLAY callBackBlock:^(){
+        }];
+        
+        return;
+    }
+    
+    [_guiModule dismissAllAppMessages];
+    [_guiModule playSound:SOUNDID_CHATASSESS_QUIT];
     [self _remoteUpdatePartnerImpressCardWithType:BusinessSessionRequestType_AssessAndQuit];
 }
 
@@ -1124,6 +1197,13 @@
     _allowCloneLabel = NO;
     [self _refershAddImpressLabelsView];
     [self _refreshExistImpressLabelsView];
+}
+
+#pragma mark - RHAlertDelegate
+
+-(void) didAckAlert
+{
+    
 }
 
 @end
