@@ -84,17 +84,4 @@
     [self setBackgroundImage:highlightedBackgroundImage forState:UIControlStateHighlighted];
 }
 
-- (void)setEnabled:(BOOL)enabled
-{
-    [super setEnabled:enabled];
-    if (enabled)
-    {
-        self.alpha = 1.0;
-    }
-    else
-    {
-        self.alpha = 0.4;
-    }
-}
-
 @end

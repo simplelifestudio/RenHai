@@ -75,9 +75,6 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
         }
         
         [self layoutChanged];
-        
-        // Updated by RenHai
-        [self _fixCrashIssueOnceDragsCellIfKeyboardIsVisible];
     }
     return self;
 }
@@ -236,25 +233,9 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
                   canMoveItemAtIndexPath:indexPath]) {
                 return;
             }
-            
-            // Updated by RenHai
-            // {
-            UICollectionViewCell* selectedCell = [self.collectionView cellForItemAtIndexPath:indexPath];
-            
-            NSArray* selectedIndexPathes = self.collectionView.indexPathsForSelectedItems;
-            for (NSIndexPath* p in selectedIndexPathes)
-            {
-                [self.collectionView deselectItemAtIndexPath:p animated:NO];
-                UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:p];
-                cell.highlighted = NO;
-            }
-            [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-            selectedCell.highlighted = YES;
-            // }
-            
             // Create mock cell to drag around
             UICollectionViewCell *cell = [self.collectionView cellForItemAtIndexPath:indexPath];
-            cell.highlighted = YES;
+            cell.highlighted = NO;
             [mockCell removeFromSuperview];
             mockCell = [[UIImageView alloc] initWithFrame:cell.frame];
             mockCell.image = [self imageFromCell:cell];
@@ -306,16 +287,6 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
                  self.layoutHelper.hideIndexPath = nil;
                  [self.collectionView.collectionViewLayout invalidateLayout];
              }];
-            
-            // Updated by RenHai
-            // {
-            NSArray* selectedIndexPathes = self.collectionView.indexPathsForSelectedItems;
-            for (NSIndexPath* p in selectedIndexPathes)
-            {
-                [self.collectionView deselectItemAtIndexPath:p animated:NO];
-                UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:p];
-                cell.highlighted = NO;
-            }
             
             // Reset
             [self invalidatesScrollTimer];
@@ -447,35 +418,5 @@ typedef NS_ENUM(NSInteger, _ScrollingDirection) {
     NSIndexPath *indexPath = [self indexPathForItemClosestToPoint:mockCell.center];
     [self warpToIndexPath:indexPath];
 }
-
-// Updated by RenHai
-// {
-static BOOL _originEnableVal;
-static BOOL _isKeyboardVisible;
--(void) _fixCrashIssueOnceDragsCellIfKeyboardIsVisible
-{    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onKeyboardWillShow) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_onKeyboardDidHide) name:UIKeyboardDidHideNotification object:nil];
-}
-
--(void) _onKeyboardWillShow
-{
-    if (!_isKeyboardVisible)
-    {
-        _originEnableVal = self.enabled;
-        
-        _isKeyboardVisible = YES;
-    }
-    
-    self.enabled = NO;
-}
-
--(void) _onKeyboardDidHide
-{
-    self.enabled = _originEnableVal;
-    
-    _isKeyboardVisible = NO;
-}
-// }
 
 @end
