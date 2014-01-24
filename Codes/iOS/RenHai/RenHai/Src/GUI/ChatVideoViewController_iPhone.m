@@ -16,6 +16,7 @@
 #import "BusinessStatusModule.h"
 #import "WebRTCModule.h"
 #import "OpenTokAgent.h"
+#import "HardwareModule.h"
 
 #import "ChatMessageSendView_iPhone.h"
 
@@ -43,6 +44,7 @@
     AppDataModule* _appDataModule;
     BusinessStatusModule* _statusModule;
     WebRTCModule* _webRTCModule;
+    HardwareModule* _hardWareModule;
     
     NSUInteger _countdownSeconds;
     NSTimer* _timer;
@@ -245,6 +247,7 @@
     _appDataModule = [AppDataModule sharedInstance];
     _statusModule = [BusinessStatusModule sharedInstance];
     _webRTCModule = [WebRTCModule sharedInstance];
+    _hardWareModule = [HardwareModule sharedInstance];
     
     _isSelfDeciding = NO;
     _decideLock = [[NSCondition alloc] init];
@@ -694,12 +697,12 @@ static NSInteger _kToolbarDisplaySeconds = 0;
 
 -(void)_frontCameraTurnedValid
 {
-    [_webRTCModule pauseSubscriber:NO];
+//    [_webRTCModule pauseSubscriber:NO];
 }
 
 -(void)_frontCameraTurnedInvalid
 {
-    [_webRTCModule pauseSubscriber:YES];
+//    [_webRTCModule pauseSubscriber:YES];
 }
 
 -(void)_connectWebRTC

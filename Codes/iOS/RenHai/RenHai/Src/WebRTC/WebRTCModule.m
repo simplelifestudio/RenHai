@@ -9,6 +9,7 @@
 #import "WebRTCModule.h"
 
 #import "CommunicationModule.h"
+#import "HardwareModule.h"
 
 @interface WebRTCModule()
 {
@@ -60,11 +61,17 @@ SINGLETON(WebRTCModule)
 -(void) connectAndPublishOnWebRTC:(NSString*) apiKey sessionId:(NSString*) sessionId token:(NSString*) token
 {
     [_openTokAgent connectWithAPIKey:apiKey sessionId:sessionId token:token];
+    
+    HardwareModule* hardwareModule = [HardwareModule sharedInstance];
+    [hardwareModule enableProximitySensor];
 }
 
 -(void) unpublishAndDisconnectOnWebRTC
 {
     [_openTokAgent disconnect];
+    
+    HardwareModule* hardwareModule = [HardwareModule sharedInstance];    
+    [hardwareModule disableProximitySensor];
 }
 
 -(void) registerWebRTCDelegate:(id<OpenTokDelegate>) delegate

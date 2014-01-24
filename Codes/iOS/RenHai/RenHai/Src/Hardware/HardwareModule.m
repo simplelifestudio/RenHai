@@ -43,14 +43,22 @@ SINGLETON(HardwareModule)
     
     [super startService];
     
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
-    
     [self _registerNotifications];
 }
 
 -(void) processService
 {
     MODULE_DELAY
+}
+
+-(void) enableProximitySensor
+{
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+}
+
+-(void) disableProximitySensor
+{
+    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
 }
 
 #pragma mark - UIApplicationDelegate
@@ -62,7 +70,7 @@ SINGLETON(HardwareModule)
 
 -(void)applicationDidEnterBackground:(UIApplication *)application
 {
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:NO];
+
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
@@ -72,7 +80,7 @@ SINGLETON(HardwareModule)
 
 -(void)applicationWillEnterForeground:(UIApplication *)application
 {
-    [[UIDevice currentDevice] setProximityMonitoringEnabled:YES];
+
 }
 
 #pragma mark - Private Methods

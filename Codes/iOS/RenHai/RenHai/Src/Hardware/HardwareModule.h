@@ -15,4 +15,7 @@
 
 @interface HardwareModule : CBModuleAbstractImpl <CBSharedInstance, UIApplicationDelegate>
 
+-(void) enableProximitySensor;
+-(void) disableProximitySensor;
+
 @end
