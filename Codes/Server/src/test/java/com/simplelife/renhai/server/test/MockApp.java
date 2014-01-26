@@ -63,6 +63,12 @@ public class MockApp implements IMockApp, Runnable
 		{
 			try
 			{
+				if (!setupConnection(isUsingRealSocket))
+				{
+					logger.error("Fatal error: MockApp <{}> failed to setup websocket connection with server", deviceSn);
+					return;
+				}
+				
 				syncDevice();
 				sendServerDataSyncRequest();
 			}
@@ -1646,6 +1652,11 @@ public class MockApp implements IMockApp, Runnable
 	
 	public void setBusinessStatus(MockAppConsts.MockAppBusinessStatus status)
 	{
+		if (this.behaviorMode ==  MockAppBehaviorMode.Monitor)
+		{
+			return;
+		}
+		
 		logger.debug("MockApp <{}> will chang status to " + status.name(), deviceSn);
 		businessStatus = status;
 		if (status == MockAppConsts.MockAppBusinessStatus.Ended)
