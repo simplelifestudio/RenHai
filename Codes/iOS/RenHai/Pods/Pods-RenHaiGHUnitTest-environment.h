@@ -26,24 +26,21 @@
 
 // CocoaLumberjack
 #define COCOAPODS_POD_AVAILABLE_CocoaLumberjack
-// This library does not follow semantic-versioning,
-// so we were not able to define version macros.
-// Please contact the author.
-// Version: 1.6.5.1.
+#define COCOAPODS_VERSION_MAJOR_CocoaLumberjack 1
+#define COCOAPODS_VERSION_MINOR_CocoaLumberjack 7
+#define COCOAPODS_VERSION_PATCH_CocoaLumberjack 0
 
 // CocoaLumberjack/Core
 #define COCOAPODS_POD_AVAILABLE_CocoaLumberjack_Core
-// This library does not follow semantic-versioning,
-// so we were not able to define version macros.
-// Please contact the author.
-// Version: 1.6.5.1.
+#define COCOAPODS_VERSION_MAJOR_CocoaLumberjack_Core 1
+#define COCOAPODS_VERSION_MINOR_CocoaLumberjack_Core 7
+#define COCOAPODS_VERSION_PATCH_CocoaLumberjack_Core 0
 
 // CocoaLumberjack/Extensions
 #define COCOAPODS_POD_AVAILABLE_CocoaLumberjack_Extensions
-// This library does not follow semantic-versioning,
-// so we were not able to define version macros.
-// Please contact the author.
-// Version: 1.6.5.1.
+#define COCOAPODS_VERSION_MAJOR_CocoaLumberjack_Extensions 1
+#define COCOAPODS_VERSION_MINOR_CocoaLumberjack_Extensions 7
+#define COCOAPODS_VERSION_PATCH_CocoaLumberjack_Extensions 0
 
 // DraggableCollectionView
 #define COCOAPODS_POD_AVAILABLE_DraggableCollectionView
@@ -61,7 +58,7 @@
 #define COCOAPODS_POD_AVAILABLE_FTCoreText
 #define COCOAPODS_VERSION_MAJOR_FTCoreText 1
 #define COCOAPODS_VERSION_MINOR_FTCoreText 0
-#define COCOAPODS_VERSION_PATCH_FTCoreText 0
+#define COCOAPODS_VERSION_PATCH_FTCoreText 1
 
 // FlatUIKit
 #define COCOAPODS_POD_AVAILABLE_FlatUIKit
@@ -85,7 +82,7 @@
 #define COCOAPODS_POD_AVAILABLE_JSMessagesViewController
 #define COCOAPODS_VERSION_MAJOR_JSMessagesViewController 3
 #define COCOAPODS_VERSION_MINOR_JSMessagesViewController 4
-#define COCOAPODS_VERSION_PATCH_JSMessagesViewController 0
+#define COCOAPODS_VERSION_PATCH_JSMessagesViewController 4
 
 // JSQSystemSoundPlayer
 #define COCOAPODS_POD_AVAILABLE_JSQSystemSoundPlayer

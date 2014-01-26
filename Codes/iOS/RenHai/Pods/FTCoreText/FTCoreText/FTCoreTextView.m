@@ -17,7 +17,7 @@
 
 @interface NSData (FTCoreTextAdditions)
 
-+ (NSData *)ftct_base64DataFromString:(NSString *)string;
++ (NSData *)ftct_dataWithBase64EncodedString:(NSString *)string;
 
 @end
 
@@ -256,18 +256,18 @@ NSInteger rangeSort(NSString *range1, NSString *range2, void *context);
 
 - (NSString*)getNodeIndexThatContainLocationFormNSRange:(NSRange)range
 {
-    FTCoreTextNode* node = [self getNodeThatContainLocationFormNSRange:range];
+    FTCoreTextNode *node = [self getNodeThatContainLocationFormNSRange:range];
     return [self getIndexingForNode:node];
 }
 
 - (FTCoreTextNode*)getNodeThatContainLocationFormNSRange:(NSRange)range
 {
-    FTCoreTextNode* currentNode = self.rootNode;
+    FTCoreTextNode *currentNode = self.rootNode;
     int i = 0;
     int count = [currentNode.subnodes count];
     while (currentNode.subnodes && count>i)
     {
-        FTCoreTextNode* node = [currentNode.subnodes objectAtIndex:i];
+        FTCoreTextNode *node = [currentNode.subnodes objectAtIndex:i];
         if (range.length==0 && node.styleRange.location==range.location && node.styleRange.length==0)
         {
             currentNode=node;
@@ -289,12 +289,12 @@ NSInteger rangeSort(NSString *range1, NSString *range2, void *context);
 
 - (NSInteger)getCorrectLocationFromNSRange:(NSRange)range
 {
-    FTCoreTextNode* currentNode = self.rootNode;
+    FTCoreTextNode *currentNode = self.rootNode;
     int i = 0;
     int count = [currentNode.subnodes count];
     while (currentNode.subnodes && count>i)
     {
-        FTCoreTextNode* node = [currentNode.subnodes objectAtIndex:i];
+        FTCoreTextNode *node = [currentNode.subnodes objectAtIndex:i];
         if (node.styleRange.location<=range.location && (node.styleRange.location + node.styleRange.length)>range.location)
         {
             currentNode=node;
@@ -308,10 +308,10 @@ NSInteger rangeSort(NSString *range1, NSString *range2, void *context);
 }
 
 
-- (NSString*)getIndexingForNode:(FTCoreTextNode*)node
+- (NSString *)getIndexingForNode:(FTCoreTextNode*)node
 {
-    NSString* string = [NSString string];
-    FTCoreTextNode* currentNode = node;
+    NSString *string = [NSString string];
+    FTCoreTextNode *currentNode = node;
     do {
         if (currentNode==self.rootNode)
         {
@@ -360,7 +360,7 @@ NSInteger rangeSort(NSString *range1, NSString *range2, void *context);
             {
                 CFRange lineRange= CTLineGetStringRange(line);
                 NSRange lineNSRange = {lineRange.location,lineRange.length};
-                FTCoreTextNode* myNode = [self getNodeThatContainLocationFormNSRange:lineNSRange];
+                FTCoreTextNode *myNode = [self getNodeThatContainLocationFormNSRange:lineNSRange];
                 CFRelease(ctframe);
                 return [self getIndexingForNode:myNode];
             }
@@ -435,21 +435,6 @@ CTFontRef CTFontCreateFromUIFont(UIFont *font)
                                             font.pointSize,
                                             NULL);
     return ctFont;
-}
-
-UITextAlignment UITextAlignmentFromCoreTextAlignment(FTCoreTextAlignement alignment)
-{
-	switch (alignment) {
-		case FTCoreTextAlignementCenter:
-			return UITextAlignmentCenter;
-			break;
-		case FTCoreTextAlignementRight:
-			return UITextAlignmentRight;
-			break;
-		default:
-			return UITextAlignmentLeft;
-			break;
-	}
 }
 
 #pragma mark - FTCoreTextView business
@@ -567,7 +552,7 @@ UITextAlignment UITextAlignmentFromCoreTextAlignment(FTCoreTextAlignement alignm
 								baselineOrigin.y = CGRectGetHeight(self.frame) - baselineOrigin.y;
 								
 								CGRect lineFrame = CGRectMake(baselineOrigin.x, baselineOrigin.y - ascent, lineWidth, ascent + descent);
-								CGRect actualRect;
+								CGRect actualRect = CGRectZero;
 								actualRect.size.height = lineFrame.size.height;
 								actualRect.origin.y = lineFrame.origin.y;
 								
@@ -600,7 +585,7 @@ UITextAlignment UITextAlignmentFromCoreTextAlignment(FTCoreTextAlignement alignm
                 CFArrayRef runs = CTLineGetGlyphRuns(line);
                 for(CFIndex j = 0; j < CFArrayGetCount(runs); j++) {
                     CTRunRef run = CFArrayGetValueAtIndex(runs, j);
-                    NSDictionary* attributes = (__bridge NSDictionary*)CTRunGetAttributes(run);
+                    NSDictionary *attributes = (__bridge NSDictionary*)CTRunGetAttributes(run);
                     
                     NSString *name = [attributes objectForKey:FTCoreTextDataName];
                     if (![name isEqualToString:FTCoreTextTagLink]) continue;
@@ -826,7 +811,7 @@ UITextAlignment UITextAlignmentFromCoreTextAlignment(FTCoreTextAlignement alignm
                     UIImage *img =nil;
                     if ([elementContent hasPrefix:@"base64:"])
                     {
-                        NSData *myImgData = [NSData ftct_base64DataFromString:[elementContent substringFromIndex:7]];
+                        NSData *myImgData = [NSData ftct_dataWithBase64EncodedString:[elementContent substringFromIndex:7]];
                         img = [UIImage imageWithData:myImgData];
                     }
                     else
@@ -899,7 +884,7 @@ UITextAlignment UITextAlignmentFromCoreTextAlignment(FTCoreTextAlignement alignm
 				
                 if (style.block)
                 {
-                    NSDictionary* blockDict = [NSDictionary dictionaryWithObjectsAndKeys:tagsComponents,@"components", [NSValue valueWithRange:NSMakeRange(tagRange.location, newNode.style.appendedCharacter.length)],@"range", nil];
+                    NSDictionary *blockDict = [NSDictionary dictionaryWithObjectsAndKeys:tagsComponents,@"components", [NSValue valueWithRange:NSMakeRange(tagRange.location, newNode.style.appendedCharacter.length)],@"range", nil];
                     style.block(blockDict);
                 }
                 remainingRange.location = tagRange.location;
@@ -1304,10 +1289,10 @@ UITextAlignment UITextAlignmentFromCoreTextAlignment(FTCoreTextAlignement alignm
 			CGRect lineFrame = CGRectMake(baselineOrigin.x, baselineOrigin.y - ascent, lineWidth, ascent + descent);
 			
 			CTTextAlignment alignment = (CTTextAlignment)imageNode.style.textAlignment;
-            UIImage *img =nil;
+            UIImage *img = nil;
             if ([imageNode.imageName hasPrefix:@"base64:"])
             {
-                NSData* myImgData = [NSData ftct_base64DataFromString:[imageNode.imageName substringFromIndex:7]];
+                NSData *myImgData = [NSData ftct_dataWithBase64EncodedString:[imageNode.imageName substringFromIndex:7]];
                 img = [UIImage imageWithData:myImgData];
             }
             else
@@ -1447,6 +1432,8 @@ UITextAlignment UITextAlignmentFromCoreTextAlignment(FTCoreTextAlignement alignm
     CGPathRelease(mainPath);
 	
     NSArray *lines = (__bridge NSArray *)CTFrameGetLines(ctframe);
+    CFRelease(ctframe);
+    
     NSInteger lineCount = [lines count];
     if (lineCount != 0)
     {
@@ -1462,7 +1449,7 @@ UITextAlignment UITextAlignmentFromCoreTextAlignment(FTCoreTextAlignement alignm
             }
         }
 	}
-	CFRelease(ctframe);
+	
     return @"";
 }
 
@@ -1482,112 +1469,90 @@ UITextAlignment UITextAlignmentFromCoreTextAlignment(FTCoreTextAlignement alignm
 
 
 
-@implementation NSData (NSDataAdditions)
+@implementation NSData (FTCoreTextAdditions)
 
-/**
- *  Code by Alex Reynolds from StackOverflow discussion here:
- *  http://stackoverflow.com/a/800976/2378431
- */
-+ (NSData *)ftct_base64DataFromString:(NSString *)string
+//
+// This method's implementation is copyied from Nick Lockwood's Base64
+// Header of the method has been altered to prevent naming collisions
+//
+// Version 1.1
+//
+// Created by Nick Lockwood on 12/01/2012.
+// Copyright (C) 2012 Charcoal Design
+//
+// Distributed under the permissive zlib License
+// Get the latest version from here:
+//
+// https://github.com/nicklockwood/Base64
+//
+// This software is provided 'as-is', without any express or implied
+// warranty. In no event will the authors be held liable for any damages
+// arising from the use of this software.
+//
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+//
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+//
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+//
+// 3. This notice may not be removed or altered from any source distribution.
+//
+
++ (NSData *)ftct_dataWithBase64EncodedString:(NSString *)string
 {
-    unsigned long ixtext, lentext;
-    unsigned char ch, inbuf[4], outbuf[3];
-    short i, ixinbuf;
-    Boolean flignore, flendtext = false;
-    const unsigned char *tempcstring;
-    NSMutableData *theData;
-    
-    if (string == nil)
+    const char lookup[] =
     {
-        return [NSData data];
-    }
+        99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
+        99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99,
+        99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 62, 99, 99, 99, 63,
+        52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 99, 99, 99, 99, 99, 99,
+        99, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
+        15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 99, 99, 99, 99, 99,
+        99, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+        41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 99, 99, 99, 99, 99
+    };
     
-    ixtext = 0;
+    NSData *inputData = [string dataUsingEncoding:NSASCIIStringEncoding allowLossyConversion:YES];
+    NSUInteger inputLength = [inputData length];
+    const unsigned char *inputBytes = [inputData bytes];
     
-    tempcstring = (const unsigned char *)[string UTF8String];
+    NSUInteger maxOutputLength = (inputLength / 4 + 1) * 3;
+    NSMutableData *outputData = [NSMutableData dataWithLength:maxOutputLength];
+    unsigned char *outputBytes = (unsigned char *)[outputData mutableBytes];
     
-    lentext = [string length];
-    
-    theData = [NSMutableData dataWithCapacity: lentext];
-    
-    ixinbuf = 0;
-    
-    while (true)
+    NSUInteger accumulator = 0;
+    NSUInteger outputLength = 0;
+    unsigned char accumulated[] = {0, 0, 0, 0};
+    for (NSUInteger i = 0; i < inputLength; i++)
     {
-        if (ixtext >= lentext) {
-            break;
-        }
-        
-        ch = tempcstring [ixtext++];
-        
-        flignore = false;
-        
-        if ((ch >= 'A') && (ch <= 'Z')) {
-            ch = ch - 'A';
-        }
-        else if ((ch >= 'a') && (ch <= 'z')) {
-            ch = ch - 'a' + 26;
-        }
-        else if ((ch >= '0') && (ch <= '9')) {
-            ch = ch - '0' + 52;
-        }
-        else if (ch == '+') {
-            ch = 62;
-        }
-        else if (ch == '=') {
-            flendtext = true;
-        }
-        else if (ch == '/') {
-            ch = 63;
-        }
-        else {
-            flignore = true;
-        }
-        
-        if (!flignore)
+        unsigned char decoded = lookup[inputBytes[i] & 0x7F];
+        if (decoded != 99)
         {
-            short ctcharsinbuf = 3;
-            Boolean flbreak = false;
-            
-            if (flendtext)
+            accumulated[accumulator] = decoded;
+            if (accumulator == 3)
             {
-                if (ixinbuf == 0) {
-                    break;
-                }
-                
-                if ((ixinbuf == 1) || (ixinbuf == 2)) {
-                    ctcharsinbuf = 1;
-                }
-                else {
-                    ctcharsinbuf = 2;
-                }
-                
-                ixinbuf = 3;
-                flbreak = true;
+                outputBytes[outputLength++] = (accumulated[0] << 2) | (accumulated[1] >> 4);
+                outputBytes[outputLength++] = (accumulated[1] << 4) | (accumulated[2] >> 2);
+                outputBytes[outputLength++] = (accumulated[2] << 6) | accumulated[3];
             }
-            
-            inbuf [ixinbuf++] = ch;
-            
-            if (ixinbuf == 4)
-            {
-                ixinbuf = 0;
-                
-                outbuf[0] = (inbuf[0] << 2) | ((inbuf[1] & 0x30) >> 4);
-                outbuf[1] = ((inbuf[1] & 0x0F) << 4) | ((inbuf[2] & 0x3C) >> 2);
-                outbuf[2] = ((inbuf[2] & 0x03) << 6) | (inbuf[3] & 0x3F);
-                
-                for (i = 0; i < ctcharsinbuf; i++){
-                    [theData appendBytes: &outbuf[i] length: 1];
-                }
-            }
-            
-            if (flbreak){
-                break;
-            }
+            accumulator = (accumulator + 1) % 4;
         }
     }
     
-    return theData;
+    //handle left-over data
+    if (accumulator > 0) outputBytes[outputLength] = (accumulated[0] << 2) | (accumulated[1] >> 4);
+    if (accumulator > 1) outputBytes[++outputLength] = (accumulated[1] << 4) | (accumulated[2] >> 2);
+    if (accumulator > 2) outputLength++;
+    
+    //truncate data to match actual output length
+    outputData.length = outputLength;
+    return outputLength? outputData: nil;
 }
 
 @end

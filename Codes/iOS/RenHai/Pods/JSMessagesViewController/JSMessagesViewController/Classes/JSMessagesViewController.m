@@ -18,7 +18,6 @@
 
 @interface JSMessagesViewController () <JSDismissiveTextViewDelegate>
 
-@property (assign, nonatomic, readonly) UIEdgeInsets originalTableViewContentInset;
 @property (assign, nonatomic) CGFloat previousTextViewContentHeight;
 @property (assign, nonatomic) BOOL isUserScrolling;
 
@@ -31,6 +30,10 @@
 - (BOOL)shouldHaveSubtitleForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 - (BOOL)shouldAllowScroll;
+
+- (void)layoutAndAnimateMessageInputTextView:(UITextView *)textView;
+- (void)setTableViewInsetsWithBottomValue:(CGFloat)bottom;
+- (UIEdgeInsets)tableViewInsetsWithBottomValue:(CGFloat)bottom;
 
 - (void)handleWillShowKeyboardNotification:(NSNotification *)notification;
 - (void)handleWillHideKeyboardNotification:(NSNotification *)notification;
@@ -105,6 +108,7 @@
 {
     [super viewDidLoad];
     [self setup];
+    [[JSBubbleView appearance] setFont:[UIFont systemFontOfSize:16.0f]];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -128,14 +132,7 @@
 {
     [super viewDidAppear:animated];
     
-    //  FIXME: this is a hack
-    //  ---------------------
-    //  tableView.contentInset.top = 0.0 on iOS 6
-    //  tableView.contentInset.top = 64.0 on iOS 7
-    //  this is because in iOS 7 all VCs default to fullscreen (with navbar overlayed on view)
-    //  save here in order to reset in [ keyboardWillShowHide: ]
-    //  ---------------------
-    _originalTableViewContentInset = self.tableView.contentInset;
+    [self scrollToBottomAnimated:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -152,7 +149,7 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    NSLog(@"*** %@: didReceiveMemoryWarning ***", self.class);
+    NSLog(@"*** %@: didReceiveMemoryWarning ***", [self class]);
 }
 
 - (void)dealloc
@@ -213,7 +210,7 @@
     BOOL hasAvatar = [self shouldHaveAvatarForRowAtIndexPath:indexPath];
 	BOOL hasSubtitle = [self shouldHaveSubtitleForRowAtIndexPath:indexPath];
     
-    NSString *CellIdentifier = [NSString stringWithFormat:@"MessageCell_%d_%d_%d_%d", type, hasTimestamp, hasAvatar, hasSubtitle];
+    NSString *CellIdentifier = [NSString stringWithFormat:@"MessageCell_%d_%d_%d_%d", (int)type, hasTimestamp, hasAvatar, hasSubtitle];
     JSBubbleMessageCell *cell = (JSBubbleMessageCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if(!cell) {
@@ -240,8 +237,12 @@
     [cell setMessage:[self.dataSource textForRowAtIndexPath:indexPath]];
     [cell setBackgroundColor:tableView.backgroundColor];
     
-    cell.bubbleView.textView.dataDetectorTypes = UIDataDetectorTypeAll;
-    
+	#if TARGET_IPHONE_SIMULATOR
+        cell.bubbleView.textView.dataDetectorTypes = UIDataDetectorTypeNone;
+	#else
+		cell.bubbleView.textView.dataDetectorTypes = UIDataDetectorTypeAll;
+	#endif
+	
     if([self.delegate respondsToSelector:@selector(configureCell:atIndexPath:)]) {
         [self.delegate configureCell:cell atIndexPath:indexPath];
     }
@@ -432,13 +433,8 @@
     if(changeInHeight != 0.0f) {
         [UIView animateWithDuration:0.25f
                          animations:^{
-                             UIEdgeInsets insets = UIEdgeInsetsMake(0.0f,
-                                                                    0.0f,
-                                                                    self.tableView.contentInset.bottom + changeInHeight,
-                                                                    0.0f);
+                             [self setTableViewInsetsWithBottomValue:self.tableView.contentInset.bottom + changeInHeight];
                              
-                             self.tableView.contentInset = insets;
-                             self.tableView.scrollIndicatorInsets = insets;
                              [self scrollToBottomAnimated:NO];
                              
                              if(isShrinking) {
@@ -477,6 +473,26 @@
     }
 }
 
+- (void)setTableViewInsetsWithBottomValue:(CGFloat)bottom
+{
+    UIEdgeInsets insets = [self tableViewInsetsWithBottomValue:bottom];
+    self.tableView.contentInset = insets;
+    self.tableView.scrollIndicatorInsets = insets;
+}
+
+- (UIEdgeInsets)tableViewInsetsWithBottomValue:(CGFloat)bottom
+{
+    UIEdgeInsets insets = UIEdgeInsetsZero;
+    
+    if ([self respondsToSelector:@selector(topLayoutGuide)]) {
+        insets.top = self.topLayoutGuide.length;
+    }
+    
+    insets.bottom = bottom;
+    
+    return insets;
+}
+
 #pragma mark - Key-value observing
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -484,7 +500,7 @@
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    if ([object isKindOfClass:[UITextView class]] && [keyPath isEqualToString:@"contentSize"]) {
+    if (object == self.messageInputView.textView && [keyPath isEqualToString:@"contentSize"]) {
         [self layoutAndAnimateMessageInputTextView:object];
     }
 }
@@ -508,7 +524,7 @@
 	double duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     
     [UIView animateWithDuration:duration
-                          delay:0.0f
+                          delay:0.0
                         options:[self animationOptionsForCurve:curve]
                      animations:^{
                          CGFloat keyboardY = [self.view convertRect:keyboardRect fromView:nil].origin.y;
@@ -526,16 +542,11 @@
 																  inputViewFrame.size.width,
 																  inputViewFrame.size.height);
 
-                         UIEdgeInsets insets = self.originalTableViewContentInset;
-                         insets.bottom = self.view.frame.size.height
-                                            - self.messageInputView.frame.origin.y
-                                            - inputViewFrame.size.height;
-                         
-                         self.tableView.contentInset = insets;
-                         self.tableView.scrollIndicatorInsets = insets;
+                         [self setTableViewInsetsWithBottomValue:self.view.frame.size.height
+                                                                - self.messageInputView.frame.origin.y
+                                                                - inputViewFrame.size.height];
                      }
-                     completion:^(BOOL finished) {
-                     }];
+                     completion:nil];
 }
 
 #pragma mark - Dismissive text view delegate
@@ -557,6 +568,10 @@
 
 - (void)keyboardWillSnapBackToPoint:(CGPoint)point
 {
+    if(!self.tabBarController.tabBar.hidden){
+        return;
+    }
+	
     CGRect inputViewFrame = self.messageInputView.frame;
     CGPoint keyboardOrigin = [self.view convertPoint:point fromView:nil];
     inputViewFrame.origin.y = keyboardOrigin.y - inputViewFrame.size.height;
