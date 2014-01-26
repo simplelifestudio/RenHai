@@ -63,6 +63,7 @@ public class MockApp implements IMockApp, Runnable
 		{
 			try
 			{
+				syncDevice();
 				sendServerDataSyncRequest();
 			}
 			catch(Exception e)

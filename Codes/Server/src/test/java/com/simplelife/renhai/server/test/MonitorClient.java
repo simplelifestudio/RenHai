@@ -32,6 +32,7 @@ public class MonitorClient
 	        String serverLink = args[1];
 	        
 	        MockApp app = new MockApp("Monitor", MockAppBehaviorMode.Monitor.name(), serverLink, "Monitor");
+	        app.stopTimer();
 	        app.startMonitorTimer(interval);
 	        while (true)
 	        {
