@@ -164,8 +164,6 @@
 		C593C49217D46CB800C26367 /* RHImpressLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C49017D46CB700C26367 /* RHImpressLabel.m */; };
 		C593C49517D46CC400C26367 /* RHInterestLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C49417D46CC400C26367 /* RHInterestLabel.m */; };
 		C593C49617D46CC400C26367 /* RHInterestLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = C593C49417D46CC400C26367 /* RHInterestLabel.m */; };
-		C593C49F17D482EA00C26367 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C593C49D17D482C400C26367 /* CoreLocation.framework */; };
-		C593C4A017D482F000C26367 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C593C49B17D482B300C26367 /* MapKit.framework */; };
 		C593C4A117D4830B00C26367 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C593C49B17D482B300C26367 /* MapKit.framework */; };
 		C593C4A217D4831200C26367 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C593C49D17D482C400C26367 /* CoreLocation.framework */; };
 		C5945F5B17D56DDF0084BB10 /* CBJSONUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = C5945F5A17D56DDF0084BB10 /* CBJSONUtils.m */; };
@@ -293,6 +291,10 @@
 		CD5D6D031838949B002DEDAF /* libPods-RenHaiGHUnitTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CD5D6D021838949B002DEDAF /* libPods-RenHaiGHUnitTest.a */; };
 		CD6D8CD118434A6A00C2330D /* RHDataUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = CD6D8CD018434A6A00C2330D /* RHDataUtils.m */; };
 		CD6D8CD218434A6A00C2330D /* RHDataUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = CD6D8CD018434A6A00C2330D /* RHDataUtils.m */; };
+		CD6E9E4A18B8BED000B37CCD /* HardwareModule.h in Sources */ = {isa = PBXBuildFile; fileRef = CD180E821890A9DA00A93EAC /* HardwareModule.h */; };
+		CD6E9E4B18B8BED000B37CCD /* HardwareModule.m in Sources */ = {isa = PBXBuildFile; fileRef = CD180E831890A9DA00A93EAC /* HardwareModule.m */; };
+		CD6E9E4C18B8BEF100B37CCD /* MessageBarManager.h in Sources */ = {isa = PBXBuildFile; fileRef = CDDBE34318548D1E001A1744 /* MessageBarManager.h */; };
+		CD6E9E4D18B8BEF100B37CCD /* MessageBarManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CDDBE34418548D1E001A1744 /* MessageBarManager.m */; };
 		CD736CEE1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */; };
 		CD736CEF1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = CD736CED1817B92B00FD1675 /* ImpressLabelsHeaderView_iPhone.m */; };
 		CD736CF41817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD736CF31817C6D200FD1675 /* ImpressLabelsHeaderView_iPhone.xib */; };
@@ -938,8 +940,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C593C4A017D482F000C26367 /* MapKit.framework in Frameworks */,
-				C593C49F17D482EA00C26367 /* CoreLocation.framework in Frameworks */,
 				C55B43EC17CF580A009BB21B /* UIKit.framework in Frameworks */,
 				C55B43EE17CF580A009BB21B /* Foundation.framework in Frameworks */,
 				C55B43F017CF580A009BB21B /* CoreGraphics.framework in Frameworks */,
@@ -1648,6 +1648,9 @@
 							};
 						};
 					};
+					C55B442017CF5992009BB21B = {
+						DevelopmentTeam = 3QC6PDN9W4;
+					};
 					CD94DEF91851918000C9CBC4 = {
 						DevelopmentTeam = 3QC6PDN9W4;
 					};
@@ -2203,6 +2206,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD6E9E4C18B8BEF100B37CCD /* MessageBarManager.h in Sources */,
+				CD6E9E4D18B8BEF100B37CCD /* MessageBarManager.m in Sources */,
+				CD6E9E4A18B8BED000B37CCD /* HardwareModule.h in Sources */,
+				CD6E9E4B18B8BED000B37CCD /* HardwareModule.m in Sources */,
 				CDC0519B1805754F006158B8 /* UINavigationController+CBNavigationControllerExtends.m in Sources */,
 				CD94DEF81851614E00C9CBC4 /* RHStatus.m in Sources */,
 				C55B442C17CF5992009BB21B /* main.m in Sources */,
@@ -2448,6 +2455,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
@@ -2462,7 +2470,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PROVISIONING_PROFILE = "5AE50A40-6EE1-45DD-91DA-6BC7EA36D654";
 				SDKROOT = iphoneos;
@@ -2482,6 +2490,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = YES;
@@ -2489,7 +2498,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PROVISIONING_PROFILE = "5AE50A40-6EE1-45DD-91DA-6BC7EA36D654";
@@ -2510,7 +2519,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHai/RenHai-Prefix.pch";
@@ -2539,7 +2548,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHai/RenHai-Prefix.pch";
@@ -2563,11 +2572,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 92519C2C061245F9942C7EC7 /* Pods-RenHaiGHUnitTest.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHaiGHUnitTest/RenHaiGHUnitTest-Prefix.pch";
 				INFOPLIST_FILE = "RenHaiGHUnitTest/RenHaiGHUnitTest-Info.plist";
 				PRODUCT_NAME = RenHaiTest;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2577,11 +2588,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 92519C2C061245F9942C7EC7 /* Pods-RenHaiGHUnitTest.xcconfig */;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHaiGHUnitTest/RenHaiGHUnitTest-Prefix.pch";
 				INFOPLIST_FILE = "RenHaiGHUnitTest/RenHaiGHUnitTest-Info.plist";
 				PRODUCT_NAME = RenHaiTest;
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2598,7 +2611,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: DENG KE (R229UE6C87)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
+					"/Volumes/Data\\ HDD/Cloud/百度云同步盘/Workspace/SimplelifeStudio/RenHai/Codes/iOS/RenHai/RenHai/Src/PrivateAPI",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHai/RenHai-Prefix.pch";
@@ -2627,7 +2641,8 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: DENG KE (R229UE6C87)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)\"",
+					"$(SRCROOT)",
+					"/Volumes/Data\\ HDD/Cloud/百度云同步盘/Workspace/SimplelifeStudio/RenHai/Codes/iOS/RenHai/RenHai/Src/PrivateAPI",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RenHai/RenHai-Prefix.pch";

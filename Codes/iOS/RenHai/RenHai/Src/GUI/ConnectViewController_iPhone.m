@@ -31,7 +31,7 @@
 #ifdef DEBUG
 #define ENABLE_3G 1
 #else
-#define ENABLE_3G 0
+#define ENABLE_3G 1
 #endif
 
 typedef enum

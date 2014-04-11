@@ -411,7 +411,7 @@
 {
     NSCondition* lock = nil;
     
-    if (nil != messageSn && 0 < messageSn)
+    if (nil != messageSn && 0 < messageSn.length)
     {
         lock = [[NSCondition alloc] init];
         lock.name = messageSn;
@@ -429,7 +429,7 @@
 {
     NSCondition* lock = nil;
     
-    if (nil != messageSn && 0 < messageSn)
+    if (nil != messageSn && 0 < messageSn.length)
     {
         @synchronized(_messageLockSet)
         {
