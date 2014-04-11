@@ -18,7 +18,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.ibatis.session.SqlSession;
+
+import com.simplelife.renhai.server.business.pool.OnlineDevicePool;
+import com.simplelife.renhai.server.db.DAOWrapper;
+import com.simplelife.renhai.server.db.StatisticsMapper;
 import com.simplelife.renhai.server.util.DateUtil;
+import com.simplelife.renhai.server.util.JSONKey;
 
 @WebServlet("/stat")
 public class StatisticsServlet extends HttpServlet
@@ -40,7 +46,12 @@ public class StatisticsServlet extends HttpServlet
     {
 		response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-        out.println("Output provided by statistics servlet:");
-        out.println("Current time is: " + DateUtil.getNow());
+        
+        SqlSession session = DAOWrapper.instance.getSession();
+		StatisticsMapper mapper = session.getMapper(StatisticsMapper.class);
+        int registerDeviceCount = mapper.selectRegisterDeviceCount();
+        
+        out.write("【注册用户：" + registerDeviceCount + "    ");
+        out.write("当前在线：" + OnlineDevicePool.instance.getDeviceCount() + "】");
     }
 }
