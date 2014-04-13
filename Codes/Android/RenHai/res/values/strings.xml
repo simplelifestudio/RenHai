@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">RenHai</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="splash_logo">HiYa</string>
+    <string name="splash_advert">See You By Destiny</string>
+
+</resources>

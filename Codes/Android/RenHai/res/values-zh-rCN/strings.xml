@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">人海</string>
+    <string name="action_settings">设置</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="splash_logo">人  海</string>
+    <string name="splash_advert">斯人若彩虹，遇上方知有</string>
+    
+</resources>
