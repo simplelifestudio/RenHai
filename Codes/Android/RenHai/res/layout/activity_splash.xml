@@ -21,10 +21,21 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/splashteamlogo"
+        android:layout_marginBottom="18dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="17dp"
+        android:textSize="@dimen/splash_advt_size"
         android:textColor="@android:color/white"
         android:text="@string/splash_advert" />
+    
+    <TextView
+        android:id="@+id/splashteamlogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="16dp"
+        android:textColor="@android:color/white"
+        android:text="@string/splash_teamlogo" />
 
 </RelativeLayout>

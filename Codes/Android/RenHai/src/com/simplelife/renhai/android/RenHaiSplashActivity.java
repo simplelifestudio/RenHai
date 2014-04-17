@@ -58,22 +58,22 @@ public class RenHaiSplashActivity extends Activity {
 	private void redirectTo(){       
 		Intent intent;
 		/*
-		if(isFirstStart())
+		if(isFirstStart())*/
 		{
 			updateFirstStartFlag(false);
-			intent = new Intent(this, RenHaiHelpActivity.class);
+			intent = new Intent(this, RenHaiProtocalActivity.class);
 		    Bundle bundle = new Bundle();
 		    bundle.putString("caller", "RenHaiSplashActivity");
 		    intent.putExtras(bundle);
 		}
-		else*/
+		/*else*/
 		{
 
 			//intent = new Intent(this, RenHaiMainPageActivity.class);			
 		}		
 				
-		//startActivity(intent);
-		//finish();
+		startActivity(intent);
+		finish();
 	}
 	
     private boolean isFirstStart(){
