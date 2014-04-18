@@ -6,5 +6,7 @@
     <dimen name="splash_logo_size">46dip</dimen>
     <dimen name="splash_advt_size">20dip</dimen>
     <dimen name="protocal_btn_size">18dip</dimen>
+    <dimen name="protocal_text_size">15dip</dimen>
+    <dimen name="protocal_title_size">18dip</dimen>
 
 </resources>

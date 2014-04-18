@@ -13,6 +13,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
+            android:textSize="@dimen/protocal_text_size"
             android:text="@string/protocal_text"/>
         
     </ScrollView>
@@ -30,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="42dp"
             android:layout_weight="1"
-            android:background="#33cc99"
+            android:background="@color/maingreen"
             android:gravity="center_vertical|center"
             android:text="@string/protocal_yes"
             android:textSize="@dimen/protocal_btn_size"
@@ -49,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="42dp"
             android:layout_weight="1"
-            android:background="#33cc99"
+            android:background="@color/maingreen"
             android:gravity="center_vertical|center"
             android:text="@string/protocal_no"
             android:textSize="@dimen/protocal_btn_size"
