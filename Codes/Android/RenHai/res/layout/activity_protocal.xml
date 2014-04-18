@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="42dp"
             android:layout_weight="1"
-            android:background="@color/maingreen"
+            android:background="@drawable/protocal_btn_selector"
             android:gravity="center_vertical|center"
             android:text="@string/protocal_yes"
             android:textSize="@dimen/protocal_btn_size"
@@ -50,13 +50,12 @@
             android:layout_width="wrap_content"
             android:layout_height="42dp"
             android:layout_weight="1"
-            android:background="@color/maingreen"
+            android:background="@drawable/protocal_btn_selector"
             android:gravity="center_vertical|center"
             android:text="@string/protocal_no"
             android:textSize="@dimen/protocal_btn_size"
             android:textColor="#FFFFFF" >
         </TextView>
-    </LinearLayout>
-            
+    </LinearLayout>            
     
 </RelativeLayout>

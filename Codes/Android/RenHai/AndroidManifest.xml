@@ -5,8 +5,8 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+        android:minSdkVersion="13"
+        android:targetSdkVersion="19" />
 
     <application
         android:allowBackup="true"
@@ -23,7 +23,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.simplelife.renhai.android.RenHaiProtocalActivity">
+            android:name="com.simplelife.renhai.android.RenHaiProtocalActivity"
+            android:label="@string/protocal_title"
+            android:theme="@style/ActionBarWithOnlyTitleTheme">
         </activity>
     </application>
 

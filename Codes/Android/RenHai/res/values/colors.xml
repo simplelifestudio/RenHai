@@ -147,4 +147,5 @@
 	<color name="plum">#dda0dd</color><!--洋李色 -->
 	<color name="gainsboro">#dcdcdc</color><!--淡灰色 -->
 	<color name="maingreen">#33cc99</color><!--主题色 -->
+	<color name="protocal_btnyes_pressed">#339933</color><!--主题色 -->
 </resources>
