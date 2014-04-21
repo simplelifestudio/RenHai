@@ -21,9 +21,20 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 
+import java.io.File;
+
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import android.os.Environment;
+import de.mindpipe.android.logging.log4j.LogConfigurator;
+
+
 public class RenHaiSplashActivity extends Activity {
 	
 	private SharedPreferences mSharedPrefs;
+	
+	private final Logger mlog = Logger.getLogger(RenHaiSplashActivity.class);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +51,10 @@ public class RenHaiSplashActivity extends Activity {
 		AlphaAnimation fadeShow = new AlphaAnimation(0.3f,1.0f);
 		fadeShow.setDuration(2000);
 		startView.startAnimation(fadeShow);	
+		
+		// 1.Configure the logger module
+		configureLogger();
+		mlog.info("Renhai is about to start!");
 						
 		// Stay for a moments and redirect
 		fadeShow.setAnimationListener(new AnimationListener()
@@ -88,5 +103,20 @@ public class RenHaiSplashActivity extends Activity {
     	editor.putBoolean("isfirststart", _inTag);
     	editor.commit();    	
     } 
+    
+    public static void configureLogger() {
+        final LogConfigurator logConfigurator = new LogConfigurator();
+                
+        logConfigurator.setFileName(Environment.getExternalStorageDirectory() 
+        		                   + File.separator
+        		                   + RenHaiDefinitions.RENHAI_APP_FOLDER
+        		                   + File.separator
+        		                   + RenHaiDefinitions.RENHAI_LOG_FILENAME
+        		                   + ".log");
+        logConfigurator.setRootLevel(Level.DEBUG);
+        // Set log level of a specific logger
+        logConfigurator.setLevel("org.apache", Level.ERROR);
+        logConfigurator.configure();
+    }
 
 }
