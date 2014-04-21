@@ -11,8 +11,8 @@
         <TextView 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:textSize="@dimen/protocal_text_size"
             android:text="@string/protocal_text"/>
         
@@ -29,7 +29,7 @@
         <TextView
             android:id="@+id/protocal_btnyes"
             android:layout_width="wrap_content"
-            android:layout_height="42dp"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:background="@drawable/protocal_btn_selector"
             android:gravity="center_vertical|center"
@@ -48,7 +48,7 @@
         <TextView
             android:id="@+id/protocal_btnno"
             android:layout_width="wrap_content"
-            android:layout_height="42dp"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:background="@drawable/protocal_btn_selector"
             android:gravity="center_vertical|center"
