@@ -470,10 +470,42 @@ public final class R {
         public static final int splash_logo_size=0x7f050002;
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
-        public static final int protocal_btn_selector=0x7f020001;
-        public static final int protocal_btnyes_normal=0x7f020002;
-        public static final int protocal_btnyes_pressed=0x7f020003;
+        public static final int ab_background_textured_actionbarwithtabstheme=0x7f020000;
+        public static final int ab_bottom_solid_actionbarwithtabstheme=0x7f020001;
+        public static final int ab_solid_actionbarwithtabstheme=0x7f020002;
+        public static final int ab_stacked_solid_actionbarwithtabstheme=0x7f020003;
+        public static final int ab_texture_tile_actionbarwithtabstheme=0x7f020004;
+        public static final int ab_transparent_actionbarwithtabstheme=0x7f020005;
+        public static final int btn_cab_done_actionbarwithtabstheme=0x7f020006;
+        public static final int btn_cab_done_default_actionbarwithtabstheme=0x7f020007;
+        public static final int btn_cab_done_focused_actionbarwithtabstheme=0x7f020008;
+        public static final int btn_cab_done_pressed_actionbarwithtabstheme=0x7f020009;
+        public static final int cab_background_bottom_actionbarwithtabstheme=0x7f02000a;
+        public static final int cab_background_top_actionbarwithtabstheme=0x7f02000b;
+        public static final int ic_launcher=0x7f02000c;
+        public static final int list_focused_actionbarwithtabstheme=0x7f02000d;
+        public static final int list_pressed_actionbarwithtabstheme=0x7f02000e;
+        public static final int menu_dropdown_panel_actionbarwithtabstheme=0x7f02000f;
+        public static final int progress_bg_actionbarwithtabstheme=0x7f020010;
+        public static final int progress_horizontal_actionbarwithtabstheme=0x7f020011;
+        public static final int progress_primary_actionbarwithtabstheme=0x7f020012;
+        public static final int progress_secondary_actionbarwithtabstheme=0x7f020013;
+        public static final int protocal_btn_selector=0x7f020014;
+        public static final int protocal_btnyes_normal=0x7f020015;
+        public static final int protocal_btnyes_pressed=0x7f020016;
+        public static final int selectable_background_actionbarwithtabstheme=0x7f020017;
+        public static final int spinner_ab_default_actionbarwithtabstheme=0x7f020018;
+        public static final int spinner_ab_disabled_actionbarwithtabstheme=0x7f020019;
+        public static final int spinner_ab_focused_actionbarwithtabstheme=0x7f02001a;
+        public static final int spinner_ab_pressed_actionbarwithtabstheme=0x7f02001b;
+        public static final int spinner_background_ab_actionbarwithtabstheme=0x7f02001c;
+        public static final int tab_indicator_ab_actionbarwithtabstheme=0x7f02001d;
+        public static final int tab_selected_actionbarwithtabstheme=0x7f02001e;
+        public static final int tab_selected_focused_actionbarwithtabstheme=0x7f02001f;
+        public static final int tab_selected_pressed_actionbarwithtabstheme=0x7f020020;
+        public static final int tab_unselected_actionbarwithtabstheme=0x7f020021;
+        public static final int tab_unselected_focused_actionbarwithtabstheme=0x7f020022;
+        public static final int tab_unselected_pressed_actionbarwithtabstheme=0x7f020023;
     }
     public static final class id {
         public static final int action_settings=0x7f090005;
@@ -507,10 +539,24 @@ public final class R {
         public static final int viewpager_section_topics=0x7f06000a;
     }
     public static final class style {
+        public static final int ActionBar_Solid_Actionbarwithtabstheme=0x7f07000c;
+        public static final int ActionBar_Transparent_Actionbarwithtabstheme=0x7f07000d;
+        public static final int ActionBarTabStyle_Actionbarwithtabstheme=0x7f070010;
         /**  ActionBar styles 
          */
         public static final int ActionBarWithOnlyTitle=0x7f070003;
+        /**  ======================================================================= 
+ Below Theme is for actionbar without tabs 
+         */
         public static final int ActionBarWithOnlyTitleTheme=0x7f070002;
+        /**  ActionBar styles 
+         */
+        public static final int ActionBarWithTabs=0x7f070006;
+        /**  ======================================================================= 
+ Theme for actionbar with tabs 
+         */
+        public static final int ActionBarWithTabsTheme=0x7f070005;
+        public static final int ActionButton_CloseMode_Actionbarwithtabstheme=0x7f070013;
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
@@ -537,8 +583,26 @@ public final class R {
  All customizations that are NOT specific to a particular API-level can go here. 
          */
         public static final int AppTheme=0x7f070001;
+        public static final int DropDownListView_Actionbarwithtabstheme=0x7f07000f;
+        public static final int DropDownNav_Actionbarwithtabstheme=0x7f070011;
+        public static final int PopupMenu_Actionbarwithtabstheme=0x7f07000e;
+        public static final int ProgressBar_Actionbarwithtabstheme=0x7f070012;
+        /**  ======================================================================= 
+         */
+        public static final int Theme_Actionbarwithtabstheme=0x7f07000b;
+        /**  this style is only referenced in a Light.DarkActionBar based theme 
+         */
+        public static final int Theme_Actionbarwithtabstheme_Widget=0x7f070014;
         /**  ActionBar title text 
          */
-        public static final int MyActionBarTitleText=0x7f070004;
+        public static final int ThemeOneActionBarTitleText=0x7f070004;
+        public static final int ThemeTwoMyActionBarTabBars=0x7f07000a;
+        /**  ActionBar tabs text 
+         */
+        public static final int ThemeTwoMyActionBarTabText=0x7f070008;
+        public static final int ThemeTwoMyActionBarTabs=0x7f070009;
+        /**  ActionBar title text 
+         */
+        public static final int ThemeTwoMyActionBarTitleText=0x7f070007;
     }
 }

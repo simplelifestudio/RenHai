@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
       
+    <!-- ======================================================================= -->
+    <!-- Below Theme is for actionbar without tabs -->
     <style name="ActionBarWithOnlyTitleTheme" parent="@style/AppTheme">  
         <item name="android:actionBarStyle">@style/ActionBarWithOnlyTitle</item>     
     </style>  
@@ -8,13 +10,108 @@
     <!-- ActionBar styles -->  
     <style name="ActionBarWithOnlyTitle" parent="@android:style/Widget.Holo.ActionBar">  
         <item name="android:background">@color/maingreen</item>  
-        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>     
+        <item name="android:titleTextStyle">@style/ThemeOneActionBarTitleText</item>     
     </style>  
   
     <!-- ActionBar title text -->  
-    <style name="MyActionBarTitleText" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">  
+    <style name="ThemeOneActionBarTitleText" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">  
         <item name="android:textColor">@color/white</item>  
         <item name="android:textSize">@dimen/protocal_title_size</item>
+    </style>
+    
+    <!-- ======================================================================= -->
+    <!-- Theme for actionbar with tabs -->
+    <style name="ActionBarWithTabsTheme" parent="@android:style/Theme.Holo.Light">  
+        <item name="android:actionBarStyle">@style/ActionBarWithTabs</item>  
+        <item name="android:actionBarDivider">@null</item>  
+        <item name="android:actionBarTabTextStyle">@style/ThemeTwoMyActionBarTabText</item>
+        <item name="android:actionBarTabStyle">@style/ThemeTwoMyActionBarTabs</item>  
+        <item name="android:actionBarTabBarStyle">@style/ThemeTwoMyActionBarTabBars</item>  
+        <item name="android:actionMenuTextColor">@color/white</item>    
+    </style>
+    
+    <!-- ActionBar styles -->  
+    <style name="ActionBarWithTabs" parent="@android:style/Widget.Holo.ActionBar">  
+        <item name="android:background">@color/maingreen</item>  
+        <item name="android:titleTextStyle">@style/ThemeTwoMyActionBarTitleText</item>  
+        <item name="android:backgroundStacked">@color/maingreen</item>  
+    </style> 
+    
+    <!-- ActionBar title text -->  
+    <style name="ThemeTwoMyActionBarTitleText" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">  
+        <item name="android:textColor">@color/white</item>  
     </style>  
+  
+    <!-- ActionBar tabs text -->  
+    <style name="ThemeTwoMyActionBarTabText" parent="@android:style/Widget.Holo.ActionBar.TabText">  
+        <item name="android:textColor">@color/black</item>  
+    </style>
+    
+    <style name="ThemeTwoMyActionBarTabs" parent="@android:style/Widget.Holo.ActionBar.TabView">  
+        <item name="android:background">@color/floralwhite</item>  
+    </style> 
+    
+    <style name="ThemeTwoMyActionBarTabBars" parent="@android:style/Widget.Holo.ActionBar.TabBar">    
+        <item name="android:showDividers">none</item>    
+    </style> 
+    
+    <!-- ======================================================================= -->    
+    <style name="Theme.Actionbarwithtabstheme" parent="@android:style/Theme.Holo">
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_actionbarwithtabstheme</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.Actionbarwithtabstheme</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Actionbarwithtabstheme</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Actionbarwithtabstheme</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Actionbarwithtabstheme</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Actionbarwithtabstheme</item>
+        <item name="android:actionModeBackground">@drawable/cab_background_top_actionbarwithtabstheme</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_actionbarwithtabstheme</item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Actionbarwithtabstheme</item>                
+    </style>
+
+    <style name="ActionBar.Solid.Actionbarwithtabstheme" parent="@android:style/Widget.Holo.ActionBar.Solid">
+        <item name="android:background">@drawable/ab_solid_actionbarwithtabstheme</item>
+        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_actionbarwithtabstheme</item>
+        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_actionbarwithtabstheme</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Actionbarwithtabstheme</item>
+    </style>
+
+    <style name="ActionBar.Transparent.Actionbarwithtabstheme" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:background">@drawable/ab_transparent_actionbarwithtabstheme</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Actionbarwithtabstheme</item>
+    </style>
+
+    <style name="PopupMenu.Actionbarwithtabstheme" parent="@android:style/Widget.Holo.ListPopupWindow">
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_actionbarwithtabstheme</item>	
+    </style>
+
+    <style name="DropDownListView.Actionbarwithtabstheme" parent="@android:style/Widget.Holo.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selectable_background_actionbarwithtabstheme</item>
+    </style>
+
+    <style name="ActionBarTabStyle.Actionbarwithtabstheme" parent="@android:style/Widget.Holo.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_actionbarwithtabstheme</item>
+    </style>
+
+    <style name="DropDownNav.Actionbarwithtabstheme" parent="@android:style/Widget.Holo.Spinner">
+        <item name="android:background">@drawable/spinner_background_ab_actionbarwithtabstheme</item>
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_actionbarwithtabstheme</item>
+        <item name="android:dropDownSelector">@drawable/selectable_background_actionbarwithtabstheme</item>
+    </style>
+    
+    <style name="ProgressBar.Actionbarwithtabstheme" parent="@android:style/Widget.Holo.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_actionbarwithtabstheme</item>
+    </style>
+    
+    <style name="ActionButton.CloseMode.Actionbarwithtabstheme" parent="@android:style/Widget.Holo.ActionButton.CloseMode">
+        <item name="android:background">@drawable/btn_cab_done_actionbarwithtabstheme</item>
+    </style>
+
+    <!-- this style is only referenced in a Light.DarkActionBar based theme -->
+    <style name="Theme.Actionbarwithtabstheme.Widget" parent="@android:style/Theme.Holo">
+        <item name="android:popupMenuStyle">@style/PopupMenu.Actionbarwithtabstheme</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Actionbarwithtabstheme</item>
+    </style>
+
+    <!-- ======================================================================= -->
    
 </resources>

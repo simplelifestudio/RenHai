@@ -31,8 +31,8 @@
         </activity>
         
         <activity
-            android:name="com.simplelife.renhai.android.RenHaiMainPageActivity">
-            
+            android:name="com.simplelife.renhai.android.RenHaiMainPageActivity"
+            android:theme="@style/Theme.Actionbarwithtabstheme">                       
         </activity>"
     </application>
 
