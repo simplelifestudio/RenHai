@@ -10,6 +10,9 @@
     <string name="protocal_title">User Agreement</string>
     <string name="protocal_yes">Roger</string>
     <string name="protocal_no">Damn</string>
+    <string name="viewpager_section_start">My RenHai</string>
+    <string name="viewpager_section_topics">My Topics</string>
+    <string name="viewpager_section_impressions">My Impressions</string>
     
     <string name="protocal_text">
 \t\t人海是一款基于话题匹配的视频社交产品，人海所提供的各项服务的所有权和运作权归简单生活工作室（SimpleLife Studio，以下称人海官方）所有。
