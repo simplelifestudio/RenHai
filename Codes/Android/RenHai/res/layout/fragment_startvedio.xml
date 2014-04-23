@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@color/white">
+    
+    <TextView 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/startvedio_onlinecount"
+        android:layout_above="@+id/startvedio_onlinecount"
+        android:layout_marginBottom="4dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/splash_logo_size"
+        android:text="test"/>
+    
+    <TextView
+        android:id="@+id/startvedio_onlinecount"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/startvedio_rectangle"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_vertical|right"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"        
+        android:textSize="@dimen/splash_logo_size"
+        android:textColor="@android:color/white"
+        android:text="99999" />
+        
+
+</RelativeLayout>
