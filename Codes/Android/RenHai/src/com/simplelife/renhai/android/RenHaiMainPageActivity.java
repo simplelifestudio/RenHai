@@ -8,16 +8,23 @@
  */
 package com.simplelife.renhai.android;
 
+import java.net.URL;
+
 import org.apache.log4j.Logger;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
+import android.view.View;
+import android.view.Window;
+import android.widget.TextView;
 
 public class RenHaiMainPageActivity extends FragmentActivity implements ActionBar.TabListener{
 
@@ -34,7 +41,9 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_mainpage_viewpager);
+        //setProgressBarIndeterminateVisibility(true);
 
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
@@ -49,6 +58,24 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 
         // Specify that we will be displaying tabs in the action bar.
         tActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
+        		ActionBar.LayoutParams.MATCH_PARENT,
+        		ActionBar.LayoutParams.MATCH_PARENT,
+        		Gravity.CENTER);
+        View viewTitleBar = getLayoutInflater().inflate(R.layout.activity_mainpage_titlebar, null);
+        getActionBar().setCustomView(viewTitleBar, lp);
+        //getActionBar().setDisplayShowHomeEnabled(false);
+        //getActionBar().setDisplayShowTitleEnabled(false);
+        getActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getActionBar().setDisplayShowCustomEnabled(true);
+        TextView tvTitle = (TextView) getActionBar().getCustomView().findViewById(R.id.title);
+        tvTitle.setText(R.string.mainpage_title);
+
+        //tvTitle.setVisibility(View.GONE);
+        getActionBar().setDisplayShowCustomEnabled(false);
+        tActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME);
+        getActionBar().setDisplayShowTitleEnabled(true);
+        
 
         // Set up the ViewPager, attaching the adapter and setting up a listener for when the
         // user swipes between sections.
@@ -136,5 +163,24 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 
         }
     }
+    
+    private class RenHaiConnectServer extends AsyncTask<URL, Integer, Long> {
+        // Do the long-running work in here
+        protected Long doInBackground(URL... urls) {
+
+            return (long) 100;
+        }
+
+        // This is called each time you call publishProgress()
+        protected void onProgressUpdate(Integer... progress) {
+            //setProgressPercent(progress[0]);
+        }
+
+        // This is called when doInBackground() is finished
+        protected void onPostExecute(Long result) {
+           // showNotification("Downloaded " + result + " bytes");
+        }
+    }
+    
     
 }

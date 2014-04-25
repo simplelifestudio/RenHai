@@ -509,19 +509,21 @@ public final class R {
         public static final int tab_unselected_pressed_actionbarwithtabstheme=0x7f020024;
     }
     public static final class id {
-        public static final int action_settings=0x7f090006;
-        public static final int mainpage_viewpager=0x7f090000;
-        public static final int protocal_btnno=0x7f090003;
-        public static final int protocal_btnyes=0x7f090002;
-        public static final int protocal_confirm=0x7f090001;
-        public static final int splashteamlogo=0x7f090004;
-        public static final int startvedio_onlinecount=0x7f090005;
+        public static final int action_settings=0x7f090007;
+        public static final int mainpage_viewpager=0x7f090001;
+        public static final int protocal_btnno=0x7f090004;
+        public static final int protocal_btnyes=0x7f090003;
+        public static final int protocal_confirm=0x7f090002;
+        public static final int splashteamlogo=0x7f090005;
+        public static final int startvedio_onlinecount=0x7f090006;
+        public static final int title=0x7f090000;
     }
     public static final class layout {
-        public static final int activity_mainpage_viewpager=0x7f030000;
-        public static final int activity_protocal=0x7f030001;
-        public static final int activity_splash=0x7f030002;
-        public static final int fragment_startvedio=0x7f030003;
+        public static final int activity_mainpage_titlebar=0x7f030000;
+        public static final int activity_mainpage_viewpager=0x7f030001;
+        public static final int activity_protocal=0x7f030002;
+        public static final int activity_splash=0x7f030003;
+        public static final int fragment_startvedio=0x7f030004;
     }
     public static final class menu {
         public static final int splash=0x7f080000;
@@ -530,8 +532,9 @@ public final class R {
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
         public static final int hello_world=0x7f060002;
+        public static final int mainpage_title=0x7f06000c;
         public static final int protocal_no=0x7f060008;
-        public static final int protocal_text=0x7f06000c;
+        public static final int protocal_text=0x7f06000d;
         public static final int protocal_title=0x7f060006;
         public static final int protocal_yes=0x7f060007;
         public static final int splash_advert=0x7f060004;

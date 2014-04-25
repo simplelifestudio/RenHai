@@ -13,6 +13,7 @@
     <string name="viewpager_section_start">我的人海</string>
     <string name="viewpager_section_topics">我的话题</string>
     <string name="viewpager_section_impressions">我的印象</string>
+    <string name="mainpage_title">已连接</string>
     
     <string name="protocal_text">
 \t\t人海是一款基于话题匹配的视频社交产品，人海所提供的各项服务的所有权和运作权归简单生活工作室（SimpleLife Studio，以下称人海官方）所有。
