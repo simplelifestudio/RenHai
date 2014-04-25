@@ -13,6 +13,10 @@
     <string name="viewpager_section_start">My RenHai</string>
     <string name="viewpager_section_topics">My Topics</string>
     <string name="viewpager_section_impressions">My Impressions</string>
+    <string name="mainpage_title_preparenetwork">Prepare Network&#8230;</string>
+    <string name="mainpage_title_connectserver">Connect RenHai&#8230;</string>
+    <string name="mainpage_title_syncserver">Syncronizing&#8230;</string>
+    <string name="mainpage_title_updateinfo">Updating Info&#8230;</string>
     <string name="mainpage_title">Connected</string>
     
     <string name="protocal_text">
