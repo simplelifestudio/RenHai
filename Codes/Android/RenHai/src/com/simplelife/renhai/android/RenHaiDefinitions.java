@@ -17,5 +17,9 @@ public class RenHaiDefinitions {
 	// Log positions
 	public static final String RENHAI_LOG_FILENAME = "renhai";
 	
+	// Key for the message encoding
+	public static final String RENHAI_ENCODE_KEY = "20130801";
+	
+	
 
 }

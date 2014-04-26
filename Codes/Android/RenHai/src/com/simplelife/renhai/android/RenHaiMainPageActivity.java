@@ -13,8 +13,11 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
+
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +25,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.telephony.TelephonyManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -62,6 +66,16 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         // Specify that we will be displaying tabs in the action bar.
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         
+		// Damn work round for the android system bug
+        View homeIcon = findViewById(android.R.id.home); 
+		((View) homeIcon.getParent()).setVisibility(View.GONE); 
+		
+		// Get the device serial number
+		TelephonyManager telephonyManager = (TelephonyManager)this.getSystemService( Context.TELEPHONY_SERVICE); 
+		String tDeviceSn = telephonyManager.getSimSerialNumber();
+		RenHaiJsonMsgProcess.storeDeviceSn(tDeviceSn);
+
+        
         // Trigger an asynctask to process the network connections
         URL tServerUrl = null;
 		try {
@@ -72,13 +86,6 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 		}
         RenHaiConnectServer tNetwork = new RenHaiConnectServer();
         tNetwork.execute(tServerUrl);
-        
-        
-        
-        
-        
-       
-        
 
         // Set up the ViewPager, attaching the adapter and setting up a listener for when the
         // user swipes between sections.
@@ -170,7 +177,8 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
     private class RenHaiConnectServer extends AsyncTask<URL, Integer, Long> {
         
     	protected void onPreExecute () {
-    		 ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
+     		
+    		ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
     	        		ActionBar.LayoutParams.MATCH_PARENT,
     	        		ActionBar.LayoutParams.MATCH_PARENT,
     	        		Gravity.CENTER);
@@ -178,11 +186,12 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
     	        mActionBar.setCustomView(viewTitleBar, lp);
     	        //getActionBar().setDisplayShowHomeEnabled(false);
     	        //getActionBar().setDisplayShowTitleEnabled(false);
-    	        mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+    	        mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM);
     	        mActionBar.setDisplayShowCustomEnabled(true);
-    	        mActionBarTitle = (TextView) getActionBar().getCustomView().findViewById(R.id.title);
+    	        mActionBarTitle = (TextView) mActionBar.getCustomView().findViewById(R.id.mainpage_title);
     	            	        
     	        mActionBarTitle.setText(R.string.mainpage_title);
+    	        setProgressBarIndeterminateVisibility(true);
 	
     	}
     	
@@ -190,13 +199,17 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         protected Long doInBackground(URL... urls) {
 
         	publishProgress(0);
-        	for(int i=0;i<10000000;i++){        		
+        	// 1.Communicate with the proxy to get the status of server
+        	String tAlohaRequestMsg = RenHaiJsonMsgProcess.constructAlohaRequestMsg().toString();
+        	
+        	for(int i=0;i< 999999999;i++){
+        		
         	}
         	publishProgress(30);
-        	for(int i=0;i<10000000;i++){        		
+        	for(int i=0;i<999999999;i++){        		
         	}
         	publishProgress(60);
-        	for(int i=0;i<10000000;i++){        		
+        	for(int i=0;i<999999999;i++){        		
         	}
         	publishProgress(100);
         	return (long) 100;
@@ -205,14 +218,33 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         // This is called each time you call publishProgress()
         protected void onProgressUpdate(Integer... progress) {
             //setProgressPercent(progress[0]);
+        	switch(progress[0].intValue())
+        	{
+        	    case 0:
+        	    	mActionBarTitle.setText(R.string.mainpage_title_preparenetwork);
+        	    	return;
+        	    
+        	    case 30:
+        	    	mActionBarTitle.setText(R.string.mainpage_title_connectserver);
+        	    	return;
+        	    
+        	    case 60:
+        	    	mActionBarTitle.setText(R.string.mainpage_title_syncserver);
+        	    	return;
+        	    
+        	    case 100:
+        	        mActionBarTitle.setText(R.string.mainpage_title_updateinfo);
+        	        return;
+        	            	    
+        	}
         }
 
         // This is called when doInBackground() is finished
         protected void onPostExecute(Long result) {
-           // showNotification("Downloaded " + result + " bytes");
         	mActionBar.setDisplayShowCustomEnabled(false);
 	        mActionBar.setDisplayShowHomeEnabled(true);
 	        mActionBar.setDisplayShowTitleEnabled(true);
+	        setProgressBarIndeterminateVisibility(false);
         }
     }
     

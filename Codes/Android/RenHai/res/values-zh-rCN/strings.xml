@@ -13,10 +13,10 @@
     <string name="viewpager_section_start">我的人海</string>
     <string name="viewpager_section_topics">我的话题</string>
     <string name="viewpager_section_impressions">我的印象</string>
-    <string name="mainpage_title_preparenetwork">Prepare Network&#8230;</string>
-    <string name="mainpage_title_connectserver">Connect RenHai&#8230;</string>
-    <string name="mainpage_title_syncserver">Syncronizing&#8230;</string>
-    <string name="mainpage_title_updateinfo">Updating Info&#8230;</string>
+    <string name="mainpage_title_preparenetwork">检查网络&#8230;</string>
+    <string name="mainpage_title_connectserver">连接人海&#8230;</string>
+    <string name="mainpage_title_syncserver">同步&#8230;</string>
+    <string name="mainpage_title_updateinfo">更新&#8230;</string>
     <string name="mainpage_title">已连接</string>
     
     <string name="protocal_text">

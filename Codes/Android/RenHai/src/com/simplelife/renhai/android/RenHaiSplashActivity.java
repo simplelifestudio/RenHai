@@ -9,6 +9,7 @@
 package com.simplelife.renhai.android;
 
 import com.simplelife.renhai.android.R;
+import com.simplelife.renhai.android.timeprocess.RenHaiTimeProcess;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -55,6 +56,9 @@ public class RenHaiSplashActivity extends Activity {
 		// 1.Configure the logger module
 		configureLogger();
 		mlog.info("Renhai is about to start!");
+		
+		// 2.Initialize the time process
+		RenHaiTimeProcess.initTimeProcess();
 						
 		// Stay for a moments and redirect
 		fadeShow.setAnimationListener(new AnimationListener()
