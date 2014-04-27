@@ -97,10 +97,34 @@ public class RenHaiJsonMsgProcess {
 			
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
+		}		
 		
 		return tMsg;
+	}
+	
+	public static void decodeAlohaResponseMsg(String inMsg){
+		
+		JSONObject tInMsg;
+		String tMsgContentBeforeDecode = null;
+		String tMsgContentAfterDecode  = null;
+		try {
+			tInMsg = new JSONObject(inMsg);
+			tMsgContentBeforeDecode = (String)tInMsg.get(MSG_ENVELOPE);												
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Decode the message content
+		try {
+			tMsgContentAfterDecode  = SecurityUtils.decryptByDESAndDecodeByBase64(tMsgContentBeforeDecode, RenHaiDefinitions.RENHAI_ENCODE_KEY);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Log.i("RenHaiJsonMsgProcess","AlohaResponse msg is"+tMsgContentAfterDecode);
+			
 	}
 	
 	public static void storeDeviceSn(String inSn){

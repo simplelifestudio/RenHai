@@ -9,6 +9,7 @@
 package com.simplelife.renhai.android;
 
 import com.simplelife.renhai.android.R;
+import com.simplelife.renhai.android.networkprocess.RenHaiNetworkProcess;
 import com.simplelife.renhai.android.timeprocess.RenHaiTimeProcess;
 
 import android.os.Bundle;
@@ -59,6 +60,9 @@ public class RenHaiSplashActivity extends Activity {
 		
 		// 2.Initialize the time process
 		RenHaiTimeProcess.initTimeProcess();
+		
+		// 3.Initialize the websocket
+		RenHaiNetworkProcess.initNetworkProcess();
 						
 		// Stay for a moments and redirect
 		fadeShow.setAnimationListener(new AnimationListener()
