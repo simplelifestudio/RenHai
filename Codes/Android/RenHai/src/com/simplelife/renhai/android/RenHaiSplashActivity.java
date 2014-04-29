@@ -84,7 +84,8 @@ public class RenHaiSplashActivity extends Activity {
 		if(isFirstStart())*/
 		{
 			updateFirstStartFlag(false);
-			intent = new Intent(this, RenHaiProtocalActivity.class);
+			//intent = new Intent(this, RenHaiProtocalActivity.class);			
+			intent = new Intent(this, RenHaiLoadingActivity.class);
 		    Bundle bundle = new Bundle();
 		    bundle.putString("caller", "RenHaiSplashActivity");
 		    intent.putExtras(bundle);

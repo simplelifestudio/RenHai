@@ -20,6 +20,10 @@ public class RenHaiDefinitions {
 	// Key for the message encoding
 	public static final String RENHAI_ENCODE_KEY = "20130801";
 	
+	// Message types
+	public static final int RENHAI_MSGID_ALOHAREQUEST  = 100;
+	public static final int RENHAI_MSGID_ALOHARESPONSE = 402;
+	
 	
 
 }

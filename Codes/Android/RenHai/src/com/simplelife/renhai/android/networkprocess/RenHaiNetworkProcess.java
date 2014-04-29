@@ -15,8 +15,11 @@ import java.util.List;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
 
+import android.os.Message;
 import android.util.Log;
 
+import com.simplelife.renhai.android.RenHaiDefinitions;
+import com.simplelife.renhai.android.RenHaiLoadingActivity;
 import com.simplelife.renhai.android.RenHaiMainPageActivity;
 import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
 import com.simplelife.renhai.android.utils.WebSocketClient;
@@ -44,7 +47,11 @@ public class RenHaiNetworkProcess {
 			    @Override
 			    public void onMessage(String message) {
 			        Log.d(TAG, String.format("Got string message! %s", message));
-			        RenHaiJsonMsgProcess.decodeAlohaResponseMsg(message);
+			        // 1. Decode the whole message			        
+			        RenHaiJsonMsgProcess.decodeMsg(message);
+			        Message t_MsgListData = new Message();
+					t_MsgListData.what = RenHaiDefinitions.RENHAI_MSGID_ALOHARESPONSE;
+					RenHaiLoadingActivity.getLoadingPageMsgHandler().sendMessage(t_MsgListData);	
 			    }
 
 			    @Override

@@ -27,6 +27,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="com.simplelife.renhai.android.RenHaiLoadingActivity"
+            android:label="@string/protocal_title"
+            android:theme="@style/ActionBarWithOnlyTitleTheme">
+        </activity>        
+        <activity
             android:name="com.simplelife.renhai.android.RenHaiProtocalActivity"
             android:label="@string/protocal_title"
             android:theme="@style/ActionBarWithOnlyTitleTheme">

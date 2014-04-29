@@ -85,8 +85,8 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        RenHaiConnectServer tNetwork = new RenHaiConnectServer();
-        tNetwork.execute(tServerUrl);
+        //RenHaiConnectServer tNetwork = new RenHaiConnectServer();
+        //tNetwork.execute(tServerUrl);
 
         // Set up the ViewPager, attaching the adapter and setting up a listener for when the
         // user swipes between sections.
