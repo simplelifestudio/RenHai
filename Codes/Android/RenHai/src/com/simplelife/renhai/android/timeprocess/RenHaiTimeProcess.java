@@ -17,7 +17,7 @@ import com.simplelife.renhai.android.RenHaiMainPageActivity;
 public class RenHaiTimeProcess {
 	
 	private static RenHaiTimeProcess mInstance = null;
-	private final Logger mlog = Logger.getLogger(RenHaiMainPageActivity.class);
+	private final Logger mlog = Logger.getLogger(RenHaiTimeProcess.class);
 	
 	public RenHaiTimeProcess(){
 		mlog.info("TimeProcess is starting!");

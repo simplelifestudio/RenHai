@@ -21,6 +21,7 @@ import android.util.Log;
 import com.simplelife.renhai.android.RenHaiDefinitions;
 import com.simplelife.renhai.android.RenHaiLoadingActivity;
 import com.simplelife.renhai.android.RenHaiMainPageActivity;
+import com.simplelife.renhai.android.RenHaiSplashActivity;
 import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
 import com.simplelife.renhai.android.utils.WebSocketClient;
 
@@ -42,6 +43,9 @@ public class RenHaiNetworkProcess {
 			    @Override
 			    public void onConnect() {
 			        Log.d(TAG, "Connected!");
+			        Message t_MsgListData = new Message();
+					t_MsgListData.what = RenHaiDefinitions.RENHAI_NETWORK_CREATE_SUCCESS;
+					RenHaiSplashActivity.getLoadingPageMsgHandler().sendMessage(t_MsgListData);	
 			    }
 
 			    @Override
@@ -50,8 +54,8 @@ public class RenHaiNetworkProcess {
 			        // 1. Decode the whole message			        
 			        RenHaiJsonMsgProcess.decodeMsg(message);
 			        Message t_MsgListData = new Message();
-					t_MsgListData.what = RenHaiDefinitions.RENHAI_MSGID_ALOHARESPONSE;
-					RenHaiLoadingActivity.getLoadingPageMsgHandler().sendMessage(t_MsgListData);	
+					t_MsgListData.what = RenHaiDefinitions.RENHAI_NETWORK_RECEIVE_MSG;
+					RenHaiSplashActivity.getLoadingPageMsgHandler().sendMessage(t_MsgListData);	
 			    }
 
 			    @Override

@@ -463,11 +463,12 @@ public final class R {
          */
         public static final int activity_horizontal_margin=0x7f050000;
         public static final int activity_vertical_margin=0x7f050001;
-        public static final int protocal_btn_size=0x7f050004;
-        public static final int protocal_text_size=0x7f050005;
-        public static final int protocal_title_size=0x7f050006;
+        public static final int protocal_btn_size=0x7f050005;
+        public static final int protocal_text_size=0x7f050006;
+        public static final int protocal_title_size=0x7f050007;
         public static final int splash_advt_size=0x7f050003;
         public static final int splash_logo_size=0x7f050002;
+        public static final int splash_progresstext_size=0x7f050004;
     }
     public static final class drawable {
         public static final int ab_background_textured_actionbarwithtabstheme=0x7f020000;
@@ -509,15 +510,21 @@ public final class R {
         public static final int tab_unselected_pressed_actionbarwithtabstheme=0x7f020024;
     }
     public static final class id {
-        public static final int action_settings=0x7f090008;
-        public static final int loadingpage_bar=0x7f090000;
-        public static final int mainpage_title=0x7f090001;
-        public static final int mainpage_viewpager=0x7f090002;
-        public static final int protocal_btnno=0x7f090005;
-        public static final int protocal_btnyes=0x7f090004;
-        public static final int protocal_confirm=0x7f090003;
-        public static final int splashteamlogo=0x7f090006;
-        public static final int startvedio_onlinecount=0x7f090007;
+        public static final int action_settings=0x7f09000e;
+        public static final int loadingpage_bar=0x7f090001;
+        public static final int loadingpage_barlayout=0x7f090000;
+        public static final int loadingpage_text=0x7f090002;
+        public static final int mainpage_title=0x7f090003;
+        public static final int mainpage_viewpager=0x7f090004;
+        public static final int protocal_btnno=0x7f090007;
+        public static final int protocal_btnyes=0x7f090006;
+        public static final int protocal_confirm=0x7f090005;
+        public static final int splash_applogo=0x7f090008;
+        public static final int splash_barlayout=0x7f090009;
+        public static final int splash_progressbar=0x7f09000a;
+        public static final int splash_progresstext=0x7f09000b;
+        public static final int splashteamlogo=0x7f09000c;
+        public static final int startvedio_onlinecount=0x7f09000d;
     }
     public static final class layout {
         public static final int activity_loading=0x7f030000;

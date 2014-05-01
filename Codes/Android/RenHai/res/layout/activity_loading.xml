@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     
-    <LinearLayout 
+    <LinearLayout
+        android:id="@+id/loadingpage_barlayout" 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true">
@@ -12,10 +13,16 @@
         <com.simplelife.renhai.android.ui.RenHaiProgressBar 
         android:id="@+id/loadingpage_bar"
         android:layout_width="fill_parent"
-        android:layout_height="2dp" 
-        android:layout_centerVertical="true"/>
-        
+        android:layout_height="2dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp" 
+        android:layout_centerVertical="true"/>        
     </LinearLayout>
-        
+    
+    <TextView 
+        android:id="@+id/loadingpage_text"
+        android:layout_below="@+id/loadingpage_barlayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>        
         
 </RelativeLayout>

@@ -20,11 +20,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.TextView;
 
 public class RenHaiLoadingActivity extends Activity{
 	
 	private final Logger mlog = Logger.getLogger(RenHaiSplashActivity.class);
 	private static RenHaiProgressBar mProgressBar;
+	private static TextView mProgressStage;
 
 	private static Handler mMsgHandler = new Handler(){ 
 	
@@ -33,6 +35,7 @@ public class RenHaiLoadingActivity extends Activity{
         	switch (msg.what) {
         	    case RenHaiDefinitions.RENHAI_MSGID_ALOHARESPONSE:
         	    	mProgressBar.animation_start(Mode.DETERMINATE);
+        	    	mProgressStage.setText(R.string.mainpage_title_connectserver);
         	}
         }
 
@@ -51,7 +54,10 @@ public class RenHaiLoadingActivity extends Activity{
         
         mProgressBar.animation_config(2, 20);
         int[] tColor = {Color.GREEN, Color.TRANSPARENT};
-        mProgressBar.bar_config(20, 0, 20, Color.LTGRAY, tColor);
+        mProgressBar.bar_config(40, 0, 20, Color.LTGRAY, tColor);
+        
+        mProgressStage = (TextView)findViewById(R.id.loadingpage_text);
+        mProgressStage.setText(R.string.mainpage_title_preparenetwork);
         
     	// 1.Communicate with the proxy to get the status of server
     	String tAlohaRequestMsg = RenHaiJsonMsgProcess.constructAlohaRequestMsg().toString();
