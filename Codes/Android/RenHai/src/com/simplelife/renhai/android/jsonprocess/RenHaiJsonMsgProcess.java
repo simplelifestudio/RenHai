@@ -51,6 +51,12 @@ public class RenHaiJsonMsgProcess {
 	// Length of the random sequence
 	public static int LENGTH_OF_MESSAGESN = 16;
 	
+	public static JSONObject constructProxyDataSyncRequestMsg(){
+		JSONObject tMsgContent = new JSONObject();
+		
+		return tMsgContent;
+	}
+	
 	public static JSONObject constructAlohaRequestMsg(){
 		
 		JSONObject tMsgContent = new JSONObject();	

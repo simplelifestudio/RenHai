@@ -11,7 +11,7 @@ package com.simplelife.renhai.android;
 import org.apache.log4j.Logger;
 
 import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
-import com.simplelife.renhai.android.networkprocess.RenHaiNetworkProcess;
+import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.ui.RenHaiProgressBar;
 import com.simplelife.renhai.android.ui.RenHaiProgressBar.Mode;
 
@@ -61,8 +61,8 @@ public class RenHaiLoadingActivity extends Activity{
         
     	// 1.Communicate with the proxy to get the status of server
     	String tAlohaRequestMsg = RenHaiJsonMsgProcess.constructAlohaRequestMsg().toString();
-    	RenHaiNetworkProcess tNetHandle = RenHaiNetworkProcess.getNetworkInstance();
-    	tNetHandle.sendMessage(tAlohaRequestMsg);  
+    	//RenHaiNetworkProcess tNetHandle = RenHaiNetworkProcess.getNetworkInstance();
+    	//tNetHandle.sendMessage(tAlohaRequestMsg);  
     }
         
 

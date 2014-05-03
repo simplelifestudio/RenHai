@@ -10,18 +10,19 @@ package com.simplelife.renhai.android;
 
 import com.simplelife.renhai.android.R;
 import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
-import com.simplelife.renhai.android.networkprocess.RenHaiNetworkProcess;
+import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.timeprocess.RenHaiTimeProcess;
 import com.simplelife.renhai.android.ui.RenHaiProgressBar;
 import com.simplelife.renhai.android.ui.RenHaiProgressBar.Mode;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.preference.PreferenceManager;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.View;
@@ -49,8 +50,7 @@ public class RenHaiSplashActivity extends Activity {
 	
 	private static final int BACKGROUND_PROCESS_TYPE_INITIAL = 1;
 	private static final int BACKGROUND_PROCESS_TYPE_SENDALOHA = 2;
-	
-	
+		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -74,7 +74,12 @@ public class RenHaiSplashActivity extends Activity {
 		
 		// Configure fade in and fade out
 		AlphaAnimation fadeShow = new AlphaAnimation(0.3f,1.0f);
-		fadeShow.setDuration(2000);		
+		fadeShow.setDuration(2000);	
+		
+		// Register the broadcast receiver
+		IntentFilter tFilter = new IntentFilter();
+		tFilter.addAction(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+		registerReceiver(mBroadcastRcver, tFilter); 
 		
 		// Start a background task to process the network communication
         MessageSendingTask tMsgSender = new MessageSendingTask();
@@ -100,35 +105,51 @@ public class RenHaiSplashActivity extends Activity {
 		});        
 	}
 
-	private static Handler mMsgHandler = new Handler(){ 		
-        @Override  
-        public void handleMessage(Message msg) {  
-        	switch (msg.what) {
+    private BroadcastReceiver mBroadcastRcver = new BroadcastReceiver() { 
+        @Override 
+        public void onReceive(Context context, Intent intent) { 
+
+            String action = intent.getAction(); 
+            if(action.equals(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG)){
+            	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
+            	
+            	switch (tMsgType) {
         	    case RenHaiDefinitions.RENHAI_NETWORK_CREATE_SUCCESS:
         	    {
+        	    	mlog.info("Websocket create success!");
         	    	mProgressText.setText(R.string.mainpage_title_connectserver);
-        	        MessageSendingTask tMsgSender = new MessageSendingTask();
-        	        tMsgSender.execute(BACKGROUND_PROCESS_TYPE_SENDALOHA);
+                	String tAlohaRequestMsg = RenHaiJsonMsgProcess.constructAlohaRequestMsg().toString();
+                	RenHaiWebSocketProcess tNetHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
+                	tNetHandle.sendMessage(tAlohaRequestMsg); 
         	        break;
         	    }
         	        
         	    case RenHaiDefinitions.RENHAI_NETWORK_CREATE_ERROR:
+        	    {
+        	    	mlog.info("Websocket error, error info: "+
+        	                   intent.getStringExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_SOCKETERROR));
+        	    	// Make a toast here to let the user to determine to enter the app offline or exit
         	    	break;
+        	    }
         	    
         	    case RenHaiDefinitions.RENHAI_NETWORK_RECEIVE_MSG:
         	    {
+        	    	mlog.info("Websocket receive message!");
         	    	mProgressText.setText(R.string.mainpage_title_syncserver);
         	    	processMessage();
         	    	break;
         	    }
         	}
-        }
-
-	};
-	
-	public static Handler getLoadingPageMsgHandler(){
-		return mMsgHandler;
-	}
+            	
+            }
+        } 
+    }; 
+    
+    @Override
+    protected void onDestroy() {  
+        super.onDestroy();  
+        unregisterReceiver(mBroadcastRcver);  
+    }  			
 	
 	private static void processMessage(){
 		
@@ -184,7 +205,7 @@ public class RenHaiSplashActivity extends Activity {
         logConfigurator.configure();
     }
     
-    private static class MessageSendingTask extends AsyncTask<Integer, Integer, String> {
+    private class MessageSendingTask extends AsyncTask<Integer, Integer, String> {
         // Do the long-running work in here
         protected String doInBackground(Integer... inType) {
         	int tInType = inType[0];
@@ -201,17 +222,9 @@ public class RenHaiSplashActivity extends Activity {
         			RenHaiTimeProcess.initTimeProcess();
         			
         			// 3.Initialize the websocket
-        			RenHaiNetworkProcess.initNetworkProcess();
+        			RenHaiWebSocketProcess.initNetworkProcess(getApplication());
         			
         			break;
-        	    }
-        	    case BACKGROUND_PROCESS_TYPE_SENDALOHA:
-        	    {
-                	// 1.Communicate with the proxy to get the status of server
-                	String tAlohaRequestMsg = RenHaiJsonMsgProcess.constructAlohaRequestMsg().toString();
-                	RenHaiNetworkProcess tNetHandle = RenHaiNetworkProcess.getNetworkInstance();
-                	tNetHandle.sendMessage(tAlohaRequestMsg);                	
-                	break;
         	    }
         	}       	
         	
@@ -228,11 +241,6 @@ public class RenHaiSplashActivity extends Activity {
             
         }
     }
-    
-    
-    
-    
-    
     
 
 }

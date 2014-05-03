@@ -1,7 +1,7 @@
 /*
  *  Copyright (C) 2014 SimpleLife Studio All Rights Reserved
  *  
- *  RenHaiNetworkProcess.java
+ *  RenHaiWebSocketProcess.java
  *  RenHai
  *
  *  Created by Chris Li on 14-4-25. 
@@ -15,25 +15,29 @@ import java.util.List;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Message;
 import android.util.Log;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
-import com.simplelife.renhai.android.RenHaiLoadingActivity;
 import com.simplelife.renhai.android.RenHaiMainPageActivity;
 import com.simplelife.renhai.android.RenHaiSplashActivity;
 import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
 import com.simplelife.renhai.android.utils.WebSocketClient;
 
-public class RenHaiNetworkProcess {
+public class RenHaiWebSocketProcess {
 	
-	private static RenHaiNetworkProcess mInstance = null;
+	private static RenHaiWebSocketProcess mInstance = null;
+	private Context mContext;
 	private WebSocketClient mWebsocketClient;
 	private final Logger mlog = Logger.getLogger(RenHaiMainPageActivity.class);
 	public static String TAG = "RenHaiNetworkProcess";	
 	
-	public RenHaiNetworkProcess(){
+	public RenHaiWebSocketProcess(Context _context){
 		mlog.info("Network process is starting!");
+		
+		mContext = _context;
 		
 		List<BasicNameValuePair> extraHeaders = Arrays.asList(
 			    new BasicNameValuePair("Cookie","session=abcd")
@@ -43,9 +47,12 @@ public class RenHaiNetworkProcess {
 			    @Override
 			    public void onConnect() {
 			        Log.d(TAG, "Connected!");
-			        Message t_MsgListData = new Message();
-					t_MsgListData.what = RenHaiDefinitions.RENHAI_NETWORK_CREATE_SUCCESS;
-					RenHaiSplashActivity.getLoadingPageMsgHandler().sendMessage(t_MsgListData);	
+			        
+			        // Notify the foreground receiver
+			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
+			        		        RenHaiDefinitions.RENHAI_NETWORK_CREATE_SUCCESS);
+			        mContext.sendBroadcast(tIntent);
 			    }
 
 			    @Override
@@ -53,9 +60,10 @@ public class RenHaiNetworkProcess {
 			        Log.d(TAG, String.format("Got string message! %s", message));
 			        // 1. Decode the whole message			        
 			        RenHaiJsonMsgProcess.decodeMsg(message);
-			        Message t_MsgListData = new Message();
-					t_MsgListData.what = RenHaiDefinitions.RENHAI_NETWORK_RECEIVE_MSG;
-					RenHaiSplashActivity.getLoadingPageMsgHandler().sendMessage(t_MsgListData);	
+			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
+			        		         RenHaiDefinitions.RENHAI_NETWORK_RECEIVE_MSG);
+			        mContext.sendBroadcast(tIntent);
 			    }
 
 			    @Override
@@ -71,6 +79,13 @@ public class RenHaiNetworkProcess {
 			    @Override
 			    public void onError(Exception error) {
 			        Log.e(TAG, "Error!", error);
+			        
+			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
+			        		         RenHaiDefinitions.RENHAI_NETWORK_CREATE_ERROR);
+			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_SOCKETERROR, 
+			        		         error.toString());
+			        mContext.sendBroadcast(tIntent);
 			    }
 			}, extraHeaders);
 
@@ -81,15 +96,15 @@ public class RenHaiNetworkProcess {
 		mWebsocketClient.send(inMsg);
 	}
 	
-	public static RenHaiNetworkProcess getNetworkInstance(){
+	public static RenHaiWebSocketProcess getNetworkInstance(Context _context){
 		if (null == mInstance)
-			mInstance = new RenHaiNetworkProcess();
+			mInstance = new RenHaiWebSocketProcess(_context);
 		return mInstance;
 	}
 	
-	public static void initNetworkProcess(){
+	public static void initNetworkProcess(Context _context){
 		if (null == mInstance)
-			mInstance = new RenHaiNetworkProcess();		
+			mInstance = new RenHaiWebSocketProcess(_context);		
 	}
 
 }

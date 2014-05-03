@@ -14,7 +14,7 @@ import java.net.URL;
 import org.apache.log4j.Logger;
 
 import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
-import com.simplelife.renhai.android.networkprocess.RenHaiNetworkProcess;
+import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
@@ -201,9 +201,9 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 
         	publishProgress(0);
         	// 1.Communicate with the proxy to get the status of server
-        	String tAlohaRequestMsg = RenHaiJsonMsgProcess.constructAlohaRequestMsg().toString();
-        	RenHaiNetworkProcess tNetHandle = RenHaiNetworkProcess.getNetworkInstance();
-        	tNetHandle.sendMessage(tAlohaRequestMsg);        	
+        	//String tAlohaRequestMsg = RenHaiJsonMsgProcess.constructAlohaRequestMsg().toString();
+        	//RenHaiNetworkProcess tNetHandle = RenHaiNetworkProcess.getNetworkInstance();
+        	//tNetHandle.sendMessage(tAlohaRequestMsg);        	
         	
         	for(int i=0;i< 999999999;i++){
         		
