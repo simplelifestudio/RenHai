@@ -23,16 +23,8 @@ import com.simplelife.renhai.android.utils.SecurityUtils;
 
 public class RenHaiJsonMsgProcess {
 	
-	private final Logger mlog = Logger.getLogger(RenHaiMainPageActivity.class);
-	private static String mDeviceSn = "";
-	
-	// Message Type
-	public static int MSGTYPE_UNKNOW = 0;
-	public static int MSGTYPE_APPREQUEST = 1;
-	public static int MSGTYPE_APPRESPONSE = 2;
-	public static int MSGTYPE_SERVERNOTIFICATION = 3;
-	public static int MSGTYPE_SERVERRESPONSE = 4;
-	public static int MSGTYPE_PROXYREQUEST = 5;
+	private final Logger mlog = Logger.getLogger(RenHaiJsonMsgProcess.class);
+	private static String mDeviceSn = "";	
 	
 	// Message ID
 	public static int AlohaRequestId = 100;
@@ -48,13 +40,78 @@ public class RenHaiJsonMsgProcess {
 	public static String MSG_HEADER_DEVSN = "deviceSn";
 	public static String MSG_HEADER_TIME  = "timeStamp";
 	
+	// ProxyDataSyncRequest fields definition
+	public static String MSG_PROXYREQ_APPVERSION = "appVersion";
+	public static String MSG_PROXYRESP_VERSION   = "version";
+	public static String MSG_PROXYRESP_BUILD     = "build";
+	
 	// Length of the random sequence
 	public static int LENGTH_OF_MESSAGESN = 16;
 	
+	public static JSONObject constructMsgHeader(int _msgType, int _msgId){
+		JSONObject tMsgHeader = new JSONObject();
+		
+		RenHaiTimeProcess tTimeHandle = RenHaiTimeProcess.getTimeProcessHandle();
+		String tCurrentTime = tTimeHandle.getCurrentTime();
+		
+		try {
+			tMsgHeader.put(MSG_HEADER_TYPE, _msgType);
+			tMsgHeader.put(MSG_HEADER_SN, RenHaiUtilSeqGenerator.genRandomSeq(LENGTH_OF_MESSAGESN));
+			tMsgHeader.put(MSG_HEADER_ID, _msgId);
+			tMsgHeader.put(MSG_HEADER_DEVID, "");
+			tMsgHeader.put(MSG_HEADER_DEVSN, mDeviceSn);
+			tMsgHeader.put(MSG_HEADER_TIME, tCurrentTime);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return tMsgHeader;
+
+	}
+	
 	public static JSONObject constructProxyDataSyncRequestMsg(){
 		JSONObject tMsgContent = new JSONObject();
+		JSONObject tMsgHeaderContent = new JSONObject();
+		JSONObject tMsgBodyContent   = new JSONObject();
+		JSONObject tMsg = new JSONObject();
+		String tMessageAfterEncode = null;
 		
-		return tMsgContent;
+		tMsgHeaderContent = constructMsgHeader(
+				            RenHaiDefinitions.RENHAI_MSGTYPE_PROXYREQUEST,
+				            RenHaiDefinitions.RENHAI_MSGID_PROXYSYNCREQUEST);
+		
+		try {
+			tMsgContent.put(MSG_HEADER,tMsgHeaderContent);
+			JSONObject tAppVersion = new JSONObject();
+			tAppVersion.put(MSG_PROXYRESP_VERSION, RenHaiDefinitions.RENHAI_APP_VERSION);
+			tAppVersion.put(MSG_PROXYRESP_BUILD, 1234);
+			tMsgBodyContent.put(MSG_PROXYREQ_APPVERSION, tAppVersion);
+			tMsgContent.put(MSG_BODY, tMsgBodyContent);			
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// Encrpt the message content and encode by base64
+		try {
+			tMessageAfterEncode = SecurityUtils.encryptByDESAndEncodeByBase64(
+					              tMsgContent.toString(), RenHaiDefinitions.RENHAI_ENCODE_KEY);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block				
+			e.printStackTrace();
+		}
+		
+		Log.i("RenHaiJsonMsgProcess","MsgContent after encoding is"+tMessageAfterEncode);
+		
+		// Capsulate with the envelope
+		try {
+			tMsg.put(MSG_ENVELOPE, tMessageAfterEncode);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		return tMsg;
 	}
 	
 	public static JSONObject constructAlohaRequestMsg(){
@@ -72,7 +129,7 @@ public class RenHaiJsonMsgProcess {
 				
 		try {
 			// Construct the message body except the envelope part
-			tMsgHeaderContent.put(MSG_HEADER_TYPE, MSGTYPE_APPREQUEST);
+			tMsgHeaderContent.put(MSG_HEADER_TYPE, RenHaiDefinitions.RENHAI_MSGTYPE_APPREQUEST);
 			tMsgHeaderContent.put(MSG_HEADER_SN, RenHaiUtilSeqGenerator.genRandomSeq(LENGTH_OF_MESSAGESN));
 			tMsgHeaderContent.put(MSG_HEADER_ID, AlohaRequestId);
 			tMsgHeaderContent.put(MSG_HEADER_DEVID, "");

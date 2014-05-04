@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
@@ -190,7 +191,7 @@ public class RenHaiSplashActivity extends Activity {
     	editor.commit();    	
     } 
     
-    public static void configureLogger() {
+    public void configureLogger() {
         final LogConfigurator logConfigurator = new LogConfigurator();
                 
         logConfigurator.setFileName(Environment.getExternalStorageDirectory() 
@@ -203,6 +204,12 @@ public class RenHaiSplashActivity extends Activity {
         // Set log level of a specific logger
         logConfigurator.setLevel("org.apache", Level.ERROR);
         logConfigurator.configure();
+    }
+    
+    protected void getDeviceSn(){
+    	TelephonyManager telephonyManager = (TelephonyManager)this.getSystemService( Context.TELEPHONY_SERVICE); 
+    	String tDeviceSn = telephonyManager.getDeviceId();
+    	RenHaiJsonMsgProcess.storeDeviceSn(tDeviceSn);    	
     }
     
     private class MessageSendingTask extends AsyncTask<Integer, Integer, String> {
@@ -221,7 +228,10 @@ public class RenHaiSplashActivity extends Activity {
         			// 2.Initialize the time process
         			RenHaiTimeProcess.initTimeProcess();
         			
-        			// 3.Initialize the websocket
+        			// 3.Get the device sn
+        			getDeviceSn();
+        			
+        			// 4.Initialize the websocket
         			RenHaiWebSocketProcess.initNetworkProcess(getApplication());
         			
         			break;

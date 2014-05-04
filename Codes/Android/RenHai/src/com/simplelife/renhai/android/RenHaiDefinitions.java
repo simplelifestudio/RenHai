@@ -11,8 +11,9 @@ package com.simplelife.renhai.android;
 public class RenHaiDefinitions {
 	
 	// Definitions for the app utilities
-	public static final String RENHAI_APP_NAME = "RenHai";
-	public static final String RENHAI_APP_FOLDER = "RenHai";
+	public static final String RENHAI_APP_NAME    = "RenHai";
+	public static final String RENHAI_APP_FOLDER  = "RenHai";
+	public static final String RENHAI_APP_VERSION = "1.0";
 	
 	// Log positions
 	public static final String RENHAI_LOG_FILENAME = "renhai";
@@ -27,9 +28,19 @@ public class RenHaiDefinitions {
 	// ===============================================================================
 	// C-S message type definitions
 	// ===============================================================================	
-	// Message types
+	// Message Type
+	public static final int RENHAI_MSGTYPE_UNKNOW = 0;
+	public static final int RENHAI_MSGTYPE_APPREQUEST  = 1;
+	public static final int RENHAI_MSGTYPE_APPRESPONSE = 2;
+	public static final int RENHAI_MSGTYPE_SERVERNOTIFICATION = 3;
+	public static final int RENHAI_MSGTYPE_SERVERRESPONSE = 4;
+	public static final int RENHAI_MSGTYPE_PROXYREQUEST = 5;
+	
+	// Message ID
 	public static final int RENHAI_MSGID_ALOHAREQUEST  = 100;
 	public static final int RENHAI_MSGID_ALOHARESPONSE = 402;
+	public static final int RENHAI_MSGID_PROXYSYNCREQUEST  = 500; 
+	public static final int RENHAI_MSGID_PROXYSYNCRESPONSE = 600; 
 	
 	// ===============================================================================
 	// Network process result definitions

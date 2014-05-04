@@ -70,13 +70,7 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 		// Damn work round for the android system bug
         View homeIcon = findViewById(android.R.id.home); 
 		((View) homeIcon.getParent()).setVisibility(View.GONE); 
-		
-		// Get the device serial number
-		TelephonyManager telephonyManager = (TelephonyManager)this.getSystemService( Context.TELEPHONY_SERVICE); 
-		String tDeviceSn = telephonyManager.getSimSerialNumber();
-		RenHaiJsonMsgProcess.storeDeviceSn(tDeviceSn);
-
-        
+		        
         // Trigger an asynctask to process the network connections
         URL tServerUrl = null;
 		try {
