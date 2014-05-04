@@ -51,7 +51,7 @@ public class RenHaiWebSocketProcess {
 			        // Notify the foreground receiver
 			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
-			        		        RenHaiDefinitions.RENHAI_NETWORK_CREATE_SUCCESS);
+			        		        RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_SUCCESS);
 			        mContext.sendBroadcast(tIntent);
 			    }
 
@@ -62,7 +62,7 @@ public class RenHaiWebSocketProcess {
 			        RenHaiJsonMsgProcess.decodeMsg(message);
 			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
-			        		         RenHaiDefinitions.RENHAI_NETWORK_RECEIVE_MSG);
+			        		         RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_MSG);
 			        mContext.sendBroadcast(tIntent);
 			    }
 
@@ -82,7 +82,7 @@ public class RenHaiWebSocketProcess {
 			        
 			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
-			        		         RenHaiDefinitions.RENHAI_NETWORK_CREATE_ERROR);
+			        		         RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR);
 			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_SOCKETERROR, 
 			        		         error.toString());
 			        mContext.sendBroadcast(tIntent);
@@ -102,7 +102,7 @@ public class RenHaiWebSocketProcess {
 		return mInstance;
 	}
 	
-	public static void initNetworkProcess(Context _context){
+	public static void initWebSocketProcess(Context _context){
 		if (null == mInstance)
 			mInstance = new RenHaiWebSocketProcess(_context);		
 	}

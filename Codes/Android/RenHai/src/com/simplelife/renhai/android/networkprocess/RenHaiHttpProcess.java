@@ -21,6 +21,8 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
@@ -28,12 +30,13 @@ import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
 
 public class RenHaiHttpProcess {
 	
-	public static String sendProxyDataSyncRequest() throws JSONException, ClientProtocolException, IOException {
+	public static String sendProxyDataSyncRequest(Context _context) throws JSONException, ClientProtocolException, IOException {
         
 		// Prepare network parameters
 	    DefaultHttpClient httpClient = new DefaultHttpClient();
 	    new BasicResponseHandler();
 	    HttpPost postMethod = new HttpPost(RenHaiDefinitions.RENHAI_SERVER_PROXYADDR);
+	    postMethod.addHeader("Content-Type", "application/json");
 	    
 	    // Create Aloha Message
 		JSONObject tMsg = RenHaiJsonMsgProcess.constructProxyDataSyncRequestMsg();
@@ -44,20 +47,25 @@ public class RenHaiHttpProcess {
 		// Retrieve the response
 		HttpResponse response = httpClient.execute(postMethod);
 		
+		int tStatusCode = response.getStatusLine().getStatusCode();
+		
 	    // Parse the response
-		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-			String retSrc = EntityUtils.toString(response.getEntity());
-			Log.i("return :", retSrc);
-			JSONObject result = new JSONObject( retSrc);  
-			String token = (String) result.get("id");  
-		    Log.i("response :", token);	
-		    
-		    return token;
+		if (HttpStatus.SC_OK != tStatusCode)
+		{
+	        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+	        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
+	        		         RenHaiDefinitions.RENHAI_NETWORK_HTTP_COMM_ERROR);
+	        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_HTTPRESPSTATUS, tStatusCode);
+	        _context.sendBroadcast(tIntent);
+	        Log.i("RenHaiHttpProcess","http error code: " + tStatusCode);
+	        return null;
 		}
 		else
 		{
-			return null;
-		}
+			String retSrc = EntityUtils.toString(response.getEntity());			
+			String tMsgDecoded = RenHaiJsonMsgProcess.decodeMsg(retSrc);
+			return tMsgDecoded;
+		}				
 	
 	}
 

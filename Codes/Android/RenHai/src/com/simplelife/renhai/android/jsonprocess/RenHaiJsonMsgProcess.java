@@ -23,7 +23,7 @@ import com.simplelife.renhai.android.utils.SecurityUtils;
 
 public class RenHaiJsonMsgProcess {
 	
-	private final Logger mlog = Logger.getLogger(RenHaiJsonMsgProcess.class);
+	private static final Logger mlog = Logger.getLogger(RenHaiJsonMsgProcess.class);
 	private static String mDeviceSn = "";	
 	
 	// Message ID
@@ -33,9 +33,9 @@ public class RenHaiJsonMsgProcess {
 	public static String MSG_ENVELOPE = "jsonEnvelope";
 	public static String MSG_HEADER   = "header";
 	public static String MSG_BODY     = "body";
-	public static String MSG_HEADER_TYPE = "messageType";
-	public static String MSG_HEADER_SN   = "messageSn";
-	public static String MSG_HEADER_ID   = "messageId";
+	public static String MSG_HEADER_TYPE  = "messageType";
+	public static String MSG_HEADER_SN    = "messageSn";
+	public static String MSG_HEADER_ID    = "messageId";
 	public static String MSG_HEADER_DEVID = "deviceId";
 	public static String MSG_HEADER_DEVSN = "deviceSn";
 	public static String MSG_HEADER_TIME  = "timeStamp";
@@ -91,6 +91,8 @@ public class RenHaiJsonMsgProcess {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		Log.i("RenHaiJsonMsgProcess",String.format("ProxyDataSyncRequestMsg: %s", tMsgContent.toString()));
 		
 		// Encrpt the message content and encode by base64
 		try {
@@ -174,24 +176,23 @@ public class RenHaiJsonMsgProcess {
 		
 		try {
 			tInMsg = new JSONObject(inMsg);
-			tMsgContentBeforeDecode = (String)tInMsg.get(MSG_ENVELOPE);												
+			tMsgContentBeforeDecode = (String)tInMsg.get(MSG_ENVELOPE);
+			tMsgContentAfterDecode  = SecurityUtils.decryptByDESAndDecodeByBase64(tMsgContentBeforeDecode, 
+					                  RenHaiDefinitions.RENHAI_ENCODE_KEY);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			mlog.error("JSONMessage parse exception", e);
+		} catch (Exception e) {
+			mlog.error("JSONMessage decode exception", e);
 		}
 
-		// Decode the message content
-		try {
-			tMsgContentAfterDecode  = SecurityUtils.decryptByDESAndDecodeByBase64(tMsgContentBeforeDecode, RenHaiDefinitions.RENHAI_ENCODE_KEY);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		Log.i("RenHaiJsonMsgProcess","Recevive msg is"+tMsgContentAfterDecode);
 		
 		
-		return tMsgDecoded;
+		
+		
+		
+		
+		return tMsgContentAfterDecode;
 	}
 	
 	public static void decodeAlohaResponseMsg(String inMsg){

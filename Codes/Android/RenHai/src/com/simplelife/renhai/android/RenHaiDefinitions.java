@@ -23,7 +23,7 @@ public class RenHaiDefinitions {
 	
 	// Server Address
 	public static final String RENHAI_SERVER_WEBSOCKETADDR = "ws://192.81.135.31:80/renhai/websocket";
-	public static final String RENHAI_SERVER_PROXYADDR = "http://192.81.135.31/renhaiproxy/";
+	public static final String RENHAI_SERVER_PROXYADDR = "http://192.81.135.31/renhaiproxy/request";
 	
 	// ===============================================================================
 	// C-S message type definitions
@@ -46,9 +46,11 @@ public class RenHaiDefinitions {
 	// Network process result definitions
 	// ===============================================================================		
 	// Network return type
-	public static final int RENHAI_NETWORK_CREATE_SUCCESS = 1100;
-	public static final int RENHAI_NETWORK_CREATE_ERROR   = 1101;
-	public static final int RENHAI_NETWORK_RECEIVE_MSG    = 1102;
+	public static final int RENHAI_NETWORK_HTTP_RECEIVE_MSG = 1100;
+	public static final int RENHAI_NETWORK_HTTP_COMM_ERROR  = 1101;
+	public static final int RENHAI_NETWORK_WEBSOCKET_CREATE_SUCCESS = 1102;
+	public static final int RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR   = 1103;
+	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_MSG    = 1104;
 	
 	// ===============================================================================
 	// Broadcast receiver definitions
@@ -58,6 +60,7 @@ public class RenHaiDefinitions {
 	
 	// Broad cast message type
 	public static final String RENHAI_BROADCASTMSG_DEF = "renhai.broadcast.msgtype";
+	public static final String RENHAI_BROADCASTMSG_HTTPRESPSTATUS = "renhai.broadcast.httprespstatuscode";
 	public static final String RENHAI_BROADCASTMSG_SOCKETERROR = "renhai.broadcast.websocketerrtype";
 	
 	

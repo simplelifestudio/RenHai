@@ -10,6 +10,7 @@ package com.simplelife.renhai.android;
 
 import com.simplelife.renhai.android.R;
 import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
+import com.simplelife.renhai.android.networkprocess.RenHaiHttpProcess;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.timeprocess.RenHaiTimeProcess;
 import com.simplelife.renhai.android.ui.RenHaiProgressBar;
@@ -34,9 +35,12 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.IOException;
 
+import org.apache.http.client.ClientProtocolException;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.json.JSONException;
 
 import android.os.Environment;
 import de.mindpipe.android.logging.log4j.LogConfigurator;
@@ -115,7 +119,20 @@ public class RenHaiSplashActivity extends Activity {
             	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
             	
             	switch (tMsgType) {
-        	    case RenHaiDefinitions.RENHAI_NETWORK_CREATE_SUCCESS:
+            	case RenHaiDefinitions.RENHAI_NETWORK_HTTP_RECEIVE_MSG:
+            	{
+            		mlog.info("Proxy communicate success!");
+            		mProgressText.setText(R.string.mainpage_title_connectserver);
+            		break;
+            	}
+            	case RenHaiDefinitions.RENHAI_NETWORK_HTTP_COMM_ERROR:
+            	{
+            		// TODO: make a toast here
+            		mlog.error("Failed to communicate with server proxy, http status code: "
+            		          +intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_HTTPRESPSTATUS, 0));
+            		break;            		
+            	}
+        	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_SUCCESS:
         	    {
         	    	mlog.info("Websocket create success!");
         	    	mProgressText.setText(R.string.mainpage_title_connectserver);
@@ -125,7 +142,7 @@ public class RenHaiSplashActivity extends Activity {
         	        break;
         	    }
         	        
-        	    case RenHaiDefinitions.RENHAI_NETWORK_CREATE_ERROR:
+        	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR:
         	    {
         	    	mlog.info("Websocket error, error info: "+
         	                   intent.getStringExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_SOCKETERROR));
@@ -133,7 +150,7 @@ public class RenHaiSplashActivity extends Activity {
         	    	break;
         	    }
         	    
-        	    case RenHaiDefinitions.RENHAI_NETWORK_RECEIVE_MSG:
+        	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_MSG:
         	    {
         	    	mlog.info("Websocket receive message!");
         	    	mProgressText.setText(R.string.mainpage_title_syncserver);
@@ -206,10 +223,30 @@ public class RenHaiSplashActivity extends Activity {
         logConfigurator.configure();
     }
     
-    protected void getDeviceSn(){
+    private void getDeviceSn(){
     	TelephonyManager telephonyManager = (TelephonyManager)this.getSystemService( Context.TELEPHONY_SERVICE); 
     	String tDeviceSn = telephonyManager.getDeviceId();
     	RenHaiJsonMsgProcess.storeDeviceSn(tDeviceSn);    	
+    }
+    
+    private void initNetwork(){    	
+		String tProxyResponse = null;
+    	// Communicate with the server proxy
+    	try {
+    		tProxyResponse = RenHaiHttpProcess.sendProxyDataSyncRequest(getApplication());
+		} catch (ClientProtocolException e) {
+			mlog.error("Server proxy protocal exception!", e);
+		} catch (JSONException e) {
+			mlog.error("Server proxy JSON message exception!", e);
+		} catch (IOException e) {
+			mlog.error("Server proxy IO exception!", e);
+		}
+    	
+    	if (null != tProxyResponse)
+    	{
+    		// Initialize the websocket
+    		RenHaiWebSocketProcess.initWebSocketProcess(getApplication());
+    	}  	
     }
     
     private class MessageSendingTask extends AsyncTask<Integer, Integer, String> {
@@ -231,9 +268,9 @@ public class RenHaiSplashActivity extends Activity {
         			// 3.Get the device sn
         			getDeviceSn();
         			
-        			// 4.Initialize the websocket
-        			RenHaiWebSocketProcess.initNetworkProcess(getApplication());
-        			
+        			// 4.Initialize the network instances
+        			initNetwork();
+      			
         			break;
         	    }
         	}       	
