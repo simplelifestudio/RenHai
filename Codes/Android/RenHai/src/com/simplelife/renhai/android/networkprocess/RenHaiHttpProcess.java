@@ -18,6 +18,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +30,8 @@ import com.simplelife.renhai.android.RenHaiDefinitions;
 import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
 
 public class RenHaiHttpProcess {
+	
+	private static final Logger mlog = Logger.getLogger(RenHaiHttpProcess.class);
 	
 	public static String sendProxyDataSyncRequest(Context _context) throws JSONException, ClientProtocolException, IOException {
         
@@ -57,7 +60,7 @@ public class RenHaiHttpProcess {
 	        		         RenHaiDefinitions.RENHAI_NETWORK_HTTP_COMM_ERROR);
 	        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_HTTPRESPSTATUS, tStatusCode);
 	        _context.sendBroadcast(tIntent);
-	        Log.i("RenHaiHttpProcess","http error code: " + tStatusCode);
+	        mlog.warn("Http error code: " + tStatusCode);
 	        return null;
 		}
 		else
@@ -65,7 +68,7 @@ public class RenHaiHttpProcess {
 			String retSrc = EntityUtils.toString(response.getEntity());			
 			String tMsgDecoded = RenHaiJsonMsgProcess.decodeMsg(retSrc);
 			return tMsgDecoded;
-		}				
+		}
 	
 	}
 

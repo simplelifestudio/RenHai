@@ -14,6 +14,7 @@ public class RenHaiDefinitions {
 	public static final String RENHAI_APP_NAME    = "RenHai";
 	public static final String RENHAI_APP_FOLDER  = "RenHai";
 	public static final String RENHAI_APP_VERSION = "1.0";
+	public static final int RENHAI_APP_BUILD = 1000;
 	
 	// Log positions
 	public static final String RENHAI_LOG_FILENAME = "renhai";
@@ -34,7 +35,8 @@ public class RenHaiDefinitions {
 	public static final int RENHAI_MSGTYPE_APPRESPONSE = 2;
 	public static final int RENHAI_MSGTYPE_SERVERNOTIFICATION = 3;
 	public static final int RENHAI_MSGTYPE_SERVERRESPONSE = 4;
-	public static final int RENHAI_MSGTYPE_PROXYREQUEST = 5;
+	public static final int RENHAI_MSGTYPE_PROXYREQUEST   = 5;
+	public static final int RENHAI_MSGTYPE_PROXYRESPONSE  = 6;
 	
 	// Message ID
 	public static final int RENHAI_MSGID_ALOHAREQUEST  = 100;
@@ -62,6 +64,13 @@ public class RenHaiDefinitions {
 	public static final String RENHAI_BROADCASTMSG_DEF = "renhai.broadcast.msgtype";
 	public static final String RENHAI_BROADCASTMSG_HTTPRESPSTATUS = "renhai.broadcast.httprespstatuscode";
 	public static final String RENHAI_BROADCASTMSG_SOCKETERROR = "renhai.broadcast.websocketerrtype";
+	
+	// ===============================================================================
+	// Database definitions
+	// ===============================================================================	
+	// The name of the sql file
+	public static final String RENHAI_DB_SQLFILE = "CreateTables.sql";
+	
 	
 	
 

@@ -7,6 +7,12 @@
     <string name="splash_logo">HiYa</string>
     <string name="splash_advert">See You By Destiny</string>
     <string name="splash_teamlogo">Copyright © SimpleLife Studio</string>
+    <string name="splash_httpfailed_dialogtitle">Connection Failed</string>
+    <string name="splash_httpfailed_dialogmsg">Failed to retrieve the server info</string>
+    <string name="splash_httpfailed_dialogposbtn">Retry</string>
+    <string name="splash_httpfailed_dialognegbtn">Quit</string>
+    
+    
     <string name="protocal_title">User Agreement</string>
     <string name="protocal_yes">Roger</string>
     <string name="protocal_no">Damn</string>

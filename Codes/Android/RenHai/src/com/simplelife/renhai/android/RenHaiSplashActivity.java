@@ -20,8 +20,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -127,7 +130,7 @@ public class RenHaiSplashActivity extends Activity {
             	}
             	case RenHaiDefinitions.RENHAI_NETWORK_HTTP_COMM_ERROR:
             	{
-            		// TODO: make a toast here
+            		onHttpConnectFailed();
             		mlog.error("Failed to communicate with server proxy, http status code: "
             		          +intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_HTTPRESPSTATUS, 0));
             		break;            		
@@ -231,22 +234,60 @@ public class RenHaiSplashActivity extends Activity {
     
     private void initNetwork(){    	
 		String tProxyResponse = null;
+		boolean tHttpFailedFlag = false;
+		
     	// Communicate with the server proxy
     	try {
     		tProxyResponse = RenHaiHttpProcess.sendProxyDataSyncRequest(getApplication());
 		} catch (ClientProtocolException e) {
-			mlog.error("Server proxy protocal exception!", e);
+			tHttpFailedFlag = true;
+			mlog.error("Server proxy protocal exception!", e);			
 		} catch (JSONException e) {
+			tHttpFailedFlag = true;
 			mlog.error("Server proxy JSON message exception!", e);
 		} catch (IOException e) {
+			tHttpFailedFlag = true;
 			mlog.error("Server proxy IO exception!", e);
 		}
     	
-    	if (null != tProxyResponse)
+    	if(tHttpFailedFlag == true)
+    	{
+            Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+            tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
+            		         RenHaiDefinitions.RENHAI_NETWORK_HTTP_COMM_ERROR);
+            sendBroadcast(tIntent);    		
+    	} else if (null != tProxyResponse)
     	{
     		// Initialize the websocket
     		RenHaiWebSocketProcess.initWebSocketProcess(getApplication());
     	}  	
+    }
+    
+    private void onHttpConnectFailed(){
+    	AlertDialog.Builder builder = new Builder(this);
+    	builder.setTitle(R.string.splash_httpfailed_dialogtitle);
+    	builder.setMessage(R.string.splash_httpfailed_dialogmsg);
+    	/*
+    	builder.setPositiveButton(R.string.splash_httpfailed_dialogposbtn, 
+    			                  new DialogInterface.OnClickListener(){
+
+			@Override
+			public void onClick(DialogInterface dialog, int arg1) {
+				dialog.dismiss();
+				initNetwork();				
+			}
+    		
+    	});*/
+    	builder.setNegativeButton(R.string.splash_httpfailed_dialognegbtn, 
+    			                  new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.dismiss();
+		        finish();
+		    }
+		});
+
+		builder.create().show();    	
     }
     
     private class MessageSendingTask extends AsyncTask<Integer, Integer, String> {
@@ -288,6 +329,8 @@ public class RenHaiSplashActivity extends Activity {
             
         }
     }
+    
+    
     
 
 }

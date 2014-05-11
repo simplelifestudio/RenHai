@@ -84,34 +84,22 @@ public class RenHaiJsonMsgProcess {
 			tMsgContent.put(MSG_HEADER,tMsgHeaderContent);
 			JSONObject tAppVersion = new JSONObject();
 			tAppVersion.put(MSG_PROXYRESP_VERSION, RenHaiDefinitions.RENHAI_APP_VERSION);
-			tAppVersion.put(MSG_PROXYRESP_BUILD, 1234);
+			tAppVersion.put(MSG_PROXYRESP_BUILD, RenHaiDefinitions.RENHAI_APP_BUILD);
 			tMsgBodyContent.put(MSG_PROXYREQ_APPVERSION, tAppVersion);
-			tMsgContent.put(MSG_BODY, tMsgBodyContent);			
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Log.i("RenHaiJsonMsgProcess",String.format("ProxyDataSyncRequestMsg: %s", tMsgContent.toString()));
-		
-		// Encrpt the message content and encode by base64
-		try {
+			tMsgContent.put(MSG_BODY, tMsgBodyContent);
+			mlog.info("Constructing ProxyDataSyncRequest: "+tMsgContent.toString());
+			
+			// Encrpt the message content and encode by base64
 			tMessageAfterEncode = SecurityUtils.encryptByDESAndEncodeByBase64(
-					              tMsgContent.toString(), RenHaiDefinitions.RENHAI_ENCODE_KEY);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block				
-			e.printStackTrace();
-		}
-		
-		Log.i("RenHaiJsonMsgProcess","MsgContent after encoding is"+tMessageAfterEncode);
-		
-		// Capsulate with the envelope
-		try {
+		              tMsgContent.toString(), RenHaiDefinitions.RENHAI_ENCODE_KEY);
+			
+			// Capsulate with the envelope
 			tMsg.put(MSG_ENVELOPE, tMessageAfterEncode);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			mlog.error("Failed to construct ProxyDataSyncRequest!", e);
+		} catch (Exception e) {
+			mlog.error("Failed to encrypt ProxyDataSyncRequest!", e);
+		}		
 				
 		return tMsg;
 	}
@@ -170,10 +158,12 @@ public class RenHaiJsonMsgProcess {
 	public static String decodeMsg(String inMsg){
 		
 		JSONObject tInMsg;
+		JSONObject tMsgHeader;
+		JSONObject tMsgBody;
 		String tMsgDecoded = null;
 		String tMsgContentBeforeDecode = null;
 		String tMsgContentAfterDecode  = null;
-		
+				
 		try {
 			tInMsg = new JSONObject(inMsg);
 			tMsgContentBeforeDecode = (String)tInMsg.get(MSG_ENVELOPE);
@@ -186,6 +176,33 @@ public class RenHaiJsonMsgProcess {
 		}
 
 		Log.i("RenHaiJsonMsgProcess","Recevive msg is"+tMsgContentAfterDecode);
+		
+		try {
+			JSONObject tMsgInJson = new JSONObject(tMsgContentAfterDecode);
+			tMsgHeader = tMsgInJson.getJSONObject(MSG_HEADER);
+			int tMsgType  = tMsgHeader.getInt(MSG_HEADER_TYPE);			
+			int tMsgId    = tMsgHeader.getInt(MSG_HEADER_ID);
+			int tDeviceId = tMsgHeader.getInt(MSG_HEADER_DEVID);
+			String tMsgSn = tMsgHeader.getString(MSG_HEADER_SN);
+			String tDeviceSn = tMsgHeader.getString(MSG_HEADER_DEVSN);
+			String tTimestmp = tMsgHeader.getString(MSG_HEADER_TIME);
+			
+			if ( (tMsgType > RenHaiDefinitions.RENHAI_MSGTYPE_UNKNOW)
+               && (tMsgType <= RenHaiDefinitions.RENHAI_MSGTYPE_PROXYRESPONSE))
+			{
+				
+			}
+			else
+			{
+				
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
 		
 		
 		
