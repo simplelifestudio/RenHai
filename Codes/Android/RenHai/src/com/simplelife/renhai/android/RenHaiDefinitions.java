@@ -48,11 +48,13 @@ public class RenHaiDefinitions {
 	// Network process result definitions
 	// ===============================================================================		
 	// Network return type
-	public static final int RENHAI_NETWORK_HTTP_RECEIVE_MSG = 1100;
+	public static final int RENHAI_NETWORK_HTTP_COMM_SUCESS = 1100;
 	public static final int RENHAI_NETWORK_HTTP_COMM_ERROR  = 1101;
 	public static final int RENHAI_NETWORK_WEBSOCKET_CREATE_SUCCESS = 1102;
 	public static final int RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR   = 1103;
 	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_MSG    = 1104;
+	public static final int RENHAI_NETWORK_MSS_UNMATCHMSGSN = 1105;
+	public static final int RENHAI_NETWORK_MSS_UNMATCHDEVICESN = 1106;
 	
 	// ===============================================================================
 	// Broadcast receiver definitions
@@ -70,6 +72,12 @@ public class RenHaiDefinitions {
 	// ===============================================================================	
 	// The name of the sql file
 	public static final String RENHAI_DB_SQLFILE = "CreateTables.sql";
+	
+	// ===============================================================================
+	// Function return value definitions
+	// ===============================================================================
+	public static final int RENHAI_FUNC_STATUS_OK    = 0;
+	public static final int RENHAI_FUNC_STATUS_ERROR = 1;
 	
 	
 	

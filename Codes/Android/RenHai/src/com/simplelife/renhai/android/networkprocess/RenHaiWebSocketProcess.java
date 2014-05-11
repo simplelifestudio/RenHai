@@ -21,6 +21,7 @@ import android.os.Message;
 import android.util.Log;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
+import com.simplelife.renhai.android.RenHaiInfo;
 import com.simplelife.renhai.android.RenHaiMainPageActivity;
 import com.simplelife.renhai.android.RenHaiSplashActivity;
 import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
@@ -42,8 +43,16 @@ public class RenHaiWebSocketProcess {
 		List<BasicNameValuePair> extraHeaders = Arrays.asList(
 			    new BasicNameValuePair("Cookie","session=abcd")
 			);
-
-		mWebsocketClient = new WebSocketClient(URI.create("ws://192.81.135.31:80/renhai/websocket"), new WebSocketClient.Listener() {
+		
+		String tServerAddr = RenHaiInfo.ServerAddr.getProtocol()
+				           + "://"
+				           + RenHaiInfo.ServerAddr.getServerIp()
+				           + ":"
+				           + RenHaiInfo.ServerAddr.getServerPort()
+				           + RenHaiInfo.ServerAddr.getServerPath();
+		
+		//ws://192.81.135.31:80/renhai/websocket
+		mWebsocketClient = new WebSocketClient(URI.create(tServerAddr), new WebSocketClient.Listener() {
 			    @Override
 			    public void onConnect() {
 			        Log.d(TAG, "Connected!");
@@ -59,7 +68,7 @@ public class RenHaiWebSocketProcess {
 			    public void onMessage(String message) {
 			        Log.d(TAG, String.format("Got string message! %s", message));
 			        // 1. Decode the whole message			        
-			        RenHaiJsonMsgProcess.decodeMsg(message);
+			        RenHaiJsonMsgProcess.decodeMsg(mContext,message);
 			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
 			        		         RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_MSG);

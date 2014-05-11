@@ -122,7 +122,7 @@ public class RenHaiSplashActivity extends Activity {
             	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
             	
             	switch (tMsgType) {
-            	case RenHaiDefinitions.RENHAI_NETWORK_HTTP_RECEIVE_MSG:
+            	case RenHaiDefinitions.RENHAI_NETWORK_HTTP_COMM_SUCESS:
             	{
             		mlog.info("Proxy communicate success!");
             		mProgressText.setText(R.string.mainpage_title_connectserver);
@@ -143,8 +143,7 @@ public class RenHaiSplashActivity extends Activity {
                 	RenHaiWebSocketProcess tNetHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
                 	tNetHandle.sendMessage(tAlohaRequestMsg); 
         	        break;
-        	    }
-        	        
+        	    }       	        
         	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR:
         	    {
         	    	mlog.info("Websocket error, error info: "+
@@ -158,6 +157,16 @@ public class RenHaiSplashActivity extends Activity {
         	    	mlog.info("Websocket receive message!");
         	    	mProgressText.setText(R.string.mainpage_title_syncserver);
         	    	processMessage();
+        	    	break;
+        	    }
+        	    case RenHaiDefinitions.RENHAI_NETWORK_MSS_UNMATCHMSGSN:
+        	    {
+        	    	mlog.error("Receive message with unmatch msgsn!");
+        	    	break;
+        	    }
+        	    case RenHaiDefinitions.RENHAI_NETWORK_MSS_UNMATCHDEVICESN:
+        	    {
+        	    	mlog.error("Receive message with unmatch devicesn!");
         	    	break;
         	    }
         	}
@@ -229,11 +238,11 @@ public class RenHaiSplashActivity extends Activity {
     private void getDeviceSn(){
     	TelephonyManager telephonyManager = (TelephonyManager)this.getSystemService( Context.TELEPHONY_SERVICE); 
     	String tDeviceSn = telephonyManager.getDeviceId();
-    	RenHaiJsonMsgProcess.storeDeviceSn(tDeviceSn);    	
+    	RenHaiInfo.storeDeviceSn(tDeviceSn);    	
     }
     
     private void initNetwork(){    	
-		String tProxyResponse = null;
+		int tProxyResponse = RenHaiDefinitions.RENHAI_FUNC_STATUS_ERROR;
 		boolean tHttpFailedFlag = false;
 		
     	// Communicate with the server proxy
@@ -250,13 +259,14 @@ public class RenHaiSplashActivity extends Activity {
 			mlog.error("Server proxy IO exception!", e);
 		}
     	
-    	if(tHttpFailedFlag == true)
+    	if((tProxyResponse != RenHaiDefinitions.RENHAI_FUNC_STATUS_OK)
+    			||(tHttpFailedFlag == true))
     	{
             Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
             tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
             		         RenHaiDefinitions.RENHAI_NETWORK_HTTP_COMM_ERROR);
             sendBroadcast(tIntent);    		
-    	} else if (null != tProxyResponse)
+    	} else if (tProxyResponse == RenHaiDefinitions.RENHAI_FUNC_STATUS_OK)
     	{
     		// Initialize the websocket
     		RenHaiWebSocketProcess.initWebSocketProcess(getApplication());

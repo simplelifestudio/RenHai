@@ -10,11 +10,42 @@ package com.simplelife.renhai.android;
 
 public class RenHaiInfo {
 	
-	public static int deviceId;		
-	public static String deviceSn;
+	public static int deviceId = 0;		
+	public static String deviceSn = "";
+	public static String serverTimeOnFirstMsg = "";
+	public static boolean isServerTimeRecord = false;
+	
+	public static void storeDeviceId(int _devId){
+		deviceId = _devId;
+	}
+	
+	public static int getDeviceId(){
+		return deviceId;
+	}
+	
+	public static void storeDeviceSn(String _devSn){
+		deviceSn = _devSn;
+	}
+	
+	public static String getDeviceSn(){
+		return deviceSn;
+	}
+	
+	public static void storeServerTimeOnFirstMsg(String _ServerTime){
+		serverTimeOnFirstMsg = _ServerTime;
+		isServerTimeRecord = true;
+	}
+	
+	public static String getServerTimeOnFirstMsg(){
+		return serverTimeOnFirstMsg;
+	}
+	
+	public static boolean isServerTimeOnFirstMsgRecord(){
+		return isServerTimeRecord;
+	}
 	
 	public static class ServerAddr{
-		public static boolean serviceStatus = false;
+		public static int serviceStatus = 0;
 		public static String timeZone  = "GMT+0800";
 		public static String beginTime = "2013-01-01 10:00:00";
 		public static String endTime   = "2013-01-01 10:00:00";
@@ -24,6 +55,77 @@ public class RenHaiInfo {
 		public static String path = "/renhai/websocket";
 		public static String broadcastInfo = "";
 		
+		public static void storeServiceStatus(int _status){
+			serviceStatus = _status;
+		}
+		
+		public static void storeTimeZone(String _timezone){
+			timeZone = _timezone;
+		}
+		
+		public static void storeBeginTime(String _beginTime){
+			beginTime = _beginTime;
+		}
+		
+		public static void storeEndTime(String _endTime){
+			endTime = _endTime;
+		}
+		
+		public static void storeProtocol(String _protocol){
+			protocal = _protocol;
+		}
+		
+		public static void storeServerIp(String _serverIp){
+			serverIp = _serverIp;
+		}
+		
+		public static void storeServerPort(int _port){
+			serverPort = _port;
+		}
+		
+		public static void storeServerPath(String _path){
+			path = _path;
+		}
+		
+		public static void storeBroadcastInfo(String _broadcast){
+			broadcastInfo = _broadcast;
+		}
+		
+		public static int getServiceStatus(){
+			return serviceStatus;
+		}
+		
+		public static String getTimeZone(){
+			return timeZone;
+		}
+		
+		public static String getBeginTime(){
+			return beginTime;
+		}
+		
+		public static String getEndTime(){
+			return endTime;
+		}
+		
+		public static String getProtocol(){
+			return protocal;
+		}
+		
+		public static String getServerIp(){
+			return serverIp;
+		}
+		
+		public static int getServerPort(){
+			return serverPort;
+		}
+		
+		public static String getServerPath(){
+			return path;
+		}
+		
+		public static String getBroadcastInfo(){
+			return broadcastInfo;
+		}		
 	}
 		
 	public static class DeviceCard{		
