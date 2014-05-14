@@ -24,8 +24,10 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
+
 import com.simplelife.renhai.android.RenHaiDefinitions;
-import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsg;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgProxyDataSyncReq;
 
 public class RenHaiHttpProcess {
 	
@@ -40,7 +42,7 @@ public class RenHaiHttpProcess {
 	    postMethod.addHeader("Content-Type", "application/json");
 	    
 	    // Create Aloha Message
-		JSONObject tMsg = RenHaiJsonMsgProcess.constructProxyDataSyncRequestMsg();
+		JSONObject tMsg = RenHaiMsgProxyDataSyncReq.constructMsg();
 		
 	    // Send the request
 		postMethod.setEntity(new StringEntity(tMsg.toString()));
@@ -64,7 +66,7 @@ public class RenHaiHttpProcess {
 		else
 		{
 			String retSrc = EntityUtils.toString(response.getEntity());			
-			return RenHaiJsonMsgProcess.decodeMsg(_context,retSrc);
+			return RenHaiMsg.decodeMsg(_context,retSrc);
 		}
 	
 	}

@@ -10,6 +10,7 @@ package com.simplelife.renhai.android;
 
 import com.simplelife.renhai.android.R;
 import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAlohaReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiHttpProcess;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.timeprocess.RenHaiTimeProcess;
@@ -139,7 +140,7 @@ public class RenHaiSplashActivity extends Activity {
         	    {
         	    	mlog.info("Websocket create success!");
         	    	mProgressText.setText(R.string.mainpage_title_connectserver);
-                	String tAlohaRequestMsg = RenHaiJsonMsgProcess.constructAlohaRequestMsg().toString();
+                	String tAlohaRequestMsg = RenHaiMsgAlohaReq.constructMsg().toString();
                 	RenHaiWebSocketProcess tNetHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
                 	tNetHandle.sendMessage(tAlohaRequestMsg); 
         	        break;
@@ -156,7 +157,13 @@ public class RenHaiSplashActivity extends Activity {
         	    {
         	    	mlog.info("Websocket receive message!");
         	    	mProgressText.setText(R.string.mainpage_title_syncserver);
-        	    	processMessage();
+        	    	break;
+        	    }
+        	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_ALOHARESP:
+        	    {
+        	    	mlog.info("Websocket receive AlohaResponse!");
+        	    	mProgressText.setText(R.string.mainpage_title_syncserver);
+        	    	
         	    	break;
         	    }
         	    case RenHaiDefinitions.RENHAI_NETWORK_MSS_UNMATCHMSGSN:

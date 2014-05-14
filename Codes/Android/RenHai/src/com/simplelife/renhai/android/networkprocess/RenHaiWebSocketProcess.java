@@ -17,14 +17,12 @@ import org.apache.log4j.Logger;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Message;
 import android.util.Log;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
 import com.simplelife.renhai.android.RenHaiInfo;
 import com.simplelife.renhai.android.RenHaiMainPageActivity;
-import com.simplelife.renhai.android.RenHaiSplashActivity;
-import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsg;
 import com.simplelife.renhai.android.utils.WebSocketClient;
 
 public class RenHaiWebSocketProcess {
@@ -68,11 +66,12 @@ public class RenHaiWebSocketProcess {
 			    public void onMessage(String message) {
 			        Log.d(TAG, String.format("Got string message! %s", message));
 			        // 1. Decode the whole message			        
-			        RenHaiJsonMsgProcess.decodeMsg(mContext,message);
+			        RenHaiMsg.decodeMsg(mContext,message);
+			        /*
 			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
 			        		         RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_MSG);
-			        mContext.sendBroadcast(tIntent);
+			        mContext.sendBroadcast(tIntent);*/
 			    }
 
 			    @Override

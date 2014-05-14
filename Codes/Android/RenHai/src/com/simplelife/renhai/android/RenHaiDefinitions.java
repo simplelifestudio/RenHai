@@ -40,6 +40,7 @@ public class RenHaiDefinitions {
 	
 	// Message ID
 	public static final int RENHAI_MSGID_ALOHAREQUEST  = 100;
+	public static final int RENHAI_MSGID_APPDATASYNCREQUEST = 101;
 	public static final int RENHAI_MSGID_ALOHARESPONSE = 402;
 	public static final int RENHAI_MSGID_PROXYSYNCREQUEST  = 500; 
 	public static final int RENHAI_MSGID_PROXYSYNCRESPONSE = 600; 
@@ -53,8 +54,9 @@ public class RenHaiDefinitions {
 	public static final int RENHAI_NETWORK_WEBSOCKET_CREATE_SUCCESS = 1102;
 	public static final int RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR   = 1103;
 	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_MSG    = 1104;
-	public static final int RENHAI_NETWORK_MSS_UNMATCHMSGSN = 1105;
-	public static final int RENHAI_NETWORK_MSS_UNMATCHDEVICESN = 1106;
+	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_ALOHARESP = 1105;
+	public static final int RENHAI_NETWORK_MSS_UNMATCHMSGSN = 1108;
+	public static final int RENHAI_NETWORK_MSS_UNMATCHDEVICESN = 1109;
 	
 	// ===============================================================================
 	// Broadcast receiver definitions

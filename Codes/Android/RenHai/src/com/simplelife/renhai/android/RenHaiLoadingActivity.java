@@ -60,7 +60,7 @@ public class RenHaiLoadingActivity extends Activity{
         mProgressStage.setText(R.string.mainpage_title_preparenetwork);
         
     	// 1.Communicate with the proxy to get the status of server
-    	String tAlohaRequestMsg = RenHaiJsonMsgProcess.constructAlohaRequestMsg().toString();
+    	//String tAlohaRequestMsg = .constructAlohaRequestMsg().toString();
     	//RenHaiNetworkProcess tNetHandle = RenHaiNetworkProcess.getNetworkInstance();
     	//tNetHandle.sendMessage(tAlohaRequestMsg);  
     }

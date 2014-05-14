@@ -14,9 +14,11 @@ public class RenHaiInfo {
 	public static String deviceSn = "";
 	public static String serverTimeOnFirstMsg = "";
 	public static boolean isServerTimeRecord = false;
+	public static boolean isAppDateSynced    = false;
 	
 	public static void storeDeviceId(int _devId){
-		deviceId = _devId;
+		if((_devId != 0)&&(_devId != deviceId))
+		    deviceId = _devId;
 	}
 	
 	public static int getDeviceId(){
@@ -42,6 +44,10 @@ public class RenHaiInfo {
 	
 	public static boolean isServerTimeOnFirstMsgRecord(){
 		return isServerTimeRecord;
+	}
+	
+	public static boolean isAppDataSyncronized(){
+		return isAppDateSynced;
 	}
 	
 	public static class ServerAddr{
@@ -139,17 +145,106 @@ public class RenHaiInfo {
 	}
 	
 	public static class Profile{
-		public static int profileId;
-		public static boolean serviceStatus;
-		public static long unbanDate;
-		public static long lastActivityTime;
-		public static long createTime;
-		public static boolean active;
+		public static int profileId = 0;
+		public static int serviceStatus = 0;
+		public static long unbanDate = 0;
+		public static long lastActivityTime = 0;
+		public static long createTime = 0;
+		public static int active = 1;
 		public static int interestCardId;
 		public static int impressCardId;
 		public static int chatTotalCount;
 		public static int chatTotalDuration;
 		public static int chatLossCount;
+		
+		public static void storeProfileId(int _id){
+			profileId = _id;
+		}
+		
+		public static void storeServiceStatus(int _status){
+			serviceStatus = _status;
+		}
+		
+		public static void storeUnbanDate(long _unbanDate){
+			unbanDate = _unbanDate;
+		}
+		
+		public static void storeLastActiveTime(long _lastActiveTime){
+			lastActivityTime = _lastActiveTime;
+		}
+		
+		public static void storeCreatetTime(long _createTime){
+			createTime = _createTime;
+		}
+		
+		public static void storeActive(int _active){
+			active = _active;
+		}
+		
+		public static void storeInterestCardId(int _intCardId){
+			interestCardId = _intCardId;
+		}
+		
+		public static void storeImpressCardId(int _impCardId){
+			impressCardId = _impCardId;
+		}
+		
+		public static void storeChatTotalCound(int _chatCount){
+			chatTotalCount = _chatCount;
+		}
+		
+		public static void storeChatTotalDuration(int _chatDuration){
+			chatTotalDuration = _chatDuration;
+		}
+		
+		public static void storeChatLossCount(int _chatLoss){
+			chatLossCount = _chatLoss;
+		}
+		
+		public static int getProfileId(){
+			return profileId;
+		}
+		
+		public static int getServiceStatus(){
+			return serviceStatus;
+		}
+		
+		public static long getUnbanDate(){
+			return unbanDate;
+		}
+		
+		public static long getLastActiveTime(){
+			return lastActivityTime;
+		}
+		
+		public static long getCreateTime(){
+			return createTime;
+		}
+		
+		public static int getActive(){
+			return active;
+		}
+		
+		public static int getInterestCardId(){
+			return interestCardId;
+		}
+		
+		public static int getImpressCardId(){
+			return impressCardId;
+		}
+		
+		public static int getChatTotalCount(){
+			return chatTotalCount;
+		}
+		
+		public static int getChatTotalDuration(){
+			return chatTotalDuration;
+		}
+		
+		public static int getChatLossCount(){
+			return chatLossCount;
+		}
+		
 	}
 	
 	public class InterestLabelMap{
