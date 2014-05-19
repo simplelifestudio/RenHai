@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import android.content.Context;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
+import com.simplelife.renhai.android.RenHaiInfo;
 
 public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 	
@@ -61,13 +62,45 @@ public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 	
 	public static int parseMsg(Context _context, JSONObject inBody){
 
-		JSONObject tDataQuery = new JSONObject();
-		JSONObject tDataUpdate = new JSONObject();
-		//JSONObject tQuery
+		JSONObject tDataQuery    = new JSONObject();
+		JSONObject tDataUpdate   = new JSONObject();
+		JSONObject tQueryDevice  = new JSONObject();
+		JSONObject tQDDeviceCard = new JSONObject();
+		JSONObject tQDProfile    = new JSONObject();
+		JSONObject tQDPInterestCard = new JSONObject();
+		JSONObject tQDPImpressCard  = new JSONObject();
 		
 		if(inBody.has(MSG_APPSYNCRESP_QUERY))
 			try {
 				tDataQuery = inBody.getJSONObject(MSG_APPSYNCRESP_QUERY);
+				if(tDataQuery.has(MSG_APPSYNCRESP_DEV))
+				{
+					tQueryDevice = tDataQuery.getJSONObject(MSG_APPSYNCRESP_DEV);
+					if(tQueryDevice.has(MSG_APPSYNCRESP_DEVCARD))
+					{
+						// deviceId and deviceSn fields have been checked while
+						// processing the header, so leave them unprocessed here
+						// unless we will need them later for other purpose
+						tQDDeviceCard = tQueryDevice.getJSONObject(MSG_APPSYNCRESP_DEVCARD);
+						if(tQDDeviceCard.has(MSG_APPSYNCRESP_DEVCARDID))
+							RenHaiInfo.DeviceCard.storeDeviceCardId(tQDDeviceCard.getInt(MSG_APPSYNCRESP_DEVCARDID));						
+						if(tQDDeviceCard.has(MSG_APPSYNCRESP_RGSTTIME))
+							RenHaiInfo.DeviceCard.storeRegisterTime(tQDDeviceCard.getLong(MSG_APPSYNCRESP_RGSTTIME));						
+					}
+					
+					if(tQueryDevice.has(MSG_APPSYNCRESP_PROFILE))
+					{
+						tQDProfile = tQueryDevice.getJSONObject(MSG_APPSYNCRESP_PROFILE);
+						if(tQDProfile.has(MSG_APPSYNCRESP_PROFILEID))
+							RenHaiInfo.Profile.storeProfileId(tQDProfile.getInt(MSG_APPSYNCRESP_PROFILEID));
+						if(tQDProfile.has(MSG_APPSYNCRESP_SVRSTAT))
+							RenHaiInfo.Profile.storeServiceStatus(tQDProfile.getInt(MSG_APPSYNCRESP_SVRSTAT));
+						if(tQDProfile.has(MSG_APPSYNCRESP_UNBANDATE))
+							RenHaiInfo.Profile.storeUnbanDate(tQDProfile.getLong(MSG_APPSYNCRESP_UNBANDATE));
+					}
+					
+				}
+				
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
