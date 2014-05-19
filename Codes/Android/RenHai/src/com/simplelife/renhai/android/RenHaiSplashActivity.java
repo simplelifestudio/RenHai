@@ -11,6 +11,7 @@ package com.simplelife.renhai.android;
 import com.simplelife.renhai.android.R;
 import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAlohaReq;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiHttpProcess;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.timeprocess.RenHaiTimeProcess;
@@ -18,6 +19,7 @@ import com.simplelife.renhai.android.ui.RenHaiProgressBar;
 import com.simplelife.renhai.android.ui.RenHaiProgressBar.Mode;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.app.Activity;
@@ -29,6 +31,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.telephony.TelephonyManager;
 import android.view.View;
@@ -56,6 +60,7 @@ public class RenHaiSplashActivity extends Activity {
 	private final static Logger mlog = Logger.getLogger(RenHaiSplashActivity.class);
 	private static RenHaiProgressBar mProgressBar;
 	private static TextView mProgressText;
+	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	
 	private static final int BACKGROUND_PROCESS_TYPE_INITIAL = 1;
 	private static final int BACKGROUND_PROCESS_TYPE_SENDALOHA = 2;
@@ -140,9 +145,9 @@ public class RenHaiSplashActivity extends Activity {
         	    {
         	    	mlog.info("Websocket create success!");
         	    	mProgressText.setText(R.string.mainpage_title_connectserver);
+        	    	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());       	    	
                 	String tAlohaRequestMsg = RenHaiMsgAlohaReq.constructMsg().toString();
-                	RenHaiWebSocketProcess tNetHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
-                	tNetHandle.sendMessage(tAlohaRequestMsg); 
+                	mWebSocketHandle.sendMessage(tAlohaRequestMsg); 
         	        break;
         	    }       	        
         	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR:
@@ -163,7 +168,8 @@ public class RenHaiSplashActivity extends Activity {
         	    {
         	    	mlog.info("Websocket receive AlohaResponse!");
         	    	mProgressText.setText(R.string.mainpage_title_syncserver);
-        	    	
+        	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructMsg().toString();
+        	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
         	    	break;
         	    }
         	    case RenHaiDefinitions.RENHAI_NETWORK_MSS_UNMATCHMSGSN:
@@ -187,10 +193,6 @@ public class RenHaiSplashActivity extends Activity {
         super.onDestroy();  
         unregisterReceiver(mBroadcastRcver);  
     }  			
-	
-	private static void processMessage(){
-		
-	}
 	
 	private void redirectTo(){       
 		Intent intent;
@@ -242,10 +244,36 @@ public class RenHaiSplashActivity extends Activity {
         logConfigurator.configure();
     }
     
-    private void getDeviceSn(){
+    private void getDeviceInfo(){
+    	// 1.Get and store the device IMEI
     	TelephonyManager telephonyManager = (TelephonyManager)this.getSystemService( Context.TELEPHONY_SERVICE); 
     	String tDeviceSn = telephonyManager.getDeviceId();
-    	RenHaiInfo.storeDeviceSn(tDeviceSn);    	
+    	RenHaiInfo.storeDeviceSn(tDeviceSn);
+    	
+    	// 2.Get and store the device model
+    	Build tBd = new Build();
+    	String tModel = tBd.MODEL;
+    	RenHaiInfo.DeviceCard.storeDeviceModel(tModel);
+    	
+    	// 3.Get and store the os version
+    	//String tOsVersion = telephonyManager.getDeviceSoftwareVersion();
+    	String tOsVersion = "Android" + android.os.Build.VERSION.RELEASE;
+    	RenHaiInfo.DeviceCard.storeOsVersion(tOsVersion);
+    	
+    	// 4.Store the app version
+    	//RenHaiInfo.DeviceCard.storeAppVersion(RenHaiDefinitions.RENHAI_APP_VERSION);
+    	PackageManager packageManager = getPackageManager();
+    	try {
+			String tVersion = packageManager.getPackageInfo(getPackageName(), 0).versionName;
+			RenHaiInfo.DeviceCard.storeAppVersion(tVersion);
+		} catch (NameNotFoundException e) {
+			mlog.error("Failed to get the app version!", e);
+		}
+    	
+    	// 5.Get and store the location
+    	String tLocation = telephonyManager.getCellLocation().toString();
+    	RenHaiInfo.DeviceCard.storeLocation(tLocation);
+    	
     }
     
     private void initNetwork(){    	
@@ -323,8 +351,8 @@ public class RenHaiSplashActivity extends Activity {
         			// 2.Initialize the time process
         			RenHaiTimeProcess.initTimeProcess();
         			
-        			// 3.Get the device sn
-        			getDeviceSn();
+        			// 3.Get the device info
+        			getDeviceInfo();
         			
         			// 4.Initialize the network instances
         			initNetwork();

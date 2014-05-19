@@ -59,7 +59,7 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 	public static String MSG_APPSYNCREQ_LOCATION = "location";
 	public static String MSG_APPSYNCREQ_ISJAILED = "isJailed";
 	
-	public static JSONObject constructAppDataReqMsg(){
+	public static JSONObject constructMsg(){
 		
 		JSONObject tMsgContent = new JSONObject();	
 		JSONObject tMsgHeaderContent = new JSONObject();
@@ -90,7 +90,7 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 				tProfile.put(MSG_APPSYNCREQ_CREATETIME, RenHaiInfo.Profile.getCreateTime());
 				tProfile.put(MSG_APPSYNCREQ_ACTIVE, RenHaiInfo.Profile.getActive());
 				tIntCard.put(MSG_APPSYNCREQ_INTCARDID, RenHaiInfo.Profile.getInterestCardId());
-				//tIntCard.put(MSG_APPSYNCREQ_INTLBLLIST, value);
+				tIntCard.put(MSG_APPSYNCREQ_INTLBLLIST, 9);
 				tImpCard.put(MSG_APPSYNCREQ_IMPCARDID, RenHaiInfo.Profile.getImpressCardId());
 				tImpCard.put(MSG_APPSYNCREQ_CHATTCOUNT, RenHaiInfo.Profile.getChatTotalCount());
 				tImpCard.put(MSG_APPSYNCREQ_CHATTDURA, RenHaiInfo.Profile.getChatTotalDuration());
@@ -99,21 +99,21 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 				//tImpCard.put(MSG_APPSYNCREQ_IMPLABELLIST, value);
 			}
 			else{
-				tDevice.put(MSG_APPSYNCREQ_DEVID, null);
-				tProfile.put(MSG_APPSYNCREQ_PROFILEID, null);
-				tProfile.put(MSG_APPSYNCREQ_SVRSTAT, null);
-				tProfile.put(MSG_APPSYNCREQ_UNBANDATE, null);
-				tProfile.put(MSG_APPSYNCREQ_LSTACTTIME, null);
-				tProfile.put(MSG_APPSYNCREQ_CREATETIME, null);
-				tProfile.put(MSG_APPSYNCREQ_ACTIVE, null);
-				tIntCard.put(MSG_APPSYNCREQ_INTCARDID, null);
-				tIntCard.put(MSG_APPSYNCREQ_INTLBLLIST, null);
-				tImpCard.put(MSG_APPSYNCREQ_IMPCARDID, null);
-				tImpCard.put(MSG_APPSYNCREQ_CHATTCOUNT, null);
-				tImpCard.put(MSG_APPSYNCREQ_CHATTDURA, null);
-				tImpCard.put(MSG_APPSYNCREQ_CHATLOSS, null);
-				tImpCard.put(MSG_APPSYNCREQ_ASSLABELLIST, null);
-				tImpCard.put(MSG_APPSYNCREQ_IMPLABELLIST, null);				
+				tDevice.put(MSG_APPSYNCREQ_DEVID, JSONNULL);
+				tProfile.put(MSG_APPSYNCREQ_PROFILEID, JSONNULL);
+				tProfile.put(MSG_APPSYNCREQ_SVRSTAT, JSONNULL);
+				tProfile.put(MSG_APPSYNCREQ_UNBANDATE, JSONNULL);
+				tProfile.put(MSG_APPSYNCREQ_LSTACTTIME, JSONNULL);
+				tProfile.put(MSG_APPSYNCREQ_CREATETIME, JSONNULL);
+				tProfile.put(MSG_APPSYNCREQ_ACTIVE, JSONNULL);
+				tIntCard.put(MSG_APPSYNCREQ_INTCARDID, JSONNULL);
+				tIntCard.put(MSG_APPSYNCREQ_INTLBLLIST, 9);
+				tImpCard.put(MSG_APPSYNCREQ_IMPCARDID, JSONNULL);
+				tImpCard.put(MSG_APPSYNCREQ_CHATTCOUNT, JSONNULL);
+				tImpCard.put(MSG_APPSYNCREQ_CHATTDURA, JSONNULL);
+				tImpCard.put(MSG_APPSYNCREQ_CHATLOSS, JSONNULL);
+				tImpCard.put(MSG_APPSYNCREQ_ASSLABELLIST, JSONNULL);
+				tImpCard.put(MSG_APPSYNCREQ_IMPLABELLIST, JSONNULL);				
 			}
 			tProfile.put(MSG_APPSYNCREQ_INTCARD, tIntCard);
 			tProfile.put(MSG_APPSYNCREQ_IMPCARD, tImpCard);
@@ -124,17 +124,69 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 			tMsgBodyContent.put(MSG_APPSYNCREQ_QUERY, tDataQuery);
 			
 			// Construct the dataUpdate field
+			JSONObject tDataUpdate = new JSONObject();
+			JSONObject tDevice2  = new JSONObject();
+			JSONObject tDevCard  = new JSONObject();
+			JSONObject tProfile2 = new JSONObject();
+			JSONObject tIntCard2 = new JSONObject();
+			JSONObject tImpCard2 = new JSONObject();
 			
-			
-			
-			
-			
-			
-			
-			
-			tMsgBodyContent.put("content","Hello Server!");
+			if(true == RenHaiInfo.isAppDataSyncronized())
+			{
+				tDevice2.put(MSG_APPSYNCREQ_DEVID, RenHaiInfo.getDeviceId());
+				tDevCard.put(MSG_APPSYNCREQ_DEVCARDID, RenHaiInfo.DeviceCard.getDeviceCardId());
+				tDevCard.put(MSG_APPSYNCREQ_RGSTTIME, RenHaiInfo.DeviceCard.getRegisterTime());
+				tProfile2.put(MSG_APPSYNCREQ_PROFILEID, RenHaiInfo.Profile.getProfileId());
+				tProfile2.put(MSG_APPSYNCREQ_SVRSTAT, RenHaiInfo.Profile.getServiceStatus());
+				tProfile2.put(MSG_APPSYNCREQ_UNBANDATE, RenHaiInfo.Profile.getUnbanDate());
+				tProfile2.put(MSG_APPSYNCREQ_LSTACTTIME, RenHaiInfo.Profile.getLastActiveTime());
+				tProfile2.put(MSG_APPSYNCREQ_CREATETIME, RenHaiInfo.Profile.getCreateTime());
+				tProfile2.put(MSG_APPSYNCREQ_ACTIVE, RenHaiInfo.Profile.getActive());
+				tIntCard2.put(MSG_APPSYNCREQ_INTCARDID, RenHaiInfo.Profile.getInterestCardId());
+				tIntCard.put(MSG_APPSYNCREQ_INTLBLLIST, 9);
+				tImpCard2.put(MSG_APPSYNCREQ_IMPCARDID, RenHaiInfo.Profile.getImpressCardId());
+				tImpCard2.put(MSG_APPSYNCREQ_CHATTCOUNT, RenHaiInfo.Profile.getChatTotalCount());
+				tImpCard2.put(MSG_APPSYNCREQ_CHATTDURA, RenHaiInfo.Profile.getChatTotalDuration());
+				tImpCard2.put(MSG_APPSYNCREQ_CHATLOSS, RenHaiInfo.Profile.getChatLossCount());
+				//tImpCard.put(MSG_APPSYNCREQ_ASSLABELLIST, value);
+				//tImpCard.put(MSG_APPSYNCREQ_IMPLABELLIST, value);
+				
+				tDevCard.put(MSG_APPSYNCREQ_DEVMODEL, RenHaiInfo.DeviceCard.getDeviceModel());
+				tDevCard.put(MSG_APPSYNCREQ_OSVERSION, RenHaiInfo.DeviceCard.getOsVersion());
+				tDevCard.put(MSG_APPSYNCREQ_APPVERSION, RenHaiInfo.DeviceCard.getAppVersion());
+				tDevCard.put(MSG_APPSYNCREQ_LOCATION, RenHaiInfo.DeviceCard.getLocation());
+				tDevCard.put(MSG_APPSYNCREQ_ISJAILED, RenHaiInfo.DeviceCard.getJailedStatus());
+				tProfile2.put(MSG_APPSYNCREQ_INTCARD, tIntCard2);
+				tProfile2.put(MSG_APPSYNCREQ_IMPCARD, tImpCard2);
+				tDevice2.put(MSG_APPSYNCREQ_DEVSN, RenHaiInfo.getDeviceSn());
+				tDevice2.put(MSG_APPSYNCREQ_DEVCARD, tDevCard);
+				tDevice2.put(MSG_APPSYNCREQ_PROFILE, tProfile2);
+				tDataUpdate.put(MSG_APPSYNCREQ_DEV, tDevice2);
+				tMsgBodyContent.put(MSG_APPSYNCREQ_DATAUPDATE, tDataUpdate);
+			}
+			/*
+			else{
+				tDevice2.put(MSG_APPSYNCREQ_DEVID, JSONNULL);
+				tDevCard.put(MSG_APPSYNCREQ_DEVCARDID, JSONNULL);
+				tDevCard.put(MSG_APPSYNCREQ_RGSTTIME, JSONNULL);
+				tProfile2.put(MSG_APPSYNCREQ_PROFILEID, JSONNULL);
+				tProfile2.put(MSG_APPSYNCREQ_SVRSTAT, JSONNULL);
+				tProfile2.put(MSG_APPSYNCREQ_UNBANDATE, JSONNULL);
+				tProfile2.put(MSG_APPSYNCREQ_LSTACTTIME, JSONNULL);
+				tProfile2.put(MSG_APPSYNCREQ_CREATETIME, JSONNULL);
+				tProfile2.put(MSG_APPSYNCREQ_ACTIVE, JSONNULL);
+				tIntCard2.put(MSG_APPSYNCREQ_INTCARDID, JSONNULL);
+				tIntCard2.put(MSG_APPSYNCREQ_INTLBLLIST, JSONNULL);
+				tImpCard2.put(MSG_APPSYNCREQ_IMPCARDID, JSONNULL);
+				tImpCard2.put(MSG_APPSYNCREQ_CHATTCOUNT, JSONNULL);
+				tImpCard2.put(MSG_APPSYNCREQ_CHATTDURA, JSONNULL);
+				tImpCard2.put(MSG_APPSYNCREQ_CHATLOSS, JSONNULL);
+				tImpCard2.put(MSG_APPSYNCREQ_ASSLABELLIST, JSONNULL);
+				tImpCard2.put(MSG_APPSYNCREQ_IMPLABELLIST, JSONNULL);
+			}*/						
+
 			tMsgContent.put(MSG_BODY, tMsgBodyContent);
-			mlog.info("Constructing ProxyDataSyncRequest: "+tMsgContent.toString());
+			mlog.info("Constructing AppDataSyncRequest: "+tMsgContent.toString());
 			
 			// Encrpt the message content and encode by base64
 			tMessageAfterEncode = SecurityUtils.encryptByDESAndEncodeByBase64(
@@ -144,11 +196,10 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 			tMsg.put(MSG_ENVELOPE, tMessageAfterEncode);						
 						
 		} catch (JSONException e) {
-			mlog.error("Failed to construct AlohaRequest!", e);
+			mlog.error("Failed to construct AppDataSyncRequest!", e);
 		} catch (Exception e) {
-			mlog.error("Failed to encrypt AlohaRequest!", e);
-		}		
-		
+			mlog.error("Failed to encrypt AppDataSyncRequest!", e);
+		}				
 		return tMsg;
 	}
 

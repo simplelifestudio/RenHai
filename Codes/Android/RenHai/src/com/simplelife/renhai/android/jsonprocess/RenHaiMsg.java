@@ -25,6 +25,7 @@ import com.simplelife.renhai.android.utils.SecurityUtils;
 public class RenHaiMsg {
 	protected static final Logger mlog = Logger.getLogger(RenHaiJsonMsgProcess.class);
 	protected static String mRandomSeq = "";
+	protected static Object JSONNULL = JSONObject.NULL;
 	
 	public static String MSG_ENVELOPE = "jsonEnvelope";
 	public static String MSG_HEADER   = "header";
@@ -54,7 +55,7 @@ public class RenHaiMsg {
 			tMsgHeader.put(MSG_HEADER_ID, _msgId);
 			tMsgHeader.put(MSG_HEADER_DEVID, (true == RenHaiInfo.isAppDataSyncronized())
 					                         ? RenHaiInfo.getDeviceId()
-					                         : null);
+					                         : JSONNULL);
 			tMsgHeader.put(MSG_HEADER_DEVSN, RenHaiInfo.getDeviceSn());
 			tMsgHeader.put(MSG_HEADER_TIME, tCurrentTime);
 		} catch (JSONException e) {
@@ -89,7 +90,7 @@ public class RenHaiMsg {
 			mlog.error("JSONMessage decode exception", e);
 		}
 
-		Log.i("RenHaiJsonMsgProcess","Recevive msg is "+tMsgContentAfterDecode);
+		Log.i("RenHaiMsg","Recevive msg is "+tMsgContentAfterDecode);
 		
 		try {
 			JSONObject tMsgInJson = new JSONObject(tMsgContentAfterDecode);
@@ -151,6 +152,10 @@ public class RenHaiMsg {
 				    case RenHaiDefinitions.RENHAI_MSGID_ALOHARESPONSE:
 				    {
 				    	return RenHaiMsgAlohaResp.parseMsg(_context, tMsgBody);
+				    }
+				    case RenHaiDefinitions.RENHAI_MSGID_APPDATASYNCRESPONSE:
+				    {
+				    	return RenHaiMsgAppDataSyncResp.parseMsg(_context,tMsgBody);
 				    }
 				    //TODO: add other entries here
 				}

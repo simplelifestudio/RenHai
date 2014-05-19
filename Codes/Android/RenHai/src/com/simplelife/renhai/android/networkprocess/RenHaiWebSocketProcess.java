@@ -64,14 +64,8 @@ public class RenHaiWebSocketProcess {
 
 			    @Override
 			    public void onMessage(String message) {
-			        Log.d(TAG, String.format("Got string message! %s", message));
-			        // 1. Decode the whole message			        
+			        Log.d(TAG, String.format("Got string message! %s", message));		        
 			        RenHaiMsg.decodeMsg(mContext,message);
-			        /*
-			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
-			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
-			        		         RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_MSG);
-			        mContext.sendBroadcast(tIntent);*/
 			    }
 
 			    @Override

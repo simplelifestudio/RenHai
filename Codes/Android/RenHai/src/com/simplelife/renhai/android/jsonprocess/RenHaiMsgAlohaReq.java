@@ -33,7 +33,7 @@ public class RenHaiMsgAlohaReq extends RenHaiMsg{
 			
 			tMsgBodyContent.put("content","Hello Server!");
 			tMsgContent.put(MSG_BODY, tMsgBodyContent);
-			mlog.info("Constructing ProxyDataSyncRequest: "+tMsgContent.toString());
+			mlog.info("Constructing AlohaRequest: "+tMsgContent.toString());
 			
 			// Encrpt the message content and encode by base64
 			tMessageAfterEncode = SecurityUtils.encryptByDESAndEncodeByBase64(

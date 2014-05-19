@@ -141,7 +141,67 @@ public class RenHaiInfo {
 		public static String osVersion;
 		public static String appVersion;
 		public static String location;
-		public static boolean isJailed;		
+		
+		// "Jail" is not an option for android, while "root"
+		// is another thing. This field is not mandatory for
+		// android devices, hence is set to false by default
+		public static int isJailed = 0;
+		
+		public static void storeDeviceCardId(int _devId){
+			deviceCardId = _devId;
+		}
+		
+		public static void storeRegisterTime(long _regTime){
+			registerTime = _regTime;
+		}
+		
+		public static void storeDeviceModel(String _model){
+			deviceModel = _model;
+		}
+		
+		public static void storeOsVersion(String _osVersion){
+			osVersion = _osVersion;
+		}
+		
+		public static void storeAppVersion(String _appVersion){
+			appVersion = _appVersion;
+		}
+		
+		public static void storeLocation(String _location){
+			location = _location;
+		}
+		
+		public static void storeJailedStatus(int _jailStat){
+			isJailed = _jailStat;
+		}
+		
+		public static int getDeviceCardId(){
+			return deviceCardId;
+		}
+		
+		public static long getRegisterTime(){
+			return registerTime;
+		}
+		
+		public static String getDeviceModel(){
+			return deviceModel;
+		}
+		
+		public static String getOsVersion(){
+			return osVersion;
+		}
+		
+		public static String getAppVersion(){
+			return appVersion;
+		}
+		
+		public static String getLocation(){
+			return location;
+		}
+		
+		public static int getJailedStatus(){
+			return isJailed;
+		}
 	}
 	
 	public static class Profile{
