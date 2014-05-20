@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
 import com.simplelife.renhai.android.RenHaiInfo;
@@ -70,8 +71,10 @@ public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 		JSONObject tQDPInterestCard = new JSONObject();
 		JSONObject tQDPImpressCard  = new JSONObject();
 		
-		if(inBody.has(MSG_APPSYNCRESP_QUERY))
-			try {
+		try 
+		{
+		    if(inBody.has(MSG_APPSYNCRESP_QUERY))
+		    {
 				tDataQuery = inBody.getJSONObject(MSG_APPSYNCRESP_QUERY);
 				if(tDataQuery.has(MSG_APPSYNCRESP_DEV))
 				{
@@ -97,19 +100,46 @@ public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 							RenHaiInfo.Profile.storeServiceStatus(tQDProfile.getInt(MSG_APPSYNCRESP_SVRSTAT));
 						if(tQDProfile.has(MSG_APPSYNCRESP_UNBANDATE))
 							RenHaiInfo.Profile.storeUnbanDate(tQDProfile.getLong(MSG_APPSYNCRESP_UNBANDATE));
+						/* TODO:lastActivityTime and active should not be processed here
+						if(tQDProfile.has(MSG_APPSYNCRESP_LSTACTTIME))
+							RenHaiInfo.Profile.storeLastActiveTime(tQDProfile.getLong(MSG_APPSYNCRESP_LSTACTTIME));*/
+						if(tQDProfile.has(MSG_APPSYNCRESP_CREATETIME))
+							RenHaiInfo.Profile.storeCreatetTime(tQDProfile.getLong(MSG_APPSYNCRESP_CREATETIME));						
+						if(tQDProfile.has(MSG_APPSYNCRESP_INTCARD))
+						{
+							tQDPInterestCard = tQDProfile.getJSONObject(MSG_APPSYNCRESP_INTCARD);
+							if(tQDPInterestCard.has(MSG_APPSYNCRESP_INTCARDID))
+								RenHaiInfo.Profile.storeInterestCardId(tQDPInterestCard.getInt(MSG_APPSYNCRESP_INTCARDID));
+							// TODO:interestLabelList processing
+						}
+						if(tQDProfile.has(MSG_APPSYNCRESP_IMPCARD))
+						{
+							tQDPImpressCard = tQDProfile.getJSONObject(MSG_APPSYNCRESP_IMPCARD);
+							if(tQDPImpressCard.has(MSG_APPSYNCRESP_IMPCARDID))
+								RenHaiInfo.Profile.storeImpressCardId(tQDPImpressCard.getInt(MSG_APPSYNCRESP_IMPCARDID));
+							if(tQDPImpressCard.has(MSG_APPSYNCRESP_CHATTCOUNT))
+								RenHaiInfo.Profile.storeChatTotalCound(tQDPImpressCard.getInt(MSG_APPSYNCRESP_CHATTCOUNT));
+							if(tQDPImpressCard.has(MSG_APPSYNCRESP_CHATTDURA))
+								RenHaiInfo.Profile.storeChatTotalDuration(tQDPImpressCard.getInt(MSG_APPSYNCRESP_CHATTDURA));
+							if(tQDPImpressCard.has(MSG_APPSYNCRESP_CHATLOSS))
+								RenHaiInfo.Profile.storeChatLossCount(tQDPImpressCard.getInt(MSG_APPSYNCRESP_CHATLOSS));
+							// TODO: assessLabelList and impressLabelList processing
+						}
 					}
 					
 				}
 				
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		
-		
-		return RenHaiDefinitions.RENHAI_FUNC_STATUS_OK;
-		
+		        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
+		        		         RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP);
+		        _context.sendBroadcast(tIntent);
+		    }
+		    
+		    // TODO: dataUpdate field processing				
+		} catch (JSONException e) {
+			mlog.error("Failed to process AppDataSyncResp!", e);
+			return RenHaiDefinitions.RENHAI_FUNC_STATUS_ERROR;
+		}
+		return RenHaiDefinitions.RENHAI_FUNC_STATUS_OK;		
 	}
-
 }

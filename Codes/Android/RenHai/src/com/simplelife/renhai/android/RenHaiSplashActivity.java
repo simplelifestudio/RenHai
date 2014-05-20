@@ -166,10 +166,15 @@ public class RenHaiSplashActivity extends Activity {
         	    }
         	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_ALOHARESP:
         	    {
-        	    	mlog.info("Websocket receive AlohaResponse!");
         	    	mProgressText.setText(R.string.mainpage_title_syncserver);
         	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructMsg().toString();
         	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
+        	    	break;
+        	    }
+        	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP:
+        	    {
+        	    	mProgressText.setText(R.string.mainpage_title_updateinfo);
+        	    	//String tServerDataSyncReqMsg = 
         	    	break;
         	    }
         	    case RenHaiDefinitions.RENHAI_NETWORK_MSS_UNMATCHMSGSN:
