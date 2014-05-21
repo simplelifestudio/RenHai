@@ -157,6 +157,10 @@ public class RenHaiMsg {
 				    {
 				    	return RenHaiMsgAppDataSyncResp.parseMsg(_context,tMsgBody);
 				    }
+				    case RenHaiDefinitions.RENHAI_MSGID_SERVERDATASYNCRESPONSE:
+				    {
+				    	
+				    }
 				    //TODO: add other entries here
 				}
 								

@@ -12,6 +12,7 @@ import com.simplelife.renhai.android.R;
 import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAlohaReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiHttpProcess;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.timeprocess.RenHaiTimeProcess;
@@ -174,7 +175,8 @@ public class RenHaiSplashActivity extends Activity {
         	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP:
         	    {
         	    	mProgressText.setText(R.string.mainpage_title_updateinfo);
-        	    	//String tServerDataSyncReqMsg = 
+        	    	String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();
+        	    	mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
         	    	break;
         	    }
         	    case RenHaiDefinitions.RENHAI_NETWORK_MSS_UNMATCHMSGSN:

@@ -41,8 +41,10 @@ public class RenHaiDefinitions {
 	// Message ID
 	public static final int RENHAI_MSGID_ALOHAREQUEST  = 100;
 	public static final int RENHAI_MSGID_APPDATASYNCREQUEST = 101;
+	public static final int RENHAI_MSGID_SERVERDATASYNCREQUEST = 102;
 	public static final int RENHAI_MSGID_ALOHARESPONSE = 402;
 	public static final int RENHAI_MSGID_APPDATASYNCRESPONSE = 403;
+	public static final int RENHAI_MSGID_SERVERDATASYNCRESPONSE = 404;
 	public static final int RENHAI_MSGID_PROXYSYNCREQUEST  = 500; 
 	public static final int RENHAI_MSGID_PROXYSYNCRESPONSE = 600; 
 	
