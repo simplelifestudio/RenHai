@@ -88,7 +88,7 @@ public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 						if(tQDDeviceCard.has(MSG_APPSYNCRESP_DEVCARDID))
 							RenHaiInfo.DeviceCard.storeDeviceCardId(tQDDeviceCard.getInt(MSG_APPSYNCRESP_DEVCARDID));						
 						if(tQDDeviceCard.has(MSG_APPSYNCRESP_RGSTTIME))
-							RenHaiInfo.DeviceCard.storeRegisterTime(tQDDeviceCard.getLong(MSG_APPSYNCRESP_RGSTTIME));						
+							RenHaiInfo.DeviceCard.storeRegisterTime(tQDDeviceCard.getString(MSG_APPSYNCRESP_RGSTTIME));						
 					}
 					
 					if(tQueryDevice.has(MSG_APPSYNCRESP_PROFILE))
@@ -104,7 +104,7 @@ public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 						if(tQDProfile.has(MSG_APPSYNCRESP_LSTACTTIME))
 							RenHaiInfo.Profile.storeLastActiveTime(tQDProfile.getLong(MSG_APPSYNCRESP_LSTACTTIME));*/
 						if(tQDProfile.has(MSG_APPSYNCRESP_CREATETIME))
-							RenHaiInfo.Profile.storeCreatetTime(tQDProfile.getLong(MSG_APPSYNCRESP_CREATETIME));						
+							RenHaiInfo.Profile.storeCreatetTime(tQDProfile.getString(MSG_APPSYNCRESP_CREATETIME));						
 						if(tQDProfile.has(MSG_APPSYNCRESP_INTCARD))
 						{
 							tQDPInterestCard = tQDProfile.getJSONObject(MSG_APPSYNCRESP_INTCARD);

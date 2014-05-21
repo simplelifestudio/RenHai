@@ -133,10 +133,104 @@ public class RenHaiInfo {
 			return broadcastInfo;
 		}		
 	}
+	
+	public static class ServerPoolStat{
+		public static int onlineCount = 0;
+		public static int randomCount = 0;
+		public static int interestCount = 0;
+		public static int chatCount = 0;
+		public static int randomChatCount = 0;
+		public static int interestChatCount = 0;
+		public static int managementData = 0;
+		
+		public static int onlineCapa = 0;
+		public static int randomCapa = 0;
+		public static int interestCapa = 0;
+		
+		public static void storeOnlineCount(int _onlineCount){
+			onlineCount = _onlineCount;
+		}
+		
+		public static void storeRandomCount(int _randomCount){
+			randomCount = _randomCount;
+		}
+		
+		public static void storeInterestCount(int _interestCount){
+			interestCount = _interestCount;
+		}
+		
+		public static void storeChatCount(int _chatCount){
+			chatCount = _chatCount;
+		}
+		
+		public static void storeRandomChatCount(int _randomChatCount){
+			randomChatCount = _randomChatCount;
+		}
+		
+		public static void storeInterestChatCount(int _interestChatCount){
+			interestChatCount = _interestChatCount;
+		}
+		
+		public static void storeManagementData(int _mgtData){
+			managementData = _mgtData;
+		}
+		
+		public static void storeOnlineCapa(int _onlineCapa){
+			onlineCapa = _onlineCapa;
+		}
+		
+		public static void storeRandomCapa(int _randomCapa){
+			randomCapa = _randomCapa;
+		}
+		
+		public static void storeInterestCapa(int _interestCapa){
+			interestCapa = _interestCapa;
+		}
+		
+		public static int getOnlineCount(){
+			return onlineCount;
+		}
+		
+		public static int getRandomCount(){
+			return randomCount;
+		}
+		
+		public static int getInterestCount(){
+			return interestCount;
+		}
+		
+		public static int getChatCount(){
+			return chatCount;
+		}
+		
+		public static int getRandomChatCount(){
+			return randomChatCount;
+		}
+		
+		public static int getInterestChatCount(){
+			return interestChatCount;
+		}
+		
+		public static int getManagementData(){
+			return managementData;
+		}
+		
+		public static int getOnlineCapa(){
+			return onlineCapa;
+		}
+		
+		public static int getRandomCapa(){
+			return randomCapa;
+		}
+		
+		public static int getInterestCapa(){
+			return interestCapa;
+		}
+	}
 		
 	public static class DeviceCard{		
 		public static int deviceCardId;
-		public static long registerTime;
+		public static String registerTime;
 		public static String deviceModel;
 		public static String osVersion;
 		public static String appVersion;
@@ -151,7 +245,7 @@ public class RenHaiInfo {
 			deviceCardId = _devId;
 		}
 		
-		public static void storeRegisterTime(long _regTime){
+		public static void storeRegisterTime(String _regTime){
 			registerTime = _regTime;
 		}
 		
@@ -179,7 +273,7 @@ public class RenHaiInfo {
 			return deviceCardId;
 		}
 		
-		public static long getRegisterTime(){
+		public static String getRegisterTime(){
 			return registerTime;
 		}
 		
@@ -209,7 +303,7 @@ public class RenHaiInfo {
 		public static int serviceStatus = 0;
 		public static long unbanDate = 0;
 		public static long lastActivityTime = 0;
-		public static long createTime = 0;
+		public static String createTime = "2013-01-01 10:00:00";
 		public static int active = 1;
 		public static int interestCardId;
 		public static int impressCardId;
@@ -233,7 +327,7 @@ public class RenHaiInfo {
 			lastActivityTime = _lastActiveTime;
 		}
 		
-		public static void storeCreatetTime(long _createTime){
+		public static void storeCreatetTime(String _createTime){
 			createTime = _createTime;
 		}
 		
@@ -277,7 +371,7 @@ public class RenHaiInfo {
 			return lastActivityTime;
 		}
 		
-		public static long getCreateTime(){
+		public static String getCreateTime(){
 			return createTime;
 		}
 		
