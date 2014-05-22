@@ -89,7 +89,7 @@ public class RenHaiSplashActivity extends Activity {
 		
 		// Configure fade in and fade out
 		AlphaAnimation fadeShow = new AlphaAnimation(0.3f,1.0f);
-		fadeShow.setDuration(2000);	
+		fadeShow.setDuration(2500);	
 		
 		// Register the broadcast receiver
 		IntentFilter tFilter = new IntentFilter();
@@ -179,6 +179,11 @@ public class RenHaiSplashActivity extends Activity {
         	    	mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
         	    	break;
         	    }
+        	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP:
+        	    {
+        	    	redirectTo();
+        	    	break;
+        	    }
         	    case RenHaiDefinitions.RENHAI_NETWORK_MSS_UNMATCHMSGSN:
         	    {
         	    	mlog.error("Receive message with unmatch msgsn!");
@@ -207,8 +212,8 @@ public class RenHaiSplashActivity extends Activity {
 		if(isFirstStart())*/
 		{
 			updateFirstStartFlag(false);
-			//intent = new Intent(this, RenHaiProtocalActivity.class);			
-			intent = new Intent(this, RenHaiLoadingActivity.class);
+			intent = new Intent(this, RenHaiProtocalActivity.class);			
+			//intent = new Intent(this, RenHaiLoadingActivity.class);
 		    Bundle bundle = new Bundle();
 		    bundle.putString("caller", "RenHaiSplashActivity");
 		    intent.putExtras(bundle);
@@ -308,10 +313,19 @@ public class RenHaiSplashActivity extends Activity {
             tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
             		         RenHaiDefinitions.RENHAI_NETWORK_HTTP_COMM_ERROR);
             sendBroadcast(tIntent);    		
-    	} else if (tProxyResponse == RenHaiDefinitions.RENHAI_FUNC_STATUS_OK)
+    	}
+    	
+    	if (tProxyResponse == RenHaiDefinitions.RENHAI_FUNC_STATUS_OK)
     	{
     		// Initialize the websocket
-    		RenHaiWebSocketProcess.initWebSocketProcess(getApplication());
+    		boolean tWebSocketActiveFlag = RenHaiWebSocketProcess.initWebSocketProcess(getApplication());
+    		
+    		if (true == tWebSocketActiveFlag)
+    		{
+    	    	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());       	    	
+            	String tAlohaRequestMsg = RenHaiMsgAlohaReq.constructMsg().toString();
+            	mWebSocketHandle.sendMessage(tAlohaRequestMsg); 
+    		}
     	}  	
     }
     

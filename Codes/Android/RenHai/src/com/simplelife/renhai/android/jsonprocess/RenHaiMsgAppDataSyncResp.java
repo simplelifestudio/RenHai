@@ -128,14 +128,18 @@ public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 					}
 					
 				}
-				
-		        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
-		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
-		        		         RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP);
-		        _context.sendBroadcast(tIntent);
 		    }
 		    
-		    // TODO: dataUpdate field processing				
+		    // TODO: dataUpdate field processing	
+		    
+			// Set the data sync flag
+			RenHaiInfo.setAppDataSyncronized();
+			
+	        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+	        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
+	        		         RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP);
+	        _context.sendBroadcast(tIntent);
+	        
 		} catch (JSONException e) {
 			mlog.error("Failed to process AppDataSyncResp!", e);
 			return RenHaiDefinitions.RENHAI_FUNC_STATUS_ERROR;

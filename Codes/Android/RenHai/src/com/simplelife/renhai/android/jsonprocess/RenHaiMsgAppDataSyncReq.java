@@ -133,28 +133,29 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 			JSONObject tIntCard2 = new JSONObject();
 			JSONObject tImpCard2 = new JSONObject();
 			
+			/*
 			if(true == RenHaiInfo.isAppDataSyncronized())
 			{
-				tDevice2.put(MSG_APPSYNCREQ_DEVID, RenHaiInfo.getDeviceId());
-				tDevCard.put(MSG_APPSYNCREQ_DEVCARDID, RenHaiInfo.DeviceCard.getDeviceCardId());
-				tDevCard.put(MSG_APPSYNCREQ_RGSTTIME, RenHaiInfo.DeviceCard.getRegisterTime());
-				tProfile2.put(MSG_APPSYNCREQ_PROFILEID, RenHaiInfo.Profile.getProfileId());
-				tProfile2.put(MSG_APPSYNCREQ_SVRSTAT, RenHaiInfo.Profile.getServiceStatus());
-				tProfile2.put(MSG_APPSYNCREQ_UNBANDATE, RenHaiInfo.Profile.getUnbanDate());
-				tProfile2.put(MSG_APPSYNCREQ_LSTACTTIME, RenHaiInfo.Profile.getLastActiveTime());
-				tProfile2.put(MSG_APPSYNCREQ_CREATETIME, RenHaiInfo.Profile.getCreateTime());
-				tProfile2.put(MSG_APPSYNCREQ_ACTIVE, RenHaiInfo.Profile.getActive());
-				tIntCard2.put(MSG_APPSYNCREQ_INTCARDID, RenHaiInfo.Profile.getInterestCardId());
+				//tDevice2.put(MSG_APPSYNCREQ_DEVID, RenHaiInfo.getDeviceId());
+				//tDevCard.put(MSG_APPSYNCREQ_DEVCARDID, RenHaiInfo.DeviceCard.getDeviceCardId());
+				//tDevCard.put(MSG_APPSYNCREQ_RGSTTIME, RenHaiInfo.DeviceCard.getRegisterTime());
+				//tProfile2.put(MSG_APPSYNCREQ_PROFILEID, RenHaiInfo.Profile.getProfileId());
+				//tProfile2.put(MSG_APPSYNCREQ_SVRSTAT, RenHaiInfo.Profile.getServiceStatus());
+				//tProfile2.put(MSG_APPSYNCREQ_UNBANDATE, RenHaiInfo.Profile.getUnbanDate());
+				//tProfile2.put(MSG_APPSYNCREQ_LSTACTTIME, RenHaiInfo.Profile.getLastActiveTime());
+				//tProfile2.put(MSG_APPSYNCREQ_CREATETIME, RenHaiInfo.Profile.getCreateTime());
+				//tProfile2.put(MSG_APPSYNCREQ_ACTIVE, RenHaiInfo.Profile.getActive());
+				//tIntCard2.put(MSG_APPSYNCREQ_INTCARDID, RenHaiInfo.Profile.getInterestCardId());
 				tIntCard.put(MSG_APPSYNCREQ_INTLBLLIST, 9);
 				tImpCard2.put(MSG_APPSYNCREQ_IMPCARDID, RenHaiInfo.Profile.getImpressCardId());
-				tImpCard2.put(MSG_APPSYNCREQ_CHATTCOUNT, RenHaiInfo.Profile.getChatTotalCount());
-				tImpCard2.put(MSG_APPSYNCREQ_CHATTDURA, RenHaiInfo.Profile.getChatTotalDuration());
-				tImpCard2.put(MSG_APPSYNCREQ_CHATLOSS, RenHaiInfo.Profile.getChatLossCount());
+				//tImpCard2.put(MSG_APPSYNCREQ_CHATTCOUNT, RenHaiInfo.Profile.getChatTotalCount());
+				//tImpCard2.put(MSG_APPSYNCREQ_CHATTDURA, RenHaiInfo.Profile.getChatTotalDuration());
+				//tImpCard2.put(MSG_APPSYNCREQ_CHATLOSS, RenHaiInfo.Profile.getChatLossCount());
 				//tImpCard.put(MSG_APPSYNCREQ_ASSLABELLIST, value);
 				//tImpCard.put(MSG_APPSYNCREQ_IMPLABELLIST, value);
 			}			
 			else{
-				/*
+				
 				tDevice2.put(MSG_APPSYNCREQ_DEVID, JSONNULL);
 				tDevCard.put(MSG_APPSYNCREQ_DEVCARDID, JSONNULL);
 				tDevCard.put(MSG_APPSYNCREQ_RGSTTIME, JSONNULL);
@@ -171,14 +172,21 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 				tImpCard2.put(MSG_APPSYNCREQ_CHATTDURA, JSONNULL);
 				tImpCard2.put(MSG_APPSYNCREQ_CHATLOSS, JSONNULL);
 				tImpCard2.put(MSG_APPSYNCREQ_ASSLABELLIST, JSONNULL);
-				tImpCard2.put(MSG_APPSYNCREQ_IMPLABELLIST, JSONNULL);*/
+				tImpCard2.put(MSG_APPSYNCREQ_IMPLABELLIST, JSONNULL);
 				
 				tDevCard.put(MSG_APPSYNCREQ_DEVMODEL, RenHaiInfo.DeviceCard.getDeviceModel());
 				tDevCard.put(MSG_APPSYNCREQ_OSVERSION, RenHaiInfo.DeviceCard.getOsVersion());
 				tDevCard.put(MSG_APPSYNCREQ_APPVERSION, RenHaiInfo.DeviceCard.getAppVersion());
 				tDevCard.put(MSG_APPSYNCREQ_LOCATION, RenHaiInfo.DeviceCard.getLocation());
 				tDevCard.put(MSG_APPSYNCREQ_ISJAILED, RenHaiInfo.DeviceCard.getJailedStatus());
-			}
+			}*/
+			
+			tDevCard.put(MSG_APPSYNCREQ_DEVMODEL, RenHaiInfo.DeviceCard.getDeviceModel());
+			tDevCard.put(MSG_APPSYNCREQ_OSVERSION, RenHaiInfo.DeviceCard.getOsVersion());
+			tDevCard.put(MSG_APPSYNCREQ_APPVERSION, RenHaiInfo.DeviceCard.getAppVersion());
+			tDevCard.put(MSG_APPSYNCREQ_LOCATION, RenHaiInfo.DeviceCard.getLocation());
+			tDevCard.put(MSG_APPSYNCREQ_ISJAILED, RenHaiInfo.DeviceCard.getJailedStatus());
+			
 			tProfile2.put(MSG_APPSYNCREQ_INTCARD, tIntCard2);
 			tProfile2.put(MSG_APPSYNCREQ_IMPCARD, tImpCard2);
 			tDevice2.put(MSG_APPSYNCREQ_DEVSN, RenHaiInfo.getDeviceSn());

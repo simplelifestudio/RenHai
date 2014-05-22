@@ -104,9 +104,15 @@ public class RenHaiWebSocketProcess {
 		return mInstance;
 	}
 	
-	public static void initWebSocketProcess(Context _context){
+	public static boolean initWebSocketProcess(Context _context){
 		if (null == mInstance)
-			mInstance = new RenHaiWebSocketProcess(_context);		
+		{
+			mInstance = new RenHaiWebSocketProcess(_context);
+			return false;
+		}else{
+			return true;
+		}
+					
 	}
 
 }

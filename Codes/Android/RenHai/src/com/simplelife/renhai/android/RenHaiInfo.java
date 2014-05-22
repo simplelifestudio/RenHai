@@ -8,6 +8,8 @@
  */
 package com.simplelife.renhai.android;
 
+import java.util.ArrayList;
+
 public class RenHaiInfo {
 	
 	public static int deviceId = 0;		
@@ -44,6 +46,10 @@ public class RenHaiInfo {
 	
 	public static boolean isServerTimeOnFirstMsgRecord(){
 		return isServerTimeRecord;
+	}
+	
+	public static void setAppDataSyncronized(){
+		isAppDateSynced = true;
 	}
 	
 	public static boolean isAppDataSyncronized(){
@@ -415,6 +421,23 @@ public class RenHaiInfo {
 		public int assessedCount;
 		public int updateTime;
 		public int assessCount; 
+	}
+	
+	public static class InterestLabel{
+		public static ArrayList<String> mCurrHotIntLabels = new ArrayList<String>();
+		
+		public static void resetCurrHotLabelList(){
+			mCurrHotIntLabels.clear();
+		}
+		
+		public static int getCurrHotLabelNum(){
+			return mCurrHotIntLabels.size();
+		}
+		
+		public static void putCurrHotLabel(String _label){
+			mCurrHotIntLabels.add(_label);
+		}
+		
 	}
 	
 

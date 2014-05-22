@@ -23,7 +23,7 @@ import com.simplelife.renhai.android.utils.RenHaiUtilSeqGenerator;
 import com.simplelife.renhai.android.utils.SecurityUtils;
 
 public class RenHaiMsg {
-	protected static final Logger mlog = Logger.getLogger(RenHaiJsonMsgProcess.class);
+	protected static final Logger mlog = Logger.getLogger(RenHaiMsg.class);
 	protected static String mRandomSeq = "";
 	protected static Object JSONNULL = JSONObject.NULL;
 	
@@ -90,7 +90,7 @@ public class RenHaiMsg {
 			mlog.error("JSONMessage decode exception", e);
 		}
 
-		Log.i("RenHaiMsg","Recevive msg is "+tMsgContentAfterDecode);
+		mlog.info("Recevive msg is "+tMsgContentAfterDecode);
 		
 		try {
 			JSONObject tMsgInJson = new JSONObject(tMsgContentAfterDecode);

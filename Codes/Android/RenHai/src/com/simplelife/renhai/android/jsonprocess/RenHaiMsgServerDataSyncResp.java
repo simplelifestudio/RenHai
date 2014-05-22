@@ -8,6 +8,7 @@
  */
 package com.simplelife.renhai.android.jsonprocess;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,6 +16,7 @@ import com.simplelife.renhai.android.RenHaiDefinitions;
 import com.simplelife.renhai.android.RenHaiInfo;
 
 import android.content.Context;
+import android.content.Intent;
 
 public class RenHaiMsgServerDataSyncResp extends RenHaiMsg{
 	
@@ -58,8 +60,9 @@ public class RenHaiMsgServerDataSyncResp extends RenHaiMsg{
 					RenHaiInfo.ServerPoolStat.storeRandomChatCount(tDevCount.getInt(MSG_SVRSYNCRESP_RANDOMCHAT));
 				if(tDevCount.has(MSG_SVRSYNCRESP_INTERESTCHAT))
 					RenHaiInfo.ServerPoolStat.storeInterestChatCount(tDevCount.getInt(MSG_SVRSYNCRESP_INTERESTCHAT));
+				/* managementData is not for the User, ignore it here currently
 				if(tDevCount.has(MSG_SVRSYNCRESP_MGTDATA))
-					RenHaiInfo.ServerPoolStat.storeManagementData(tDevCount.getInt(MSG_SVRSYNCRESP_MGTDATA));
+					RenHaiInfo.ServerPoolStat.storeManagementData(tDevCount.getInt(MSG_SVRSYNCRESP_MGTDATA));*/
 			}
 			
 			if(inBody.has(MSG_SVRSYNCRESP_DEVCAPA))
@@ -72,6 +75,33 @@ public class RenHaiMsgServerDataSyncResp extends RenHaiMsg{
 				if(tDevCapa.has(MSG_SVRSYNCRESP_INTEREST))
 					RenHaiInfo.ServerPoolStat.storeInterestCapa(tDevCapa.getInt(MSG_SVRSYNCRESP_INTEREST));
 			}
+			
+			if(inBody.has(MSG_SVRSYNCRESP_INTLABELLIST))
+			{
+				tIntLabelList = inBody.getJSONObject(MSG_SVRSYNCRESP_INTLABELLIST);
+				if(tIntLabelList.has(MSG_SVRSYNCRESP_CURRENT))
+				{
+					JSONArray tCurrentLabel = tIntLabelList.getJSONArray(MSG_SVRSYNCRESP_CURRENT);					
+					int tLabelSize = tCurrentLabel.length();
+					if (tLabelSize > 0)
+					{
+						RenHaiInfo.InterestLabel.resetCurrHotLabelList();
+						for(int i = 0; i < tLabelSize; tLabelSize++)
+						{
+							String tLabel = tCurrentLabel.getString(i);
+							RenHaiInfo.InterestLabel.putCurrHotLabel(tLabel);						
+						}
+					}
+				}
+			}
+			// Set the data sync flag
+			RenHaiInfo.setAppDataSyncronized();
+			
+	        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+	        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
+	        		         RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP);
+	        _context.sendBroadcast(tIntent);
+	        
 		} catch (JSONException e) {
 			mlog.error("Failed to process ServerDataSyncResp!", e);
 			return RenHaiDefinitions.RENHAI_FUNC_STATUS_ERROR;

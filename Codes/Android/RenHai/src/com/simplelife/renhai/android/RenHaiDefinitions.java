@@ -59,6 +59,7 @@ public class RenHaiDefinitions {
 	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_MSG    = 1104;
 	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_ALOHARESP = 1105;
 	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP = 1106;
+	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP = 1107;
 	public static final int RENHAI_NETWORK_MSS_UNMATCHMSGSN = 1108;
 	public static final int RENHAI_NETWORK_MSS_UNMATCHDEVICESN = 1109;
 	
