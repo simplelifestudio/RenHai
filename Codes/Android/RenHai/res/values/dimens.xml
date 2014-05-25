@@ -2,12 +2,13 @@
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>    
     <dimen name="splash_logo_size">46dip</dimen>
     <dimen name="splash_advt_size">20dip</dimen>
     <dimen name="splash_progresstext_size">14dip</dimen>
     <dimen name="protocal_btn_size">22dip</dimen>
     <dimen name="protocal_text_size">15dip</dimen>
     <dimen name="protocal_title_size">18dip</dimen>
+    <dimen name="mytopics_inttitle_size">18dip</dimen>
 
 </resources>

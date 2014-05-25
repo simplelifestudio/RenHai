@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@color/white">
+    
+    <TextView 
+        android:id="@+id/mytopics_title1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"        
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:textSize="@dimen/mytopics_inttitle_size"
+        android:textColor="@color/black"
+        android:text="@string/mytopics_inttitle1" />
+    
+    <TextView 
+        android:id="@+id/mytopics_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"   
+        android:layout_alignTop="@id/mytopics_title1"    
+        android:layout_marginRight="16dp"
+        android:textSize="@dimen/mytopics_inttitle_size"
+        android:textColor="@color/black"
+        android:text="@string/mytopics_delete"/>
+    
+    <TextView 
+        android:id="@+id/mytopics_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/mytopics_title1" 
+        android:layout_toLeftOf="@id/mytopics_delete"             
+        android:layout_marginRight="16dp"
+        android:textSize="@dimen/mytopics_inttitle_size"
+        android:textColor="@color/black"
+        android:text="@string/mytopics_create"/>
+
+    <com.simplelife.renhai.android.ui.RenHaiDraggableGridView 
+        android:id="@+id/mytopics_myinterests" 
+        android:layout_height="140dp" 
+        android:layout_width="wrap_content"
+        android:layout_below="@id/mytopics_title1"         
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">       
+    </com.simplelife.renhai.android.ui.RenHaiDraggableGridView>
+    
+    <LinearLayout
+        android:id="@+id/mytopics_divide"
+        android:layout_height="1dp" 
+        android:layout_width="fill_parent"
+        android:layout_below="@id/mytopics_myinterests" 
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/maingreen"
+        android:orientation="horizontal">        
+    </LinearLayout>
+    
+    <TextView 
+        android:id="@+id/mytopics_title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_below="@id/mytopics_divide"       
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:textSize="@dimen/mytopics_inttitle_size"
+        android:textColor="@color/black"
+        android:text="@string/mytopics_inttitle2" />
+    
+    <TextView 
+        android:id="@+id/mytopics_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"   
+        android:layout_alignTop="@id/mytopics_title2"    
+        android:layout_marginRight="16dp"
+        android:textSize="@dimen/mytopics_inttitle_size"
+        android:textColor="@color/black"
+        android:text="@string/mytopics_refresh"/>
+    
+
+    <com.simplelife.renhai.android.ui.RenHaiDraggableGridView 
+        android:id="@+id/mytopics_globalinterests" 
+        android:layout_height="140dp" 
+        android:layout_width="wrap_content"
+        android:layout_below="@id/mytopics_title2"         
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">       
+    </com.simplelife.renhai.android.ui.RenHaiDraggableGridView>
+   
+</RelativeLayout>

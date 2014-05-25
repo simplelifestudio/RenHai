@@ -10,6 +10,8 @@ package com.simplelife.renhai.android;
 
 import java.util.ArrayList;
 
+import android.content.Context;
+
 public class RenHaiInfo {
 	
 	public static int deviceId = 0;		
@@ -438,8 +440,19 @@ public class RenHaiInfo {
 			mCurrHotIntLabels.add(_label);
 		}
 		
+		public static String getInterest(int _index){
+			return mCurrHotIntLabels.get(_index);			
+		}
+		
+		public static void initTestInterests(Context _context){
+			putCurrHotLabel(_context.getString(R.string.mytopics_testint1));
+			putCurrHotLabel(_context.getString(R.string.mytopics_testint2));
+			putCurrHotLabel(_context.getString(R.string.mytopics_testint3));
+			putCurrHotLabel(_context.getString(R.string.mytopics_testint4));
+			putCurrHotLabel(_context.getString(R.string.mytopics_testint5));
+			putCurrHotLabel(_context.getString(R.string.mytopics_testint6));
+		}
+		
 	}
-	
-
 
 }

@@ -24,6 +24,19 @@
     <string name="mainpage_title_updateinfo">更新&#8230;</string>
     <string name="mainpage_title">已连接</string>
     
+    <string name="mytopics_inttitle1">我的话题</string>
+    <string name="mytopics_inttitle2">当前热门</string>
+    <string name="mytopics_create">新建</string>
+    <string name="mytopics_delete">删除</string>
+    <string name="mytopics_refresh">刷新</string>
+    
+    <string name="mytopics_testint1">篮球</string>
+    <string name="mytopics_testint2">足球</string>
+    <string name="mytopics_testint3">音乐</string>
+    <string name="mytopics_testint4">阅读</string>
+    <string name="mytopics_testint5">写代码</string>
+    <string name="mytopics_testint6">吉他</string>
+    
     <string name="protocal_text">
 \t\t人海是一款基于话题匹配的视频社交产品，人海所提供的各项服务的所有权和运作权归简单生活工作室（SimpleLife Studio，以下称人海官方）所有。
 \n\t\t本协议（包括隐私保护声明）是由您（终端用户）与人海官方之间就人海提供的各项服务所订立的相关权利义务规范，本协议将对您使用人海产生法律约束力。

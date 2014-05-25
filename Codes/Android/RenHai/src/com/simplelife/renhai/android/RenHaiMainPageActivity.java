@@ -8,17 +8,12 @@
  */
 package com.simplelife.renhai.android;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.log4j.Logger;
 
-import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
-import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
-
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,7 +21,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.telephony.TelephonyManager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -68,17 +62,10 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         
 		// Damn work round for the android system bug
+        /*
         View homeIcon = findViewById(android.R.id.home); 
-		((View) homeIcon.getParent()).setVisibility(View.GONE); 
+		((View) homeIcon.getParent()).setVisibility(View.GONE); */
 		        
-        // Trigger an asynctask to process the network connections
-        URL tServerUrl = null;
-		try {
-			tServerUrl = new URL("http://192.168.1.1");
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
         //RenHaiConnectServer tNetwork = new RenHaiConnectServer();
         //tNetwork.execute(tServerUrl);
 
