@@ -9,6 +9,7 @@
 package com.simplelife.renhai.android.ui;
 import java.util.Collections;
 import java.util.ArrayList;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -17,6 +18,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -31,7 +33,7 @@ import android.widget.ImageView;
 public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchListener, View.OnClickListener, View.OnLongClickListener {
 	// layout vars
 	public static float childRatio = .9f;
-    protected int colCount, childSize, padding, dpi, scroll = 0;
+    protected int colCount, childSize, childHight, padding, dpi, scroll = 0;
     protected float lastDelta = 0;
     protected Handler handler = new Handler();
     // dragging vars
@@ -123,13 +125,15 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
         //determine childSize and padding, in px
         childSize = (r - l) / colCount;
         childSize = Math.round(childSize * childRatio);
+        childHight = childSize / 2; 
         padding = ((r - l) - (childSize * colCount)) / (colCount + 1);
     	
         for (int i = 0; i < getChildCount(); i++)
         	if (i != dragged)
         	{
 	            Point xy = getCoorFromIndex(i);
-	            getChildAt(i).layout(xy.x, xy.y, xy.x + childSize, xy.y + childSize);
+	            getChildAt(i).layout(xy.x, xy.y, xy.x + childSize, xy.y + childHight);
+	            //Log.i("RenHaiDraggableGridView","xy.x:"+xy.x+" xy.y:"+xy.y+" Width:"+xy.x + childSize+" Height:"+xy.y + childHight);
         	}
     }
     @Override
@@ -193,7 +197,7 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
         int col = index % colCount;
         int row = index / colCount;
         return new Point(padding + (childSize + padding) * col,
-                         padding + (childSize + padding) * row - scroll);
+                         padding + (childHight + padding) * row - scroll);
     }
     public int getIndexOf(View child)
     {

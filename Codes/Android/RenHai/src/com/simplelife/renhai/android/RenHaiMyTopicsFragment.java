@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class RenHaiMyTopicsFragment extends Fragment {
 	
@@ -45,39 +46,19 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	
     	// Only for test purpose
     	RenHaiInfo.InterestLabel.initTestInterests(getActivity());
-    	if(null == mMyInterestsGrid)
-    	{
-    		mlog.error("mMyInterestsGrid is null!");
-    	}else
-    	{
-    		ImageView tIntLabel1 = new ImageView(getActivity());
-        	tIntLabel1.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getInterest(0)));
-    		mMyInterestsGrid.addView(tIntLabel1);
-    		ImageView tIntLabel2 = new ImageView(getActivity());
-    		tIntLabel2.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getInterest(1)));
-    		mMyInterestsGrid.addView(tIntLabel2);
-    		ImageView tIntLabel3 = new ImageView(getActivity());
-    		tIntLabel3.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getInterest(2)));
-    		mMyInterestsGrid.addView(tIntLabel3);
-    		ImageView tIntLabel4 = new ImageView(getActivity());
-    		tIntLabel4.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getInterest(3)));
-    		mMyInterestsGrid.addView(tIntLabel4);
-    		ImageView tIntLabel5 = new ImageView(getActivity());
-    		tIntLabel5.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getInterest(4)));
-    		mMyInterestsGrid.addView(tIntLabel5);
-    		ImageView tIntLabel6 = new ImageView(getActivity());
-    		tIntLabel6.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getInterest(5)));
-    		mMyInterestsGrid.addView(tIntLabel6);
-    	}
-    	
-    	
-		/*
+		
     	for(int i=0; i < RenHaiInfo.InterestLabel.getCurrHotLabelNum(); i++)
     	{
     		ImageView tIntLabel = new ImageView(getActivity());
     		tIntLabel.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getInterest(i)));
+    		/*TextView tIntLabel = new TextView(getActivity());
+    		tIntLabel.setText(RenHaiInfo.InterestLabel.getInterest(i));
+    		tIntLabel.setBackgroundColor(getResources().getColor(R.color.maingreen));
+    		tIntLabel.setTextColor(getResources().getColor(R.color.white));
+    		tIntLabel.setTextSize(18);
+    		//tIntLabel.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);*/
     		mMyInterestsGrid.addView(tIntLabel);
-    	}*/
+    	}
 	
     	return rootView;
     
@@ -85,17 +66,17 @@ public class RenHaiMyTopicsFragment extends Fragment {
     
     private Bitmap getThumb(String s)
 	{
-		Bitmap bmp = Bitmap.createBitmap(150, 150, Bitmap.Config.RGB_565);
+		Bitmap bmp = Bitmap.createBitmap(150, 75, Bitmap.Config.RGB_565);
 		Canvas canvas = new Canvas(bmp);
 	    Paint paint = new Paint();
 	    
 	    paint.setColor(getResources().getColor(R.color.maingreen));
 	    paint.setTextSize(24);
 	    paint.setFlags(Paint.ANTI_ALIAS_FLAG);
-	    canvas.drawRect(new Rect(0, 0, 150, 150), paint);
+	    canvas.drawRect(new Rect(0, 0, 150, 75), paint);
 	    paint.setColor(Color.WHITE);
 	    paint.setTextAlign(Paint.Align.CENTER);
-	    canvas.drawText(s, 75, 75, paint);
+	    canvas.drawText(s, 75, 40, paint);
 	    
 		return bmp;
 	}
