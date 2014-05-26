@@ -10,6 +10,8 @@ package com.simplelife.renhai.android.ui;
 import java.util.Collections;
 import java.util.ArrayList;
 
+import com.simplelife.renhai.android.RenHaiMainPageActivity;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -148,7 +150,8 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
     }
     public int getIndexFromCoor(int x, int y)
     {
-        int col = getColOrRowFromCoor(x), row = getColOrRowFromCoor(y + scroll); 
+        int col = getColFromCoor(x), row = getRowFromCoor(y + scroll); 
+        Log.i("RenHaiDragging", "x="+x+" y="+y+" col="+col+" row="+row+" scroll="+scroll);
         if (col == -1 || row == -1) //touch is between columns or rows
             return -1;
         int index = row * colCount + col;
@@ -156,7 +159,7 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
             return -1;
         return index;
     }
-    protected int getColOrRowFromCoor(int coor)
+    protected int getColFromCoor(int coor)
     {
         coor -= padding;
         for (int i = 0; coor > 0; i++)
@@ -167,9 +170,20 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
         }
         return -1;
     }
+    protected int getRowFromCoor(int coor)
+    {
+        coor -= padding;
+        for (int i = 0; coor > 0; i++)
+        {
+            if (coor < childHight)
+                return i;
+            coor -= (childHight + padding);
+        }
+        return -1;
+    }
     protected int getTargetFromCoor(int x, int y)
     {
-        if (getColOrRowFromCoor(y + scroll) == -1) //touch is between rows
+        if (getRowFromCoor(y + scroll) == -1) //touch is between rows
             return -1;
         //if (getIndexFromCoor(x, y) != -1) //touch on top of another visual
             //return -1;
@@ -221,6 +235,7 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
     {
     	if (!enabled)
     		return false;
+    	Log.i("RenHaiDragging", "Long click the label!");
         int index = getLastIndex();
         if (index != -1)
         {
@@ -234,6 +249,7 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
 	public boolean onTouch(View view, MotionEvent event)
     {
         int action = event.getAction();
+        view.getParent().requestDisallowInterceptTouchEvent(true);
            switch (action & MotionEvent.ACTION_MASK) {
                case MotionEvent.ACTION_DOWN:
             	   enabled = true;
@@ -282,7 +298,7 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
                        else
                        {
                            Point xy = getCoorFromIndex(dragged);
-                           v.layout(xy.x, xy.y, xy.x + childSize, xy.y + childSize);
+                           v.layout(xy.x, xy.y, xy.x + childSize, xy.y + childHight);
                        }
                        v.clearAnimation();
                        if (v instanceof ImageView)
@@ -292,9 +308,15 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
                    }
                    touching = false;
                    break;
+               case MotionEvent.ACTION_CANCEL:
+            	   Log.i("RenHaiDragging", "MotionEvent.ACTION_CANCEL");
+            	   view.getParent().requestDisallowInterceptTouchEvent(false);
+            	   break;
            }
+
         if (dragged != -1)
         	return true;
+        	
         return false;
     }
     
@@ -302,11 +324,11 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
     protected void animateDragged()
     {
     	View v = getChildAt(dragged);
-    	int x = getCoorFromIndex(dragged).x + childSize / 2, y = getCoorFromIndex(dragged).y + childSize / 2;
-        int l = x - (3 * childSize / 4), t = y - (3 * childSize / 4);
-    	v.layout(l, t, l + (childSize * 3 / 2), t + (childSize * 3 / 2));
+    	int x = getCoorFromIndex(dragged).x + childSize / 2, y = getCoorFromIndex(dragged).y + childHight / 2;
+        int l = x - (3 * childSize / 4), t = y - (3 * childHight / 4);
+    	v.layout(l, t, l + (childSize * 3 / 2), t + (childHight * 3 / 2));
     	AnimationSet animSet = new AnimationSet(true);
-		ScaleAnimation scale = new ScaleAnimation(.667f, 1, .667f, 1, childSize * 3 / 4, childSize * 3 / 4);
+		ScaleAnimation scale = new ScaleAnimation(.667f, 1, .667f, 1, childSize * 3 / 4, childHight * 3 / 4);
 		scale.setDuration(animT);
 		AlphaAnimation alpha = new AlphaAnimation(1, .5f);
 		alpha.setDuration(animT);
@@ -435,7 +457,7 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
     }
     protected int getMaxScroll()
     {
-    	int rowCount = (int)Math.ceil((double)getChildCount()/colCount), max = rowCount * childSize + (rowCount + 1) * padding - getHeight();
+    	int rowCount = (int)Math.ceil((double)getChildCount()/colCount), max = rowCount * childHight + (rowCount + 1) * padding - getHeight();
     	return max;
     }
     public int getLastIndex()

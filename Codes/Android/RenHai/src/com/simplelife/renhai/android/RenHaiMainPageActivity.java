@@ -29,7 +29,7 @@ import android.widget.TextView;
 public class RenHaiMainPageActivity extends FragmentActivity implements ActionBar.TabListener{
 
 	AppSectionsPagerAdapter mAppSectionsPagerAdapter;
-	ViewPager mViewPager;
+	static ViewPager mViewPager;
 	ActionBar mActionBar;
 	TextView  mActionBarTitle;
 	private final Logger mlog = Logger.getLogger(RenHaiMainPageActivity.class);
@@ -104,12 +104,20 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         // When the given tab is selected, switch to the corresponding page in the ViewPager.
         mViewPager.setCurrentItem(tab.getPosition());
     }
+    
+    public static void disableSlide(){
+    	mViewPager.requestDisallowInterceptTouchEvent(true);
+    }
+    
+    public static void enableSlide(){
+    	mViewPager.requestDisallowInterceptTouchEvent(false);
+    }
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
     
-    public static class AppSectionsPagerAdapter extends FragmentPagerAdapter {
+    public class AppSectionsPagerAdapter extends FragmentPagerAdapter {
 
         public RenHaiStartVedioFragment mRenHaiStartVedioFragment = null;
         public RenHaiMyTopicsFragment mRenHaiMyTopicsFragment = null;
@@ -151,7 +159,19 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return "Section " + (position + 1);
+        	String tTitle = null;
+        	if (position == 0)
+        		tTitle = getString(R.string.viewpager_section_start);
+        	else if(position == 1)
+        		tTitle = getString(R.string.viewpager_section_topics);
+        	else if(position == 2)
+        		tTitle =  getString(R.string.viewpager_section_impressions);
+        	else
+        		tTitle = "Section "+(position+1);
+        	
+        	CharSequence tReturn = tTitle;
+        	
+            return tReturn;
 
         }
     }

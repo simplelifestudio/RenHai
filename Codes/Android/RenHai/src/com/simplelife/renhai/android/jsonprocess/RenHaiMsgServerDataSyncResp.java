@@ -88,8 +88,8 @@ public class RenHaiMsgServerDataSyncResp extends RenHaiMsg{
 						RenHaiInfo.InterestLabel.resetCurrHotLabelList();
 						for(int i = 0; i < tLabelSize; tLabelSize++)
 						{
-							String tLabel = tCurrentLabel.getString(i);
-							RenHaiInfo.InterestLabel.putCurrHotLabel(tLabel);						
+							//String tLabel = tCurrentLabel.getString(i);
+							//RenHaiInfo.InterestLabel.putCurrHotLabel(tLabel);						
 						}
 					}
 				}
