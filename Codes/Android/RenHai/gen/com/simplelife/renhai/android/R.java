@@ -511,7 +511,7 @@ public final class R {
         public static final int tab_unselected_pressed_actionbarwithtabstheme=0x7f020024;
     }
     public static final class id {
-        public static final int action_settings=0x7f090016;
+        public static final int action_settings=0x7f090017;
         public static final int loadingpage_bar=0x7f090001;
         public static final int loadingpage_barlayout=0x7f090000;
         public static final int loadingpage_text=0x7f090002;
@@ -533,6 +533,7 @@ public final class R {
         public static final int splash_progressbar=0x7f09000a;
         public static final int splash_progresstext=0x7f09000b;
         public static final int splashteamlogo=0x7f09000c;
+        public static final int startvedio_button=0x7f090016;
         public static final int startvedio_onlinecount=0x7f090015;
     }
     public static final class layout {

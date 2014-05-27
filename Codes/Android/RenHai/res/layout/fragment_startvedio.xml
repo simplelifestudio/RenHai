@@ -27,6 +27,12 @@
         android:textSize="@dimen/splash_logo_size"
         android:textColor="@android:color/white"
         android:text="99999" />
+    
+    <com.simplelife.renhai.android.ui.RenHaiCircleButton
+        android:id="@+id/startvedio_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp"/>
         
 
 </RelativeLayout>
