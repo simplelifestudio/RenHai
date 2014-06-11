@@ -44,7 +44,8 @@
   
     <!-- ActionBar tabs text -->  
     <style name="ThemeTwoMyActionBarTabText" parent="@android:style/Widget.Holo.ActionBar.TabText">  
-        <item name="android:textColor">@color/black</item>  
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/mainpage_tabtext_size</item>  
     </style>
     
     <style name="ThemeTwoMyActionBarTabs" parent="@android:style/Widget.Holo.ActionBar.TabView">  
@@ -61,6 +62,7 @@
         <item name="android:popupMenuStyle">@style/PopupMenu.Actionbarwithtabstheme</item>
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Actionbarwithtabstheme</item>
         <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Actionbarwithtabstheme</item>
+        <item name="android:actionBarTabTextStyle">@style/ThemeThreeMyActionBarTabText</item>
         <item name="android:actionDropDownStyle">@style/DropDownNav.Actionbarwithtabstheme</item>
         <item name="android:actionBarStyle">@style/ActionBar.Solid.Actionbarwithtabstheme</item>
         <item name="android:actionModeBackground">@drawable/cab_background_top_actionbarwithtabstheme</item>
@@ -89,7 +91,11 @@
     </style>
 
     <style name="ActionBarTabStyle.Actionbarwithtabstheme" parent="@android:style/Widget.Holo.ActionBar.TabView">
-        <item name="android:background">@drawable/tab_indicator_ab_actionbarwithtabstheme</item>
+        <item name="android:background">@drawable/tab_indicator_ab_actionbarwithtabstheme</item>       
+    </style>
+    
+    <style name="ThemeThreeMyActionBarTabText" parent="@android:style/Widget.Holo.ActionBar.TabText">  
+        <item name="android:textSize">@dimen/mainpage_tabtext_size</item>  
     </style>
 
     <style name="DropDownNav.Actionbarwithtabstheme" parent="@android:style/Widget.Holo.Spinner">

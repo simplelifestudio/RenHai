@@ -463,13 +463,19 @@ public final class R {
          */
         public static final int activity_horizontal_margin=0x7f050000;
         public static final int activity_vertical_margin=0x7f050001;
-        public static final int mytopics_inttitle_size=0x7f050008;
+        public static final int mainpage_tabtext_size=0x7f050008;
+        public static final int mytopics_inttitle_size=0x7f050009;
         public static final int protocal_btn_size=0x7f050005;
         public static final int protocal_text_size=0x7f050006;
         public static final int protocal_title_size=0x7f050007;
         public static final int splash_advt_size=0x7f050003;
         public static final int splash_logo_size=0x7f050002;
         public static final int splash_progresstext_size=0x7f050004;
+        public static final int startvedio_btnheight=0x7f05000d;
+        public static final int startvedio_btnmarginbottom=0x7f05000e;
+        public static final int startvedio_btnwidth=0x7f05000c;
+        public static final int startvedio_countsize=0x7f05000b;
+        public static final int startvedio_titlesize=0x7f05000a;
     }
     public static final class drawable {
         public static final int ab_background_textured_actionbarwithtabstheme=0x7f020000;
@@ -511,7 +517,7 @@ public final class R {
         public static final int tab_unselected_pressed_actionbarwithtabstheme=0x7f020024;
     }
     public static final class id {
-        public static final int action_settings=0x7f090017;
+        public static final int action_settings=0x7f09001c;
         public static final int loadingpage_bar=0x7f090001;
         public static final int loadingpage_barlayout=0x7f090000;
         public static final int loadingpage_text=0x7f090002;
@@ -533,8 +539,13 @@ public final class R {
         public static final int splash_progressbar=0x7f09000a;
         public static final int splash_progresstext=0x7f09000b;
         public static final int splashteamlogo=0x7f09000c;
-        public static final int startvedio_button=0x7f090016;
-        public static final int startvedio_onlinecount=0x7f090015;
+        public static final int startvedio_button=0x7f09001b;
+        public static final int startvedio_chatcount=0x7f09001a;
+        public static final int startvedio_chatcountlayout=0x7f090019;
+        public static final int startvedio_chatcounttitle=0x7f090018;
+        public static final int startvedio_onlinecount=0x7f090017;
+        public static final int startvedio_onlinecountlayout=0x7f090016;
+        public static final int startvedio_onlinecounttitle=0x7f090015;
     }
     public static final class layout {
         public static final int activity_loading=0x7f030000;
@@ -569,7 +580,7 @@ public final class R {
         public static final int mytopics_testint5=0x7f06001e;
         public static final int mytopics_testint6=0x7f06001f;
         public static final int protocal_no=0x7f06000c;
-        public static final int protocal_text=0x7f060020;
+        public static final int protocal_text=0x7f060023;
         public static final int protocal_title=0x7f06000a;
         public static final int protocal_yes=0x7f06000b;
         public static final int splash_advert=0x7f060004;
@@ -579,6 +590,9 @@ public final class R {
         public static final int splash_httpfailed_dialogtitle=0x7f060006;
         public static final int splash_logo=0x7f060003;
         public static final int splash_teamlogo=0x7f060005;
+        public static final int startvedio_buttontext=0x7f060022;
+        public static final int startvedio_chatcount=0x7f060021;
+        public static final int startvedio_onlinecount=0x7f060020;
         public static final int viewpager_section_impressions=0x7f06000f;
         public static final int viewpager_section_start=0x7f06000d;
         public static final int viewpager_section_topics=0x7f06000e;
@@ -601,7 +615,7 @@ public final class R {
  Theme for actionbar with tabs 
          */
         public static final int ActionBarWithTabsTheme=0x7f070005;
-        public static final int ActionButton_CloseMode_Actionbarwithtabstheme=0x7f070013;
+        public static final int ActionButton_CloseMode_Actionbarwithtabstheme=0x7f070014;
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
@@ -629,18 +643,19 @@ public final class R {
          */
         public static final int AppTheme=0x7f070001;
         public static final int DropDownListView_Actionbarwithtabstheme=0x7f07000f;
-        public static final int DropDownNav_Actionbarwithtabstheme=0x7f070011;
+        public static final int DropDownNav_Actionbarwithtabstheme=0x7f070012;
         public static final int PopupMenu_Actionbarwithtabstheme=0x7f07000e;
-        public static final int ProgressBar_Actionbarwithtabstheme=0x7f070012;
+        public static final int ProgressBar_Actionbarwithtabstheme=0x7f070013;
         /**  ======================================================================= 
          */
         public static final int Theme_Actionbarwithtabstheme=0x7f07000b;
         /**  this style is only referenced in a Light.DarkActionBar based theme 
          */
-        public static final int Theme_Actionbarwithtabstheme_Widget=0x7f070014;
+        public static final int Theme_Actionbarwithtabstheme_Widget=0x7f070015;
         /**  ActionBar title text 
          */
         public static final int ThemeOneActionBarTitleText=0x7f070004;
+        public static final int ThemeThreeMyActionBarTabText=0x7f070011;
         public static final int ThemeTwoMyActionBarTabBars=0x7f07000a;
         /**  ActionBar tabs text 
          */

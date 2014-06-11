@@ -8,9 +8,9 @@
  */
 package com.simplelife.renhai.android.ui;
 
-import android.content.Context;
-import android.view.View;
+import com.simplelife.renhai.android.R;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -22,25 +22,31 @@ import android.graphics.Typeface;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.MotionEvent;
-import android.view.View;
+import android.view.animation.Animation;
+import android.widget.ImageView;
 
-public class RenHaiCircleButton extends View {
+public class RenHaiCircleButton extends ImageView {
 	
-	public static final int HOLO_LIGHT_BLUE = 0xff33b5e5;
-	public static final int HOLO_DARK_BLUE = 0xff0099cc;
-	public static final int HOLO_LIGHT_PURPLE = 0xffaa66cc;
-	public static final int HOLO_DARK_PURPLE = 0xff9933cc;
-	public static final int HOLO_LIGHT_GREEN = 0xff99cc00;
-	public static final int HOLO_DARK_GREEN = 0xff669900;
-	public static final int HOLO_LIGHT_ORANGE = 0xffffbb33;
-	public static final int HOLO_DARK_ORANGE = 0xffff8800;
-	public static final int HOLO_LIGHT_RED = 0xffff4444;
-	public static final int HOLO_DARK_RED = 0xffcc0000;
+	private static final int DEFAULT_PRESSED_RING_WIDTH_DIP = 30;	
+	private static final int ANIMATION_TIME_ID = android.R.integer.config_shortAnimTime;	
+	private static final int PRESSED_RING_ALPHA = 75;
+	
+	private Context mContext;	
+    private Paint mRadialWidgetPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+	
+	
+    // Members for the flash focus circle
+    private Paint mFlashPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private ObjectAnimator mPressedAnimator;
+    private float mAnimationProgress;
+	private int mPressedRingWidth;
+	private int mPressedRingRadius;	
 	
 	private RectF mRadialScoreRect;
 	
-	private int mCurrentValue = 15;
+	private int mCurrentValue = 0;
 	
 	private int mMaxValue = 100;
 	
@@ -49,16 +55,14 @@ public class RenHaiCircleButton extends View {
 	private int mDiameter = 200;
 	
 	private int mMaxSweepAngle = 360;
-	
-	private int[] mScoreColorRange;
-	
-	private Paint mRadialWidgetPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
 	private int mCurrentScoreColorPointer = 0;
 	
-	private int mBaseColor = Color.parseColor("#FF636363");
+	private int mPressedColor = Color.parseColor("#7fffd4");
 	
-	private int mBorderColor = Color.LTGRAY;
+	private int mBaseColor = Color.parseColor("#33cc99");
+	
+	private int mBorderColor = Color.parseColor("#33cc99");
 	
 	private int mCenterTextColor = Color.WHITE;
 	
@@ -66,13 +70,13 @@ public class RenHaiCircleButton extends View {
 	
 	private int mShadowColor = Color.BLACK;
 	
-	private float mBorderStrokeThickness = 5.0f;
+	private float mBorderStrokeThickness = 3.0f;
 	
 	private float mShadowRadius = 4.0f;
 	
 	private String mSecondaryText = null;
 	
-	private boolean isShowPercentText = true;
+	private boolean isShowPercentText = false;
 	
 	private boolean isTouchEnabled = true;
 	
@@ -98,82 +102,106 @@ public class RenHaiCircleButton extends View {
 	
 	public RenHaiCircleButton(Context context) {
 		super(context);
+		mContext = context;
 		initView();
 	}
 	
 	public RenHaiCircleButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		mContext = context;
 		initView();
 	}
 	
 	public RenHaiCircleButton(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
+		mContext = context;
 		initView();
 	}
 	
-	/**
-	 * 
-	 */
 	private void initView() {
 		Rect rect = new Rect(0, 0, mDiameter, mDiameter);
 		mRadialScoreRect = new RectF(rect); 
-		mScoreColorRange = new int[] {HOLO_DARK_RED,
-				HOLO_LIGHT_RED,
-				HOLO_DARK_ORANGE,
-				HOLO_LIGHT_BLUE,
-				HOLO_LIGHT_GREEN};
+		
+		this.setFocusable(true);
+		this.setScaleType(ScaleType.CENTER_INSIDE);
+		setClickable(true);
+	
+		// Init the flash circle
+		mFlashPaint.setStyle(Paint.Style.STROKE);		
+		mPressedRingWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 
+				            DEFAULT_PRESSED_RING_WIDTH_DIP, getResources().getDisplayMetrics());		
+		mFlashPaint.setStrokeWidth(mPressedRingWidth);
+		mFlashPaint.setColor(mBorderColor);
+		mFlashPaint.setAlpha(PRESSED_RING_ALPHA);
+		
+		// Init the animation
+		final int pressedAnimationTime = getResources().getInteger(ANIMATION_TIME_ID);
+		mPressedAnimator = ObjectAnimator.ofFloat(this, "animationProgress", 0f, 0f);
+		mPressedAnimator.setDuration(pressedAnimationTime);
 	}
 		
 	@Override
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
-		//Draw the outer circle
+		// Draw the outer circle
 		mRadialWidgetPaint.setStyle(Style.STROKE);
 		mRadialWidgetPaint.setStrokeWidth(mBorderStrokeThickness * getResources().getDisplayMetrics().density);
 		mRadialWidgetPaint.setColor(mBorderColor);
-		canvas.drawCircle(getWidth()/ 2, getHeight() / 2, mRadius, mRadialWidgetPaint);		
+		canvas.drawCircle(getWidth()/ 2, getHeight() / 2, mRadius, mRadialWidgetPaint);	
 		mRadialWidgetPaint.setStyle(Style.FILL);
-		//Draw the score radial
+		
+		// Draw the flash circle
+		canvas.drawCircle(getWidth()/ 2, getHeight() / 2, mPressedRingRadius + mAnimationProgress, mFlashPaint);
+	
+		// Draw the score radial		
 		if(mCurrentValue <= mMaxValue) {
 			double sweepAngle = ((mCurrentValue * mMaxSweepAngle) / mMaxValue); //Calculate the arc span
 			//Determine the color of the score radial from the given array of colors
+			
 			readingValuePer = (mCurrentValue * 100) /mMaxValue;
-			for(int counter = 1; counter <= mScoreColorRange.length; counter++) {
+			/*for(int counter = 1; counter <= mScoreColorRange.length; counter++) {
 				int colorPer = (counter * 100)/mScoreColorRange.length;
 				if(readingValuePer <= colorPer) {
 					mCurrentScoreColorPointer = (counter -1);
 					break;
 				}
-			}
-			//Set the color to the paint and draw the arc
-			mRadialWidgetPaint.setColor(mScoreColorRange[mCurrentScoreColorPointer]);						
+			}*/
+			// Set the color to the paint and draw the arc
+			mRadialWidgetPaint.setColor(mBorderColor);						
 			canvas.drawArc(mRadialScoreRect, 270, (float) sweepAngle, true, mRadialWidgetPaint);
 			mRadialWidgetPaint.setShadowLayer((float) (mShadowRadius/2) * getResources().getDisplayMetrics().density, 0.0f, 0.0f, mShadowColor);  
 			canvas.drawArc(mRadialScoreRect, 270, (float) sweepAngle, true, mRadialWidgetPaint);
 			mRadialWidgetPaint.setShadowLayer(mShadowRadius, 0.0f, 0.0f, Color.TRANSPARENT);  
 		} else 
 			Log.e(this.getClass().getName(), "Current value " + String.valueOf(mCurrentValue) + " greater that maximum value " + String.valueOf(mMaxValue)); 
-		//Draw the center circle that contains the text information
+		
+		// Draw the center circle that contains the text information
 		mRadialWidgetPaint.setColor(mBaseColor);
 		canvas.drawCircle(getWidth()/ 2, getHeight() / 2, (float) (mRadius * .8), mRadialWidgetPaint);
 		mRadialWidgetPaint.setShadowLayer(mShadowRadius * getResources().getDisplayMetrics().density, 0.0f, 0.0f, mShadowColor);  
 		canvas.drawCircle(getWidth()/ 2, getHeight() / 2, (float) (mRadius * .8), mRadialWidgetPaint);
-		mRadialWidgetPaint.setShadowLayer(mShadowRadius, 0.0f, 0.0f, Color.TRANSPARENT);  
-		//Draw the center value text
+		mRadialWidgetPaint.setShadowLayer(mShadowRadius, 0.0f, 0.0f, Color.TRANSPARENT);
+		
+		// Draw the center value text
 		mRadialWidgetPaint.setColor(mCenterTextColor);
 		mRadialWidgetPaint.setTextSize(mCenterTextSize);		
 		if(mFontName != null) 
 			mRadialWidgetPaint.setTypeface(Typeface.createFromAsset(getContext().getAssets(), mFontName));
 		float textWidth = 0.0f;
-		//Check if the user wants percentage value
+		// Check if the user wants percentage value		
 		if(isShowPercentText) {
 			textWidth = mRadialWidgetPaint.measureText(String.valueOf(readingValuePer) + "%");
 			canvas.drawText(String.valueOf(readingValuePer) + "%", (getWidth()/ 2) - (textWidth/2), (getHeight()/2) + mRadius/8, mRadialWidgetPaint);
-		} else {
+		}else{
+			textWidth = mRadialWidgetPaint.measureText(mContext.getString(R.string.startvedio_buttontext));
+			canvas.drawText(mContext.getString(R.string.startvedio_buttontext), (getWidth()/ 2) - (textWidth/2), (getHeight()/2) + mRadius/8, mRadialWidgetPaint);
+		}
+		/*else {
 			textWidth = mRadialWidgetPaint.measureText(String.valueOf(mCurrentValue));
 			canvas.drawText(String.valueOf(mCurrentValue), (getWidth()/ 2) - (textWidth/2), (getHeight()/2) + mRadius/8, mRadialWidgetPaint);
-		}
-		//Draw the center secondary text
+		}*/
+		
+		// Draw the center secondary text
 		if(mSecondaryText != null) {
 			mRadialWidgetPaint.setColor(mSecondaryTextColor);
 			textWidth = mRadialWidgetPaint.measureText(mSecondaryText);
@@ -185,7 +213,7 @@ public class RenHaiCircleButton extends View {
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
-		//Determine the diameter and the radius based on device orientation
+		// Determine the diameter and the radius based on device orientation
 		if(w > h) {
 			mDiameter = h;
 			mRadius = mDiameter/2 - (getPaddingTop() + getPaddingBottom());
@@ -193,25 +221,38 @@ public class RenHaiCircleButton extends View {
 			mDiameter = w;
 			mRadius = mDiameter/2 - (getPaddingLeft() + getPaddingRight());
 		}
-		//Init the draw arc Rect object
-		int left = (getWidth()/2) - (int) mRadius + getPaddingLeft();
-		int right = (getWidth()/2) + (int) mRadius - getPaddingRight();
-		int top = (getHeight()/2) - (int) mRadius + getPaddingTop();
+		
+		// Determine the focus circle radius
+		mPressedRingRadius = mDiameter/2 - mPressedRingWidth - mPressedRingWidth/2;
+		
+		// Init the draw arc Rect object
+		int left   = (getWidth()/2) - (int) mRadius + getPaddingLeft();
+		int right  = (getWidth()/2) + (int) mRadius - getPaddingRight();
+		int top    = (getHeight()/2) - (int) mRadius + getPaddingTop();
 		int bottom = (getHeight()/2) + (int) mRadius - getPaddingBottom();
 		Rect rect = new Rect(left, top, right, bottom);
 		mRadialScoreRect = new RectF(rect); 
-		//Init the font size
+		
+		// Init the font size
 		mCenterTextSize = mRadius/2;
 		mSecondaryTextSize = mRadius/5;
 	}
-	
+	/*
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if(isTouchEnabled) {
 			switch(event.getAction()) {
+			case MotionEvent.ACTION_DOWN:				
+				//setPressed(true);
+				break;
+				
+			case MotionEvent.ACTION_UP:
+				//setPressed(false);
+				break;
+				
 			case MotionEvent.ACTION_MOVE:
 				angle = getAngleABC(new Point(getWidth()/2, 0),  new Point(getWidth()/2, getHeight()/2), new Point((int) event.getX(), (int) event.getY()));
-				Log.d("Test", "Angle " + angle);
+				//Log.d("Test", "Angle " + angle);
 				if((int) ((angle * mMaxValue) / mMaxSweepAngle) > mMinChangeValue && (int) ((angle * mMaxValue) / mMaxSweepAngle) < mMaxChangeValue) {
 					setCurrentValue((int) ((angle * mMaxValue) / mMaxSweepAngle));
 					if(mCallback != null)
@@ -219,10 +260,75 @@ public class RenHaiCircleButton extends View {
 					invalidate();
 				}
 				break;
+				
+			case MotionEvent.ACTION_CANCEL:
+				//setPressed(false);
+				break;
 			}
 			return true;
 		} else
 			return false;
+	}*/
+	
+	@Override
+	public void setPressed(boolean pressed) {
+		super.setPressed(pressed);
+		
+		
+
+		if (mRadialWidgetPaint != null) {
+			
+			if(pressed)
+			{
+				Log.i("circlebutton","setPressed activated 1!");
+				mRadialWidgetPaint.setColor(mPressedColor);
+			}				
+			else
+			{
+				Log.i("circlebutton","setPressed activated 2!");
+				mRadialWidgetPaint.setColor(mBorderColor);	
+			}
+						
+		}
+
+		/*if (pressed) {
+			showPressedRing();
+		} else {
+			hidePressedRing();
+		}*/
+	}
+	
+	public void updatePercent(){
+		if(mCallback != null)
+			mCallback.onValueChanged(getCurrentValue());
+		invalidate();
+	}
+	
+	public void autoShiningRing(){				
+		mPressedAnimator.setDuration(1200);		
+		mPressedAnimator.setRepeatCount(Animation.INFINITE);
+		mPressedAnimator.setRepeatMode(Animation.REVERSE);
+		mPressedAnimator.setFloatValues(mAnimationProgress, mPressedRingWidth);
+		mPressedAnimator.start();
+	}
+	
+	private void hidePressedRing() {
+		mPressedAnimator.setFloatValues(mAnimationProgress, 0f);
+		mPressedAnimator.start();
+	}
+	
+	private void showPressedRing() {
+		mPressedAnimator.setFloatValues(mAnimationProgress, mPressedRingWidth);
+		mPressedAnimator.start();
+	}
+	
+	public float getAnimationProgress() {
+		return mAnimationProgress;
+	}
+
+	public void setAnimationProgress(float animationProgress) {
+		this.mAnimationProgress = animationProgress;
+		this.invalidate();
 	}
 	
 	private int getAngleABC( Point a, Point b, Point c ) {
@@ -270,20 +376,6 @@ public class RenHaiCircleButton extends View {
 	 */
 	public void setMaxValue(int mMaxValue) {
 		this.mMaxValue = mMaxValue;
-	}
-
-	/**
-	 * @return the mScoreColorRange
-	 */
-	public int[] getScoreColorRange() {
-		return mScoreColorRange;
-	}
-
-	/**
-	 * @param mScoreColorRange the mScoreColorRange to set
-	 */
-	public void setScoreColorRange(int[] mScoreColorRange) {
-		this.mScoreColorRange = mScoreColorRange;
 	}
 
 	/**

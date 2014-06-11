@@ -37,6 +37,10 @@
     <string name="mytopics_testint5">写代码</string>
     <string name="mytopics_testint6">吉他</string>
     
+    <string name="startvedio_onlinecount">在线人数</string>
+    <string name="startvedio_chatcount">聊天人数</string>
+    <string name="startvedio_buttontext">开始</string>
+    
     <string name="protocal_text">
 \t\t人海是一款基于话题匹配的视频社交产品，人海所提供的各项服务的所有权和运作权归简单生活工作室（SimpleLife Studio，以下称人海官方）所有。
 \n\t\t本协议（包括隐私保护声明）是由您（终端用户）与人海官方之间就人海提供的各项服务所订立的相关权利义务规范，本协议将对您使用人海产生法律约束力。

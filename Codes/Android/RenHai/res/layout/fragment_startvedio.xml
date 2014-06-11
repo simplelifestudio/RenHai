@@ -5,34 +5,81 @@
     android:background="@color/white">
     
     <TextView 
+        android:id="@+id/startvedio_onlinecounttitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/startvedio_onlinecount"
-        android:layout_above="@+id/startvedio_onlinecount"
-        android:layout_marginBottom="4dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"          
+        android:layout_marginBottom="8dp"
         android:textColor="@color/black"
-        android:textSize="@dimen/splash_logo_size"
-        android:text="test"/>
+        android:textSize="@dimen/startvedio_titlesize"
+        android:text="@string/startvedio_onlinecount"/>
     
-    <TextView
-        android:id="@+id/startvedio_onlinecount"
+    <LinearLayout 
+        android:id="@+id/startvedio_onlinecountlayout"
         android:layout_width="fill_parent"
         android:layout_height="70dp"
         android:background="@drawable/startvedio_rectangle"
+        android:layout_below="@id/startvedio_onlinecounttitle"
         android:layout_centerHorizontal="true"
-        android:gravity="center_vertical|right"
-        android:layout_marginTop="80dp"
+        android:gravity="center_vertical|right"        
         android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+      
+      <TextView
+        android:id="@+id/startvedio_onlinecount"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center_vertical|right"        
         android:layout_marginRight="16dp"        
-        android:textSize="@dimen/splash_logo_size"
+        android:textSize="@dimen/startvedio_countsize"
         android:textColor="@android:color/white"
-        android:text="99999" />
+        android:text="99999" />          
+    </LinearLayout>
+    
+    <TextView 
+        android:id="@+id/startvedio_chatcounttitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/startvedio_onlinecountlayout"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"          
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/startvedio_titlesize"
+        android:text="@string/startvedio_chatcount"/>
+    
+    <LinearLayout 
+        android:id="@+id/startvedio_chatcountlayout"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:background="@drawable/startvedio_rectangle"
+        android:layout_below="@id/startvedio_chatcounttitle"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_vertical|right"        
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp" >
+        
+        <TextView
+        	android:id="@+id/startvedio_chatcount"
+        	android:layout_width="fill_parent"
+        	android:layout_height="fill_parent"
+        	android:gravity="center_vertical|right"        
+        	android:layout_marginRight="16dp"        
+        	android:textSize="@dimen/startvedio_countsize"
+        	android:textColor="@android:color/white"
+        	android:text="99999" />
+    </LinearLayout>
     
     <com.simplelife.renhai.android.ui.RenHaiCircleButton
         android:id="@+id/startvedio_button"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="@dimen/startvedio_btnwidth"
+        android:layout_height="@dimen/startvedio_btnheight"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/startvedio_btnmarginbottom"
         android:padding="5dp"/>
-        
 
 </RelativeLayout>

@@ -9,6 +9,12 @@
     <dimen name="protocal_btn_size">22dip</dimen>
     <dimen name="protocal_text_size">15dip</dimen>
     <dimen name="protocal_title_size">18dip</dimen>
+    <dimen name="mainpage_tabtext_size">14dip</dimen>
     <dimen name="mytopics_inttitle_size">18dip</dimen>
+    <dimen name="startvedio_titlesize">18dip</dimen>
+    <dimen name="startvedio_countsize">30dip</dimen>
+    <dimen name="startvedio_btnwidth">120dip</dimen>
+    <dimen name="startvedio_btnheight">120dip</dimen>
+    <dimen name="startvedio_btnmarginbottom">32dip</dimen>
 
 </resources>
