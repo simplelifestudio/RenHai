@@ -29,6 +29,17 @@
     <string name="mytopics_create">新建</string>
     <string name="mytopics_delete">删除</string>
     <string name="mytopics_refresh">刷新</string>
+    <string name="mytopics_intdialogtitle">兴趣标签</string>
+    <string name="mytopics_intdialogmsg">您还没有兴趣标签，现在定义吗？</string>
+    <string name="mytopics_intdialogposbtn">确认</string>
+    <string name="mytopics_intdialognegbtn">取消</string>
+    <string name="mytopics_inttxtbuildtitle">输入兴趣标签</string>
+    <string name="mytopics_inttxtbuildposbtn">确认</string>
+    <string name="mytopics_inttxtbuildnegbtn">取消</string>
+    <string name="mytopics_intcontinuedialogtitle">兴趣标签</string>
+    <string name="mytopics_intcontinuedialogmsg">继续添加？</string>
+    <string name="mytopics_intcontinuedialogposbtn">确认</string>
+    <string name="mytopics_intcontinuedialognegbtn">取消</string>
     
     <string name="mytopics_testint1">篮球</string>
     <string name="mytopics_testint2">足球</string>

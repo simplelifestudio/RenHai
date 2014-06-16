@@ -427,6 +427,7 @@ public class RenHaiInfo {
 	
 	public static class InterestLabel{
 		public static ArrayList<String> mCurrHotIntLabels = new ArrayList<String>();
+		public static ArrayList<String> mMyIntLabels = new ArrayList<String>();
 		
 		public static void resetCurrHotLabelList(){
 			mCurrHotIntLabels.clear();
@@ -440,7 +441,7 @@ public class RenHaiInfo {
 			mCurrHotIntLabels.add(_label);
 		}
 		
-		public static String getInterest(int _index){
+		public static String getCurrHotIntLabel(int _index){
 			return mCurrHotIntLabels.get(_index);			
 		}
 		
@@ -451,6 +452,27 @@ public class RenHaiInfo {
 			putCurrHotLabel(_context.getString(R.string.mytopics_testint4));
 			putCurrHotLabel(_context.getString(R.string.mytopics_testint5));
 			putCurrHotLabel(_context.getString(R.string.mytopics_testint6));
+		}
+		
+		public static void resetMyIntLabelList(){
+			mMyIntLabels.clear();
+		}
+		
+		public static int getMyIntLabelNum(){
+			return mMyIntLabels.size();
+		}
+		
+		public static String getMyIntLabel(int _index){
+			//if (null != mMyIntLabels.get(_index))
+				return mMyIntLabels.get(_index);
+		}
+		
+		public static void putMyIntLabel(String _label){
+			mMyIntLabels.add(_label);
+		}
+		
+		public static boolean isPersonalIntLabelsNotDefined(){
+			return (mMyIntLabels.size() == 0) ? true : false;
 		}
 		
 	}

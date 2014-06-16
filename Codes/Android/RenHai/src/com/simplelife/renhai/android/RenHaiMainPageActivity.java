@@ -93,6 +93,11 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
                             .setText(mAppSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+        
+        if(true == RenHaiInfo.InterestLabel.isPersonalIntLabelsNotDefined())
+        {
+        	mViewPager.setCurrentItem(1);
+        }
     }
     
     @Override

@@ -30,6 +30,17 @@
     <string name="mytopics_create">New</string>
     <string name="mytopics_delete">Delete</string>
     <string name="mytopics_refresh">Refresh</string>
+    <string name="mytopics_intdialogtitle">Interest Label</string>
+    <string name="mytopics_intdialogmsg">Your interest is not defined, define now?</string>
+    <string name="mytopics_intdialogposbtn">Confirm</string>
+    <string name="mytopics_intdialognegbtn">Cancel</string>
+    <string name="mytopics_inttxtbuildtitle">Enter your interest label</string>
+    <string name="mytopics_inttxtbuildposbtn">Confirm</string>
+    <string name="mytopics_inttxtbuildnegbtn">Cancel</string>
+    <string name="mytopics_intcontinuedialogtitle">Interest Label</string>
+    <string name="mytopics_intcontinuedialogmsg">Continue to define interest labels?</string>
+    <string name="mytopics_intcontinuedialogposbtn">Confirm</string>
+    <string name="mytopics_intcontinuedialognegbtn">Cancel</string>
     
     <string name="mytopics_testint1">Basketball</string>
     <string name="mytopics_testint2">Football</string>
