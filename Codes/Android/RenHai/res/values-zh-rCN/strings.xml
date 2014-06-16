@@ -40,6 +40,10 @@
     <string name="mytopics_intcontinuedialogmsg">继续添加？</string>
     <string name="mytopics_intcontinuedialogposbtn">确认</string>
     <string name="mytopics_intcontinuedialognegbtn">取消</string>
+    <string name="mytopics_inteditordelbuildtitle">兴趣标签</string>
+    <string name="mytopics_inteditordelbuildposbtn">确认</string>
+    <string name="mytopics_inteditordelbuildneubtn">取消</string>
+    <string name="mytopics_inteditordelbuildnegbtn">删除</string>
     
     <string name="mytopics_testint1">篮球</string>
     <string name="mytopics_testint2">足球</string>

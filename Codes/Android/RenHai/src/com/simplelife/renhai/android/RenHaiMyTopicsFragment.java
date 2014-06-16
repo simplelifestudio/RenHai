@@ -38,6 +38,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
 	
 	private final int MYTOPIC_MSG_OKTODEFINEINTEREST = 2000;
 	private final int MYTOPIC_MSG_INTERESTDEFINED = 2001;
+	private final int MYTOPIC_MSG_INTERESTCHANGED = 2002;
 		
 	RenHaiDraggableGridView mMyInterestsGrid;
 	RenHaiDraggableGridView mGlbInterestsGrid;
@@ -99,8 +100,8 @@ public class RenHaiMyTopicsFragment extends Fragment {
     private void setListeners(){
     	mMyInterestsGrid.setOnItemClickListener(new OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				mMyInterestsGrid.removeViewAt(arg2);
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {				
+				onEditOrDeleteTheIntLabel(arg2);				
 			}
 		});
     }
@@ -129,6 +130,12 @@ public class RenHaiMyTopicsFragment extends Fragment {
         	    	onUpdateMyInterestGrid();
         	    	mMyInterestsGrid.refreshDrawableState();
         	    	onContinueToDefinePersonalInterestDialog();
+        	    	break;
+        	    }
+        	    case MYTOPIC_MSG_INTERESTCHANGED:
+        	    {
+        	    	onUpdateMyInterestGrid();
+        	    	mMyInterestsGrid.refreshDrawableState();
         	    	break;
         	    }
         	
@@ -226,6 +233,48 @@ public class RenHaiMyTopicsFragment extends Fragment {
 		builder.create().show();
 	}
     
+	private void onEditOrDeleteTheIntLabel(final int _index) {
+		AlertDialog.Builder builder = new Builder(getActivity());
+		builder.setTitle(getString(R.string.mytopics_inteditordelbuildtitle));		
+		final EditText tEditText = new EditText(getActivity());
+		tEditText.setText(RenHaiInfo.InterestLabel.getMyIntLabel(_index));
+		builder.setView(tEditText);
+		builder.setPositiveButton(R.string.mytopics_inteditordelbuildposbtn, new DialogInterface.OnClickListener() {
+		    @Override
+	        public void onClick(DialogInterface dialog, int which) {
+			    dialog.dismiss();    	
+		            new Thread() {  						
+			            @Override
+			            public void run() {
+			            	String tInput = tEditText.getText().toString();
+			            	RenHaiInfo.InterestLabel.replaceMyIntLabel(_index, tInput);
+			            	Message t_MsgListData = new Message();
+					        t_MsgListData.what = MYTOPIC_MSG_INTERESTCHANGED;									
+					        handler.sendMessage(t_MsgListData);			            					        
+			            }				
+		            }.start();
+		    }
+		});
+
+		builder.setNegativeButton(R.string.mytopics_inteditordelbuildnegbtn, new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		    	mMyInterestsGrid.removeViewAt(_index);
+		    	RenHaiInfo.InterestLabel.deleteMyIntLabel(_index);
+		        dialog.dismiss();
+		    }
+		});
+		
+		builder.setNeutralButton(R.string.mytopics_inteditordelbuildneubtn, new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.dismiss();
+		    }
+		});
+
+		builder.create().show();		
+	}
+	
     private Bitmap getThumb(String s)
 	{
 		Bitmap bmp = Bitmap.createBitmap(150, 75, Bitmap.Config.RGB_565);

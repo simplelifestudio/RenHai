@@ -41,6 +41,10 @@
     <string name="mytopics_intcontinuedialogmsg">Continue to define interest labels?</string>
     <string name="mytopics_intcontinuedialogposbtn">Confirm</string>
     <string name="mytopics_intcontinuedialognegbtn">Cancel</string>
+    <string name="mytopics_inteditordelbuildtitle">Interest Label</string>
+    <string name="mytopics_inteditordelbuildposbtn">Confirm</string>
+    <string name="mytopics_inteditordelbuildneubtn">Cancel</string>
+    <string name="mytopics_inteditordelbuildnegbtn">Delete</string>
     
     <string name="mytopics_testint1">Basketball</string>
     <string name="mytopics_testint2">Football</string>

@@ -471,6 +471,14 @@ public class RenHaiInfo {
 			mMyIntLabels.add(_label);
 		}
 		
+		public static void replaceMyIntLabel(int _index, String _newLabel){					
+			mMyIntLabels.set(_index, _newLabel);
+		}
+		
+		public static void deleteMyIntLabel(int _index){					
+			mMyIntLabels.remove(_index);
+		}
+		
 		public static boolean isPersonalIntLabelsNotDefined(){
 			return (mMyIntLabels.size() == 0) ? true : false;
 		}
