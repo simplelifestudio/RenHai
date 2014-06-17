@@ -515,6 +515,9 @@ public final class R {
         public static final int tab_unselected_actionbarwithtabstheme=0x7f020022;
         public static final int tab_unselected_focused_actionbarwithtabstheme=0x7f020023;
         public static final int tab_unselected_pressed_actionbarwithtabstheme=0x7f020024;
+        public static final int textview_normal=0x7f020025;
+        public static final int textview_pressed=0x7f020026;
+        public static final int textview_selector=0x7f020027;
     }
     public static final class id {
         public static final int action_settings=0x7f09001c;
@@ -523,14 +526,14 @@ public final class R {
         public static final int loadingpage_text=0x7f090002;
         public static final int mainpage_title=0x7f090003;
         public static final int mainpage_viewpager=0x7f090004;
-        public static final int mytopics_create=0x7f09000f;
-        public static final int mytopics_delete=0x7f09000e;
-        public static final int mytopics_divide=0x7f090011;
-        public static final int mytopics_globalinterests=0x7f090014;
-        public static final int mytopics_myinterests=0x7f090010;
-        public static final int mytopics_refresh=0x7f090013;
+        public static final int mytopics_create=0x7f09000e;
+        public static final int mytopics_divide=0x7f090010;
+        public static final int mytopics_glbintempty=0x7f090014;
+        public static final int mytopics_globalinterests=0x7f090013;
+        public static final int mytopics_myinterests=0x7f09000f;
+        public static final int mytopics_refresh=0x7f090012;
         public static final int mytopics_title1=0x7f09000d;
-        public static final int mytopics_title2=0x7f090012;
+        public static final int mytopics_title2=0x7f090011;
         public static final int protocal_btnno=0x7f090007;
         public static final int protocal_btnyes=0x7f090006;
         public static final int protocal_confirm=0x7f090005;
@@ -570,6 +573,7 @@ public final class R {
         public static final int mainpage_title_updateinfo=0x7f060013;
         public static final int mytopics_create=0x7f060017;
         public static final int mytopics_delete=0x7f060018;
+        public static final int mytopics_glbintlabelempty=0x7f060029;
         public static final int mytopics_intcontinuedialogmsg=0x7f060022;
         public static final int mytopics_intcontinuedialognegbtn=0x7f060024;
         public static final int mytopics_intcontinuedialogposbtn=0x7f060023;
@@ -588,14 +592,14 @@ public final class R {
         public static final int mytopics_inttxtbuildposbtn=0x7f06001f;
         public static final int mytopics_inttxtbuildtitle=0x7f06001e;
         public static final int mytopics_refresh=0x7f060019;
-        public static final int mytopics_testint1=0x7f060029;
-        public static final int mytopics_testint2=0x7f06002a;
-        public static final int mytopics_testint3=0x7f06002b;
-        public static final int mytopics_testint4=0x7f06002c;
-        public static final int mytopics_testint5=0x7f06002d;
-        public static final int mytopics_testint6=0x7f06002e;
+        public static final int mytopics_testint1=0x7f06002a;
+        public static final int mytopics_testint2=0x7f06002b;
+        public static final int mytopics_testint3=0x7f06002c;
+        public static final int mytopics_testint4=0x7f06002d;
+        public static final int mytopics_testint5=0x7f06002e;
+        public static final int mytopics_testint6=0x7f06002f;
         public static final int protocal_no=0x7f06000c;
-        public static final int protocal_text=0x7f060032;
+        public static final int protocal_text=0x7f060033;
         public static final int protocal_title=0x7f06000a;
         public static final int protocal_yes=0x7f06000b;
         public static final int splash_advert=0x7f060004;
@@ -605,9 +609,9 @@ public final class R {
         public static final int splash_httpfailed_dialogtitle=0x7f060006;
         public static final int splash_logo=0x7f060003;
         public static final int splash_teamlogo=0x7f060005;
-        public static final int startvedio_buttontext=0x7f060031;
-        public static final int startvedio_chatcount=0x7f060030;
-        public static final int startvedio_onlinecount=0x7f06002f;
+        public static final int startvedio_buttontext=0x7f060032;
+        public static final int startvedio_chatcount=0x7f060031;
+        public static final int startvedio_onlinecount=0x7f060030;
         public static final int viewpager_section_impressions=0x7f06000f;
         public static final int viewpager_section_start=0x7f06000d;
         public static final int viewpager_section_topics=0x7f06000e;

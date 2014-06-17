@@ -14,6 +14,10 @@ import org.apache.log4j.Logger;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -98,7 +102,18 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         {
         	mViewPager.setCurrentItem(1);
         }
+        
+        // Register the broadcast receiver
+     	IntentFilter tFilter = new IntentFilter();
+     	tFilter.addAction(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+     	registerReceiver(mBroadcastRcver, tFilter); 
     }
+    
+    @Override
+    protected void onDestroy() {  
+        super.onDestroy();  
+        unregisterReceiver(mBroadcastRcver);  
+    }  		
     
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
@@ -256,6 +271,26 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 	        setProgressBarIndeterminateVisibility(false);
         }
     }
+    
+    private BroadcastReceiver mBroadcastRcver = new BroadcastReceiver() { 
+        @Override 
+        public void onReceive(Context context, Intent intent) { 
+
+            String action = intent.getAction(); 
+            if(action.equals(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG)){
+            	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
+            	switch (tMsgType) {
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR:
+        	    {
+        	    	mlog.info("Websocket error, error info: "+
+        	                   intent.getStringExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_SOCKETERROR));
+        	    	// Make a toast here to let the user to determine to enter the app offline or exit
+        	    	break;
+        	    }
+            	}            	
+            }
+        } 
+    }; 
     
     
 }

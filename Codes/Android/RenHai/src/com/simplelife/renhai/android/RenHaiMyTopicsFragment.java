@@ -24,24 +24,29 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 
 public class RenHaiMyTopicsFragment extends Fragment {
 	
 	private final int MYTOPIC_MSG_OKTODEFINEINTEREST = 2000;
 	private final int MYTOPIC_MSG_INTERESTDEFINED = 2001;
 	private final int MYTOPIC_MSG_INTERESTCHANGED = 2002;
+	private final int MYTOPIC_MSG_INTERESTDEFINEDBYMANUAL = 2003;
 		
 	RenHaiDraggableGridView mMyInterestsGrid;
 	RenHaiDraggableGridView mGlbInterestsGrid;
+	Button mCreateInt;
+	Button mFreshBtn;
+	TextView mGlbIntEmpty;
+	
 	private final Logger mlog = Logger.getLogger(RenHaiMyTopicsFragment.class);
 	
 	@Override
@@ -54,28 +59,35 @@ public class RenHaiMyTopicsFragment extends Fragment {
             Bundle savedInstanceState) {
     	
     	View rootView = inflater.inflate(R.layout.fragment_mytopic, container, false);
-    	mMyInterestsGrid = (RenHaiDraggableGridView)(rootView.findViewById(R.id.mytopics_myinterests));
+    	mMyInterestsGrid  = (RenHaiDraggableGridView)(rootView.findViewById(R.id.mytopics_myinterests));
     	mGlbInterestsGrid = (RenHaiDraggableGridView)(rootView.findViewById(R.id.mytopics_globalinterests));
+    	mCreateInt = (Button)rootView.findViewById(R.id.mytopics_create);
+    	mCreateInt.setOnClickListener(mCreateNewLabelListener);
+    	
+    	mGlbIntEmpty = (TextView)rootView.findViewById(R.id.mytopics_glbintempty);
     	
     	if(true == RenHaiInfo.InterestLabel.isPersonalIntLabelsNotDefined())
     	{
     		// The personal interest is not defined
     		onDefinePersonalInterestDialog();
-    	}
+    	}    	
     	
-    	// Only for test purpose
-    	//RenHaiInfo.InterestLabel.initTestInterests(getActivity());
-    	
+    	// Update the personal interests label grid
     	onUpdateMyInterestGrid();
     	
     	if(RenHaiInfo.InterestLabel.getCurrHotLabelNum() > 0)
     	{
+    		mGlbIntEmpty.setVisibility(View.INVISIBLE);
     		for(int i=0; i < RenHaiInfo.InterestLabel.getCurrHotLabelNum(); i++)
     		{
     			ImageView tGlbIntLabel = new ImageView(getActivity());
         		tGlbIntLabel.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getCurrHotIntLabel(i)));
         		mGlbInterestsGrid.addView(tGlbIntLabel);
     		}    		
+    	}
+    	else{
+    		mGlbIntEmpty.setVisibility(View.VISIBLE);
+    		mGlbInterestsGrid.setVisibility(View.INVISIBLE);
     	}
 		/*
     	for(int i=0; i < RenHaiInfo.InterestLabel.getCurrHotLabelNum(); i++)
@@ -106,6 +118,14 @@ public class RenHaiMyTopicsFragment extends Fragment {
 		});
     }
     
+	private View.OnClickListener mCreateNewLabelListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			onDefinePersonalInterestTextBuilder(false);			
+		}
+	};
+    
     private void onUpdateMyInterestGrid(){
     	mMyInterestsGrid.removeAllViews();
     	for(int i=0; i < RenHaiInfo.InterestLabel.getMyIntLabelNum(); i++)
@@ -122,7 +142,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
         	switch (msg.what) {
         	    case MYTOPIC_MSG_OKTODEFINEINTEREST:
         	    {
-        	    	onDefinePersonalInterestTextBuilder();       	    	
+        	    	onDefinePersonalInterestTextBuilder(true);       	    	
         	    	break;
         	    }
         	    case MYTOPIC_MSG_INTERESTDEFINED:
@@ -133,6 +153,12 @@ public class RenHaiMyTopicsFragment extends Fragment {
         	    	break;
         	    }
         	    case MYTOPIC_MSG_INTERESTCHANGED:
+        	    {
+        	    	onUpdateMyInterestGrid();
+        	    	mMyInterestsGrid.refreshDrawableState();
+        	    	break;
+        	    }
+        	    case MYTOPIC_MSG_INTERESTDEFINEDBYMANUAL:
         	    {
         	    	onUpdateMyInterestGrid();
         	    	mMyInterestsGrid.refreshDrawableState();
@@ -155,8 +181,8 @@ public class RenHaiMyTopicsFragment extends Fragment {
 			            @Override
 			            public void run() {
 			            	Message t_MsgListData = new Message();
-					        t_MsgListData.what = MYTOPIC_MSG_OKTODEFINEINTEREST;									
-					        handler.sendMessage(t_MsgListData);	
+			            	t_MsgListData.what = MYTOPIC_MSG_OKTODEFINEINTEREST;
+			            	handler.sendMessage(t_MsgListData);	
 			            }				
 		            }.start();
 		    }
@@ -172,7 +198,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
 		builder.create().show();
 	}
 	
-	private void onDefinePersonalInterestTextBuilder() {
+	private void onDefinePersonalInterestTextBuilder(final boolean _isForFirstTime) {
 		AlertDialog.Builder builder = new Builder(getActivity());
 		builder.setTitle(getString(R.string.mytopics_inttxtbuildtitle));		
 		final EditText tEditText = new EditText(getActivity());
@@ -187,7 +213,11 @@ public class RenHaiMyTopicsFragment extends Fragment {
 			            	String tInput = tEditText.getText().toString();
 			            	RenHaiInfo.InterestLabel.putMyIntLabel(tInput);
 			            	Message t_MsgListData = new Message();
-					        t_MsgListData.what = MYTOPIC_MSG_INTERESTDEFINED;									
+			            	if (true == _isForFirstTime)
+			            		t_MsgListData.what = MYTOPIC_MSG_INTERESTDEFINED;
+			            	else
+			            		t_MsgListData.what = MYTOPIC_MSG_INTERESTDEFINEDBYMANUAL;
+					        									
 					        handler.sendMessage(t_MsgListData);				            					        
 			            }				
 		            }.start();

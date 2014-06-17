@@ -14,7 +14,7 @@
         android:textColor="@color/black"
         android:text="@string/mytopics_inttitle1" />
     
-    <TextView 
+    <!--TextView 
         android:id="@+id/mytopics_delete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,18 +23,20 @@
         android:layout_marginRight="16dp"
         android:textSize="@dimen/mytopics_inttitle_size"
         android:textColor="@color/black"
-        android:text="@string/mytopics_delete"/>
+        android:text="@string/mytopics_delete"/-->
     
-    <TextView 
+    <Button         
         android:id="@+id/mytopics_create"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@id/mytopics_title1" 
-        android:layout_toLeftOf="@id/mytopics_delete"             
+        android:layout_width="80dp"
+        android:layout_height="36dp"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="16dp"
+        android:layout_alignTop="@id/mytopics_title1"      
         android:textSize="@dimen/mytopics_inttitle_size"
         android:textColor="@color/black"
-        android:text="@string/mytopics_create"/>
+        android:text="@string/mytopics_create"
+        android:background="@drawable/textview_selector"/>
+    
 
     <com.simplelife.renhai.android.ui.RenHaiDraggableGridView 
         android:id="@+id/mytopics_myinterests" 
@@ -70,18 +72,18 @@
         android:textColor="@color/black"
         android:text="@string/mytopics_inttitle2" />
     
-    <TextView 
+    <Button 
         android:id="@+id/mytopics_refresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="36dp"
         android:layout_alignParentRight="true"   
         android:layout_alignTop="@id/mytopics_title2"    
         android:layout_marginRight="16dp"
         android:textSize="@dimen/mytopics_inttitle_size"
         android:textColor="@color/black"
-        android:text="@string/mytopics_refresh"/>
+        android:text="@string/mytopics_refresh"
+        android:background="@drawable/textview_selector"/>
     
-
     <com.simplelife.renhai.android.ui.RenHaiDraggableGridView 
         android:id="@+id/mytopics_globalinterests" 
         android:layout_height="140dp" 
@@ -92,5 +94,14 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp">       
     </com.simplelife.renhai.android.ui.RenHaiDraggableGridView>
+    
+    <TextView 
+        android:id="@+id/mytopics_glbintempty"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/mytopics_title2"
+        android:text="@string/mytopics_glbintlabelempty"
+        android:gravity="center"
+        android:textStyle="bold"/>
    
 </RelativeLayout>

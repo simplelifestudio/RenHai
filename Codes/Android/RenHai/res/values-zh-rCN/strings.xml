@@ -44,6 +44,7 @@
     <string name="mytopics_inteditordelbuildposbtn">确认</string>
     <string name="mytopics_inteditordelbuildneubtn">取消</string>
     <string name="mytopics_inteditordelbuildnegbtn">删除</string>
+    <string name="mytopics_glbintlabelempty">当前无热点话题.</string>
     
     <string name="mytopics_testint1">篮球</string>
     <string name="mytopics_testint2">足球</string>

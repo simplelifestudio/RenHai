@@ -45,6 +45,7 @@
     <string name="mytopics_inteditordelbuildposbtn">Confirm</string>
     <string name="mytopics_inteditordelbuildneubtn">Cancel</string>
     <string name="mytopics_inteditordelbuildnegbtn">Delete</string>
+    <string name="mytopics_glbintlabelempty">No global hot topics.</string>
     
     <string name="mytopics_testint1">Basketball</string>
     <string name="mytopics_testint2">Football</string>
