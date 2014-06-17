@@ -114,5 +114,11 @@ public class RenHaiWebSocketProcess {
 		}
 					
 	}
+	
+	public static void reInitWebSocket(Context _context){
+		mInstance = null;
+		
+		mInstance = new RenHaiWebSocketProcess(_context);
+	}
 
 }

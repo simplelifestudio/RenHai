@@ -19,10 +19,15 @@
     <string name="viewpager_section_topics">我的话题</string>
     <string name="viewpager_section_impressions">我的印象</string>
     <string name="mainpage_title_preparenetwork">检查网络&#8230;</string>
+    <string name="mainpage_title_connectionlost">未连接</string>
     <string name="mainpage_title_connectserver">连接人海&#8230;</string>
     <string name="mainpage_title_syncserver">同步&#8230;</string>
     <string name="mainpage_title_updateinfo">更新&#8230;</string>
     <string name="mainpage_title">已连接</string>
+    <string name="mainpage_connlostdialogtitle">网络连接丢失</string>
+    <string name="mainpage_connlostdialogmsg">网络连接丢失，重新连接？</string>
+    <string name="mainpage_connlostdialogposbtn">重新连接</string>
+    <string name="mainpage_connlostdialognegbtn">取消</string>  
     
     <string name="mytopics_inttitle1">我的话题</string>
     <string name="mytopics_inttitle2">当前热门</string>

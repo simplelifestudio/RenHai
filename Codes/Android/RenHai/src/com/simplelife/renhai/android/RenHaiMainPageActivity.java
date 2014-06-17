@@ -12,14 +12,21 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
+
 import android.app.ActionBar;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.app.AlertDialog.Builder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -31,6 +38,8 @@ import android.view.Window;
 import android.widget.TextView;
 
 public class RenHaiMainPageActivity extends FragmentActivity implements ActionBar.TabListener{
+	
+	private final int MAINPAGE_MSG_WEBRECONNECTING = 3000;
 
 	AppSectionsPagerAdapter mAppSectionsPagerAdapter;
 	static ViewPager mViewPager;
@@ -196,6 +205,63 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         }
     }
     
+    private void enableActionBarNote(){
+		ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
+        		ActionBar.LayoutParams.MATCH_PARENT,
+        		ActionBar.LayoutParams.MATCH_PARENT,
+        		Gravity.CENTER);
+        View viewTitleBar = getLayoutInflater().inflate(R.layout.activity_mainpage_titlebar, null);
+        mActionBar.setCustomView(viewTitleBar, lp);
+        //getActionBar().setDisplayShowHomeEnabled(false);
+        //getActionBar().setDisplayShowTitleEnabled(false);
+        mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM);
+        //mActionBar.setDisplayShowCustomEnabled(false);
+        mActionBarTitle = (TextView) mActionBar.getCustomView().findViewById(R.id.mainpage_title);
+        //setProgressBarIndeterminateVisibility(true);
+    }
+    
+    private void disableActionBarNote(){
+    	mActionBar.setDisplayShowCustomEnabled(false);
+        mActionBar.setDisplayShowHomeEnabled(true);
+        mActionBar.setDisplayShowTitleEnabled(true);
+        setProgressBarIndeterminateVisibility(false);
+    }
+    
+    private void showActionBarNote(int _id){
+    	enableActionBarNote();
+    	mActionBarTitle.setText(_id);
+    }
+    
+	private void onDefinePersonalInterestDialog() {
+		AlertDialog.Builder builder = new Builder(this);
+		builder.setTitle(getString(R.string.mainpage_connlostdialogtitle));
+		//builder.setMessage(getString(R.string.mainpage_connlostdialogmsg));		
+		builder.setPositiveButton(R.string.mainpage_connlostdialogposbtn, new DialogInterface.OnClickListener() {
+		    @Override
+	        public void onClick(DialogInterface dialog, int which) {
+			    dialog.dismiss();    	
+		            new Thread() {  						
+			            @Override
+			            public void run() {
+			            	RenHaiWebSocketProcess.reInitWebSocket(getApplication());
+			            	Message t_MsgListData = new Message();
+			            	t_MsgListData.what = MAINPAGE_MSG_WEBRECONNECTING;
+			            	handler.sendMessage(t_MsgListData);			            	
+			            }				
+		            }.start();
+		    }
+		});
+
+		builder.setNegativeButton(R.string.mainpage_connlostdialognegbtn, new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.dismiss();
+		    }
+		});
+
+		builder.create().show();
+	}
+    
     private class RenHaiConnectServer extends AsyncTask<URL, Integer, Long> {
         
     	protected void onPreExecute () {
@@ -272,6 +338,21 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         }
     }
     
+	private Handler handler = new Handler(){  		  
+        @Override  
+        public void handleMessage(Message msg) {          	
+        	switch (msg.what) {
+        	    case MAINPAGE_MSG_WEBRECONNECTING:
+        	    {        	    	
+        	    	mActionBarTitle.setText(R.string.mainpage_title_connectserver);
+	            	setProgressBarIndeterminateVisibility(true);
+        	    	break;
+        	    }
+        	
+        	}
+        }
+	};
+    
     private BroadcastReceiver mBroadcastRcver = new BroadcastReceiver() { 
         @Override 
         public void onReceive(Context context, Intent intent) { 
@@ -282,11 +363,18 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
             	switch (tMsgType) {
             	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR:
         	    {
-        	    	mlog.info("Websocket error, error info: "+
+        	    	mlog.error("Websocket error, error info: "+
         	                   intent.getStringExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_SOCKETERROR));
-        	    	// Make a toast here to let the user to determine to enter the app offline or exit
+        	    	showActionBarNote(R.string.mainpage_title_connectionlost);
+        	    	onDefinePersonalInterestDialog();
         	    	break;
         	    }
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_SUCCESS:
+        	    {
+        	    	mlog.info("Websocket recreate success!");
+        	    	disableActionBarNote();
+        	        break;
+        	    }  
             	}            	
             }
         } 
