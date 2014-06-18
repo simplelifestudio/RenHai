@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@color/white">
+    
+    <TextView 
+        android:id="@+id/myimpression_title1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"        
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:textSize="@dimen/mytopics_inttitle_size"
+        android:textColor="@color/black"
+        android:text="@string/myimpression_imptitle1" />
+    
+    <GridView 
+        android:id="@+id/myimpression_gridview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/myimpression_title1"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:numColumns="3"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp">        
+    </GridView>
+    
+    <LinearLayout
+        android:id="@+id/myimpression_divide"
+        android:layout_height="1dp" 
+        android:layout_width="fill_parent"
+        android:layout_below="@id/myimpression_gridview" 
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/maingreen"
+        android:orientation="horizontal">        
+    </LinearLayout>
+    
+    <TextView 
+        android:id="@+id/myimpression_title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_below="@id/myimpression_divide"       
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:textSize="@dimen/mytopics_inttitle_size"
+        android:textColor="@color/black"
+        android:text="@string/myimpression_imptitle2" />
+    
+    <com.simplelife.renhai.android.ui.RenHaiDraggableGridView 
+        android:id="@+id/myimpression_implabels" 
+        android:layout_height="140dp" 
+        android:layout_width="wrap_content"
+        android:layout_below="@id/myimpression_title2"         
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">       
+    </com.simplelife.renhai.android.ui.RenHaiDraggableGridView>
+    
+    <TextView 
+        android:id="@+id/myimpression_impempty"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/myimpression_title2"
+        android:text="@string/mytopics_glbintlabelempty"
+        android:gravity="center"
+        android:textStyle="bold"/>
+
+</RelativeLayout>
