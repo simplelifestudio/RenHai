@@ -9,19 +9,22 @@
 package com.simplelife.renhai.android;
 
 import com.simplelife.renhai.android.R;
-import com.simplelife.renhai.android.jsonprocess.RenHaiJsonMsgProcess;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAlohaReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiHttpProcess;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.timeprocess.RenHaiTimeProcess;
+import com.simplelife.renhai.android.timer.RenHaiTimerHelper;
+import com.simplelife.renhai.android.timer.RenHaiTimerProcessor;
 import com.simplelife.renhai.android.ui.RenHaiProgressBar;
 import com.simplelife.renhai.android.ui.RenHaiProgressBar.Mode;
 
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -64,7 +67,10 @@ public class RenHaiSplashActivity extends Activity {
 	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	
 	private static final int BACKGROUND_PROCESS_TYPE_INITIAL = 1;
-	private static final int BACKGROUND_PROCESS_TYPE_SENDALOHA = 2;
+	private static final int BACKGROUND_PROCESS_TYPE_RECONNECT = 2;
+	private static final int BACKGROUND_PROCESS_TYPE_SENDALOHA = 3;
+	
+	private static final int SPLASH_MSG_NETWORKCONNTIMEOUT = 1001;
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +154,8 @@ public class RenHaiSplashActivity extends Activity {
         	    	mProgressText.setText(R.string.mainpage_title_connectserver);
         	    	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());       	    	
                 	String tAlohaRequestMsg = RenHaiMsgAlohaReq.constructMsg().toString();
-                	mWebSocketHandle.sendMessage(tAlohaRequestMsg); 
+                	mWebSocketHandle.sendMessage(tAlohaRequestMsg);
+                	mNetConnTimer.startTimer();
         	        break;
         	    }       	        
         	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR:
@@ -167,20 +174,25 @@ public class RenHaiSplashActivity extends Activity {
         	    }
         	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_ALOHARESP:
         	    {
+        	    	mNetConnTimer.stopTimer();
         	    	mProgressText.setText(R.string.mainpage_title_syncserver);
         	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructMsg().toString();
         	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
+        	    	mNetConnTimer.startTimer();
         	    	break;
         	    }
         	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP:
         	    {
+        	    	mNetConnTimer.stopTimer();
         	    	mProgressText.setText(R.string.mainpage_title_updateinfo);
         	    	String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();
         	    	mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
+        	    	mNetConnTimer.startTimer();
         	    	break;
         	    }
         	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP:
         	    {
+        	    	mNetConnTimer.stopTimer();
         	    	redirectTo();
         	    	break;
         	    }
@@ -318,17 +330,74 @@ public class RenHaiSplashActivity extends Activity {
     	if (tProxyResponse == RenHaiDefinitions.RENHAI_FUNC_STATUS_OK)
     	{
     		// Initialize the websocket
-    		boolean tWebSocketActiveFlag = RenHaiWebSocketProcess.initWebSocketProcess(getApplication());
-    		
-    		if (true == tWebSocketActiveFlag)
-    		{
-    	    	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());       	    	
-            	String tAlohaRequestMsg = RenHaiMsgAlohaReq.constructMsg().toString();
-            	mWebSocketHandle.sendMessage(tAlohaRequestMsg); 
-    		}
+    		RenHaiWebSocketProcess.reInitWebSocket(getApplication());
     	}  	
     }
+        
+    private class MessageSendingTask extends AsyncTask<Integer, Integer, String> {
+        // Do the long-running work in here
+        protected String doInBackground(Integer... inType) {
+        	int tInType = inType[0];
+        	String tReturnMsg = null;
+        	
+        	switch (tInType) {
+        	    case BACKGROUND_PROCESS_TYPE_INITIAL:
+        	    {
+        			// 1.Configure the logger module
+        			configureLogger();
+        			mlog.info("Renhai is about to start!");
+        			
+        			// 2.Initialize the time process
+        			RenHaiTimeProcess.initTimeProcess();
+        			
+        			// 3.Get the device info
+        			getDeviceInfo();
+        			
+        			// 4.Initialize the network instances
+        			initNetwork();
+      			
+        			break;
+        	    }
+        	    case BACKGROUND_PROCESS_TYPE_RECONNECT:
+        	    {
+        	    	initNetwork();
+        	    }
+        	}       	
+        	
+        	return tReturnMsg;
+        }
+
+        // This is called each time you call publishProgress()
+        protected void onProgressUpdate(Integer... progress) {
+            
+        }
+
+        // This is called when doInBackground() is finished
+        protected void onPostExecute(Long result) {
+            
+        }
+    }
     
+    ///////////////////////////////////////////////////////////////////////
+    // Private message Processing
+    ///////////////////////////////////////////////////////////////////////
+	private Handler handler = new Handler(){  		  
+        @Override  
+        public void handleMessage(Message msg) {          	
+        	switch (msg.what) {
+        	    case SPLASH_MSG_NETWORKCONNTIMEOUT:
+        	    {
+        	    	onNetworkConnectionTimeOut();       	    	
+        	    	break;
+        	    }
+        	
+        	}
+        }
+	};
+ 
+    ///////////////////////////////////////////////////////////////////////
+    // Exception Processing
+    ///////////////////////////////////////////////////////////////////////
     private void onHttpConnectFailed(){
     	AlertDialog.Builder builder = new Builder(this);
     	builder.setTitle(R.string.splash_httpfailed_dialogtitle);
@@ -356,46 +425,48 @@ public class RenHaiSplashActivity extends Activity {
 		builder.create().show();    	
     }
     
-    private class MessageSendingTask extends AsyncTask<Integer, Integer, String> {
-        // Do the long-running work in here
-        protected String doInBackground(Integer... inType) {
-        	int tInType = inType[0];
-        	String tReturnMsg = null;
-        	
-        	switch (tInType) {
-        	    case BACKGROUND_PROCESS_TYPE_INITIAL:
-        	    {
-        			// 1.Configure the logger module
-        			configureLogger();
-        			mlog.info("Renhai is about to start!");
-        			
-        			// 2.Initialize the time process
-        			RenHaiTimeProcess.initTimeProcess();
-        			
-        			// 3.Get the device info
-        			getDeviceInfo();
-        			
-        			// 4.Initialize the network instances
-        			initNetwork();
-      			
-        			break;
-        	    }
-        	}       	
-        	
-        	return tReturnMsg;
-        }
+    private void onNetworkConnectionTimeOut(){
+    	AlertDialog.Builder builder = new Builder(this);
+    	builder.setTitle(R.string.splash_conntimeout_dialogtitle);
 
-        // This is called each time you call publishProgress()
-        protected void onProgressUpdate(Integer... progress) {
-            
-        }
+    	builder.setPositiveButton(R.string.splash_conntimeout_dialogposbtn, 
+    			                  new DialogInterface.OnClickListener(){
 
-        // This is called when doInBackground() is finished
-        protected void onPostExecute(Long result) {
-            
-        }
+			@Override
+			public void onClick(DialogInterface dialog, int arg1) {
+				dialog.dismiss();
+				// Start another background task to process the network communication
+		        MessageSendingTask tMsgSender = new MessageSendingTask();
+		        tMsgSender.execute(BACKGROUND_PROCESS_TYPE_RECONNECT);				
+			}
+    		
+    	});
+    	builder.setNegativeButton(R.string.splash_conntimeout_dialognegbtn, 
+    			                  new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.dismiss();
+		        finish();
+		    }
+		});
+
+		builder.create().show();    	
     }
     
+    
+    
+    ///////////////////////////////////////////////////////////////////////
+    // Timer Callbacks
+    ///////////////////////////////////////////////////////////////////////
+    RenHaiTimerHelper mNetConnTimer = new RenHaiTimerHelper(10000, new RenHaiTimerProcessor() {
+        @Override
+        public void onTimeOut() {
+        	Message t_MsgListData = new Message();
+        	t_MsgListData.what = SPLASH_MSG_NETWORKCONNTIMEOUT;
+        	handler.sendMessage(t_MsgListData);	       	
+        }
+        
+    });
     
     
 

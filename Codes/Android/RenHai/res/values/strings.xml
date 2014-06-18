@@ -11,6 +11,9 @@
     <string name="splash_httpfailed_dialogmsg">Failed to retrieve the server info</string>
     <string name="splash_httpfailed_dialogposbtn">Retry</string>
     <string name="splash_httpfailed_dialognegbtn">Quit</string>
+    <string name="splash_conntimeout_dialogtitle">Network connection time out</string>
+    <string name="splash_conntimeout_dialogposbtn">Re-Connect</string>
+    <string name="splash_conntimeout_dialognegbtn">Quit</string> 
     
     
     <string name="protocal_title">User Agreement</string>
