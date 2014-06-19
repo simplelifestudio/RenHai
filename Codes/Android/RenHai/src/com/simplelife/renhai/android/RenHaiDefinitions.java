@@ -75,10 +75,11 @@ public class RenHaiDefinitions {
 	public static final String RENHAI_BROADCASTMSG_SOCKETERROR = "renhai.broadcast.websocketerrtype";
 	
 	// ===============================================================================
-	// Database definitions
+	// Special Impression Labels
 	// ===============================================================================	
-	// The name of the sql file
-	public static final String RENHAI_DB_SQLFILE = "CreateTables.sql";
+	public static final String RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY = "^#Happy#^";
+	public static final String RENHAI_IMPRESSIONLABEL_ASSESS_SOSO  = "^#SoSo#^";
+	public static final String RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING = "^#Disgusting#^";
 	
 	// ===============================================================================
 	// Function return value definitions

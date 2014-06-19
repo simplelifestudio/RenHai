@@ -484,5 +484,18 @@ public class RenHaiInfo {
 		}
 		
 	}
+	
+	public static class ImpressionLabel{
+		public static ArrayList<ImpressLabelMap> mMyImpressionLabels = new  ArrayList<ImpressLabelMap>();
+		
+		public static void resetMyImpLabels(){
+			mMyImpressionLabels.clear();
+		}
+		
+		public static int getMyImpLabelNum(){
+			return mMyImpressionLabels.size();
+		}
+		
+	}
 
 }
