@@ -58,6 +58,9 @@ public class RenHaiInfo {
 		return isAppDateSynced;
 	}
 	
+	// ===============================================================================
+	// Information of server address associated
+	// ===============================================================================	
 	public static class ServerAddr{
 		public static int serviceStatus = 0;
 		public static String timeZone  = "GMT+0800";
@@ -141,7 +144,10 @@ public class RenHaiInfo {
 			return broadcastInfo;
 		}		
 	}
-	
+
+	// ===============================================================================
+	// Information of server pool states 
+	// ===============================================================================	
 	public static class ServerPoolStat{
 		public static int onlineCount = 0;
 		public static int randomCount = 0;
@@ -235,7 +241,10 @@ public class RenHaiInfo {
 			return interestCapa;
 		}
 	}
-		
+
+	// ===============================================================================
+	// Information of user device card
+	// ===============================================================================	
 	public static class DeviceCard{		
 		public static int deviceCardId;
 		public static String registerTime;
@@ -305,7 +314,10 @@ public class RenHaiInfo {
 			return isJailed;
 		}
 	}
-	
+
+	// ===============================================================================
+	// Information of user device profile
+	// ===============================================================================	
 	public static class Profile{
 		public static int profileId = 0;
 		public static int serviceStatus = 0;
@@ -315,9 +327,9 @@ public class RenHaiInfo {
 		public static int active = 1;
 		public static int interestCardId;
 		public static int impressCardId;
-		public static int chatTotalCount;
-		public static int chatTotalDuration;
-		public static int chatLossCount;
+		public static int chatTotalCount = 0;
+		public static int chatTotalDuration = 0;
+		public static int chatLossCount = 0;
 		
 		public static void storeProfileId(int _id){
 			profileId = _id;
@@ -409,6 +421,10 @@ public class RenHaiInfo {
 		
 	}
 	
+	// ===============================================================================
+	// Information of user interest labels and impression labels
+	// ===============================================================================	
+	
 	public class InterestLabelMap{
 		public int globalInterestLabelId;
 		public String interestLabelName;
@@ -494,6 +510,44 @@ public class RenHaiInfo {
 		
 		public static int getMyImpLabelNum(){
 			return mMyImpressionLabels.size();
+		}
+		
+		public static void putMyImpLabelMap(ImpressLabelMap _impLabel){
+			mMyImpressionLabels.add(_impLabel);			
+		}
+		
+		public static ImpressLabelMap getMyImpLabelMap(int _index){
+			return mMyImpressionLabels.get(_index);
+		}
+		
+		public static class specialImpLabels{
+			public static int mAssessNumOfHappyLabel = 0;
+			public static int mAssessNumOfSoSoLabel  = 0;
+			public static int mAssessNumOfDisgustingLabel = 0;
+			
+			public static void setAssessNumOfHappyLabel(int _num){
+				mAssessNumOfHappyLabel = _num;
+			}
+			
+			public static void setAssessNumOfSoSoLabel(int _num){
+				mAssessNumOfSoSoLabel = _num;
+			}
+			
+			public static void setAssessNumOfDisgustingLabel(int _num){
+				mAssessNumOfDisgustingLabel = _num;
+			}
+			
+			public static int getAssessNumOfHappyLabel(){
+				return mAssessNumOfHappyLabel;
+			}
+			
+			public static int getAssessNumOfSoSoLabel(){
+				return mAssessNumOfSoSoLabel;
+			}
+			
+			public static int getAssessNumOfDisgustingLabel(){
+				return mAssessNumOfDisgustingLabel;
+			}
 		}
 		
 	}

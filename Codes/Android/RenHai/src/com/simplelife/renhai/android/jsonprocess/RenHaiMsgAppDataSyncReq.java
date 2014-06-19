@@ -114,8 +114,8 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 				tImpCard.put(MSG_APPSYNCREQ_CHATTCOUNT, JSONNULL);
 				tImpCard.put(MSG_APPSYNCREQ_CHATTDURA, JSONNULL);
 				tImpCard.put(MSG_APPSYNCREQ_CHATLOSS, JSONNULL);
-				tImpCard.put(MSG_APPSYNCREQ_ASSLABELLIST, JSONNULL);
-				tImpCard.put(MSG_APPSYNCREQ_IMPLABELLIST, JSONNULL);				
+				tImpCard.put(MSG_APPSYNCREQ_ASSLABELLIST, 3);
+				tImpCard.put(MSG_APPSYNCREQ_IMPLABELLIST, 10);				
 			}
 			tProfile.put(MSG_APPSYNCREQ_INTCARD, tIntCard);
 			tProfile.put(MSG_APPSYNCREQ_IMPCARD, tImpCard);

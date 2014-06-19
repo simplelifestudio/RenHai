@@ -53,7 +53,7 @@
     <string name="mytopics_inteditordelbuildposbtn">Confirm</string>
     <string name="mytopics_inteditordelbuildneubtn">Cancel</string>
     <string name="mytopics_inteditordelbuildnegbtn">Delete</string>
-    <string name="mytopics_glbintlabelempty">No global hot topics.</string>
+    <string name="mytopics_glbintlabelempty">No global hot topics</string>
     
     <string name="mytopics_testint1">Basketball</string>
     <string name="mytopics_testint2">Football</string>
@@ -68,7 +68,13 @@
     
     <string name="myimpression_imptitle1">My Impressions Marked</string>
     <string name="myimpression_imptitle2">My Impression Labels</string>
-    <string name="myimpression_glbintlabelempty">No impression labels yet.</string>
+    <string name="myimpression_glbintlabelempty">No impression labels yet</string>
+    <string name="myimpression_happylabel">Happy</string>
+    <string name="myimpression_sosolabel">SoSo</string>
+    <string name="myimpression_disgustlabel">Disgusting</string>
+    <string name="myimpression_chatcount">Chat Count</string>
+    <string name="myimpression_chattotalduration">Chat Duration</string>
+    <string name="myimpression_chatlosscount">Chat Lost</string>
     
     <string name="protocal_text">
 \t\t人海是一款基于话题匹配的视频社交产品，人海所提供的各项服务的所有权和运作权归简单生活工作室（SimpleLife Studio，以下称人海官方）所有。

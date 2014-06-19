@@ -8,9 +8,13 @@
  */
 package com.simplelife.renhai.android;
 
+import java.math.BigDecimal;
+import java.text.NumberFormat;
+
 import org.apache.log4j.Logger;
 
 import com.simplelife.renhai.android.ui.RenHaiDraggableGridView;
+import com.simplelife.renhai.android.utils.TimerConverter;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -85,16 +89,84 @@ public class RenHaiMyImpressionsFragment extends Fragment {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if(null == convertView)
 			{
+				String tTextToShow = null;
 				TextView tTextView = new TextView(mContext);
-				tTextView.setText("Test\nTest");
 				tTextView.setMaxLines(3);
 				tTextView.setSingleLine(false);
 				tTextView.setEllipsize(TruncateAt.MARQUEE);
-				tTextView.setTextSize(18);
+				tTextView.setTextSize(16);
 				tTextView.setGravity(Gravity.CENTER);
 				tTextView.setTextColor(mContext.getResources().getColor(R.color.white));
 				tTextView.setBackgroundColor(mContext.getResources().getColor(R.color.maingreen));
-				tTextView.setPadding(0, 3, 0, 3);
+				tTextView.setPadding(0, 10, 0, 10);
+				switch (position){
+				    case 0:
+				    {
+				    	tTextToShow = mContext.getString(R.string.myimpression_happylabel) 
+				    			    + "\n"
+				    			    + RenHaiInfo.ImpressionLabel.specialImpLabels.getAssessNumOfHappyLabel();				    	
+				    	break;				    	
+				    }
+				    case 1:
+				    {
+				    	tTextToShow = mContext.getString(R.string.myimpression_sosolabel) 
+				    			    + "\n"
+				    			    + RenHaiInfo.ImpressionLabel.specialImpLabels.getAssessNumOfSoSoLabel();				    	
+				    	break;				    	
+				    }
+				    case 2:
+				    {
+				    	tTextToShow = mContext.getString(R.string.myimpression_disgustlabel) 
+				    			    + "\n"
+				    			    + RenHaiInfo.ImpressionLabel.specialImpLabels.getAssessNumOfDisgustingLabel();
+				    	
+				    	break;				    	
+				    }
+				    case 3:
+				    {
+				    	tTextToShow = mContext.getString(R.string.myimpression_chatcount) 
+				    			    + "\n"
+				    			    + RenHaiInfo.Profile.getChatTotalCount();				    	
+				    	break;				    	
+				    }
+				    case 4:
+				    {
+				    	tTextToShow = mContext.getString(R.string.myimpression_chattotalduration) 
+				    			    + "\n"
+				    			    + TimerConverter.secondsToHMS(RenHaiInfo.Profile.getChatTotalDuration());				    	
+				    	break;				    	
+				    }
+				    case 5:
+				    {
+				    	String tLossRate = "";
+				    	if(RenHaiInfo.Profile.getChatTotalCount() > 0)
+				    	{
+				    		double tLossCount  = (double)RenHaiInfo.Profile.getChatLossCount();
+				    		double tTotalCount = (double)RenHaiInfo.Profile.getChatTotalCount();
+				    		BigDecimal tValue = new BigDecimal(tLossCount / tTotalCount);
+				    		NumberFormat tPercent = NumberFormat.getPercentInstance();
+				    		tPercent.setMinimumFractionDigits(2);
+				    		tPercent.setMaximumFractionDigits(2);
+				    		tLossRate = tPercent.format(tValue);
+				    	}
+				    	else
+				    	{
+				    		tLossRate = "0.00%";
+				    	}
+				    	
+				    	tTextToShow = mContext.getString(R.string.myimpression_chatlosscount) 
+				    			    + "\n"
+				    			    + tLossRate;
+				    	break;				    	
+				    }
+				    default:
+				    {
+				    	break;
+				    }
+				}
+				
+				tTextView.setText(tTextToShow);
+
 				/*
 				String tText = "Test\nTest"; 
 				SpannableString builder = new SpannableString(tText); 
