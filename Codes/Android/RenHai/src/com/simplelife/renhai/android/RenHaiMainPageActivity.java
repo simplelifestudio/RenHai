@@ -45,6 +45,7 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 	static ViewPager mViewPager;
 	ActionBar mActionBar;
 	TextView  mActionBarTitle;
+	View mHomeIcon;
 	private final Logger mlog = Logger.getLogger(RenHaiMainPageActivity.class);
 	
 	// Define the view pages
@@ -217,6 +218,9 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM);
         //mActionBar.setDisplayShowCustomEnabled(false);
         mActionBarTitle = (TextView) mActionBar.getCustomView().findViewById(R.id.mainpage_title);
+        
+        mHomeIcon = findViewById(android.R.id.home); 
+		((View) mHomeIcon.getParent()).setVisibility(View.GONE); 
         //setProgressBarIndeterminateVisibility(true);
     }
     
@@ -225,11 +229,13 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         mActionBar.setDisplayShowHomeEnabled(true);
         mActionBar.setDisplayShowTitleEnabled(true);
         setProgressBarIndeterminateVisibility(false);
+        ((View) mHomeIcon.getParent()).setVisibility(View.VISIBLE);
     }
     
     private void showActionBarNote(int _id){
     	enableActionBarNote();
     	mActionBarTitle.setText(_id);
+    	mActionBarTitle.setTextSize(16);
     }
     
 	private void onDefinePersonalInterestDialog() {

@@ -13,8 +13,8 @@
     <dimen name="mytopics_inttitle_size">18dip</dimen>
     <dimen name="startvedio_titlesize">18dip</dimen>
     <dimen name="startvedio_countsize">30dip</dimen>
-    <dimen name="startvedio_btnwidth">120dip</dimen>
-    <dimen name="startvedio_btnheight">120dip</dimen>
+    <dimen name="startvedio_btnwidth">160dip</dimen>
+    <dimen name="startvedio_btnheight">160dip</dimen>
     <dimen name="startvedio_btnmarginbottom">32dip</dimen>
 
 </resources>

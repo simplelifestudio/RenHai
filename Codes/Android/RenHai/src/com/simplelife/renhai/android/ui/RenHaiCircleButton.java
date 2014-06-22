@@ -206,7 +206,7 @@ public class RenHaiCircleButton extends ImageView {
 			mRadialWidgetPaint.setColor(mSecondaryTextColor);
 			textWidth = mRadialWidgetPaint.measureText(mSecondaryText);
 			mRadialWidgetPaint.setTextSize(mSecondaryTextSize);		
-			canvas.drawText(mSecondaryText, (getWidth()/ 2) - (textWidth/5), (getHeight()/2) + mRadius/3, mRadialWidgetPaint);
+			canvas.drawText(mSecondaryText, (getWidth()/ 2) - (textWidth/5), (getHeight()/2) + mRadius/2, mRadialWidgetPaint);
 		}
 	}
 	

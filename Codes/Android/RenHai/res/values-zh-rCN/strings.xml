@@ -64,6 +64,7 @@
     <string name="startvedio_onlinecount">在线人数</string>
     <string name="startvedio_chatcount">聊天人数</string>
     <string name="startvedio_buttontext">开始</string>
+    <string name="startvedio_btnmatching">匹配中&#8230;</string>
     
     <string name="myimpression_imptitle1">别人对我的评价</string>
     <string name="myimpression_imptitle2">别人对我的印象</string>

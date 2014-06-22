@@ -65,6 +65,7 @@
     <string name="startvedio_onlinecount">Online Count</string>
     <string name="startvedio_chatcount">Chatting Count</string>
     <string name="startvedio_buttontext">Start</string>
+    <string name="startvedio_btnmatching">Matching&#8230;</string>
     
     <string name="myimpression_imptitle1">My Impressions Marked</string>
     <string name="myimpression_imptitle2">My Impression Labels</string>
