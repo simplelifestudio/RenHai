@@ -10,6 +10,9 @@ package com.simplelife.renhai.android;
 
 import java.util.ArrayList;
 
+import com.simplelife.renhai.android.structure.ImpressLabelMap;
+import com.simplelife.renhai.android.structure.InterestLabelMap;
+
 import android.content.Context;
 
 public class RenHaiInfo {
@@ -423,27 +426,10 @@ public class RenHaiInfo {
 	
 	// ===============================================================================
 	// Information of user interest labels and impression labels
-	// ===============================================================================	
-	
-	public class InterestLabelMap{
-		public int globalInterestLabelId;
-		public String interestLabelName;
-		public int globalMatchCount;
-		public int labelOrder;
-		public boolean validFlag; 
-	}
-	
-	public class ImpressLabelMap{
-		public int globalImpressLabelId;
-		public String impressLabelName;
-		public int assessedCount;
-		public int updateTime;
-		public int assessCount; 
-	}
-	
+	// ===============================================================================		
 	public static class InterestLabel{
-		public static ArrayList<String> mCurrHotIntLabels = new ArrayList<String>();
-		public static ArrayList<String> mMyIntLabels = new ArrayList<String>();
+		public static ArrayList<InterestLabelMap> mCurrHotIntLabels = new ArrayList<InterestLabelMap>();
+		public static ArrayList<InterestLabelMap> mMyIntLabels = new ArrayList<InterestLabelMap>();
 		
 		public static void resetCurrHotLabelList(){
 			mCurrHotIntLabels.clear();
@@ -453,22 +439,13 @@ public class RenHaiInfo {
 			return mCurrHotIntLabels.size();
 		}
 		
-		public static void putCurrHotLabel(String _label){
+		public static void putCurrHotLabel(InterestLabelMap _label){
 			mCurrHotIntLabels.add(_label);
 		}
 		
-		public static String getCurrHotIntLabel(int _index){
+		public static InterestLabelMap getCurrHotIntLabel(int _index){
 			return mCurrHotIntLabels.get(_index);			
-		}
-		
-		public static void initTestInterests(Context _context){
-			putCurrHotLabel(_context.getString(R.string.mytopics_testint1));
-			putCurrHotLabel(_context.getString(R.string.mytopics_testint2));
-			putCurrHotLabel(_context.getString(R.string.mytopics_testint3));
-			putCurrHotLabel(_context.getString(R.string.mytopics_testint4));
-			putCurrHotLabel(_context.getString(R.string.mytopics_testint5));
-			putCurrHotLabel(_context.getString(R.string.mytopics_testint6));
-		}
+		}		
 		
 		public static void resetMyIntLabelList(){
 			mMyIntLabels.clear();
@@ -478,16 +455,16 @@ public class RenHaiInfo {
 			return mMyIntLabels.size();
 		}
 		
-		public static String getMyIntLabel(int _index){
+		public static InterestLabelMap getMyIntLabel(int _index){
 			//if (null != mMyIntLabels.get(_index))
 				return mMyIntLabels.get(_index);
 		}
 		
-		public static void putMyIntLabel(String _label){
+		public static void putMyIntLabel(InterestLabelMap _label){
 			mMyIntLabels.add(_label);
 		}
 		
-		public static void replaceMyIntLabel(int _index, String _newLabel){					
+		public static void replaceMyIntLabel(int _index, InterestLabelMap _newLabel){					
 			mMyIntLabels.set(_index, _newLabel);
 		}
 		
@@ -496,7 +473,7 @@ public class RenHaiInfo {
 		}
 		
 		public static boolean isPersonalIntLabelsNotDefined(){
-			return (mMyIntLabels.size() == 0) ? true : false;
+			return (mMyIntLabels.size() <= 0) ? true : false;
 		}
 		
 	}

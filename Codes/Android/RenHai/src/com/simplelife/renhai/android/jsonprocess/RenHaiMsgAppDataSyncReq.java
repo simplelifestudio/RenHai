@@ -8,6 +8,7 @@
  */
 package com.simplelife.renhai.android.jsonprocess;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -132,6 +133,19 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 			JSONObject tProfile2 = new JSONObject();
 			JSONObject tIntCard2 = new JSONObject();
 			JSONObject tImpCard2 = new JSONObject();
+			
+			int tMyIntLabelNum = RenHaiInfo.InterestLabel.getMyIntLabelNum(); 
+			if( tMyIntLabelNum > 0)
+			{
+				tIntCard2.put(MSG_APPSYNCREQ_INTCARDID, RenHaiInfo.Profile.interestCardId);
+				JSONArray tIntCardLabelList = new JSONArray();
+				for(int i=0; i<tMyIntLabelNum; i++)
+				{
+					JSONObject tIntCardLabelMap = new JSONObject();
+					tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBINTLABELID, value)
+				}
+			}
+			
 			
 			/*
 			if(true == RenHaiInfo.isAppDataSyncronized())
