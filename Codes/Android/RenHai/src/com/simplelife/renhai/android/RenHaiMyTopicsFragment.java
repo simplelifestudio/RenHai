@@ -19,7 +19,11 @@ import com.simplelife.renhai.android.ui.RenHaiDraggableGridView;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -82,7 +86,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	}    	
     	
     	// Update the personal interests label grid
-    	onUpdateMyInterestGrid();
+    	onUpdateMyInterestGrid(true);
     	
     	if(RenHaiInfo.InterestLabel.getCurrHotLabelNum() > 0)
     	{
@@ -113,10 +117,21 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	}*/
     	
     	setListeners();
+    	
+		// Register the broadcast receiver
+		IntentFilter tFilter = new IntentFilter();
+		tFilter.addAction(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+		getActivity().registerReceiver(mBroadcastRcverMyTopic, tFilter); 
 	
     	return rootView;
     
     }
+    
+    @Override
+	public void onDestroy() {  
+        super.onDestroy();  
+        getActivity().unregisterReceiver(mBroadcastRcverMyTopic);  
+    } 
     
     private void setListeners(){
     	mMyInterestsGrid.setOnItemClickListener(new OnItemClickListener() {
@@ -135,7 +150,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
 		}
 	};
     
-    private void onUpdateMyInterestGrid(){
+    private void onUpdateMyInterestGrid(boolean _ifFirstEntry){
     	mMyInterestsGrid.removeAllViews();
     	for(int i=0; i < RenHaiInfo.InterestLabel.getMyIntLabelNum(); i++)
     	{
@@ -143,6 +158,11 @@ public class RenHaiMyTopicsFragment extends Fragment {
     		tIntLabel.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getMyIntLabel(i).getIntLabelName()));
     		mMyInterestsGrid.addView(tIntLabel);
     	}
+    	
+    	// Use the resetTimer rather than the startTimer in case of the 
+    	// frequently operation of adding interest labels
+    	if(_ifFirstEntry != true)
+    		mUpdateTimer.resetTimer();
     }
     
 	private Handler handler = new Handler(){  		  
@@ -156,20 +176,20 @@ public class RenHaiMyTopicsFragment extends Fragment {
         	    }
         	    case MYTOPIC_MSG_INTERESTDEFINED:
         	    {
-        	    	onUpdateMyInterestGrid();
+        	    	onUpdateMyInterestGrid(false);
         	    	mMyInterestsGrid.refreshDrawableState();
         	    	onContinueToDefinePersonalInterestDialog();
         	    	break;
         	    }
         	    case MYTOPIC_MSG_INTERESTCHANGED:
         	    {
-        	    	onUpdateMyInterestGrid();
+        	    	onUpdateMyInterestGrid(false);
         	    	mMyInterestsGrid.refreshDrawableState();
         	    	break;
         	    }
         	    case MYTOPIC_MSG_INTERESTDEFINEDBYMANUAL:
         	    {
-        	    	onUpdateMyInterestGrid();
+        	    	onUpdateMyInterestGrid(false);
         	    	mMyInterestsGrid.refreshDrawableState();
         	    	break;
         	    }
@@ -177,6 +197,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
         	    {
         	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructMsg().toString();
         	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
+        	    	mUpdateTimer.stopTimer();
         	    	break;
         	    }
         	
@@ -294,7 +315,9 @@ public class RenHaiMyTopicsFragment extends Fragment {
 			            @Override
 			            public void run() {
 			            	String tInput = tEditText.getText().toString();
-			            	RenHaiInfo.InterestLabel.replaceMyIntLabel(_index, tInput);
+			            	// Reset the label map and set the label name
+			            	RenHaiInfo.InterestLabel.getMyIntLabel(_index).reset();
+			            	RenHaiInfo.InterestLabel.getMyIntLabel(_index).setIntLabelName(tInput);
 			            	Message t_MsgListData = new Message();
 					        t_MsgListData.what = MYTOPIC_MSG_INTERESTCHANGED;									
 					        handler.sendMessage(t_MsgListData);			            					        
@@ -308,6 +331,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
 		    public void onClick(DialogInterface dialog, int which) {
 		    	mMyInterestsGrid.removeViewAt(_index);
 		    	RenHaiInfo.InterestLabel.deleteMyIntLabel(_index);
+		    	mUpdateTimer.resetTimer();
 		        dialog.dismiss();
 		    }
 		});
@@ -351,7 +375,27 @@ public class RenHaiMyTopicsFragment extends Fragment {
         }
         
     });
+    
+    ///////////////////////////////////////////////////////////////////////
+    // Network message process
+    ///////////////////////////////////////////////////////////////////////    
+    private BroadcastReceiver mBroadcastRcverMyTopic = new BroadcastReceiver() { 
+        @Override 
+        public void onReceive(Context context, Intent intent) { 
 
+            String action = intent.getAction(); 
+            if(action.equals(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG)){
+            	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
+            	switch (tMsgType) {
+            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP:
+        	        {
+        	        	
+        	    	    break;
+        	        }  
+            	}            	
+            }
+        } 
+    };
     
     
 }

@@ -51,5 +51,11 @@ public class RenHaiTimerHelper {
             mTimerTask = null;
         }
     }
+    
+    public void resetTimer(){
+    	if (mTimer != null)
+    		stopTimer();
+    	startTimer();
+    }
 
 }

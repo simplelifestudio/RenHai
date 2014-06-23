@@ -13,6 +13,7 @@ public class InterestLabelMap{
 	public String interestLabelName;
 	public int globalMatchCount;
 	public int labelOrder;
+	public int matchCount;
 	public boolean validFlag;
 	public boolean isNewlyCreated;
 	
@@ -20,6 +21,17 @@ public class InterestLabelMap{
 		globalInterestLabelId = 0;
 		interestLabelName  = null;
 		globalMatchCount = 0;
+		matchCount = 0;
+		labelOrder = 0;
+		validFlag  = false;
+		isNewlyCreated = true;
+	}
+	
+	public void reset(){
+		globalInterestLabelId = 0;
+		interestLabelName  = null;
+		globalMatchCount = 0;
+		matchCount = 0;
 		labelOrder = 0;
 		validFlag  = false;
 		isNewlyCreated = true;
@@ -35,6 +47,10 @@ public class InterestLabelMap{
 	
 	public void setGlobalMatchCount(int _glbMatchCount){
 		globalMatchCount = _glbMatchCount;
+	}
+	
+	public void setMatchCount(int _matchCount){
+		matchCount = _matchCount;
 	}
 	
 	public void setLabelOrder(int _labelOrder){
@@ -59,6 +75,10 @@ public class InterestLabelMap{
 	
 	public int getGlobalMatchCount(){
 		return globalMatchCount;
+	}
+	
+	public int getMatchCount(){
+		return matchCount;
 	}
 	
 	public int getLabelOrder(){

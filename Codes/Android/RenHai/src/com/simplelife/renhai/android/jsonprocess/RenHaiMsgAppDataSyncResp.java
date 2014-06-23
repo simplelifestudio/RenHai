@@ -8,6 +8,7 @@
  */
 package com.simplelife.renhai.android.jsonprocess;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,6 +17,7 @@ import android.content.Intent;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
 import com.simplelife.renhai.android.RenHaiInfo;
+import com.simplelife.renhai.android.structure.InterestLabelMap;
 
 public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 	
@@ -110,7 +112,33 @@ public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 							tQDPInterestCard = tQDProfile.getJSONObject(MSG_APPSYNCRESP_INTCARD);
 							if(tQDPInterestCard.has(MSG_APPSYNCRESP_INTCARDID))
 								RenHaiInfo.Profile.storeInterestCardId(tQDPInterestCard.getInt(MSG_APPSYNCRESP_INTCARDID));
-							// TODO:interestLabelList processing
+							if(tQDPInterestCard.has(MSG_APPSYNCRESP_INTLBLLIST))
+							{
+								JSONArray tIntLabelList = tQDPInterestCard.getJSONArray(MSG_APPSYNCRESP_INTLBLLIST);
+								RenHaiInfo.InterestLabel.resetMyIntLabelList();
+								int tArraySize = tIntLabelList.length();
+								for(int i=0; i<tArraySize; i++)
+								{
+									JSONObject tIntLabelMapObj = (JSONObject) tIntLabelList.get(i);
+									InterestLabelMap tIntLabelMap = new InterestLabelMap();
+									if(tIntLabelMapObj.has(MSG_APPSYNCRESP_GLBINTLABELID))
+										tIntLabelMap.setGlobalIntLabelId(tIntLabelMapObj.getInt(MSG_APPSYNCRESP_GLBINTLABELID));
+									if(tIntLabelMapObj.has(MSG_APPSYNCRESP_INTLABELNAME))
+										tIntLabelMap.setIntLabelName(tIntLabelMapObj.getString(MSG_APPSYNCRESP_INTLABELNAME));
+									if(tIntLabelMapObj.has(MSG_APPSYNCRESP_GLBMTCHCOUNT))
+										tIntLabelMap.setGlobalMatchCount(tIntLabelMapObj.getInt(MSG_APPSYNCRESP_GLBMTCHCOUNT));
+									if(tIntLabelMapObj.has(MSG_APPSYNCRESP_LABELORDER))
+										tIntLabelMap.setLabelOrder(tIntLabelMapObj.getInt(MSG_APPSYNCRESP_LABELORDER));
+									if(tIntLabelMapObj.has(MSG_APPSYNCRESP_MATCHCOUNT))
+										tIntLabelMap.setMatchCount(tIntLabelMapObj.getInt(MSG_APPSYNCRESP_MATCHCOUNT));
+									if(tIntLabelMapObj.has(MSG_APPSYNCRESP_VALIDFLAG))
+									{
+										int tValidFlag = tIntLabelMapObj.getInt(MSG_APPSYNCRESP_VALIDFLAG);
+										tIntLabelMap.setValidFlag((tValidFlag == 1) ? true : false);
+									}
+									RenHaiInfo.InterestLabel.putMyIntLabel(tIntLabelMap);
+								}
+							}
 						}
 						if(tQDProfile.has(MSG_APPSYNCRESP_IMPCARD))
 						{

@@ -528,5 +528,20 @@ public class RenHaiInfo {
 		}
 		
 	}
+	
+	// ===============================================================================
+	// Information of business session related
+	// ===============================================================================
+	public static class BusinessSession{
+		public static int mBusinessSessionId;
+		
+		public static void setBusinessSessionId(int _id){
+			mBusinessSessionId = _id;
+		}
+		
+		public static int getBusinessSessionId(){
+			return mBusinessSessionId;
+		}
+	}
 
 }

@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
 import com.simplelife.renhai.android.RenHaiInfo;
+import com.simplelife.renhai.android.structure.InterestLabelMap;
 
 import android.content.Context;
 import android.content.Intent;
@@ -89,7 +90,9 @@ public class RenHaiMsgServerDataSyncResp extends RenHaiMsg{
 						for(int i = 0; i < tLabelSize; tLabelSize++)
 						{
 							String tLabel = tCurrentLabel.getString(i);
-							RenHaiInfo.InterestLabel.putCurrHotLabel(tLabel);						
+							InterestLabelMap tIntLabelMap = new InterestLabelMap();
+							tIntLabelMap.setIntLabelName(tLabel);
+							RenHaiInfo.InterestLabel.putCurrHotLabel(tIntLabelMap);						
 						}
 					}
 				}

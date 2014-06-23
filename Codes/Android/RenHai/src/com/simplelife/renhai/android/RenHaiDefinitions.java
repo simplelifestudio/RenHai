@@ -42,9 +42,11 @@ public class RenHaiDefinitions {
 	public static final int RENHAI_MSGID_ALOHAREQUEST  = 100;
 	public static final int RENHAI_MSGID_APPDATASYNCREQUEST = 101;
 	public static final int RENHAI_MSGID_SERVERDATASYNCREQUEST = 102;
+	public static final int RENHAI_MSGID_BUSINESSSESSIONREQUEST = 103;
 	public static final int RENHAI_MSGID_ALOHARESPONSE = 402;
 	public static final int RENHAI_MSGID_APPDATASYNCRESPONSE = 403;
 	public static final int RENHAI_MSGID_SERVERDATASYNCRESPONSE = 404;
+	public static final int RENHAI_MSGID_BUSINESSSESSIONRESPONSE = 405;
 	public static final int RENHAI_MSGID_PROXYSYNCREQUEST  = 500; 
 	public static final int RENHAI_MSGID_PROXYSYNCRESPONSE = 600; 
 	
@@ -87,7 +89,35 @@ public class RenHaiDefinitions {
 	public static final int RENHAI_FUNC_STATUS_OK    = 0;
 	public static final int RENHAI_FUNC_STATUS_ERROR = 1;
 	
+	// ===============================================================================
+	// Business session type
+	// ===============================================================================
+	public static final int RENHAI_BUSINESS_TYPE_RANDOM = 1;
+	public static final int RENHAI_BUSINESS_TYPE_INTEREST = 2;
 	
+	// ===============================================================================
+	// APP business operation type
+	// ===============================================================================
+	public static final int RENHAI_USEROPERATION_TYPE_ENTERPOOL  = 1;
+	public static final int RENHAI_USEROPERATION_TYPE_LEAVEPOOL  = 2;
+	public static final int RENHAI_USEROPERATION_TYPE_AGREECHAT  = 3;
+	public static final int RENHAI_USEROPERATION_TYPE_REJECTCHAT = 4;
+	public static final int RENHAI_USEROPERATION_TYPE_ENDCHAT = 5;
+	public static final int RENHAI_USEROPERATION_TYPE_ASSESSANDCONTINUE = 6;
+	public static final int RENHAI_USEROPERATION_TYPE_ASSESSANDQUIT = 7;
+	public static final int RENHAI_USEROPERATION_TYPE_SESSIONUNBIND = 8;
+	public static final int RENHAI_USEROPERATION_TYPE_MATCHSTART  = 9;
+	public static final int RENHAI_USEROPERATION_TYPE_CHATMESSAGE = 10;
+	
+	// ===============================================================================
+	// Server business notification type
+	// ===============================================================================	
+	public static final int RENHAI_SERVERNOTIF_TYPE_SESSIONBINDED = 1;
+	public static final int RENHAI_SERVERNOTIF_TYPE_OTHERSIDEREJECTED = 2;
+	public static final int RENHAI_SERVERNOTIF_TYPE_OTHERSIDEAGREED = 3;
+	public static final int RENHAI_SERVERNOTIF_TYPE_OTHERSIDELOST = 4;
+	public static final int RENHAI_SERVERNOTIF_TYPE_OTHERSIDEENDCHAT = 5;
+	public static final int RENHAI_SERVERNOTIF_TYPE_OTHERSIDECHATMESSAGE = 6;
 	
 
 }

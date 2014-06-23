@@ -14,6 +14,7 @@ import org.json.JSONObject;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
 import com.simplelife.renhai.android.RenHaiInfo;
+import com.simplelife.renhai.android.structure.InterestLabelMap;
 import com.simplelife.renhai.android.utils.SecurityUtils;
 
 public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
@@ -141,11 +142,27 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 				JSONArray tIntCardLabelList = new JSONArray();
 				for(int i=0; i<tMyIntLabelNum; i++)
 				{
+					InterestLabelMap tIntLabelMap = RenHaiInfo.InterestLabel.getMyIntLabel(i);
 					JSONObject tIntCardLabelMap = new JSONObject();
-					tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBINTLABELID, value)
+					if(true == tIntLabelMap.getNewlyCreatedFlag())
+					{
+						tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBINTLABELID, JSONNULL);
+						tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBMTCHCOUNT, JSONNULL);
+						tIntCardLabelMap.put(MSG_APPSYNCREQ_LABELORDER, JSONNULL);
+						tIntCardLabelMap.put(MSG_APPSYNCREQ_MATCHCOUNT, JSONNULL);
+						tIntCardLabelMap.put(MSG_APPSYNCREQ_VALIDFLAG, JSONNULL);
+					}else{
+						tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBINTLABELID, tIntLabelMap.getGlobalIntLabelId());
+						tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBMTCHCOUNT, tIntLabelMap.getGlobalMatchCount());
+						tIntCardLabelMap.put(MSG_APPSYNCREQ_LABELORDER, tIntLabelMap.getLabelOrder());
+						tIntCardLabelMap.put(MSG_APPSYNCREQ_MATCHCOUNT, tIntLabelMap.getMatchCount());
+						tIntCardLabelMap.put(MSG_APPSYNCREQ_VALIDFLAG, tIntLabelMap.getValidFlag());
+					}
+					tIntCardLabelMap.put(MSG_APPSYNCREQ_INTLABELNAME, tIntLabelMap.getIntLabelName());
+					tIntCardLabelList.put(tIntCardLabelMap);
 				}
+				tIntCard2.put(MSG_APPSYNCREQ_INTLBLLIST, tIntCardLabelList);
 			}
-			
 			
 			/*
 			if(true == RenHaiInfo.isAppDataSyncronized())
