@@ -520,7 +520,7 @@ public final class R {
         public static final int textview_selector=0x7f020027;
     }
     public static final class id {
-        public static final int action_settings=0x7f090022;
+        public static final int action_settings=0x7f090023;
         public static final int loadingpage_bar=0x7f090001;
         public static final int loadingpage_barlayout=0x7f090000;
         public static final int loadingpage_text=0x7f090002;
@@ -537,6 +537,7 @@ public final class R {
         public static final int mytopics_glbintempty=0x7f09001a;
         public static final int mytopics_globalinterests=0x7f090019;
         public static final int mytopics_myinterests=0x7f090015;
+        public static final int mytopics_progressbar=0x7f09001b;
         public static final int mytopics_refresh=0x7f090018;
         public static final int mytopics_title1=0x7f090013;
         public static final int mytopics_title2=0x7f090017;
@@ -548,13 +549,13 @@ public final class R {
         public static final int splash_progressbar=0x7f09000a;
         public static final int splash_progresstext=0x7f09000b;
         public static final int splashteamlogo=0x7f09000c;
-        public static final int startvedio_button=0x7f090021;
-        public static final int startvedio_chatcount=0x7f090020;
-        public static final int startvedio_chatcountlayout=0x7f09001f;
-        public static final int startvedio_chatcounttitle=0x7f09001e;
-        public static final int startvedio_onlinecount=0x7f09001d;
-        public static final int startvedio_onlinecountlayout=0x7f09001c;
-        public static final int startvedio_onlinecounttitle=0x7f09001b;
+        public static final int startvedio_button=0x7f090022;
+        public static final int startvedio_chatcount=0x7f090021;
+        public static final int startvedio_chatcountlayout=0x7f090020;
+        public static final int startvedio_chatcounttitle=0x7f09001f;
+        public static final int startvedio_onlinecount=0x7f09001e;
+        public static final int startvedio_onlinecountlayout=0x7f09001d;
+        public static final int startvedio_onlinecounttitle=0x7f09001c;
     }
     public static final class layout {
         public static final int activity_loading=0x7f030000;

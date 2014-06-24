@@ -123,6 +123,7 @@ public class RenHaiStartVedioFragment extends Fragment {
         	    }
         	    case STARTVEDIO_MSG_TIMETOUPDATE:
         	    {        	    	 
+        	    	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
         	    	String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();
         	    	mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
         	    	break;
@@ -159,6 +160,8 @@ public class RenHaiStartVedioFragment extends Fragment {
 			new Thread() {  						
 	            @Override
 	            public void run() {
+	            	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
+	            	
 	            	for(int i=0; i<999999999; i++)
 	    			{
 	    				
@@ -207,7 +210,7 @@ public class RenHaiStartVedioFragment extends Fragment {
     ///////////////////////////////////////////////////////////////////////
     // Timer Callbacks
     ///////////////////////////////////////////////////////////////////////
-    RenHaiTimerHelper mUpdateTimer = new RenHaiTimerHelper(15000, new RenHaiTimerProcessor() {
+    RenHaiTimerHelper mUpdateTimer = new RenHaiTimerHelper(25000, new RenHaiTimerProcessor() {
         @Override
         public void onTimeOut() {
         	Message t_MsgListData = new Message();

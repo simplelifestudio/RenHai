@@ -11,6 +11,7 @@ package com.simplelife.renhai.android;
 import org.apache.log4j.Logger;
 
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.structure.InterestLabelMap;
 import com.simplelife.renhai.android.timer.RenHaiTimerHelper;
@@ -41,6 +42,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class RenHaiMyTopicsFragment extends Fragment {
@@ -56,6 +58,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
 	Button mCreateInt;
 	Button mFreshBtn;
 	TextView mGlbIntEmpty;
+	ProgressBar mProgressBar;
 	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	
 	private final Logger mlog = Logger.getLogger(RenHaiMyTopicsFragment.class);
@@ -73,9 +76,13 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	mMyInterestsGrid  = (RenHaiDraggableGridView)(rootView.findViewById(R.id.mytopics_myinterests));
     	mGlbInterestsGrid = (RenHaiDraggableGridView)(rootView.findViewById(R.id.mytopics_globalinterests));
     	mCreateInt = (Button)rootView.findViewById(R.id.mytopics_create);
-    	mCreateInt.setOnClickListener(mCreateNewLabelListener);
+    	mFreshBtn  = (Button)rootView.findViewById(R.id.mytopics_refresh);
+    	mCreateInt.setOnClickListener(mCreateNewLabelListener);   	
+    	mFreshBtn.setOnClickListener(mFreshGlbIntLabelListener);
     	
     	mGlbIntEmpty = (TextView)rootView.findViewById(R.id.mytopics_glbintempty);
+    	mProgressBar = (ProgressBar)rootView.findViewById(R.id.mytopics_progressbar);
+    	mProgressBar.setVisibility(View.INVISIBLE);
     	
     	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
     	
@@ -88,20 +95,9 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	// Update the personal interests label grid
     	onUpdateMyInterestGrid(true);
     	
-    	if(RenHaiInfo.InterestLabel.getCurrHotLabelNum() > 0)
-    	{
-    		mGlbIntEmpty.setVisibility(View.INVISIBLE);
-    		for(int i=0; i < RenHaiInfo.InterestLabel.getCurrHotLabelNum(); i++)
-    		{
-    			ImageView tGlbIntLabel = new ImageView(getActivity());
-        		tGlbIntLabel.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getCurrHotIntLabel(i).getIntLabelName()));
-        		mGlbInterestsGrid.addView(tGlbIntLabel);
-    		}    		
-    	}
-    	else{
-    		mGlbIntEmpty.setVisibility(View.VISIBLE);
-    		mGlbInterestsGrid.setVisibility(View.INVISIBLE);
-    	}
+    	// Update the global interest label grid
+    	onUpdateGlobalInterestGrid();
+    	
 		/*
     	for(int i=0; i < RenHaiInfo.InterestLabel.getCurrHotLabelNum(); i++)
     	{
@@ -149,6 +145,28 @@ public class RenHaiMyTopicsFragment extends Fragment {
 			onDefinePersonalInterestTextBuilder(false);			
 		}
 	};
+	
+	private View.OnClickListener mFreshGlbIntLabelListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			mProgressBar.setVisibility(View.VISIBLE);
+			mGlbIntEmpty.setVisibility(View.INVISIBLE);
+			new Thread() {  						
+	            @Override
+	            public void run() {
+	            	String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();
+	            	
+	            	// Try to retrieve the handle everytime when we want to send a message rather than
+	            	// init the websocket handle on the start if the fragment. Because the websocket 
+	            	// connect might be lost under some cases, and after the websocket is re-initialized,
+	            	// the handle is changed anyway. The old pipe is broken, so we have to re-get.	            	
+	            	RenHaiWebSocketProcess tWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
+	            	tWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
+	            }				
+            }.start();			
+		}
+	};
     
     private void onUpdateMyInterestGrid(boolean _ifFirstEntry){
     	mMyInterestsGrid.removeAllViews();
@@ -163,6 +181,23 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	// frequently operation of adding interest labels
     	if(_ifFirstEntry != true)
     		mUpdateTimer.resetTimer();
+    }
+    
+    private void onUpdateGlobalInterestGrid(){
+    	if(RenHaiInfo.InterestLabel.getCurrHotLabelNum() > 0)
+    	{
+    		mGlbIntEmpty.setVisibility(View.INVISIBLE);
+    		for(int i=0; i < RenHaiInfo.InterestLabel.getCurrHotLabelNum(); i++)
+    		{
+    			ImageView tGlbIntLabel = new ImageView(getActivity());
+        		tGlbIntLabel.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getCurrHotIntLabel(i).getIntLabelName()));
+        		mGlbInterestsGrid.addView(tGlbIntLabel);
+    		}    		
+    	}
+    	else{
+    		mGlbIntEmpty.setVisibility(View.VISIBLE);
+    		mGlbInterestsGrid.setVisibility(View.INVISIBLE);
+    	}
     }
     
 	private Handler handler = new Handler(){  		  
@@ -387,11 +422,22 @@ public class RenHaiMyTopicsFragment extends Fragment {
             if(action.equals(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG)){
             	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
             	switch (tMsgType) {
+            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR:
+            	    {
+            	    	mGlbIntEmpty.setVisibility(View.VISIBLE);
+            	    	mProgressBar.setVisibility(View.INVISIBLE);
+            	    	break;
+            	    }
             	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP:
-        	        {
-        	        	
+        	        {       	        	
         	    	    break;
-        	        }  
+        	        }
+            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP:
+            	    {
+            	    	onUpdateGlobalInterestGrid();
+            	    	mProgressBar.setVisibility(View.INVISIBLE);
+            	    	break;
+            	    }
             	}            	
             }
         } 

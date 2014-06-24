@@ -103,5 +103,13 @@
         android:text="@string/mytopics_glbintlabelempty"
         android:gravity="center"
         android:textStyle="bold"/>
+    
+    <ProgressBar
+        android:id="@+id/mytopics_progressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/mytopics_title2">
+    </ProgressBar>
    
 </RelativeLayout>

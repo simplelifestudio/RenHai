@@ -12,7 +12,12 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAlohaReq;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
+import com.simplelife.renhai.android.timer.RenHaiTimerHelper;
+import com.simplelife.renhai.android.timer.RenHaiTimerProcessor;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -40,13 +45,16 @@ import android.widget.TextView;
 public class RenHaiMainPageActivity extends FragmentActivity implements ActionBar.TabListener{
 	
 	private final int MAINPAGE_MSG_WEBRECONNECTING = 3000;
+	private final int MAINPAGE_MSG_WEBRECONNECTED  = 3001;
 
 	AppSectionsPagerAdapter mAppSectionsPagerAdapter;
 	static ViewPager mViewPager;
 	ActionBar mActionBar;
 	TextView  mActionBarTitle;
 	View mHomeIcon;
+	boolean mWebSocketLost = false;
 	private final Logger mlog = Logger.getLogger(RenHaiMainPageActivity.class);
+	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	
 	// Define the view pages
 	public enum ViewPages{
@@ -112,6 +120,9 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         {
         	mViewPager.setCurrentItem(1);
         }
+        
+        // Get the websocket handle
+        mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
         
         // Register the broadcast receiver
      	IntentFilter tFilter = new IntentFilter();
@@ -238,7 +249,7 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
     	mActionBarTitle.setTextSize(16);
     }
     
-	private void onDefinePersonalInterestDialog() {
+	private void onReInitWebSocketDialog() {
 		AlertDialog.Builder builder = new Builder(this);
 		builder.setTitle(getString(R.string.mainpage_connlostdialogtitle));
 		//builder.setMessage(getString(R.string.mainpage_connlostdialogmsg));		
@@ -354,6 +365,11 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 	            	setProgressBarIndeterminateVisibility(true);
         	    	break;
         	    }
+        	    case MAINPAGE_MSG_WEBRECONNECTED:
+        	    {
+        	    	disableActionBarNote();
+        	    	break;
+        	    }
         	
         	}
         }
@@ -371,20 +387,57 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         	    {
         	    	mlog.error("Websocket error, error info: "+
         	                   intent.getStringExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_SOCKETERROR));
+        	    	mWebSocketLost = true;
         	    	showActionBarNote(R.string.mainpage_title_connectionlost);
-        	    	onDefinePersonalInterestDialog();
+        	    	onReInitWebSocketDialog();
         	    	break;
         	    }
             	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_SUCCESS:
         	    {
         	    	mlog.info("Websocket recreate success!");
-        	    	disableActionBarNote();
+        	    	// Re-get the websocket handle in case the handle is changed
+        	    	mActionBarTitle.setText(R.string.mainpage_title_syncserver);
+        	    	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
+        	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructMsg().toString();
+        	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
         	        break;
-        	    }  
+        	    }
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP:
+        	    {
+        	    	mActionBarTitle.setText(R.string.mainpage_title_updateinfo);
+        	    	String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();
+        	    	mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
+        	    	break;
+        	    }
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP:
+        	    {
+        	    	if(mWebSocketLost == true)
+        	    	{
+        	    		mActionBarTitle.setText(R.string.mainpage_title);
+        	    		setProgressBarIndeterminateVisibility(false);
+            	    	mShowConnectedTimer.startTimer();
+            	    	mWebSocketLost = false;
+        	    	}        	    	
+        	    	//disableActionBarNote();
+        	    	break;
+        	    }
             	}            	
             }
         } 
-    }; 
+    };
+    
+    ///////////////////////////////////////////////////////////////////////
+    // Timer Callbacks
+    ///////////////////////////////////////////////////////////////////////
+    RenHaiTimerHelper mShowConnectedTimer = new RenHaiTimerHelper(2000, new RenHaiTimerProcessor() {
+        @Override
+        public void onTimeOut() {
+        	Message t_MsgListData = new Message();
+        	t_MsgListData.what = MAINPAGE_MSG_WEBRECONNECTED;
+        	handler.sendMessage(t_MsgListData);	        	      	
+        }
+        
+    });
     
     
 }
