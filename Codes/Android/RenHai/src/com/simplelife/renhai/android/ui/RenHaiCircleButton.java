@@ -346,6 +346,24 @@ public class RenHaiCircleButton extends ImageView {
 	/********************************************************************************************************************
 	 * Getter and setter functions
 	 ********************************************************************************************************************/
+	public void setProgress(int _progress)
+	{
+		if(_progress > mMaxValue)
+		{
+			_progress = mMaxValue;
+		}
+		
+		if(_progress <= mMaxValue)
+		{
+			mCurrentValue = _progress;
+			postInvalidate();
+		}
+	}
+	
+	public void resetProgress(){
+		mCurrentValue = 0;
+		postInvalidate();
+	}
 	/**
 	 * @return the mCurrentValue
 	 */

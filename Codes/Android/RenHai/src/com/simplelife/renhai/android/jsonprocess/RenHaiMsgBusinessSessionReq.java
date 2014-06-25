@@ -23,7 +23,7 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 	public static String MSG_BUSINESSSESSIONREQ_OPERATIONINFO  = "operationInfo";
 	public static String MSG_BUSINESSSESSIONREQ_OPERATIONVALUE = "operationValue";
 	
-	public static JSONObject constructMsg(){
+	public static JSONObject constructMsg(int _businessType, int _operationType){
 		JSONObject tMsgContent = new JSONObject();
 		JSONObject tMsgHeaderContent = new JSONObject();
 		JSONObject tMsgBodyContent   = new JSONObject();
@@ -37,8 +37,8 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 		try {
 			tMsgContent.put(MSG_HEADER,tMsgHeaderContent);
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_SESSIONID, JSONNULL);
-			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_BUSINESSTYPE, "Interest");
-			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONTYPE, "EnterPool");
+			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_BUSINESSTYPE, _businessType);
+			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONTYPE, _operationType);
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONINFO, JSONNULL);
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONVALUE, JSONNULL);
 			tMsgContent.put(MSG_BODY, tMsgBodyContent);

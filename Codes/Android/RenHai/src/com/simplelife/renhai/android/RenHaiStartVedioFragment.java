@@ -12,6 +12,7 @@ import java.text.DecimalFormat;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.timer.RenHaiTimerHelper;
@@ -118,7 +119,7 @@ public class RenHaiStartVedioFragment extends Fragment {
         	    {
         	    	mCircleButton.setSecondaryText(getString(R.string.startvedio_btnmatching));
         	    	int tValue = msg.getData().getInt("progress");
-        	    	mCircleButton.setCurrentValue(tValue);
+        	    	//mCircleButton.setCurrentValue(tValue);
         	    	break;
         	    }
         	    case STARTVEDIO_MSG_TIMETOUPDATE:
@@ -161,48 +162,26 @@ public class RenHaiStartVedioFragment extends Fragment {
 	            @Override
 	            public void run() {
 	            	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
+	            	String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
+	            			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ENTERPOOL).toString();
+	            	mWebSocketHandle.sendMessage(tBusinessSessionReq);
 	            	
-	            	for(int i=0; i<999999999; i++)
-	    			{
-	    				
-	    			}
-	    			Message t_MsgListData = new Message();
+	            	int tProgress = 0;
+	            	while(tProgress <= 100){
+	            		tProgress += 3;
+	            		mCircleButton.setProgress(tProgress);
+						
+						try {
+							Thread.sleep(100);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
+	            	Message t_MsgListData = new Message();
 	            	t_MsgListData.what = STARTVEDIO_MSG_UPDATEPROGRESS;
-	            	Bundle tbundle = new Bundle();
-	            	tbundle.putInt("progress", 30);
-	            	t_MsgListData.setData(tbundle);
-	            	handler.sendMessage(t_MsgListData);	
-	    			//mCircleButton.setCurrentValue(30);
-	    			//mCircleButton.updatePercent();
-	    			for(int i=0; i<999999999; i++)
-	    			{
-	    				
-	    			}
-	    			//mCircleButton.setCurrentValue(60);
-	    			//mCircleButton.updatePercent();
-	    			Message t_MsgListData1 = new Message();
-	            	t_MsgListData1.what = STARTVEDIO_MSG_UPDATEPROGRESS;
-	            	Bundle tbundle1 = new Bundle();
-	            	tbundle1.putInt("progress", 60);
-	            	t_MsgListData1.setData(tbundle1);
-	            	handler.sendMessage(t_MsgListData1);	
-	    			for(int i=0; i<999999999; i++)
-	    			{
-	    				
-	    			}
-	    			//mCircleButton.setCurrentValue(90);
-	    			//mCircleButton.updatePercent();
-	    			Message t_MsgListData2 = new Message();
-	            	t_MsgListData2.what = STARTVEDIO_MSG_UPDATEPROGRESS;
-	            	Bundle tbundle2 = new Bundle();
-	            	tbundle2.putInt("progress", 90);
-	            	t_MsgListData2.setData(tbundle2);
-	            	handler.sendMessage(t_MsgListData2);
+	            	handler.sendMessage(t_MsgListData);		            	
 	            }				
             }.start();
-			
-			
-			Toast.makeText(getActivity(), "Button clicked", Toast.LENGTH_SHORT).show();
 			
 		}
 	};
