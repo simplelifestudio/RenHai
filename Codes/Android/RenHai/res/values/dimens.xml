@@ -16,5 +16,6 @@
     <dimen name="startvedio_btnwidth">160dip</dimen>
     <dimen name="startvedio_btnheight">160dip</dimen>
     <dimen name="startvedio_btnmarginbottom">32dip</dimen>
+    <dimen name="waitformatch_countersize">50dip</dimen>
 
 </resources>

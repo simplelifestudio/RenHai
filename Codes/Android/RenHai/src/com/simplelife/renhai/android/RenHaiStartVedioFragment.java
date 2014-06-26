@@ -40,9 +40,11 @@ public class RenHaiStartVedioFragment extends Fragment {
 	private final int STARTVEDIO_MSG_UPDATEPROGRESS = 5000;
 	private final int STARTVEDIO_MSG_TIMETOUPDATE   = 5001;
 	private final int STARTVEDIO_MSG_READYTOENTERPOOL = 5002;
-	RenHaiCircleButton mCircleButton;
-	TextView mOnlineCount;
-	TextView mChatCount;
+	private RenHaiCircleButton mCircleButton;
+	private TextView mOnlineCount;
+	private TextView mChatCount;
+	protected boolean mIsReadyToMoveOn = false;
+	protected boolean mHasMovedOn = false;
 	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	
 	private final Logger mlog = Logger.getLogger(RenHaiStartVedioFragment.class);
@@ -132,6 +134,17 @@ public class RenHaiStartVedioFragment extends Fragment {
         	    {
         	    	mUpdateTimer.stopTimer();
         	    	mCircleButton.setSecondaryText(getString(R.string.startvedio_btnmatching));
+        	    	mlog.info("Ready to move to the waiting page, before loop1!");
+        	    	if((mIsReadyToMoveOn == true)&&(mHasMovedOn == false))
+        	    	{
+	            		mlog.info("Ready to move to the waiting page, loop1!");
+	            		mHasMovedOn = true;
+	            		Intent tIntent = new Intent(getActivity(), RenHaiWaitForMatchActivity.class);
+        	    		startActivity(tIntent);        	    		
+        	    	}else
+        	    	{
+        	    		mIsReadyToMoveOn = true;
+        	    	}
         	    	// Enter the pool activity
         	    	break;
         	    }
@@ -157,6 +170,18 @@ public class RenHaiStartVedioFragment extends Fragment {
         	        }
             	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESPSUCC:
             	    {
+            	    	mlog.info("Ready to move to the waiting page, before loop2!");
+            	    	if((mIsReadyToMoveOn == true)&&(mHasMovedOn == false))
+            	    	{
+            	    		mlog.info("Ready to move to the waiting page, loop2!");
+            	    		Intent tIntent = new Intent(getActivity(), RenHaiWaitForMatchActivity.class);
+            	    		startActivity(tIntent);
+            	    		mHasMovedOn = true;
+            	    	}else
+            	    	{
+            	    		mIsReadyToMoveOn = true;
+            	    	}
+            	    	
             	    	break;
             	    }
             	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESPFAIL:
@@ -200,7 +225,7 @@ public class RenHaiStartVedioFragment extends Fragment {
 	            	
 	            	Message t_MsgListData1 = new Message();
 	            	t_MsgListData1.what = STARTVEDIO_MSG_READYTOENTERPOOL;
-	            	handler.sendMessage(t_MsgListData1);
+	            	handler.sendMessage(t_MsgListData1);	            	
 	            	            	
 	            }				
             }.start();

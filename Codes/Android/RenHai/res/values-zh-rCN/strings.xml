@@ -77,6 +77,9 @@
     <string name="myimpression_chattotalduration">聊天时长</string>
     <string name="myimpression_chatlosscount">掉线率</string>
     
+    <string name="waitformatch_counterstart">0</string>
+    <string name="waitformatch_counternote">匹配中&#8230;</string>
+    
     <string name="protocal_text">
 \t\t人海是一款基于话题匹配的视频社交产品，人海所提供的各项服务的所有权和运作权归简单生活工作室（SimpleLife Studio，以下称人海官方）所有。
 \n\t\t本协议（包括隐私保护声明）是由您（终端用户）与人海官方之间就人海提供的各项服务所订立的相关权利义务规范，本协议将对您使用人海产生法律约束力。
