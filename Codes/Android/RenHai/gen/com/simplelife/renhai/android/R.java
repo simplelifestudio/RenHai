@@ -561,11 +561,12 @@ public final class R {
         public static final int activity_loading=0x7f030000;
         public static final int activity_mainpage_titlebar=0x7f030001;
         public static final int activity_mainpage_viewpager=0x7f030002;
-        public static final int activity_protocal=0x7f030003;
-        public static final int activity_splash=0x7f030004;
-        public static final int fragment_myimpression=0x7f030005;
-        public static final int fragment_mytopic=0x7f030006;
-        public static final int fragment_startvedio=0x7f030007;
+        public static final int activity_matchpage=0x7f030003;
+        public static final int activity_protocal=0x7f030004;
+        public static final int activity_splash=0x7f030005;
+        public static final int fragment_myimpression=0x7f030006;
+        public static final int fragment_mytopic=0x7f030007;
+        public static final int fragment_startvedio=0x7f030008;
     }
     public static final class menu {
         public static final int splash=0x7f080000;
@@ -584,15 +585,15 @@ public final class R {
         public static final int mainpage_title_preparenetwork=0x7f060013;
         public static final int mainpage_title_syncserver=0x7f060016;
         public static final int mainpage_title_updateinfo=0x7f060017;
-        public static final int myimpression_chatcount=0x7f060042;
-        public static final int myimpression_chatlosscount=0x7f060044;
-        public static final int myimpression_chattotalduration=0x7f060043;
-        public static final int myimpression_disgustlabel=0x7f060041;
-        public static final int myimpression_glbintlabelempty=0x7f06003e;
-        public static final int myimpression_happylabel=0x7f06003f;
-        public static final int myimpression_imptitle1=0x7f06003c;
-        public static final int myimpression_imptitle2=0x7f06003d;
-        public static final int myimpression_sosolabel=0x7f060040;
+        public static final int myimpression_chatcount=0x7f060043;
+        public static final int myimpression_chatlosscount=0x7f060045;
+        public static final int myimpression_chattotalduration=0x7f060044;
+        public static final int myimpression_disgustlabel=0x7f060042;
+        public static final int myimpression_glbintlabelempty=0x7f06003f;
+        public static final int myimpression_happylabel=0x7f060040;
+        public static final int myimpression_imptitle1=0x7f06003d;
+        public static final int myimpression_imptitle2=0x7f06003e;
+        public static final int myimpression_sosolabel=0x7f060041;
         public static final int mytopics_create=0x7f06001f;
         public static final int mytopics_delete=0x7f060020;
         public static final int mytopics_glbintlabelempty=0x7f060031;
@@ -621,7 +622,7 @@ public final class R {
         public static final int mytopics_testint5=0x7f060036;
         public static final int mytopics_testint6=0x7f060037;
         public static final int protocal_no=0x7f06000f;
-        public static final int protocal_text=0x7f060045;
+        public static final int protocal_text=0x7f060046;
         public static final int protocal_title=0x7f06000d;
         public static final int protocal_yes=0x7f06000e;
         public static final int splash_advert=0x7f060004;
@@ -634,7 +635,8 @@ public final class R {
         public static final int splash_httpfailed_dialogtitle=0x7f060006;
         public static final int splash_logo=0x7f060003;
         public static final int splash_teamlogo=0x7f060005;
-        public static final int startvedio_btnmatching=0x7f06003b;
+        public static final int startvedio_btnmatching=0x7f06003c;
+        public static final int startvedio_btnpreparing=0x7f06003b;
         public static final int startvedio_buttontext=0x7f06003a;
         public static final int startvedio_chatcount=0x7f060039;
         public static final int startvedio_onlinecount=0x7f060038;

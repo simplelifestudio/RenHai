@@ -163,7 +163,7 @@ public class RenHaiMsg {
 				    }
 				    case RenHaiDefinitions.RENHAI_MSGID_BUSINESSSESSIONRESPONSE:
 				    {
-				    	return
+				    	return RenHaiMsgBusinessSessionResp.parseMsg(_context, tMsgBody);
 				    }
 				    //TODO: add other entries here
 				}

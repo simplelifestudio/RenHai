@@ -62,8 +62,10 @@ public class RenHaiDefinitions {
 	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_ALOHARESP = 1105;
 	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP = 1106;
 	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP = 1107;
-	public static final int RENHAI_NETWORK_MSS_UNMATCHMSGSN = 1108;
-	public static final int RENHAI_NETWORK_MSS_UNMATCHDEVICESN = 1109;
+	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESPSUCC = 1108;
+	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESPFAIL = 1109;
+	public static final int RENHAI_NETWORK_MSS_UNMATCHMSGSN = 1110;
+	public static final int RENHAI_NETWORK_MSS_UNMATCHDEVICESN = 1111;
 	
 	// ===============================================================================
 	// Broadcast receiver definitions

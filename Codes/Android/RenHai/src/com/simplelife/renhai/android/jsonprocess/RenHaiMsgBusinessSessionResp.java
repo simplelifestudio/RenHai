@@ -15,6 +15,7 @@ import com.simplelife.renhai.android.RenHaiDefinitions;
 import com.simplelife.renhai.android.RenHaiInfo;
 
 import android.content.Context;
+import android.content.Intent;
 
 public class RenHaiMsgBusinessSessionResp extends RenHaiMsg{
 	// Message fields definition
@@ -26,19 +27,35 @@ public class RenHaiMsgBusinessSessionResp extends RenHaiMsg{
 	
 	public static int parseMsg(Context _context, JSONObject inBody){
 		
+		boolean tValueSuccessFlag = false;
+		
 		try 
 		{
 			if(inBody.has(MSG_BUSINESSSESSIONRESP_SESSIONID))
 				RenHaiInfo.BusinessSession.setBusinessSessionId(inBody.getInt(MSG_BUSINESSSESSIONRESP_SESSIONID));
 				
+			if(inBody.has(MSG_BUSINESSSESSIONRESP_OPERATIONVALUE))
+				tValueSuccessFlag = (inBody.getInt(MSG_BUSINESSSESSIONRESP_OPERATIONVALUE) == 1) ? true : false;
+				                  
+			if(tValueSuccessFlag == true)
+			{
+				Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
+		        		         RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESPSUCC);
+		        _context.sendBroadcast(tIntent);
+			}else
+			{
+				Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
+		        		         RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESPFAIL);
+		        _context.sendBroadcast(tIntent);				
+			}
 			
 		}catch (JSONException e) {
 			mlog.error("Failed to process RenHaiMsgBusinessSessionResp!", e);
 			return RenHaiDefinitions.RENHAI_FUNC_STATUS_ERROR;
 		}
 		return RenHaiDefinitions.RENHAI_FUNC_STATUS_OK;
-		
-		
 
 	}
 

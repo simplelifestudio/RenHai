@@ -39,6 +39,7 @@ public class RenHaiStartVedioFragment extends Fragment {
 	
 	private final int STARTVEDIO_MSG_UPDATEPROGRESS = 5000;
 	private final int STARTVEDIO_MSG_TIMETOUPDATE   = 5001;
+	private final int STARTVEDIO_MSG_READYTOENTERPOOL = 5002;
 	RenHaiCircleButton mCircleButton;
 	TextView mOnlineCount;
 	TextView mChatCount;
@@ -117,9 +118,7 @@ public class RenHaiStartVedioFragment extends Fragment {
         	switch (msg.what) {
         	    case STARTVEDIO_MSG_UPDATEPROGRESS:
         	    {
-        	    	mCircleButton.setSecondaryText(getString(R.string.startvedio_btnmatching));
-        	    	int tValue = msg.getData().getInt("progress");
-        	    	//mCircleButton.setCurrentValue(tValue);
+        	    	mCircleButton.setSecondaryText(getString(R.string.startvedio_btnpreparing));
         	    	break;
         	    }
         	    case STARTVEDIO_MSG_TIMETOUPDATE:
@@ -129,6 +128,14 @@ public class RenHaiStartVedioFragment extends Fragment {
         	    	mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
         	    	break;
         	    }
+        	    case STARTVEDIO_MSG_READYTOENTERPOOL:
+        	    {
+        	    	mUpdateTimer.stopTimer();
+        	    	mCircleButton.setSecondaryText(getString(R.string.startvedio_btnmatching));
+        	    	// Enter the pool activity
+        	    	break;
+        	    }
+        	    
         	
         	}
         }
@@ -147,7 +154,15 @@ public class RenHaiStartVedioFragment extends Fragment {
         	        	initView();
         	        	mUpdateTimer.startTimer();
         	    	    break;
-        	        }  
+        	        }
+            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESPSUCC:
+            	    {
+            	    	break;
+            	    }
+            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESPFAIL:
+            	    {
+            	    	break;
+            	    }
             	}            	
             }
         } 
@@ -162,9 +177,14 @@ public class RenHaiStartVedioFragment extends Fragment {
 	            @Override
 	            public void run() {
 	            	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
-	            	String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
+	            	String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(
+	            			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
 	            			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ENTERPOOL).toString();
 	            	mWebSocketHandle.sendMessage(tBusinessSessionReq);
+	            	
+	            	Message t_MsgListData = new Message();
+	            	t_MsgListData.what = STARTVEDIO_MSG_UPDATEPROGRESS;
+	            	handler.sendMessage(t_MsgListData);		
 	            	
 	            	int tProgress = 0;
 	            	while(tProgress <= 100){
@@ -172,14 +192,16 @@ public class RenHaiStartVedioFragment extends Fragment {
 	            		mCircleButton.setProgress(tProgress);
 						
 						try {
-							Thread.sleep(100);
+							Thread.sleep(60);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
 					}
-	            	Message t_MsgListData = new Message();
-	            	t_MsgListData.what = STARTVEDIO_MSG_UPDATEPROGRESS;
-	            	handler.sendMessage(t_MsgListData);		            	
+	            	
+	            	Message t_MsgListData1 = new Message();
+	            	t_MsgListData1.what = STARTVEDIO_MSG_READYTOENTERPOOL;
+	            	handler.sendMessage(t_MsgListData1);
+	            	            	
 	            }				
             }.start();
 			
