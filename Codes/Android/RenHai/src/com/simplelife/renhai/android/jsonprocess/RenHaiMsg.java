@@ -165,6 +165,11 @@ public class RenHaiMsg {
 				    {
 				    	return RenHaiMsgBusinessSessionResp.parseMsg(_context, tMsgBody);
 				    }
+				    case RenHaiDefinitions.RENHAI_MSGID_BUSINESSSESSIONNOTIFICATION:
+				    {
+				    	return RenHaiMsgBusinessSessionNotification.parseMsg(_context, tMsgBody);
+				    }
+				    
 				    //TODO: add other entries here
 				}
 								
