@@ -94,6 +94,10 @@ public class RenHaiWebSocketProcess {
 		mWebsocketClient.connect();
 	}
 	
+	public void ping(String inMsg){
+		mWebsocketClient.ping(inMsg);
+	}
+	
 	public void sendMessage(String inMsg){
 		mWebsocketClient.send(inMsg);
 	}

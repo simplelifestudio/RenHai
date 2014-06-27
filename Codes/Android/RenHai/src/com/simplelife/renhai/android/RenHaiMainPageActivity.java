@@ -128,11 +128,14 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
      	IntentFilter tFilter = new IntentFilter();
      	tFilter.addAction(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
      	registerReceiver(mBroadcastRcver, tFilter); 
+     	
+     	mPingTimer.startRepeatTimer();
     }
     
     @Override
     protected void onDestroy() {  
         super.onDestroy();  
+        mPingTimer.stopTimer();
         unregisterReceiver(mBroadcastRcver);  
     }  		
     
@@ -388,6 +391,7 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         	    	mlog.error("Websocket error, error info: "+
         	                   intent.getStringExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_SOCKETERROR));
         	    	mWebSocketLost = true;
+        	    	mPingTimer.stopTimer();
         	    	showActionBarNote(R.string.mainpage_title_connectionlost);
         	    	onReInitWebSocketDialog();
         	    	break;
@@ -423,6 +427,7 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         	    		setProgressBarIndeterminateVisibility(false);
             	    	mShowConnectedTimer.startTimer();
             	    	mWebSocketLost = false;
+            	    	mPingTimer.startRepeatTimer();
         	    	}        	    	
         	    	//disableActionBarNote();
         	    	break;
@@ -441,6 +446,14 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         	Message t_MsgListData = new Message();
         	t_MsgListData.what = MAINPAGE_MSG_WEBRECONNECTED;
         	handler.sendMessage(t_MsgListData);	        	      	
+        }
+        
+    });
+    
+    RenHaiTimerHelper mPingTimer = new RenHaiTimerHelper(1000, 4000, new RenHaiTimerProcessor() {
+        @Override
+        public void onTimeOut() {
+        	mWebSocketHandle.ping("");        	      	
         }
         
     });

@@ -17,6 +17,8 @@ public class RenHaiTimerHelper {
     
     private int mDelayMs;
     
+    private int mPeriod;
+    
     private Timer mTimer;
     
     private TimerTask mTimerTask;
@@ -24,6 +26,12 @@ public class RenHaiTimerHelper {
     public RenHaiTimerHelper(int _delayMs, RenHaiTimerProcessor _processor) {
         mProcessor = _processor;
         mDelayMs   = _delayMs;
+    }
+    
+    public RenHaiTimerHelper(int _delayMs, int _period, RenHaiTimerProcessor _processor) {
+        mProcessor = _processor;
+        mDelayMs   = _delayMs;
+        mPeriod    = _period;
     }
     
     public void startTimer() {
@@ -39,6 +47,21 @@ public class RenHaiTimerHelper {
         };
         
         mTimer.schedule(mTimerTask, mDelayMs);
+    }
+    
+    public void startRepeatTimer() {
+        mTimer = new Timer(true);
+        mTimerTask = new TimerTask() {
+
+            @Override
+            public void run() {
+                if (mProcessor != null) {
+                    mProcessor.onTimeOut();
+                }
+            }            
+        };
+        
+        mTimer.schedule(mTimerTask, mDelayMs, mPeriod);
     }
     
     public void stopTimer() {

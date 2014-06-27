@@ -187,12 +187,14 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	if(RenHaiInfo.InterestLabel.getCurrHotLabelNum() > 0)
     	{
     		mGlbIntEmpty.setVisibility(View.INVISIBLE);
+    		mGlbInterestsGrid.removeAllViews();
     		for(int i=0; i < RenHaiInfo.InterestLabel.getCurrHotLabelNum(); i++)
     		{
     			ImageView tGlbIntLabel = new ImageView(getActivity());
         		tGlbIntLabel.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getCurrHotIntLabel(i).getIntLabelName()));
         		mGlbInterestsGrid.addView(tGlbIntLabel);
-    		}    		
+    		} 
+    		mGlbInterestsGrid.setVisibility(View.VISIBLE);
     	}
     	else{
     		mGlbIntEmpty.setVisibility(View.VISIBLE);
