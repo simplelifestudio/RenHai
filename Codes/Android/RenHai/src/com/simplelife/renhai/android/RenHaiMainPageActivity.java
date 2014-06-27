@@ -395,18 +395,24 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
             	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_SUCCESS:
         	    {
         	    	mlog.info("Websocket recreate success!");
-        	    	// Re-get the websocket handle in case the handle is changed
-        	    	mActionBarTitle.setText(R.string.mainpage_title_syncserver);
-        	    	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
-        	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructMsg().toString();
-        	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
+        	    	if(mWebSocketLost == true)
+        	    	{
+        	    		// Re-get the websocket handle in case the handle is changed
+            	    	mActionBarTitle.setText(R.string.mainpage_title_syncserver);
+            	    	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
+            	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructMsg().toString();
+            	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
+        	    	}        	    	
         	        break;
         	    }
             	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP:
         	    {
-        	    	mActionBarTitle.setText(R.string.mainpage_title_updateinfo);
-        	    	String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();
-        	    	mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
+        	    	if(mWebSocketLost == true)
+        	    	{
+        	    		mActionBarTitle.setText(R.string.mainpage_title_updateinfo);
+            	    	String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();
+            	    	mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
+        	    	}       	    	
         	    	break;
         	    }
             	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP:

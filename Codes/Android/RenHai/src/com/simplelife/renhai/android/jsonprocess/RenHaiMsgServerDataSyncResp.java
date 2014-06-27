@@ -32,6 +32,10 @@ public class RenHaiMsgServerDataSyncResp extends RenHaiMsg{
 	public static String MSG_SVRSYNCRESP_DEVCAPA = "deviceCapacity";	
 	public static String MSG_SVRSYNCRESP_INTLABELLIST = "interestLabelList";
 	public static String MSG_SVRSYNCRESP_CURRENT   = "current";
+	public static String MSG_SVRSYNCRESP_INLABELPROFCNT = "currentProfileCount";
+	public static String MSG_SVRSYNCRESP_INLABELGLBID = "globalInterestLabelId";
+	public static String MSG_SVRSYNCRESP_INLABELGLBMATCHCNT = "globalMatchCount";
+	public static String MSG_SVRSYNCRESP_INLABELNAME = "interestLabelName";
 	public static String MSG_SVRSYNCRESP_HISTORY   = "history";
 	public static String MSG_SVRSYNCRESP_STARTTIME = "startTime";
 	public static String MSG_SVRSYNCRESP_ENDTIME   = "endTime";
@@ -87,11 +91,24 @@ public class RenHaiMsgServerDataSyncResp extends RenHaiMsg{
 					if (tLabelSize > 0)
 					{
 						RenHaiInfo.InterestLabel.resetCurrHotLabelList();
-						for(int i = 0; i < tLabelSize; tLabelSize++)
+						for(int i = 0; i < tLabelSize; i++)
 						{
-							String tLabel = tCurrentLabel.getString(i);
+							JSONObject tIntLabelMapInList = tCurrentLabel.getJSONObject(i);
 							InterestLabelMap tIntLabelMap = new InterestLabelMap();
-							tIntLabelMap.setIntLabelName(tLabel);
+							if(tIntLabelMapInList.has(MSG_SVRSYNCRESP_INLABELGLBID))
+								tIntLabelMap.setGlobalIntLabelId(tIntLabelMapInList.getInt(MSG_SVRSYNCRESP_INLABELGLBID));
+							if(tIntLabelMapInList.has(MSG_SVRSYNCRESP_INLABELPROFCNT))
+								tIntLabelMap.setCurrentProfileCount(tIntLabelMapInList.getInt(MSG_SVRSYNCRESP_INLABELPROFCNT));
+							if(tIntLabelMapInList.has(MSG_SVRSYNCRESP_INLABELGLBMATCHCNT))
+								tIntLabelMap.setGlobalMatchCount(tIntLabelMapInList.getInt(MSG_SVRSYNCRESP_INLABELGLBMATCHCNT));
+							if(tIntLabelMapInList.has(MSG_SVRSYNCRESP_INLABELNAME))
+							{
+								tIntLabelMap.setIntLabelName(tIntLabelMapInList.getString(MSG_SVRSYNCRESP_INLABELNAME));
+							}else{
+								// It is not a normal case, but you know...
+								tIntLabelMap.setIntLabelName("Unknow");
+							}
+								
 							RenHaiInfo.InterestLabel.putCurrHotLabel(tIntLabelMap);						
 						}
 					}

@@ -14,6 +14,7 @@ public class InterestLabelMap{
 	public int globalMatchCount;
 	public int labelOrder;
 	public int matchCount;
+	public int currentProfileCount;
 	public boolean validFlag;
 	public boolean isNewlyCreated;
 	
@@ -49,6 +50,10 @@ public class InterestLabelMap{
 		globalMatchCount = _glbMatchCount;
 	}
 	
+	public void setCurrentProfileCount(int _count){
+		currentProfileCount = _count;
+	}
+	
 	public void setMatchCount(int _matchCount){
 		matchCount = _matchCount;
 	}
@@ -79,6 +84,10 @@ public class InterestLabelMap{
 	
 	public int getMatchCount(){
 		return matchCount;
+	}
+	
+	public int getCurrentProfileCount(){
+		return currentProfileCount;
 	}
 	
 	public int getLabelOrder(){
