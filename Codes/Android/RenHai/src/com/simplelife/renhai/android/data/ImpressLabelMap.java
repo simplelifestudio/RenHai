@@ -23,6 +23,14 @@ public class ImpressLabelMap{
 		assessCount   = 0;
 	}
 	
+	public ImpressLabelMap(int _glbid, String _name, int _assessCnt, int _assessedCnt, int _updateTime){
+		globalImpressLabelId = _glbid;
+		impressLabelName = _name;
+		assessedCount = _assessedCnt;
+		updateTime    = _updateTime;
+		assessCount   = _assessCnt;
+	}
+	
 	public void setGlobalImpLabelId(int _id){
 		globalImpressLabelId = _id;
 	}

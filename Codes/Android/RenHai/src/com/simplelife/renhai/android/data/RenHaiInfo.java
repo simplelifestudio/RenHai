@@ -528,6 +528,12 @@ public class RenHaiInfo {
 		
 	}
 	
+	public static class AssessLabel {
+		public static ImpressLabelMap mHappyLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY,0,0,0);
+		public static ImpressLabelMap mSoSoLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_SOSO,0,0,0);
+		public static ImpressLabelMap mDigustingLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING,0,0,0);
+	}
+	
 	// ===============================================================================
 	// Information of business session related
 	// ===============================================================================

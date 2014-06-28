@@ -8,6 +8,10 @@
  */
 package com.simplelife.renhai.android.data;
 
+import java.util.ArrayList;
+
+import com.simplelife.renhai.android.RenHaiDefinitions;
+
 public class PeerDeviceInfo {
 	public static int deviceId = 0;		
 	public static String deviceSn = "";
@@ -203,5 +207,119 @@ public class PeerDeviceInfo {
 			return chatLossCount;
 		}
 		
+	}
+	
+	// ===============================================================================
+	// Information of user interest labels and impression labels
+	// ===============================================================================		
+	public static class InterestLabel{
+		public static ArrayList<InterestLabelMap> mCurrHotIntLabels = new ArrayList<InterestLabelMap>();
+		public static ArrayList<InterestLabelMap> mMyIntLabels = new ArrayList<InterestLabelMap>();
+		
+		public static void resetCurrHotLabelList(){
+			mCurrHotIntLabels.clear();
+		}
+		
+		public static int getCurrHotLabelNum(){
+			return mCurrHotIntLabels.size();
+		}
+		
+		public static void putCurrHotLabel(InterestLabelMap _label){
+			mCurrHotIntLabels.add(_label);
+		}
+		
+		public static InterestLabelMap getCurrHotIntLabel(int _index){
+			return mCurrHotIntLabels.get(_index);			
+		}		
+		
+		public static void resetMyIntLabelList(){
+			mMyIntLabels.clear();
+		}
+		
+		public static int getMyIntLabelNum(){
+			return mMyIntLabels.size();
+		}
+		
+		public static InterestLabelMap getMyIntLabel(int _index){
+			//if (null != mMyIntLabels.get(_index))
+				return mMyIntLabels.get(_index);
+		}
+		
+		public static void putMyIntLabel(InterestLabelMap _label){
+			mMyIntLabels.add(_label);
+		}
+		
+		public static void replaceMyIntLabel(int _index, InterestLabelMap _newLabel){					
+			mMyIntLabels.set(_index, _newLabel);
+		}
+		
+		public static void deleteMyIntLabel(int _index){					
+			mMyIntLabels.remove(_index);
+		}
+		
+		public static boolean isPersonalIntLabelsNotDefined(){
+			return (mMyIntLabels.size() <= 0) ? true : false;
+		}
+		
+	}
+	
+	public static class ImpressionLabel{
+		public static ArrayList<ImpressLabelMap> mMyImpressionLabels = new  ArrayList<ImpressLabelMap>();
+		
+		public static void resetMyImpLabels(){
+			mMyImpressionLabels.clear();
+		}
+		
+		public static int getMyImpLabelNum(){
+			return mMyImpressionLabels.size();
+		}
+		
+		public static void putMyImpLabelMap(ImpressLabelMap _impLabel){
+			mMyImpressionLabels.add(_impLabel);			
+		}
+		
+		public static ImpressLabelMap getMyImpLabelMap(int _index){
+			return mMyImpressionLabels.get(_index);
+		}
+		
+		public static class specialImpLabels{
+			public static int mAssessNumOfHappyLabel = 0;
+			public static int mAssessNumOfSoSoLabel  = 0;
+			public static int mAssessNumOfDisgustingLabel = 0;
+			
+			public static void setAssessNumOfHappyLabel(int _num){
+				mAssessNumOfHappyLabel = _num;
+			}
+			
+			public static void setAssessNumOfSoSoLabel(int _num){
+				mAssessNumOfSoSoLabel = _num;
+			}
+			
+			public static void setAssessNumOfDisgustingLabel(int _num){
+				mAssessNumOfDisgustingLabel = _num;
+			}
+			
+			public static int getAssessNumOfHappyLabel(){
+				return mAssessNumOfHappyLabel;
+			}
+			
+			public static int getAssessNumOfSoSoLabel(){
+				return mAssessNumOfSoSoLabel;
+			}
+			
+			public static int getAssessNumOfDisgustingLabel(){
+				return mAssessNumOfDisgustingLabel;
+			}
+		}
+		
+	}
+
+	// ===============================================================================
+	// Information of assess labels
+	// ===============================================================================	
+	public static class AssessLabel {
+		public static ImpressLabelMap mHappyLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY,0,0,0);
+		public static ImpressLabelMap mSoSoLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_SOSO,0,0,0);
+		public static ImpressLabelMap mDigustingLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING,0,0,0);
 	}
 }
