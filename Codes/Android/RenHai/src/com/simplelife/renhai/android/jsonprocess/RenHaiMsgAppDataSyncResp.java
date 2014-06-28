@@ -16,8 +16,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
-import com.simplelife.renhai.android.RenHaiInfo;
-import com.simplelife.renhai.android.structure.InterestLabelMap;
+import com.simplelife.renhai.android.data.InterestLabelMap;
+import com.simplelife.renhai.android.data.RenHaiInfo;
 
 public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 	

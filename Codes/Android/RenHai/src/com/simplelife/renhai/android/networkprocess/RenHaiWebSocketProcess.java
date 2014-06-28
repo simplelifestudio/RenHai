@@ -20,8 +20,8 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
-import com.simplelife.renhai.android.RenHaiInfo;
 import com.simplelife.renhai.android.RenHaiMainPageActivity;
+import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsg;
 import com.simplelife.renhai.android.utils.WebSocketClient;
 

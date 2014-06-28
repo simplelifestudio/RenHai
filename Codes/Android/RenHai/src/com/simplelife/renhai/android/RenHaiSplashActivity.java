@@ -9,6 +9,7 @@
 package com.simplelife.renhai.android;
 
 import com.simplelife.renhai.android.R;
+import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAlohaReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;

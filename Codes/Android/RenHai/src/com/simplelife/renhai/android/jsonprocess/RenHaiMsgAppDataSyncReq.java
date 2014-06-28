@@ -13,8 +13,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
-import com.simplelife.renhai.android.RenHaiInfo;
-import com.simplelife.renhai.android.structure.InterestLabelMap;
+import com.simplelife.renhai.android.data.InterestLabelMap;
+import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.utils.SecurityUtils;
 
 public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{

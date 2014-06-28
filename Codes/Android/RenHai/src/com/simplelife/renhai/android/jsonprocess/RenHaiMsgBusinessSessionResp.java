@@ -12,7 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
-import com.simplelife.renhai.android.RenHaiInfo;
+import com.simplelife.renhai.android.data.RenHaiInfo;
 
 import android.content.Context;
 import android.content.Intent;
@@ -39,9 +39,63 @@ public class RenHaiMsgBusinessSessionResp extends RenHaiMsg{
 				                  
 			if(tValueSuccessFlag == true)
 			{
+				int tOperationType = inBody.getInt(MSG_BUSINESSSESSIONRESP_OPERATIONTYPE);
+				int tNoteType = 0;
+				switch(tOperationType){
+					case RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ENTERPOOL:
+					{
+						tNoteType = RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_ENTERPOOL;
+						break;
+					}
+					case RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_LEAVEPOOL:
+					{
+						tNoteType = RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_LEAVEPOOL;
+						break;
+					}
+					case RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_AGREECHAT:
+					{
+						tNoteType = RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_AGREECHAT;
+						break;
+					}
+					case RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_REJECTCHAT:
+					{
+						tNoteType = RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_REJCHAT;
+						break;
+					}
+					case RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ENDCHAT:
+					{
+						tNoteType = RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_ENDCHAT;
+						break;
+					}
+					case RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ASSESSANDCONTINUE:
+					{
+						tNoteType = RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_ASSANDCON;
+						break;
+					}
+					case RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ASSESSANDQUIT:
+					{
+						tNoteType = RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_ASSANDQUIT;
+						break;
+					}
+					case RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_SESSIONUNBIND:
+					{
+						tNoteType = RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_SESSIONUNBIND;
+						break;
+					}
+					case RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_MATCHSTART:
+					{
+						tNoteType = RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_MATCHSTART;
+						break;
+					}	
+					case RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_CHATMESSAGE:
+					{
+						tNoteType = RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_CHATMSG;
+						break;
+					}					
+				}
+				
 				Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
-		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
-		        		         RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESPSUCC);
+		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, tNoteType);
 		        _context.sendBroadcast(tIntent);
 			}else
 			{

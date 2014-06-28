@@ -12,6 +12,7 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAlohaReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;

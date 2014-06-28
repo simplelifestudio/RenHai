@@ -13,6 +13,7 @@ import java.text.NumberFormat;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.ui.RenHaiDraggableGridView;
 import com.simplelife.renhai.android.utils.TimerConverter;
 

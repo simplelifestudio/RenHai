@@ -6,7 +6,7 @@
  *
  *  Created by Chris Li on 14-6-11. 
  */
-package com.simplelife.renhai.android.structure;
+package com.simplelife.renhai.android.data;
 
 public class ImpressLabelMap{
 	public int globalImpressLabelId;

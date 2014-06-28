@@ -12,7 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
-import com.simplelife.renhai.android.RenHaiInfo;
+import com.simplelife.renhai.android.data.RenHaiInfo;
 
 public class RenHaiMsgProxyDataSyncResp extends RenHaiMsg{
 	

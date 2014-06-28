@@ -17,7 +17,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
-import com.simplelife.renhai.android.RenHaiInfo;
+import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.timeprocess.RenHaiTimeProcess;
 import com.simplelife.renhai.android.utils.RenHaiUtilSeqGenerator;
 import com.simplelife.renhai.android.utils.SecurityUtils;

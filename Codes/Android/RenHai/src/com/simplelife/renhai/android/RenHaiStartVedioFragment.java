@@ -12,6 +12,7 @@ import java.text.DecimalFormat;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
@@ -168,7 +169,7 @@ public class RenHaiStartVedioFragment extends Fragment {
         	        	mUpdateTimer.startTimer();
         	    	    break;
         	        }
-            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESPSUCC:
+            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_ENTERPOOL:
             	    {
             	    	mlog.info("Ready to move to the waiting page, before loop2!");
             	    	if((mIsReadyToMoveOn == true)&&(mHasMovedOn == false))

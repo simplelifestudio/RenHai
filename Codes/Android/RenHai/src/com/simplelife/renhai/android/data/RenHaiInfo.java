@@ -6,12 +6,11 @@
  *
  *  Created by Chris Li on 14-4-11. 
  */
-package com.simplelife.renhai.android;
+package com.simplelife.renhai.android.data;
 
 import java.util.ArrayList;
 
-import com.simplelife.renhai.android.structure.ImpressLabelMap;
-import com.simplelife.renhai.android.structure.InterestLabelMap;
+import com.simplelife.renhai.android.RenHaiDefinitions;
 
 import android.content.Context;
 
@@ -534,6 +533,7 @@ public class RenHaiInfo {
 	// ===============================================================================
 	public static class BusinessSession{
 		public static int mBusinessSessionId;
+		public static int mBusinessType = RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST;
 		
 		public static void setBusinessSessionId(int _id){
 			mBusinessSessionId = _id;
@@ -541,6 +541,14 @@ public class RenHaiInfo {
 		
 		public static int getBusinessSessionId(){
 			return mBusinessSessionId;
+		}
+		
+		public static void setBusinessType(int _type){
+			mBusinessType = _type;
+		}
+		
+		public static int getBusinessType(){
+			return mBusinessType;
 		}
 	}
 

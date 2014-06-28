@@ -10,10 +10,11 @@ package com.simplelife.renhai.android;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.data.InterestLabelMap;
+import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
-import com.simplelife.renhai.android.structure.InterestLabelMap;
 import com.simplelife.renhai.android.timer.RenHaiTimerHelper;
 import com.simplelife.renhai.android.timer.RenHaiTimerProcessor;
 import com.simplelife.renhai.android.ui.RenHaiDraggableGridView;

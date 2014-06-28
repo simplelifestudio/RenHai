@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
+import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.utils.SecurityUtils;
 
 public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
@@ -43,6 +44,8 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONVALUE, JSONNULL);
 			tMsgContent.put(MSG_BODY, tMsgBodyContent);
 			mlog.info("Constructing BusinessSessionRequest: "+tMsgContent.toString());
+			
+			RenHaiInfo.BusinessSession.setBusinessType(_businessType);
 			
 			// Encrpt the message content and encode by base64
 			tMessageAfterEncode = SecurityUtils.encryptByDESAndEncodeByBase64(
