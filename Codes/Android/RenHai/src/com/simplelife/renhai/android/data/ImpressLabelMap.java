@@ -31,6 +31,14 @@ public class ImpressLabelMap{
 		assessCount   = _assessCnt;
 	}
 	
+	public void reset(int _glbid, String _name, int _assessCnt, int _assessedCnt, int _updateTime){
+		globalImpressLabelId = _glbid;
+		impressLabelName = _name;
+		assessedCount = _assessedCnt;
+		updateTime    = _updateTime;
+		assessCount   = _assessCnt;
+	}
+	
 	public void setGlobalImpLabelId(int _id){
 		globalImpressLabelId = _id;
 	}
@@ -67,7 +75,7 @@ public class ImpressLabelMap{
 		return updateTime;
 	}
 	
-	public int setAssessCount(){
+	public int getAssessCount(){
 		return assessCount;
 	}
 }

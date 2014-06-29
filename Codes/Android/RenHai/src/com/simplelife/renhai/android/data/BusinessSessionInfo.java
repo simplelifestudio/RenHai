@@ -55,7 +55,7 @@ public class BusinessSessionInfo {
 			return mMatchCount;
 		}
 		
-		public static String setMatchLabelName(){
+		public static String getMatchLabelName(){
 			return mLabelName;
 		}
 		

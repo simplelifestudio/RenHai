@@ -16,6 +16,17 @@ public class PeerDeviceInfo {
 	public static int deviceId = 0;		
 	public static String deviceSn = "";
 	
+	public static void resetPeerDeviceInfo(){
+		deviceId = 0;
+		deviceSn = "";
+		DeviceCard.resetDeviceCardInfo();
+		Profile.resetProfileInfo();
+		InterestLabel.resetPeerIntLabelList();
+		ImpressionLabel.resetPeerImpLabels();
+		AssessLabel.resetAssessLabels();
+		
+	}
+	
 	public static void storeDeviceId(int _devId){
 		if((_devId != 0)&&(_devId != deviceId))
 		    deviceId = _devId;
@@ -34,17 +45,26 @@ public class PeerDeviceInfo {
 	}
 	
 	public static class DeviceCard {
-		public static int deviceCardId;
-		public static String registerTime;
-		public static String deviceModel;
-		public static String osVersion;
-		public static String appVersion;
-		public static String location;
+		public static int deviceCardId = 0;
+		public static String registerTime = "";
+		public static String deviceModel = "";
+		public static String osVersion = "";
+		public static String appVersion = "";
+		public static String location = "";
 		
 		// "Jail" is not an option for android, while "root"
 		// is another thing. This field is not mandatory for
 		// android devices, hence is set to false by default
 		public static int isJailed = 0;
+		
+		public static void resetDeviceCardInfo(){
+			deviceCardId = 0;
+			registerTime = "";
+			deviceModel = "";
+			osVersion = "";
+			appVersion = "";
+			location = "";
+		}
 		
 		public static void storeDeviceCardId(int _devId){
 			deviceCardId = _devId;
@@ -113,11 +133,25 @@ public class PeerDeviceInfo {
 		public static long lastActivityTime = 0;
 		public static String createTime = "2013-01-01 10:00:00";
 		public static int active = 1;
-		public static int interestCardId;
-		public static int impressCardId;
+		public static int interestCardId = 0;
+		public static int impressCardId = 0;
 		public static int chatTotalCount = 0;
 		public static int chatTotalDuration = 0;
 		public static int chatLossCount = 0;
+		
+		public static void resetProfileInfo(){
+			profileId = 0;
+			serviceStatus = 0;
+			unbanDate = 0;
+			lastActivityTime = 0;
+			createTime = "2013-01-01 10:00:00";
+			active = 1;
+			interestCardId = 0;
+			impressCardId = 0;
+			chatTotalCount = 0;
+			chatTotalDuration = 0;
+			chatLossCount = 0;
+		}
 		
 		public static void storeProfileId(int _id){
 			profileId = _id;
@@ -213,105 +247,56 @@ public class PeerDeviceInfo {
 	// Information of user interest labels and impression labels
 	// ===============================================================================		
 	public static class InterestLabel{
-		public static ArrayList<InterestLabelMap> mCurrHotIntLabels = new ArrayList<InterestLabelMap>();
-		public static ArrayList<InterestLabelMap> mMyIntLabels = new ArrayList<InterestLabelMap>();
+		public static ArrayList<InterestLabelMap> mPeerIntLabels = new ArrayList<InterestLabelMap>();		
 		
-		public static void resetCurrHotLabelList(){
-			mCurrHotIntLabels.clear();
+		public static void resetPeerIntLabelList(){
+			mPeerIntLabels.clear();
 		}
 		
-		public static int getCurrHotLabelNum(){
-			return mCurrHotIntLabels.size();
+		public static int getPeerIntLabelNum(){
+			return mPeerIntLabels.size();
 		}
 		
-		public static void putCurrHotLabel(InterestLabelMap _label){
-			mCurrHotIntLabels.add(_label);
-		}
-		
-		public static InterestLabelMap getCurrHotIntLabel(int _index){
-			return mCurrHotIntLabels.get(_index);			
-		}		
-		
-		public static void resetMyIntLabelList(){
-			mMyIntLabels.clear();
-		}
-		
-		public static int getMyIntLabelNum(){
-			return mMyIntLabels.size();
-		}
-		
-		public static InterestLabelMap getMyIntLabel(int _index){
+		public static InterestLabelMap getPeerIntLabel(int _index){
 			//if (null != mMyIntLabels.get(_index))
-				return mMyIntLabels.get(_index);
+				return mPeerIntLabels.get(_index);
 		}
 		
-		public static void putMyIntLabel(InterestLabelMap _label){
-			mMyIntLabels.add(_label);
+		public static void putPeerIntLabel(InterestLabelMap _label){
+			mPeerIntLabels.add(_label);
 		}
 		
-		public static void replaceMyIntLabel(int _index, InterestLabelMap _newLabel){					
-			mMyIntLabels.set(_index, _newLabel);
+		public static void replacePeerIntLabel(int _index, InterestLabelMap _newLabel){					
+			mPeerIntLabels.set(_index, _newLabel);
 		}
 		
-		public static void deleteMyIntLabel(int _index){					
-			mMyIntLabels.remove(_index);
+		public static void deletePeerIntLabel(int _index){					
+			mPeerIntLabels.remove(_index);
 		}
 		
 		public static boolean isPersonalIntLabelsNotDefined(){
-			return (mMyIntLabels.size() <= 0) ? true : false;
-		}
-		
+			return (mPeerIntLabels.size() <= 0) ? true : false;
+		}		
 	}
 	
 	public static class ImpressionLabel{
-		public static ArrayList<ImpressLabelMap> mMyImpressionLabels = new  ArrayList<ImpressLabelMap>();
+		public static ArrayList<ImpressLabelMap> mPeerImpressionLabels = new  ArrayList<ImpressLabelMap>();
 		
-		public static void resetMyImpLabels(){
-			mMyImpressionLabels.clear();
+		public static void resetPeerImpLabels(){
+			mPeerImpressionLabels.clear();
 		}
 		
-		public static int getMyImpLabelNum(){
-			return mMyImpressionLabels.size();
+		public static int getPeerImpLabelNum(){
+			return mPeerImpressionLabels.size();
 		}
 		
-		public static void putMyImpLabelMap(ImpressLabelMap _impLabel){
-			mMyImpressionLabels.add(_impLabel);			
+		public static void putPeerImpLabelMap(ImpressLabelMap _impLabel){
+			mPeerImpressionLabels.add(_impLabel);			
 		}
 		
-		public static ImpressLabelMap getMyImpLabelMap(int _index){
-			return mMyImpressionLabels.get(_index);
-		}
-		
-		public static class specialImpLabels{
-			public static int mAssessNumOfHappyLabel = 0;
-			public static int mAssessNumOfSoSoLabel  = 0;
-			public static int mAssessNumOfDisgustingLabel = 0;
-			
-			public static void setAssessNumOfHappyLabel(int _num){
-				mAssessNumOfHappyLabel = _num;
-			}
-			
-			public static void setAssessNumOfSoSoLabel(int _num){
-				mAssessNumOfSoSoLabel = _num;
-			}
-			
-			public static void setAssessNumOfDisgustingLabel(int _num){
-				mAssessNumOfDisgustingLabel = _num;
-			}
-			
-			public static int getAssessNumOfHappyLabel(){
-				return mAssessNumOfHappyLabel;
-			}
-			
-			public static int getAssessNumOfSoSoLabel(){
-				return mAssessNumOfSoSoLabel;
-			}
-			
-			public static int getAssessNumOfDisgustingLabel(){
-				return mAssessNumOfDisgustingLabel;
-			}
-		}
-		
+		public static ImpressLabelMap getPeerImpLabelMap(int _index){
+			return mPeerImpressionLabels.get(_index);
+		}		
 	}
 
 	// ===============================================================================
@@ -321,5 +306,11 @@ public class PeerDeviceInfo {
 		public static ImpressLabelMap mHappyLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY,0,0,0);
 		public static ImpressLabelMap mSoSoLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_SOSO,0,0,0);
 		public static ImpressLabelMap mDigustingLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING,0,0,0);
+		
+		public static void resetAssessLabels(){
+			mHappyLabel.reset(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY,0,0,0);
+			mSoSoLabel.reset(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_SOSO,0,0,0);
+			mDigustingLabel.reset(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING,0,0,0);
+		}
 	}
 }

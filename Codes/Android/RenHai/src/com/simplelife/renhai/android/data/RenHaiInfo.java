@@ -494,38 +494,7 @@ public class RenHaiInfo {
 		
 		public static ImpressLabelMap getMyImpLabelMap(int _index){
 			return mMyImpressionLabels.get(_index);
-		}
-		
-		public static class specialImpLabels{
-			public static int mAssessNumOfHappyLabel = 0;
-			public static int mAssessNumOfSoSoLabel  = 0;
-			public static int mAssessNumOfDisgustingLabel = 0;
-			
-			public static void setAssessNumOfHappyLabel(int _num){
-				mAssessNumOfHappyLabel = _num;
-			}
-			
-			public static void setAssessNumOfSoSoLabel(int _num){
-				mAssessNumOfSoSoLabel = _num;
-			}
-			
-			public static void setAssessNumOfDisgustingLabel(int _num){
-				mAssessNumOfDisgustingLabel = _num;
-			}
-			
-			public static int getAssessNumOfHappyLabel(){
-				return mAssessNumOfHappyLabel;
-			}
-			
-			public static int getAssessNumOfSoSoLabel(){
-				return mAssessNumOfSoSoLabel;
-			}
-			
-			public static int getAssessNumOfDisgustingLabel(){
-				return mAssessNumOfDisgustingLabel;
-			}
-		}
-		
+		}		
 	}
 	
 	public static class AssessLabel {

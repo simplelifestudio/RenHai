@@ -105,21 +105,21 @@ public class RenHaiMyImpressionsFragment extends Fragment {
 				    {
 				    	tTextToShow = mContext.getString(R.string.myimpression_happylabel) 
 				    			    + "\n"
-				    			    + RenHaiInfo.ImpressionLabel.specialImpLabels.getAssessNumOfHappyLabel();				    	
+				    			    + RenHaiInfo.AssessLabel.mHappyLabel.getAssessCount();				    	
 				    	break;				    	
 				    }
 				    case 1:
 				    {
 				    	tTextToShow = mContext.getString(R.string.myimpression_sosolabel) 
 				    			    + "\n"
-				    			    + RenHaiInfo.ImpressionLabel.specialImpLabels.getAssessNumOfSoSoLabel();				    	
+				    			    + RenHaiInfo.AssessLabel.mSoSoLabel.getAssessCount();			    	
 				    	break;				    	
 				    }
 				    case 2:
 				    {
 				    	tTextToShow = mContext.getString(R.string.myimpression_disgustlabel) 
 				    			    + "\n"
-				    			    + RenHaiInfo.ImpressionLabel.specialImpLabels.getAssessNumOfDisgustingLabel();
+				    			    + RenHaiInfo.AssessLabel.mDigustingLabel.getAssessCount();
 				    	
 				    	break;				    	
 				    }
