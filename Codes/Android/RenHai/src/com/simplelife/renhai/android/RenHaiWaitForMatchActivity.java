@@ -96,6 +96,14 @@ public class RenHaiWaitForMatchActivity extends Activity {
             	    	mlog.info("Receive match start response!");
             	    	break;
             	    }
+            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_SESSIONBINDED:
+            	    {
+            	    	mlog.info("Receive session binded message!");
+            	    	Intent tIntent = new Intent(RenHaiWaitForMatchActivity.this, RenHaiMatchingActivity.class);
+        	    		startActivity(tIntent);
+        	    		finish();
+            	    	break;
+            	    }
 
             	}            	
             }

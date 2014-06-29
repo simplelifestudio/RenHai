@@ -130,7 +130,7 @@ public class PeerDeviceInfo {
 		public static int profileId = 0;
 		public static int serviceStatus = 0;
 		public static long unbanDate = 0;
-		public static long lastActivityTime = 0;
+		public static String lastActivityTime = "";
 		public static String createTime = "2013-01-01 10:00:00";
 		public static int active = 1;
 		public static int interestCardId = 0;
@@ -143,7 +143,7 @@ public class PeerDeviceInfo {
 			profileId = 0;
 			serviceStatus = 0;
 			unbanDate = 0;
-			lastActivityTime = 0;
+			lastActivityTime = "";
 			createTime = "2013-01-01 10:00:00";
 			active = 1;
 			interestCardId = 0;
@@ -165,7 +165,7 @@ public class PeerDeviceInfo {
 			unbanDate = _unbanDate;
 		}
 		
-		public static void storeLastActiveTime(long _lastActiveTime){
+		public static void storeLastActiveTime(String _lastActiveTime){
 			lastActivityTime = _lastActiveTime;
 		}
 		
@@ -209,7 +209,7 @@ public class PeerDeviceInfo {
 			return unbanDate;
 		}
 		
-		public static long getLastActiveTime(){
+		public static String getLastActiveTime(){
 			return lastActivityTime;
 		}
 		
@@ -303,14 +303,14 @@ public class PeerDeviceInfo {
 	// Information of assess labels
 	// ===============================================================================	
 	public static class AssessLabel {
-		public static ImpressLabelMap mHappyLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY,0,0,0);
-		public static ImpressLabelMap mSoSoLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_SOSO,0,0,0);
-		public static ImpressLabelMap mDigustingLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING,0,0,0);
+		public static ImpressLabelMap mHappyLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY,0,0,"");
+		public static ImpressLabelMap mSoSoLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_SOSO,0,0,"");
+		public static ImpressLabelMap mDigustingLabel = new ImpressLabelMap(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING,0,0,"");
 		
 		public static void resetAssessLabels(){
-			mHappyLabel.reset(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY,0,0,0);
-			mSoSoLabel.reset(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_SOSO,0,0,0);
-			mDigustingLabel.reset(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING,0,0,0);
+			mHappyLabel.reset(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY,0,0,"");
+			mSoSoLabel.reset(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_SOSO,0,0,"");
+			mDigustingLabel.reset(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING,0,0,"");
 		}
 	}
 }

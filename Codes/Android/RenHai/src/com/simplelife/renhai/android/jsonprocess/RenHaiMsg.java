@@ -97,18 +97,25 @@ public class RenHaiMsg {
 			tMsgHeader = tMsgInJson.getJSONObject(MSG_HEADER);
 			if (tMsgHeader.has(MSG_HEADER_TYPE))
 			    tMsgType  = tMsgHeader.getInt(MSG_HEADER_TYPE);			
-			
-			if ( (tMsgType > RenHaiDefinitions.RENHAI_MSGTYPE_UNKNOW)
-               && (tMsgType <= RenHaiDefinitions.RENHAI_MSGTYPE_PROXYRESPONSE))
+			if(tMsgHeader.has(MSG_HEADER_ID))
+			    tMsgId    = tMsgHeader.getInt(MSG_HEADER_ID);
+			if(tMsgHeader.has(MSG_HEADER_DEVID))
 			{
-				if(tMsgHeader.has(MSG_HEADER_ID))
-				    tMsgId    = tMsgHeader.getInt(MSG_HEADER_ID);
-				if(tMsgHeader.has(MSG_HEADER_DEVID))
+				tDeviceId = tMsgHeader.getInt(MSG_HEADER_DEVID);
+				RenHaiInfo.storeDeviceId(tDeviceId);
+			}
+			if(tMsgHeader.has(MSG_HEADER_TIME))
+			{
+				tTimestmp = tMsgHeader.getString(MSG_HEADER_TIME);
+				if(!RenHaiInfo.isServerTimeOnFirstMsgRecord())
 				{
-					tDeviceId = tMsgHeader.getInt(MSG_HEADER_DEVID);
-					RenHaiInfo.storeDeviceId(tDeviceId);
+					RenHaiInfo.storeServerTimeOnFirstMsg(tTimestmp);
 				}
-				    
+			}
+			
+			if ( (tMsgType  == RenHaiDefinitions.RENHAI_MSGTYPE_SERVERRESPONSE)
+               || (tMsgType == RenHaiDefinitions.RENHAI_MSGTYPE_PROXYRESPONSE))
+			{
 				if(tMsgHeader.has(MSG_HEADER_SN))
 				{
 				    tMsgSn = tMsgHeader.getString(MSG_HEADER_SN);
@@ -132,52 +139,46 @@ public class RenHaiMsg {
 				        _context.sendBroadcast(tIntent);			        
 				        return RenHaiDefinitions.RENHAI_FUNC_STATUS_ERROR;
 					}
-				}				    
-				if(tMsgHeader.has(MSG_HEADER_TIME))
-				{
-					tTimestmp = tMsgHeader.getString(MSG_HEADER_TIME);
-					if(!RenHaiInfo.isServerTimeOnFirstMsgRecord())
-					{
-						RenHaiInfo.storeServerTimeOnFirstMsg(tTimestmp);
-					}
 				}
+			}else if(tMsgType == RenHaiDefinitions.RENHAI_MSGTYPE_SERVERNOTIFICATION){
+				mlog.info("Receive server business session notification!");
 				
-				// Continue process the message body
-				tMsgBody = tMsgInJson.getJSONObject(MSG_BODY);
-				switch(tMsgId){
-				    case RenHaiDefinitions.RENHAI_MSGID_PROXYSYNCRESPONSE:
-				    {
-				    	return RenHaiMsgProxyDataSyncResp.parseMsg(tMsgBody);					
-				    }
-				    case RenHaiDefinitions.RENHAI_MSGID_ALOHARESPONSE:
-				    {
-				    	return RenHaiMsgAlohaResp.parseMsg(_context, tMsgBody);
-				    }
-				    case RenHaiDefinitions.RENHAI_MSGID_APPDATASYNCRESPONSE:
-				    {
-				    	return RenHaiMsgAppDataSyncResp.parseMsg(_context,tMsgBody);
-				    }
-				    case RenHaiDefinitions.RENHAI_MSGID_SERVERDATASYNCRESPONSE:
-				    {
-				    	return RenHaiMsgServerDataSyncResp.parseMsg(_context, tMsgBody);
-				    }
-				    case RenHaiDefinitions.RENHAI_MSGID_BUSINESSSESSIONRESPONSE:
-				    {
-				    	return RenHaiMsgBusinessSessionResp.parseMsg(_context, tMsgBody);
-				    }
-				    case RenHaiDefinitions.RENHAI_MSGID_BUSINESSSESSIONNOTIFICATION:
-				    {
-				    	return RenHaiMsgBusinessSessionNotification.parseMsg(_context, tMsgBody);
-				    }
-				    
-				    //TODO: add other entries here
-				}
-								
-			}
-			else
-			{
+			}else{
 				mlog.warn("Receive message from server with unknow type!");
+				return RenHaiDefinitions.RENHAI_FUNC_STATUS_ERROR;
 			}
+				
+			// Continue process the message body
+			tMsgBody = tMsgInJson.getJSONObject(MSG_BODY);
+			switch(tMsgId){
+			    case RenHaiDefinitions.RENHAI_MSGID_PROXYSYNCRESPONSE:
+			    {
+			    	return RenHaiMsgProxyDataSyncResp.parseMsg(tMsgBody);					
+			    }
+			    case RenHaiDefinitions.RENHAI_MSGID_ALOHARESPONSE:
+			    {
+			    	return RenHaiMsgAlohaResp.parseMsg(_context, tMsgBody);
+			    }
+			    case RenHaiDefinitions.RENHAI_MSGID_APPDATASYNCRESPONSE:
+			    {
+			    	return RenHaiMsgAppDataSyncResp.parseMsg(_context,tMsgBody);
+			    }
+			    case RenHaiDefinitions.RENHAI_MSGID_SERVERDATASYNCRESPONSE:
+			    {
+			    	return RenHaiMsgServerDataSyncResp.parseMsg(_context, tMsgBody);
+			    }
+			    case RenHaiDefinitions.RENHAI_MSGID_BUSINESSSESSIONRESPONSE:
+			    {
+			    	return RenHaiMsgBusinessSessionResp.parseMsg(_context, tMsgBody);
+			    }
+			    case RenHaiDefinitions.RENHAI_MSGID_BUSINESSSESSIONNOTIFICATION:
+			    {
+			    	return RenHaiMsgBusinessSessionNotification.parseMsg(_context, tMsgBody);
+			    }
+			    
+			    //TODO: add other entries here
+			}
+								
 		} catch (JSONException e) {
 			mlog.error("Failed to decode message", e);
 			return RenHaiDefinitions.RENHAI_FUNC_STATUS_ERROR;

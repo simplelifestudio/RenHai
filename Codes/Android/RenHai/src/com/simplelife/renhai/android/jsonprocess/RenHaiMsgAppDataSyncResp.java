@@ -176,7 +176,7 @@ public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 											if(tAssessLabel.has(MSG_APPSYNCRESP_ASSLISTGLBIMPLABELID))
 												RenHaiInfo.AssessLabel.mHappyLabel.setGlobalImpLabelId(tAssessLabel.getInt(MSG_APPSYNCRESP_ASSLISTGLBIMPLABELID));
 											if(tAssessLabel.has(MSG_APPSYNCRESP_ASSLISTUPDATETIME))
-												RenHaiInfo.AssessLabel.mHappyLabel.setUpdateTime(tAssessLabel.getInt(MSG_APPSYNCRESP_ASSLISTUPDATETIME));
+												RenHaiInfo.AssessLabel.mHappyLabel.setUpdateTime(tAssessLabel.getString(MSG_APPSYNCRESP_ASSLISTUPDATETIME));
 										}else if(tLabelName.equals(RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_SOSO)){
 											if(tAssessLabel.has(MSG_APPSYNCRESP_ASSLISTASSCNT))
 												RenHaiInfo.AssessLabel.mSoSoLabel.setAssessCount(tAssessLabel.getInt(MSG_APPSYNCRESP_ASSLISTASSCNT));
@@ -185,7 +185,7 @@ public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 											if(tAssessLabel.has(MSG_APPSYNCRESP_ASSLISTGLBIMPLABELID))
 												RenHaiInfo.AssessLabel.mSoSoLabel.setGlobalImpLabelId(tAssessLabel.getInt(MSG_APPSYNCRESP_ASSLISTGLBIMPLABELID));
 											if(tAssessLabel.has(MSG_APPSYNCRESP_ASSLISTUPDATETIME))
-												RenHaiInfo.AssessLabel.mSoSoLabel.setUpdateTime(tAssessLabel.getInt(MSG_APPSYNCRESP_ASSLISTUPDATETIME));
+												RenHaiInfo.AssessLabel.mSoSoLabel.setUpdateTime(tAssessLabel.getString(MSG_APPSYNCRESP_ASSLISTUPDATETIME));
 										}else if(tLabelName.equals(RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING)){
 											if(tAssessLabel.has(MSG_APPSYNCRESP_ASSLISTASSCNT))
 												RenHaiInfo.AssessLabel.mDigustingLabel.setAssessCount(tAssessLabel.getInt(MSG_APPSYNCRESP_ASSLISTASSCNT));
@@ -194,7 +194,7 @@ public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 											if(tAssessLabel.has(MSG_APPSYNCRESP_ASSLISTGLBIMPLABELID))
 												RenHaiInfo.AssessLabel.mDigustingLabel.setGlobalImpLabelId(tAssessLabel.getInt(MSG_APPSYNCRESP_ASSLISTGLBIMPLABELID));
 											if(tAssessLabel.has(MSG_APPSYNCRESP_ASSLISTUPDATETIME))
-												RenHaiInfo.AssessLabel.mDigustingLabel.setUpdateTime(tAssessLabel.getInt(MSG_APPSYNCRESP_ASSLISTUPDATETIME));
+												RenHaiInfo.AssessLabel.mDigustingLabel.setUpdateTime(tAssessLabel.getString(MSG_APPSYNCRESP_ASSLISTUPDATETIME));
 										}
 									}
 								}
@@ -215,7 +215,7 @@ public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 									if(tImpLabelInMsg.has(MSG_APPSYNCRESP_ASSLISTGLBIMPLABELID))
 										tImpLabel.setGlobalImpLabelId(tImpLabelInMsg.getInt(MSG_APPSYNCRESP_ASSLISTGLBIMPLABELID));
 									if(tImpLabelInMsg.has(MSG_APPSYNCRESP_ASSLISTUPDATETIME))
-										tImpLabel.setUpdateTime(tImpLabelInMsg.getInt(MSG_APPSYNCRESP_ASSLISTIMPLABELNAME));
+										tImpLabel.setUpdateTime(tImpLabelInMsg.getString(MSG_APPSYNCRESP_ASSLISTIMPLABELNAME));
 									if(tImpLabelInMsg.has(MSG_APPSYNCRESP_ASSLISTIMPLABELNAME))
 										tImpLabel.setImpLabelName(tImpLabelInMsg.getString(MSG_APPSYNCRESP_ASSLISTIMPLABELNAME));
 									RenHaiInfo.ImpressionLabel.putMyImpLabelMap(tImpLabel);										

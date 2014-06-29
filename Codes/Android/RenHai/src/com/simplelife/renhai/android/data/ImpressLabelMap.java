@@ -12,18 +12,18 @@ public class ImpressLabelMap{
 	public int globalImpressLabelId;
 	public String impressLabelName;
 	public int assessedCount;
-	public int updateTime;
+	public String updateTime;
 	public int assessCount;
 	
 	public ImpressLabelMap(){
 		globalImpressLabelId = 0;
 		impressLabelName = null;
 		assessedCount = 0;
-		updateTime    = 0;
+		updateTime    = "";
 		assessCount   = 0;
 	}
 	
-	public ImpressLabelMap(int _glbid, String _name, int _assessCnt, int _assessedCnt, int _updateTime){
+	public ImpressLabelMap(int _glbid, String _name, int _assessCnt, int _assessedCnt, String _updateTime){
 		globalImpressLabelId = _glbid;
 		impressLabelName = _name;
 		assessedCount = _assessedCnt;
@@ -31,7 +31,7 @@ public class ImpressLabelMap{
 		assessCount   = _assessCnt;
 	}
 	
-	public void reset(int _glbid, String _name, int _assessCnt, int _assessedCnt, int _updateTime){
+	public void reset(int _glbid, String _name, int _assessCnt, int _assessedCnt, String _updateTime){
 		globalImpressLabelId = _glbid;
 		impressLabelName = _name;
 		assessedCount = _assessedCnt;
@@ -51,7 +51,7 @@ public class ImpressLabelMap{
 		assessedCount = _count;
 	}
 	
-	public void setUpdateTime(int _time){
+	public void setUpdateTime(String _time){
 		updateTime = _time;
 	}
 	
@@ -71,7 +71,7 @@ public class ImpressLabelMap{
 		return assessedCount;
 	}
 	
-	public int getUpdateTime(){
+	public String getUpdateTime(){
 		return updateTime;
 	}
 	

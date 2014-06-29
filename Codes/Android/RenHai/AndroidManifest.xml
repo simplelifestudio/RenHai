@@ -52,6 +52,10 @@
             android:name="com.simplelife.renhai.android.RenHaiWaitForMatchActivity"
             android:theme="@style/Theme.Actionbarwithtabstheme">                       
         </activity>
+        <activity
+            android:name="com.simplelife.renhai.android.RenHaiMatchingActivity"
+            android:theme="@style/Theme.Actionbarwithtabstheme">                       
+        </activity>
     </application>
 
 </manifest>

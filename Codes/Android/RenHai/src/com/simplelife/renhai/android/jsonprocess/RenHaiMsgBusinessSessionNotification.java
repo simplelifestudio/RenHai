@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
 import com.simplelife.renhai.android.data.BusinessSessionInfo;
@@ -83,10 +84,12 @@ public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {
 	public static int parseMsg(Context _context, JSONObject inBody){		
 		int tOperationType = 0;
 		
+		mlog.info("Receive businesssession notification message!");
+		
 		try 
 		{
 			if(inBody.has(MSG_BUSINESSSESSIONNOTIF_SESSIONID))
-				BusinessSessionInfo.setBusinessSessionId(inBody.getInt(MSG_BUSINESSSESSIONNOTIF_SESSIONID));
+				BusinessSessionInfo.setBusinessSessionId(inBody.getString(MSG_BUSINESSSESSIONNOTIF_SESSIONID));
 			
 			if(inBody.has(MSG_BUSINESSSESSIONNOTIF_BUSINESSTYPE))
 			{
@@ -140,7 +143,7 @@ public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {
 							if(tProfile.has(MSG_BUSINESSSESSIONNOTIF_CREATETIME))
 								PeerDeviceInfo.Profile.storeCreatetTime(tProfile.getString(MSG_BUSINESSSESSIONNOTIF_CREATETIME));
 							if(tProfile.has(MSG_BUSINESSSESSIONNOTIF_LSTACTTIME))
-								PeerDeviceInfo.Profile.storeLastActiveTime(tProfile.getLong(MSG_BUSINESSSESSIONNOTIF_LSTACTTIME));
+								PeerDeviceInfo.Profile.storeLastActiveTime(tProfile.getString(MSG_BUSINESSSESSIONNOTIF_LSTACTTIME));
 							if(tProfile.has(MSG_BUSINESSSESSIONNOTIF_PROFILEID))
 								PeerDeviceInfo.Profile.storeProfileId(tProfile.getInt(MSG_BUSINESSSESSIONNOTIF_PROFILEID));
 							if(tProfile.has(MSG_BUSINESSSESSIONNOTIF_SVRSTAT))
@@ -175,7 +178,7 @@ public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {
 												if(tAssessLabel.has(MSG_BUSINESSSESSIONNOTIF_ASSLISTGLBIMPLABELID))
 													PeerDeviceInfo.AssessLabel.mHappyLabel.setGlobalImpLabelId(tAssessLabel.getInt(MSG_BUSINESSSESSIONNOTIF_ASSLISTGLBIMPLABELID));
 												if(tAssessLabel.has(MSG_BUSINESSSESSIONNOTIF_ASSLISTUPDATETIME))
-													PeerDeviceInfo.AssessLabel.mHappyLabel.setUpdateTime(tAssessLabel.getInt(MSG_BUSINESSSESSIONNOTIF_ASSLISTUPDATETIME));
+													PeerDeviceInfo.AssessLabel.mHappyLabel.setUpdateTime(tAssessLabel.getString(MSG_BUSINESSSESSIONNOTIF_ASSLISTUPDATETIME));
 											}else if(tLabelName.equals(RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_SOSO)){
 												if(tAssessLabel.has(MSG_BUSINESSSESSIONNOTIF_ASSLISTASSCNT))
 													PeerDeviceInfo.AssessLabel.mSoSoLabel.setAssessCount(tAssessLabel.getInt(MSG_BUSINESSSESSIONNOTIF_ASSLISTASSCNT));
@@ -184,7 +187,7 @@ public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {
 												if(tAssessLabel.has(MSG_BUSINESSSESSIONNOTIF_ASSLISTGLBIMPLABELID))
 													PeerDeviceInfo.AssessLabel.mSoSoLabel.setGlobalImpLabelId(tAssessLabel.getInt(MSG_BUSINESSSESSIONNOTIF_ASSLISTGLBIMPLABELID));
 												if(tAssessLabel.has(MSG_BUSINESSSESSIONNOTIF_ASSLISTUPDATETIME))
-													PeerDeviceInfo.AssessLabel.mSoSoLabel.setUpdateTime(tAssessLabel.getInt(MSG_BUSINESSSESSIONNOTIF_ASSLISTUPDATETIME));
+													PeerDeviceInfo.AssessLabel.mSoSoLabel.setUpdateTime(tAssessLabel.getString(MSG_BUSINESSSESSIONNOTIF_ASSLISTUPDATETIME));
 											}else if(tLabelName.equals(RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING)){
 												if(tAssessLabel.has(MSG_BUSINESSSESSIONNOTIF_ASSLISTASSCNT))
 													PeerDeviceInfo.AssessLabel.mDigustingLabel.setAssessCount(tAssessLabel.getInt(MSG_BUSINESSSESSIONNOTIF_ASSLISTASSCNT));
@@ -193,7 +196,7 @@ public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {
 												if(tAssessLabel.has(MSG_BUSINESSSESSIONNOTIF_ASSLISTGLBIMPLABELID))
 													PeerDeviceInfo.AssessLabel.mDigustingLabel.setGlobalImpLabelId(tAssessLabel.getInt(MSG_BUSINESSSESSIONNOTIF_ASSLISTGLBIMPLABELID));
 												if(tAssessLabel.has(MSG_BUSINESSSESSIONNOTIF_ASSLISTUPDATETIME))
-													PeerDeviceInfo.AssessLabel.mDigustingLabel.setUpdateTime(tAssessLabel.getInt(MSG_BUSINESSSESSIONNOTIF_ASSLISTUPDATETIME));
+													PeerDeviceInfo.AssessLabel.mDigustingLabel.setUpdateTime(tAssessLabel.getString(MSG_BUSINESSSESSIONNOTIF_ASSLISTUPDATETIME));
 											}
 										}
 									}
@@ -214,7 +217,7 @@ public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {
 										if(tImpLabelInMsg.has(MSG_BUSINESSSESSIONNOTIF_ASSLISTGLBIMPLABELID))
 											tImpLabel.setGlobalImpLabelId(tImpLabelInMsg.getInt(MSG_BUSINESSSESSIONNOTIF_ASSLISTGLBIMPLABELID));
 										if(tImpLabelInMsg.has(MSG_BUSINESSSESSIONNOTIF_ASSLISTUPDATETIME))
-											tImpLabel.setUpdateTime(tImpLabelInMsg.getInt(MSG_BUSINESSSESSIONNOTIF_ASSLISTUPDATETIME));
+											tImpLabel.setUpdateTime(tImpLabelInMsg.getString(MSG_BUSINESSSESSIONNOTIF_ASSLISTUPDATETIME));
 										if(tImpLabelInMsg.has(MSG_BUSINESSSESSIONNOTIF_ASSLISTIMPLABELNAME))
 											tImpLabel.setImpLabelName(tImpLabelInMsg.getString(MSG_BUSINESSSESSIONNOTIF_ASSLISTIMPLABELNAME));
 										PeerDeviceInfo.ImpressionLabel.putPeerImpLabelMap(tImpLabel);										
@@ -277,6 +280,11 @@ public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {
 						}
 					}
 				}
+				
+				
+				Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_SESSIONBINDED);
+		        _context.sendBroadcast(tIntent);
 			}
 	    }catch (JSONException e) {
 			mlog.error("Failed to process RenHaiMsgBusinessSessionResp!", e);

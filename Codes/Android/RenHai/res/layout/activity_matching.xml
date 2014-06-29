@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:background="@color/white" >
+    
+    <TextView 
+        android:id="@+id/matching_title1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"        
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:textSize="@dimen/mytopics_inttitle_size"
+        android:textColor="@color/black"
+        android:text="@string/matching_peerassess" />
+    
+    <GridView 
+        android:id="@+id/matching_assgridview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/matching_title1"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:numColumns="3"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp">        
+    </GridView>
+    
+    <LinearLayout
+        android:id="@+id/matching_divide"
+        android:layout_height="1dp" 
+        android:layout_width="fill_parent"
+        android:layout_below="@id/matching_assgridview" 
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/maingreen"
+        android:orientation="horizontal">        
+    </LinearLayout>
+    
+    <TextView 
+        android:id="@+id/matching_title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_below="@id/matching_divide"       
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:textSize="@dimen/mytopics_inttitle_size"
+        android:textColor="@color/black"
+        android:text="@string/matching_peerimpression" />
+    
+    <GridView 
+        android:id="@+id/matching_impgridview"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/matching_title2"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:numColumns="3"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp">        
+    </GridView>
+    
+</RelativeLayout>

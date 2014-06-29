@@ -11,14 +11,14 @@ package com.simplelife.renhai.android.data;
 import com.simplelife.renhai.android.RenHaiDefinitions;
 
 public class BusinessSessionInfo {
-	public static int mBusinessSessionId;
+	public static String mBusinessSessionId;
 	public static int mBusinessType = RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST;
 	
-	public static void setBusinessSessionId(int _id){
+	public static void setBusinessSessionId(String _id){
 		mBusinessSessionId = _id;
 	}
 	
-	public static int getBusinessSessionId(){
+	public static String getBusinessSessionId(){
 		return mBusinessSessionId;
 	}
 	
