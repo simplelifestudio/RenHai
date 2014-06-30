@@ -108,8 +108,8 @@ public class RenHaiMatchingActivity extends Activity{
 			sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_AGREECHAT);
 			
 			// Hide the buttons
-			mMatchingBtnYes.setVisibility(View.GONE);
-			mMatchingBtnNo.setVisibility(View.GONE);			
+			mMatchingBtnYes.setVisibility(View.INVISIBLE);
+			mMatchingBtnNo.setVisibility(View.INVISIBLE);			
 		}
 	};
 	
@@ -119,8 +119,8 @@ public class RenHaiMatchingActivity extends Activity{
 		public void onClick(View v) {
 			sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_REJECTCHAT);
 			// Hide the buttons
-		    mMatchingBtnYes.setVisibility(View.GONE);
-			mMatchingBtnNo.setVisibility(View.GONE);			
+		    mMatchingBtnYes.setVisibility(View.INVISIBLE);
+			mMatchingBtnNo.setVisibility(View.INVISIBLE);			
 		}
 	};
 	

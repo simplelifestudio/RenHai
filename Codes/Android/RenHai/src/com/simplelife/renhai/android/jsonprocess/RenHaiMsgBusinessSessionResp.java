@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
+import com.simplelife.renhai.android.data.BusinessSessionInfo;
 import com.simplelife.renhai.android.data.RenHaiInfo;
 
 import android.content.Context;
@@ -32,7 +33,7 @@ public class RenHaiMsgBusinessSessionResp extends RenHaiMsg{
 		try 
 		{
 			if(inBody.has(MSG_BUSINESSSESSIONRESP_SESSIONID))
-				RenHaiInfo.BusinessSession.setBusinessSessionId(inBody.getInt(MSG_BUSINESSSESSIONRESP_SESSIONID));
+				BusinessSessionInfo.setBusinessSessionId(inBody.getString(MSG_BUSINESSSESSIONRESP_SESSIONID));
 				
 			if(inBody.has(MSG_BUSINESSSESSIONRESP_OPERATIONVALUE))
 				tValueSuccessFlag = (inBody.getInt(MSG_BUSINESSSESSIONRESP_OPERATIONVALUE) == 1) ? true : false;

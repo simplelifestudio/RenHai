@@ -56,6 +56,14 @@
             android:name="com.simplelife.renhai.android.RenHaiMatchingActivity"
             android:theme="@style/Theme.Actionbarwithtabstheme">                       
         </activity>
+        <activity
+            	android:name="com.simplelife.renhai.android.RenHaiVideoTalkActivity"
+            	android:configChanges="orientation|keyboardHidden|screenSize">
+            	<intent-filter>
+                	<action android:name="com.simplelife.renhai.android.RenHaiVideoTalkActivity" />
+                	<category android:name="android.intent.category.DEFAULT" />
+            	</intent-filter>
+        </activity>
     </application>
 
 </manifest>

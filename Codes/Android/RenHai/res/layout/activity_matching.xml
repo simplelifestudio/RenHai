@@ -120,11 +120,12 @@
         android:id="@+id/matching_peerstat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@id/matching_confirmlayout"
         android:layout_alignParentRight="true"
         android:layout_marginRight="32dp"       
         android:layout_marginBottom="32dp"      
         android:textSize="@dimen/matching_peerstatsize"
-        android:textColor="@color/black"
+        android:textColor="@color/gray"
         android:text="@string/matching_peerstattext" />
     
 </RelativeLayout>

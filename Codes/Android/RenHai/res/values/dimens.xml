@@ -17,6 +17,6 @@
     <dimen name="startvedio_btnheight">160dip</dimen>
     <dimen name="startvedio_btnmarginbottom">32dip</dimen>
     <dimen name="waitformatch_countersize">50dip</dimen>
-    <dimen name="matching_peerstatsize">24dip</dimen>
+    <dimen name="matching_peerstatsize">18dip</dimen>
 
 </resources>
