@@ -279,13 +279,25 @@ public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {
 								WebRtcSession.setToken(tWebRtc.getString(MSG_BUSINESSSESSIONNOTIF_WEBRTCTOKEN));
 						}
 					}
-				}
-				
+				}				
 				
 				Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_SESSIONBINDED);
 		        _context.sendBroadcast(tIntent);
+			}else if(tOperationType == RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEAGREED)
+			{
+				Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERAGREE);
+		        _context.sendBroadcast(tIntent);
 			}
+			else if(tOperationType == RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEREJECTED)
+			{
+				Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERREJECT);
+		        _context.sendBroadcast(tIntent);
+			}
+			
+			//TODO: add more conditions here
 	    }catch (JSONException e) {
 			mlog.error("Failed to process RenHaiMsgBusinessSessionResp!", e);
 			return RenHaiDefinitions.RENHAI_FUNC_STATUS_ERROR;

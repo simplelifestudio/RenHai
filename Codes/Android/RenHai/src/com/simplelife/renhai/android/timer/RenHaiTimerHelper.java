@@ -80,5 +80,11 @@ public class RenHaiTimerHelper {
     		stopTimer();
     	startTimer();
     }
+    
+    public void resetRepeatTimer(){
+    	if (mTimer != null)
+    		stopTimer();
+    	startRepeatTimer();
+    }
 
 }

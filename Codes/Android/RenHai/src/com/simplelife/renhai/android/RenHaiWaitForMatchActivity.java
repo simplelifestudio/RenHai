@@ -10,7 +10,9 @@ package com.simplelife.renhai.android;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionNotificationResp;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionReq;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 
 import android.app.Activity;
@@ -76,7 +78,10 @@ public class RenHaiWaitForMatchActivity extends Activity {
 	        }  
 	        @Override  
 	        public void onFinish() {  
-	        	mCounterText.setText("Time Out!");  
+	        	mCounterText.setText("Time Out!"); 
+	        	//Intent tIntent = new Intent(RenHaiWaitForMatchActivity.this, RenHaiMatchingActivity.class);
+	    		//startActivity(tIntent);
+	    		finish();	        	 
 	        }  
 	 }
 	 
@@ -99,6 +104,11 @@ public class RenHaiWaitForMatchActivity extends Activity {
             	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_SESSIONBINDED:
             	    {
             	    	mlog.info("Receive session binded message!");
+            	    	String tBusinessNotRespMsg = RenHaiMsgBusinessSessionNotificationResp
+            	    			                      .constructMsg(RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
+            	    			                    		        RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_SESSIONBINDED, 1).toString();
+            	    	mWebSocketHandle.sendMessage(tBusinessNotRespMsg);
+            	    	
             	    	Intent tIntent = new Intent(RenHaiWaitForMatchActivity.this, RenHaiMatchingActivity.class);
         	    		startActivity(tIntent);
         	    		finish();

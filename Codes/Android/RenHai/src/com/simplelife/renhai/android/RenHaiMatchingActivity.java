@@ -15,6 +15,8 @@ import org.apache.log4j.Logger;
 
 import com.simplelife.renhai.android.data.BusinessSessionInfo;
 import com.simplelife.renhai.android.data.PeerDeviceInfo;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionNotificationResp;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.utils.TimerConverter;
 
@@ -25,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.TextUtils.TruncateAt;
 import android.view.Gravity;
 import android.view.View;
@@ -39,9 +42,17 @@ public class RenHaiMatchingActivity extends Activity{
 	private GridView mImpGridView;
 	private AssessAdapter mAssessAdapter;
 	private ImpressionAdapter mImpAdapter;
+	private TextView mCounterText;
+	private MyCount mCounter;
+	private TextView mMatchingBtnYes;
+	private TextView mMatchingBtnNo;
+	private TextView mPeerStatText;
+	private boolean mEitherSideAgreed = false;
+	private boolean mMovedToVideoPage = false;
 	ActionBar mActionBar;
 	TextView  mActionBarTitle;
 	View mHomeIcon;
+	
 	
 	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	private final Logger mlog = Logger.getLogger(RenHaiMatchingActivity.class);
@@ -57,6 +68,20 @@ public class RenHaiMatchingActivity extends Activity{
 		mAssessAdapter = new AssessAdapter(this);
 		mAssessGridView.setAdapter(mAssessAdapter);
 		
+		mImpAdapter = new ImpressionAdapter(this);
+		mImpGridView.setAdapter(mImpAdapter);
+		
+		mCounterText = (TextView)findViewById(R.id.matching_counter);
+		mCounter = new MyCount(20000, 1000);
+		
+		mMatchingBtnYes = (TextView)findViewById(R.id.matching_btnaccept);
+		mMatchingBtnNo  = (TextView)findViewById(R.id.matching_btnrefuse);
+		
+		mMatchingBtnYes.setOnClickListener(mMatchingBtnYesListener);
+		mMatchingBtnNo.setOnClickListener(mMatchingBtnNoListener);
+		
+		mPeerStatText = (TextView)findViewById(R.id.matching_peerstat);
+		
 		enableActionBarNote();
 		
 		// Register the broadcast receiver
@@ -65,6 +90,8 @@ public class RenHaiMatchingActivity extends Activity{
 		registerReceiver(mBroadcastRcverMatching, tFilter); 
 		
 		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
+		
+		mCounter.start();
 
 	}
 	
@@ -73,6 +100,54 @@ public class RenHaiMatchingActivity extends Activity{
         super.onDestroy();  
         unregisterReceiver(mBroadcastRcverMatching);  
     }
+	
+	private View.OnClickListener mMatchingBtnYesListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_AGREECHAT);
+			
+			// Hide the buttons
+			mMatchingBtnYes.setVisibility(View.GONE);
+			mMatchingBtnNo.setVisibility(View.GONE);			
+		}
+	};
+	
+	private View.OnClickListener mMatchingBtnNoListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_REJECTCHAT);
+			// Hide the buttons
+		    mMatchingBtnYes.setVisibility(View.GONE);
+			mMatchingBtnNo.setVisibility(View.GONE);			
+		}
+	};
+	
+	private void determingToMoveToVideoPage(){
+		if((mEitherSideAgreed == true)&&(mMovedToVideoPage == false))
+    	{
+			mMovedToVideoPage = true;
+    		Intent tIntent = new Intent(this, RenHaiVideoTalkActivity.class);
+    		startActivity(tIntent);
+    		finish();
+    	}else
+    	{
+    		mEitherSideAgreed = true;
+    	}
+	}
+	
+	private void sendBusinessSessionReqMessage(int _operationType){
+		String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(
+    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, _operationType).toString();
+    	mWebSocketHandle.sendMessage(tBusinessSessionReq);
+	}
+	
+	private void sendBusinessSessionNotificationRespMessage(int _operationType, int _operationValue){
+		String tBusinessSessionNotResp = RenHaiMsgBusinessSessionNotificationResp.constructMsg(
+    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, _operationType, _operationValue).toString();
+    	mWebSocketHandle.sendMessage(tBusinessSessionNotResp);
+	}
 	
 	private void enableActionBarNote(){
 		ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
@@ -224,7 +299,8 @@ public class RenHaiMatchingActivity extends Activity{
 
 		@Override
 		public int getCount() {
-			return 6;
+			int tImpLabelNum = PeerDeviceInfo.ImpressionLabel.getPeerImpLabelNum();
+			return (tImpLabelNum > 6) ? 6 : tImpLabelNum;
 		}
 
 		@Override
@@ -251,73 +327,10 @@ public class RenHaiMatchingActivity extends Activity{
 				tTextView.setTextColor(mContext.getResources().getColor(R.color.white));
 				tTextView.setBackgroundColor(mContext.getResources().getColor(R.color.maingreen));
 				tTextView.setPadding(0, 10, 0, 10);
-				switch (position){
-				    case 0:
-				    {
-				    	tTextToShow = mContext.getString(R.string.myimpression_happylabel) 
-				    			    + "\n"
-				    			    + PeerDeviceInfo.AssessLabel.mHappyLabel.getAssessCount();				    	
-				    	break;				    	
-				    }
-				    case 1:
-				    {
-				    	tTextToShow = mContext.getString(R.string.myimpression_sosolabel) 
-				    			    + "\n"
-				    			    + PeerDeviceInfo.AssessLabel.mSoSoLabel.getAssessCount();			    	
-				    	break;				    	
-				    }
-				    case 2:
-				    {
-				    	tTextToShow = mContext.getString(R.string.myimpression_disgustlabel) 
-				    			    + "\n"
-				    			    + PeerDeviceInfo.AssessLabel.mDigustingLabel.getAssessCount();
-				    	
-				    	break;				    	
-				    }
-				    case 3:
-				    {
-				    	tTextToShow = mContext.getString(R.string.myimpression_chatcount) 
-				    			    + "\n"
-				    			    + PeerDeviceInfo.Profile.getChatTotalCount();				    	
-				    	break;				    	
-				    }
-				    case 4:
-				    {
-				    	tTextToShow = mContext.getString(R.string.myimpression_chattotalduration) 
-				    			    + "\n"
-				    			    + TimerConverter.secondsToHMS(PeerDeviceInfo.Profile.getChatTotalDuration());				    	
-				    	break;				    	
-				    }
-				    case 5:
-				    {
-				    	String tLossRate = "";
-				    	if(PeerDeviceInfo.Profile.getChatTotalCount() > 0)
-				    	{
-				    		double tLossCount  = (double)PeerDeviceInfo.Profile.getChatLossCount();
-				    		double tTotalCount = (double)PeerDeviceInfo.Profile.getChatTotalCount();
-				    		BigDecimal tValue = new BigDecimal(tLossCount / tTotalCount);
-				    		NumberFormat tPercent = NumberFormat.getPercentInstance();
-				    		tPercent.setMinimumFractionDigits(2);
-				    		tPercent.setMaximumFractionDigits(2);
-				    		tLossRate = tPercent.format(tValue);
-				    	}
-				    	else
-				    	{
-				    		tLossRate = "0.00%";
-				    	}
-				    	
-				    	tTextToShow = mContext.getString(R.string.myimpression_chatlosscount) 
-				    			    + "\n"
-				    			    + tLossRate;
-				    	break;				    	
-				    }
-				    default:
-				    {
-				    	break;
-				    }
-				}
-				
-				tTextView.setText(tTextToShow);
+				tTextToShow = PeerDeviceInfo.ImpressionLabel.getPeerImpLabelMap(position).getImpLabelName()
+						    + "\n"
+						    + PeerDeviceInfo.ImpressionLabel.getPeerImpLabelMap(position).getAssessCount();
+  			    tTextView.setText(tTextToShow);
 
 				/*
 				String tText = "Test\nTest"; 
@@ -333,6 +346,29 @@ public class RenHaiMatchingActivity extends Activity{
 		} 
     	
     }
+
+    ///////////////////////////////////////////////////////////////////////
+    // Count down timer process
+    ///////////////////////////////////////////////////////////////////////  
+    class MyCount extends CountDownTimer{
+		 long mTimeToWait;
+		   
+	        public MyCount(long millisInFuture, long countDownInterval) {  
+	            super(millisInFuture, countDownInterval);
+	            mTimeToWait = millisInFuture;
+	        }  
+	        @Override  
+	        public void onTick(long millisUntilFinished) {  
+	        	mCounterText.setText("" + millisUntilFinished / 1000);  
+	        }  
+	        @Override  
+	        public void onFinish() {  
+	        	mCounterText.setText("Time Out!"); 
+	        	//Intent tIntent = new Intent(RenHaiWaitForMatchActivity.this, RenHaiMatchingActivity.class);
+	    		//startActivity(tIntent);
+	    		//finish();	        	 
+	        }  
+	 }
 	
     ///////////////////////////////////////////////////////////////////////
     // Network message process
@@ -345,6 +381,30 @@ public class RenHaiMatchingActivity extends Activity{
             if(action.equals(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG)){
             	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
             	switch (tMsgType) {
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_AGREECHAT:
+            	{
+            		determingToMoveToVideoPage();
+            		break;
+            	}
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_REJCHAT:
+            	{
+            		finish();
+            		break;
+            	}
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERAGREE:
+            	{
+            		mPeerStatText.setText(R.string.matching_peerstattextagree);
+            		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEAGREED,1);
+            		determingToMoveToVideoPage();
+            		break;
+            	}
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERREJECT:
+            	{
+            		//TODO: add processing here
+            		mPeerStatText.setText(R.string.matching_peerstattextreject);
+            		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEREJECTED,1);
+            		break;
+            	}
 
             	}            	
             }

@@ -83,6 +83,12 @@
     <string name="matching_peerassess">对方获得的评价</string>
     <string name="matching_peerimpression">对方获得的印象</string>
     <string name="matching_matchcondition">根据标签 </string>
+    <string name="matching_counterstart">20</string>
+    <string name="matching_peerstattext">等待对方确认&#8230;</string>
+    <string name="matching_peerstattextagree">对方已经接受</string>
+    <string name="matching_peerstattextreject">对方拒绝了本次通话</string>
+    <string name="matching_accept">接受</string>
+    <string name="matching_refuse">拒绝</string>
     
     <string name="protocal_text">
 \t\t人海是一款基于话题匹配的视频社交产品，人海所提供的各项服务的所有权和运作权归简单生活工作室（SimpleLife Studio，以下称人海官方）所有。

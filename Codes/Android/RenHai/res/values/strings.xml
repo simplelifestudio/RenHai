@@ -84,6 +84,12 @@
     <string name="matching_peerassess">Peer User Assessments</string>
     <string name="matching_peerimpression">Peer User Impressions</string>
     <string name="matching_matchcondition">Match Based On Label </string>
+    <string name="matching_counterstart">20</string>
+    <string name="matching_peerstattext">Waiting for peer to confirm&#8230;</string>
+    <string name="matching_peerstattextagree">Peer accepted the chat</string>
+    <string name="matching_peerstattextreject">Peer rejected the chat</string>
+    <string name="matching_accept">Accept</string>
+    <string name="matching_refuse">Refuse</string>
     
     <string name="protocal_text">
 \t\t人海是一款基于话题匹配的视频社交产品，人海所提供的各项服务的所有权和运作权归简单生活工作室（SimpleLife Studio，以下称人海官方）所有。

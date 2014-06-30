@@ -93,16 +93,27 @@ public class RenHaiStartVedioFragment extends Fragment {
      	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
      	
      	// Start the time to update the data periodically
-     	mUpdateTimer.startTimer();
+     	mUpdateTimer.startRepeatTimer();
     	
     	return rootView;    
     }
     
     @Override
-	public void onDestroy() {  
-        super.onDestroy();  
-        getActivity().unregisterReceiver(mBroadcastRcverStartVideo);  
-    } 
+    public void onResume(){
+    	super.onResume();
+    	mIsReadyToMoveOn = false;
+    	mHasMovedOn = false;
+    	mCircleButton.resetView();
+    	mUpdateTimer.resetRepeatTimer();
+    	
+    }        
+    
+    @Override
+   	public void onDestroyView() {  
+           super.onDestroyView(); 
+           mUpdateTimer.stopTimer();
+           getActivity().unregisterReceiver(mBroadcastRcverStartVideo);  
+       } 
     
     private void initView(){
     	mOnlineCount.setText(formatCount(RenHaiInfo.ServerPoolStat.getOnlineCount()));
@@ -134,7 +145,7 @@ public class RenHaiStartVedioFragment extends Fragment {
         	    case STARTVEDIO_MSG_READYTOENTERPOOL:
         	    {
         	    	mUpdateTimer.stopTimer();
-        	    	mCircleButton.setSecondaryText(getString(R.string.startvedio_btnmatching));
+        	    	//mCircleButton.setSecondaryText(getString(R.string.startvedio_btnmatching));
         	    	mlog.info("Ready to move to the waiting page, before loop1!");
         	    	if((mIsReadyToMoveOn == true)&&(mHasMovedOn == false))
         	    	{
@@ -166,7 +177,7 @@ public class RenHaiStartVedioFragment extends Fragment {
             	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP:
         	        {
         	        	initView();
-        	        	mUpdateTimer.startTimer();
+        	        	//mUpdateTimer.startTimer();
         	    	    break;
         	        }
             	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_ENTERPOOL:
@@ -237,7 +248,7 @@ public class RenHaiStartVedioFragment extends Fragment {
     ///////////////////////////////////////////////////////////////////////
     // Timer Callbacks
     ///////////////////////////////////////////////////////////////////////
-    RenHaiTimerHelper mUpdateTimer = new RenHaiTimerHelper(25000, new RenHaiTimerProcessor() {
+    RenHaiTimerHelper mUpdateTimer = new RenHaiTimerHelper(25000, 25000, new RenHaiTimerProcessor() {
         @Override
         public void onTimeOut() {
         	Message t_MsgListData = new Message();

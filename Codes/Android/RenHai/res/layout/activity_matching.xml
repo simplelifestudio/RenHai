@@ -61,6 +61,70 @@
         android:numColumns="3"
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp">        
-    </GridView>
+    </GridView>    
+    
+    <LinearLayout
+        android:id="@+id/matching_confirmlayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/matching_btnaccept"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/protocal_btn_selector"
+            android:gravity="center_vertical|center"
+            android:text="@string/matching_accept"
+            android:textSize="@dimen/protocal_btn_size"
+            android:textColor="@color/white" >
+        </TextView>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="3dip"
+            android:layout_marginTop="3dip"
+            android:background="#FFFFFFFF" />
+
+        <TextView
+            android:id="@+id/matching_btnrefuse"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/protocal_btn_selector"
+            android:gravity="center_vertical|center"
+            android:text="@string/matching_refuse"
+            android:textSize="@dimen/protocal_btn_size"
+            android:textColor="@color/white" >
+        </TextView>
+    </LinearLayout>
+    
+        <TextView 
+        android:id="@+id/matching_counter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/matching_confirmlayout"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="32dp"
+        android:layout_marginLeft="32dp"      
+        android:textSize="@dimen/waitformatch_countersize"
+        android:textColor="@color/maingreen"
+        android:textStyle="bold"
+        android:text="@string/matching_counterstart" />
+    
+    <TextView 
+        android:id="@+id/matching_peerstat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="32dp"       
+        android:layout_marginBottom="32dp"      
+        android:textSize="@dimen/matching_peerstatsize"
+        android:textColor="@color/black"
+        android:text="@string/matching_peerstattext" />
     
 </RelativeLayout>

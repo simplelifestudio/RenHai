@@ -95,7 +95,8 @@
     </style>
     
     <style name="ThemeThreeMyActionBarTabText" parent="@android:style/Widget.Holo.ActionBar.TabText">  
-        <item name="android:textSize">@dimen/mainpage_tabtext_size</item>  
+        <item name="android:textSize">@dimen/mainpage_tabtext_size</item>
+        <item name="android:textColor">@drawable/tab_text_actionbarwithtabstheme</item>  
     </style>
 
     <style name="DropDownNav.Actionbarwithtabstheme" parent="@android:style/Widget.Holo.Spinner">

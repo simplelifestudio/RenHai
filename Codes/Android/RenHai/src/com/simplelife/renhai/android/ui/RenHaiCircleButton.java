@@ -118,6 +118,13 @@ public class RenHaiCircleButton extends ImageView {
 		initView();
 	}
 	
+	public void resetView(){
+		mCurrentValue = 0;
+		setShowPercentText(false);
+		setSecondaryText("");
+		//initView();
+	}
+	
 	private void initView() {
 		Rect rect = new Rect(0, 0, mDiameter, mDiameter);
 		mRadialScoreRect = new RectF(rect); 
