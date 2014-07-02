@@ -24,7 +24,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class RenHaiVideoTalkActivity extends Activity implements Publisher.Listener, Subscriber.Listener, Session.Listener{
 	
@@ -37,6 +39,9 @@ public class RenHaiVideoTalkActivity extends Activity implements Publisher.Liste
     
 	private RelativeLayout mSubscriberViewContainer;
 	private RelativeLayout mPublisherViewContainer;
+	private LinearLayout mBtnLayout;
+	private TextView mBtnWriteMsg;
+	private TextView mBtnHangOff;
 	private Publisher mPublisher;
     private Subscriber mSubscriber;
     private Session mSession;
@@ -52,6 +57,11 @@ public class RenHaiVideoTalkActivity extends Activity implements Publisher.Liste
         
         mPublisherViewContainer  = (RelativeLayout) findViewById(R.id.video_publisherview);
         mSubscriberViewContainer = (RelativeLayout) findViewById(R.id.video_subscriberview);
+        mBtnLayout   = (LinearLayout) findViewById(R.id.video_touchlayout);
+        mBtnWriteMsg = (TextView) findViewById(R.id.video_btnwritemsg);
+        mBtnHangOff  = (TextView) findViewById(R.id.video_btnhangup);
+        
+        mBtnLayout.setVisibility(View.GONE);
 
         // Disable screen dimming
         PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);

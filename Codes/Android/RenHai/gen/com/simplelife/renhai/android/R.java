@@ -524,7 +524,7 @@ public final class R {
         public static final int textview_selector=0x7f020029;
     }
     public static final class id {
-        public static final int action_settings=0x7f090031;
+        public static final int action_settings=0x7f090034;
         public static final int loadingpage_bar=0x7f090001;
         public static final int loadingpage_barlayout=0x7f090000;
         public static final int loadingpage_text=0x7f090002;
@@ -540,21 +540,21 @@ public final class R {
         public static final int matching_peerstat=0x7f09000e;
         public static final int matching_title1=0x7f090005;
         public static final int matching_title2=0x7f090008;
-        public static final int myimpression_divide=0x7f09001d;
-        public static final int myimpression_gridview=0x7f09001c;
-        public static final int myimpression_impempty=0x7f090020;
-        public static final int myimpression_implabels=0x7f09001f;
-        public static final int myimpression_title1=0x7f09001b;
-        public static final int myimpression_title2=0x7f09001e;
-        public static final int mytopics_create=0x7f090022;
-        public static final int mytopics_divide=0x7f090024;
-        public static final int mytopics_glbintempty=0x7f090028;
-        public static final int mytopics_globalinterests=0x7f090027;
-        public static final int mytopics_myinterests=0x7f090023;
-        public static final int mytopics_progressbar=0x7f090029;
-        public static final int mytopics_refresh=0x7f090026;
-        public static final int mytopics_title1=0x7f090021;
-        public static final int mytopics_title2=0x7f090025;
+        public static final int myimpression_divide=0x7f090020;
+        public static final int myimpression_gridview=0x7f09001f;
+        public static final int myimpression_impempty=0x7f090023;
+        public static final int myimpression_implabels=0x7f090022;
+        public static final int myimpression_title1=0x7f09001e;
+        public static final int myimpression_title2=0x7f090021;
+        public static final int mytopics_create=0x7f090025;
+        public static final int mytopics_divide=0x7f090027;
+        public static final int mytopics_glbintempty=0x7f09002b;
+        public static final int mytopics_globalinterests=0x7f09002a;
+        public static final int mytopics_myinterests=0x7f090026;
+        public static final int mytopics_progressbar=0x7f09002c;
+        public static final int mytopics_refresh=0x7f090029;
+        public static final int mytopics_title1=0x7f090024;
+        public static final int mytopics_title2=0x7f090028;
         public static final int protocal_btnno=0x7f090011;
         public static final int protocal_btnyes=0x7f090010;
         public static final int protocal_confirm=0x7f09000f;
@@ -563,17 +563,20 @@ public final class R {
         public static final int splash_progressbar=0x7f090014;
         public static final int splash_progresstext=0x7f090015;
         public static final int splashteamlogo=0x7f090016;
-        public static final int startvedio_button=0x7f090030;
-        public static final int startvedio_chatcount=0x7f09002f;
-        public static final int startvedio_chatcountlayout=0x7f09002e;
-        public static final int startvedio_chatcounttitle=0x7f09002d;
-        public static final int startvedio_onlinecount=0x7f09002c;
-        public static final int startvedio_onlinecountlayout=0x7f09002b;
-        public static final int startvedio_onlinecounttitle=0x7f09002a;
+        public static final int startvedio_button=0x7f090033;
+        public static final int startvedio_chatcount=0x7f090032;
+        public static final int startvedio_chatcountlayout=0x7f090031;
+        public static final int startvedio_chatcounttitle=0x7f090030;
+        public static final int startvedio_onlinecount=0x7f09002f;
+        public static final int startvedio_onlinecountlayout=0x7f09002e;
+        public static final int startvedio_onlinecounttitle=0x7f09002d;
+        public static final int video_btnhangup=0x7f09001b;
+        public static final int video_btnwritemsg=0x7f09001a;
         public static final int video_publisherview=0x7f090018;
         public static final int video_subscriberview=0x7f090017;
-        public static final int waitingformatch_counter=0x7f090019;
-        public static final int waitingformatch_counternote=0x7f09001a;
+        public static final int video_touchlayout=0x7f090019;
+        public static final int waitingformatch_counter=0x7f09001c;
+        public static final int waitingformatch_counternote=0x7f09001d;
     }
     public static final class layout {
         public static final int activity_loading=0x7f030000;
@@ -652,7 +655,7 @@ public final class R {
         public static final int mytopics_testint5=0x7f060036;
         public static final int mytopics_testint6=0x7f060037;
         public static final int protocal_no=0x7f06000f;
-        public static final int protocal_text=0x7f060051;
+        public static final int protocal_text=0x7f060053;
         public static final int protocal_title=0x7f06000d;
         public static final int protocal_yes=0x7f06000e;
         public static final int splash_advert=0x7f060004;
@@ -670,6 +673,8 @@ public final class R {
         public static final int startvedio_buttontext=0x7f06003a;
         public static final int startvedio_chatcount=0x7f060039;
         public static final int startvedio_onlinecount=0x7f060038;
+        public static final int video_btnhangoff=0x7f060052;
+        public static final int video_btnwritemsg=0x7f060051;
         public static final int viewpager_section_impressions=0x7f060012;
         public static final int viewpager_section_start=0x7f060010;
         public static final int viewpager_section_topics=0x7f060011;
