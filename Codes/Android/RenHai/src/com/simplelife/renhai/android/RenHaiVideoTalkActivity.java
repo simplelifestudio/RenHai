@@ -61,6 +61,9 @@ public class RenHaiVideoTalkActivity extends Activity implements Publisher.Liste
         mBtnWriteMsg = (TextView) findViewById(R.id.video_btnwritemsg);
         mBtnHangOff  = (TextView) findViewById(R.id.video_btnhangup);
         
+        mPublisherViewContainer.setOnClickListener(mPublisherListener);
+        mBtnWriteMsg.setOnClickListener(mBtnWriteMsgListener);
+        mBtnHangOff.setOnClickListener(mBtnHangOffListener);
         mBtnLayout.setVisibility(View.GONE);
 
         // Disable screen dimming
@@ -71,6 +74,30 @@ public class RenHaiVideoTalkActivity extends Activity implements Publisher.Liste
             sessionConnect();
         }
     }
+    
+    private View.OnClickListener mPublisherListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			mBtnLayout.setVisibility(View.VISIBLE);		
+		}
+	};
+	
+    private View.OnClickListener mBtnWriteMsgListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+					
+		}
+	};
+	
+	private View.OnClickListener mBtnHangOffListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+					
+		}
+	};
     
     @Override
     public void onStop() {

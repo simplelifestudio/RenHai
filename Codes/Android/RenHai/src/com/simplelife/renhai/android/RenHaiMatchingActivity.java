@@ -364,6 +364,7 @@ public class RenHaiMatchingActivity extends Activity{
 	        @Override  
 	        public void onFinish() {  
 	        	mCounterText.setText("Time Out!"); 
+	        	mCounterText.setTextSize(18);
 	        	//Intent tIntent = new Intent(RenHaiWaitForMatchActivity.this, RenHaiMatchingActivity.class);
 	    		//startActivity(tIntent);
 	    		//finish();	        	 
