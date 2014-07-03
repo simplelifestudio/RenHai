@@ -272,7 +272,7 @@ public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {
 						{
 							JSONObject tWebRtc = tOperationInfo.getJSONObject(MSG_BUSINESSSESSIONNOTIF_WEBRTC);
 							if(tWebRtc.has(MSG_BUSINESSSESSIONNOTIF_WEBRTCAPIKEY))
-								WebRtcSession.setApiKey(tWebRtc.getLong(MSG_BUSINESSSESSIONNOTIF_WEBRTCAPIKEY));
+								WebRtcSession.setApiKey(tWebRtc.getString(MSG_BUSINESSSESSIONNOTIF_WEBRTCAPIKEY));
 							if(tWebRtc.has(MSG_BUSINESSSESSIONNOTIF_WEBRTCSESSIONID))
 								WebRtcSession.setSessionId(tWebRtc.getString(MSG_BUSINESSSESSIONNOTIF_WEBRTCSESSIONID));
 							if(tWebRtc.has(MSG_BUSINESSSESSIONNOTIF_WEBRTCTOKEN))

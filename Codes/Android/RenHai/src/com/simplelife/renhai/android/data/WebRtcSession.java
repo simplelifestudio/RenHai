@@ -9,11 +9,11 @@
 package com.simplelife.renhai.android.data;
 
 public class WebRtcSession {
-	public static long mApiKey;
+	public static String mApiKey;
 	public static String mSessionId;
 	public static String mToken;
 	
-	public static void setApiKey(long _key){
+	public static void setApiKey(String _key){
 		mApiKey = _key;
 	}
 	
@@ -25,7 +25,7 @@ public class WebRtcSession {
 		mToken = _token;
 	}
 	
-	public static long getApiKey(){
+	public static String getApiKey(){
 		return mApiKey;
 	}
 	
