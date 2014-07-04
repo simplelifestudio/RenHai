@@ -61,5 +61,43 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 				
 		return tMsg;
 	}
+	
+	public static JSONObject constructMsg(int _businessType, int _operationType, String _operationInfo){
+		JSONObject tMsgContent = new JSONObject();
+		JSONObject tMsgHeaderContent = new JSONObject();
+		JSONObject tMsgBodyContent   = new JSONObject();
+		JSONObject tMsg = new JSONObject();
+		String tMessageAfterEncode = null;
+		
+		tMsgHeaderContent = constructMsgHeader(
+				            RenHaiDefinitions.RENHAI_MSGTYPE_APPREQUEST,
+				            RenHaiDefinitions.RENHAI_MSGID_BUSINESSSESSIONREQUEST);
+		
+		try {
+			tMsgContent.put(MSG_HEADER,tMsgHeaderContent);
+			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_SESSIONID, JSONNULL);
+			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_BUSINESSTYPE, _businessType);
+			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONTYPE, _operationType);
+			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONINFO, _operationInfo);
+			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONVALUE, JSONNULL);
+			tMsgContent.put(MSG_BODY, tMsgBodyContent);
+			mlog.info("Constructing BusinessSessionRequest: "+tMsgContent.toString());
+			
+			RenHaiInfo.BusinessSession.setBusinessType(_businessType);
+			
+			// Encrpt the message content and encode by base64
+			tMessageAfterEncode = SecurityUtils.encryptByDESAndEncodeByBase64(
+		              tMsgContent.toString(), RenHaiDefinitions.RENHAI_ENCODE_KEY);
+			
+			// Capsulate with the envelope
+			tMsg.put(MSG_ENVELOPE, tMessageAfterEncode);
+		} catch (JSONException e) {
+			mlog.error("Failed to construct BusinessSessionRequest!", e);
+		} catch (Exception e) {
+			mlog.error("Failed to encrypt BusinessSessionRequest!", e);
+		}		
+				
+		return tMsg;
+	}
 
 }

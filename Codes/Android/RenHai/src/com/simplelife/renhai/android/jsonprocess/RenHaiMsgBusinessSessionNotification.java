@@ -284,7 +284,8 @@ public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {
 				Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_SESSIONBINDED);
 		        _context.sendBroadcast(tIntent);
-			}else if(tOperationType == RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEAGREED)
+			}
+			else if(tOperationType == RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEAGREED)
 			{
 				Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERAGREE);
@@ -296,7 +297,24 @@ public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {
 		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERREJECT);
 		        _context.sendBroadcast(tIntent);
 			}
-			
+			else if(tOperationType == RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEENDCHAT)
+			{
+				Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERENDCHAT);
+		        _context.sendBroadcast(tIntent);
+			}			
+			else if(tOperationType == RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDECHATMESSAGE)
+			{
+				if(inBody.has(MSG_BUSINESSSESSIONNOTIF_OPERATIONINFO))
+				{
+					String tMsg = inBody.getString(MSG_BUSINESSSESSIONNOTIF_OPERATIONINFO);
+					PeerDeviceInfo.storeChatMsg(tMsg);
+				}
+				
+				Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+		        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERCHATMSG);
+		        _context.sendBroadcast(tIntent);
+			}
 			//TODO: add more conditions here
 	    }catch (JSONException e) {
 			mlog.error("Failed to process RenHaiMsgBusinessSessionResp!", e);

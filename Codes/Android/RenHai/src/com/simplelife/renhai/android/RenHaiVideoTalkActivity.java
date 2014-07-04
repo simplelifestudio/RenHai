@@ -18,14 +18,20 @@ import com.opentok.android.Session;
 import com.opentok.android.Stream;
 import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
+import com.simplelife.renhai.android.data.PeerDeviceInfo;
 import com.simplelife.renhai.android.data.WebRtcSession;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionNotificationResp;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionReq;
+import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,6 +39,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -62,8 +69,14 @@ Subscriber.VideoListener {
 	private RelativeLayout mPublisherViewContainer;
 	private RelativeLayout mSubscriberViewContainer;
 	private LinearLayout mBtnLayout;
+	private LinearLayout mMsgLayout;
+	private LinearLayout mShowMsgLayout;
 	private TextView mBtnWriteMsg;
 	private TextView mBtnHangOff;
+	private TextView mPeerStatus;
+	private TextView mBtnSendMsg;
+	private TextView mShowMsg;
+	private EditText mEditMsg;
 	
 	// Spinning wheel for loading subscriber view
 	private ProgressBar mLoadingSub;
@@ -75,6 +88,7 @@ Subscriber.VideoListener {
 	private NotificationCompat.Builder mNotifyBuilder;
 	NotificationManager mNotificationManager;
 	private int notificationId;
+	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,17 +103,33 @@ Subscriber.VideoListener {
 		
 		mPublisherViewContainer = (RelativeLayout) findViewById(R.id.video_publisherview);
 		mSubscriberViewContainer = (RelativeLayout) findViewById(R.id.video_subscriberview);
-		mLoadingSub = (ProgressBar) findViewById(R.id.loadingSpinner);
+		mLoadingSub  = (ProgressBar) findViewById(R.id.loadingSpinner);
 		mBtnLayout   = (LinearLayout) findViewById(R.id.video_touchlayout);
+		mMsgLayout   = (LinearLayout) findViewById(R.id.video_writemsglayout);
+		mShowMsgLayout = (LinearLayout) findViewById(R.id.video_showmsglayout);
         mBtnWriteMsg = (TextView) findViewById(R.id.video_btnwritemsg);
         mBtnHangOff  = (TextView) findViewById(R.id.video_btnhangup);
+        mPeerStatus  = (TextView) findViewById(R.id.peerstatus);
+        mBtnSendMsg  = (TextView) findViewById(R.id.video_btnsendmsg);
+        mShowMsg     = (TextView) findViewById(R.id.video_showmsg);
+        mEditMsg     = (EditText) findViewById(R.id.video_editmsg);
         
         mPublisherViewContainer.setOnClickListener(mPublisherListener);
         mBtnWriteMsg.setOnClickListener(mBtnWriteMsgListener);
         mBtnHangOff.setOnClickListener(mBtnHangOffListener);
+        mBtnSendMsg.setOnClickListener(mBtnSendMsgListener);
         mBtnLayout.setVisibility(View.GONE);
+        mMsgLayout.setVisibility(View.GONE);
+        mShowMsgLayout.setVisibility(View.GONE);
+        mLoadingSub.setVisibility(View.VISIBLE);
 		
 		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
+		
+		// Register the broadcast receiver
+		IntentFilter tFilter = new IntentFilter();
+		tFilter.addAction(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+		registerReceiver(mBroadcastRcverVideo, tFilter); 
 		
 		mStreams = new ArrayList<Stream>();
 		sessionConnect();
@@ -115,8 +145,10 @@ Subscriber.VideoListener {
 				isLayoutCalledout = true;
 			}else{
 				mBtnLayout.setVisibility(View.GONE);
+				mMsgLayout.setVisibility(View.GONE);
 				isLayoutCalledout = false;
 			}
+			mShowMsgLayout.setVisibility(View.GONE);
 				
 		}
 	};
@@ -125,7 +157,8 @@ Subscriber.VideoListener {
 
 		@Override
 		public void onClick(View v) {
-			
+			mBtnLayout.setVisibility(View.GONE);
+			mMsgLayout.setVisibility(View.VISIBLE);			
 		}
 	};
 	
@@ -133,9 +166,37 @@ Subscriber.VideoListener {
 
 		@Override
 		public void onClick(View v) {
-			
+			//sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ENDCHAT);
+			//mBtnLayout.setVisibility(View.GONE);
+			mShowMsgLayout.setVisibility(View.VISIBLE);
+    		mShowMsg.setText("Hello, this is a test!");
 		}
 	};
+	
+	private View.OnClickListener mBtnSendMsgListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(
+	    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
+	    			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_CHATMESSAGE,
+	    			mEditMsg.getText().toString()).toString();
+	    	mWebSocketHandle.sendMessage(tBusinessSessionReq);
+			mMsgLayout.setVisibility(View.GONE);			
+		}
+	};
+	
+	private void sendBusinessSessionReqMessage(int _operationType){
+		String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(
+    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, _operationType).toString();
+    	mWebSocketHandle.sendMessage(tBusinessSessionReq);
+	}
+	
+	private void sendBusinessSessionNotificationRespMessage(int _operationType, int _operationValue){
+		String tBusinessSessionNotResp = RenHaiMsgBusinessSessionNotificationResp.constructMsg(
+    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, _operationType, _operationValue).toString();
+    	mWebSocketHandle.sendMessage(tBusinessSessionNotResp);
+	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -216,6 +277,12 @@ Subscriber.VideoListener {
 		    }
 		}
 	}
+	
+	@Override
+	public void onDestroy() {  
+        super.onDestroy();  
+        unregisterReceiver(mBroadcastRcverVideo);  
+    }
 	
 	@Override
 	public void onBackPressed() {
@@ -328,61 +395,61 @@ Subscriber.VideoListener {
 	
 	@Override
 	public void onStreamReceived(Session session, Stream stream) {
-	Log.i(LOGTAG, "onStreamReceived");
-	if (!SUBSCRIBE_TO_SELF) {
-	    mStreams.add(stream);
-	    if (mSubscriber == null) {
-	        subscribeToStream(stream);
-	    }
-	}
+		Log.i(LOGTAG, "onStreamReceived");
+		if (!SUBSCRIBE_TO_SELF) {
+		    mStreams.add(stream);
+		    if (mSubscriber == null) {
+		        subscribeToStream(stream);
+		    }
+		}
 	}
 	
 	@Override
 	public void onStreamDropped(Session session, Stream stream) {
-	Log.i(LOGTAG, "onStreamDropped");
-	if (!SUBSCRIBE_TO_SELF) {
-	    if (mSubscriber != null) {
-	        unsubscribeFromStream(stream);
-	    }
-	}
+		Log.i(LOGTAG, "onStreamDropped");
+		if (!SUBSCRIBE_TO_SELF) {
+		    if (mSubscriber != null) {
+		        unsubscribeFromStream(stream);
+		    }
+		}
 	}
 	
 	@Override
 	public void onStreamCreated(PublisherKit publisher, Stream stream) {
-	Log.i(LOGTAG, "onStreamCreated");
-	if (SUBSCRIBE_TO_SELF) {
-	    mStreams.add(stream);
-	    if (mSubscriber == null) {
-	        subscribeToStream(stream);
-	    }
-	}
+		Log.i(LOGTAG, "onStreamCreated");
+		if (SUBSCRIBE_TO_SELF) {
+		    mStreams.add(stream);
+		    if (mSubscriber == null) {
+		        subscribeToStream(stream);
+		    }
+		}
 	}
 	
 	@Override
 	public void onStreamDestroyed(PublisherKit publisher, Stream stream) {
-	if ((SUBSCRIBE_TO_SELF && mSubscriber != null)) {
-	    unsubscribeFromStream(stream);
-	}
+		if ((SUBSCRIBE_TO_SELF && mSubscriber != null)) {
+		    unsubscribeFromStream(stream);
+		}
 	}
 	
 	@Override
 	public void onError(PublisherKit publisher, OpentokError exception) {
-	Log.i(LOGTAG, "Publisher exception: " + exception.getMessage());
+		Log.i(LOGTAG, "Publisher exception: " + exception.getMessage());
 	}
 	
 	@Override
 	public void onVideoDisabled(SubscriberKit subscriber) {
-	Log.i(LOGTAG,
-	        "Video quality changed. It is disabled for the subscriber.");
+		Log.i(LOGTAG,
+		        "Video quality changed. It is disabled for the subscriber.");
 	}
 	
 	@Override
 	public void onVideoDataReceived(SubscriberKit subscriber) {
-	Log.i(LOGTAG, "First frame received");
-	
-	// stop loading spinning
-	mLoadingSub.setVisibility(View.GONE);
-	attachSubscriberView(mSubscriber);
+		Log.i(LOGTAG, "First frame received");
+		
+		// stop loading spinning
+		mLoadingSub.setVisibility(View.GONE);
+		attachSubscriberView(mSubscriber);
 	}
 	
 	/**
@@ -396,5 +463,44 @@ Subscriber.VideoListener {
 	double screenDensity = this.getResources().getDisplayMetrics().density;
 	return (int) (screenDensity * (double) dp);
 	}
+	
+    ///////////////////////////////////////////////////////////////////////
+    // Network message process
+    ///////////////////////////////////////////////////////////////////////    
+    private BroadcastReceiver mBroadcastRcverVideo = new BroadcastReceiver() { 
+        @Override 
+        public void onReceive(Context context, Intent intent) { 
+
+            String action = intent.getAction(); 
+            if(action.equals(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG)){
+            	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
+            	switch (tMsgType) {
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_ENDCHAT:
+            	{
+            		// TODO: Add processing to disconnect the opentok
+            		finish();
+            		break;
+            	}
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERENDCHAT:
+            	{
+            		// TODO: Add processing to disconnect the opentok
+            		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEENDCHAT,1);
+            		mPeerStatus.setVisibility(View.VISIBLE);
+            		mPeerStatus.setText(R.string.video_peerhangoff);
+            		finish();
+            		break;
+            	}
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERCHATMSG:
+            	{
+            		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDECHATMESSAGE,1);
+            		mShowMsgLayout.setVisibility(View.VISIBLE);
+            		mShowMsg.setText(PeerDeviceInfo.getChatMsg());
+            		break;
+            	}
+
+            	}            	
+            }
+        } 
+    };
 
 }

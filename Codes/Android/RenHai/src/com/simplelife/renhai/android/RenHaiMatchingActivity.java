@@ -34,6 +34,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class RenHaiMatchingActivity extends Activity{
@@ -47,6 +48,8 @@ public class RenHaiMatchingActivity extends Activity{
 	private TextView mMatchingBtnYes;
 	private TextView mMatchingBtnNo;
 	private TextView mPeerStatText;
+	private LinearLayout mBackLayout;
+	private TextView mMatchingBtnBack;
 	private boolean mEitherSideAgreed = false;
 	private boolean mMovedToVideoPage = false;
 	ActionBar mActionBar;
@@ -75,12 +78,15 @@ public class RenHaiMatchingActivity extends Activity{
 		mCounter = new MyCount(20000, 1000);
 		
 		mMatchingBtnYes = (TextView)findViewById(R.id.matching_btnaccept);
-		mMatchingBtnNo  = (TextView)findViewById(R.id.matching_btnrefuse);
-		
+		mMatchingBtnNo  = (TextView)findViewById(R.id.matching_btnrefuse);		
+		mPeerStatText   = (TextView)findViewById(R.id.matching_peerstat);		
+		mBackLayout     = (LinearLayout)findViewById(R.id.matching_backlayout);
+		mMatchingBtnBack = (TextView)findViewById(R.id.matching_btnback);
+		mBackLayout.setVisibility(View.GONE);
+				
 		mMatchingBtnYes.setOnClickListener(mMatchingBtnYesListener);
 		mMatchingBtnNo.setOnClickListener(mMatchingBtnNoListener);
-		
-		mPeerStatText = (TextView)findViewById(R.id.matching_peerstat);
+		mMatchingBtnBack.setOnClickListener(mMatchingBtnBackListener);
 		
 		enableActionBarNote();
 		
@@ -121,6 +127,14 @@ public class RenHaiMatchingActivity extends Activity{
 			// Hide the buttons
 		    mMatchingBtnYes.setVisibility(View.INVISIBLE);
 			mMatchingBtnNo.setVisibility(View.INVISIBLE);			
+		}
+	};
+	
+	private View.OnClickListener mMatchingBtnBackListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			finish();		
 		}
 	};
 	
@@ -401,9 +415,10 @@ public class RenHaiMatchingActivity extends Activity{
             	}
             	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERREJECT:
             	{
-            		//TODO: add processing here
             		mPeerStatText.setText(R.string.matching_peerstattextreject);
+            		mCounter.cancel();
             		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEREJECTED,1);
+            		mBackLayout.setVisibility(View.VISIBLE);
             		break;
             	}
 

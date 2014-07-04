@@ -15,10 +15,12 @@ import com.simplelife.renhai.android.RenHaiDefinitions;
 public class PeerDeviceInfo {
 	public static int deviceId = 0;		
 	public static String deviceSn = "";
+	public static String chatMsg = "";
 	
 	public static void resetPeerDeviceInfo(){
 		deviceId = 0;
 		deviceSn = "";
+		chatMsg  = "";
 		DeviceCard.resetDeviceCardInfo();
 		Profile.resetProfileInfo();
 		InterestLabel.resetPeerIntLabelList();
@@ -42,6 +44,14 @@ public class PeerDeviceInfo {
 	
 	public static String getDeviceSn(){
 		return deviceSn;
+	}
+	
+	public static void storeChatMsg(String _msg){
+		chatMsg = _msg;
+	}
+	
+	public static String getChatMsg(){
+		return chatMsg;
 	}
 	
 	public static class DeviceCard {
