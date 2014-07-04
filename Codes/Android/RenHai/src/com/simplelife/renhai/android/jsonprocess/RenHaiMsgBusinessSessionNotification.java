@@ -80,6 +80,7 @@ public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {
 	public static String MSG_BUSINESSSESSIONNOTIF_WEBRTCAPIKEY = "apiKey";
 	public static String MSG_BUSINESSSESSIONNOTIF_WEBRTCSESSIONID = "sessionId";
 	public static String MSG_BUSINESSSESSIONNOTIF_WEBRTCTOKEN = "token";
+	public static String MSG_BUSINESSSESSIONNOTIF_CHATMSG = "chatMessage";
 	
 	public static int parseMsg(Context _context, JSONObject inBody){		
 		int tOperationType = 0;
@@ -307,8 +308,11 @@ public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {
 			{
 				if(inBody.has(MSG_BUSINESSSESSIONNOTIF_OPERATIONINFO))
 				{
-					String tMsg = inBody.getString(MSG_BUSINESSSESSIONNOTIF_OPERATIONINFO);
-					PeerDeviceInfo.storeChatMsg(tMsg);
+					JSONObject tInfo = inBody.getJSONObject(MSG_BUSINESSSESSIONNOTIF_OPERATIONINFO);
+					if(tInfo.has(MSG_BUSINESSSESSIONNOTIF_CHATMSG))
+					{
+						PeerDeviceInfo.storeChatMsg(tInfo.getString(MSG_BUSINESSSESSIONNOTIF_CHATMSG));
+					}
 				}
 				
 				Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);

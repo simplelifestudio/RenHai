@@ -7,7 +7,7 @@
     <LinearLayout
         android:id="@+id/video_showmsglayout"
         android:layout_width="fill_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -108,7 +108,7 @@
 
         <EditText
             android:id="@+id/video_editmsg"
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginLeft="5dp"
             android:background="@color/white"

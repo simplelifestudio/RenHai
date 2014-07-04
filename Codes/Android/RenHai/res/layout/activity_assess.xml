@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <TextView 
+        android:id="@+id/assess_title1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"        
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:textSize="@dimen/mytopics_inttitle_size"
+        android:textColor="@color/black"
+        android:text="@string/assess_title1" />
+    
+    <GridView 
+        android:id="@+id/assess_gridview1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/assess_title1"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:numColumns="3"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp">        
+    </GridView>
+    
+    <LinearLayout
+        android:id="@+id/assess_divide1"
+        android:layout_height="1dp" 
+        android:layout_width="fill_parent"
+        android:layout_below="@id/assess_gridview1" 
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/maingreen"
+        android:orientation="horizontal">        
+    </LinearLayout>
+    
+    <TextView 
+        android:id="@+id/assess_title2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_below="@id/assess_divide1"       
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:textSize="@dimen/mytopics_inttitle_size"
+        android:textColor="@color/black"
+        android:text="@string/assess_title2" />
+    
+    <com.simplelife.renhai.android.ui.RenHaiDraggableGridView 
+        android:id="@+id/assess_implabels" 
+        android:layout_height="140dp" 
+        android:layout_width="wrap_content"
+        android:layout_below="@id/assess_title2"         
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">       
+    </com.simplelife.renhai.android.ui.RenHaiDraggableGridView>
+    
+    <LinearLayout
+        android:id="@+id/assess_divide2"
+        android:layout_height="1dp" 
+        android:layout_width="fill_parent"
+        android:layout_below="@id/assess_implabels" 
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:background="@color/maingreen"
+        android:orientation="horizontal">        
+    </LinearLayout>
+    
+    <TextView 
+        android:id="@+id/assess_title3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_below="@id/assess_divide2"       
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:textSize="@dimen/mytopics_inttitle_size"
+        android:textColor="@color/black"
+        android:text="@string/assess_title3" />
+    
+    <GridView 
+        android:id="@+id/assess_gridview2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/assess_title3"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:numColumns="3"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="10dp">        
+    </GridView>
+
+</RelativeLayout>

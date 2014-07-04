@@ -166,10 +166,10 @@ Subscriber.VideoListener {
 
 		@Override
 		public void onClick(View v) {
-			//sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ENDCHAT);
-			//mBtnLayout.setVisibility(View.GONE);
-			mShowMsgLayout.setVisibility(View.VISIBLE);
-    		mShowMsg.setText("Hello, this is a test!");
+			sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ENDCHAT);
+			mBtnLayout.setVisibility(View.GONE);
+			//mShowMsgLayout.setVisibility(View.VISIBLE);
+    		//mShowMsg.setText("Hello, this is a test!");
 		}
 	};
 	
@@ -369,6 +369,8 @@ Subscriber.VideoListener {
 		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
 		        getResources().getDisplayMetrics().widthPixels, getResources()
 		                .getDisplayMetrics().heightPixels);
+		Log.i(LOGTAG, "attaching subscriber, width: " + getResources().getDisplayMetrics().widthPixels + " height: "+getResources()
+                .getDisplayMetrics().heightPixels);
 		mSubscriberViewContainer.addView(mSubscriber.getView(), layoutParams);
 		subscriber.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
 		        BaseVideoRenderer.STYLE_VIDEO_FILL);

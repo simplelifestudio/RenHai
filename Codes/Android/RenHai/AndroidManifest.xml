@@ -64,6 +64,10 @@
                 	<category android:name="android.intent.category.DEFAULT" />
             	</intent-filter>
         </activity>
+        <activity
+            android:name="com.simplelife.renhai.android.RenHaiAssessActivity"
+            android:theme="@style/Theme.Actionbarwithtabstheme">                       
+        </activity>
     </application>
 
 </manifest>

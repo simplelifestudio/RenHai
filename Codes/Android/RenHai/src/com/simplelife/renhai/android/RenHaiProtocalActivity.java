@@ -35,7 +35,7 @@ public class RenHaiProtocalActivity extends Activity {
 
 		@Override
 		public void onClick(View v) {
-		    Intent intent = new Intent(RenHaiProtocalActivity.this, RenHaiMainPageActivity.class);
+		    Intent intent = new Intent(RenHaiProtocalActivity.this, RenHaiAssessActivity.class);
 		    startActivity(intent);
 			finish();
 			

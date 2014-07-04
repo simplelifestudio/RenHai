@@ -23,6 +23,7 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 	public static String MSG_BUSINESSSESSIONREQ_OPERATIONTYPE  = "operationType";
 	public static String MSG_BUSINESSSESSIONREQ_OPERATIONINFO  = "operationInfo";
 	public static String MSG_BUSINESSSESSIONREQ_OPERATIONVALUE = "operationValue";
+	public static String MSG_BUSINESSSESSIONREQ_CHATMSG = "chatMessage";
 	
 	public static JSONObject constructMsg(int _businessType, int _operationType){
 		JSONObject tMsgContent = new JSONObject();
@@ -66,6 +67,7 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 		JSONObject tMsgContent = new JSONObject();
 		JSONObject tMsgHeaderContent = new JSONObject();
 		JSONObject tMsgBodyContent   = new JSONObject();
+		JSONObject tOperationInfo    = new JSONObject();
 		JSONObject tMsg = new JSONObject();
 		String tMessageAfterEncode = null;
 		
@@ -78,7 +80,8 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_SESSIONID, JSONNULL);
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_BUSINESSTYPE, _businessType);
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONTYPE, _operationType);
-			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONINFO, _operationInfo);
+			tOperationInfo.put(MSG_BUSINESSSESSIONREQ_CHATMSG, _operationInfo);			
+			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONINFO, tOperationInfo);
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONVALUE, JSONNULL);
 			tMsgContent.put(MSG_BODY, tMsgBodyContent);
 			mlog.info("Constructing BusinessSessionRequest: "+tMsgContent.toString());
