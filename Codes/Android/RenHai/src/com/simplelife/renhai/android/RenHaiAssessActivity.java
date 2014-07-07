@@ -14,8 +14,13 @@ import java.text.NumberFormat;
 import org.apache.log4j.Logger;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils.TruncateAt;
 import android.util.Log;
 import android.view.Gravity;
@@ -23,34 +28,142 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.simplelife.renhai.android.data.InterestLabelMap;
 import com.simplelife.renhai.android.data.PeerDeviceInfo;
+import com.simplelife.renhai.android.data.RenHaiInfo;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
+import com.simplelife.renhai.android.ui.RenHaiDraggableGridView;
 import com.simplelife.renhai.android.utils.TimerConverter;
 
 public class RenHaiAssessActivity extends Activity{
 	private GridView mAssessGridView;
 	private AssessAdapter mAssessAdapter;
+	private RadioGroup mAssessRdGroup;
+	private RadioButton mRdBtnHappy;
+	private RadioButton mRdBtnSoso;
+	private RadioButton mRdBtnDisgust;
+	private RenHaiDraggableGridView mImpressionGrid;
+	private Button mCreateImp;
+	
+	private final int ASSESS_MSG_IMPLABELDEFINED = 6000;
 	
 	private RenHaiWebSocketProcess mWebSocketHandle = null;
-	private final Logger mlog = Logger.getLogger(RenHaiMatchingActivity.class);
+	private final Logger mlog = Logger.getLogger(RenHaiAssessActivity.class);
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_assess);
+		
+		mAssessRdGroup = (RadioGroup)findViewById(R.id.assess_radiogroup);
+		mRdBtnHappy   = (RadioButton)findViewById(R.id.assess_btnhappy);
+		mRdBtnSoso    = (RadioButton)findViewById(R.id.assess_btnsoso);
+		mRdBtnDisgust = (RadioButton)findViewById(R.id.assess_btndisgust);		
+		mAssessRdGroup.setOnCheckedChangeListener(mRadioGroupListener);
+		
+		mImpressionGrid = (RenHaiDraggableGridView)findViewById(R.id.assess_implabels);
+		mCreateImp = (Button)findViewById(R.id.assess_create);
+		mCreateImp.setOnClickListener(mCreateNewImpLabelListener); 
 
+		/*
 		mAssessGridView = (GridView)findViewById(R.id.assess_gridview1);
 		mAssessAdapter = new AssessAdapter(this);
 		mAssessGridView.setAdapter(mAssessAdapter);
-		setAssessGridViewListeners();
+		setAssessGridViewListeners();*/
 				
 	}
+	
+	private RadioGroup.OnCheckedChangeListener mRadioGroupListener = new RadioGroup.OnCheckedChangeListener() {
+
+		@Override
+		public void onCheckedChanged(RadioGroup arg0, int checkedId) {
+			// TODO Auto-generated method stub
+			if(checkedId == mRdBtnHappy.getId()){
+            	PeerDeviceInfo.AssessResult.setAssessment(RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY);
+            }
+            if(checkedId==mRdBtnSoso.getId()){
+            	PeerDeviceInfo.AssessResult.setAssessment(RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_SOSO);                
+            }
+            if(checkedId==mRdBtnDisgust.getId()){
+            	PeerDeviceInfo.AssessResult.setAssessment(RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING);
+            }
+			
+		}
+		
+	};
+	
+	private View.OnClickListener mCreateNewImpLabelListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			onDefineImpLabelTextBuilder();			
+		}
+	};
+	
+	private void onDefineImpLabelTextBuilder() {
+		AlertDialog.Builder builder = new Builder(this);
+		builder.setTitle(getString(R.string.mytopics_inttxtbuildtitle));		
+		final EditText tEditText = new EditText(this);
+		builder.setView(tEditText);
+		builder.setPositiveButton(R.string.mytopics_inttxtbuildposbtn, new DialogInterface.OnClickListener() {
+		    @Override
+	        public void onClick(DialogInterface dialog, int which) {
+			    dialog.dismiss();    	
+		            new Thread() {  						
+			            @Override
+			            public void run() {
+			            	String tInput = tEditText.getText().toString();
+			            	InterestLabelMap tIntLabelMap = new InterestLabelMap();
+			            	tIntLabelMap.setIntLabelName(tInput);
+			            	RenHaiInfo.InterestLabel.putMyIntLabel(tIntLabelMap);
+			            	Message t_MsgListData = new Message();
+			            	t_MsgListData.what = ASSESS_MSG_IMPLABELDEFINED;					        								
+					        handler.sendMessage(t_MsgListData);				            					        
+			            }				
+		            }.start();
+		    }
+		});
+
+		builder.setNegativeButton(R.string.mytopics_intdialognegbtn, new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.dismiss();
+		    }
+		});
+
+		builder.create().show();		
+	}
+	
+    ///////////////////////////////////////////////////////////////////////
+    // Inner message hander
+    /////////////////////////////////////////////////////////////////////// 
+	private Handler handler = new Handler(){  		  
+        @Override  
+        public void handleMessage(Message msg) {          	
+        	switch (msg.what) {
+        	    case ASSESS_MSG_IMPLABELDEFINED:
+        	    {
+        	    	onUpdateMyInterestGrid(false);
+        	    	mMyInterestsGrid.refreshDrawableState();
+        	    	onContinueToDefinePersonalInterestDialog();
+        	    	break;
+        	    }
+        	
+        	}
+        }
+	};
+	
 	
 	private void setAssessGridViewListeners(){
 		mAssessGridView.setOnItemClickListener(new OnItemClickListener() {
@@ -129,6 +242,7 @@ public class RenHaiAssessActivity extends Activity{
 				    	mCheckBox0.setHeight(96);
 				    	mCheckBox0.setPadding(0, 10, 0, 10);
 				    	mCheckBox0.setText(R.string.myimpression_happylabel);
+				    	mCheckBox0.setOnClickListener(mCheckBox0Listener);
 				    	return mCheckBox0;			    	
 				    }
 				    case 1:
@@ -138,7 +252,8 @@ public class RenHaiAssessActivity extends Activity{
 				    	mCheckBox1.setBackgroundColor(mContext.getResources().getColor(R.color.maingreen));
 				    	mCheckBox1.setHeight(96);
 				    	mCheckBox1.setPadding(0, 10, 0, 10);
-				    	mCheckBox1.setText(R.string.myimpression_sosolabel);			    	
+				    	mCheckBox1.setText(R.string.myimpression_sosolabel);
+				    	mCheckBox1.setOnClickListener(mCheckBox1Listener);
 				    	return mCheckBox1;				    	
 				    }
 				    case 2:
@@ -149,7 +264,8 @@ public class RenHaiAssessActivity extends Activity{
 				    	mCheckBox2.setHeight(96);
 				    	mCheckBox2.setPadding(0, 10, 0, 10);
 				    	mCheckBox2.setText(R.string.myimpression_sosolabel);
-				    	mCheckBox2.setText(R.string.myimpression_disgustlabel);		
+				    	mCheckBox2.setText(R.string.myimpression_disgustlabel);	
+				    	mCheckBox2.setOnClickListener(mCheckBox2Listener);
 				    	return mCheckBox2;				    	
 				    }
 				    default:
@@ -161,8 +277,31 @@ public class RenHaiAssessActivity extends Activity{
 			else{
 				return convertView;
 			}
-		} 
-    	
+		}
+		private View.OnClickListener mCheckBox0Listener = new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mCheckBox1.setChecked(false);
+				mCheckBox2.setChecked(false);
+			}
+		};
+		private View.OnClickListener mCheckBox1Listener = new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mCheckBox0.setChecked(false);
+				mCheckBox2.setChecked(false);
+			}
+		};
+		private View.OnClickListener mCheckBox2Listener = new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mCheckBox0.setChecked(false);
+				mCheckBox1.setChecked(false);
+			}
+		};
     }
 
 }

@@ -14,7 +14,41 @@
         android:textColor="@color/black"
         android:text="@string/assess_title1" />
     
-    <GridView 
+    <RadioGroup 
+        android:id="@+id/assess_radiogroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/assess_title1"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="horizontal">
+        
+        <RadioButton 
+            android:id="@+id/assess_btnhappy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/myimpression_happylabel"
+            android:textColor="@color/black"/>
+        
+        <RadioButton 
+            android:id="@+id/assess_btnsoso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/myimpression_sosolabel"
+            android:textColor="@color/black"
+            android:layout_marginLeft="40dp"/>
+        
+        <RadioButton 
+            android:id="@+id/assess_btndisgust"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/myimpression_disgustlabel"
+            android:textColor="@color/black"
+            android:layout_marginLeft="40dp"/>        
+    </RadioGroup>
+    
+    <!--GridView 
         android:id="@+id/assess_gridview1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -25,13 +59,13 @@
         android:numColumns="3"
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp">        
-    </GridView>
+    </GridView-->
     
     <LinearLayout
         android:id="@+id/assess_divide1"
         android:layout_height="1dp" 
         android:layout_width="fill_parent"
-        android:layout_below="@id/assess_gridview1" 
+        android:layout_below="@id/assess_radiogroup" 
         android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
@@ -49,6 +83,18 @@
         android:textSize="@dimen/mytopics_inttitle_size"
         android:textColor="@color/black"
         android:text="@string/assess_title2" />
+    
+    <Button         
+        android:id="@+id/assess_create"
+        android:layout_width="80dp"
+        android:layout_height="36dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"
+        android:layout_alignTop="@id/assess_title2"      
+        android:textSize="@dimen/mytopics_inttitle_size"
+        android:textColor="@color/black"
+        android:text="@string/mytopics_create"
+        android:background="@drawable/textview_selector"/>
     
     <com.simplelife.renhai.android.ui.RenHaiDraggableGridView 
         android:id="@+id/assess_implabels" 
@@ -85,7 +131,7 @@
         android:text="@string/assess_title3" />
     
     <GridView 
-        android:id="@+id/assess_gridview2"
+        android:id="@+id/assess_origlabels"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/assess_title3"

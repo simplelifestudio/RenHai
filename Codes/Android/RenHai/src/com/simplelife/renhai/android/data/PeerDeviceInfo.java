@@ -323,4 +323,20 @@ public class PeerDeviceInfo {
 			mDigustingLabel.reset(0, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING,0,0,"");
 		}
 	}
+	
+	// ===============================================================================
+	// Assess result after the chat
+	// ===============================================================================
+	public static class AssessResult {
+		public static String mAssessment;
+		
+		
+		public static void setAssessment(String _assess){
+			mAssessment = _assess;
+		}
+		
+		public static String getAssessment(){
+			return mAssessment;
+		}
+	}
 }
