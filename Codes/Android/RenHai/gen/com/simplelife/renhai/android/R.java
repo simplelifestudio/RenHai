@@ -620,9 +620,16 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
+        public static final int assess_addimplabeldnegbtn=0x7f06005d;
+        public static final int assess_addimplabelposbtn=0x7f06005c;
+        public static final int assess_addimplabeltitle=0x7f06005b;
+        public static final int assess_editimplabelneubtn=0x7f060060;
+        public static final int assess_editimplabelposbtn=0x7f06005f;
+        public static final int assess_editimplabeltitle=0x7f06005e;
         public static final int assess_title1=0x7f060058;
         public static final int assess_title2=0x7f060059;
         public static final int assess_title3=0x7f06005a;
+        public static final int assesss_editimplabeldnegbtn=0x7f060061;
         public static final int hello_world=0x7f060002;
         public static final int mainpage_connlostdialogmsg=0x7f06001a;
         public static final int mainpage_connlostdialognegbtn=0x7f06001c;
@@ -681,7 +688,7 @@ public final class R {
         public static final int mytopics_testint5=0x7f060036;
         public static final int mytopics_testint6=0x7f060037;
         public static final int protocal_no=0x7f06000f;
-        public static final int protocal_text=0x7f06005b;
+        public static final int protocal_text=0x7f060062;
         public static final int protocal_title=0x7f06000d;
         public static final int protocal_yes=0x7f06000e;
         public static final int splash_advert=0x7f060004;

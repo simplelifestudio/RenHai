@@ -26,6 +26,7 @@ public class PeerDeviceInfo {
 		InterestLabel.resetPeerIntLabelList();
 		ImpressionLabel.resetPeerImpLabels();
 		AssessLabel.resetAssessLabels();
+		AssessResult.resetAssessImpLabels();
 		
 	}
 	
@@ -328,8 +329,24 @@ public class PeerDeviceInfo {
 	// Assess result after the chat
 	// ===============================================================================
 	public static class AssessResult {
-		public static String mAssessment;
+		public static String mAssessment;		
+        public static ArrayList<ImpressLabelMap> mAssessImpLabels = new  ArrayList<ImpressLabelMap>();
 		
+		public static void resetAssessImpLabels(){
+			mAssessImpLabels.clear();
+		}
+		
+		public static int getPeerAssessLabelNum(){
+			return mAssessImpLabels.size();
+		}
+		
+		public static void putAssessImpLabelMap(ImpressLabelMap _impLabel){
+			mAssessImpLabels.add(_impLabel);			
+		}
+		
+		public static ImpressLabelMap getAssessImpLabelMap(int _index){
+			return mAssessImpLabels.get(_index);
+		}
 		
 		public static void setAssessment(String _assess){
 			mAssessment = _assess;

@@ -10,6 +10,7 @@ package com.simplelife.renhai.android;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.data.PeerDeviceInfo;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionNotificationResp;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
@@ -108,7 +109,7 @@ public class RenHaiWaitForMatchActivity extends Activity {
             	    			                      .constructMsg(RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
             	    			                    		        RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_SESSIONBINDED, 1).toString();
             	    	mWebSocketHandle.sendMessage(tBusinessNotRespMsg);
-            	    	
+            	    	PeerDeviceInfo.resetPeerDeviceInfo();
             	    	Intent tIntent = new Intent(RenHaiWaitForMatchActivity.this, RenHaiMatchingActivity.class);
         	    		startActivity(tIntent);
         	    		finish();

@@ -18,6 +18,11 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,11 +37,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 
+import com.simplelife.renhai.android.data.ImpressLabelMap;
 import com.simplelife.renhai.android.data.InterestLabelMap;
 import com.simplelife.renhai.android.data.PeerDeviceInfo;
 import com.simplelife.renhai.android.data.RenHaiInfo;
@@ -67,14 +74,16 @@ public class RenHaiAssessActivity extends Activity{
 		setContentView(R.layout.activity_assess);
 		
 		mAssessRdGroup = (RadioGroup)findViewById(R.id.assess_radiogroup);
-		mRdBtnHappy   = (RadioButton)findViewById(R.id.assess_btnhappy);
-		mRdBtnSoso    = (RadioButton)findViewById(R.id.assess_btnsoso);
-		mRdBtnDisgust = (RadioButton)findViewById(R.id.assess_btndisgust);		
+		mRdBtnHappy    = (RadioButton)findViewById(R.id.assess_btnhappy);
+		mRdBtnSoso     = (RadioButton)findViewById(R.id.assess_btnsoso);
+		mRdBtnDisgust  = (RadioButton)findViewById(R.id.assess_btndisgust);		
 		mAssessRdGroup.setOnCheckedChangeListener(mRadioGroupListener);
 		
 		mImpressionGrid = (RenHaiDraggableGridView)findViewById(R.id.assess_implabels);
 		mCreateImp = (Button)findViewById(R.id.assess_create);
-		mCreateImp.setOnClickListener(mCreateNewImpLabelListener); 
+		mCreateImp.setOnClickListener(mCreateNewImpLabelListener);
+		
+		setGridListeners();
 
 		/*
 		mAssessGridView = (GridView)findViewById(R.id.assess_gridview1);
@@ -111,12 +120,32 @@ public class RenHaiAssessActivity extends Activity{
 		}
 	};
 	
+	private void setGridListeners(){
+		mImpressionGrid.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {				
+				onEditOrDeleteTheImpLabel(arg2);				
+			}
+		});
+    }
+	
+	private void onUpdateImpLabelsGrid(){
+		mImpressionGrid.removeAllViews();
+    	for(int i=0; i < PeerDeviceInfo.AssessResult.getPeerAssessLabelNum(); i++)
+    	{
+    		ImageView tIntLabel = new ImageView(this);
+    		tIntLabel.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getMyIntLabel(i).getIntLabelName()));
+    		mImpressionGrid.addView(tIntLabel);
+    	}
+
+    }
+	
 	private void onDefineImpLabelTextBuilder() {
 		AlertDialog.Builder builder = new Builder(this);
 		builder.setTitle(getString(R.string.mytopics_inttxtbuildtitle));		
 		final EditText tEditText = new EditText(this);
 		builder.setView(tEditText);
-		builder.setPositiveButton(R.string.mytopics_inttxtbuildposbtn, new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(R.string.assess_addimplabelposbtn, new DialogInterface.OnClickListener() {
 		    @Override
 	        public void onClick(DialogInterface dialog, int which) {
 			    dialog.dismiss();    	
@@ -124,9 +153,9 @@ public class RenHaiAssessActivity extends Activity{
 			            @Override
 			            public void run() {
 			            	String tInput = tEditText.getText().toString();
-			            	InterestLabelMap tIntLabelMap = new InterestLabelMap();
-			            	tIntLabelMap.setIntLabelName(tInput);
-			            	RenHaiInfo.InterestLabel.putMyIntLabel(tIntLabelMap);
+			            	ImpressLabelMap tImpLabelMap = new ImpressLabelMap();
+			            	tImpLabelMap.setImpLabelName(tInput);
+			            	PeerDeviceInfo.AssessResult.putAssessImpLabelMap(tImpLabelMap);
 			            	Message t_MsgListData = new Message();
 			            	t_MsgListData.what = ASSESS_MSG_IMPLABELDEFINED;					        								
 					        handler.sendMessage(t_MsgListData);				            					        
@@ -135,7 +164,53 @@ public class RenHaiAssessActivity extends Activity{
 		    }
 		});
 
-		builder.setNegativeButton(R.string.mytopics_intdialognegbtn, new DialogInterface.OnClickListener() {
+		builder.setNegativeButton(R.string.assess_addimplabeldnegbtn, new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.dismiss();
+		    }
+		});
+
+		builder.create().show();		
+	}
+	
+    
+	private void onEditOrDeleteTheImpLabel(final int _index) {
+		AlertDialog.Builder builder = new Builder(this);
+		builder.setTitle(getString(R.string.mytopics_inteditordelbuildtitle));		
+		final EditText tEditText = new EditText(this);
+		tEditText.setText(RenHaiInfo.InterestLabel.getMyIntLabel(_index).getIntLabelName());
+		builder.setView(tEditText);
+		builder.setPositiveButton(R.string.mytopics_inteditordelbuildposbtn, new DialogInterface.OnClickListener() {
+		    @Override
+	        public void onClick(DialogInterface dialog, int which) {
+			    dialog.dismiss();    	
+		            new Thread() {  						
+			            @Override
+			            public void run() {
+			            	String tInput = tEditText.getText().toString();
+			            	// Reset the label map and set the label name
+			            	RenHaiInfo.InterestLabel.getMyIntLabel(_index).reset();
+			            	RenHaiInfo.InterestLabel.getMyIntLabel(_index).setIntLabelName(tInput);
+			            	Message t_MsgListData = new Message();
+					        t_MsgListData.what = MYTOPIC_MSG_INTERESTCHANGED;									
+					        handler.sendMessage(t_MsgListData);			            					        
+			            }				
+		            }.start();
+		    }
+		});
+
+		builder.setNegativeButton(R.string.mytopics_inteditordelbuildnegbtn, new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		    	mMyInterestsGrid.removeViewAt(_index);
+		    	RenHaiInfo.InterestLabel.deleteMyIntLabel(_index);
+		    	mUpdateTimer.resetTimer();
+		        dialog.dismiss();
+		    }
+		});
+		
+		builder.setNeutralButton(R.string.mytopics_inteditordelbuildneubtn, new DialogInterface.OnClickListener() {
 		    @Override
 		    public void onClick(DialogInterface dialog, int which) {
 		        dialog.dismiss();
@@ -154,9 +229,8 @@ public class RenHaiAssessActivity extends Activity{
         	switch (msg.what) {
         	    case ASSESS_MSG_IMPLABELDEFINED:
         	    {
-        	    	onUpdateMyInterestGrid(false);
-        	    	mMyInterestsGrid.refreshDrawableState();
-        	    	onContinueToDefinePersonalInterestDialog();
+        	    	onUpdateImpLabelsGrid();
+        	    	mImpressionGrid.refreshDrawableState();
         	    	break;
         	    }
         	
@@ -175,6 +249,23 @@ public class RenHaiAssessActivity extends Activity{
 			}
 		});
     }
+	
+	private Bitmap getThumb(String s)
+	{
+		Bitmap bmp = Bitmap.createBitmap(150, 75, Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(bmp);
+	    Paint paint = new Paint();
+	    
+	    paint.setColor(getResources().getColor(R.color.maingreen));
+	    paint.setTextSize(24);
+	    paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+	    canvas.drawRect(new Rect(0, 0, 150, 75), paint);
+	    paint.setColor(Color.WHITE);
+	    paint.setTextAlign(Paint.Align.CENTER);
+	    canvas.drawText(s, 75, 40, paint);
+	    
+		return bmp;
+	}
 	
     ///////////////////////////////////////////////////////////////////////
     // GridView adapters

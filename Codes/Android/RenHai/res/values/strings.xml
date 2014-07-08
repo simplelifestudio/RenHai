@@ -102,6 +102,13 @@
     <string name="assess_title1">Assessment for peer</string>
     <string name="assess_title2">Impressions to peer</string>
     <string name="assess_title3">Impressions achieved by peer</string>
+    <string name="assess_addimplabeltitle">Enter your impression</string>
+    <string name="assess_addimplabelposbtn">Confirm</string>
+    <string name="assess_addimplabeldnegbtn">Cancel</string>
+    <string name="assess_editimplabeltitle">Edit impression label</string>
+    <string name="assess_editimplabelposbtn">Confirm</string>
+    <string name="assess_editimplabelneubtn">Cancel</string>
+    <string name="assesss_editimplabeldnegbtn">Delete</string>
     
     <string name="protocal_text">
 \t\t人海是一款基于话题匹配的视频社交产品，人海所提供的各项服务的所有权和运作权归简单生活工作室（SimpleLife Studio，以下称人海官方）所有。
