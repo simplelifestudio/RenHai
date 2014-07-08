@@ -101,13 +101,15 @@
     <string name="assess_title1">我给对方的评价</string>
     <string name="assess_title2">我对对方的印象</string>
     <string name="assess_title3">对方原有的印象标签</string>
-    <string name="assess_addimplabeltitle">输入兴趣标签</string>
-    <string name="assess_addimplabelposbtn">Confirm</string>
-    <string name="assess_addimplabeldnegbtn">Cancel</string>
-    <string name="assess_editimplabeltitle">Edit impression label</string>
-    <string name="assess_editimplabelposbtn">Confirm</string>
-    <string name="assess_editimplabelneubtn">Cancel</string>
-    <string name="assesss_editimplabeldnegbtn">Delete</string>
+    <string name="assess_addimplabeltitle">输入印象标签</string>
+    <string name="assess_addimplabelposbtn">确认</string>
+    <string name="assess_addimplabeldnegbtn">取消</string>
+    <string name="assess_editimplabeltitle">编辑印象标签</string>
+    <string name="assess_editimplabelposbtn">确认</string>
+    <string name="assess_editimplabelneubtn">取消</string>
+    <string name="assesss_editimplabeldnegbtn">删除</string>
+    <string name="assess_btnyestoassess">继续寻找</string>
+    <string name="assess_btnnotoassess">退出人海</string>
     
     <string name="protocal_text">
 \t\t人海是一款基于话题匹配的视频社交产品，人海所提供的各项服务的所有权和运作权归简单生活工作室（SimpleLife Studio，以下称人海官方）所有。

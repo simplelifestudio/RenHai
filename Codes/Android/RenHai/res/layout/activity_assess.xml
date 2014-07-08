@@ -29,7 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/myimpression_happylabel"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:checked="true"/>
         
         <RadioButton 
             android:id="@+id/assess_btnsoso"
@@ -142,5 +143,45 @@
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp">        
     </GridView>
+    
+    <LinearLayout
+        android:id="@+id/assess_btnlayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/assess_btnyes"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/protocal_btn_selector"
+            android:gravity="center_vertical|center"
+            android:text="@string/assess_btnyestoassess"
+            android:textSize="@dimen/protocal_btn_size"
+            android:textColor="#FFFFFF" >
+        </TextView>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="3dip"
+            android:layout_marginTop="3dip"
+            android:background="#FFFFFFFF" />
+
+        <TextView
+            android:id="@+id/assess_btnno"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/protocal_btn_selector"
+            android:gravity="center_vertical|center"
+            android:text="@string/assess_btnnotoassess"
+            android:textSize="@dimen/protocal_btn_size"
+            android:textColor="#FFFFFF" >
+        </TextView>
+    </LinearLayout>  
 
 </RelativeLayout>

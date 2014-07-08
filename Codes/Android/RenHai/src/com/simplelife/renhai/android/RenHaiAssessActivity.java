@@ -8,9 +8,6 @@
  */
 package com.simplelife.renhai.android;
 
-import java.math.BigDecimal;
-import java.text.NumberFormat;
-
 import org.apache.log4j.Logger;
 
 import android.app.Activity;
@@ -18,6 +15,7 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -26,9 +24,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils.TruncateAt;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -40,18 +36,13 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.TextView;
 
 import com.simplelife.renhai.android.data.ImpressLabelMap;
-import com.simplelife.renhai.android.data.InterestLabelMap;
 import com.simplelife.renhai.android.data.PeerDeviceInfo;
-import com.simplelife.renhai.android.data.RenHaiInfo;
-import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
-import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.ui.RenHaiDraggableGridView;
-import com.simplelife.renhai.android.utils.TimerConverter;
 
 public class RenHaiAssessActivity extends Activity{
 	private GridView mAssessGridView;
@@ -62,8 +53,11 @@ public class RenHaiAssessActivity extends Activity{
 	private RadioButton mRdBtnDisgust;
 	private RenHaiDraggableGridView mImpressionGrid;
 	private Button mCreateImp;
+	private TextView mAssessBtnYes;
+	private TextView mAssessBtnNo;
 	
 	private final int ASSESS_MSG_IMPLABELDEFINED = 6000;
+	private final int ASSESS_MSG_IMPLABELMODIFIED = 6001;
 	
 	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	private final Logger mlog = Logger.getLogger(RenHaiAssessActivity.class);
@@ -83,6 +77,11 @@ public class RenHaiAssessActivity extends Activity{
 		mCreateImp = (Button)findViewById(R.id.assess_create);
 		mCreateImp.setOnClickListener(mCreateNewImpLabelListener);
 		
+		mAssessBtnYes = (TextView)findViewById(R.id.assess_btnyes);
+		mAssessBtnNo  = (TextView)findViewById(R.id.assess_btnno);
+		mAssessBtnYes.setOnClickListener(mAssessBtnYesListener);
+		mAssessBtnNo.setOnClickListener(mAssessBtnNoListener);
+		
 		setGridListeners();
 
 		/*
@@ -93,6 +92,9 @@ public class RenHaiAssessActivity extends Activity{
 				
 	}
 	
+    ///////////////////////////////////////////////////////////////////////
+    // Operation listeners
+    /////////////////////////////////////////////////////////////////////// 
 	private RadioGroup.OnCheckedChangeListener mRadioGroupListener = new RadioGroup.OnCheckedChangeListener() {
 
 		@Override
@@ -110,8 +112,8 @@ public class RenHaiAssessActivity extends Activity{
 			
 		}
 		
-	};
-	
+	};	
+
 	private View.OnClickListener mCreateNewImpLabelListener = new View.OnClickListener() {
 
 		@Override
@@ -129,20 +131,44 @@ public class RenHaiAssessActivity extends Activity{
 		});
     }
 	
+	private View.OnClickListener mAssessBtnYesListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+		    /*
+			Intent intent = new Intent(RenHaiProtocalActivity.this, RenHaiAssessActivity.class);
+		    startActivity(intent);
+			finish();
+			*/
+		}
+	};
+	
+	private View.OnClickListener mAssessBtnNoListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			finish();
+			
+		}
+	};
+	
+	///////////////////////////////////////////////////////////////////////
+	// Message processing
+	/////////////////////////////////////////////////////////////////////// 	
 	private void onUpdateImpLabelsGrid(){
 		mImpressionGrid.removeAllViews();
     	for(int i=0; i < PeerDeviceInfo.AssessResult.getPeerAssessLabelNum(); i++)
     	{
-    		ImageView tIntLabel = new ImageView(this);
-    		tIntLabel.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getMyIntLabel(i).getIntLabelName()));
-    		mImpressionGrid.addView(tIntLabel);
+    		ImageView tImpLabel = new ImageView(this);
+    		tImpLabel.setImageBitmap(getThumb(PeerDeviceInfo.AssessResult.getAssessImpLabelMap(i).getImpLabelName()));
+    		mImpressionGrid.addView(tImpLabel);
     	}
 
     }
 	
 	private void onDefineImpLabelTextBuilder() {
 		AlertDialog.Builder builder = new Builder(this);
-		builder.setTitle(getString(R.string.mytopics_inttxtbuildtitle));		
+		builder.setTitle(getString(R.string.assess_addimplabeltitle));		
 		final EditText tEditText = new EditText(this);
 		builder.setView(tEditText);
 		builder.setPositiveButton(R.string.assess_addimplabelposbtn, new DialogInterface.OnClickListener() {
@@ -177,11 +203,11 @@ public class RenHaiAssessActivity extends Activity{
     
 	private void onEditOrDeleteTheImpLabel(final int _index) {
 		AlertDialog.Builder builder = new Builder(this);
-		builder.setTitle(getString(R.string.mytopics_inteditordelbuildtitle));		
+		builder.setTitle(getString(R.string.assess_editimplabeltitle));		
 		final EditText tEditText = new EditText(this);
-		tEditText.setText(RenHaiInfo.InterestLabel.getMyIntLabel(_index).getIntLabelName());
+		tEditText.setText(PeerDeviceInfo.AssessResult.getAssessImpLabelMap(_index).getImpLabelName());
 		builder.setView(tEditText);
-		builder.setPositiveButton(R.string.mytopics_inteditordelbuildposbtn, new DialogInterface.OnClickListener() {
+		builder.setPositiveButton(R.string.assess_editimplabelposbtn, new DialogInterface.OnClickListener() {
 		    @Override
 	        public void onClick(DialogInterface dialog, int which) {
 			    dialog.dismiss();    	
@@ -189,28 +215,26 @@ public class RenHaiAssessActivity extends Activity{
 			            @Override
 			            public void run() {
 			            	String tInput = tEditText.getText().toString();
-			            	// Reset the label map and set the label name
-			            	RenHaiInfo.InterestLabel.getMyIntLabel(_index).reset();
-			            	RenHaiInfo.InterestLabel.getMyIntLabel(_index).setIntLabelName(tInput);
+			            	PeerDeviceInfo.AssessResult.getAssessImpLabelMap(_index).reset();
+			            	PeerDeviceInfo.AssessResult.getAssessImpLabelMap(_index).setImpLabelName(tInput);
 			            	Message t_MsgListData = new Message();
-					        t_MsgListData.what = MYTOPIC_MSG_INTERESTCHANGED;									
+					        t_MsgListData.what = ASSESS_MSG_IMPLABELMODIFIED;									
 					        handler.sendMessage(t_MsgListData);			            					        
 			            }				
 		            }.start();
 		    }
 		});
 
-		builder.setNegativeButton(R.string.mytopics_inteditordelbuildnegbtn, new DialogInterface.OnClickListener() {
+		builder.setNegativeButton(R.string.assess_editimplabeldnegbtn, new DialogInterface.OnClickListener() {
 		    @Override
 		    public void onClick(DialogInterface dialog, int which) {
-		    	mMyInterestsGrid.removeViewAt(_index);
-		    	RenHaiInfo.InterestLabel.deleteMyIntLabel(_index);
-		    	mUpdateTimer.resetTimer();
+		    	mImpressionGrid.removeViewAt(_index);
+		    	PeerDeviceInfo.AssessResult.deleteImpLabel(_index);
 		        dialog.dismiss();
 		    }
 		});
 		
-		builder.setNeutralButton(R.string.mytopics_inteditordelbuildneubtn, new DialogInterface.OnClickListener() {
+		builder.setNeutralButton(R.string.assess_editimplabelneubtn, new DialogInterface.OnClickListener() {
 		    @Override
 		    public void onClick(DialogInterface dialog, int which) {
 		        dialog.dismiss();
@@ -228,6 +252,12 @@ public class RenHaiAssessActivity extends Activity{
         public void handleMessage(Message msg) {          	
         	switch (msg.what) {
         	    case ASSESS_MSG_IMPLABELDEFINED:
+        	    {
+        	    	onUpdateImpLabelsGrid();
+        	    	mImpressionGrid.refreshDrawableState();
+        	    	break;
+        	    }
+        	    case ASSESS_MSG_IMPLABELMODIFIED:
         	    {
         	    	onUpdateImpLabelsGrid();
         	    	mImpressionGrid.refreshDrawableState();

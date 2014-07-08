@@ -480,7 +480,7 @@ Subscriber.VideoListener {
             	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_ENDCHAT:
             	{
             		// TODO: Add processing to disconnect the opentok
-            		finish();
+            		directToAssessPage();
             		break;
             	}
             	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERENDCHAT:
@@ -489,7 +489,7 @@ Subscriber.VideoListener {
             		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEENDCHAT,1);
             		mPeerStatus.setVisibility(View.VISIBLE);
             		mPeerStatus.setText(R.string.video_peerhangoff);
-            		finish();
+            		directToAssessPage();
             		break;
             	}
             	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERCHATMSG:
@@ -504,5 +504,11 @@ Subscriber.VideoListener {
             }
         } 
     };
+    
+    private void directToAssessPage(){
+    	Intent intent = new Intent(RenHaiVideoTalkActivity.this, RenHaiAssessActivity.class);
+	    startActivity(intent);
+		finish();
+    }
 
 }

@@ -348,6 +348,10 @@ public class PeerDeviceInfo {
 			return mAssessImpLabels.get(_index);
 		}
 		
+		public static void deleteImpLabel(int _index){					
+			mAssessImpLabels.remove(_index);
+		}
+		
 		public static void setAssessment(String _assess){
 			mAssessment = _assess;
 		}

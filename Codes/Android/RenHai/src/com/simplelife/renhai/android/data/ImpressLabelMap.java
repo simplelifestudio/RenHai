@@ -39,6 +39,14 @@ public class ImpressLabelMap{
 		assessCount   = _assessCnt;
 	}
 	
+	public void reset(){
+		globalImpressLabelId = 0;
+		impressLabelName = null;
+		assessedCount = 0;
+		updateTime    = "";
+		assessCount   = 0;
+	}
+	
 	public void setGlobalImpLabelId(int _id){
 		globalImpressLabelId = _id;
 	}
