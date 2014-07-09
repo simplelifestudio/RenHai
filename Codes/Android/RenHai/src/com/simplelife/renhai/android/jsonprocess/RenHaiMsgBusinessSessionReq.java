@@ -103,8 +103,7 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 				tOperationInfo.put(MSG_BUSINESSSESSIONREQ_DEVICE, tDevice);
 			}else{
 				tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONINFO, JSONNULL);
-			}
-			
+			}			
 			
 			tMsgContent.put(MSG_BODY, tMsgBodyContent);
 			mlog.info("Constructing BusinessSessionRequest: "+tMsgContent.toString());

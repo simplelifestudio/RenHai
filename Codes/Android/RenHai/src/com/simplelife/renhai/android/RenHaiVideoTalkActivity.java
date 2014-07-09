@@ -49,11 +49,11 @@ public class RenHaiVideoTalkActivity extends Activity implements
 Session.SessionListener, Publisher.PublisherListener,
 Subscriber.VideoListener {
 	
-	public static final String SESSION_ID = "1_MX40NDg0NTgxMn5-U2F0IEp1biAyMSAwNTo1MTo0NyBQRFQgMjAxNH4wLjQ0MjQ4OTY4fn4";
+	public static final String SESSION_ID = "1_MX40NDg5MjE4Mn5-V2VkIEp1bCAwOSAwNjo0MDowOCBQRFQgMjAxNH4wLjU0Mzg2MzI0fn4";
 	// Replace with a generated token (from the dashboard or using an OpenTok server SDK)
-	public static final String TOKEN = "T1==cGFydG5lcl9pZD00NDg0NTgxMiZzaWc9NjMyZGEyMDkzYmRmNDI2OGNlYzI3N2YxNTEyYWVmYTQ2NGE2YzUxMjpyb2xlPXN1YnNjcmliZXImc2Vzc2lvbl9pZD0xX01YNDBORGcwTlRneE1uNS1VMkYwSUVwMWJpQXlNU0F3TlRvMU1UbzBOeUJRUkZRZ01qQXhOSDR3TGpRME1qUTRPVFk0Zm40JmNyZWF0ZV90aW1lPTE0MDMzNTUxMzkmbm9uY2U9MC40MjQ1NzAxMzg0ODczMTk4NCZleHBpcmVfdGltZT0xNDA1OTQ2ODIw"; 
+	public static final String TOKEN = "T1==cGFydG5lcl9pZD00NDg5MjE4MiZzaWc9MTkzZGQxNjA1MzY0MDM1MTJmMjZiMTNjNDliZmRhNDdjYTU2NTMzYjpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTFfTVg0ME5EZzVNakU0TW41LVYyVmtJRXAxYkNBd09TQXdOam8wTURvd09DQlFSRlFnTWpBeE5INHdMalUwTXpnMk16STBmbjQmY3JlYXRlX3RpbWU9MTQwNDkxMzY0NyZub25jZT0wLjIwMjg3MTc4NDIyNTk2NDImZXhwaXJlX3RpbWU9MTQwNzUwNTE3MA=="; 
 	// Replace with your OpenTok API key
-	public static final String API_KEY= "44845812";
+	public static final String API_KEY= "44892182";
 	
 	// Subscribe to a stream published by this client. Set to false to subscribe
     // to other clients' streams only.
