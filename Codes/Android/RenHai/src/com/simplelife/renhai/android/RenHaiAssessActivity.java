@@ -41,6 +41,7 @@ import android.widget.TextView;
 
 import com.simplelife.renhai.android.data.ImpressLabelMap;
 import com.simplelife.renhai.android.data.PeerDeviceInfo;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.ui.RenHaiDraggableGridView;
 
@@ -135,6 +136,10 @@ public class RenHaiAssessActivity extends Activity{
 
 		@Override
 		public void onClick(View v) {
+			String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(
+	    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
+	    			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ASSESSANDCONTINUE).toString();
+	    	mWebSocketHandle.sendMessage(tBusinessSessionReq);
 		    /*
 			Intent intent = new Intent(RenHaiProtocalActivity.this, RenHaiAssessActivity.class);
 		    startActivity(intent);
@@ -157,7 +162,7 @@ public class RenHaiAssessActivity extends Activity{
 	/////////////////////////////////////////////////////////////////////// 	
 	private void onUpdateImpLabelsGrid(){
 		mImpressionGrid.removeAllViews();
-    	for(int i=0; i < PeerDeviceInfo.AssessResult.getPeerAssessLabelNum(); i++)
+    	for(int i=0; i < PeerDeviceInfo.AssessResult.getPeerAssessImpLabelNum(); i++)
     	{
     		ImageView tImpLabel = new ImageView(this);
     		tImpLabel.setImageBitmap(getThumb(PeerDeviceInfo.AssessResult.getAssessImpLabelMap(i).getImpLabelName()));

@@ -336,7 +336,7 @@ public class PeerDeviceInfo {
 			mAssessImpLabels.clear();
 		}
 		
-		public static int getPeerAssessLabelNum(){
+		public static int getPeerAssessImpLabelNum(){
 			return mAssessImpLabels.size();
 		}
 		
