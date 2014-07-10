@@ -17,7 +17,9 @@
         <TextView
             android:id="@+id/video_showmsg"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"            
+            android:layout_height="fill_parent"  
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"          
             android:background="@color/white"
             android:textColor="@color/black"
             android:textSize="@dimen/protocal_btn_size">
@@ -28,6 +30,7 @@
         android:id="@+id/video_subscriberview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_below="@id/video_showmsglayout"
         android:gravity="center_horizontal" 
         android:background="@color/white">
 
@@ -55,7 +58,16 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_above="@+id/video_touchlayout"
-       android:background="@drawable/draw_stroke"/>
+       android:background="@color/maingreen">
+        <ProgressBar
+            android:id="@+id/publishloadingSpinner"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="false"
+            android:visibility="gone" />
+    </RelativeLayout>  
     
     <LinearLayout
         android:id="@+id/video_touchlayout"

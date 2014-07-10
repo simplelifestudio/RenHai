@@ -148,4 +148,7 @@
 	<color name="gainsboro">#dcdcdc</color><!--淡灰色 -->
 	<color name="maingreen">#33cc99</color><!--主题色 -->
 	<color name="protocal_btnyes_pressed">#339933</color><!--主题色 -->
+	<color name="trans_dark_grey">#80282828</color>
+	<color name="trans_white">#20ffffff</color>
+	<color name="trans">#00000000</color>
 </resources>

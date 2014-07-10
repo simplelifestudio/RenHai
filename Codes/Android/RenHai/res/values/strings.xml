@@ -93,11 +93,12 @@
     <string name="matching_back">Back</string>
     
     <string name="video_btnwritemsg">Message</string>
-    <string name="video_btnhangoff">Hang up</string>
+    <string name="video_btnhangoff">End Call</string>
     <string name="video_notification">Ongoing call</string>
     <string name="video_peerhangoff">Peer side hang off the call</string>
     <string name="video_msghint">Please enter the message&#8230;</string>
     <string name="video_msgsend">Send</string>
+    <string name="video_archivingOff">Archiving off</string>
     
     <string name="assess_title1">Assessment for peer</string>
     <string name="assess_title2">Impressions to peer</string>

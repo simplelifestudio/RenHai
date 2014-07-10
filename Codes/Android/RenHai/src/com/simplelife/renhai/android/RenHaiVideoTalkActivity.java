@@ -122,7 +122,7 @@ Subscriber.VideoListener {
         mMsgLayout.setVisibility(View.GONE);
         mShowMsgLayout.setVisibility(View.GONE);
         mLoadingSub.setVisibility(View.VISIBLE);
-		
+        
 		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
 		
@@ -166,10 +166,10 @@ Subscriber.VideoListener {
 
 		@Override
 		public void onClick(View v) {
-			sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ENDCHAT);
-			mBtnLayout.setVisibility(View.GONE);
-			//mShowMsgLayout.setVisibility(View.VISIBLE);
-    		//mShowMsg.setText("Hello, this is a test!");
+			//sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ENDCHAT);
+			//mBtnLayout.setVisibility(View.GONE);
+			mShowMsgLayout.setVisibility(View.VISIBLE);
+    		mShowMsg.setText("Hello, this is a test!");
 		}
 	};
 	
