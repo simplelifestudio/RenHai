@@ -541,8 +541,8 @@ public final class R {
         public static final int video_publish_bg=0x7f020035;
     }
     public static final class id {
-        public static final int action_settings=0x7f09005e;
-        public static final int archiving=0x7f090053;
+        public static final int action_settings=0x7f090061;
+        public static final int archiving=0x7f090056;
         public static final int assess_btndisgust=0x7f090004;
         public static final int assess_btnhappy=0x7f090002;
         public static final int assess_btnlayout=0x7f09000c;
@@ -560,21 +560,22 @@ public final class R {
         public static final int assess_title3=0x7f09000a;
         public static final int audioOnlyView=0x7f09002b;
         public static final int avatar=0x7f09002d;
-        public static final int connectionStatus=0x7f090056;
-        public static final int endCall=0x7f090051;
+        public static final int connectionStatus=0x7f090059;
+        public static final int editAndSendMsg=0x7f090053;
+        public static final int endCall=0x7f090054;
         public static final int fragment_pub_container=0x7f090032;
         public static final int fragment_pub_status_container=0x7f090033;
         public static final int fragment_sub_container=0x7f090031;
         public static final int layoutPubFragment=0x7f09004c;
-        public static final int layoutSubFragment=0x7f090057;
-        public static final int line1=0x7f090055;
-        public static final int line2=0x7f09005c;
+        public static final int layoutSubFragment=0x7f09005a;
+        public static final int line1=0x7f090058;
+        public static final int line2=0x7f09005f;
         public static final int loadingSpinner=0x7f09002a;
         public static final int loadingSpinner_publisher=0x7f090030;
         public static final int loadingpage_bar=0x7f090010;
         public static final int loadingpage_barlayout=0x7f09000f;
         public static final int loadingpage_text=0x7f090011;
-        public static final int logo=0x7f090059;
+        public static final int logo=0x7f09005c;
         public static final int mainpage_title=0x7f090012;
         public static final int mainpage_viewpager=0x7f090013;
         public static final int matching_assgridview=0x7f090015;
@@ -589,9 +590,9 @@ public final class R {
         public static final int matching_peerstat=0x7f09001f;
         public static final int matching_title1=0x7f090014;
         public static final int matching_title2=0x7f090017;
-        public static final int menu_settings=0x7f09005d;
-        public static final int mutePublisher=0x7f09004e;
-        public static final int muteSubscriber=0x7f09005a;
+        public static final int menu_settings=0x7f090060;
+        public static final int mutePublisher=0x7f090051;
+        public static final int muteSubscriber=0x7f09005d;
         public static final int myimpression_divide=0x7f090038;
         public static final int myimpression_gridview=0x7f090037;
         public static final int myimpression_impempty=0x7f09003b;
@@ -611,10 +612,9 @@ public final class R {
         public static final int protocal_btnno=0x7f090022;
         public static final int protocal_btnyes=0x7f090021;
         public static final int protocal_confirm=0x7f090020;
-        public static final int publisherStatusWidget=0x7f090052;
+        public static final int publisherStatusWidget=0x7f090055;
         public static final int publisherView=0x7f09002f;
-        public static final int publisherWidget=0x7f09004d;
-        public static final int sendMsg=0x7f090050;
+        public static final int publisherWidget=0x7f090050;
         public static final int speakerActive=0x7f09002e;
         public static final int splash_applogo=0x7f090023;
         public static final int splash_barlayout=0x7f090024;
@@ -628,14 +628,17 @@ public final class R {
         public static final int startvedio_onlinecount=0x7f090047;
         public static final int startvedio_onlinecountlayout=0x7f090046;
         public static final int startvedio_onlinecounttitle=0x7f090045;
-        public static final int statusLabel=0x7f090054;
-        public static final int subscriberName=0x7f09005b;
+        public static final int statusLabel=0x7f090057;
+        public static final int subscriberName=0x7f09005e;
         public static final int subscriberView=0x7f090029;
-        public static final int subscriberWidget=0x7f090058;
-        public static final int swapCamera=0x7f09004f;
+        public static final int subscriberWidget=0x7f09005b;
+        public static final int swapCamera=0x7f090052;
+        public static final int video_editmsg=0x7f09004e;
         public static final int video_mainlayout=0x7f090028;
+        public static final int video_sendmsg=0x7f09004f;
         public static final int waitingformatch_counter=0x7f090034;
         public static final int waitingformatch_counternote=0x7f090035;
+        public static final int writemsgWidget=0x7f09004d;
     }
     public static final class layout {
         public static final int activity_assess=0x7f030000;

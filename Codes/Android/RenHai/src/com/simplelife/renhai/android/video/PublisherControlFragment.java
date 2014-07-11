@@ -1,7 +1,10 @@
 package com.simplelife.renhai.android.video;
 
 import com.simplelife.renhai.android.R;
+import com.simplelife.renhai.android.RenHaiDefinitions;
 import com.simplelife.renhai.android.RenHaiVideoTalkActivity;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionReq;
+import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
@@ -25,12 +29,19 @@ public class PublisherControlFragment extends Fragment implements
 	private ImageButton mPublisherMute;
 	private ImageButton mSwapCamera;
 	private Button mEndCall;
+	private Button mEditAndSendMsg;
+	private Button mSendMsg;
+	private EditText mEditMsg;
 
 	private PublisherCallbacks mCallbacks = sOpenTokCallbacks;
 	private RenHaiVideoTalkActivity openTokActivity;
 	protected boolean mPublisherWidgetVisible = false;
 
 	protected RelativeLayout mPublisherContainer;
+	protected RelativeLayout mWriteMsgLayout;
+	public RelativeLayout mButtonLayout;
+	
+	private RenHaiWebSocketProcess mWebSocketHandle = null;
 
 	public interface PublisherCallbacks {
 		public void onMutePublisher();
@@ -38,6 +49,7 @@ public class PublisherControlFragment extends Fragment implements
 		public void onSwapCamera();
 
 		public void onEndCall();
+
 	}
 
 	private static PublisherCallbacks sOpenTokCallbacks = new PublisherCallbacks() {
@@ -56,6 +68,7 @@ public class PublisherControlFragment extends Fragment implements
 		public void onEndCall() {
 			return;
 		}
+
 	};
 
 	@Override
@@ -70,6 +83,7 @@ public class PublisherControlFragment extends Fragment implements
 		}
 
 		mCallbacks = (PublisherCallbacks) activity;
+		
 	}
 
 	@Override
@@ -83,10 +97,12 @@ public class PublisherControlFragment extends Fragment implements
 
 		View rootView = inflater.inflate(R.layout.fragment_video_pub_control,
 				container, false);
+		
+		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
 
 		mPublisherContainer = (RelativeLayout) openTokActivity
 				.findViewById(R.id.fragment_pub_container);
-
+		
 		mPublisherMute = (ImageButton) rootView
 				.findViewById(R.id.mutePublisher);
 		mPublisherMute.setOnClickListener(this);
@@ -96,6 +112,16 @@ public class PublisherControlFragment extends Fragment implements
 
 		mEndCall = (Button) rootView.findViewById(R.id.endCall);
 		mEndCall.setOnClickListener(this);
+		
+		mWriteMsgLayout = (RelativeLayout) rootView.findViewById(R.id.writemsgWidget);
+		mButtonLayout = (RelativeLayout) rootView.findViewById(R.id.publisherWidget);
+		
+		mEditAndSendMsg = (Button) rootView.findViewById(R.id.editAndSendMsg);
+		mEditAndSendMsg.setOnClickListener(this);
+		
+		mEditMsg = (EditText) rootView.findViewById(R.id.video_editmsg);
+		mSendMsg = (Button) rootView.findViewById(R.id.video_sendmsg);
+		mSendMsg.setOnClickListener(this);
 
 		return rootView;
 	}
@@ -151,6 +177,14 @@ public class PublisherControlFragment extends Fragment implements
 		case R.id.endCall:
 			endCall();
 			break;
+			
+		case R.id.editAndSendMsg:
+			editAndSendMsg();
+			break;
+			
+		case R.id.video_sendmsg:
+			sendMsg();
+			break;
 		}
 	}
 
@@ -168,6 +202,20 @@ public class PublisherControlFragment extends Fragment implements
 
 	public void endCall() {
 		mCallbacks.onEndCall();
+	}
+	
+	public void editAndSendMsg() {
+		mButtonLayout.setVisibility(View.GONE);
+		mWriteMsgLayout.setVisibility(View.VISIBLE);
+	}
+	
+	public void sendMsg(){
+		String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(
+    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
+    			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_CHATMESSAGE,
+    			mEditMsg.getText().toString()).toString();
+    	mWebSocketHandle.sendMessage(tBusinessSessionReq);
+    	mButtonLayout.setVisibility(View.GONE);
 	}
 
 	public void initPublisherUI() {
@@ -213,6 +261,8 @@ public class PublisherControlFragment extends Fragment implements
 
 		if (show) {
 			mPublisherContainer.setVisibility(View.VISIBLE);
+			mButtonLayout.setVisibility(View.VISIBLE);
+			mWriteMsgLayout.setVisibility(View.GONE);
 		} else {
 			mPublisherContainer.setVisibility(View.GONE);
 		}
