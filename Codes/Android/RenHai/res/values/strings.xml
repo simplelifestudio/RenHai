@@ -98,6 +98,9 @@
     <string name="video_peerhangoff">Peer side hang off the call</string>
     <string name="video_msghint">Please enter the message&#8230;</string>
     <string name="video_msgsend">Send</string>
+    <string name="video_audioOnly">Audio only</string>
+    <string name="video_menusettings">Settings</string>
+    <string name="video_archivingOn">Archiving on</string>
     <string name="video_archivingOff">Archiving off</string>
     
     <string name="assess_title1">Assessment for peer</string>

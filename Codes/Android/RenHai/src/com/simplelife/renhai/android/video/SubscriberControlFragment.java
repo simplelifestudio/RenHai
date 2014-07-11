@@ -2,6 +2,7 @@ package com.simplelife.renhai.android.video;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.R;
 import com.simplelife.renhai.android.RenHaiMatchingActivity;
 import com.simplelife.renhai.android.RenHaiVideoTalkActivity;
 
@@ -72,7 +73,7 @@ public class SubscriberControlFragment extends Fragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.layout_fragment_sub_control,
+		View rootView = inflater.inflate(R.layout.fragment_video_sub_control,
 				container, false);
 
 		mSubContainer = (RelativeLayout) videoActivity
@@ -86,15 +87,15 @@ public class SubscriberControlFragment extends Fragment implements
 
 		mSubscriberName = (TextView) rootView.findViewById(R.id.subscriberName);
 
-		if (openTokActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+		if (videoActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) container
 					.getLayoutParams();
 
 			DisplayMetrics metrics = new DisplayMetrics();
-			openTokActivity.getWindowManager().getDefaultDisplay()
+			videoActivity.getWindowManager().getDefaultDisplay()
 					.getMetrics(metrics);
 
-			params.width = metrics.widthPixels - openTokActivity.dpToPx(48);
+			params.width = metrics.widthPixels - videoActivity.dpToPx(48);
 			container.setLayoutParams(params);
 		}
 
@@ -135,7 +136,7 @@ public class SubscriberControlFragment extends Fragment implements
 	public void onDetach() {
 		super.onDetach();
 
-		Log.i(LOGTAG, "On detach Subscriber control fragment");
+		mlog.info("On detach Subscriber control fragment");
 		mCallbacks = sOpenTokCallbacks;
 	}
 
@@ -189,19 +190,19 @@ public class SubscriberControlFragment extends Fragment implements
 	public void muteSubscriber() {
 		mCallbacks.onMuteSubscriber();
 
-		mSubscriberMute.setImageResource(openTokActivity.getmSubscriber()
+		mSubscriberMute.setImageResource(videoActivity.getmSubscriber()
 				.getSubscribeToAudio() ? R.drawable.unmute_sub
 				: R.drawable.mute_sub);
 	}
 
 	public void initSubscriberUI() {
-		openTokActivity.getmHandler().removeCallbacks(
+		videoActivity.getmHandler().removeCallbacks(
 				mSubscriberWidgetTimerTask);
-		openTokActivity.getmHandler().postDelayed(mSubscriberWidgetTimerTask,
+		videoActivity.getmHandler().postDelayed(mSubscriberWidgetTimerTask,
 				SUBSCRIBER_CONTROLS_DURATION);
-		mSubscriberName.setText(openTokActivity.getmSubscriber().getStream()
+		mSubscriberName.setText(videoActivity.getmSubscriber().getStream()
 				.getName());
-		mSubscriberMute.setImageResource(openTokActivity.getmSubscriber()
+		mSubscriberMute.setImageResource(videoActivity.getmSubscriber()
 				.getSubscribeToAudio() ? R.drawable.unmute_sub
 				: R.drawable.mute_sub);
 	}

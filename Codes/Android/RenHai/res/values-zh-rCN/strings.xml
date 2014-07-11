@@ -93,10 +93,14 @@
     
     <string name="video_btnwritemsg">小纸条</string>
     <string name="video_btnhangoff">挂断</string>
-    <string name="video_notification">继续通话 </string>
+    <string name="video_notification">正在通话中 </string>
     <string name="video_peerhangoff">对方已退出通话</string>
     <string name="video_msghint">请输入消息&#8230;</string>
     <string name="video_msgsend">发送</string>
+    <string name="video_audioOnly">仅语音</string>
+    <string name="video_menusettings">设置</string>
+    <string name="video_archivingOn">开启存储</string>
+    <string name="video_archivingOff">关闭存储</string>
     
     <string name="assess_title1">我给对方的评价</string>
     <string name="assess_title2">我对对方的印象</string>
