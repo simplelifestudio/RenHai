@@ -329,11 +329,12 @@ public class PeerDeviceInfo {
 	// Assess result after the chat
 	// ===============================================================================
 	public static class AssessResult {
-		public static String mAssessment;		
+		public static String mAssessment = RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY;		
         public static ArrayList<ImpressLabelMap> mAssessImpLabels = new  ArrayList<ImpressLabelMap>();
 		
 		public static void resetAssessImpLabels(){
 			mAssessImpLabels.clear();
+			mAssessment = RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY;	
 		}
 		
 		public static int getPeerAssessImpLabelNum(){

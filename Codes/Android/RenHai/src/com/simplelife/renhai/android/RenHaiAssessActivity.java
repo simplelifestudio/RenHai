@@ -90,6 +90,8 @@ public class RenHaiAssessActivity extends Activity{
 		mImpAdapter = new ImpressionAdapter(this);
 		mOrigImpGridView.setAdapter(mImpAdapter);
 		
+		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
+		
 		setGridListeners();
 
 		/*
@@ -111,10 +113,10 @@ public class RenHaiAssessActivity extends Activity{
 			if(checkedId == mRdBtnHappy.getId()){
             	PeerDeviceInfo.AssessResult.setAssessment(RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY);
             }
-            if(checkedId==mRdBtnSoso.getId()){
+            if(checkedId == mRdBtnSoso.getId()){
             	PeerDeviceInfo.AssessResult.setAssessment(RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_SOSO);                
             }
-            if(checkedId==mRdBtnDisgust.getId()){
+            if(checkedId == mRdBtnDisgust.getId()){
             	PeerDeviceInfo.AssessResult.setAssessment(RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING);
             }
 			

@@ -75,8 +75,7 @@
             android:layout_height="48dp"
             android:layout_alignParentTop="true"            
             android:layout_toRightOf="@+id/swapCamera"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:layout_toLeftOf="@+id/video_centerline"
             android:background="@drawable/video_button_bg"
             android:text="@string/video_btnwritemsg"
             android:textColor="@color/white" 
@@ -88,8 +87,7 @@
             android:layout_height="48dp"
             android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/mutePublisher"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:layout_toRightOf="@+id/video_centerline"
             android:background="@drawable/video_button_bg"
             android:text="@string/video_btnhangoff"
             android:textColor="@color/white" 
@@ -102,9 +100,10 @@
             android:background="@color/trans_white" />
         
         <View
+            android:id="@+id/video_centerline"
             android:layout_width="1dp"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@+id/editAndSendMsg"
+            android:layout_centerHorizontal="true"
             android:background="@color/trans_white" />
         
         <View

@@ -64,6 +64,8 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 				JSONArray tImpLabelList = new JSONArray();
 				// Assessment construction
 				JSONObject tAssessLabel = new JSONObject();
+				tAssessLabel.put(MSG_BUSINESSSESSIONREQ_ASSLISTIMPLABELNAME, PeerDeviceInfo.AssessResult.getAssessment());
+				/*
 				if(PeerDeviceInfo.AssessResult.getAssessment().equals(RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY))
 				{
 					tAssessLabel.put(MSG_BUSINESSSESSIONREQ_ASSLISTIMPLABELNAME, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_HAPPY);
@@ -75,7 +77,7 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 				else if(PeerDeviceInfo.AssessResult.getAssessment().equals(RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING))
 				{
 					tAssessLabel.put(MSG_BUSINESSSESSIONREQ_ASSLISTIMPLABELNAME, RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING);
-				}
+				}*/
 				tAssessLabel.put(MSG_BUSINESSSESSIONREQ_ASSLISTGLBIMPLABELID, JSONNULL);
 				tAssessLabel.put(MSG_BUSINESSSESSIONREQ_ASSLISTASSEDCNT, JSONNULL);
 				tAssessLabel.put(MSG_BUSINESSSESSIONREQ_ASSLISTUPDATETIME, JSONNULL);

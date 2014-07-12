@@ -159,6 +159,11 @@ public class SubscriberControlFragment extends Fragment implements
 	public void showSubscriberWidget(boolean show) {
 		showSubscriberWidget(show, true);
 	}
+	
+	public void setTextContent(String _content) {
+		mSubscriberName.setText(_content);
+		showSubscriberWidget(true);
+	}
 
 	private void showSubscriberWidget(boolean show, boolean animate) {
 		mSubContainer.clearAnimation();

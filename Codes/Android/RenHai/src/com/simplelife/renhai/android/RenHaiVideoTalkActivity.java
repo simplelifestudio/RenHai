@@ -33,8 +33,10 @@ import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -67,7 +69,7 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
 
 	// Subscribe to a stream published by this client. Set to false to subscribe
 	// to other clients' streams only.
-	public static final boolean SUBSCRIBE_TO_SELF = true;
+	public static final boolean SUBSCRIBE_TO_SELF = false;
 	
 	private static final String LOGTAG = "RenHaiVideoTalk";
 	private static final int ANIMATION_DURATION = 3000;
@@ -101,6 +103,7 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
 	NotificationManager mNotificationManager;
 	private int notificationId;
 	private final Logger mlog = Logger.getLogger(RenHaiVideoTalkActivity.class);
+	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +123,12 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
 		}
 		
 		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
+		
+		// Register the broadcast receiver
+		IntentFilter tFilter = new IntentFilter();
+		tFilter.addAction(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+		registerReceiver(mBroadcastRcverVideoTalk, tFilter); 
 		
 		sessionConnect();
 	}
@@ -333,6 +342,12 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
 		super.onBackPressed();
 	}
 	
+	@Override
+	public void onDestroy() {  
+        super.onDestroy();  
+        unregisterReceiver(mBroadcastRcverVideoTalk);  
+    } 
+	
 	public void reloadInterface() {
 		mHandler.postDelayed(new Runnable() {
 		    @Override
@@ -392,10 +407,14 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
 	
 	@Override
 	public void onEndCall() {
+		sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ENDCHAT);
+		mLoadingSub.setVisibility(View.VISIBLE);
+		//mBtnLayout.setVisibility(View.GONE);
+		
 		if (mSession != null) {
 		    mSession.disconnect();
 		}
-		finish();
+		//finish();
 	}
 	
 	private void attachSubscriberView(Subscriber subscriber) {
@@ -561,9 +580,9 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
 		mPublisherFragment.initPublisherUI();
 		mPublisherStatusFragment.showPubStatusWidget(true);
 		mPublisherStatusFragment.initPubStatusUI();
-		}
+	}
 		
-		public void setPubViewMargins() {
+	public void setPubViewMargins() {
 		RelativeLayout.LayoutParams pubLayoutParams = (LayoutParams) mPublisherViewContainer
 		        .getLayoutParams();
 		int bottomMargin = 0;
@@ -622,99 +641,99 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
 	
 	@Override
 	public void onPublisherRemoved(Session session, PublisherKit publisher) {
-	Log.i(LOGTAG, "The publisher stops streaming");
+		Log.i(LOGTAG, "The publisher stops streaming");
 	}
 	
 	@Override
 	public void onError(PublisherKit publisher, OpentokError exception) {
-	Log.i(LOGTAG, "Publisher exception: " + exception.getMessage());
+		Log.i(LOGTAG, "Publisher exception: " + exception.getMessage());
 	}
 	
 	@Override
 	public void onConnected(SubscriberKit subscriber) {
-	mSubscriberFragment.showSubscriberWidget(true);
-	mSubscriberFragment.initSubscriberUI();
+		mSubscriberFragment.showSubscriberWidget(true);
+		mSubscriberFragment.initSubscriberUI();
 	}
 	
 	@Override
 	public void onDisconnected(SubscriberKit subscriber) {
-	Log.i(LOGTAG, "Subscriber disconnected.");
+		Log.i(LOGTAG, "Subscriber disconnected.");
 	}
 	
 	@Override
 	public void onVideoDataReceived(SubscriberKit subscriber) {
-	Log.i(LOGTAG, "First frame received");
-	
-	// stop loading spinning
-	mLoadingSub.setVisibility(View.GONE);
-	attachSubscriberView(mSubscriber);
+		Log.i(LOGTAG, "First frame received");
+		
+		// stop loading spinning
+		mLoadingSub.setVisibility(View.GONE);
+		attachSubscriberView(mSubscriber);
 	}
 	
 	@Override
 	public void onError(SubscriberKit subscriber, OpentokError exception) {
-	Log.i(LOGTAG, "Subscriber exception: " + exception.getMessage());
+		Log.i(LOGTAG, "Subscriber exception: " + exception.getMessage());
 	}
 	
 	@Override
 	public void onVideoDisabled(SubscriberKit subscriber) {
-	Log.i(LOGTAG,
-	        "Video quality changed. It is disabled for the subscriber.");
-	if (mSubscriber == subscriber) {
-	    setAudioOnlyView(true);
-	}
+		Log.i(LOGTAG,
+		        "Video quality changed. It is disabled for the subscriber.");
+		if (mSubscriber == subscriber) {
+		    setAudioOnlyView(true);
+		}
 	}
 	
 	@Override
 	public void onStreamHasAudioChanged(Session session, Stream stream,
 	    boolean audioEnabled) {
-	Log.i(LOGTAG, "Stream audio changed");
+		Log.i(LOGTAG, "Stream audio changed");
 	}
 	
 	@Override
 	public void onStreamHasVideoChanged(Session session, Stream stream,
 	    boolean videoEnabled) {
-	Log.i(LOGTAG, "Stream video changed");
-	
-	if (mSubscriber != null
-	        && (mSubscriber.getStream().getStreamId() == stream
-	                .getStreamId())) {
-	    if (videoEnabled) {
-	        setAudioOnlyView(true);
-	    } else {
-	        setAudioOnlyView(false);
-	    }
-	}
+		Log.i(LOGTAG, "Stream video changed");
+		
+		if (mSubscriber != null
+		        && (mSubscriber.getStream().getStreamId() == stream
+		                .getStreamId())) {
+		    if (videoEnabled) {
+		        setAudioOnlyView(true);
+		    } else {
+		        setAudioOnlyView(false);
+		    }
+		}
 	}
 	
 	@Override
 	public void onStreamVideoDimensionsChanged(Session session, Stream stream,
 	    int width, int height) {
-	Log.i(LOGTAG, "Stream video dimensions changed");
+		Log.i(LOGTAG, "Stream video dimensions changed");
 	}
 	
 	@Override
 	public void onArchiveStarted(Session session, String id, String name) {
-	Log.i(LOGTAG, "Archiving starts");
-	mPublisherFragment.showPublisherWidget(false);
-	
-	archiving = true;
-	mPublisherStatusFragment.updateArchivingUI(true);
-	mPublisherFragment.showPublisherWidget(true);
-	mPublisherFragment.initPublisherUI();
-	setPubViewMargins();
-	
-	if (mSubscriber != null) {
-	    mSubscriberFragment.showSubscriberWidget(true);
-	}
+		Log.i(LOGTAG, "Archiving starts");
+		mPublisherFragment.showPublisherWidget(false);
+		
+		archiving = true;
+		mPublisherStatusFragment.updateArchivingUI(true);
+		mPublisherFragment.showPublisherWidget(true);
+		mPublisherFragment.initPublisherUI();
+		setPubViewMargins();
+		
+		if (mSubscriber != null) {
+		    mSubscriberFragment.showSubscriberWidget(true);
+		}
 	}
 	
 	@Override
 	public void onArchiveStopped(Session session, String id) {
-	Log.i(LOGTAG, "Archiving stops");
-	archiving = false;
-	
-	mPublisherStatusFragment.updateArchivingUI(false);
-	setPubViewMargins();
+		Log.i(LOGTAG, "Archiving stops");
+		archiving = false;
+		
+		mPublisherStatusFragment.updateArchivingUI(false);
+		setPubViewMargins();
 	}
 	
 	/**
@@ -725,9 +744,65 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
 	* @return The equivalent number of real pixels.
 	*/
 	public int dpToPx(int dp) {
-	double screenDensity = getResources().getDisplayMetrics().density;
-	return (int) (screenDensity * (double) dp);
+		double screenDensity = getResources().getDisplayMetrics().density;
+		return (int) (screenDensity * (double) dp);
 	}
 	
+    ///////////////////////////////////////////////////////////////////////
+    // Network message process
+    ///////////////////////////////////////////////////////////////////////
+	private void sendBusinessSessionReqMessage(int _operationType){
+		String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(
+    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, _operationType).toString();
+    	mWebSocketHandle.sendMessage(tBusinessSessionReq);
 	}
+	
+	private void sendBusinessSessionNotificationRespMessage(int _operationType, int _operationValue){
+		String tBusinessSessionNotResp = RenHaiMsgBusinessSessionNotificationResp.constructMsg(
+    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, _operationType, _operationValue).toString();
+    	mWebSocketHandle.sendMessage(tBusinessSessionNotResp);
+	}
+	  
+    private BroadcastReceiver mBroadcastRcverVideoTalk = new BroadcastReceiver() { 
+        @Override 
+        public void onReceive(Context context, Intent intent) { 
+
+            String action = intent.getAction(); 
+            if(action.equals(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG)){
+            	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
+            	switch (tMsgType) {
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_ENDCHAT:
+            	{
+            		// TODO: Add processing to disconnect the opentok
+            		directToAssessPage();
+            		break;
+            	}
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERENDCHAT:
+            	{
+            		// TODO: Add processing to disconnect the opentok
+            		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEENDCHAT,1);
+            		//mPeerStatus.setVisibility(View.VISIBLE);
+            		//mPeerStatus.setText(R.string.video_peerhangoff);
+            		directToAssessPage();
+            		break;
+            	}
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERCHATMSG:
+            	{
+            		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDECHATMESSAGE,1);
+            		mSubscriberFragment.setTextContent(PeerDeviceInfo.getChatMsg());            		
+            		break;
+            	}
+
+            	}            	
+            }
+        } 
+    };
+    
+    private void directToAssessPage(){
+    	Intent intent = new Intent(RenHaiVideoTalkActivity.this, RenHaiAssessActivity.class);
+	    startActivity(intent);
+		finish();
+    }
+	
+}
 
