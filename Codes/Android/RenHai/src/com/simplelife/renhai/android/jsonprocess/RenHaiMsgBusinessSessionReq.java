@@ -13,6 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
+import com.simplelife.renhai.android.data.BusinessSessionInfo;
 import com.simplelife.renhai.android.data.PeerDeviceInfo;
 import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.utils.SecurityUtils;
@@ -50,7 +51,10 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 		
 		try {
 			tMsgContent.put(MSG_HEADER,tMsgHeaderContent);
-			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_SESSIONID, JSONNULL);
+			if(null != BusinessSessionInfo.getBusinessSessionId())
+				tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_SESSIONID, BusinessSessionInfo.getBusinessSessionId());
+			else
+				tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_SESSIONID, JSONNULL);			
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_BUSINESSTYPE, _businessType);
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONTYPE, _operationType);			
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONVALUE, JSONNULL);
@@ -103,6 +107,7 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 				tProfile.put(MSG_BUSINESSSESSIONREQ_IMPCARD, tImpCard);
 				tDevice.put(MSG_BUSINESSSESSIONREQ_PROFILE, tProfile);
 				tOperationInfo.put(MSG_BUSINESSSESSIONREQ_DEVICE, tDevice);
+				tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONINFO, tOperationInfo);
 			}else{
 				tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONINFO, JSONNULL);
 			}			
@@ -141,7 +146,10 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 		
 		try {
 			tMsgContent.put(MSG_HEADER,tMsgHeaderContent);
-			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_SESSIONID, JSONNULL);
+			if(null != BusinessSessionInfo.getBusinessSessionId())
+				tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_SESSIONID, BusinessSessionInfo.getBusinessSessionId());
+			else
+				tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_SESSIONID, JSONNULL);	
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_BUSINESSTYPE, _businessType);
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONTYPE, _operationType);
 			tOperationInfo.put(MSG_BUSINESSSESSIONREQ_CHATMSG, _operationInfo);			

@@ -562,7 +562,7 @@ public final class R {
         public static final int avatar=0x7f09002d;
         public static final int connectionStatus=0x7f09005a;
         public static final int editAndSendMsg=0x7f090053;
-        public static final int endCall=0x7f090054;
+        public static final int endCall=0x7f090055;
         public static final int fragment_pub_container=0x7f090032;
         public static final int fragment_pub_status_container=0x7f090033;
         public static final int fragment_sub_container=0x7f090031;
@@ -633,7 +633,7 @@ public final class R {
         public static final int subscriberView=0x7f090029;
         public static final int subscriberWidget=0x7f09005c;
         public static final int swapCamera=0x7f090052;
-        public static final int video_centerline=0x7f090055;
+        public static final int video_centerline=0x7f090054;
         public static final int video_editmsg=0x7f09004e;
         public static final int video_mainlayout=0x7f090028;
         public static final int video_sendmsg=0x7f09004f;

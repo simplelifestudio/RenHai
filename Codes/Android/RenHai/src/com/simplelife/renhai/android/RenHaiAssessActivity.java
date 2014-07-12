@@ -149,11 +149,11 @@ public class RenHaiAssessActivity extends Activity{
 	    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
 	    			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ASSESSANDCONTINUE).toString();
 	    	mWebSocketHandle.sendMessage(tBusinessSessionReq);
-		    /*
-			Intent intent = new Intent(RenHaiProtocalActivity.this, RenHaiAssessActivity.class);
+
+			Intent intent = new Intent(RenHaiAssessActivity.this, RenHaiMainPageActivity.class);
 		    startActivity(intent);
 			finish();
-			*/
+
 		}
 	};
 	

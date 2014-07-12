@@ -11,7 +11,7 @@ package com.simplelife.renhai.android.data;
 import com.simplelife.renhai.android.RenHaiDefinitions;
 
 public class BusinessSessionInfo {
-	public static String mBusinessSessionId;
+	public static String mBusinessSessionId = null;
 	public static int mBusinessType = RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST;
 	
 	public static void setBusinessSessionId(String _id){
