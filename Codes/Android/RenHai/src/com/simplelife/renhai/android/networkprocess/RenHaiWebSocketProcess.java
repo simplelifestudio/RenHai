@@ -30,8 +30,8 @@ public class RenHaiWebSocketProcess {
 	private static RenHaiWebSocketProcess mInstance = null;
 	private Context mContext;
 	private WebSocketClient mWebsocketClient;
-	private final Logger mlog = Logger.getLogger(RenHaiMainPageActivity.class);
-	public static String TAG = "RenHaiNetworkProcess";	
+	private final Logger mlog = Logger.getLogger(RenHaiWebSocketProcess.class);
+	public static String TAG = "RenHaiWebSocketProcess";	
 	
 	public RenHaiWebSocketProcess(Context _context){
 		mlog.info("Network process is starting!");
@@ -76,6 +76,8 @@ public class RenHaiWebSocketProcess {
 			    @Override
 			    public void onDisconnect(int code, String reason) {
 			        Log.d(TAG, String.format("Disconnected! Code: %d Reason: %s", code, reason));
+			        // Reconnect the network
+			        mWebsocketClient.connect();
 			    }
 
 			    @Override

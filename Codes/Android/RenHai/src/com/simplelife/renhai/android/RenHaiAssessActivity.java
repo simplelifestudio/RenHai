@@ -150,8 +150,8 @@ public class RenHaiAssessActivity extends Activity{
 	    			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ASSESSANDCONTINUE).toString();
 	    	mWebSocketHandle.sendMessage(tBusinessSessionReq);
 
-			Intent intent = new Intent(RenHaiAssessActivity.this, RenHaiMainPageActivity.class);
-		    startActivity(intent);
+			//Intent intent = new Intent(RenHaiAssessActivity.this, RenHaiMainPageActivity.class);
+		    //startActivity(intent);
 			finish();
 
 		}
@@ -161,8 +161,8 @@ public class RenHaiAssessActivity extends Activity{
 
 		@Override
 		public void onClick(View v) {
-			Intent intent = new Intent(RenHaiAssessActivity.this, RenHaiMainPageActivity.class);
-		    startActivity(intent);
+			//Intent intent = new Intent(RenHaiAssessActivity.this, RenHaiMainPageActivity.class);
+		    //startActivity(intent);
 			finish();			
 		}
 	};

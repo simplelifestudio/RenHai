@@ -102,6 +102,7 @@
     <string name="video_menusettings">Settings</string>
     <string name="video_archivingOn">Archiving on</string>
     <string name="video_archivingOff">Archiving off</string>
+    <string name="video_replymsgtext">Reply</string>
     
     <string name="assess_title1">Assessment for peer</string>
     <string name="assess_title2">Impressions to peer</string>

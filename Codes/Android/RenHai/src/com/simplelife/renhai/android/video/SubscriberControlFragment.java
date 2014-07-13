@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -29,6 +30,10 @@ public class SubscriberControlFragment extends Fragment implements
 	private ImageButton mSubscriberMute;
 	private TextView mSubscriberName;
 	private RelativeLayout mSubContainer;
+	private RelativeLayout mSubInfoContainer;
+	private RelativeLayout mRcvMsgContainer;
+	private TextView mShowMsg;
+	private Button mReplyMsg;
 
 	// Animation constants
 	private static final int ANIMATION_DURATION = 500;
@@ -39,12 +44,19 @@ public class SubscriberControlFragment extends Fragment implements
 
 	public interface SubscriberCallbacks {
 		public void onMuteSubscriber();
+
+		void onReplyMsg();
 	}
 
 	private static SubscriberCallbacks sOpenTokCallbacks = new SubscriberCallbacks() {
 
 		@Override
 		public void onMuteSubscriber() {
+			return;
+		}
+		
+		@Override
+		public void onReplyMsg() {
 			return;
 		}
 
@@ -86,6 +98,12 @@ public class SubscriberControlFragment extends Fragment implements
 		mSubscriberMute.setOnClickListener(this);
 
 		mSubscriberName = (TextView) rootView.findViewById(R.id.subscriberName);
+		
+		mSubInfoContainer = (RelativeLayout) rootView.findViewById(R.id.subscriberWidget);
+		mRcvMsgContainer = (RelativeLayout) rootView.findViewById(R.id.video_rcvmsgwidget);
+		mShowMsg  = (TextView) rootView.findViewById(R.id.video_recvmsg);
+		mReplyMsg = (Button) rootView.findViewById(R.id.video_replymsg);
+		mReplyMsg.setOnClickListener(this);
 
 		if (videoActivity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 			RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) container
@@ -146,6 +164,10 @@ public class SubscriberControlFragment extends Fragment implements
 		case R.id.muteSubscriber:
 			muteSubscriber();
 			break;
+			
+		case R.id.video_replymsg:
+			replyMsg();
+			break;
 		}
 	}
 
@@ -160,8 +182,10 @@ public class SubscriberControlFragment extends Fragment implements
 		showSubscriberWidget(show, true);
 	}
 	
-	public void setTextContent(String _content) {
-		mSubscriberName.setText(_content);
+	public void showReceivedMsg(String _content) {
+		mShowMsg.setText(_content);
+		mSubInfoContainer.setVisibility(View.GONE);
+		mRcvMsgContainer.setVisibility(View.VISIBLE);
 		showSubscriberWidget(true);
 	}
 
@@ -183,6 +207,8 @@ public class SubscriberControlFragment extends Fragment implements
 	}
 
 	public void subscriberClick() {
+		mSubInfoContainer.setVisibility(View.VISIBLE);
+		mRcvMsgContainer.setVisibility(View.GONE);
 		if (!mSubscriberWidgetVisible) {
 			showSubscriberWidget(true);
 		} else {
@@ -198,6 +224,10 @@ public class SubscriberControlFragment extends Fragment implements
 		mSubscriberMute.setImageResource(videoActivity.getmSubscriber()
 				.getSubscribeToAudio() ? R.drawable.unmute_sub
 				: R.drawable.mute_sub);
+	}
+	
+	public void replyMsg() {
+		mCallbacks.onReplyMsg();
 	}
 
 	public void initSubscriberUI() {

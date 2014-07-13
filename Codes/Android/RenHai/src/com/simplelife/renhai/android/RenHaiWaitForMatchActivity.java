@@ -109,7 +109,6 @@ public class RenHaiWaitForMatchActivity extends Activity {
             	    			                      .constructMsg(RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
             	    			                    		        RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_SESSIONBINDED, 1).toString();
             	    	mWebSocketHandle.sendMessage(tBusinessNotRespMsg);
-            	    	PeerDeviceInfo.resetPeerDeviceInfo();
             	    	Intent tIntent = new Intent(RenHaiWaitForMatchActivity.this, RenHaiMatchingActivity.class);
         	    		startActivity(tIntent);
         	    		finish();

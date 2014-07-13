@@ -101,6 +101,7 @@
     <string name="video_menusettings">设置</string>
     <string name="video_archivingOn">开启存储</string>
     <string name="video_archivingOff">关闭存储</string>
+    <string name="video_replymsgtext">回复</string>
     
     <string name="assess_title1">我给对方的评价</string>
     <string name="assess_title2">我对对方的印象</string>

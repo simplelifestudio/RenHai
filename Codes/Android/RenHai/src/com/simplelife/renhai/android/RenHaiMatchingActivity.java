@@ -225,21 +225,21 @@ public class RenHaiMatchingActivity extends Activity{
 				    {
 				    	tTextToShow = mContext.getString(R.string.myimpression_happylabel) 
 				    			    + "\n"
-				    			    + PeerDeviceInfo.AssessLabel.mHappyLabel.getAssessCount();				    	
+				    			    + PeerDeviceInfo.AssessLabel.mHappyLabel.getAssessedCount();				    	
 				    	break;				    	
 				    }
 				    case 1:
 				    {
 				    	tTextToShow = mContext.getString(R.string.myimpression_sosolabel) 
 				    			    + "\n"
-				    			    + PeerDeviceInfo.AssessLabel.mSoSoLabel.getAssessCount();			    	
+				    			    + PeerDeviceInfo.AssessLabel.mSoSoLabel.getAssessedCount();			    	
 				    	break;				    	
 				    }
 				    case 2:
 				    {
 				    	tTextToShow = mContext.getString(R.string.myimpression_disgustlabel) 
 				    			    + "\n"
-				    			    + PeerDeviceInfo.AssessLabel.mDigustingLabel.getAssessCount();
+				    			    + PeerDeviceInfo.AssessLabel.mDigustingLabel.getAssessedCount();
 				    	
 				    	break;				    	
 				    }

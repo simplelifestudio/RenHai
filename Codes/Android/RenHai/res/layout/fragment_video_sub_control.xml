@@ -13,7 +13,8 @@
         android:layout_width="fill_parent"
         android:layout_height="48dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" >
+        android:layout_centerHorizontal="true"
+         >
 
         <View
             android:id="@+id/line1"
@@ -47,17 +48,56 @@
             android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/muteSubscriber"
             android:layout_toRightOf="@id/logo"
-            android:gravity="center_vertical|right"
+            android:gravity="center_vertical|left"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text=""
-            android:textColor="@color/white" />
+            android:textColor="@color/white" />        
 
         <View
             android:id="@+id/line2"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_toLeftOf="@+id/muteSubscriber"
+            android:background="@color/trans_white" />
+    </RelativeLayout>
+    
+    <RelativeLayout 
+        android:id="@+id/video_rcvmsgwidget"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" >
+        <TextView
+            android:id="@+id/video_recvmsg"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|left"
+            android:layout_toLeftOf="@+id/line3"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text=""
+            android:textColor="@color/white" />
+        <Button
+            android:id="@+id/video_replymsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/video_button_bg"
+            android:text="@string/video_replymsgtext"
+            android:textColor="@color/white" />        
+        <View
+            android:id="@+id/line3"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/video_replymsg"
+            android:layout_toLeftOf="@+id/video_replymsg"
             android:background="@color/trans_white" />
     </RelativeLayout>
 

@@ -541,7 +541,7 @@ public final class R {
         public static final int video_publish_bg=0x7f020035;
     }
     public static final class id {
-        public static final int action_settings=0x7f090062;
+        public static final int action_settings=0x7f090066;
         public static final int archiving=0x7f090057;
         public static final int assess_btndisgust=0x7f090004;
         public static final int assess_btnhappy=0x7f090002;
@@ -570,6 +570,7 @@ public final class R {
         public static final int layoutSubFragment=0x7f09005b;
         public static final int line1=0x7f090059;
         public static final int line2=0x7f090060;
+        public static final int line3=0x7f090063;
         public static final int loadingSpinner=0x7f09002a;
         public static final int loadingSpinner_publisher=0x7f090030;
         public static final int loadingpage_bar=0x7f090010;
@@ -590,7 +591,7 @@ public final class R {
         public static final int matching_peerstat=0x7f09001f;
         public static final int matching_title1=0x7f090014;
         public static final int matching_title2=0x7f090017;
-        public static final int menu_settings=0x7f090061;
+        public static final int menu_settings=0x7f090065;
         public static final int mutePublisher=0x7f090051;
         public static final int muteSubscriber=0x7f09005e;
         public static final int myimpression_divide=0x7f090038;
@@ -636,6 +637,9 @@ public final class R {
         public static final int video_centerline=0x7f090054;
         public static final int video_editmsg=0x7f09004e;
         public static final int video_mainlayout=0x7f090028;
+        public static final int video_rcvmsgwidget=0x7f090061;
+        public static final int video_recvmsg=0x7f090062;
+        public static final int video_replymsg=0x7f090064;
         public static final int video_sendmsg=0x7f09004f;
         public static final int waitingformatch_counter=0x7f090034;
         public static final int waitingformatch_counternote=0x7f090035;
@@ -666,19 +670,19 @@ public final class R {
     public static final class string {
         public static final int action_settings=0x7f060001;
         public static final int app_name=0x7f060000;
-        public static final int assess_addimplabeldnegbtn=0x7f060061;
-        public static final int assess_addimplabelposbtn=0x7f060060;
-        public static final int assess_addimplabeltitle=0x7f06005f;
-        public static final int assess_btnnotoassess=0x7f060067;
-        public static final int assess_btnyestoassess=0x7f060066;
-        public static final int assess_editimplabeldnegbtn=0x7f060065;
-        public static final int assess_editimplabelneubtn=0x7f060064;
-        public static final int assess_editimplabelposbtn=0x7f060063;
-        public static final int assess_editimplabeltitle=0x7f060062;
-        public static final int assess_title1=0x7f06005c;
-        public static final int assess_title2=0x7f06005d;
-        public static final int assess_title3=0x7f06005e;
-        public static final int assesss_editimplabeldnegbtn=0x7f060069;
+        public static final int assess_addimplabeldnegbtn=0x7f060062;
+        public static final int assess_addimplabelposbtn=0x7f060061;
+        public static final int assess_addimplabeltitle=0x7f060060;
+        public static final int assess_btnnotoassess=0x7f060068;
+        public static final int assess_btnyestoassess=0x7f060067;
+        public static final int assess_editimplabeldnegbtn=0x7f060066;
+        public static final int assess_editimplabelneubtn=0x7f060065;
+        public static final int assess_editimplabelposbtn=0x7f060064;
+        public static final int assess_editimplabeltitle=0x7f060063;
+        public static final int assess_title1=0x7f06005d;
+        public static final int assess_title2=0x7f06005e;
+        public static final int assess_title3=0x7f06005f;
+        public static final int assesss_editimplabeldnegbtn=0x7f06006a;
         public static final int hello_world=0x7f060002;
         public static final int mainpage_connlostdialogmsg=0x7f06001a;
         public static final int mainpage_connlostdialognegbtn=0x7f06001c;
@@ -737,7 +741,7 @@ public final class R {
         public static final int mytopics_testint5=0x7f060036;
         public static final int mytopics_testint6=0x7f060037;
         public static final int protocal_no=0x7f06000f;
-        public static final int protocal_text=0x7f060068;
+        public static final int protocal_text=0x7f060069;
         public static final int protocal_title=0x7f06000d;
         public static final int protocal_yes=0x7f06000e;
         public static final int splash_advert=0x7f060004;
@@ -765,6 +769,7 @@ public final class R {
         public static final int video_msgsend=0x7f060057;
         public static final int video_notification=0x7f060054;
         public static final int video_peerhangoff=0x7f060055;
+        public static final int video_replymsgtext=0x7f06005c;
         public static final int viewpager_section_impressions=0x7f060012;
         public static final int viewpager_section_start=0x7f060010;
         public static final int viewpager_section_topics=0x7f060011;

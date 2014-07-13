@@ -363,12 +363,13 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
 	
 	private void sessionConnect() {
 		if (mSession == null) {
-		    mSession = new Session(this, API_KEY, SESSION_ID);
+		    //mSession = new Session(this, API_KEY, SESSION_ID);
+			mSession = new Session(this, WebRtcSession.getApiKey(), WebRtcSession.getSessionId());
 		    mSession.setSessionListener(this);
 		    mSession.setArchiveListener(this);
 		    mSession.setStreamPropertiesListener(this);
 		    mSession.setPublisherListener(this);
-		    mSession.connect(TOKEN);
+		    mSession.connect(WebRtcSession.getToken());
 		}
 	}
 	
@@ -388,6 +389,15 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
 	public void onMuteSubscriber() {
 		if (mSubscriber != null) {
 		    mSubscriber.setSubscribeToAudio(!mSubscriber.getSubscribeToAudio());
+		}
+	}
+	
+	@Override
+	public void onReplyMsg() {
+		if (mPublisherFragment != null) {
+			mSubscriberFragment.showSubscriberWidget(false);			
+			mPublisherFragment.showPublisherWidget(true);
+			mPublisherFragment.editAndSendMsg();
 		}
 	}
 	
@@ -789,7 +799,7 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
             	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERCHATMSG:
             	{
             		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDECHATMESSAGE,1);
-            		mSubscriberFragment.setTextContent(PeerDeviceInfo.getChatMsg());            		
+            		mSubscriberFragment.showReceivedMsg(PeerDeviceInfo.getChatMsg());            		
             		break;
             	}
 
