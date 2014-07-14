@@ -1,4 +1,59 @@
-<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainpage_viewpager"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+	<android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/mainpage_viewpager"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent" />
+	
+	<RelativeLayout 
+        android:id="@+id/mainpage_serverstatinfolayout"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/maingreen">
+       
+        <TextView
+            android:id="@+id/mainpage_serverstatinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/mainpage_serverinfodiv"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:ellipsize="marquee"    
+            android:gravity="center"            
+            android:focusable="true"    
+			android:marqueeRepeatLimit="marquee_forever"    
+			android:focusableInTouchMode="true"    
+			android:scrollHorizontally="true"    
+			android:singleLine="true"
+			android:textColor="@color/white"
+            android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" >
+        </TextView>
+        
+       <Button
+            android:id="@+id/mainpage_dismissserverinfo"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"            
+            android:layout_alignParentRight="true"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:background="@drawable/video_button_bg"
+            android:text="@string/mainpage_dismissserverstatinfo"
+            android:textColor="@color/white" />
+       
+       <View
+            android:id="@+id/mainpage_serverinfodiv"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/mainpage_dismissserverinfo"
+            android:background="@color/trans_white" />
+   </RelativeLayout> 
+
+</RelativeLayout>

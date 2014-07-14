@@ -31,7 +31,8 @@
     <string name="mainpage_connlostdialogtitle">Web connection lost</string>
     <string name="mainpage_connlostdialogmsg">Web connection lost, re-connect now?</string>
     <string name="mainpage_connlostdialogposbtn">Re-Connect</string>
-    <string name="mainpage_connlostdialognegbtn">Cancel</string>      
+    <string name="mainpage_connlostdialognegbtn">Cancel</string>
+    <string name="mainpage_dismissserverstatinfo">OK</string>       
     
     <string name="mytopics_inttitle1">My Topics</string>
     <string name="mytopics_inttitle2">Hot Topics</string>
