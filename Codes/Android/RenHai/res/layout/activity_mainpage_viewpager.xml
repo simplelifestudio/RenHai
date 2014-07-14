@@ -15,7 +15,9 @@
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@color/maingreen">
+        android:background="@color/maingreen"
+        android:alpha="0.8"
+        android:visibility="gone">
        
         <TextView
             android:id="@+id/mainpage_serverstatinfo"
@@ -33,7 +35,7 @@
 			android:scrollHorizontally="true"    
 			android:singleLine="true"
 			android:textColor="@color/white"
-            android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" >
+            android:text="" >
         </TextView>
         
        <Button

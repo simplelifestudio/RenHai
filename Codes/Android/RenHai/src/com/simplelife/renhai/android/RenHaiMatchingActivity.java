@@ -254,7 +254,7 @@ public class RenHaiMatchingActivity extends Activity{
 				    {
 				    	tTextToShow = mContext.getString(R.string.myimpression_chattotalduration) 
 				    			    + "\n"
-				    			    + TimerConverter.secondsToHMS(PeerDeviceInfo.Profile.getChatTotalDuration());				    	
+				    			    + TimerConverter.msToHms(PeerDeviceInfo.Profile.getChatTotalDuration());				    	
 				    	break;				    	
 				    }
 				    case 5:

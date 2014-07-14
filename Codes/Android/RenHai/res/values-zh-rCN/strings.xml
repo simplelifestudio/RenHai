@@ -31,7 +31,9 @@
     <string name="mainpage_connlostdialogmsg">网络连接丢失，重新连接？</string>
     <string name="mainpage_connlostdialogposbtn">重新连接</string>
     <string name="mainpage_connlostdialognegbtn">取消</string>
-    <string name="mainpage_dismissserverstatinfo">知道了</string>  
+    <string name="mainpage_dismissserverstatinfo">知道了</string>
+    <string name="mainpage_statinfopart1">亲爱的用户，我们的服务器将于 </string>
+    <string name="mainpage_statinfopart2"> 进行维护，届时人海将无法为您提供服务，请接受我们诚挚的道歉。 －Simplelife Studio</string>   
     
     <string name="mytopics_inttitle1">我的话题</string>
     <string name="mytopics_inttitle2">当前热门</string>

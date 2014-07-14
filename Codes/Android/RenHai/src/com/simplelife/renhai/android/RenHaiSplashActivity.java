@@ -177,7 +177,7 @@ public class RenHaiSplashActivity extends Activity {
         	    {
         	    	mNetConnTimer.stopTimer();
         	    	mProgressText.setText(R.string.mainpage_title_syncserver);
-        	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructMsg().toString();
+        	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructQueryMsg().toString();
         	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
         	    	mNetConnTimer.startTimer();
         	    	break;

@@ -41,6 +41,8 @@ import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class RenHaiMainPageActivity extends FragmentActivity implements ActionBar.TabListener{
@@ -56,6 +58,9 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 	boolean mWebSocketLost = false;
 	private final Logger mlog = Logger.getLogger(RenHaiMainPageActivity.class);
 	private RenHaiWebSocketProcess mWebSocketHandle = null;
+	private RelativeLayout mServerStatLayout;
+	private TextView mServerStatInfo;
+	private Button mBtnDismissInfo;
 	
 	// Define the view pages
 	public enum ViewPages{
@@ -83,6 +88,25 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 
         // Specify that we will be displaying tabs in the action bar.
         mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        
+        mServerStatLayout = (RelativeLayout)findViewById(R.id.mainpage_serverstatinfolayout);
+        mServerStatInfo = (TextView)findViewById(R.id.mainpage_serverstatinfo);
+        mBtnDismissInfo = (Button)findViewById(R.id.mainpage_dismissserverinfo);
+        
+        String tServerInfoToShow = "";
+        if(0 == RenHaiInfo.ServerAddr.getServiceStatus())
+        {
+        	tServerInfoToShow = getString(R.string.mainpage_statinfopart1)
+        			          + RenHaiInfo.ServerAddr.getTimeZone() + " "
+        			          + RenHaiInfo.ServerAddr.getBeginTime() + " to "
+        			          + RenHaiInfo.ServerAddr.getEndTime()
+        			          + getString(R.string.mainpage_statinfopart1);
+        }else{
+        	tServerInfoToShow = RenHaiInfo.ServerAddr.getBroadcastInfo();
+        }
+        mServerStatLayout.setVisibility(View.VISIBLE);
+        mServerStatInfo.setText(tServerInfoToShow);
+        mBtnDismissInfo.setOnClickListener(mBtnDismissInfoListener);
         
 		// Damn work round for the android system bug
         /*
@@ -157,6 +181,14 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
     public static void enableSlide(){
     	mViewPager.requestDisallowInterceptTouchEvent(false);
     }
+    
+    private View.OnClickListener mBtnDismissInfoListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			mServerStatLayout.setVisibility(View.GONE);			
+		}
+	};
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {

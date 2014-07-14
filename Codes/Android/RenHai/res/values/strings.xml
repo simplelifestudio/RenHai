@@ -32,7 +32,9 @@
     <string name="mainpage_connlostdialogmsg">Web connection lost, re-connect now?</string>
     <string name="mainpage_connlostdialogposbtn">Re-Connect</string>
     <string name="mainpage_connlostdialognegbtn">Cancel</string>
-    <string name="mainpage_dismissserverstatinfo">OK</string>       
+    <string name="mainpage_dismissserverstatinfo">OK</string>
+    <string name="mainpage_statinfopart1">Dear friends, we plan to maintain our server during </string>
+    <string name="mainpage_statinfopart2"> the Hiya service will be idle at that time, please accept our sincere apologies。 －Simplelife Studio</string>       
     
     <string name="mytopics_inttitle1">My Topics</string>
     <string name="mytopics_inttitle2">Hot Topics</string>

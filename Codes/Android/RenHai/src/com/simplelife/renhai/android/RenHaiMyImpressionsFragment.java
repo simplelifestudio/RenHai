@@ -134,7 +134,7 @@ public class RenHaiMyImpressionsFragment extends Fragment {
 				    {
 				    	tTextToShow = mContext.getString(R.string.myimpression_chattotalduration) 
 				    			    + "\n"
-				    			    + TimerConverter.secondsToHMS(RenHaiInfo.Profile.getChatTotalDuration());				    	
+				    			    + TimerConverter.msToHms(RenHaiInfo.Profile.getChatTotalDuration());				    	
 				    	break;				    	
 				    }
 				    case 5:
