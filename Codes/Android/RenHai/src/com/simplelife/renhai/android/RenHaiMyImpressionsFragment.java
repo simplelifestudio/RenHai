@@ -18,6 +18,11 @@ import com.simplelife.renhai.android.ui.RenHaiDraggableGridView;
 import com.simplelife.renhai.android.utils.TimerConverter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Spannable;
@@ -30,13 +35,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class RenHaiMyImpressionsFragment extends Fragment {
 	
 	private final Logger mlog = Logger.getLogger(RenHaiMyImpressionsFragment.class);
 	
-	private GridView mGridView;
+	private GridView mAssessGridView;
 	private MyAdapter mAdapter;	
 	TextView mGlbImpEmpty;
 	RenHaiDraggableGridView mImpLabelsGrid;
@@ -51,16 +57,54 @@ public class RenHaiMyImpressionsFragment extends Fragment {
             Bundle savedInstanceState) {
     	
     	View rootView = inflater.inflate(R.layout.fragment_myimpression, container, false);
-    	mGridView = (GridView)rootView.findViewById(R.id.myimpression_gridview);
+    	mAssessGridView = (GridView)rootView.findViewById(R.id.myimpression_gridview);
     	mGlbImpEmpty = (TextView)rootView.findViewById(R.id.myimpression_impempty);
     	mImpLabelsGrid = (RenHaiDraggableGridView)rootView.findViewById(R.id.myimpression_implabels);
     	
     	mAdapter = new MyAdapter(this.getActivity());
-    	mGridView.setAdapter(mAdapter);
-    	mImpLabelsGrid.setVisibility(View.INVISIBLE);
+    	mAssessGridView.setAdapter(mAdapter);
+    	//mImpLabelsGrid.setVisibility(View.INVISIBLE);
+    	
+    	onUpdateImpressionGridView();
     	
     	return rootView;
     }
+    
+    private void onUpdateImpressionGridView(){
+    	mImpLabelsGrid.removeAllViews();
+    	int tImpLabelNum = RenHaiInfo.ImpressionLabel.getMyImpLabelNum();    	
+    	if(tImpLabelNum > 0)
+    	{
+    		for(int i=0; i < tImpLabelNum; i++)
+        	{
+        		ImageView tIntLabel = new ImageView(getActivity());
+        		tIntLabel.setImageBitmap(getThumb(RenHaiInfo.ImpressionLabel.getMyImpLabelMap(i).getImpLabelName()));
+        		mImpLabelsGrid.addView(tIntLabel);
+        	}
+    		mGlbImpEmpty.setVisibility(View.GONE);
+    	}else{
+    		mImpLabelsGrid.setVisibility(View.GONE);
+    		mGlbImpEmpty.setVisibility(View.VISIBLE);
+    	}
+    	
+    }
+    
+    private Bitmap getThumb(String s)
+	{
+		Bitmap bmp = Bitmap.createBitmap(150, 75, Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(bmp);
+	    Paint paint = new Paint();
+	    
+	    paint.setColor(getResources().getColor(R.color.maingreen));
+	    paint.setTextSize(24);
+	    paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+	    canvas.drawRect(new Rect(0, 0, 150, 75), paint);
+	    paint.setColor(Color.WHITE);
+	    paint.setTextAlign(Paint.Align.CENTER);
+	    canvas.drawText(s, 75, 40, paint);
+	    
+		return bmp;
+	}
     
     private class MyAdapter extends BaseAdapter {
     	
