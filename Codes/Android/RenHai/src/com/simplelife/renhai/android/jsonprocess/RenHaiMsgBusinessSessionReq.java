@@ -28,6 +28,8 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 	public static String MSG_BUSINESSSESSIONREQ_OPERATIONVALUE = "operationValue";
 	public static String MSG_BUSINESSSESSIONREQ_CHATMSG = "chatMessage";
 	public static String MSG_BUSINESSSESSIONREQ_DEVICE = "device";
+	public static String MSG_BUSINESSSESSIONREQ_DEVICEID = "deviceId";
+	public static String MSG_BUSINESSSESSIONREQ_DEVICESN = "deviceSn";
 	public static String MSG_BUSINESSSESSIONREQ_PROFILE = "profile";
 	public static String MSG_BUSINESSSESSIONREQ_IMPCARD = "impressCard";
 	public static String MSG_BUSINESSSESSIONREQ_ASSLABELLIST = "assessLabelList";
@@ -66,6 +68,9 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 				JSONObject tImpCard = new JSONObject();
 				JSONArray tAssessLabelList = new JSONArray();
 				JSONArray tImpLabelList = new JSONArray();
+				// Device info
+				tDevice.put(MSG_BUSINESSSESSIONREQ_DEVICEID, PeerDeviceInfo.getDeviceId());
+				tDevice.put(MSG_BUSINESSSESSIONREQ_DEVICESN, PeerDeviceInfo.getDeviceSn());
 				// Assessment construction
 				JSONObject tAssessLabel = new JSONObject();
 				tAssessLabel.put(MSG_BUSINESSSESSIONREQ_ASSLISTIMPLABELNAME, PeerDeviceInfo.AssessResult.getAssessment());
