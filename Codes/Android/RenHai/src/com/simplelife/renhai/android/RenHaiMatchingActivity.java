@@ -343,7 +343,7 @@ public class RenHaiMatchingActivity extends Activity{
 				tTextView.setPadding(0, 10, 0, 10);
 				tTextToShow = PeerDeviceInfo.ImpressionLabel.getPeerImpLabelMap(position).getImpLabelName()
 						    + "\n"
-						    + PeerDeviceInfo.ImpressionLabel.getPeerImpLabelMap(position).getAssessCount();
+						    + PeerDeviceInfo.ImpressionLabel.getPeerImpLabelMap(position).getAssessedCount();
   			    tTextView.setText(tTextToShow);
 
 				/*

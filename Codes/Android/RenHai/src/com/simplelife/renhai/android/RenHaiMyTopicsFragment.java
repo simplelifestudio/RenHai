@@ -233,7 +233,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
         	    }
         	    case MYTOPIC_MSG_TIMETOUPDATE:
         	    {
-        	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructMsg().toString();
+        	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructUpdateMsg().toString();
         	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
         	    	mUpdateTimer.stopTimer();
         	    	break;
@@ -404,7 +404,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
     ///////////////////////////////////////////////////////////////////////
     // Timer Callbacks
     ///////////////////////////////////////////////////////////////////////
-    RenHaiTimerHelper mUpdateTimer = new RenHaiTimerHelper(10000, new RenHaiTimerProcessor() {
+    RenHaiTimerHelper mUpdateTimer = new RenHaiTimerHelper(5000, new RenHaiTimerProcessor() {
         @Override
         public void onTimeOut() {
         	Message t_MsgListData = new Message();

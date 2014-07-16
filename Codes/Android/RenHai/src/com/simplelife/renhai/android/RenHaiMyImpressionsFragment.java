@@ -13,6 +13,7 @@ import java.text.NumberFormat;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.data.PeerDeviceInfo;
 import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.ui.RenHaiDraggableGridView;
 import com.simplelife.renhai.android.utils.TimerConverter;
@@ -78,7 +79,8 @@ public class RenHaiMyImpressionsFragment extends Fragment {
     		for(int i=0; i < tImpLabelNum; i++)
         	{
         		ImageView tIntLabel = new ImageView(getActivity());
-        		tIntLabel.setImageBitmap(getThumb(RenHaiInfo.ImpressionLabel.getMyImpLabelMap(i).getImpLabelName()));
+        		tIntLabel.setImageBitmap(getThumb( RenHaiInfo.ImpressionLabel.getMyImpLabelMap(i).getImpLabelName(),
+        				     				       ""+RenHaiInfo.ImpressionLabel.getMyImpLabelMap(i).getAssessedCount()));
         		mImpLabelsGrid.addView(tIntLabel);
         	}
     		mGlbImpEmpty.setVisibility(View.GONE);
@@ -102,6 +104,25 @@ public class RenHaiMyImpressionsFragment extends Fragment {
 	    paint.setColor(Color.WHITE);
 	    paint.setTextAlign(Paint.Align.CENTER);
 	    canvas.drawText(s, 75, 40, paint);
+	    
+	    
+		return bmp;
+	}
+    
+    private Bitmap getThumb(String s1, String s2)
+	{
+		Bitmap bmp = Bitmap.createBitmap(150, 75, Bitmap.Config.RGB_565);
+		Canvas canvas = new Canvas(bmp);
+	    Paint paint = new Paint();
+	    
+	    paint.setColor(getResources().getColor(R.color.maingreen));
+	    paint.setTextSize(24);
+	    paint.setFlags(Paint.ANTI_ALIAS_FLAG);
+	    canvas.drawRect(new Rect(0, 0, 150, 75), paint);
+	    paint.setColor(Color.WHITE);
+	    paint.setTextAlign(Paint.Align.CENTER);
+	    canvas.drawText(s1, 75, 35, paint);
+	    canvas.drawText(s2, 75, 60, paint);
 	    
 		return bmp;
 	}

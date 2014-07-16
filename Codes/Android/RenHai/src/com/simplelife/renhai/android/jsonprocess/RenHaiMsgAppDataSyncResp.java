@@ -142,6 +142,7 @@ public class RenHaiMsgAppDataSyncResp extends RenHaiMsg{
 										int tValidFlag = tIntLabelMapObj.getInt(MSG_APPSYNCRESP_VALIDFLAG);
 										tIntLabelMap.setValidFlag((tValidFlag == 1) ? true : false);
 									}
+									tIntLabelMap.setNewlyCreatedFlag(false);
 									RenHaiInfo.InterestLabel.putMyIntLabel(tIntLabelMap);
 								}
 							}

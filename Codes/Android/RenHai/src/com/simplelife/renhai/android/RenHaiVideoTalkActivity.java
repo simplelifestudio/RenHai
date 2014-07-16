@@ -22,9 +22,13 @@ import com.opentok.android.Subscriber;
 import com.opentok.android.SubscriberKit;
 import com.simplelife.renhai.android.data.PeerDeviceInfo;
 import com.simplelife.renhai.android.data.WebRtcSession;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAlohaReq;
+import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionNotificationResp;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
+import com.simplelife.renhai.android.timer.RenHaiTimerHelper;
+import com.simplelife.renhai.android.timer.RenHaiTimerProcessor;
 import com.simplelife.renhai.android.video.PublisherControlFragment;
 import com.simplelife.renhai.android.video.PublisherStatusFragment;
 import com.simplelife.renhai.android.video.SubscriberControlFragment;
@@ -40,6 +44,7 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
@@ -128,7 +133,9 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
 		// Register the broadcast receiver
 		IntentFilter tFilter = new IntentFilter();
 		tFilter.addAction(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
-		registerReceiver(mBroadcastRcverVideoTalk, tFilter); 
+		registerReceiver(mBroadcastRcverVideoTalk, tFilter);
+		
+		mAlohaTimer.startRepeatTimer();
 		
 		sessionConnect();
 	}
@@ -802,6 +809,10 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
             		mSubscriberFragment.showReceivedMsg(PeerDeviceInfo.getChatMsg());            		
             		break;
             	}
+            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_ALOHARESP:
+        	    {        	    	
+        	    	break;
+        	    }
 
             	}            	
             }
@@ -809,10 +820,24 @@ public class RenHaiVideoTalkActivity extends Activity implements Session.Session
     };
     
     private void directToAssessPage(){
+    	mAlohaTimer.stopTimer();
     	Intent intent = new Intent(RenHaiVideoTalkActivity.this, RenHaiAssessActivity.class);
 	    startActivity(intent);
 		finish();
     }
+    
+	///////////////////////////////////////////////////////////////////////
+	// Timer Callbacks
+	///////////////////////////////////////////////////////////////////////
+	RenHaiTimerHelper mAlohaTimer = new RenHaiTimerHelper(0, 40000, new RenHaiTimerProcessor() {
+		@Override
+		public void onTimeOut() {
+			mlog.info("Sending Aloha Request!");
+			String tAlohaRequestMsg = RenHaiMsgAlohaReq.constructMsg().toString();
+        	mWebSocketHandle.sendMessage(tAlohaRequestMsg);	       	
+		}
+	
+	});
 	
 }
 
