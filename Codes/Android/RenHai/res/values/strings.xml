@@ -19,6 +19,12 @@
     <string name="protocal_title">User Agreement</string>
     <string name="protocal_yes">Roger</string>
     <string name="protocal_no">Damn</string>
+    
+    <string name="introduce_page0_text">Define your interest labels</string>
+    <string name="introduce_page1_text_part1">Match a stranger with similar interest</string>
+    <string name="introduce_page1_text_part2">To chat over video</string>
+    <string name="introduce_page1_button_text">Start</string>
+    
     <string name="viewpager_section_start">My RenHai</string>
     <string name="viewpager_section_topics">My Topics</string>
     <string name="viewpager_section_impressions">My Impressions</string>

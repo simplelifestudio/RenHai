@@ -18,6 +18,11 @@
     <string name="splash_conntimeout_dialogposbtn">重新连接</string>
     <string name="splash_conntimeout_dialognegbtn">退出</string>
     
+    <string name="introduce_page0_text">定义你自己的兴趣标签</string>
+    <string name="introduce_page1_text_part1">找到兴趣相投的陌生人</string>
+    <string name="introduce_page1_text_part2">开始视频聊天</string>
+    <string name="introduce_page1_button_text">开始</string>
+    
     <string name="viewpager_section_start">我的人海</string>
     <string name="viewpager_section_topics">我的话题</string>
     <string name="viewpager_section_impressions">我的印象</string>

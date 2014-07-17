@@ -46,6 +46,11 @@
         </activity>
         
         <activity
+            android:name="com.simplelife.renhai.android.RenHaiIntroduceActivity"
+            android:theme="@style/ActionBarWithOnlyTitleTheme">
+        </activity>
+        
+        <activity
             android:name="com.simplelife.renhai.android.RenHaiMainPageActivity"
             android:theme="@style/Theme.Actionbarwithtabstheme">                       
         </activity>
