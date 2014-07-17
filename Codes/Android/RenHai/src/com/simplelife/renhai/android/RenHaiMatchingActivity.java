@@ -175,7 +175,9 @@ public class RenHaiMatchingActivity extends Activity{
         mActionBarTitle = (TextView) mActionBar.getCustomView().findViewById(R.id.mainpage_title);        
         mHomeIcon = findViewById(android.R.id.home); 
 		((View) mHomeIcon.getParent()).setVisibility(View.GONE); 
-		mActionBarTitle.setText(getString(R.string.matching_matchcondition) + BusinessSessionInfo.MatchedCondition.getMatchLabelName());
+		mActionBarTitle.setText( getString(R.string.matching_matchconditionpart1) 
+				               + BusinessSessionInfo.MatchedCondition.getMatchLabelName()
+				               + getString(R.string.matching_matchconditionpart2));
     	mActionBarTitle.setTextSize(16);
         //setProgressBarIndeterminateVisibility(true);
     }

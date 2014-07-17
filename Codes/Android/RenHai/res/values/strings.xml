@@ -92,7 +92,8 @@
     
     <string name="matching_peerassess">Peer User Assessments</string>
     <string name="matching_peerimpression">Peer User Impressions</string>
-    <string name="matching_matchcondition">Match Based On Label </string>
+    <string name="matching_matchconditionpart1">Match Based On Label </string>
+    <string name="matching_matchconditionpart2"></string>
     <string name="matching_counterstart">20</string>
     <string name="matching_peerstattext">Waiting for peer to confirm&#8230;</string>
     <string name="matching_peerstattextagree">Peer accepted the chat</string>

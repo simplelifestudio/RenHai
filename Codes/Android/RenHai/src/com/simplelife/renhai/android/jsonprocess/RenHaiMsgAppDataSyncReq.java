@@ -155,7 +155,7 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 						JSONObject tIntCardLabelMap = new JSONObject();
 						tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBINTLABELID, JSONNULL);
 						tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBMTCHCOUNT, JSONNULL);
-						tIntCardLabelMap.put(MSG_APPSYNCREQ_LABELORDER, i+1);
+						tIntCardLabelMap.put(MSG_APPSYNCREQ_LABELORDER, tIntLabelMap.getLabelOrder());
 						tIntCardLabelMap.put(MSG_APPSYNCREQ_MATCHCOUNT, JSONNULL);
 						tIntCardLabelMap.put(MSG_APPSYNCREQ_VALIDFLAG, JSONNULL);
 						tIntCardLabelMap.put(MSG_APPSYNCREQ_INTLABELNAME, tIntLabelMap.getIntLabelName());
@@ -296,7 +296,7 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 						JSONObject tIntCardLabelMap = new JSONObject();
 						tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBINTLABELID, JSONNULL);
 						tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBMTCHCOUNT, JSONNULL);
-						tIntCardLabelMap.put(MSG_APPSYNCREQ_LABELORDER, JSONNULL);
+						tIntCardLabelMap.put(MSG_APPSYNCREQ_LABELORDER, tIntLabelMap.getLabelOrder());
 						tIntCardLabelMap.put(MSG_APPSYNCREQ_MATCHCOUNT, JSONNULL);
 						tIntCardLabelMap.put(MSG_APPSYNCREQ_VALIDFLAG, JSONNULL);
 						tIntCardLabelMap.put(MSG_APPSYNCREQ_INTLABELNAME, tIntLabelMap.getIntLabelName());

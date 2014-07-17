@@ -90,7 +90,8 @@
     
     <string name="matching_peerassess">对方获得的评价</string>
     <string name="matching_peerimpression">对方获得的印象</string>
-    <string name="matching_matchcondition">根据标签 </string>
+    <string name="matching_matchconditionpart1">根据标签"</string>
+    <string name="matching_matchconditionpart2">"找到对方</string>
     <string name="matching_counterstart">20</string>
     <string name="matching_peerstattext">等待对方确认&#8230;</string>
     <string name="matching_peerstattextagree">对方已经接受</string>

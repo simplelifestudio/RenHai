@@ -287,6 +287,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
 			            	String tInput = tEditText.getText().toString();
 			            	InterestLabelMap tIntLabelMap = new InterestLabelMap();
 			            	tIntLabelMap.setIntLabelName(tInput);
+			            	tIntLabelMap.setLabelOrder(RenHaiInfo.InterestLabel.getMyIntLabelNum());
 			            	RenHaiInfo.InterestLabel.putMyIntLabel(tIntLabelMap);
 			            	Message t_MsgListData = new Message();
 			            	if (true == _isForFirstTime)

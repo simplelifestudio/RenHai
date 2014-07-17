@@ -437,7 +437,7 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         	    		// Re-get the websocket handle in case the handle is changed
             	    	mActionBarTitle.setText(R.string.mainpage_title_syncserver);
             	    	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
-            	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructMsg().toString();
+            	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructQueryMsg().toString();
             	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
         	    	}        	    	
         	        break;
