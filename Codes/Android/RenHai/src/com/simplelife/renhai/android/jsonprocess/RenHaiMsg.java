@@ -17,6 +17,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
+import com.simplelife.renhai.android.data.BusinessSessionInfo;
 import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.timeprocess.RenHaiTimeProcess;
 import com.simplelife.renhai.android.utils.RenHaiUtilSeqGenerator;
@@ -42,16 +43,24 @@ public class RenHaiMsg {
 	
 	public static JSONObject constructMsgHeader(int _msgType, int _msgId){
 		JSONObject tMsgHeader = new JSONObject();
+		String tMsgSn = "";
 		
 		RenHaiTimeProcess tTimeHandle = RenHaiTimeProcess.getTimeProcessHandle();
 		String tCurrentTime = tTimeHandle.getCurrentTime();
 		
-		// Generate the random sequence and store for further verification
-		mRandomSeq = RenHaiUtilSeqGenerator.genRandomSeq(LENGTH_OF_MESSAGESN);
+		if (  (_msgType == RenHaiDefinitions.RENHAI_MSGTYPE_APPREQUEST)
+		   || (_msgType == RenHaiDefinitions.RENHAI_MSGTYPE_PROXYREQUEST))
+		{
+			// Generate the random sequence and store for further verification
+			mRandomSeq = RenHaiUtilSeqGenerator.genRandomSeq(LENGTH_OF_MESSAGESN);
+			tMsgSn = mRandomSeq;
+		}else{
+			tMsgSn = BusinessSessionInfo.getMsgSn();
+		}		
 		
 		try {
 			tMsgHeader.put(MSG_HEADER_TYPE, _msgType);
-			tMsgHeader.put(MSG_HEADER_SN, mRandomSeq);
+			tMsgHeader.put(MSG_HEADER_SN, tMsgSn);
 			tMsgHeader.put(MSG_HEADER_ID, _msgId);
 			tMsgHeader.put(MSG_HEADER_DEVID, (true == RenHaiInfo.isAppDataSyncronized())
 					                         ? RenHaiInfo.getDeviceId()
@@ -95,15 +104,36 @@ public class RenHaiMsg {
 		try {
 			JSONObject tMsgInJson = new JSONObject(tMsgContentAfterDecode);
 			tMsgHeader = tMsgInJson.getJSONObject(MSG_HEADER);
-			if (tMsgHeader.has(MSG_HEADER_TYPE))
-			    tMsgType  = tMsgHeader.getInt(MSG_HEADER_TYPE);			
-			if(tMsgHeader.has(MSG_HEADER_ID))
-			    tMsgId    = tMsgHeader.getInt(MSG_HEADER_ID);
+			
 			if(tMsgHeader.has(MSG_HEADER_DEVID))
 			{
+				// TODO: Do we need to verify the device id to make sure the msg is correct?
 				tDeviceId = tMsgHeader.getInt(MSG_HEADER_DEVID);
 				RenHaiInfo.storeDeviceId(tDeviceId);
 			}
+			
+			// Verify device sn
+			if(tMsgHeader.has(MSG_HEADER_DEVSN))
+			{
+				tDeviceSn = tMsgHeader.getString(MSG_HEADER_DEVSN);
+				if(!tDeviceSn.equals(RenHaiInfo.getDeviceSn()))
+				{
+			        mlog.warn("Receive message with unmatch device SN, received device SN: "+tDeviceSn+", my SN: "+RenHaiInfo.getDeviceSn());
+					Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
+			        		         RenHaiDefinitions.RENHAI_NETWORK_MSS_UNMATCHDEVICESN);
+			        _context.sendBroadcast(tIntent);			        
+			        return RenHaiDefinitions.RENHAI_FUNC_STATUS_ERROR;
+				}
+			}
+			
+			if (tMsgHeader.has(MSG_HEADER_TYPE))
+			    tMsgType  = tMsgHeader.getInt(MSG_HEADER_TYPE);				
+					
+			if(tMsgHeader.has(MSG_HEADER_ID))
+			    tMsgId    = tMsgHeader.getInt(MSG_HEADER_ID);
+
+			// TODO: find a way to process the time
 			if(tMsgHeader.has(MSG_HEADER_TIME))
 			{
 				tTimestmp = tMsgHeader.getString(MSG_HEADER_TIME);
@@ -113,39 +143,29 @@ public class RenHaiMsg {
 				}
 			}
 			
-			if ( (tMsgType  == RenHaiDefinitions.RENHAI_MSGTYPE_SERVERRESPONSE)
-               || (tMsgType == RenHaiDefinitions.RENHAI_MSGTYPE_PROXYRESPONSE))
+			// Verify the message SN
+			if(tMsgHeader.has(MSG_HEADER_SN))
 			{
-				if(tMsgHeader.has(MSG_HEADER_SN))
-				{
-				    tMsgSn = tMsgHeader.getString(MSG_HEADER_SN);
-				    if(!tMsgSn.equals(mRandomSeq))
+			    tMsgSn = tMsgHeader.getString(MSG_HEADER_SN);
+			    
+			    if (  (tMsgType == RenHaiDefinitions.RENHAI_MSGTYPE_SERVERRESPONSE)
+			       || (tMsgType == RenHaiDefinitions.RENHAI_MSGTYPE_PROXYRESPONSE))
+			    {
+			    	if(!tMsgSn.equals(mRandomSeq))
 				    {
-			            Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+			    		mlog.warn("Receive message with unmatch message SN, received message SN: "+tMsgSn+", my SN: "+mRandomSeq);
+			    		Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 			            tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
 			        		             RenHaiDefinitions.RENHAI_NETWORK_MSS_UNMATCHMSGSN);
 			            _context.sendBroadcast(tIntent);			        
 			            return RenHaiDefinitions.RENHAI_FUNC_STATUS_ERROR;
 				    }
-				}
-				if(tMsgHeader.has(MSG_HEADER_DEVSN))
-				{
-					tDeviceSn = tMsgHeader.getString(MSG_HEADER_DEVSN);
-					if(!tDeviceSn.equals(RenHaiInfo.getDeviceSn()))
-					{
-				        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
-				        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
-				        		         RenHaiDefinitions.RENHAI_NETWORK_MSS_UNMATCHDEVICESN);
-				        _context.sendBroadcast(tIntent);			        
-				        return RenHaiDefinitions.RENHAI_FUNC_STATUS_ERROR;
-					}
-				}
-			}else if(tMsgType == RenHaiDefinitions.RENHAI_MSGTYPE_SERVERNOTIFICATION){
-				mlog.info("Receive server business session notification!");
-				
-			}else{
-				mlog.warn("Receive message from server with unknow type!");
-				return RenHaiDefinitions.RENHAI_FUNC_STATUS_ERROR;
+			    }
+			    else
+			    {
+			    	BusinessSessionInfo.setMsgSn(tMsgSn);
+			    }
+			    
 			}
 				
 			// Continue process the message body

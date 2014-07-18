@@ -13,6 +13,7 @@ import com.simplelife.renhai.android.RenHaiDefinitions;
 public class BusinessSessionInfo {
 	public static String mBusinessSessionId = null;
 	public static int mBusinessType = RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST;
+	public static String mNotifMsgSn = null;
 	
 	public static void setBusinessSessionId(String _id){
 		mBusinessSessionId = _id;
@@ -26,8 +27,16 @@ public class BusinessSessionInfo {
 		mBusinessType = _type;
 	}
 	
+	public static void setMsgSn(String _sn){
+		mNotifMsgSn = _sn;
+	}
+	
 	public static int getBusinessType(){
 		return mBusinessType;
+	}
+	
+	public static String getMsgSn(){
+		return mNotifMsgSn;
 	}
 	
 	public static class MatchedCondition {
