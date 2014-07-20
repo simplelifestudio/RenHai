@@ -60,7 +60,7 @@ public class RenHaiDefinitions {
 	public static final int RENHAI_NETWORK_HTTP_COMM_ERROR  = 1101;
 	public static final int RENHAI_NETWORK_WEBSOCKET_CREATE_SUCCESS = 1102;
 	public static final int RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR   = 1103;
-	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_MSG    = 1104;
+	public static final int RENHAI_NETWORK_WEBSOCKET_DISCONNECT     = 1104; // TODO:remove
 	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_ALOHARESP = 1105;
 	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP = 1106;
 	public static final int RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP = 1107;
@@ -138,6 +138,20 @@ public class RenHaiDefinitions {
 	public static final int RENHAI_SERVERNOTIF_TYPE_OTHERSIDELOST = 4;
 	public static final int RENHAI_SERVERNOTIF_TYPE_OTHERSIDEENDCHAT = 5;
 	public static final int RENHAI_SERVERNOTIF_TYPE_OTHERSIDECHATMESSAGE = 6;
+	
+	// ===============================================================================
+	// Server business notification type
+	// ===============================================================================	
+	public enum RenHaiAppState{
+		DISCONNECTED,
+		CONNECTED,
+		APPDATASYNCED,
+		BUSINESSCHOOSED,
+		MATCHSTARTED,
+		SESSIONBOUNDACKED,
+		CHATALLAGREED,
+		CHATENDED		
+	}
 	
 
 }

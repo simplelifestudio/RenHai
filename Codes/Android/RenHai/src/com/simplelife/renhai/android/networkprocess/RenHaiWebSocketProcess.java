@@ -75,9 +75,11 @@ public class RenHaiWebSocketProcess {
 
 			    @Override
 			    public void onDisconnect(int code, String reason) {
-			        Log.d(TAG, String.format("Disconnected! Code: %d Reason: %s", code, reason));
-			        // Reconnect the network
-			        mWebsocketClient.connect();
+			        Log.d(TAG, String.format("Disconnected! Code: %d Reason: %s", code, reason));			        
+			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
+			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
+			        		        RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_DISCONNECT);
+			        mContext.sendBroadcast(tIntent);
 			    }
 
 			    @Override

@@ -27,14 +27,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -58,20 +55,17 @@ import org.json.JSONException;
 import android.os.Environment;
 import de.mindpipe.android.logging.log4j.LogConfigurator;
 
-public class RenHaiSplashActivity extends Activity {
+public class RenHaiSplashActivity extends RenHaiBaseActivity {
 	
 	private SharedPreferences mSharedPrefs;
 	
 	private final static Logger mlog = Logger.getLogger(RenHaiSplashActivity.class);
 	private static RenHaiProgressBar mProgressBar;
 	private static TextView mProgressText;
-	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	
 	private static final int BACKGROUND_PROCESS_TYPE_INITIAL = 1;
 	private static final int BACKGROUND_PROCESS_TYPE_RECONNECT = 2;
-	private static final int BACKGROUND_PROCESS_TYPE_SENDALOHA = 3;
-	
-	private static final int SPLASH_MSG_NETWORKCONNTIMEOUT = 1001;
+	private static final int SPLASH_MSG_NETWORKCONNTIMEOUT = 2001;
 		
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,12 +90,7 @@ public class RenHaiSplashActivity extends Activity {
 		
 		// Configure fade in and fade out
 		AlphaAnimation fadeShow = new AlphaAnimation(0.3f,1.0f);
-		fadeShow.setDuration(2500);	
-		
-		// Register the broadcast receiver
-		IntentFilter tFilter = new IntentFilter();
-		tFilter.addAction(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
-		registerReceiver(mBroadcastRcver, tFilter); 
+		fadeShow.setDuration(2800);	
 		
 		// Start a background task to process the network communication
         MessageSendingTask tMsgSender = new MessageSendingTask();
@@ -126,123 +115,27 @@ public class RenHaiSplashActivity extends Activity {
 			public void onAnimationStart(Animation animation) {}			
 		});        
 	}
-
-    private BroadcastReceiver mBroadcastRcver = new BroadcastReceiver() { 
-        @Override 
-        public void onReceive(Context context, Intent intent) { 
-
-            String action = intent.getAction(); 
-            if(action.equals(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG)){
-            	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
-            	
-            	switch (tMsgType) {
-            	case RenHaiDefinitions.RENHAI_NETWORK_HTTP_COMM_SUCESS:
-            	{
-            		mlog.info("Proxy communicate success!");
-            		mProgressText.setText(R.string.mainpage_title_connectserver);
-            		break;
-            	}
-            	case RenHaiDefinitions.RENHAI_NETWORK_HTTP_COMM_ERROR:
-            	{
-            		onHttpConnectFailed();
-            		mlog.error("Failed to communicate with server proxy, http status code: "
-            		          +intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_HTTPRESPSTATUS, 0));
-            		break;            		
-            	}
-        	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_SUCCESS:
-        	    {
-        	    	mlog.info("Websocket create success!");
-        	    	mProgressText.setText(R.string.mainpage_title_connectserver);
-        	    	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());       	    	
-                	String tAlohaRequestMsg = RenHaiMsgAlohaReq.constructMsg().toString();
-                	mWebSocketHandle.sendMessage(tAlohaRequestMsg);
-                	mNetConnTimer.startTimer();
-        	        break;
-        	    }       	        
-        	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR:
-        	    {
-        	    	mlog.info("Websocket error, error info: "+
-        	                   intent.getStringExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_SOCKETERROR));
-        	    	// Make a toast here to let the user to determine to enter the app offline or exit
-        	    	break;
-        	    }
-        	    
-        	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_MSG:
-        	    {
-        	    	mlog.info("Websocket receive message!");
-        	    	mProgressText.setText(R.string.mainpage_title_syncserver);
-        	    	break;
-        	    }
-        	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_ALOHARESP:
-        	    {
-        	    	mNetConnTimer.stopTimer();
-        	    	mProgressText.setText(R.string.mainpage_title_syncserver);
-        	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructQueryMsg().toString();
-        	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
-        	    	mNetConnTimer.startTimer();
-        	    	break;
-        	    }
-        	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP:
-        	    {
-        	    	mNetConnTimer.stopTimer();
-        	    	mProgressText.setText(R.string.mainpage_title_updateinfo);
-        	    	String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();
-        	    	mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
-        	    	mNetConnTimer.startTimer();
-        	    	break;
-        	    }
-        	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP:
-        	    {
-        	    	mNetConnTimer.stopTimer();
-        	    	redirectTo();
-        	    	break;
-        	    }
-        	    case RenHaiDefinitions.RENHAI_NETWORK_MSS_UNMATCHMSGSN:
-        	    {
-        	    	mlog.error("Receive message with unmatch msgsn!");
-        	    	break;
-        	    }
-        	    case RenHaiDefinitions.RENHAI_NETWORK_MSS_UNMATCHDEVICESN:
-        	    {
-        	    	mlog.error("Receive message with unmatch devicesn!");
-        	    	break;
-        	    }
-        	}
-            	
-            }
-        } 
-    }; 
-    
-    @Override
-    protected void onDestroy() {  
-        super.onDestroy();  
-        unregisterReceiver(mBroadcastRcver);  
-    }  			
 	
 	private void redirectTo(){       
 		Intent intent;
-		/*
-		if(isFirstStart())*/
+		if(isFirstStart())
 		{
 			updateFirstStartFlag(false);
 			intent = new Intent(this, RenHaiProtocalActivity.class);			
-			//intent = new Intent(this, RenHaiLoadingActivity.class);
 		    Bundle bundle = new Bundle();
 		    bundle.putString("caller", "RenHaiSplashActivity");
 		    intent.putExtras(bundle);
 		}
-		/*else*/
+		else
 		{
-
-			//intent = new Intent(this, RenHaiMainPageActivity.class);			
+			intent = new Intent(this, RenHaiMainPageActivity.class);			
 		}		
 				
 		startActivity(intent);
 		finish();
 	}
 	
-    private boolean isFirstStart(){
-    	
+    private boolean isFirstStart(){   	
     	// Retrieve the seeds info status by date via the shared preference file
     	return mSharedPrefs.getBoolean("isfirststart",true);    	
     }
@@ -276,8 +169,8 @@ public class RenHaiSplashActivity extends Activity {
     	RenHaiInfo.storeDeviceSn(tDeviceSn);
     	
     	// 2.Get and store the device model
-    	Build tBd = new Build();
-    	String tModel = tBd.MODEL;
+    	//Build tBd = new Build();
+    	String tModel = Build.MODEL;
     	RenHaiInfo.DeviceCard.storeDeviceModel(tModel);
     	
     	// 3.Get and store the os version
@@ -374,32 +267,24 @@ public class RenHaiSplashActivity extends Activity {
         }
 
         // This is called when doInBackground() is finished
-        protected void onPostExecute(Long result) {
+        @SuppressWarnings("unused")
+		protected void onPostExecute(Long result) {
             
         }
     }
     
-    ///////////////////////////////////////////////////////////////////////
-    // Private message Processing
-    ///////////////////////////////////////////////////////////////////////
-	private Handler handler = new Handler(){  		  
-        @Override  
-        public void handleMessage(Message msg) {          	
-        	switch (msg.what) {
-        	    case SPLASH_MSG_NETWORKCONNTIMEOUT:
-        	    {
-        	    	onNetworkConnectionTimeOut();       	    	
-        	    	break;
-        	    }
-        	
-        	}
-        }
-	};
- 
-    ///////////////////////////////////////////////////////////////////////
-    // Exception Processing
-    ///////////////////////////////////////////////////////////////////////
-    private void onHttpConnectFailed(){
+	///////////////////////////////////////////////////////////////////////
+	// Network message Processing
+	/////////////////////////////////////////////////////////////////////// 	
+    @Override
+    protected void onHttpCommSuccess() {
+    	super.onHttpCommSuccess();
+		mProgressText.setText(R.string.mainpage_title_connectserver);
+	}
+	
+    @Override
+	protected void onHttpConnectFailed() {
+    	super.onHttpConnectFailed();
     	AlertDialog.Builder builder = new Builder(this);
     	builder.setTitle(R.string.splash_httpfailed_dialogtitle);
     	builder.setMessage(R.string.splash_httpfailed_dialogmsg);
@@ -425,7 +310,59 @@ public class RenHaiSplashActivity extends Activity {
 
 		builder.create().show();    	
     }
+	
+    @Override
+	protected void onWebSocketCreateSuccess() {
+    	super.onWebSocketCreateSuccess();
+    	mProgressText.setText(R.string.mainpage_title_syncserver);
+    	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());  
+    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructQueryMsg().toString();
+    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
+    	mNetConnTimer.startTimer();
+	}
+	
+    @Override
+	protected void onWebSocketCreateError() {
+    	super.onWebSocketCreateError();
+		// TODO:Make a toast here to let the user to determine to enter the app offline or exit
+	}	
+	
+    @Override
+	protected void onReceiveAppSyncResp() {
+    	super.onReceiveAppSyncResp();
+		mNetConnTimer.stopTimer();
+    	mProgressText.setText(R.string.mainpage_title_updateinfo);
+    	String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();
+    	mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
+    	mNetConnTimer.startTimer();
+	}
+	
+    @Override
+	protected void onReceiveServerSyncResp() {
+    	super.onReceiveServerSyncResp();
+		mNetConnTimer.stopTimer();
+    	redirectTo();
+	}
     
+    ///////////////////////////////////////////////////////////////////////
+    // Private message Processing
+    ///////////////////////////////////////////////////////////////////////
+	private Handler handler = new Handler(){  		  
+        @Override  
+        public void handleMessage(Message msg) {          	
+        	switch (msg.what) {
+        	    case SPLASH_MSG_NETWORKCONNTIMEOUT:
+        	    {
+        	    	onNetworkConnectionTimeOut();       	    	
+        	    	break;
+        	    }       	
+        	}
+        }
+	};
+ 
+    ///////////////////////////////////////////////////////////////////////
+    // Exception Processing
+    ///////////////////////////////////////////////////////////////////////        
     private void onNetworkConnectionTimeOut(){
     	AlertDialog.Builder builder = new Builder(this);
     	builder.setTitle(R.string.splash_conntimeout_dialogtitle);
@@ -452,9 +389,7 @@ public class RenHaiSplashActivity extends Activity {
 		});
 
 		builder.create().show();    	
-    }
-    
-    
+    }        
     
     ///////////////////////////////////////////////////////////////////////
     // Timer Callbacks
@@ -467,8 +402,6 @@ public class RenHaiSplashActivity extends Activity {
         	handler.sendMessage(t_MsgListData);	       	
         }
         
-    });
+    });    
     
-    
-
 }

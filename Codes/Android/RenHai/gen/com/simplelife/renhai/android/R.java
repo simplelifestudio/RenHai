@@ -553,7 +553,7 @@ public final class R {
         public static final int video_publish_bg=0x7f02003e;
     }
     public static final class id {
-        public static final int action_settings=0x7f090072;
+        public static final int action_settings=0x7f090073;
         public static final int archiving=0x7f090063;
         public static final int assess_btndisgust=0x7f090004;
         public static final int assess_btnhappy=0x7f090002;
@@ -578,6 +578,7 @@ public final class R {
         public static final int fragment_pub_container=0x7f09003e;
         public static final int fragment_pub_status_container=0x7f09003f;
         public static final int fragment_sub_container=0x7f09003d;
+        public static final int frame_titlebar_text=0x7f090071;
         public static final int img_iv=0x7f090013;
         public static final int intro_page0=0x7f090010;
         public static final int intro_page1=0x7f090011;
@@ -611,7 +612,7 @@ public final class R {
         public static final int matching_peerstat=0x7f09002b;
         public static final int matching_title1=0x7f090020;
         public static final int matching_title2=0x7f090023;
-        public static final int menu_settings=0x7f090071;
+        public static final int menu_settings=0x7f090072;
         public static final int mutePublisher=0x7f09005d;
         public static final int muteSubscriber=0x7f09006a;
         public static final int myimpression_divide=0x7f090044;
@@ -689,6 +690,7 @@ public final class R {
         public static final int fragment_video_pub_control=0x7f030010;
         public static final int fragment_video_pub_status=0x7f030011;
         public static final int fragment_video_sub_control=0x7f030012;
+        public static final int framelayout_titlebar=0x7f030013;
     }
     public static final class menu {
         public static final int menu_videotalk=0x7f080000;
