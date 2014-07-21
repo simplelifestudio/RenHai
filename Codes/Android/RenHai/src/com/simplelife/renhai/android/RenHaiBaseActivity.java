@@ -11,6 +11,7 @@ package com.simplelife.renhai.android;
 import org.apache.log4j.Logger;
 
 import com.simplelife.renhai.android.RenHaiDefinitions.RenHaiAppState;
+import com.simplelife.renhai.android.data.AppStateMgr;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 
 import android.content.BroadcastReceiver;
@@ -20,9 +21,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-public abstract class RenHaiBaseActivity extends FragmentActivity {
-	
-	protected RenHaiAppState mAppState = RenHaiAppState.DISCONNECTED;
+public abstract class RenHaiBaseActivity extends FragmentActivity {		
 	protected final Logger mlog = Logger.getLogger(RenHaiBaseActivity.class);
 	protected RenHaiWebSocketProcess mWebSocketHandle = null;
 	
@@ -40,18 +39,7 @@ public abstract class RenHaiBaseActivity extends FragmentActivity {
     protected void onDestroy() {  
         super.onDestroy();  
         unregisterReceiver(mBroadcastRcver);  
-    }
-	
-	///////////////////////////////////////////////////////////////////////
-	// State management
-	///////////////////////////////////////////////////////////////////////
-	protected void setMyAppStatus(RenHaiAppState _state) {
-		mAppState = _state;
-	}
-	
-	protected RenHaiAppState getMyAppStatus() {
-		return mAppState;
-	}			
+    }			
 	
 	///////////////////////////////////////////////////////////////////////
 	// Network message Processing
@@ -63,78 +51,79 @@ public abstract class RenHaiBaseActivity extends FragmentActivity {
 	}
 	
 	protected void onWebSocketCreateError() {
+		AppStateMgr.setMyAppStatus(RenHaiAppState.DISCONNECTED);
 	}
 	
 	protected void onWebSocketCreateSuccess() {
-		if(getMyAppStatus() == RenHaiAppState.DISCONNECTED)
+		if(AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED)
 		{
 			mlog.info("App State transit to Connected from DisConnected.");
-			setMyAppStatus(RenHaiAppState.CONNECTED);
-		}else if((getMyAppStatus() == RenHaiAppState.CONNECTED)
-				||(getMyAppStatus() == RenHaiAppState.APPDATASYNCED)){				
-			mlog.info("WebSocket connected under state: "+getMyAppStatus());
+			AppStateMgr.setMyAppStatus(RenHaiAppState.CONNECTED);
+		}else if((AppStateMgr.getMyAppStatus() == RenHaiAppState.CONNECTED)
+				||(AppStateMgr.getMyAppStatus() == RenHaiAppState.APPDATASYNCED)){				
+			mlog.info("WebSocket connected under state: "+AppStateMgr.getMyAppStatus());
 		}else{
-			mlog.error("WebSocket unexpected connected under state: "+getMyAppStatus());
+			mlog.error("WebSocket unexpected connected under state: "+AppStateMgr.getMyAppStatus());
 		}
 	}
 	
 	protected void onWebSocketDisconnect() {
-		setMyAppStatus(RenHaiAppState.DISCONNECTED);
+		AppStateMgr.setMyAppStatus(RenHaiAppState.DISCONNECTED);
 	}
 	
 	protected void onReceiveAlohaResp() {
 	}
 	
 	protected void onReceiveAppSyncResp() {
-		if(getMyAppStatus() == RenHaiAppState.CONNECTED)
+		if(AppStateMgr.getMyAppStatus() == RenHaiAppState.CONNECTED)
 		{	
 			mlog.info("App State transit to AppDataSynced from Connected.");
-			setMyAppStatus(RenHaiAppState.APPDATASYNCED);
-		}else if((getMyAppStatus() == RenHaiAppState.DISCONNECTED)
-				||(getMyAppStatus() == RenHaiAppState.APPDATASYNCED)){				
+			AppStateMgr.setMyAppStatus(RenHaiAppState.APPDATASYNCED);
+		}else if((AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED)
+				||(AppStateMgr.getMyAppStatus() == RenHaiAppState.APPDATASYNCED)){				
 			// Ignore the state
 		}else{
-			mlog.error("Unexpected AppDataSyncResp received under state:"+getMyAppStatus());
+			mlog.error("Unexpected AppDataSyncResp received under state:"+AppStateMgr.getMyAppStatus());
 		}
 	}
 	
 	protected void onReceiveServerSyncResp() {
-		if( (getMyAppStatus() == RenHaiAppState.CONNECTED)
-		  ||(getMyAppStatus() == RenHaiAppState.DISCONNECTED)
-		  ||(getMyAppStatus() == RenHaiAppState.APPDATASYNCED))
+		if( (AppStateMgr.getMyAppStatus() == RenHaiAppState.CONNECTED)
+		  ||(AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED)
+		  ||(AppStateMgr.getMyAppStatus() == RenHaiAppState.APPDATASYNCED))
 		{
 			// Ignore the state
 		}else{
-			mlog.error("Unexpected AppDataSyncResp received under state:"+getMyAppStatus());
+			mlog.error("Unexpected AppDataSyncResp received under state:"+AppStateMgr.getMyAppStatus());
 		}
 		
 	}
 	
 	protected void onReceiveBSRespEnterPool() {
-		if(getMyAppStatus() == RenHaiAppState.APPDATASYNCED)
+		if(AppStateMgr.getMyAppStatus() == RenHaiAppState.APPDATASYNCED)
 		{	
 			mlog.info("App State transit to BusinessChoosed from AppDataSynced.");
-			setMyAppStatus(RenHaiAppState.BUSINESSCHOOSED);
-		}else if((getMyAppStatus() == RenHaiAppState.DISCONNECTED)
-				||(getMyAppStatus() == RenHaiAppState.CHATENDED)
-				||(getMyAppStatus() == RenHaiAppState.MATCHSTARTED)){				
+			AppStateMgr.setMyAppStatus(RenHaiAppState.BUSINESSCHOOSED);
+		}else if((AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED)
+				||(AppStateMgr.getMyAppStatus() == RenHaiAppState.CHATENDED)
+				||(AppStateMgr.getMyAppStatus() == RenHaiAppState.MATCHSTARTED)){				
 			// Ignore the state
 		}else{
-			mlog.error("Unexpected EnterPoolResp received under state:"+getMyAppStatus());
+			mlog.error("Unexpected EnterPoolResp received under state:"+AppStateMgr.getMyAppStatus());
 		}
 	}
 	
 	protected void onReceiveBSRespLeavePool() {
-		if( (getMyAppStatus() == RenHaiAppState.BUSINESSCHOOSED)
-		  ||(getMyAppStatus() == RenHaiAppState.MATCHSTARTED)
-		  ||(getMyAppStatus() == RenHaiAppState.SESSIONBOUNDACKED))
+		if( (AppStateMgr.getMyAppStatus() == RenHaiAppState.BUSINESSCHOOSED)
+		  ||(AppStateMgr.getMyAppStatus() == RenHaiAppState.MATCHSTARTED)
+		  ||(AppStateMgr.getMyAppStatus() == RenHaiAppState.SESSIONBOUNDACKED))
 		{
-			mlog.info("App State transit to AppDataSynced from "+getMyAppStatus());
-			setMyAppStatus(RenHaiAppState.BUSINESSCHOOSED);
-		}else if(getMyAppStatus() == RenHaiAppState.DISCONNECTED){				
+			mlog.info("App State transit to AppDataSynced from "+AppStateMgr.getMyAppStatus());
+			AppStateMgr.setMyAppStatus(RenHaiAppState.BUSINESSCHOOSED);
+		}else if(AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED){				
 			// Ignore the state
 		}else{
-			mlog.error("Unexpected LeavePoolResp received under state:"+getMyAppStatus());
+			mlog.error("Unexpected LeavePoolResp received under state:"+AppStateMgr.getMyAppStatus());
 		}
 	}
 	
@@ -143,50 +132,50 @@ public abstract class RenHaiBaseActivity extends FragmentActivity {
 	}
 	
 	protected void onReceiveBSRespRejectChat() {
-		if(getMyAppStatus() == RenHaiAppState.SESSIONBOUNDACKED)
+		if(AppStateMgr.getMyAppStatus() == RenHaiAppState.SESSIONBOUNDACKED)
 		{	
 			mlog.info("App State transit to BusinessSession from SessionBoundAcked.");
-			setMyAppStatus(RenHaiAppState.BUSINESSCHOOSED);
-		}else if(getMyAppStatus() == RenHaiAppState.DISCONNECTED){				
+			AppStateMgr.setMyAppStatus(RenHaiAppState.BUSINESSCHOOSED);
+		}else if(AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED){				
 			// Ignore the state
 		}else{
-			mlog.error("Unexpected RejectChatResp received under state:"+getMyAppStatus());
+			mlog.error("Unexpected RejectChatResp received under state:"+AppStateMgr.getMyAppStatus());
 		}
 	}
 	
 	protected void onReceiveBSRespEndChat() {
-		if(getMyAppStatus() == RenHaiAppState.CHATALLAGREED)
+		if(AppStateMgr.getMyAppStatus() == RenHaiAppState.CHATALLAGREED)
 		{	
 			mlog.info("App State transit to ChatEnded from ChatAllAgreed.");
-			setMyAppStatus(RenHaiAppState.CHATENDED);
-		}else if(getMyAppStatus() == RenHaiAppState.DISCONNECTED){				
+			AppStateMgr.setMyAppStatus(RenHaiAppState.CHATENDED);
+		}else if(AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED){				
 			// Ignore the state
 		}else{
-			mlog.error("Unexpected EndChatResp received under state:"+getMyAppStatus());
+			mlog.error("Unexpected EndChatResp received under state:"+AppStateMgr.getMyAppStatus());
 		}
 	}
 	
 	protected void onReceiveBSRespAssAndCont() {
-		if(getMyAppStatus() == RenHaiAppState.CHATENDED)
+		if(AppStateMgr.getMyAppStatus() == RenHaiAppState.CHATENDED)
 		{	
 			mlog.info("App State transit to BusinessChoosed from ChatEnded.");
-			setMyAppStatus(RenHaiAppState.BUSINESSCHOOSED);
-		}else if(getMyAppStatus() == RenHaiAppState.DISCONNECTED){				
+			AppStateMgr.setMyAppStatus(RenHaiAppState.BUSINESSCHOOSED);
+		}else if(AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED){				
 			// Ignore the state
 		}else{
-			mlog.error("Unexpected AssAndChatResp received under state:"+getMyAppStatus());
+			mlog.error("Unexpected AssAndChatResp received under state:"+AppStateMgr.getMyAppStatus());
 		}
 	}
 	
 	protected void onReceiveBSRespAssAndQuit() {
-		if(getMyAppStatus() == RenHaiAppState.CHATENDED)
+		if(AppStateMgr.getMyAppStatus() == RenHaiAppState.CHATENDED)
 		{	
 			mlog.info("App State transit to AppDataSynced from ChatEnded.");
-			setMyAppStatus(RenHaiAppState.APPDATASYNCED);
-		}else if(getMyAppStatus() == RenHaiAppState.DISCONNECTED){				
+			AppStateMgr.setMyAppStatus(RenHaiAppState.APPDATASYNCED);
+		}else if(AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED){				
 			// Ignore the state
 		}else{
-			mlog.error("Unexpected AssAndQuitResp received under state:"+getMyAppStatus());
+			mlog.error("Unexpected AssAndQuitResp received under state:"+AppStateMgr.getMyAppStatus());
 		}
 	}
 	
@@ -195,17 +184,17 @@ public abstract class RenHaiBaseActivity extends FragmentActivity {
 	}
 	
 	protected void onReceiveBSRespMatchStart() {
-		if(getMyAppStatus() == RenHaiAppState.BUSINESSCHOOSED)
+		if(AppStateMgr.getMyAppStatus() == RenHaiAppState.BUSINESSCHOOSED)
 		{	
 			mlog.info("App State transit to MatchStarted from BusinessChoosed.");
-			setMyAppStatus(RenHaiAppState.MATCHSTARTED);
-		}else if((getMyAppStatus() == RenHaiAppState.DISCONNECTED)
-				||(getMyAppStatus() == RenHaiAppState.CHATENDED)
-				||(getMyAppStatus() == RenHaiAppState.APPDATASYNCED)
-				||(getMyAppStatus() == RenHaiAppState.MATCHSTARTED)){				
+			AppStateMgr.setMyAppStatus(RenHaiAppState.MATCHSTARTED);
+		}else if((AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED)
+				||(AppStateMgr.getMyAppStatus() == RenHaiAppState.CHATENDED)
+				||(AppStateMgr.getMyAppStatus() == RenHaiAppState.APPDATASYNCED)
+				||(AppStateMgr.getMyAppStatus() == RenHaiAppState.MATCHSTARTED)){				
 			// Ignore the state
 		}else{
-			mlog.error("Unexpected MatchStartResp received under state:"+getMyAppStatus());
+			mlog.error("Unexpected MatchStartResp received under state:"+AppStateMgr.getMyAppStatus());
 		}
 	}
 	
@@ -216,17 +205,17 @@ public abstract class RenHaiBaseActivity extends FragmentActivity {
 	}
 	
 	protected void onReceiveBNSessBinded() {
-		if(getMyAppStatus() == RenHaiAppState.MATCHSTARTED)
+		if(AppStateMgr.getMyAppStatus() == RenHaiAppState.MATCHSTARTED)
 		{	
 			mlog.info("App State transit to MatchStarted from BusinessChoosed.");
-			setMyAppStatus(RenHaiAppState.SESSIONBOUNDACKED);
-		}else if((getMyAppStatus() == RenHaiAppState.DISCONNECTED)
-				||(getMyAppStatus() == RenHaiAppState.CHATENDED)
-				||(getMyAppStatus() == RenHaiAppState.APPDATASYNCED)
-				||(getMyAppStatus() == RenHaiAppState.BUSINESSCHOOSED)){				
+			AppStateMgr.setMyAppStatus(RenHaiAppState.SESSIONBOUNDACKED);
+		}else if((AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED)
+				||(AppStateMgr.getMyAppStatus() == RenHaiAppState.CHATENDED)
+				||(AppStateMgr.getMyAppStatus() == RenHaiAppState.APPDATASYNCED)
+				||(AppStateMgr.getMyAppStatus() == RenHaiAppState.BUSINESSCHOOSED)){				
 			// Ignore the state
 		}else{
-			mlog.error("Unexpected SessionBound received under state:"+getMyAppStatus());
+			mlog.error("Unexpected SessionBound received under state:"+AppStateMgr.getMyAppStatus());
 		}
 	}
 	

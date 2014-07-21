@@ -12,8 +12,6 @@ import java.util.ArrayList;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
 
-import android.content.Context;
-
 public class RenHaiInfo {
 	
 	public static int deviceId = 0;		

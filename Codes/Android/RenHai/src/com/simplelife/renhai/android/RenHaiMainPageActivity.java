@@ -12,6 +12,7 @@ import java.net.URL;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.RenHaiDefinitions.RenHaiAppState;
 import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAlohaReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
@@ -310,64 +311,52 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity implements Action
         }
 	};
     
-    private BroadcastReceiver mBroadcastRcver = new BroadcastReceiver() { 
-        @Override 
-        public void onReceive(Context context, Intent intent) { 
-
-            String action = intent.getAction(); 
-            if(action.equals(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG)){
-            	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
-            	switch (tMsgType) {
-            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR:
-        	    {
-        	    	mlog.error("Websocket error, error info: "+
-        	                   intent.getStringExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_SOCKETERROR));
-        	    	mWebSocketLost = true;
-        	    	//mPingTimer.stopTimer();
-        	    	showActionBarNote(R.string.mainpage_title_connectionlost);
-        	    	onReInitWebSocketDialog();
-        	    	break;
-        	    }
-            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_SUCCESS:
-        	    {
-        	    	mlog.info("Websocket recreate success!");
-        	    	if(mWebSocketLost == true)
-        	    	{
-        	    		// Re-get the websocket handle in case the handle is changed
-            	    	mActionBarTitle.setText(R.string.mainpage_title_syncserver);
-            	    	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
-            	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructQueryMsg().toString();
-            	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
-        	    	}        	    	
-        	        break;
-        	    }
-            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP:
-        	    {
-        	    	if(mWebSocketLost == true)
-        	    	{
-        	    		mActionBarTitle.setText(R.string.mainpage_title_updateinfo);
-            	    	String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();
-            	    	mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
-        	    	}       	    	
-        	    	break;
-        	    }
-            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP:
-        	    {
-        	    	if(mWebSocketLost == true)
-        	    	{
-        	    		mActionBarTitle.setText(R.string.mainpage_title);
-        	    		setProgressBarIndeterminateVisibility(false);
-            	    	mShowConnectedTimer.startTimer();
-            	    	mWebSocketLost = false;
-            	    	//mPingTimer.startRepeatTimer();
-        	    	}        	    	
-        	    	//disableActionBarNote();
-        	    	break;
-        	    }
-            	}            	
-            }
-        } 
-    };
+    ///////////////////////////////////////////////////////////////////////
+    // Network message processing
+    ///////////////////////////////////////////////////////////////////////
+	@Override
+	protected void onWebSocketCreateError() {
+		super.onWebSocketCreateError();
+		mWebSocketLost = true;
+    	showActionBarNote(R.string.mainpage_title_connectionlost);
+    	onReInitWebSocketDialog();
+	}
+	
+	@Override
+	protected void onWebSocketCreateSuccess() {
+		super.onWebSocketCreateSuccess();
+		if(mWebSocketLost == true)
+    	{
+    		// Re-get the websocket handle in case the handle is changed
+	    	mActionBarTitle.setText(R.string.mainpage_title_syncserver);
+	    	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
+	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructQueryMsg().toString();
+	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
+    	}
+	}
+	
+	@Override
+	protected void onReceiveAppSyncResp() {
+		super.onReceiveAppSyncResp();
+		if(mWebSocketLost == true)
+    	{
+    		mActionBarTitle.setText(R.string.mainpage_title_updateinfo);
+	    	String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();
+	    	mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
+    	}
+	}
+	
+	@Override
+	protected void onReceiveServerSyncResp() {
+		super.onReceiveServerSyncResp();
+		if(mWebSocketLost == true)
+    	{
+    		mActionBarTitle.setText(R.string.mainpage_title);
+    		setProgressBarIndeterminateVisibility(false);
+	    	mShowConnectedTimer.startTimer();
+	    	mWebSocketLost = false;
+    	} 
+	}	
     
     ///////////////////////////////////////////////////////////////////////
     // Timer Callbacks
@@ -380,15 +369,6 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity implements Action
         	handler.sendMessage(t_MsgListData);	        	      	
         }
         
-    });
-    
-    RenHaiTimerHelper mPingTimer = new RenHaiTimerHelper(1000, 4000, new RenHaiTimerProcessor() {
-        @Override
-        public void onTimeOut() {
-        	mWebSocketHandle.ping("");        	      	
-        }
-        
-    });
-    
+    });    
     
 }
