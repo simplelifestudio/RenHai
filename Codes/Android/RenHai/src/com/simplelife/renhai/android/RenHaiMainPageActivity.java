@@ -45,7 +45,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class RenHaiMainPageActivity extends FragmentActivity implements ActionBar.TabListener{
+public class RenHaiMainPageActivity extends RenHaiBaseActivity implements ActionBar.TabListener{
 	
 	private final int MAINPAGE_MSG_WEBRECONNECTING = 3000;
 	private final int MAINPAGE_MSG_WEBRECONNECTED  = 3001;
@@ -57,7 +57,6 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 	View mHomeIcon;
 	boolean mWebSocketLost = false;
 	private final Logger mlog = Logger.getLogger(RenHaiMainPageActivity.class);
-	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	private RelativeLayout mServerStatLayout;
 	private TextView mServerStatInfo;
 	private Button mBtnDismissInfo;
@@ -106,15 +105,7 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         }
         mServerStatLayout.setVisibility(View.VISIBLE);
         mServerStatInfo.setText(tServerInfoToShow);
-        mBtnDismissInfo.setOnClickListener(mBtnDismissInfoListener);
-        
-		// Damn work round for the android system bug
-        /*
-        View homeIcon = findViewById(android.R.id.home); 
-		((View) homeIcon.getParent()).setVisibility(View.GONE); */
-		        
-        //RenHaiConnectServer tNetwork = new RenHaiConnectServer();
-        //tNetwork.execute(tServerUrl);
+        mBtnDismissInfo.setOnClickListener(mBtnDismissInfoListener);        
 
         // Set up the ViewPager, attaching the adapter and setting up a listener for when the
         // user swipes between sections.
@@ -145,24 +136,7 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         {
         	mViewPager.setCurrentItem(1);
         }
-        
-        // Get the websocket handle
-        mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
-        
-        // Register the broadcast receiver
-     	IntentFilter tFilter = new IntentFilter();
-     	tFilter.addAction(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
-     	registerReceiver(mBroadcastRcver, tFilter); 
-     	
-     	mPingTimer.startRepeatTimer();
-    }
-    
-    @Override
-    protected void onDestroy() {  
-        super.onDestroy();  
-        mPingTimer.stopTimer();
-        unregisterReceiver(mBroadcastRcver);  
-    }  		
+    }	
     
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
@@ -296,7 +270,8 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 		            new Thread() {  						
 			            @Override
 			            public void run() {
-			            	RenHaiWebSocketProcess.reInitWebSocket(getApplication());
+			            	//RenHaiWebSocketProcess.reInitWebSocket(getApplication());
+			            	mWebSocketHandle.reConnectWebSocket(getApplication());
 			            	Message t_MsgListData = new Message();
 			            	t_MsgListData.what = MAINPAGE_MSG_WEBRECONNECTING;
 			            	handler.sendMessage(t_MsgListData);			            	
@@ -313,83 +288,7 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
 		});
 
 		builder.create().show();
-	}
-    
-    private class RenHaiConnectServer extends AsyncTask<URL, Integer, Long> {
-        
-    	protected void onPreExecute () {
-     		
-    		ActionBar.LayoutParams lp = new ActionBar.LayoutParams(
-    	        		ActionBar.LayoutParams.MATCH_PARENT,
-    	        		ActionBar.LayoutParams.MATCH_PARENT,
-    	        		Gravity.CENTER);
-    	        View viewTitleBar = getLayoutInflater().inflate(R.layout.activity_mainpage_titlebar, null);
-    	        mActionBar.setCustomView(viewTitleBar, lp);
-    	        //getActionBar().setDisplayShowHomeEnabled(false);
-    	        //getActionBar().setDisplayShowTitleEnabled(false);
-    	        mActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_CUSTOM);
-    	        mActionBar.setDisplayShowCustomEnabled(true);
-    	        mActionBarTitle = (TextView) mActionBar.getCustomView().findViewById(R.id.mainpage_title);
-    	            	        
-    	        mActionBarTitle.setText(R.string.mainpage_title);
-    	        setProgressBarIndeterminateVisibility(true);
-	
-    	}
-    	
-    	// Do the long-running work in here
-        protected Long doInBackground(URL... urls) {
-
-        	publishProgress(0);
-        	// 1.Communicate with the proxy to get the status of server
-        	//String tAlohaRequestMsg = RenHaiJsonMsgProcess.constructAlohaRequestMsg().toString();
-        	//RenHaiNetworkProcess tNetHandle = RenHaiNetworkProcess.getNetworkInstance();
-        	//tNetHandle.sendMessage(tAlohaRequestMsg);        	
-        	
-        	for(int i=0;i< 999999999;i++){
-        		
-        	}
-        	publishProgress(30);
-        	for(int i=0;i<999999999;i++){        		
-        	}
-        	publishProgress(60);
-        	for(int i=0;i<999999999;i++){        		
-        	}
-        	publishProgress(100);
-        	return (long) 100;
-        }
-
-        // This is called each time you call publishProgress()
-        protected void onProgressUpdate(Integer... progress) {
-            //setProgressPercent(progress[0]);
-        	switch(progress[0].intValue())
-        	{
-        	    case 0:
-        	    	mActionBarTitle.setText(R.string.mainpage_title_preparenetwork);
-        	    	return;
-        	    
-        	    case 30:
-        	    	mActionBarTitle.setText(R.string.mainpage_title_connectserver);
-        	    	return;
-        	    
-        	    case 60:
-        	    	mActionBarTitle.setText(R.string.mainpage_title_syncserver);
-        	    	return;
-        	    
-        	    case 100:
-        	        mActionBarTitle.setText(R.string.mainpage_title_updateinfo);
-        	        return;
-        	            	    
-        	}
-        }
-
-        // This is called when doInBackground() is finished
-        protected void onPostExecute(Long result) {
-        	mActionBar.setDisplayShowCustomEnabled(false);
-	        mActionBar.setDisplayShowHomeEnabled(true);
-	        mActionBar.setDisplayShowTitleEnabled(true);
-	        setProgressBarIndeterminateVisibility(false);
-        }
-    }
+	}    
     
 	private Handler handler = new Handler(){  		  
         @Override  
@@ -424,7 +323,7 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         	    	mlog.error("Websocket error, error info: "+
         	                   intent.getStringExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_SOCKETERROR));
         	    	mWebSocketLost = true;
-        	    	mPingTimer.stopTimer();
+        	    	//mPingTimer.stopTimer();
         	    	showActionBarNote(R.string.mainpage_title_connectionlost);
         	    	onReInitWebSocketDialog();
         	    	break;
@@ -460,7 +359,7 @@ public class RenHaiMainPageActivity extends FragmentActivity implements ActionBa
         	    		setProgressBarIndeterminateVisibility(false);
             	    	mShowConnectedTimer.startTimer();
             	    	mWebSocketLost = false;
-            	    	mPingTimer.startRepeatTimer();
+            	    	//mPingTimer.startRepeatTimer();
         	    	}        	    	
         	    	//disableActionBarNote();
         	    	break;

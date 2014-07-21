@@ -20,9 +20,10 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
-import com.simplelife.renhai.android.RenHaiMainPageActivity;
 import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsg;
+import com.simplelife.renhai.android.timer.RenHaiTimerHelper;
+import com.simplelife.renhai.android.timer.RenHaiTimerProcessor;
 import com.simplelife.renhai.android.utils.WebSocketClient;
 
 public class RenHaiWebSocketProcess {
@@ -55,6 +56,8 @@ public class RenHaiWebSocketProcess {
 			    public void onConnect() {
 			        Log.d(TAG, "Connected!");
 			        
+			        mPingTimer.resetRepeatTimer();
+			        
 			        // Notify the foreground receiver
 			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
@@ -75,7 +78,8 @@ public class RenHaiWebSocketProcess {
 
 			    @Override
 			    public void onDisconnect(int code, String reason) {
-			        Log.d(TAG, String.format("Disconnected! Code: %d Reason: %s", code, reason));			        
+			        Log.d(TAG, String.format("Disconnected! Code: %d Reason: %s", code, reason));
+			        mPingTimer.stopTimer();
 			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
 			        		        RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_DISCONNECT);
@@ -85,7 +89,7 @@ public class RenHaiWebSocketProcess {
 			    @Override
 			    public void onError(Exception error) {
 			        Log.e(TAG, "Error!", error);
-			        
+			        mPingTimer.stopTimer();
 			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
 			        		         RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR);
@@ -124,9 +128,20 @@ public class RenHaiWebSocketProcess {
 	}
 	
 	public static void reInitWebSocket(Context _context){
-		mInstance = null;
-		
+		mInstance = null;		
 		mInstance = new RenHaiWebSocketProcess(_context);
 	}
+	
+	public void reConnectWebSocket(Context _context){
+		mWebsocketClient.connect();
+	}
+	
+	RenHaiTimerHelper mPingTimer = new RenHaiTimerHelper(1000, 4000, new RenHaiTimerProcessor() {
+        @Override
+        public void onTimeOut() {
+        	ping("");        	      	
+        }
+        
+    });
 
 }

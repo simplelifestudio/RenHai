@@ -13,14 +13,14 @@ import org.apache.log4j.Logger;
 import com.simplelife.renhai.android.RenHaiDefinitions.RenHaiAppState;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
-public abstract class RenHaiBaseActivity extends Activity {
+public abstract class RenHaiBaseActivity extends FragmentActivity {
 	
 	protected RenHaiAppState mAppState = RenHaiAppState.DISCONNECTED;
 	protected final Logger mlog = Logger.getLogger(RenHaiBaseActivity.class);
