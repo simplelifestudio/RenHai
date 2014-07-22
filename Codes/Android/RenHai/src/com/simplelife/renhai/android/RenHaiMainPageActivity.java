@@ -8,13 +8,9 @@
  */
 package com.simplelife.renhai.android;
 
-import java.net.URL;
-
 import org.apache.log4j.Logger;
 
-import com.simplelife.renhai.android.RenHaiDefinitions.RenHaiAppState;
 import com.simplelife.renhai.android.data.RenHaiInfo;
-import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAlohaReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
@@ -25,17 +21,11 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.app.AlertDialog.Builder;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -46,7 +36,8 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class RenHaiMainPageActivity extends RenHaiBaseActivity implements ActionBar.TabListener{
+public class RenHaiMainPageActivity extends RenHaiBaseActivity 
+	implements ActionBar.TabListener {
 	
 	private final int MAINPAGE_MSG_WEBRECONNECTING = 3000;
 	private final int MAINPAGE_MSG_WEBRECONNECTED  = 3001;
@@ -62,12 +53,9 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity implements Action
 	private TextView mServerStatInfo;
 	private Button mBtnDismissInfo;
 	
-	// Define the view pages
-	public enum ViewPages{
-		PAGE_STARTCHAT,
-		PAGE_MYTOPICS,
-		PAGE_MYIMPRESSIONS
-	}
+	private RenHaiStartVedioFragment mRenHaiStartVedioFragment = null;
+	private RenHaiMyTopicsFragment mRenHaiMyTopicsFragment = null;
+	private RenHaiMyImpressionsFragment mRenHaiMyImpressionsFragment = null;
 	
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,6 +125,9 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity implements Action
         {
         	mViewPager.setCurrentItem(1);
         }
+        
+        // Retrieve the websocket handle
+        mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());  
     }	
     
     @Override
@@ -170,11 +161,7 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity implements Action
     }
     
     public class AppSectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public RenHaiStartVedioFragment mRenHaiStartVedioFragment = null;
-        public RenHaiMyTopicsFragment mRenHaiMyTopicsFragment = null;
-        public RenHaiMyImpressionsFragment mRenHaiMyImpressionsFragment = null;
-        
+      
     	public AppSectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -355,8 +342,17 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity implements Action
     		setProgressBarIndeterminateVisibility(false);
 	    	mShowConnectedTimer.startTimer();
 	    	mWebSocketLost = false;
-    	} 
-	}	
+    	}
+		// Update the fragments
+		mRenHaiStartVedioFragment.onUpdateView();
+		mRenHaiMyTopicsFragment.onUpdateGlobalInterestGrid();
+	}
+	
+	@Override
+	protected void onReceiveBSRespEnterPool() {
+		super.onReceiveBSRespEnterPool();
+		mRenHaiStartVedioFragment.onDetermineToDirect();
+	}
     
     ///////////////////////////////////////////////////////////////////////
     // Timer Callbacks
@@ -369,6 +365,6 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity implements Action
         	handler.sendMessage(t_MsgListData);	        	      	
         }
         
-    });    
+    });   
     
 }

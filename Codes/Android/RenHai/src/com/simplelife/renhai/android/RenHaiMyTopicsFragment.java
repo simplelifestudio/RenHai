@@ -21,11 +21,7 @@ import com.simplelife.renhai.android.ui.RenHaiDraggableGridView;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -114,21 +110,10 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	}*/
     	
     	setListeners();
-    	
-		// Register the broadcast receiver
-		IntentFilter tFilter = new IntentFilter();
-		tFilter.addAction(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
-		getActivity().registerReceiver(mBroadcastRcverMyTopic, tFilter); 
 	
     	return rootView;
     
-    }
-    
-    @Override
-	public void onDestroy() {  
-        super.onDestroy();  
-        getActivity().unregisterReceiver(mBroadcastRcverMyTopic);  
-    } 
+    }    
     
     private void setListeners(){
     	mMyInterestsGrid.setOnItemClickListener(new OnItemClickListener() {
@@ -153,19 +138,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
 		public void onClick(View v) {
 			mProgressBar.setVisibility(View.VISIBLE);
 			mGlbIntEmpty.setVisibility(View.INVISIBLE);
-			new Thread() {  						
-	            @Override
-	            public void run() {
-	            	String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();
-	            	
-	            	// Try to retrieve the handle everytime when we want to send a message rather than
-	            	// init the websocket handle on the start if the fragment. Because the websocket 
-	            	// connect might be lost under some cases, and after the websocket is re-initialized,
-	            	// the handle is changed anyway. The old pipe is broken, so we have to re-get.	            	
-	            	RenHaiWebSocketProcess tWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
-	            	tWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
-	            }				
-            }.start();			
+			sendServerDataSyncReq();				
 		}
 	};
     
@@ -184,7 +157,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
     		mUpdateTimer.resetTimer();
     }
     
-    private void onUpdateGlobalInterestGrid(){
+    public void onUpdateGlobalInterestGrid() {
     	if(RenHaiInfo.InterestLabel.getCurrHotLabelNum() > 0)
     	{
     		mGlbIntEmpty.setVisibility(View.INVISIBLE);
@@ -201,6 +174,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
     		mGlbIntEmpty.setVisibility(View.VISIBLE);
     		mGlbInterestsGrid.setVisibility(View.INVISIBLE);
     	}
+    	mProgressBar.setVisibility(View.INVISIBLE);
     }
     
 	private Handler handler = new Handler(){  		  
@@ -400,6 +374,11 @@ public class RenHaiMyTopicsFragment extends Fragment {
 	    canvas.drawText(s, 75, 40, paint);
 	    
 		return bmp;
+	}    
+	
+	public void sendServerDataSyncReq() {
+		String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();    	
+		mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
 	}
     
     ///////////////////////////////////////////////////////////////////////
@@ -411,41 +390,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
         	Message t_MsgListData = new Message();
         	t_MsgListData.what = MYTOPIC_MSG_TIMETOUPDATE;
         	handler.sendMessage(t_MsgListData);	       	
-        }
-        
-    });
-    
-    ///////////////////////////////////////////////////////////////////////
-    // Network message process
-    ///////////////////////////////////////////////////////////////////////    
-    private BroadcastReceiver mBroadcastRcverMyTopic = new BroadcastReceiver() { 
-        @Override 
-        public void onReceive(Context context, Intent intent) { 
-
-            String action = intent.getAction(); 
-            if(action.equals(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG)){
-            	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
-            	switch (tMsgType) {
-            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_CREATE_ERROR:
-            	    {
-            	    	mGlbIntEmpty.setVisibility(View.VISIBLE);
-            	    	mProgressBar.setVisibility(View.INVISIBLE);
-            	    	break;
-            	    }
-            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_APPSYNCRESP:
-        	        {       	        	
-        	    	    break;
-        	        }
-            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP:
-            	    {
-            	    	onUpdateGlobalInterestGrid();
-            	    	mProgressBar.setVisibility(View.INVISIBLE);
-            	    	break;
-            	    }
-            	}            	
-            }
-        } 
-    };
-    
+        }        
+    });        
     
 }

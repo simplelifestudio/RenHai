@@ -21,10 +21,7 @@ import com.simplelife.renhai.android.timer.RenHaiTimerProcessor;
 import com.simplelife.renhai.android.ui.RenHaiCircleButton;
 import com.simplelife.renhai.android.ui.RenHaiCircleButton.OnRadialViewValueChanged;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,7 +31,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class RenHaiStartVedioFragment extends Fragment {
 	
@@ -66,7 +62,7 @@ public class RenHaiStartVedioFragment extends Fragment {
     	
     	mOnlineCount = (TextView)rootView.findViewById(R.id.startvedio_onlinecount);    	
     	mChatCount   = (TextView)rootView.findViewById(R.id.startvedio_chatcount);
-    	initView();
+    	onUpdateView();
     	
     	mCircleButton.setOnRadialViewValueChanged(new OnRadialViewValueChanged() {
 			@Override
@@ -82,12 +78,7 @@ public class RenHaiStartVedioFragment extends Fragment {
     	if((int) (getWindow().getAttributes().screenBrightness * 100) < 0)
 			mCircleButton.setCurrentValue(50);
 		else
-			mCircleButton.setCurrentValue((int) (getWindow().getAttributes().screenBrightness * 100));*/
-    	
-        // Register the broadcast receiver
-     	IntentFilter tFilter = new IntentFilter();
-     	tFilter.addAction(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
-     	getActivity().registerReceiver(mBroadcastRcverStartVideo, tFilter);
+			mCircleButton.setCurrentValue((int) (getWindow().getAttributes().screenBrightness * 100));*/    	
      	
      	// Retrieve the network instance
      	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
@@ -108,16 +99,22 @@ public class RenHaiStartVedioFragment extends Fragment {
     	
     }        
     
-    @Override
-   	public void onDestroyView() {  
-           super.onDestroyView(); 
-           mUpdateTimer.stopTimer();
-           getActivity().unregisterReceiver(mBroadcastRcverStartVideo);  
-       } 
-    
-    private void initView(){
+    public void onUpdateView(){
     	mOnlineCount.setText(formatCount(RenHaiInfo.ServerPoolStat.getOnlineCount()));
     	mChatCount.setText(formatCount(RenHaiInfo.ServerPoolStat.getChatCount()));
+    }
+    
+    public void onDetermineToDirect() {
+    	if((mIsReadyToMoveOn == true)&&(mHasMovedOn == false))
+    	{
+    		mlog.info("Ready to move to the waiting page, loop2!");
+    		mHasMovedOn = true;
+    		Intent tIntent = new Intent(getActivity(), RenHaiWaitForMatchActivity.class);
+    		startActivity(tIntent);    		
+    	}else
+    	{
+    		mIsReadyToMoveOn = true;
+    	}
     }
     
     private String formatCount(int _count){
@@ -145,19 +142,9 @@ public class RenHaiStartVedioFragment extends Fragment {
         	    case STARTVEDIO_MSG_READYTOENTERPOOL:
         	    {
         	    	mUpdateTimer.stopTimer();
+        	    	onDetermineToDirect();
         	    	//mCircleButton.setSecondaryText(getString(R.string.startvedio_btnmatching));
         	    	mlog.info("Ready to move to the waiting page, before loop1!");
-        	    	if((mIsReadyToMoveOn == true)&&(mHasMovedOn == false))
-        	    	{
-	            		mlog.info("Ready to move to the waiting page, loop1!");
-	            		mHasMovedOn = true;
-	            		Intent tIntent = new Intent(getActivity(), RenHaiWaitForMatchActivity.class);
-        	    		startActivity(tIntent);        	    		
-        	    	}else
-        	    	{
-        	    		mIsReadyToMoveOn = true;
-        	    	}
-        	    	// Enter the pool activity
         	    	break;
         	    }
         	    
@@ -165,45 +152,6 @@ public class RenHaiStartVedioFragment extends Fragment {
         	}
         }
 	};
-	
-    private BroadcastReceiver mBroadcastRcverStartVideo = new BroadcastReceiver() { 
-        @Override 
-        public void onReceive(Context context, Intent intent) { 
-
-            String action = intent.getAction(); 
-            if(action.equals(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG)){
-            	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
-            	switch (tMsgType) {
-            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_SERVERSYNCRESP:
-        	        {
-        	        	initView();
-        	        	//mUpdateTimer.startTimer();
-        	    	    break;
-        	        }
-            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_ENTERPOOL:
-            	    {
-            	    	mlog.info("Ready to move to the waiting page, before loop2!");
-            	    	if((mIsReadyToMoveOn == true)&&(mHasMovedOn == false))
-            	    	{
-            	    		mlog.info("Ready to move to the waiting page, loop2!");
-            	    		Intent tIntent = new Intent(getActivity(), RenHaiWaitForMatchActivity.class);
-            	    		startActivity(tIntent);
-            	    		mHasMovedOn = true;
-            	    	}else
-            	    	{
-            	    		mIsReadyToMoveOn = true;
-            	    	}
-            	    	
-            	    	break;
-            	    }
-            	    case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESPFAIL:
-            	    {
-            	    	break;
-            	    }
-            	}            	
-            }
-        } 
-    };
     
     private View.OnClickListener mStartBtnListener = new View.OnClickListener() {
 
@@ -243,7 +191,7 @@ public class RenHaiStartVedioFragment extends Fragment {
             }.start();
 			
 		}
-	};
+	};	
 	
     ///////////////////////////////////////////////////////////////////////
     // Timer Callbacks

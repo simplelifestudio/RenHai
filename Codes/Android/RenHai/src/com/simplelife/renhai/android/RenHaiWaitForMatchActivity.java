@@ -12,6 +12,8 @@ import org.apache.log4j.Logger;
 
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionNotificationResp;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionReq;
+import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -31,7 +33,7 @@ public class RenHaiWaitForMatchActivity extends RenHaiBaseActivity {
 		mCounterText = (TextView) findViewById(R.id.waitingformatch_counter);
 		mCounter = new MyCount(20000, 1000);
 		mCounter.start();
-		
+		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication()); 
 		sendMatchStartMessage();
 	}
 	
