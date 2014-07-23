@@ -71,6 +71,8 @@ public class RenHaiSplashActivity extends RenHaiBaseActivity {
 		super.onCreate(savedInstanceState);
 		final View tStartView = View.inflate(this,R.layout.activity_splash,null);
 		
+		configureLogger();
+		
 		mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -236,8 +238,7 @@ public class RenHaiSplashActivity extends RenHaiBaseActivity {
         	switch (tInType) {
         	    case BACKGROUND_PROCESS_TYPE_INITIAL:
         	    {
-        			// 1.Configure the logger module
-        			configureLogger();
+        			// 1.Configure the logger module      			
         			mlog.info("Renhai is about to start!");
         			
         			// 2.Initialize the time process
@@ -284,6 +285,7 @@ public class RenHaiSplashActivity extends RenHaiBaseActivity {
     @Override
 	protected void onHttpConnectFailed() {
     	super.onHttpConnectFailed();
+    	mNetConnTimer.stopTimer();
     	AlertDialog.Builder builder = new Builder(this);
     	builder.setTitle(R.string.splash_httpfailed_dialogtitle);
     	builder.setMessage(R.string.splash_httpfailed_dialogmsg);

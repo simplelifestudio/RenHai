@@ -52,9 +52,9 @@ public class RenHaiWaitForMatchActivity extends RenHaiBaseActivity {
 		public void onClick(View v) {
 			String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(
 	    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
-	    			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_SESSIONUNBIND).toString();
+	    			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_LEAVEPOOL).toString();
 	    	mWebSocketHandle.sendMessage(tBusinessSessionReq);
-			finish();
+	    	finish();
 		}
 	};
 	
@@ -123,6 +123,12 @@ public class RenHaiWaitForMatchActivity extends RenHaiBaseActivity {
 		Intent tIntent = new Intent(RenHaiWaitForMatchActivity.this, RenHaiMatchingActivity.class);
 		startActivity(tIntent);
 		finish();
+	}
+	
+	@Override
+	protected void onReceiveBSRespLeavePool() {
+		super.onReceiveBSRespLeavePool();
+		
 	}
 
 }

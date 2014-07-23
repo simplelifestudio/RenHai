@@ -119,7 +119,7 @@ public abstract class RenHaiBaseActivity extends FragmentActivity {
 		  ||(AppStateMgr.getMyAppStatus() == RenHaiAppState.SESSIONBOUNDACKED))
 		{
 			mlog.info("App State transit to AppDataSynced from "+AppStateMgr.getMyAppStatus());
-			AppStateMgr.setMyAppStatus(RenHaiAppState.BUSINESSCHOOSED);
+			AppStateMgr.setMyAppStatus(RenHaiAppState.APPDATASYNCED);
 		}else if(AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED){				
 			// Ignore the state
 		}else{
