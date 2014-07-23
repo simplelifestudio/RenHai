@@ -304,9 +304,10 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
 	@Override
 	protected void onWebSocketCreateError() {
 		super.onWebSocketCreateError();
+		/*
 		mWebSocketLost = true;
     	showActionBarNote(R.string.mainpage_title_connectionlost);
-    	onReInitWebSocketDialog();
+    	onReInitWebSocketDialog();*/
 	}
 	
 	@Override
@@ -320,6 +321,14 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
 	    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructQueryMsg().toString();
 	    	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
     	}
+	}
+	
+	@Override
+	protected void onWebSocketDisconnect() {
+		super.onWebSocketDisconnect();
+		mWebSocketLost = true;
+    	showActionBarNote(R.string.mainpage_title_connectionlost);
+    	onReInitWebSocketDialog();
 	}
 	
 	@Override

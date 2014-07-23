@@ -87,6 +87,9 @@
     
     <string name="waitformatch_counterstart">0</string>
     <string name="waitformatch_counternote">匹配中&#8230;</string>
+    <string name="waitformatch_cancelbtn">取消</string>
+    <string name="waitformatch_connectionlost_dialogtitle">网络连接丢失</string>
+    <string name="waitformatch_connectionlost_dialogposbtn">返回</string>
     
     <string name="matching_peerassess">对方获得的评价</string>
     <string name="matching_peerimpression">对方获得的印象</string>

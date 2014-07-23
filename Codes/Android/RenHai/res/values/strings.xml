@@ -89,6 +89,9 @@
     
     <string name="waitformatch_counterstart">0</string>
     <string name="waitformatch_counternote">Matching&#8230;</string>
+    <string name="waitformatch_cancelbtn">Cancel</string>
+    <string name="waitformatch_connectionlost_dialogtitle">Network connection lost</string>
+    <string name="waitformatch_connectionlost_dialogposbtn">Back</string>
     
     <string name="matching_peerassess">Peer User Assessments</string>
     <string name="matching_peerimpression">Peer User Impressions</string>
