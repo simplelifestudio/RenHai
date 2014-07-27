@@ -272,6 +272,9 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
 		    @Override
 		    public void onClick(DialogInterface dialog, int which) {
 		        dialog.dismiss();
+		        // Without the network, nothing can be continued, so we just
+		        // quit if the user choose not to re-connect the network
+		        finish();
 		    }
 		});
 
@@ -304,10 +307,13 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
 	@Override
 	protected void onWebSocketCreateError() {
 		super.onWebSocketCreateError();
-		/*
-		mWebSocketLost = true;
-    	showActionBarNote(R.string.mainpage_title_connectionlost);
-    	onReInitWebSocketDialog();*/
+		// avoid the multi-note of connection lost
+		if(mWebSocketLost == true)
+		{
+			mWebSocketLost = true;
+	    	showActionBarNote(R.string.mainpage_title_connectionlost);
+	    	onReInitWebSocketDialog();
+		}		
 	}
 	
 	@Override
@@ -326,9 +332,13 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
 	@Override
 	protected void onWebSocketDisconnect() {
 		super.onWebSocketDisconnect();
-		mWebSocketLost = true;
-    	showActionBarNote(R.string.mainpage_title_connectionlost);
-    	onReInitWebSocketDialog();
+		// avoid the multi-note of connection lost
+		if(mWebSocketLost == true)
+		{
+			mWebSocketLost = true;
+	    	showActionBarNote(R.string.mainpage_title_connectionlost);
+	    	onReInitWebSocketDialog();
+		}
 	}
 	
 	@Override

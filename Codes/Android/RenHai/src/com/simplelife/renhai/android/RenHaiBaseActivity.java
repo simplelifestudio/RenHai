@@ -51,6 +51,7 @@ public abstract class RenHaiBaseActivity extends FragmentActivity {
 	}
 	
 	protected void onWebSocketCreateError() {
+		mlog.info("App State transit to DisConnected from "+AppStateMgr.getMyAppStatus());
 		AppStateMgr.setMyAppStatus(RenHaiAppState.DISCONNECTED);
 	}
 	
@@ -68,6 +69,7 @@ public abstract class RenHaiBaseActivity extends FragmentActivity {
 	}
 	
 	protected void onWebSocketDisconnect() {
+		mlog.info("App State transit to DisConnected from "+AppStateMgr.getMyAppStatus());
 		AppStateMgr.setMyAppStatus(RenHaiAppState.DISCONNECTED);
 	}
 	

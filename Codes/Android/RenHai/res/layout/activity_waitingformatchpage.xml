@@ -16,6 +16,18 @@
         android:text="@string/waitformatch_counterstart" />
     
     <TextView 
+        android:id="@+id/waitingformatch_timeoutnote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" 
+        android:gravity="center"       
+        android:textSize="@dimen/waitformatch_timeoutnotesize"
+        android:textStyle="bold"
+        android:textColor="@color/grey"
+        android:text="@string/waitformatch_timeoutnote"
+        android:visibility="gone" />
+    
+    <TextView 
         android:id="@+id/waitingformatch_counternote"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
@@ -33,7 +45,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+         >
 
         <TextView
             android:id="@+id/waitingformatch_btncancel"
@@ -43,6 +56,47 @@
             android:background="@drawable/protocal_btn_selector"
             android:gravity="center_vertical|center"
             android:text="@string/waitformatch_cancelbtn"
+            android:textSize="@dimen/protocal_btn_size"
+            android:textColor="#FFFFFF" >
+        </TextView>
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/waitingformatch_tobtnlayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:orientation="horizontal" 
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/waitingformatch_btnretry"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/protocal_btn_selector"
+            android:gravity="center_vertical|center"
+            android:text="@string/waitformatch_retrybtn"
+            android:textSize="@dimen/protocal_btn_size"
+            android:textColor="#FFFFFF" >
+        </TextView>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="3dip"
+            android:layout_marginTop="3dip"
+            android:background="#FFFFFFFF" />
+
+        <TextView
+            android:id="@+id/waitingformatch_btnback"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/protocal_btn_selector"
+            android:gravity="center_vertical|center"
+            android:text="@string/waitformatch_backbtn"
             android:textSize="@dimen/protocal_btn_size"
             android:textColor="#FFFFFF" >
         </TextView>

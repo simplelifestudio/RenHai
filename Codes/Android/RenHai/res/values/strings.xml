@@ -92,6 +92,9 @@
     <string name="waitformatch_cancelbtn">Cancel</string>
     <string name="waitformatch_connectionlost_dialogtitle">Network connection lost</string>
     <string name="waitformatch_connectionlost_dialogposbtn">Back</string>
+    <string name="waitformatch_timeoutnote">Sorry, no one is out there.</string>
+    <string name="waitformatch_retrybtn">Retry</string>
+    <string name="waitformatch_backbtn">Back</string>
     
     <string name="matching_peerassess">Peer User Assessments</string>
     <string name="matching_peerimpression">Peer User Impressions</string>
@@ -101,6 +104,7 @@
     <string name="matching_peerstattext">Waiting for peer to confirm&#8230;</string>
     <string name="matching_peerstattextagree">Peer accepted the chat</string>
     <string name="matching_peerstattextreject">Peer rejected the chat</string>
+    <string name="matching_peerstattextlost">Peer lost the connection</string>
     <string name="matching_accept">Accept</string>
     <string name="matching_refuse">Refuse</string>
     <string name="matching_back">Back</string>

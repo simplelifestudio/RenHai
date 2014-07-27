@@ -92,6 +92,7 @@ public class RenHaiStartVedioFragment extends Fragment {
     @Override
     public void onResume(){
     	super.onResume();
+    	mlog.info("StartVideo onResume");
     	mIsReadyToMoveOn = false;
     	mHasMovedOn = false;
     	mCircleButton.resetView();
@@ -110,6 +111,9 @@ public class RenHaiStartVedioFragment extends Fragment {
     		mlog.info("Ready to move to the waiting page, loop2!");
     		mHasMovedOn = true;
     		Intent tIntent = new Intent(getActivity(), RenHaiWaitForMatchActivity.class);
+    		Bundle bundle = new Bundle();
+    	    bundle.putString("caller", "RenHaiStartVedioFragment");
+    	    tIntent.putExtras(bundle);
     		startActivity(tIntent);    		
     	}else
     	{

@@ -35,7 +35,7 @@
     <string name="mainpage_connlostdialogtitle">网络连接丢失</string>
     <string name="mainpage_connlostdialogmsg">网络连接丢失，重新连接？</string>
     <string name="mainpage_connlostdialogposbtn">重新连接</string>
-    <string name="mainpage_connlostdialognegbtn">取消</string>
+    <string name="mainpage_connlostdialognegbtn">退出</string>
     <string name="mainpage_dismissserverstatinfo">知道了</string>
     <string name="mainpage_statinfopart1">亲爱的用户，我们的服务器将于 </string>
     <string name="mainpage_statinfopart2"> 进行维护，届时人海将无法为您提供服务，请接受我们诚挚的道歉。 －Simplelife Studio</string>   
@@ -90,6 +90,9 @@
     <string name="waitformatch_cancelbtn">取消</string>
     <string name="waitformatch_connectionlost_dialogtitle">网络连接丢失</string>
     <string name="waitformatch_connectionlost_dialogposbtn">返回</string>
+    <string name="waitformatch_timeoutnote">对不起，没有匹配到聊天对象。</string>
+    <string name="waitformatch_retrybtn">重试</string>
+    <string name="waitformatch_backbtn">返回</string>
     
     <string name="matching_peerassess">对方获得的评价</string>
     <string name="matching_peerimpression">对方获得的印象</string>
@@ -99,6 +102,7 @@
     <string name="matching_peerstattext">等待对方确认&#8230;</string>
     <string name="matching_peerstattextagree">对方已经接受</string>
     <string name="matching_peerstattextreject">对方拒绝了本次通话</string>
+    <string name="matching_peerstattextlost">对方失去连接</string>
     <string name="matching_accept">接受</string>
     <string name="matching_refuse">拒绝</string>
     <string name="matching_back">返回</string>

@@ -13,6 +13,8 @@ import java.text.NumberFormat;
 
 import org.apache.log4j.Logger;
 
+import com.simplelife.renhai.android.RenHaiDefinitions.RenHaiAppState;
+import com.simplelife.renhai.android.data.AppStateMgr;
 import com.simplelife.renhai.android.data.BusinessSessionInfo;
 import com.simplelife.renhai.android.data.PeerDeviceInfo;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionNotificationResp;
@@ -21,11 +23,8 @@ import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.utils.TimerConverter;
 
 import android.app.ActionBar;
-import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.TextUtils.TruncateAt;
@@ -37,7 +36,7 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class RenHaiMatchingActivity extends Activity{
+public class RenHaiMatchingActivity extends RenHaiBaseActivity{
 	
 	private GridView mAssessGridView;
 	private GridView mImpGridView;
@@ -55,9 +54,7 @@ public class RenHaiMatchingActivity extends Activity{
 	ActionBar mActionBar;
 	TextView  mActionBarTitle;
 	View mHomeIcon;
-	
-	
-	private RenHaiWebSocketProcess mWebSocketHandle = null;
+
 	private final Logger mlog = Logger.getLogger(RenHaiMatchingActivity.class);
 	
 	@Override
@@ -75,7 +72,7 @@ public class RenHaiMatchingActivity extends Activity{
 		mImpGridView.setAdapter(mImpAdapter);
 		
 		mCounterText = (TextView)findViewById(R.id.matching_counter);
-		mCounter = new MyCount(20000, 1000);
+		mCounter = new MyCount(22000, 1000);
 		
 		mMatchingBtnYes = (TextView)findViewById(R.id.matching_btnaccept);
 		mMatchingBtnNo  = (TextView)findViewById(R.id.matching_btnrefuse);		
@@ -90,22 +87,11 @@ public class RenHaiMatchingActivity extends Activity{
 		
 		enableActionBarNote();
 		
-		// Register the broadcast receiver
-		IntentFilter tFilter = new IntentFilter();
-		tFilter.addAction(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
-		registerReceiver(mBroadcastRcverMatching, tFilter); 
-		
 		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
 		
 		mCounter.start();
 
 	}
-	
-	@Override
-	public void onDestroy() {  
-        super.onDestroy();  
-        unregisterReceiver(mBroadcastRcverMatching);  
-    }
 	
 	private View.OnClickListener mMatchingBtnYesListener = new View.OnClickListener() {
 
@@ -134,7 +120,8 @@ public class RenHaiMatchingActivity extends Activity{
 
 		@Override
 		public void onClick(View v) {
-			finish();		
+			sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_SESSIONUNBIND);			
+			//finish();		
 		}
 	};
 	
@@ -142,6 +129,8 @@ public class RenHaiMatchingActivity extends Activity{
 		if((mEitherSideAgreed == true)&&(mMovedToVideoPage == false))
     	{
 			mMovedToVideoPage = true;
+			mlog.info("App State transit to CHATALLAGREED from "+AppStateMgr.getMyAppStatus());
+			AppStateMgr.setMyAppStatus(RenHaiAppState.CHATALLAGREED);
     		Intent tIntent = new Intent(this, RenHaiVideoTalkActivity.class);
     		startActivity(tIntent);
     		finish();
@@ -386,47 +375,64 @@ public class RenHaiMatchingActivity extends Activity{
 	    		//finish();	        	 
 	        }  
 	 }
+    
+    private void redirectToWaitPage() {
+    	Intent tIntent = new Intent(this, RenHaiWaitForMatchActivity.class);
+    	Bundle bundle = new Bundle();
+	    bundle.putString("caller", "RenHaiMatchingActivity");
+	    tIntent.putExtras(bundle);
+		startActivity(tIntent);
+		finish();
+    }
 	
     ///////////////////////////////////////////////////////////////////////
     // Network message process
-    ///////////////////////////////////////////////////////////////////////    
-    private BroadcastReceiver mBroadcastRcverMatching = new BroadcastReceiver() { 
-        @Override 
-        public void onReceive(Context context, Intent intent) { 
-
-            String action = intent.getAction(); 
-            if(action.equals(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG)){
-            	int tMsgType = intent.getIntExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 0);
-            	switch (tMsgType) {
-            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_AGREECHAT:
-            	{
-            		determingToMoveToVideoPage();
-            		break;
-            	}
-            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONRESP_REJCHAT:
-            	{
-            		finish();
-            		break;
-            	}
-            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERAGREE:
-            	{
-            		mPeerStatText.setText(R.string.matching_peerstattextagree);
-            		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEAGREED,1);
-            		determingToMoveToVideoPage();
-            		break;
-            	}
-            	case RenHaiDefinitions.RENHAI_NETWORK_WEBSOCKET_RECEIVE_BUSINESSSESSIONNOT_PEERREJECT:
-            	{
-            		mPeerStatText.setText(R.string.matching_peerstattextreject);
-            		mCounter.cancel();
-            		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEREJECTED,1);
-            		mBackLayout.setVisibility(View.VISIBLE);
-            		break;
-            	}
-
-            	}            	
-            }
-        } 
-    };
+    ///////////////////////////////////////////////////////////////////////
+    @Override
+    protected void onReceiveBSRespAgreeChat() {
+		super.onReceiveBSRespAgreeChat();
+		determingToMoveToVideoPage();
+	}
+    
+    @Override
+    protected void onReceiveBSRespRejectChat() {
+    	super.onReceiveBSRespRejectChat();
+    	mlog.info("App State transit to BusinessChoosed from "+AppStateMgr.getMyAppStatus());
+		AppStateMgr.setMyAppStatus(RenHaiAppState.BUSINESSCHOOSED);
+		redirectToWaitPage();		
+    }
+    
+    @Override
+    protected void onReceiveBNPeerAgree() {
+    	super.onReceiveBNPeerAgree();
+    	mPeerStatText.setText(R.string.matching_peerstattextagree);
+		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEAGREED,1);
+    	determingToMoveToVideoPage();
+	}
+    
+    @Override
+    protected void onReceiveBNPeerRej() {
+		super.onReceiveBNPeerRej();
+		mPeerStatText.setText(R.string.matching_peerstattextreject);
+		mCounter.cancel();
+		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEREJECTED,1);
+		mBackLayout.setVisibility(View.VISIBLE);
+	}
+    
+    @Override
+    protected void onReceiveBNPeerLost() {
+    	super.onReceiveBNPeerLost();
+    	mPeerStatText.setText(R.string.matching_peerstattextlost);
+		mCounter.cancel();
+		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDELOST,1);
+		mBackLayout.setVisibility(View.VISIBLE);
+	}
+    
+    @Override
+    protected void onReceiveBSRespSessUnBind() {
+    	mlog.info("App State transit to BusinessChoosed from "+AppStateMgr.getMyAppStatus());
+		AppStateMgr.setMyAppStatus(RenHaiAppState.BUSINESSCHOOSED);
+		redirectToWaitPage();
+	}
 
 }
