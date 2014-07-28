@@ -215,7 +215,7 @@ public class PublisherControlFragment extends Fragment implements
     			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_CHATMESSAGE,
     			mEditMsg.getText().toString()).toString();
     	mWebSocketHandle.sendMessage(tBusinessSessionReq);
-    	mButtonLayout.setVisibility(View.GONE);
+    	mWriteMsgLayout.setVisibility(View.GONE);
 	}
 
 	public void initPublisherUI() {

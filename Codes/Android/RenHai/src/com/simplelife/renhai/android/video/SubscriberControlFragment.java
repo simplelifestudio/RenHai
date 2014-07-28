@@ -3,7 +3,6 @@ package com.simplelife.renhai.android.video;
 import org.apache.log4j.Logger;
 
 import com.simplelife.renhai.android.R;
-import com.simplelife.renhai.android.RenHaiMatchingActivity;
 import com.simplelife.renhai.android.RenHaiVideoTalkActivity;
 
 import android.app.Activity;
@@ -11,7 +10,6 @@ import android.app.Fragment;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

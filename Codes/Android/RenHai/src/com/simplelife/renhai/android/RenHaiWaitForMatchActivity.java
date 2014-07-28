@@ -10,8 +10,6 @@ package com.simplelife.renhai.android;
 
 import org.apache.log4j.Logger;
 
-import com.simplelife.renhai.android.RenHaiDefinitions.RenHaiAppState;
-import com.simplelife.renhai.android.data.AppStateMgr;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionNotificationResp;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
