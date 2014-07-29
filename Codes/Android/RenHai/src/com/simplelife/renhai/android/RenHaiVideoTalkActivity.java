@@ -561,10 +561,11 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	}
 	
 	@Override
-	public void onStreamDestroyed(PublisherKit publisher, Stream stream) {
-	
-		if (SUBSCRIBE_TO_SELF && mSubscriber != null) {
-		    unsubscriberFromStream(stream);
+	public void onStreamDestroyed(PublisherKit publisher, Stream stream) {	
+		if (SUBSCRIBE_TO_SELF) {
+			if (mSubscriber != null) {
+			    unsubscriberFromStream(stream);
+			}
 		}
 	}
 	

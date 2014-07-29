@@ -222,19 +222,56 @@ public abstract class RenHaiBaseActivity extends FragmentActivity {
 	}
 	
 	protected void onReceiveBNPeerRej() {
-		//TODO:leave the object to realize
+		if( (AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED)
+		  ||(AppStateMgr.getMyAppStatus() == RenHaiAppState.SESSIONBOUNDACKED))
+		{	
+			// Ignore
+		}else{
+			mlog.error("Unexpected OthersideRejectChat received under state:"+AppStateMgr.getMyAppStatus());
+		}
 	}
 	
 	protected void onReceiveBNPeerAgree() {
+		if( (AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED)
+		  ||(AppStateMgr.getMyAppStatus() == RenHaiAppState.SESSIONBOUNDACKED))
+		{	
+			// Ignore
+		}else{
+			mlog.error("Unexpected OthersideAgreeChat received under state:"+AppStateMgr.getMyAppStatus());
+		}
 	}
 	
 	protected void onReceiveBNPeerLost() {
+		if( (AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED)
+		  ||(AppStateMgr.getMyAppStatus() == RenHaiAppState.SESSIONBOUNDACKED)
+		  ||(AppStateMgr.getMyAppStatus() == RenHaiAppState.CHATALLAGREED)
+		  ||(AppStateMgr.getMyAppStatus() == RenHaiAppState.CHATENDED))
+		{	
+			// Ignore
+		}else{
+			mlog.error("Unexpected OthersideLost received under state:"+AppStateMgr.getMyAppStatus());
+		}
 	}
 
 	protected void onReceiveBNPeerEndChat() {
+		if( (AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED)
+		  ||(AppStateMgr.getMyAppStatus() == RenHaiAppState.CHATALLAGREED)
+		  ||(AppStateMgr.getMyAppStatus() == RenHaiAppState.CHATENDED))
+		{	
+			// Ignore
+		}else{
+			mlog.error("Unexpected OthersideEndChat received under state:"+AppStateMgr.getMyAppStatus());
+		}
 	}
 	
 	protected void onReceiveBNPeerChatMsg() {
+		if( (AppStateMgr.getMyAppStatus() == RenHaiAppState.DISCONNECTED)
+		  ||(AppStateMgr.getMyAppStatus() == RenHaiAppState.CHATALLAGREED))
+		{	
+			// Ignore
+		}else{
+			mlog.error("Unexpected OthersideChatMsg received under state:"+AppStateMgr.getMyAppStatus());
+		}
 	}
 	
 	protected BroadcastReceiver mBroadcastRcver = new BroadcastReceiver() { 

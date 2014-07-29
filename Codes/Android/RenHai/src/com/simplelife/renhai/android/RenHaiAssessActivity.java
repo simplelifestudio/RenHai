@@ -10,7 +10,6 @@ package com.simplelife.renhai.android;
 
 import org.apache.log4j.Logger;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -25,14 +24,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils.TruncateAt;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -47,7 +44,7 @@ import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.ui.RenHaiDraggableGridView;
 
-public class RenHaiAssessActivity extends Activity{
+public class RenHaiAssessActivity extends RenHaiBaseActivity {
 	private GridView mOrigImpGridView;
 	private ImpressionAdapter mImpAdapter;
 	private RadioGroup mAssessRdGroup;
@@ -58,12 +55,10 @@ public class RenHaiAssessActivity extends Activity{
 	private Button mCreateImp;
 	private TextView mAssessBtnYes;
 	private TextView mAssessBtnNo;
-	
-	
+		
 	private final int ASSESS_MSG_IMPLABELDEFINED = 6000;
 	private final int ASSESS_MSG_IMPLABELMODIFIED = 6001;
 	
-	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	private final Logger mlog = Logger.getLogger(RenHaiAssessActivity.class);
 	
 	@Override
@@ -149,11 +144,6 @@ public class RenHaiAssessActivity extends Activity{
 	    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
 	    			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ASSESSANDCONTINUE).toString();
 	    	mWebSocketHandle.sendMessage(tBusinessSessionReq);
-
-			//Intent intent = new Intent(RenHaiAssessActivity.this, RenHaiMainPageActivity.class);
-		    //startActivity(intent);
-			finish();
-
 		}
 	};
 	
@@ -161,9 +151,10 @@ public class RenHaiAssessActivity extends Activity{
 
 		@Override
 		public void onClick(View v) {
-			//Intent intent = new Intent(RenHaiAssessActivity.this, RenHaiMainPageActivity.class);
-		    //startActivity(intent);
-			finish();			
+			String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(
+	    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
+	    			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ASSESSANDQUIT).toString();
+	    	mWebSocketHandle.sendMessage(tBusinessSessionReq);		
 		}
 	};
 	
@@ -281,9 +272,7 @@ public class RenHaiAssessActivity extends Activity{
         	}
         }
 	};
-	
-	
-	
+
 	private Bitmap getThumb(String s)
 	{
 		Bitmap bmp = Bitmap.createBitmap(150, 75, Bitmap.Config.RGB_565);
@@ -355,5 +344,47 @@ public class RenHaiAssessActivity extends Activity{
 		} 
     	
     }
+    
+    private void onWebSocketException() {
+    	// Re-connect the network to let the assess stage fulfilled
+    	mWebSocketHandle.reConnectWebSocket(getApplication());
+	 }
+    
+    private void redirectToWaitPage() {
+    	Intent tIntent = new Intent(this, RenHaiWaitForMatchActivity.class);
+    	Bundle bundle = new Bundle();
+	    bundle.putString("caller", "RenHaiAssessActivity");
+	    tIntent.putExtras(bundle);
+		startActivity(tIntent);
+		finish();
+    }
+    
+	///////////////////////////////////////////////////////////////////////
+	// Network message process
+	///////////////////////////////////////////////////////////////////////
+    @Override
+	protected void onWebSocketDisconnect() {
+		super.onWebSocketDisconnect();
+		onWebSocketException();		
+	}
+	
+	@Override
+	protected void onWebSocketCreateError() {
+		super.onWebSocketCreateError();
+		onWebSocketException();
+	}
+	
+	@Override
+	protected void onReceiveBSRespAssAndCont() {
+	    super.onReceiveBSRespAssAndCont();
+	    redirectToWaitPage();
+	}
+	
+	@Override
+	protected void onReceiveBSRespAssAndQuit() {
+		super.onReceiveBSRespAssAndQuit();
+		//Return to the main page
+		finish();
+	}
 
 }

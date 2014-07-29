@@ -60,7 +60,8 @@ public class RenHaiMsgBusinessSessionReq extends RenHaiMsg{
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_BUSINESSTYPE, _businessType);
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONTYPE, _operationType);			
 			tMsgBodyContent.put(MSG_BUSINESSSESSIONREQ_OPERATIONVALUE, JSONNULL);
-			if(_operationType == RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ASSESSANDCONTINUE)
+			if( (_operationType == RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ASSESSANDCONTINUE)
+			  ||(_operationType == RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ASSESSANDQUIT))
 			{
 				JSONObject tOperationInfo = new JSONObject();
 				JSONObject tDevice = new JSONObject();

@@ -65,7 +65,8 @@ public class RenHaiWaitForMatchActivity extends RenHaiBaseActivity {
 		if(mCallerName.equals("RenHaiStartVedioFragment"))
 		{
 			sendMatchStartMessage();
-		}else if(mCallerName.equals("RenHaiMatchingActivity"))
+		}else if( (mCallerName.equals("RenHaiMatchingActivity"))
+				||(mCallerName.equals("RenHaiAssessActivity")) )
 		{
 			// Do nothing here, because we are already under the MATCHSTARTED state
 		}		
