@@ -34,10 +34,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.TranslateAnimation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -57,6 +63,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
 	TextView mGlbIntEmpty;
 	ProgressBar mProgressBar;
 	private RenHaiWebSocketProcess mWebSocketHandle = null;
+	boolean isMove = false;
 	
 	private final Logger mlog = Logger.getLogger(RenHaiMyTopicsFragment.class);
 	
@@ -122,6 +129,32 @@ public class RenHaiMyTopicsFragment extends Fragment {
 				onEditOrDeleteTheIntLabel(arg2);				
 			}
 		});
+    	
+    	mGlbInterestsGrid.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {				
+				if(arg1 != null)
+				{
+					final ImageView tMoveView = new ImageView(getActivity());
+					tMoveView.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getCurrHotIntLabel(arg2).getIntLabelName()));
+					
+					final int[] startLocation = new int[2];
+					arg1.getLocationInWindow(startLocation);
+					new Handler().postDelayed(new Runnable() {
+						public void run() {
+							try {
+								int[] endLocation = new int[2];
+								mMyInterestsGrid.getLocationInWindow(endLocation);
+								endLocation[0] += mMyInterestsGrid.getCoorFromIndex(mMyInterestsGrid.getChildCount()).x;
+								endLocation[1] += mMyInterestsGrid.getCoorFromIndex(mMyInterestsGrid.getChildCount()).y;
+								MoveAnim(tMoveView, startLocation , endLocation);							
+							} catch (Exception localException) {
+							}
+						}
+					}, 50L);
+				}
+			}
+		});
     }
     
 	private View.OnClickListener mCreateNewLabelListener = new View.OnClickListener() {
@@ -142,8 +175,61 @@ public class RenHaiMyTopicsFragment extends Fragment {
 		}
 	};
     
+	private void MoveAnim(final View moveView, int[] startLocation,int[] endLocation) {
+		int[] initLocation = new int[2];
+		moveView.getLocationInWindow(initLocation);
+		final ViewGroup moveViewGroup = getMoveViewGroup();
+		final View mMoveView = getMoveView(moveViewGroup, moveView, initLocation);
+		TranslateAnimation moveAnimation = new TranslateAnimation(
+				startLocation[0], endLocation[0], startLocation[1],
+				endLocation[1]);
+		moveAnimation.setDuration(300L);
+		AnimationSet moveAnimationSet = new AnimationSet(true);
+		moveAnimationSet.setFillAfter(false);
+		moveAnimationSet.addAnimation(moveAnimation);
+		mMoveView.startAnimation(moveAnimationSet);
+		moveAnimationSet.setAnimationListener(new AnimationListener() {
+			
+			@Override
+			public void onAnimationStart(Animation animation) {
+				isMove = true;
+			}
+			
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+			}
+			
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				moveViewGroup.removeView(mMoveView);
+				mMyInterestsGrid.addView((ImageView)moveView);
+				mMyInterestsGrid.refreshDrawableState();
+				isMove = false;
+			}
+		});
+	}
+	
+	private ViewGroup getMoveViewGroup() {
+		ViewGroup moveViewGroup = (ViewGroup) getActivity().getWindow().getDecorView();
+		LinearLayout moveLinearLayout = new LinearLayout(getActivity());
+		moveLinearLayout.setLayoutParams(new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		moveViewGroup.addView(moveLinearLayout);
+		return moveLinearLayout;
+	}
+	
+	private View getMoveView(ViewGroup viewGroup, View view, int[] initLocation) {
+		int x = initLocation[0];
+		int y = initLocation[1];
+		viewGroup.addView(view);
+		LinearLayout.LayoutParams mLayoutParams = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		mLayoutParams.leftMargin = x;
+		mLayoutParams.topMargin = y;
+		view.setLayoutParams(mLayoutParams);
+		return view;
+	}
+	
     private void onUpdateMyInterestGrid(boolean _ifFirstEntry){
-    	mMyInterestsGrid.removeAllViews();
+    	mMyInterestsGrid.removeAllViews();   	
     	for(int i=0; i < RenHaiInfo.InterestLabel.getMyIntLabelNum(); i++)
     	{
     		ImageView tIntLabel = new ImageView(getActivity());

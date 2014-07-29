@@ -206,7 +206,7 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
         //Toast.makeText(getContext(), "Target: " + target + ".", Toast.LENGTH_SHORT).show();
         return target;
     }
-    protected Point getCoorFromIndex(int index)
+    public Point getCoorFromIndex(int index)
     {
         int col = index % colCount;
         int row = index / colCount;
