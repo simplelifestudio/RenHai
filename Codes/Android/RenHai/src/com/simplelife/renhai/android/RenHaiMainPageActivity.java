@@ -308,7 +308,7 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
 	protected void onWebSocketCreateError() {
 		super.onWebSocketCreateError();
 		// avoid the multi-note of connection lost
-		if(mWebSocketLost == true)
+		if(mWebSocketLost == false)
 		{
 			mWebSocketLost = true;
 	    	showActionBarNote(R.string.mainpage_title_connectionlost);
@@ -333,7 +333,7 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
 	protected void onWebSocketDisconnect() {
 		super.onWebSocketDisconnect();
 		// avoid the multi-note of connection lost
-		if(mWebSocketLost == true)
+		if(mWebSocketLost == false)
 		{
 			mWebSocketLost = true;
 	    	showActionBarNote(R.string.mainpage_title_connectionlost);
