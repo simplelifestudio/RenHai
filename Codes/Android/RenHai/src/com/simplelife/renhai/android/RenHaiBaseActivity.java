@@ -36,6 +36,12 @@ public abstract class RenHaiBaseActivity extends FragmentActivity {
 	}
 	
 	@Override
+	public void onStop() {
+    	super.onStop();
+    	finish();   	
+    }
+	
+	@Override
     protected void onDestroy() {  
         super.onDestroy();  
         unregisterReceiver(mBroadcastRcver);  
