@@ -10,8 +10,6 @@ package com.simplelife.renhai.android.ui;
 import java.util.Collections;
 import java.util.ArrayList;
 
-import com.simplelife.renhai.android.RenHaiMainPageActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -30,7 +28,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
 
 public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchListener, View.OnClickListener, View.OnLongClickListener {
 	// layout vars
@@ -59,7 +56,8 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
         DisplayMetrics metrics = new DisplayMetrics();
         ((Activity)context).getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		dpi = metrics.densityDpi;
-    }
+    }       
+    
     protected void setListeners()
     {
     	setOnTouchListener(this);
@@ -301,8 +299,8 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
                            v.layout(xy.x, xy.y, xy.x + childSize, xy.y + childHight);
                        }
                        v.clearAnimation();
-                       if (v instanceof ImageView)
-                    	   ((ImageView)v).setAlpha(255);
+                       if (v instanceof RenHaiImageView)
+                    	   ((RenHaiImageView)v).setAlpha(255);
                        lastTarget = -1;
                        dragged = -1;
                    }
@@ -413,6 +411,8 @@ public class RenHaiDraggableGridView extends ViewGroup implements View.OnTouchLi
         	newPositions.set(i, -1);
             addView(children.get(i));
         }
+        if (onRearrangeListener != null)
+    		onRearrangeListener.onRearrangeAll();
         onLayout(true, getLeft(), getTop(), getRight(), getBottom());
     }
     public void scrollToTop()

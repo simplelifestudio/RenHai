@@ -18,6 +18,8 @@ import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.timer.RenHaiTimerHelper;
 import com.simplelife.renhai.android.timer.RenHaiTimerProcessor;
 import com.simplelife.renhai.android.ui.RenHaiDraggableGridView;
+import com.simplelife.renhai.android.ui.RenHaiDraggableGridViewListener;
+import com.simplelife.renhai.android.ui.RenHaiImageView;
 
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -42,7 +44,6 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ProgressBar;
@@ -130,13 +131,28 @@ public class RenHaiMyTopicsFragment extends Fragment {
 			}
 		});
     	
+    	mMyInterestsGrid.setOnRearrangeListener(new RenHaiDraggableGridViewListener() {
+
+			@Override
+			public void onRearrange(int oldIndex, int newIndex) {
+				// TODO Auto-generated method stub				
+			}
+
+			@Override
+			public void onRearrangeAll() {
+				onReorderLabels();				
+			}
+    		
+    	});
+    	
     	mGlbInterestsGrid.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {				
 				if(arg1 != null)
 				{
-					final ImageView tMoveView = new ImageView(getActivity());
-					tMoveView.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getCurrHotIntLabel(arg2).getIntLabelName()));
+					final RenHaiImageView tMoveView = new RenHaiImageView(getActivity());
+					tMoveView.setImageBitmap(getThumb(((RenHaiImageView)arg1).getText()));
+					tMoveView.setText(((RenHaiImageView)arg1).getText());
 					
 					final int[] startLocation = new int[2];
 					arg1.getLocationInWindow(startLocation);
@@ -202,8 +218,10 @@ public class RenHaiMyTopicsFragment extends Fragment {
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				moveViewGroup.removeView(mMoveView);
-				mMyInterestsGrid.addView((ImageView)moveView);
+				addInterestLabel(((RenHaiImageView)moveView).getText());
+				mMyInterestsGrid.addView((RenHaiImageView)moveView);
 				mMyInterestsGrid.refreshDrawableState();
+				mUpdateTimer.resetTimer();
 				isMove = false;
 			}
 		});
@@ -232,8 +250,9 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	mMyInterestsGrid.removeAllViews();   	
     	for(int i=0; i < RenHaiInfo.InterestLabel.getMyIntLabelNum(); i++)
     	{
-    		ImageView tIntLabel = new ImageView(getActivity());
+    		RenHaiImageView tIntLabel = new RenHaiImageView(getActivity());
     		tIntLabel.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getMyIntLabel(i).getIntLabelName()));
+    		tIntLabel.setText(RenHaiInfo.InterestLabel.getMyIntLabel(i).getIntLabelName());
     		mMyInterestsGrid.addView(tIntLabel);
     	}
     	
@@ -250,8 +269,9 @@ public class RenHaiMyTopicsFragment extends Fragment {
     		mGlbInterestsGrid.removeAllViews();
     		for(int i=0; i < RenHaiInfo.InterestLabel.getCurrHotLabelNum(); i++)
     		{
-    			ImageView tGlbIntLabel = new ImageView(getActivity());
+    			RenHaiImageView tGlbIntLabel = new RenHaiImageView(getActivity());
         		tGlbIntLabel.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getCurrHotIntLabel(i).getIntLabelName()));
+        		tGlbIntLabel.setText(RenHaiInfo.InterestLabel.getCurrHotIntLabel(i).getIntLabelName());
         		mGlbInterestsGrid.addView(tGlbIntLabel);
     		} 
     		mGlbInterestsGrid.setVisibility(View.VISIBLE);
@@ -467,6 +487,12 @@ public class RenHaiMyTopicsFragment extends Fragment {
 		mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
 	}
     
+	public void addInterestLabel(String _label) {
+		InterestLabelMap tIntLabelMap = new InterestLabelMap();
+    	tIntLabelMap.setIntLabelName(_label);
+    	tIntLabelMap.setLabelOrder(RenHaiInfo.InterestLabel.getMyIntLabelNum());
+    	RenHaiInfo.InterestLabel.putMyIntLabel(tIntLabelMap);
+	}
     ///////////////////////////////////////////////////////////////////////
     // Timer Callbacks
     ///////////////////////////////////////////////////////////////////////
@@ -477,6 +503,33 @@ public class RenHaiMyTopicsFragment extends Fragment {
         	t_MsgListData.what = MYTOPIC_MSG_TIMETOUPDATE;
         	handler.sendMessage(t_MsgListData);	       	
         }        
-    });        
+    });
+
+	///////////////////////////////////////////////////////////////////////
+	// Interface Callbacks
+	///////////////////////////////////////////////////////////////////////
+	public void onReorderLabels() {				
+		int tLabelNum = mMyInterestsGrid.getChildCount();
+
+		for(int viewIdx=0; viewIdx<tLabelNum; viewIdx++)
+		{
+			String tLabelName = ((RenHaiImageView)mMyInterestsGrid.getChildAt(viewIdx)).getText();
+			for(int mapIdx=0; mapIdx<tLabelNum; mapIdx++)
+			{
+				InterestLabelMap tLabelMap = RenHaiInfo.InterestLabel.getMyIntLabel(mapIdx);
+				if((tLabelMap.getIntLabelName().equals(tLabelName))
+						&&(viewIdx != mapIdx))
+				{
+					InterestLabelMap tLabelMapOrig = RenHaiInfo.InterestLabel.getMyIntLabel(viewIdx);
+					RenHaiInfo.InterestLabel.replaceMyIntLabel(viewIdx, tLabelMap);
+					RenHaiInfo.InterestLabel.replaceMyIntLabel(mapIdx, tLabelMapOrig);
+					tLabelMap.setLabelOrder(viewIdx+1);
+					tLabelMapOrig.setLabelOrder(mapIdx+1);
+					break;
+				}
+			}
+		}
+		mUpdateTimer.resetTimer();		
+	}        
     
 }

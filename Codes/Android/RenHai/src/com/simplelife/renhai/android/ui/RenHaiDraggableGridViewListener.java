@@ -11,4 +11,6 @@ package com.simplelife.renhai.android.ui;
 public interface RenHaiDraggableGridViewListener {
 	
 	public abstract void onRearrange(int oldIndex, int newIndex);
+	
+	public abstract void onRearrangeAll();
 }
