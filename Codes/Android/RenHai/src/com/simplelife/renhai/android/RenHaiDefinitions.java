@@ -156,7 +156,8 @@ public class RenHaiDefinitions {
 	// ===============================================================================
 	// Shared preference key
 	// ===============================================================================
-	public static final String RENHAI_SHAREDPREF_STARTVIDEO = "renhai.sharedpref.startvideo";
-	public static final String RENHAI_SHAREDPREF_MYTOPIC1   = "renhai.sharedpref.mytopic1";
-	public static final String RENHAI_SHAREDPREF_MYTOPIC2   = "renhai.sharedpref.mytopic2";
+	public static final String RENHAI_SHAREDPREF_FIRSTSTART = "renhai.sharedpref.fs";
+	public static final String RENHAI_SHAREDPREF_FIRSTSTART_STARTVIDEO = "renhai.sharedpref.fs.startvideo";
+	public static final String RENHAI_SHAREDPREF_FIRSTSTART_MYTOPIC1   = "renhai.sharedpref.fs.mytopic1";
+	public static final String RENHAI_SHAREDPREF_FIRSTSTART_MYTOPIC2   = "renhai.sharedpref.fs.mytopic2";
 }

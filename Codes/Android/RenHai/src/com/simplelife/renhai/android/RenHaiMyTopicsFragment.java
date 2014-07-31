@@ -24,6 +24,7 @@ import com.simplelife.renhai.android.ui.RenHaiImageView;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -65,8 +66,11 @@ public class RenHaiMyTopicsFragment extends Fragment {
 	TextView mGlbIntEmpty;
 	ProgressBar mProgressBar;
 	private ImageView mGuideImage;
+	private ImageView mGuideImage2;
 	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	boolean isMove = false;
+	private SharedPreferences mSharedPrefs;
+	
 	
 	private final Logger mlog = Logger.getLogger(RenHaiMyTopicsFragment.class);
 	
@@ -87,9 +91,14 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	mCreateInt.setOnClickListener(mCreateNewLabelListener);   	
     	mFreshBtn.setOnClickListener(mFreshGlbIntLabelListener);
     	
+    	mSharedPrefs = getActivity().getSharedPreferences(RenHaiDefinitions.RENHAI_SHAREDPREF_FIRSTSTART, 0);
+    	
     	mGlbIntEmpty = (TextView)rootView.findViewById(R.id.mytopics_glbintempty);
     	mProgressBar = (ProgressBar)rootView.findViewById(R.id.mytopics_progressbar);
     	mProgressBar.setVisibility(View.INVISIBLE);
+    	
+    	mGuideImage   = (ImageView)rootView.findViewById(R.id.mytopics_guide);
+    	mGuideImage2  = (ImageView)rootView.findViewById(R.id.mytopics_guide2);
     	
     	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
     	
@@ -104,16 +113,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	
     	// Update the global interest label grid
     	onUpdateGlobalInterestGrid();
-    	
-    	mGuideImage  = (ImageView)rootView.findViewById(R.id.mytopics_guide);
-    	mGuideImage.setVisibility(View.VISIBLE);
-    	
-    	mGuideImage.setOnClickListener(new View.OnClickListener() { 
-             public void onClick(View v) { 
-            	 mGuideImage.setVisibility(View.GONE); 
-             } 
-         }); 
-    	
+	
 		/*
     	for(int i=0; i < RenHaiInfo.InterestLabel.getCurrHotLabelNum(); i++)
     	{
@@ -267,6 +267,17 @@ public class RenHaiMyTopicsFragment extends Fragment {
     		mMyInterestsGrid.addView(tIntLabel);
     	}
     	
+    	if(isFirstTimeToShowMyIntLabel() && (RenHaiInfo.InterestLabel.getMyIntLabelNum()>0))
+    	{
+    		mGuideImage.setVisibility(View.VISIBLE);
+    		mGuideImage.setOnClickListener(new View.OnClickListener() { 
+                public void onClick(View v) { 
+               	 mGuideImage.setVisibility(View.GONE); 
+                } 
+            });
+    		updateFirstTimeShowMyIntFlag(false);
+    	}
+    	
     	// Use the resetTimer rather than the startTimer in case of the 
     	// frequently operation of adding interest labels
     	if(_ifFirstEntry != true)
@@ -286,6 +297,18 @@ public class RenHaiMyTopicsFragment extends Fragment {
         		mGlbInterestsGrid.addView(tGlbIntLabel);
     		} 
     		mGlbInterestsGrid.setVisibility(View.VISIBLE);
+    		
+    		if(isFirstTimeToShowGlbIntLabel())
+    		{
+    			mGuideImage.setVisibility(View.VISIBLE);
+    			mGuideImage2.setOnClickListener(new View.OnClickListener() { 
+    	            public void onClick(View v) { 
+    	            	mGuideImage2.setVisibility(View.GONE); 
+    	            } 
+    	        }); 
+    			updateFirstTimeShowGlbIntFlag(false);
+    		}
+
     	}
     	else{    		
     		mGlbIntEmpty.setVisibility(View.VISIBLE);
@@ -543,4 +566,30 @@ public class RenHaiMyTopicsFragment extends Fragment {
 		mUpdateTimer.resetTimer();		
 	}        
     
+	///////////////////////////////////////////////////////////////////////
+	// First time running
+	///////////////////////////////////////////////////////////////////////
+	private boolean isFirstTimeToShowMyIntLabel() {   	
+    	// Retrieve the seeds info status by date via the shared preference file
+    	return mSharedPrefs.getBoolean(RenHaiDefinitions.RENHAI_SHAREDPREF_FIRSTSTART_MYTOPIC1,true);    	
+    }
+	
+	private boolean isFirstTimeToShowGlbIntLabel() {   	
+    	// Retrieve the seeds info status by date via the shared preference file
+    	return mSharedPrefs.getBoolean(RenHaiDefinitions.RENHAI_SHAREDPREF_FIRSTSTART_MYTOPIC2,true);    	
+    }
+    
+    private void updateFirstTimeShowMyIntFlag(Boolean _inTag){
+    	
+    	SharedPreferences.Editor editor = mSharedPrefs.edit();
+    	editor.putBoolean(RenHaiDefinitions.RENHAI_SHAREDPREF_FIRSTSTART_MYTOPIC1, _inTag);
+    	editor.commit();    	
+    }
+    
+private void updateFirstTimeShowGlbIntFlag(Boolean _inTag){
+    	
+    	SharedPreferences.Editor editor = mSharedPrefs.edit();
+    	editor.putBoolean(RenHaiDefinitions.RENHAI_SHAREDPREF_FIRSTSTART_MYTOPIC2, _inTag);
+    	editor.commit();    	
+    }
 }

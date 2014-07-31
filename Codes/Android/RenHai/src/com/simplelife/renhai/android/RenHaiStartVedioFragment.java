@@ -59,7 +59,7 @@ public class RenHaiStartVedioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
     	
-    	mSharedPrefs = getActivity().getSharedPreferences(RenHaiDefinitions.RENHAI_SHAREDPREF_STARTVIDEO, 0);
+    	mSharedPrefs = getActivity().getSharedPreferences(RenHaiDefinitions.RENHAI_SHAREDPREF_FIRSTSTART, 0);
     	View rootView = inflater.inflate(R.layout.fragment_startvedio, container, false);
     	mCircleButton = (RenHaiCircleButton)rootView.findViewById(R.id.startvedio_button);
     	mCircleButton.autoShiningRing();
@@ -70,14 +70,18 @@ public class RenHaiStartVedioFragment extends Fragment {
     	onUpdateView();
     	
     	mGuideImage  = (ImageView)rootView.findViewById(R.id.startvedio_guide);
-    	mGuideImage.setVisibility(View.VISIBLE);
     	
-    	mGuideImage.setOnClickListener(new View.OnClickListener() { 
-             public void onClick(View v) { 
-            	 mGuideImage.setVisibility(View.GONE); 
-             } 
-         }); 
-    	
+    	if(isFirstTimeAssess())
+    	{
+    		mGuideImage.setVisibility(View.VISIBLE);
+    		mGuideImage.setOnClickListener(new View.OnClickListener() { 
+                public void onClick(View v) { 
+               	 mGuideImage.setVisibility(View.GONE); 
+                } 
+            });
+    		updateFirstTimeAssFlag(false);
+    	}
+  	
     	mCircleButton.setOnRadialViewValueChanged(new OnRadialViewValueChanged() {
 			@Override
 			public void onValueChanged(int value) {
@@ -229,5 +233,18 @@ public class RenHaiStartVedioFragment extends Fragment {
         }
         
     });
+    
+    
+    private boolean isFirstTimeAssess() {   	
+    	// Retrieve the seeds info status by date via the shared preference file
+    	return mSharedPrefs.getBoolean(RenHaiDefinitions.RENHAI_SHAREDPREF_FIRSTSTART_STARTVIDEO,true);    	
+    }
+    
+    private void updateFirstTimeAssFlag(Boolean _inTag){
+    	
+    	SharedPreferences.Editor editor = mSharedPrefs.edit();
+    	editor.putBoolean(RenHaiDefinitions.RENHAI_SHAREDPREF_FIRSTSTART_STARTVIDEO, _inTag);
+    	editor.commit();    	
+    }
 
 }

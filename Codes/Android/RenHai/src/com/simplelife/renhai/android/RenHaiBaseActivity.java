@@ -35,11 +35,12 @@ public abstract class RenHaiBaseActivity extends FragmentActivity {
 	 	registerReceiver(mBroadcastRcver, tFilter); 
 	}
 	
+	/*
 	@Override
 	public void onStop() {
     	super.onStop();
     	finish();   	
-    }
+    }*/
 	
 	@Override
     protected void onDestroy() {  

@@ -120,6 +120,18 @@
         android:contentDescription="guideimage" 
         android:keepScreenOn="true" 
         android:scaleType="fitXY" 
-        android:src="@drawable/guide_mytopic2" />
+        android:src="@drawable/guide_mytopic"
+        android:visibility="gone" />
+    
+    <ImageView 
+        android:id="@+id/mytopics_guide2" 
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent" 
+        android:layout_alignParentBottom="true" 
+        android:contentDescription="guideimage" 
+        android:keepScreenOn="true" 
+        android:scaleType="fitXY" 
+        android:src="@drawable/guide_mytopic2"
+        android:visibility="gone" />
    
 </RelativeLayout>

@@ -317,7 +317,7 @@ public class RenHaiSplashActivity extends RenHaiBaseActivity {
     	super.onWebSocketCreateSuccess();
     	mProgressText.setText(R.string.mainpage_title_syncserver);
     	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());  
-    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructQueryMsg().toString();
+    	String tAppDataSyncReqMsg = RenHaiMsgAppDataSyncReq.constructMsg().toString();
     	mWebSocketHandle.sendMessage(tAppDataSyncReqMsg);
     	mNetConnTimer.startTimer();
 	}

@@ -90,6 +90,7 @@
         android:contentDescription="guideimage" 
         android:keepScreenOn="true" 
         android:scaleType="fitXY" 
-        android:src="@drawable/guide_startvideo" /> 
+        android:src="@drawable/guide_startvideo"
+        android:visibility="gone" /> 
 
 </RelativeLayout>
