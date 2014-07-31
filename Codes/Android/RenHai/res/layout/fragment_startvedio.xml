@@ -81,5 +81,15 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/startvedio_btnmarginbottom"
         android:padding="5dp"/>
+    
+    <ImageView 
+        android:id="@+id/startvedio_guide" 
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent" 
+        android:layout_alignParentBottom="true" 
+        android:contentDescription="guideimage" 
+        android:keepScreenOn="true" 
+        android:scaleType="fitXY" 
+        android:src="@drawable/guide_startvideo" /> 
 
 </RelativeLayout>

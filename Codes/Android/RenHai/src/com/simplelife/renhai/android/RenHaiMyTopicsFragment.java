@@ -44,6 +44,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ProgressBar;
@@ -63,6 +64,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
 	Button mFreshBtn;
 	TextView mGlbIntEmpty;
 	ProgressBar mProgressBar;
+	private ImageView mGuideImage;
 	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	boolean isMove = false;
 	
@@ -102,6 +104,15 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	
     	// Update the global interest label grid
     	onUpdateGlobalInterestGrid();
+    	
+    	mGuideImage  = (ImageView)rootView.findViewById(R.id.mytopics_guide);
+    	mGuideImage.setVisibility(View.VISIBLE);
+    	
+    	mGuideImage.setOnClickListener(new View.OnClickListener() { 
+             public void onClick(View v) { 
+            	 mGuideImage.setVisibility(View.GONE); 
+             } 
+         }); 
     	
 		/*
     	for(int i=0; i < RenHaiInfo.InterestLabel.getCurrHotLabelNum(); i++)
@@ -276,7 +287,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
     		} 
     		mGlbInterestsGrid.setVisibility(View.VISIBLE);
     	}
-    	else{
+    	else{    		
     		mGlbIntEmpty.setVisibility(View.VISIBLE);
     		mGlbInterestsGrid.setVisibility(View.INVISIBLE);
     	}

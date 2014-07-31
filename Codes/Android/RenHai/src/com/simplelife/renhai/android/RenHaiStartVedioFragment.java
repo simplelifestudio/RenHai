@@ -22,6 +22,7 @@ import com.simplelife.renhai.android.ui.RenHaiCircleButton;
 import com.simplelife.renhai.android.ui.RenHaiCircleButton.OnRadialViewValueChanged;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,6 +31,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class RenHaiStartVedioFragment extends Fragment {
@@ -42,7 +44,9 @@ public class RenHaiStartVedioFragment extends Fragment {
 	private TextView mChatCount;
 	protected boolean mIsReadyToMoveOn = false;
 	protected boolean mHasMovedOn = false;
+	private ImageView mGuideImage;
 	private RenHaiWebSocketProcess mWebSocketHandle = null;
+	private SharedPreferences mSharedPrefs;
 	
 	private final Logger mlog = Logger.getLogger(RenHaiStartVedioFragment.class);
 	
@@ -55,6 +59,7 @@ public class RenHaiStartVedioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
     	
+    	mSharedPrefs = getActivity().getSharedPreferences(RenHaiDefinitions.RENHAI_SHAREDPREF_STARTVIDEO, 0);
     	View rootView = inflater.inflate(R.layout.fragment_startvedio, container, false);
     	mCircleButton = (RenHaiCircleButton)rootView.findViewById(R.id.startvedio_button);
     	mCircleButton.autoShiningRing();
@@ -63,6 +68,15 @@ public class RenHaiStartVedioFragment extends Fragment {
     	mOnlineCount = (TextView)rootView.findViewById(R.id.startvedio_onlinecount);    	
     	mChatCount   = (TextView)rootView.findViewById(R.id.startvedio_chatcount);
     	onUpdateView();
+    	
+    	mGuideImage  = (ImageView)rootView.findViewById(R.id.startvedio_guide);
+    	mGuideImage.setVisibility(View.VISIBLE);
+    	
+    	mGuideImage.setOnClickListener(new View.OnClickListener() { 
+             public void onClick(View v) { 
+            	 mGuideImage.setVisibility(View.GONE); 
+             } 
+         }); 
     	
     	mCircleButton.setOnRadialViewValueChanged(new OnRadialViewValueChanged() {
 			@Override
@@ -98,7 +112,13 @@ public class RenHaiStartVedioFragment extends Fragment {
     	mCircleButton.resetView();
     	mUpdateTimer.resetRepeatTimer();
     	
-    }        
+    }
+    
+    @Override
+	public void onStop() {
+    	super.onStop();
+    	mUpdateTimer.stopTimer();  	
+    }
     
     public void onUpdateView(){
     	mOnlineCount.setText(formatCount(RenHaiInfo.ServerPoolStat.getOnlineCount()));

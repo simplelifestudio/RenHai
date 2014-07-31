@@ -24,10 +24,12 @@
         android:allowBackup="true"
         android:icon="@drawable/renhai_icon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        >
         <activity
             android:name="com.simplelife.renhai.android.RenHaiSplashActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"  >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,34 +39,41 @@
         <activity
             android:name="com.simplelife.renhai.android.RenHaiLoadingActivity"
             android:label="@string/protocal_title"
-            android:theme="@style/ActionBarWithOnlyTitleTheme">
+            android:theme="@style/ActionBarWithOnlyTitleTheme"
+            android:screenOrientation="portrait" >
         </activity>        
         <activity
             android:name="com.simplelife.renhai.android.RenHaiProtocalActivity"
             android:label="@string/protocal_title"
-            android:theme="@style/ActionBarWithOnlyTitleTheme">
+            android:theme="@style/ActionBarWithOnlyTitleTheme"
+            android:screenOrientation="portrait" >
         </activity>
         
         <activity
             android:name="com.simplelife.renhai.android.RenHaiIntroduceActivity"
-            android:theme="@style/ActionBarWithOnlyTitleTheme">
+            android:theme="@style/ActionBarWithOnlyTitleTheme"
+            android:screenOrientation="portrait" >
         </activity>
         
         <activity
             android:name="com.simplelife.renhai.android.RenHaiMainPageActivity"
-            android:theme="@style/Theme.Actionbarwithtabstheme">                       
+            android:theme="@style/Theme.Actionbarwithtabstheme"
+            android:screenOrientation="portrait" >                       
         </activity>
         <activity
             android:name="com.simplelife.renhai.android.RenHaiWaitForMatchActivity"
-            android:theme="@style/Theme.Actionbarwithtabstheme">                       
+            android:theme="@style/Theme.Actionbarwithtabstheme"
+            android:screenOrientation="portrait" >                       
         </activity>
         <activity
             android:name="com.simplelife.renhai.android.RenHaiMatchingActivity"
-            android:theme="@style/Theme.Actionbarwithtabstheme">                       
+            android:theme="@style/Theme.Actionbarwithtabstheme"
+            android:screenOrientation="portrait" >                       
         </activity>
         <activity
             	android:name="com.simplelife.renhai.android.RenHaiVideoTalkActivity"
-            	android:configChanges="orientation|keyboardHidden|screenSize">
+            	android:configChanges="orientation|keyboardHidden|screenSize"
+            	>
             	<intent-filter>
                 	<action android:name="com.simplelife.renhai.android.RenHaiVideoTalkActivity" />
                 	<category android:name="android.intent.category.DEFAULT" />
@@ -72,7 +81,8 @@
         </activity>
         <activity
             android:name="com.simplelife.renhai.android.RenHaiAssessActivity"
-            android:theme="@style/Theme.Actionbarwithtabstheme">                       
+            android:theme="@style/Theme.Actionbarwithtabstheme"
+            android:screenOrientation="portrait" >                       
         </activity>
     </application>
 
