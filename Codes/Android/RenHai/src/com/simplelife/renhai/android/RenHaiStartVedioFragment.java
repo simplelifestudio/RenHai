@@ -27,7 +27,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,14 +60,10 @@ public class RenHaiStartVedioFragment extends Fragment {
     	
     	mSharedPrefs = getActivity().getSharedPreferences(RenHaiDefinitions.RENHAI_SHAREDPREF_FIRSTSTART, 0);
     	View rootView = inflater.inflate(R.layout.fragment_startvedio, container, false);
-    	mCircleButton = (RenHaiCircleButton)rootView.findViewById(R.id.startvedio_button);
-    	mCircleButton.autoShiningRing();
-    	mCircleButton.setOnClickListener(mStartBtnListener);
-    	
-    	mOnlineCount = (TextView)rootView.findViewById(R.id.startvedio_onlinecount);    	
-    	mChatCount   = (TextView)rootView.findViewById(R.id.startvedio_chatcount);
-    	onUpdateView();
-    	
+    	mCircleButton = (RenHaiCircleButton)rootView.findViewById(R.id.startvedio_button);  	
+    	mOnlineCount  = (TextView)rootView.findViewById(R.id.startvedio_onlinecount);    	
+    	mChatCount    = (TextView)rootView.findViewById(R.id.startvedio_chatcount);
+   	
     	mGuideImage  = (ImageView)rootView.findViewById(R.id.startvedio_guide);
     	
     	if(isFirstTimeAssess())
@@ -88,21 +83,9 @@ public class RenHaiStartVedioFragment extends Fragment {
 				//WindowManager.LayoutParams lp = getWindow().getAttributes();
 				//lp.screenBrightness = value / 100.0f;
 				//getWindow().setAttributes(lp);
-				Log.i("RenHaiStartVedioFragment", "onValueChanged value = " + value);
+				//Log.i("RenHaiStartVedioFragment", "onValueChanged value = " + value);
 			}
-		});
-		
-		/*
-    	if((int) (getWindow().getAttributes().screenBrightness * 100) < 0)
-			mCircleButton.setCurrentValue(50);
-		else
-			mCircleButton.setCurrentValue((int) (getWindow().getAttributes().screenBrightness * 100));*/    	
-     	
-     	// Retrieve the network instance
-     	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
-     	
-     	// Start the time to update the data periodically
-     	mUpdateTimer.startRepeatTimer();
+		});    	
     	
     	return rootView;    
     }
@@ -110,11 +93,20 @@ public class RenHaiStartVedioFragment extends Fragment {
     @Override
     public void onResume(){
     	super.onResume();
-    	mlog.info("StartVideo onResume");
     	mIsReadyToMoveOn = false;
     	mHasMovedOn = false;
-    	mCircleButton.resetView();
-    	mUpdateTimer.resetRepeatTimer();
+    	
+    	mCircleButton.resetView();    	
+    	mCircleButton.autoShiningRing();
+    	mCircleButton.setOnClickListener(mStartBtnListener);
+    	
+    	onUpdateView();
+    	
+    	// Retrieve the network instance
+     	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
+     	
+     	// Start the time to update the data periodically
+     	mUpdateTimer.startRepeatTimer();
     	
     }
     

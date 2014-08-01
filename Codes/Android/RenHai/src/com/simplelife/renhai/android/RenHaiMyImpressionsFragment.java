@@ -13,7 +13,6 @@ import java.text.NumberFormat;
 
 import org.apache.log4j.Logger;
 
-import com.simplelife.renhai.android.data.PeerDeviceInfo;
 import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.ui.RenHaiDraggableGridView;
 import com.simplelife.renhai.android.utils.TimerConverter;
@@ -26,10 +25,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.TextUtils.TruncateAt;
-import android.text.style.AbsoluteSizeSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -71,7 +67,7 @@ public class RenHaiMyImpressionsFragment extends Fragment {
     	return rootView;
     }
     
-    private void onUpdateImpressionGridView(){
+    public void onUpdateImpressionGridView() {
     	mImpLabelsGrid.removeAllViews();
     	int tImpLabelNum = RenHaiInfo.ImpressionLabel.getMyImpLabelNum();    	
     	if(tImpLabelNum > 0)
@@ -90,24 +86,6 @@ public class RenHaiMyImpressionsFragment extends Fragment {
     	}
     	
     }
-    
-    private Bitmap getThumb(String s)
-	{
-		Bitmap bmp = Bitmap.createBitmap(150, 75, Bitmap.Config.RGB_565);
-		Canvas canvas = new Canvas(bmp);
-	    Paint paint = new Paint();
-	    
-	    paint.setColor(getResources().getColor(R.color.maingreen));
-	    paint.setTextSize(24);
-	    paint.setFlags(Paint.ANTI_ALIAS_FLAG);
-	    canvas.drawRect(new Rect(0, 0, 150, 75), paint);
-	    paint.setColor(Color.WHITE);
-	    paint.setTextAlign(Paint.Align.CENTER);
-	    canvas.drawText(s, 75, 40, paint);
-	    
-	    
-		return bmp;
-	}
     
     private Bitmap getThumb(String s1, String s2)
 	{

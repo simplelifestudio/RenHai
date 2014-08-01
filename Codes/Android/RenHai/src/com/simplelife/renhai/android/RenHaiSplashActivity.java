@@ -116,7 +116,7 @@ public class RenHaiSplashActivity extends RenHaiBaseActivity {
 			public void onAnimationStart(Animation animation) {}			
 		});        
 	}
-	
+    	
 	private void redirectTo(){       
 		Intent intent;
 		if(isFirstStart())

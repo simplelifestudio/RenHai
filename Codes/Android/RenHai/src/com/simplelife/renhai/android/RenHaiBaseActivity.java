@@ -27,25 +27,38 @@ public abstract class RenHaiBaseActivity extends FragmentActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        
-	     // Register the broadcast receiver
+        super.onCreate(savedInstanceState);        	     
+	}
+	
+	@Override
+	protected void onStart() {
+    	super.onStart();  	
+    }
+	
+	@Override
+	protected void onResume() {
+    	super.onResume();
+    	// Register the broadcast receiver
 	 	IntentFilter tFilter = new IntentFilter();
 	 	tFilter.addAction(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 	 	registerReceiver(mBroadcastRcver, tFilter); 
-	}
+    }
 	
-	/*
 	@Override
-	public void onStop() {
-    	super.onStop();
-    	finish();   	
-    }*/
+	protected void onPause() {
+    	super.onPause();
+    	unregisterReceiver(mBroadcastRcver);
+    }
+	
+	@Override
+	protected void onStop() {
+    	super.onStop();  	
+    }
 	
 	@Override
     protected void onDestroy() {  
         super.onDestroy();  
-        unregisterReceiver(mBroadcastRcver);  
+         
     }			
 	
 	///////////////////////////////////////////////////////////////////////

@@ -9,14 +9,13 @@
 package com.simplelife.renhai.android;
 
 import org.apache.log4j.Logger;
-
 import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.timer.RenHaiTimerHelper;
 import com.simplelife.renhai.android.timer.RenHaiTimerProcessor;
-
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
@@ -79,22 +78,7 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
         
         mServerStatLayout = (RelativeLayout)findViewById(R.id.mainpage_serverstatinfolayout);
         mServerStatInfo = (TextView)findViewById(R.id.mainpage_serverstatinfo);
-        mBtnDismissInfo = (Button)findViewById(R.id.mainpage_dismissserverinfo);
-        
-        String tServerInfoToShow = "";
-        if(0 == RenHaiInfo.ServerAddr.getServiceStatus())
-        {
-        	tServerInfoToShow = getString(R.string.mainpage_statinfopart1)
-        			          + RenHaiInfo.ServerAddr.getTimeZone() + " "
-        			          + RenHaiInfo.ServerAddr.getBeginTime() + " to "
-        			          + RenHaiInfo.ServerAddr.getEndTime()
-        			          + getString(R.string.mainpage_statinfopart1);
-        }else{
-        	tServerInfoToShow = RenHaiInfo.ServerAddr.getBroadcastInfo();
-        }
-        mServerStatLayout.setVisibility(View.VISIBLE);
-        mServerStatInfo.setText(tServerInfoToShow);
-        mBtnDismissInfo.setOnClickListener(mBtnDismissInfoListener);        
+        mBtnDismissInfo = (Button)findViewById(R.id.mainpage_dismissserverinfo);                       
 
         // Set up the ViewPager, attaching the adapter and setting up a listener for when the
         // user swipes between sections.
@@ -124,11 +108,34 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
         if(true == RenHaiInfo.InterestLabel.isPersonalIntLabelsNotDefined())
         {
         	mViewPager.setCurrentItem(1);
-        }
-        
-        // Retrieve the websocket handle
-        mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());  
+        } 
+         
     }	
+    
+    @Override
+	protected void onResume() {
+    	super.onResume();
+    	
+    	String tServerInfoToShow = "";
+        if(0 == RenHaiInfo.ServerAddr.getServiceStatus())
+        {
+        	tServerInfoToShow = getString(R.string.mainpage_statinfopart1)
+        			          + RenHaiInfo.ServerAddr.getTimeZone() + " "
+        			          + RenHaiInfo.ServerAddr.getBeginTime() + " to "
+        			          + RenHaiInfo.ServerAddr.getEndTime()
+        			          + getString(R.string.mainpage_statinfopart1);
+        }else{
+        	tServerInfoToShow = RenHaiInfo.ServerAddr.getBroadcastInfo();
+        }
+        mServerStatLayout.setVisibility(View.VISIBLE);
+        mServerStatInfo.setText(tServerInfoToShow);
+        mBtnDismissInfo.setOnClickListener(mBtnDismissInfoListener);
+     
+        // Retrieve the websocket handle
+        mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication()); 
+        
+    }
+    
     
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
@@ -259,7 +266,7 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
 			            @Override
 			            public void run() {
 			            	//RenHaiWebSocketProcess.reInitWebSocket(getApplication());
-			            	mWebSocketHandle.reConnectWebSocket(getApplication());
+			            	RenHaiWebSocketProcess.reConnectWebSocket(getApplication());
 			            	Message t_MsgListData = new Message();
 			            	t_MsgListData.what = MAINPAGE_MSG_WEBRECONNECTING;
 			            	handler.sendMessage(t_MsgListData);			            	
@@ -281,6 +288,7 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
 		builder.create().show();
 	}    
     
+	@SuppressLint("HandlerLeak")
 	private Handler handler = new Handler(){  		  
         @Override  
         public void handleMessage(Message msg) {          	
@@ -350,6 +358,8 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
 	    	String tServerDataSyncReqMsg = RenHaiMsgServerDataSyncReq.constructMsg().toString();
 	    	mWebSocketHandle.sendMessage(tServerDataSyncReqMsg);
     	}
+		
+		mRenHaiMyImpressionsFragment.onUpdateImpressionGridView();
 	}
 	
 	@Override

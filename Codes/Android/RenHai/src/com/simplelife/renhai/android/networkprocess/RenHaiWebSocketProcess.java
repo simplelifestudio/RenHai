@@ -30,8 +30,9 @@ public class RenHaiWebSocketProcess {
 	
 	private static RenHaiWebSocketProcess mInstance = null;
 	private Context mContext;
-	private WebSocketClient mWebsocketClient;
+	private static WebSocketClient mWebsocketClient;
 	private final Logger mlog = Logger.getLogger(RenHaiWebSocketProcess.class);
+	private static boolean mIsDiconnected = false;
 	public static String TAG = "RenHaiWebSocketProcess";	
 	
 	public RenHaiWebSocketProcess(Context _context){
@@ -56,6 +57,8 @@ public class RenHaiWebSocketProcess {
 			    public void onConnect() {
 			        Log.d(TAG, "Connected!");
 			        
+			        mIsDiconnected = false;
+			        
 			        mPingTimer.resetRepeatTimer();
 			        
 			        // Notify the foreground receiver
@@ -79,6 +82,7 @@ public class RenHaiWebSocketProcess {
 			    @Override
 			    public void onDisconnect(int code, String reason) {
 			        Log.d(TAG, String.format("Disconnected! Code: %d Reason: %s", code, reason));
+			        mIsDiconnected = true;
 			        mPingTimer.stopTimer();
 			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
@@ -89,6 +93,7 @@ public class RenHaiWebSocketProcess {
 			    @Override
 			    public void onError(Exception error) {
 			        Log.e(TAG, "Error!", error);
+			        mIsDiconnected = true;
 			        mPingTimer.stopTimer();
 			        Intent tIntent = new Intent(RenHaiDefinitions.RENHAI_BROADCAST_WEBSOCKETMSG);
 			        tIntent.putExtra(RenHaiDefinitions.RENHAI_BROADCASTMSG_DEF, 
@@ -103,16 +108,23 @@ public class RenHaiWebSocketProcess {
 	}
 	
 	public void ping(String inMsg){
-		mWebsocketClient.ping(inMsg);
+		if(mIsDiconnected == false)
+			mWebsocketClient.ping(inMsg);
 	}
 	
 	public void sendMessage(String inMsg){
-		mWebsocketClient.send(inMsg);
+		if(mIsDiconnected == false)
+			mWebsocketClient.send(inMsg);
+		else
+			Log.w(TAG, "Websocketed is not connected, failed to send message;");
 	}
 	
 	public static RenHaiWebSocketProcess getNetworkInstance(Context _context){
 		if (null == mInstance)
 			mInstance = new RenHaiWebSocketProcess(_context);
+		
+		if(mIsDiconnected == true)
+			reConnectWebSocket(_context);
 		return mInstance;
 	}
 	
@@ -132,7 +144,7 @@ public class RenHaiWebSocketProcess {
 		mInstance = new RenHaiWebSocketProcess(_context);
 	}
 	
-	public void reConnectWebSocket(Context _context){
+	public static void reConnectWebSocket(Context _context){
 		mWebsocketClient.connect();
 	}
 	

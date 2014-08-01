@@ -27,9 +27,8 @@ public class RenHaiIntroduceActivity extends Activity {
 	
 	private ImageView mPage0;
 	private ImageView mPage1;
-	private String mCallerName;
 	
-    @Override
+	@Override
     public void onCreate(Bundle savedInstanceState) {
     	requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);

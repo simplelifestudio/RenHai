@@ -300,7 +300,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
     		
     		if(isFirstTimeToShowGlbIntLabel())
     		{
-    			mGuideImage.setVisibility(View.VISIBLE);
+    			mGuideImage2.setVisibility(View.VISIBLE);
     			mGuideImage2.setOnClickListener(new View.OnClickListener() { 
     	            public void onClick(View v) { 
     	            	mGuideImage2.setVisibility(View.GONE); 

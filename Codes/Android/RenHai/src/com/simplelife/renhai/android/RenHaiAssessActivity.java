@@ -66,35 +66,29 @@ public class RenHaiAssessActivity extends RenHaiBaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_assess);
 		
-		mAssessRdGroup = (RadioGroup)findViewById(R.id.assess_radiogroup);
-		mRdBtnHappy    = (RadioButton)findViewById(R.id.assess_btnhappy);
-		mRdBtnSoso     = (RadioButton)findViewById(R.id.assess_btnsoso);
-		mRdBtnDisgust  = (RadioButton)findViewById(R.id.assess_btndisgust);		
-		mAssessRdGroup.setOnCheckedChangeListener(mRadioGroupListener);
-		
-		mImpressionGrid = (RenHaiDraggableGridView)findViewById(R.id.assess_implabels);
-		mCreateImp = (Button)findViewById(R.id.assess_create);
-		mCreateImp.setOnClickListener(mCreateNewImpLabelListener);
-		
-		mAssessBtnYes = (TextView)findViewById(R.id.assess_btnyes);
-		mAssessBtnNo  = (TextView)findViewById(R.id.assess_btnno);
-		mAssessBtnYes.setOnClickListener(mAssessBtnYesListener);
-		mAssessBtnNo.setOnClickListener(mAssessBtnNoListener);
-		
+		mAssessRdGroup   = (RadioGroup)findViewById(R.id.assess_radiogroup);
+		mRdBtnHappy      = (RadioButton)findViewById(R.id.assess_btnhappy);
+		mRdBtnSoso       = (RadioButton)findViewById(R.id.assess_btnsoso);
+		mRdBtnDisgust    = (RadioButton)findViewById(R.id.assess_btndisgust);	
+		mImpressionGrid  = (RenHaiDraggableGridView)findViewById(R.id.assess_implabels);
 		mOrigImpGridView = (GridView)findViewById(R.id.assess_origlabels);
-		mImpAdapter = new ImpressionAdapter(this);
-		mOrigImpGridView.setAdapter(mImpAdapter);
-		
+		mCreateImp    = (Button)findViewById(R.id.assess_create);
+		mAssessBtnYes = (TextView)findViewById(R.id.assess_btnyes);
+		mAssessBtnNo  = (TextView)findViewById(R.id.assess_btnno);		
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();		
 		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
 		
-		setGridListeners();
-
-		/*
-		mAssessGridView = (GridView)findViewById(R.id.assess_gridview1);
-		mAssessAdapter = new AssessAdapter(this);
-		mAssessGridView.setAdapter(mAssessAdapter);
-		setAssessGridViewListeners();*/
-				
+		mAssessRdGroup.setOnCheckedChangeListener(mRadioGroupListener);		
+		mCreateImp.setOnClickListener(mCreateNewImpLabelListener);				
+		mAssessBtnYes.setOnClickListener(mAssessBtnYesListener);
+		mAssessBtnNo.setOnClickListener(mAssessBtnNoListener);		
+		mImpAdapter = new ImpressionAdapter(this);
+		mOrigImpGridView.setAdapter(mImpAdapter);
+		setGridListeners();		
 	}
 	
     ///////////////////////////////////////////////////////////////////////
@@ -113,8 +107,7 @@ public class RenHaiAssessActivity extends RenHaiBaseActivity {
             }
             if(checkedId == mRdBtnDisgust.getId()){
             	PeerDeviceInfo.AssessResult.setAssessment(RenHaiDefinitions.RENHAI_IMPRESSIONLABEL_ASSESS_DISGUSTING);
-            }
-			
+            }			
 		}
 		
 	};	
@@ -347,7 +340,7 @@ public class RenHaiAssessActivity extends RenHaiBaseActivity {
     
     private void onWebSocketException() {
     	// Re-connect the network to let the assess stage fulfilled
-    	mWebSocketHandle.reConnectWebSocket(getApplication());
+    	RenHaiWebSocketProcess.reConnectWebSocket(getApplication());
 	 }
     
     private void redirectToWaitPage() {
