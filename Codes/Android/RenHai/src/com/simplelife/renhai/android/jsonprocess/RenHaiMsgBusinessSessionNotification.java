@@ -20,7 +20,6 @@ import com.simplelife.renhai.android.data.BusinessSessionInfo;
 import com.simplelife.renhai.android.data.ImpressLabelMap;
 import com.simplelife.renhai.android.data.InterestLabelMap;
 import com.simplelife.renhai.android.data.PeerDeviceInfo;
-import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.data.WebRtcSession;
 
 public class RenHaiMsgBusinessSessionNotification extends RenHaiMsg {

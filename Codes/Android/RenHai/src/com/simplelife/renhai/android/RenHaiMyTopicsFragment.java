@@ -59,19 +59,18 @@ public class RenHaiMyTopicsFragment extends Fragment {
 	private final int MYTOPIC_MSG_INTERESTDEFINEDBYMANUAL = 2003;
 	private final int MYTOPIC_MSG_TIMETOUPDATE = 2004;
 		
-	RenHaiDraggableGridView mMyInterestsGrid;
-	RenHaiDraggableGridView mGlbInterestsGrid;
-	Button mCreateInt;
-	Button mFreshBtn;
-	TextView mGlbIntEmpty;
-	ProgressBar mProgressBar;
+	private RenHaiDraggableGridView mMyInterestsGrid;
+	private RenHaiDraggableGridView mGlbInterestsGrid;
+	private Button mCreateInt;
+	private Button mFreshBtn;
+	private TextView mGlbIntEmpty;
+	private ProgressBar mProgressBar;
 	private ImageView mGuideImage;
 	private ImageView mGuideImage2;
 	private RenHaiWebSocketProcess mWebSocketHandle = null;
 	boolean isMove = false;
 	private SharedPreferences mSharedPrefs;
-	
-	
+		
 	private final Logger mlog = Logger.getLogger(RenHaiMyTopicsFragment.class);
 	
 	@Override
@@ -86,21 +85,27 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	View rootView = inflater.inflate(R.layout.fragment_mytopic, container, false);
     	mMyInterestsGrid  = (RenHaiDraggableGridView)(rootView.findViewById(R.id.mytopics_myinterests));
     	mGlbInterestsGrid = (RenHaiDraggableGridView)(rootView.findViewById(R.id.mytopics_globalinterests));
-    	mCreateInt = (Button)rootView.findViewById(R.id.mytopics_create);
-    	mFreshBtn  = (Button)rootView.findViewById(R.id.mytopics_refresh);
-    	mCreateInt.setOnClickListener(mCreateNewLabelListener);   	
-    	mFreshBtn.setOnClickListener(mFreshGlbIntLabelListener);
-    	
-    	mSharedPrefs = getActivity().getSharedPreferences(RenHaiDefinitions.RENHAI_SHAREDPREF_FIRSTSTART, 0);
-    	
-    	mGlbIntEmpty = (TextView)rootView.findViewById(R.id.mytopics_glbintempty);
-    	mProgressBar = (ProgressBar)rootView.findViewById(R.id.mytopics_progressbar);
-    	mProgressBar.setVisibility(View.INVISIBLE);
-    	
+    	mCreateInt    = (Button)rootView.findViewById(R.id.mytopics_create);
+    	mFreshBtn     = (Button)rootView.findViewById(R.id.mytopics_refresh);
+    	mGlbIntEmpty  = (TextView)rootView.findViewById(R.id.mytopics_glbintempty);
+    	mProgressBar  = (ProgressBar)rootView.findViewById(R.id.mytopics_progressbar);
     	mGuideImage   = (ImageView)rootView.findViewById(R.id.mytopics_guide);
     	mGuideImage2  = (ImageView)rootView.findViewById(R.id.mytopics_guide2);
     	
+    	mSharedPrefs = getActivity().getSharedPreferences(RenHaiDefinitions.RENHAI_SHAREDPREF_FIRSTSTART, 0);
+	
+    	return rootView;   
+    }
+    
+    @Override
+    public void onResume() {
+    	super.onResume();
+    	
     	mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getActivity().getApplication());
+    	
+    	mCreateInt.setOnClickListener(mCreateNewLabelListener);   	
+    	mFreshBtn.setOnClickListener(mFreshGlbIntLabelListener);
+    	mProgressBar.setVisibility(View.INVISIBLE);
     	
     	if(true == RenHaiInfo.InterestLabel.isPersonalIntLabelsNotDefined())
     	{
@@ -113,26 +118,9 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	
     	// Update the global interest label grid
     	onUpdateGlobalInterestGrid();
-	
-		/*
-    	for(int i=0; i < RenHaiInfo.InterestLabel.getCurrHotLabelNum(); i++)
-    	{
-    		ImageView tIntLabel = new ImageView(getActivity());
-    		tIntLabel.setImageBitmap(getThumb(RenHaiInfo.InterestLabel.getCurrHotIntLabel(i)));
-    		/*TextView tIntLabel = new TextView(getActivity());
-    		tIntLabel.setText(RenHaiInfo.InterestLabel.getInterest(i));
-    		tIntLabel.setBackgroundColor(getResources().getColor(R.color.maingreen));
-    		tIntLabel.setTextColor(getResources().getColor(R.color.white));
-    		tIntLabel.setTextSize(18);
-    		//tIntLabel.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-    		mMyInterestsGrid.addView(tIntLabel);
-    	}*/
     	
     	setListeners();
-	
-    	return rootView;
-    
-    }    
+    }
     
     private void setListeners(){
     	mMyInterestsGrid.setOnItemClickListener(new OnItemClickListener() {

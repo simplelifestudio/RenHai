@@ -108,6 +108,7 @@
     <string name="matching_accept">Accept</string>
     <string name="matching_refuse">Refuse</string>
     <string name="matching_back">Back</string>
+    <string name="matching_counttimeout">Time Out</string>
     
     <string name="video_btnwritemsg">Message</string>
     <string name="video_btnhangoff">End Call</string>

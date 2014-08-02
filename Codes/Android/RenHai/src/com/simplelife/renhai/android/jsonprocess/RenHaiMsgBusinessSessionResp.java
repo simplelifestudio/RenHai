@@ -13,8 +13,6 @@ import org.json.JSONObject;
 
 import com.simplelife.renhai.android.RenHaiDefinitions;
 import com.simplelife.renhai.android.data.BusinessSessionInfo;
-import com.simplelife.renhai.android.data.RenHaiInfo;
-
 import android.content.Context;
 import android.content.Intent;
 

@@ -107,6 +107,12 @@ public class RenHaiWebSocketProcess {
 		mWebsocketClient.connect();
 	}
 	
+	public void dieconnect() {
+		mPingTimer.stopTimer();
+		mIsDiconnected = true;
+		mWebsocketClient.disconnect();		
+		mInstance = null;
+	}
 	public void ping(String inMsg){
 		if(mIsDiconnected == false)
 			mWebsocketClient.ping(inMsg);
@@ -140,7 +146,12 @@ public class RenHaiWebSocketProcess {
 	}
 	
 	public static void reInitWebSocket(Context _context){
-		mInstance = null;		
+		if(mInstance != null)
+		{
+			mInstance.dieconnect();
+			mInstance = null;
+		}
+				
 		mInstance = new RenHaiWebSocketProcess(_context);
 	}
 	

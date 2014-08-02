@@ -106,6 +106,7 @@
     <string name="matching_accept">接受</string>
     <string name="matching_refuse">拒绝</string>
     <string name="matching_back">返回</string>
+    <string name="matching_counttimeout">等待超时</string>
     
     <string name="video_btnwritemsg">小纸条</string>
     <string name="video_btnhangoff">挂断</string>

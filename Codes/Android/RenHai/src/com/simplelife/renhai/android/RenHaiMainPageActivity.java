@@ -136,6 +136,12 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
         
     }
     
+    @Override
+	protected void onDestroy() {
+    	super.onDestroy();
+    	mWebSocketHandle.dieconnect();
+    }
+    
     
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {

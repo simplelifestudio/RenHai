@@ -63,7 +63,7 @@ public class RenHaiMatchingActivity extends RenHaiBaseActivity{
 		setContentView(R.layout.activity_matching);
 		
 		mAssessGridView = (GridView)findViewById(R.id.matching_assgridview);
-		mImpGridView = (GridView)findViewById(R.id.matching_impgridview);
+		mImpGridView    = (GridView)findViewById(R.id.matching_impgridview);
 		
 		mAssessAdapter = new AssessAdapter(this);
 		mAssessGridView.setAdapter(mAssessAdapter);
@@ -80,17 +80,25 @@ public class RenHaiMatchingActivity extends RenHaiBaseActivity{
 		mBackLayout     = (LinearLayout)findViewById(R.id.matching_backlayout);
 		mMatchingBtnBack = (TextView)findViewById(R.id.matching_btnback);
 		mBackLayout.setVisibility(View.GONE);
-				
-		mMatchingBtnYes.setOnClickListener(mMatchingBtnYesListener);
-		mMatchingBtnNo.setOnClickListener(mMatchingBtnNoListener);
-		mMatchingBtnBack.setOnClickListener(mMatchingBtnBackListener);
-		
+	
 		enableActionBarNote();
 		
-		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
-		
 		mCounter.start();
-
+	}
+	
+	@Override
+	protected void onResume() {
+    	super.onResume();
+    	mMatchingBtnYes.setOnClickListener(mMatchingBtnYesListener);
+		mMatchingBtnNo.setOnClickListener(mMatchingBtnNoListener);
+		mMatchingBtnBack.setOnClickListener(mMatchingBtnBackListener);
+		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
+	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_LEAVEPOOL);
 	}
 	
 	private View.OnClickListener mMatchingBtnYesListener = new View.OnClickListener() {
@@ -368,11 +376,10 @@ public class RenHaiMatchingActivity extends RenHaiBaseActivity{
 	        }  
 	        @Override  
 	        public void onFinish() {  
-	        	mCounterText.setText("Time Out!"); 
+	        	mCounterText.setText(R.string.matching_counttimeout); 
 	        	mCounterText.setTextSize(18);
-	        	//Intent tIntent = new Intent(RenHaiWaitForMatchActivity.this, RenHaiMatchingActivity.class);
-	    		//startActivity(tIntent);
-	    		//finish();	        	 
+	        	sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_LEAVEPOOL);
+	        	mBackLayout.setVisibility(View.VISIBLE);      	 
 	        }  
 	 }
     

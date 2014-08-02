@@ -12,8 +12,6 @@ import java.text.SimpleDateFormat;
 
 import org.apache.log4j.Logger;
 
-import com.simplelife.renhai.android.RenHaiMainPageActivity;
-
 public class RenHaiTimeProcess {
 	
 	private static RenHaiTimeProcess mInstance = null;

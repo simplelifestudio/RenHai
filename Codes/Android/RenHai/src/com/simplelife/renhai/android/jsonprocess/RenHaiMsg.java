@@ -14,8 +14,6 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-
 import com.simplelife.renhai.android.RenHaiDefinitions;
 import com.simplelife.renhai.android.data.BusinessSessionInfo;
 import com.simplelife.renhai.android.data.RenHaiInfo;

@@ -8,8 +8,7 @@
  */
 package com.simplelife.renhai.android;
 
-import org.apache.log4j.Logger;
-
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Context;
@@ -37,7 +36,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
-
 import com.simplelife.renhai.android.data.ImpressLabelMap;
 import com.simplelife.renhai.android.data.PeerDeviceInfo;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgBusinessSessionReq;
@@ -58,8 +56,6 @@ public class RenHaiAssessActivity extends RenHaiBaseActivity {
 		
 	private final int ASSESS_MSG_IMPLABELDEFINED = 6000;
 	private final int ASSESS_MSG_IMPLABELMODIFIED = 6001;
-	
-	private final Logger mlog = Logger.getLogger(RenHaiAssessActivity.class);
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -245,6 +241,7 @@ public class RenHaiAssessActivity extends RenHaiBaseActivity {
     ///////////////////////////////////////////////////////////////////////
     // Inner message hander
     /////////////////////////////////////////////////////////////////////// 
+	@SuppressLint("HandlerLeak")
 	private Handler handler = new Handler(){  		  
         @Override  
         public void handleMessage(Message msg) {          	

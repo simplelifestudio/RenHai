@@ -23,7 +23,6 @@ import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.MotionEvent;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 

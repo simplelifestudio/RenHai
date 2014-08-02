@@ -97,7 +97,8 @@ public class RenHaiIntroduceActivity extends Activity {
     public class MyPagerAdapter extends PagerAdapter{
     	
     	private ArrayList<View> views;
-    	private ArrayList<String> titles;    	
+    	@SuppressWarnings("unused")
+		private ArrayList<String> titles;    	
     	
     	public MyPagerAdapter(ArrayList<View> views,ArrayList<String> titles){    		
     		this.views = views;

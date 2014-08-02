@@ -42,21 +42,26 @@ public class RenHaiWaitForMatchActivity extends RenHaiBaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_waitingformatchpage);
 		
-		mBtnCancel = (LinearLayout) findViewById(R.id.waitingformatch_btnlayout);
-		mBtnCancel.setOnClickListener(mCancelBtnListener);
-		
+		mBtnCancel   = (LinearLayout) findViewById(R.id.waitingformatch_btnlayout);				
 		mCounterNote = (TextView) findViewById(R.id.waitingformatch_counternote);
-		mTimeOutNote = (TextView) findViewById(R.id.waitingformatch_timeoutnote);
-		
+		mTimeOutNote = (TextView) findViewById(R.id.waitingformatch_timeoutnote);		
 		mToBtnLayout = (LinearLayout) findViewById(R.id.waitingformatch_tobtnlayout);
 		mBtnRetry = (TextView) findViewById(R.id.waitingformatch_btnretry);
 		mBtnBack  = (TextView) findViewById(R.id.waitingformatch_btnback);
-		mBtnRetry.setOnClickListener(mRetryBtnListener);
-		mBtnBack.setOnClickListener(mBackBtnListener);
-		
 		mCounterText = (TextView) findViewById(R.id.waitingformatch_counter);
+		
 		mCounter = new MyCount(22000, 1000);
 		mCounter.start();
+	}
+	
+	@Override
+	protected void onResume() {
+    	super.onResume();
+    	
+    	mBtnCancel.setOnClickListener(mCancelBtnListener);
+    	mBtnRetry.setOnClickListener(mRetryBtnListener);
+		mBtnBack.setOnClickListener(mBackBtnListener);		
+		
 		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication()); 
 		
 		// Retrieve the date info parameter
@@ -69,7 +74,13 @@ public class RenHaiWaitForMatchActivity extends RenHaiBaseActivity {
 				||(mCallerName.equals("RenHaiAssessActivity")) )
 		{
 			// Do nothing here, because we are already under the MATCHSTARTED state
-		}		
+		}
+	}
+	
+	@Override
+	public void onBackPressed() {
+		super.onBackPressed();
+		sendLeavePoolMessage();
 	}
 	
 	private View.OnClickListener mCancelBtnListener = new View.OnClickListener() {
@@ -104,13 +115,17 @@ public class RenHaiWaitForMatchActivity extends RenHaiBaseActivity {
 
 		@Override
 		public void onClick(View v) {
-			String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(
-	    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
-	    			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_LEAVEPOOL).toString();
-	    	mWebSocketHandle.sendMessage(tBusinessSessionReq);
+			sendLeavePoolMessage();
 	    	finish();
 		}
 	};
+	
+	private void sendLeavePoolMessage(){
+		String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(
+    			RenHaiDefinitions.RENHAI_BUSINESS_TYPE_INTEREST, 
+    			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_LEAVEPOOL).toString();
+    	mWebSocketHandle.sendMessage(tBusinessSessionReq);
+	}
 	
 	private void sendMatchStartMessage(){
 		String tBusinessSessionReq = RenHaiMsgBusinessSessionReq.constructMsg(
