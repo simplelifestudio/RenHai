@@ -46,10 +46,13 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.widget.ProgressBar;
@@ -63,7 +66,8 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		Session.StreamPropertiesListener, Publisher.PublisherListener,
 		Subscriber.VideoListener, Subscriber.SubscriberListener,
 		SubscriberControlFragment.SubscriberCallbacks,
-		PublisherControlFragment.PublisherCallbacks {
+		PublisherControlFragment.PublisherCallbacks,
+		OnTouchListener {
 
 	// For Test purpose
 	public static final String SESSION_ID = "1_MX40NDg5MjE4Mn5-V2VkIEp1bCAwOSAwNjo0MDowOCBQRFQgMjAxNH4wLjU0Mzg2MzI0fn4";
@@ -106,6 +110,10 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	NotificationManager mNotificationManager;
 	private int notificationId;
 	private final Logger mlog = Logger.getLogger(RenHaiVideoTalkActivity.class);
+	private int lastX;  
+	private int lastY; 
+	private int screenWidth;  
+	private int screenHeight; 
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -201,6 +209,11 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		mPublisherViewContainer = (RelativeLayout) findViewById(R.id.publisherView);
 		mSubscriberViewContainer = (RelativeLayout) findViewById(R.id.subscriberView);
 		mSubscriberAudioOnlyView = (RelativeLayout) findViewById(R.id.audioOnlyView);
+		
+		DisplayMetrics dm = getResources().getDisplayMetrics();  
+        screenWidth = dm.widthPixels;  
+        screenHeight = dm.heightPixels - 50;  
+		mPublisherViewContainer.setOnTouchListener(this);
 		
 		// Attach running video views
 		if (mPublisher != null) {
@@ -845,6 +858,59 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		}
 	
 	});
+	
+	///////////////////////////////////////////////////////////////////////
+	// On touch listner
+	///////////////////////////////////////////////////////////////////////
+	 @Override  
+	    public boolean onTouch(View v, MotionEvent event) {  
+	        // TODO Auto-generated method stub  
+	        int action=event.getAction();    
+	        switch(action){  
+	        case MotionEvent.ACTION_DOWN:  
+	            lastX = (int) event.getRawX();  
+	            lastY = (int) event.getRawY();  
+	            break;  
+	            /** 
+	             * layout(l,t,r,b) 
+	             * l  Left position, relative to parent  
+	            t  Top position, relative to parent  
+	            r  Right position, relative to parent  
+	            b  Bottom position, relative to parent   
+	             * */  
+	        case MotionEvent.ACTION_MOVE:  
+	            int dx =(int)event.getRawX() - lastX;  
+	            int dy =(int)event.getRawY() - lastY;  
+	          
+	            int left = v.getLeft() + dx;  
+	            int top = v.getTop() + dy;  
+	            int right = v.getRight() + dx;  
+	            int bottom = v.getBottom() + dy;                      
+	            if(left < 0){  
+	                left = 0;  
+	                right = left + v.getWidth();  
+	            }                     
+	            if(right > screenWidth){  
+	                right = screenWidth;  
+	                left = right - v.getWidth();  
+	            }                     
+	            if(top < 0){  
+	                top = 0;  
+	                bottom = top + v.getHeight();  
+	            }                     
+	            if(bottom > screenHeight){  
+	                bottom = screenHeight;  
+	                top = bottom - v.getHeight();  
+	            }                     
+	            v.layout(left, top, right, bottom);    
+	            lastX = (int) event.getRawX();  
+	            lastY = (int) event.getRawY();                    
+	            break;  
+	        case MotionEvent.ACTION_UP:  
+	            break;                
+	        }  
+	        return false;     
+	    } 
 	
 }
 
