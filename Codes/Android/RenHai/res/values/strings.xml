@@ -123,6 +123,9 @@
     <string name="video_replymsgtext">Reply</string>
     <string name="video_connectionlost_dialogtitle">Network connection lost</string>
     <string name="video_connectionlost_dialogposbtn">Back</string>
+    <string name="video_subloadnote">Peer side preparing video&#8230;</string>
+    <string name="video_endcallnote">Talk is over</string>
+    <string name="video_publisherinfo">Chatting</string>
     
     <string name="assess_title1">Assessment for peer</string>
     <string name="assess_title2">Impressions to peer</string>

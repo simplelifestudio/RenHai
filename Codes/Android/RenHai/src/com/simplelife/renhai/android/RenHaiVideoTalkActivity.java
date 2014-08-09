@@ -70,14 +70,14 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		OnTouchListener {
 
 	// For Test purpose
-	public static final String SESSION_ID = "1_MX40NDg5MjE4Mn5-V2VkIEp1bCAwOSAwNjo0MDowOCBQRFQgMjAxNH4wLjU0Mzg2MzI0fn4";
+	public static final String SESSION_ID = "2_MX40NDkyNzkxMn5-U3VuIEF1ZyAwMyAyMzoyOTozMSBQRFQgMjAxNH4wLjk1NjgyMzZ-fg";
 	// Replace with a generated token (from the dashboard or using an OpenTok server SDK)
-	public static final String TOKEN = "T1==cGFydG5lcl9pZD00NDg5MjE4MiZzaWc9MTkzZGQxNjA1MzY0MDM1MTJmMjZiMTNjNDliZmRhNDdjYTU2NTMzYjpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTFfTVg0ME5EZzVNakU0TW41LVYyVmtJRXAxYkNBd09TQXdOam8wTURvd09DQlFSRlFnTWpBeE5INHdMalUwTXpnMk16STBmbjQmY3JlYXRlX3RpbWU9MTQwNDkxMzY0NyZub25jZT0wLjIwMjg3MTc4NDIyNTk2NDImZXhwaXJlX3RpbWU9MTQwNzUwNTE3MA=="; 
+	public static final String TOKEN = "T1==cGFydG5lcl9pZD00NDkyNzkxMiZzaWc9ZjA3NmZjNjJmNWIyMDBiNjFkZWVjZDA0YjRmMDZiYzU1NGY5YTk3NDpyb2xlPXB1Ymxpc2hlciZzZXNzaW9uX2lkPTJfTVg0ME5Ea3lOemt4TW41LVUzVnVJRUYxWnlBd015QXlNem95T1Rvek1TQlFSRlFnTWpBeE5INHdMamsxTmpneU16Wi1mZyZjcmVhdGVfdGltZT0xNDA3MTMzOTkzJm5vbmNlPTAuMjMzOTE0ODcxOTkxODEzOTMmZXhwaXJlX3RpbWU9MTQwOTcyNTcyOQ=="; 
 	// Replace with your OpenTok API key
-	public static final String API_KEY= "44892182";
+	public static final String API_KEY= "44927912";
 	// Subscribe to a stream published by this client. Set to false to subscribe
 	// to other clients' streams only.
-	public static final boolean SUBSCRIBE_TO_SELF = false;
+	public static final boolean SUBSCRIBE_TO_SELF = true;
 	
 	private static final int ANIMATION_DURATION = 3000;
 	
@@ -93,6 +93,7 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	
 	// View related variables
 	private RelativeLayout mPublisherViewContainer;
+	private RelativeLayout mPublishViewFakeContainer;
 	private RelativeLayout mSubscriberViewContainer;
 	private RelativeLayout mSubscriberAudioOnlyView;
 	
@@ -105,6 +106,8 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	// Spinning wheel for loading subscriber view
 	private ProgressBar mLoadingSub;
 	private ProgressBar mPublisherLoadingSub;
+	private TextView mSubLoadingNote;
+	private TextView mPubLoadingNote;
 	
 	private NotificationCompat.Builder mNotifyBuilder;
 	NotificationManager mNotificationManager;
@@ -132,10 +135,7 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		    mFragmentTransaction.commitAllowingStateLoss();
 		}
 		
-		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
-		
-		mAlohaTimer.startRepeatTimer();
+		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);						
 		
 		sessionConnect();
 	}
@@ -202,18 +202,21 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		setContentView(R.layout.activity_videotalk);
 		
 		mLoadingSub = (ProgressBar) findViewById(R.id.loadingSpinner);
+		mSubLoadingNote = (TextView) findViewById(R.id.video_subloadingnote);
 		mPublisherLoadingSub = (ProgressBar) findViewById(R.id.loadingSpinner_publisher);
 		mLoadingSub.setVisibility(View.VISIBLE);
+		mSubLoadingNote.setVisibility(View.VISIBLE);
 		mPublisherLoadingSub.setVisibility(View.VISIBLE);
 		
-		mPublisherViewContainer = (RelativeLayout) findViewById(R.id.publisherView);
-		mSubscriberViewContainer = (RelativeLayout) findViewById(R.id.subscriberView);
-		mSubscriberAudioOnlyView = (RelativeLayout) findViewById(R.id.audioOnlyView);
+		mPublisherViewContainer   = (RelativeLayout) findViewById(R.id.publisherView_full);
+		mPublishViewFakeContainer = (RelativeLayout) findViewById(R.id.publisherView);
+		mSubscriberViewContainer  = (RelativeLayout) findViewById(R.id.subscriberView);
+		mSubscriberAudioOnlyView  = (RelativeLayout) findViewById(R.id.audioOnlyView);
 		
 		DisplayMetrics dm = getResources().getDisplayMetrics();  
         screenWidth = dm.widthPixels;  
         screenHeight = dm.heightPixels - 50;  
-		mPublisherViewContainer.setOnTouchListener(this);
+		//mPublisherViewContainer.setOnTouchListener(this);
 		
 		// Attach running video views
 		if (mPublisher != null) {
@@ -331,6 +334,9 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		
 		mNotificationManager.cancel(notificationId);
 		
+		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
+		mAlohaTimer.startRepeatTimer();
+		
 		reloadInterface();
 	}
 	
@@ -376,18 +382,29 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		    mSession.setStreamPropertiesListener(this);
 		    mSession.setPublisherListener(this);
 		    mSession.connect(WebRtcSession.getToken());
+		    //mSession.connect(TOKEN);
 		}
 	}
 	
 	private void attachPublisherView(Publisher publisher) {
+		/*
 		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
 		        RelativeLayout.LayoutParams.MATCH_PARENT,
 		        RelativeLayout.LayoutParams.MATCH_PARENT);
 		mPublisherViewContainer.addView(publisher.getView(), layoutParams);
+		mPublisherViewContainer.setDrawingCacheEnabled(true);*/
+		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+				dpToPx(160),dpToPx(160));
+		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+		layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+		layoutParams.setMargins(0, 0, dpToPx(20), dpToPx(20));
+		mPublisherViewContainer.addView(publisher.getView(), layoutParams);
 		mPublisherViewContainer.setDrawingCacheEnabled(true);
+		mPublishViewFakeContainer.setVisibility(View.GONE);
 		publisher.setStyle(BaseVideoRenderer.STYLE_VIDEO_SCALE,
 		        BaseVideoRenderer.STYLE_VIDEO_FILL);
 		publisher.getView().setOnClickListener(onViewClick);
+		publisher.getView().setOnTouchListener(this);
 		mPublisherLoadingSub.setVisibility(View.GONE);
 	}
 	
@@ -424,7 +441,9 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	@Override
 	public void onEndCall() {
 		sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ENDCHAT);
-		mLoadingSub.setVisibility(View.VISIBLE);
+		//mLoadingSub.setVisibility(View.VISIBLE);
+		mSubLoadingNote.setVisibility(View.VISIBLE);
+		mSubLoadingNote.setText(R.string.video_endcallnote);
 		//mBtnLayout.setVisibility(View.GONE);
 		
 		if (mSession != null) {
@@ -519,7 +538,7 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	public void onConnected(Session session) {
 		mlog.info("Connected to the session.");
 		if (mPublisher == null) {
-		    mPublisher = new Publisher(this, "Publisher");
+		    mPublisher = new Publisher(this, getString(R.string.video_publisherinfo));
 		    mPublisher.setPublisherListener(this);
 		    attachPublisherView(mPublisher);
 		    mSession.publish(mPublisher);
@@ -683,6 +702,7 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		
 		// stop loading spinning
 		mLoadingSub.setVisibility(View.GONE);
+		mSubLoadingNote.setVisibility(View.GONE);
 		attachSubscriberView(mSubscriber);
 	}
 	
@@ -867,7 +887,7 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	        // TODO Auto-generated method stub  
 	        int action=event.getAction();    
 	        switch(action){  
-	        case MotionEvent.ACTION_DOWN:  
+	        case MotionEvent.ACTION_DOWN:
 	            lastX = (int) event.getRawX();  
 	            lastY = (int) event.getRawY();  
 	            break;  
@@ -878,7 +898,7 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	            r  Right position, relative to parent  
 	            b  Bottom position, relative to parent   
 	             * */  
-	        case MotionEvent.ACTION_MOVE:  
+	        case MotionEvent.ACTION_MOVE:
 	            int dx =(int)event.getRawX() - lastX;  
 	            int dy =(int)event.getRawY() - lastY;  
 	          
@@ -906,7 +926,7 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	            lastX = (int) event.getRawX();  
 	            lastY = (int) event.getRawY();                    
 	            break;  
-	        case MotionEvent.ACTION_UP:  
+	        case MotionEvent.ACTION_UP: 
 	            break;                
 	        }  
 	        return false;     
