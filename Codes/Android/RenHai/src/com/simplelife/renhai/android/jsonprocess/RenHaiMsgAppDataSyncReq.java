@@ -253,39 +253,7 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 			JSONObject tDevCard  = new JSONObject();
 			JSONObject tProfile2 = new JSONObject();
 			JSONObject tIntCard2 = new JSONObject();
-			JSONObject tImpCard2 = new JSONObject();
-			
-			int tMyIntLabelNum = RenHaiInfo.InterestLabel.getMyIntLabelNum(); 
-			if( tMyIntLabelNum > 0)
-			{
-				tIntCard2.put(MSG_APPSYNCREQ_INTCARDID, RenHaiInfo.Profile.interestCardId);
-				JSONArray tIntCardLabelList = new JSONArray();
-				for(int i=0; i<tMyIntLabelNum; i++)
-				{
-					InterestLabelMap tIntLabelMap = RenHaiInfo.InterestLabel.getMyIntLabel(i);
-					
-					if(true == tIntLabelMap.getNewlyCreatedFlag())
-					{
-						JSONObject tIntCardLabelMap = new JSONObject();
-						tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBINTLABELID, JSONNULL);
-						tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBMTCHCOUNT, JSONNULL);
-						tIntCardLabelMap.put(MSG_APPSYNCREQ_LABELORDER, tIntLabelMap.getLabelOrder());
-						tIntCardLabelMap.put(MSG_APPSYNCREQ_MATCHCOUNT, JSONNULL);
-						tIntCardLabelMap.put(MSG_APPSYNCREQ_VALIDFLAG, JSONNULL);
-						tIntCardLabelMap.put(MSG_APPSYNCREQ_INTLABELNAME, tIntLabelMap.getIntLabelName());
-						tIntCardLabelList.put(tIntCardLabelMap);
-					}
-					/*else{
-						tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBINTLABELID, tIntLabelMap.getGlobalIntLabelId());
-						tIntCardLabelMap.put(MSG_APPSYNCREQ_GLBMTCHCOUNT, tIntLabelMap.getGlobalMatchCount());
-						tIntCardLabelMap.put(MSG_APPSYNCREQ_LABELORDER, tIntLabelMap.getLabelOrder());
-						tIntCardLabelMap.put(MSG_APPSYNCREQ_MATCHCOUNT, tIntLabelMap.getMatchCount());
-						tIntCardLabelMap.put(MSG_APPSYNCREQ_VALIDFLAG, tIntLabelMap.getValidFlag());
-					}*/
-					
-				}
-				tIntCard2.put(MSG_APPSYNCREQ_INTLBLLIST, tIntCardLabelList);
-			}		
+			JSONObject tImpCard2 = new JSONObject();								
 			
 			tDevCard.put(MSG_APPSYNCREQ_DEVMODEL, RenHaiInfo.DeviceCard.getDeviceModel());
 			tDevCard.put(MSG_APPSYNCREQ_OSVERSION, RenHaiInfo.DeviceCard.getOsVersion());
@@ -293,7 +261,7 @@ public class RenHaiMsgAppDataSyncReq extends RenHaiMsg{
 			tDevCard.put(MSG_APPSYNCREQ_LOCATION, RenHaiInfo.DeviceCard.getLocation());
 			tDevCard.put(MSG_APPSYNCREQ_ISJAILED, RenHaiInfo.DeviceCard.getJailedStatus());
 			
-			tProfile2.put(MSG_APPSYNCREQ_INTCARD, tIntCard2);
+			//tProfile2.put(MSG_APPSYNCREQ_INTCARD, tIntCard2);
 			//tProfile2.put(MSG_APPSYNCREQ_IMPCARD, tImpCard2);
 			tDevice2.put(MSG_APPSYNCREQ_DEVID, RenHaiInfo.getDeviceId());
 			tDevice2.put(MSG_APPSYNCREQ_DEVSN, RenHaiInfo.getDeviceSn());

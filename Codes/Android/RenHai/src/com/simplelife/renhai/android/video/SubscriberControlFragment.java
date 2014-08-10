@@ -181,7 +181,8 @@ public class SubscriberControlFragment extends Fragment implements
 	}
 	
 	public void showReceivedMsg(String _content) {
-		mShowMsg.setText(_content);
+		mShowMsg.setText(getString(R.string.video_peermsg) + _content);
+		
 		mSubInfoContainer.setVisibility(View.GONE);
 		mRcvMsgContainer.setVisibility(View.VISIBLE);
 		showSubscriberWidget(true);

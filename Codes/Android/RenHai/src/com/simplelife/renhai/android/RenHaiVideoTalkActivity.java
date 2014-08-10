@@ -55,6 +55,8 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -77,7 +79,7 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	public static final String API_KEY= "44927912";
 	// Subscribe to a stream published by this client. Set to false to subscribe
 	// to other clients' streams only.
-	public static final boolean SUBSCRIBE_TO_SELF = true;
+	public static final boolean SUBSCRIBE_TO_SELF = false;
 	
 	private static final int ANIMATION_DURATION = 3000;
 	
@@ -90,12 +92,15 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	private boolean mSubscriberVideoOnly = false;
 	private boolean archiving = false;
 	private boolean resumeHasRun = false;
+	private boolean mSelfStreamHide = false;
 	
 	// View related variables
 	private RelativeLayout mPublisherViewContainer;
 	private RelativeLayout mPublishViewFakeContainer;
 	private RelativeLayout mSubscriberViewContainer;
 	private RelativeLayout mSubscriberAudioOnlyView;
+	private LinearLayout   mHangUpLayout;
+	private TextView       mBtnHangUp;
 	
 	// Fragments
 	private SubscriberControlFragment mSubscriberFragment;
@@ -116,7 +121,7 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	private int lastX;  
 	private int lastY; 
 	private int screenWidth;  
-	private int screenHeight; 
+	private int screenHeight;	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +140,9 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		    mFragmentTransaction.commitAllowingStateLoss();
 		}
 		
-		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);						
+		mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
+		mAlohaTimer.startRepeatTimer();
 		
 		sessionConnect();
 	}
@@ -193,7 +200,7 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		
 		        initPublisherStatusFragment();
 		    }
-		}
+		}		
 		
 		loadInterface();
 	}
@@ -212,6 +219,9 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		mPublishViewFakeContainer = (RelativeLayout) findViewById(R.id.publisherView);
 		mSubscriberViewContainer  = (RelativeLayout) findViewById(R.id.subscriberView);
 		mSubscriberAudioOnlyView  = (RelativeLayout) findViewById(R.id.audioOnlyView);
+		mHangUpLayout = (LinearLayout) findViewById(R.id.video_hangup);
+		mBtnHangUp    = (TextView) findViewById(R.id.video_btnhangup);
+		mBtnHangUp.setOnClickListener(mBtnHangUpListener);
 		
 		DisplayMetrics dm = getResources().getDisplayMetrics();  
         screenWidth = dm.widthPixels;  
@@ -323,6 +333,8 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	public void onResume() {
 		super.onResume();
 		
+		mlog.info("VideoTalk onResume called!");
+		
 		if (!resumeHasRun) {
 		    resumeHasRun = true;
 		    return;
@@ -332,10 +344,7 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		    }
 		}
 		
-		mNotificationManager.cancel(notificationId);
-		
-		mWebSocketHandle = RenHaiWebSocketProcess.getNetworkInstance(getApplication());
-		mAlohaTimer.startRepeatTimer();
+		mNotificationManager.cancel(notificationId);		
 		
 		reloadInterface();
 	}
@@ -437,6 +446,22 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 		    mPublisher.swapCamera();
 		}
 	}
+	
+	@Override
+	public void onShowOrHideMyCam() {
+		if (mPublisher != null) {
+		    if(mSelfStreamHide == false)
+		    {
+		    	mPublisher.getView().setVisibility(View.INVISIBLE);
+		    	mSelfStreamHide = true;
+		    }else{
+		    	mPublisher.getView().setVisibility(View.VISIBLE);
+		    	mSelfStreamHide = false;
+		    }
+			
+		}
+		
+	} 
 	
 	@Override
 	public void onEndCall() {
@@ -842,9 +867,10 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	protected void onReceiveBNPeerEndChat() {
 		super.onReceiveBNPeerEndChat();
 		sendBusinessSessionNotificationRespMessage(RenHaiDefinitions.RENHAI_SERVERNOTIF_TYPE_OTHERSIDEENDCHAT,1);
-		//mPeerStatus.setVisibility(View.VISIBLE);
-		//mPeerStatus.setText(R.string.video_peerhangoff);
-		//directToAssessPage();
+		mLoadingSub.setVisibility(View.GONE);
+		mSubLoadingNote.setVisibility(View.VISIBLE);
+		mSubLoadingNote.setText(R.string.video_peerhangoff);
+		mHangUpLayout.setVisibility(View.VISIBLE);	
 	}
 	
 	@Override
@@ -882,6 +908,15 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	///////////////////////////////////////////////////////////////////////
 	// On touch listner
 	///////////////////////////////////////////////////////////////////////
+	private View.OnClickListener mBtnHangUpListener = new View.OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			sendBusinessSessionReqMessage(RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_ENDCHAT);
+			mHangUpLayout.setVisibility(View.GONE);	
+		}
+	};
+	
 	 @Override  
 	    public boolean onTouch(View v, MotionEvent event) {  
 	        // TODO Auto-generated method stub  
@@ -930,7 +965,7 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	            break;                
 	        }  
 	        return false;     
-	    } 
+	    }	
 	
 }
 

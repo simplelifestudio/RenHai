@@ -96,8 +96,8 @@
     
     <string name="matching_peerassess">对方获得的评价</string>
     <string name="matching_peerimpression">对方获得的印象</string>
-    <string name="matching_matchconditionpart1">根据标签"</string>
-    <string name="matching_matchconditionpart2">"找到对方</string>
+    <string name="matching_matchconditionpart1">根据标签\"</string>
+    <string name="matching_matchconditionpart2">\"找到对方</string>
     <string name="matching_counterstart">20</string>
     <string name="matching_peerstattext">等待对方确认&#8230;</string>
     <string name="matching_peerstattextagree">对方已经接受</string>
@@ -123,7 +123,9 @@
     <string name="video_connectionlost_dialogposbtn">返回</string>
     <string name="video_subloadnote">等待对方视频连接&#8230;</string>
     <string name="video_endcallnote">通话已结束</string>
+    <string name="video_peerendcallnote">对方已挂断通话</string>
     <string name="video_publisherinfo">聊天中</string>
+    <string name="video_peermsg">小纸条&#058; </string>
     
     <string name="assess_title1">我给对方的评价</string>
     <string name="assess_title2">我对对方的印象</string>

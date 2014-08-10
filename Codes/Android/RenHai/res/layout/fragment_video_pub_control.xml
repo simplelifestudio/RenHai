@@ -112,6 +112,6 @@
             android:layout_toLeftOf="@+id/mutePublisher"
             android:background="@color/trans_white" />
         
-    </RelativeLayout>
+    </RelativeLayout>   
         
 </RelativeLayout>

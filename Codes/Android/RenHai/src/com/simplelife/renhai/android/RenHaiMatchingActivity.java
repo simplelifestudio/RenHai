@@ -136,6 +136,7 @@ public class RenHaiMatchingActivity extends RenHaiBaseActivity{
 	private void determingToMoveToVideoPage(){
 		if((mEitherSideAgreed == true)&&(mMovedToVideoPage == false))
     	{
+			mCounter.cancel();
 			mMovedToVideoPage = true;
 			mlog.info("App State transit to CHATALLAGREED from "+AppStateMgr.getMyAppStatus());
 			AppStateMgr.setMyAppStatus(RenHaiAppState.CHATALLAGREED);

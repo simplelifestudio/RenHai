@@ -389,7 +389,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
 			            	String tInput = tEditText.getText().toString();
 			            	InterestLabelMap tIntLabelMap = new InterestLabelMap();
 			            	tIntLabelMap.setIntLabelName(tInput);
-			            	tIntLabelMap.setLabelOrder(RenHaiInfo.InterestLabel.getMyIntLabelNum());
+			            	tIntLabelMap.setLabelOrder(RenHaiInfo.InterestLabel.getMyIntLabelNum()+1);
 			            	RenHaiInfo.InterestLabel.putMyIntLabel(tIntLabelMap);
 			            	Message t_MsgListData = new Message();
 			            	if (true == _isForFirstTime)
@@ -512,7 +512,7 @@ public class RenHaiMyTopicsFragment extends Fragment {
 	public void addInterestLabel(String _label) {
 		InterestLabelMap tIntLabelMap = new InterestLabelMap();
     	tIntLabelMap.setIntLabelName(_label);
-    	tIntLabelMap.setLabelOrder(RenHaiInfo.InterestLabel.getMyIntLabelNum());
+    	tIntLabelMap.setLabelOrder(RenHaiInfo.InterestLabel.getMyIntLabelNum()+1);
     	RenHaiInfo.InterestLabel.putMyIntLabel(tIntLabelMap);
 	}
     ///////////////////////////////////////////////////////////////////////

@@ -8,12 +8,15 @@ import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -40,6 +43,7 @@ public class PublisherControlFragment extends Fragment implements
 	protected RelativeLayout mPublisherContainer;
 	protected RelativeLayout mWriteMsgLayout;
 	public RelativeLayout mButtonLayout;
+	InputMethodManager mInputMgr;
 	
 	private RenHaiWebSocketProcess mWebSocketHandle = null;
 
@@ -47,6 +51,8 @@ public class PublisherControlFragment extends Fragment implements
 		public void onMutePublisher();
 
 		public void onSwapCamera();
+		
+		public void onShowOrHideMyCam();
 
 		public void onEndCall();
 
@@ -61,6 +67,11 @@ public class PublisherControlFragment extends Fragment implements
 
 		@Override
 		public void onSwapCamera() {
+			return;
+		}
+		
+		@Override
+		public void onShowOrHideMyCam() {
 			return;
 		}
 
@@ -83,7 +94,7 @@ public class PublisherControlFragment extends Fragment implements
 		}
 
 		mCallbacks = (PublisherCallbacks) activity;
-		
+		mInputMgr = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 	}
 
 	@Override
@@ -171,7 +182,8 @@ public class PublisherControlFragment extends Fragment implements
 			break;
 
 		case R.id.swapCamera:
-			swapCamera();
+			//swapCamera();
+			showOrHideMyCam();
 			break;
 
 		case R.id.endCall:
@@ -199,6 +211,10 @@ public class PublisherControlFragment extends Fragment implements
 	public void swapCamera() {
 		mCallbacks.onSwapCamera();
 	}
+	
+	public void showOrHideMyCam() {
+		mCallbacks.onShowOrHideMyCam();
+	}
 
 	public void endCall() {
 		mCallbacks.onEndCall();
@@ -207,6 +223,7 @@ public class PublisherControlFragment extends Fragment implements
 	public void editAndSendMsg() {
 		mButtonLayout.setVisibility(View.GONE);
 		mWriteMsgLayout.setVisibility(View.VISIBLE);
+		mInputMgr.hideSoftInputFromWindow(mEditMsg.getWindowToken(), 1);
 	}
 	
 	public void sendMsg(){
@@ -215,6 +232,8 @@ public class PublisherControlFragment extends Fragment implements
     			RenHaiDefinitions.RENHAI_USEROPERATION_TYPE_CHATMESSAGE,
     			mEditMsg.getText().toString()).toString();
     	mWebSocketHandle.sendMessage(tBusinessSessionReq);
+    	//mEditMsg.setInputType(InputType.TYPE_NULL);
+    	mInputMgr.hideSoftInputFromWindow(mEditMsg.getWindowToken(), 0);
     	mWriteMsgLayout.setVisibility(View.GONE);
 	}
 

@@ -467,6 +467,11 @@ public class RenHaiInfo {
 		
 		public static void deleteMyIntLabel(int _index){					
 			mMyIntLabels.remove(_index);
+			int tLabelNum = mMyIntLabels.size();
+			for(int i=0; i<tLabelNum; i++)
+			{
+				mMyIntLabels.get(i).setLabelOrder(i+1);
+			}
 		}
 		
 		public static boolean isPersonalIntLabelsNotDefined(){
