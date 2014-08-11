@@ -58,6 +58,8 @@ public class RenHaiMyTopicsFragment extends Fragment {
 	private final int MYTOPIC_MSG_INTERESTCHANGED = 2002;
 	private final int MYTOPIC_MSG_INTERESTDEFINEDBYMANUAL = 2003;
 	private final int MYTOPIC_MSG_TIMETOUPDATE = 2004;
+	private final int MYTOPIC_MSG_INVALIDLABEL = 2005;
+	private final int MYTOPIC_MSG_LABELREDEFINED = 2006;
 		
 	private RenHaiDraggableGridView mMyInterestsGrid;
 	private RenHaiDraggableGridView mGlbInterestsGrid;
@@ -150,8 +152,12 @@ public class RenHaiMyTopicsFragment extends Fragment {
 				if(arg1 != null)
 				{
 					final RenHaiImageView tMoveView = new RenHaiImageView(getActivity());
-					tMoveView.setImageBitmap(getThumb(((RenHaiImageView)arg1).getText()));
-					tMoveView.setText(((RenHaiImageView)arg1).getText());
+					String tLabelText = ((RenHaiImageView)arg1).getText();
+					if(true == isLabelAlreayDefined(tLabelText))
+						return;					
+					
+					tMoveView.setImageBitmap(getThumb(tLabelText));
+					tMoveView.setText(tLabelText);
 					
 					final int[] startLocation = new int[2];
 					arg1.getLocationInWindow(startLocation);
@@ -272,7 +278,13 @@ public class RenHaiMyTopicsFragment extends Fragment {
     		mUpdateTimer.resetTimer();
     }
     
-    public void onUpdateGlobalInterestGrid() {
+    public void onUpdateGlobalInterestGrid() {  	
+    	/*
+    	RenHaiImageView tGlbIntLabel = new RenHaiImageView(getActivity());
+		tGlbIntLabel.setImageBitmap(getThumb(getString(R.string.mytopics_test)));
+		tGlbIntLabel.setText(getString(R.string.mytopics_test));
+		mGlbInterestsGrid.addView(tGlbIntLabel);*/
+    	
     	if(RenHaiInfo.InterestLabel.getCurrHotLabelNum() > 0)
     	{
     		mGlbIntEmpty.setVisibility(View.INVISIBLE);
@@ -340,6 +352,16 @@ public class RenHaiMyTopicsFragment extends Fragment {
         	    	mUpdateTimer.stopTimer();
         	    	break;
         	    }
+        	    case MYTOPIC_MSG_INVALIDLABEL:
+        	    {
+        	    	onInValidIntLabelDefinedDialog();
+        	    	break;
+        	    }
+        	    case MYTOPIC_MSG_LABELREDEFINED:
+        	    {
+        	    	onInterestLabelDoubleAddDialog();
+        	    	break;
+        	    }
         	
         	}
         }
@@ -387,17 +409,21 @@ public class RenHaiMyTopicsFragment extends Fragment {
 			            @Override
 			            public void run() {
 			            	String tInput = tEditText.getText().toString();
-			            	InterestLabelMap tIntLabelMap = new InterestLabelMap();
-			            	tIntLabelMap.setIntLabelName(tInput);
-			            	tIntLabelMap.setLabelOrder(RenHaiInfo.InterestLabel.getMyIntLabelNum()+1);
-			            	RenHaiInfo.InterestLabel.putMyIntLabel(tIntLabelMap);
-			            	Message t_MsgListData = new Message();
-			            	if (true == _isForFirstTime)
-			            		t_MsgListData.what = MYTOPIC_MSG_INTERESTDEFINED;
-			            	else
-			            		t_MsgListData.what = MYTOPIC_MSG_INTERESTDEFINEDBYMANUAL;
-					        									
-					        handler.sendMessage(t_MsgListData);				            					        
+			            	if((false == isLabelAlreayDefined(tInput)) && (true == isLabelValid(tInput)))
+			            	{
+			            		InterestLabelMap tIntLabelMap = new InterestLabelMap();
+				            	tIntLabelMap.setIntLabelName(tInput);
+				            	tIntLabelMap.setLabelOrder(RenHaiInfo.InterestLabel.getMyIntLabelNum()+1);
+				            	RenHaiInfo.InterestLabel.putMyIntLabel(tIntLabelMap);
+				            	Message t_MsgListData = new Message();
+				            	if (true == _isForFirstTime)
+				            		t_MsgListData.what = MYTOPIC_MSG_INTERESTDEFINED;
+				            	else
+				            		t_MsgListData.what = MYTOPIC_MSG_INTERESTDEFINEDBYMANUAL;
+						        									
+						        handler.sendMessage(t_MsgListData);	
+			            	}
+		            				            					        
 			            }				
 		            }.start();
 		    }
@@ -487,6 +513,34 @@ public class RenHaiMyTopicsFragment extends Fragment {
 		builder.create().show();		
 	}
 	
+	private void onInterestLabelDoubleAddDialog() {
+		AlertDialog.Builder builder = new Builder(getActivity());
+		builder.setTitle(getString(R.string.mytopics_intlbreddialogtitle));
+		builder.setMessage(getString(R.string.mytopics_intlbreddialogmsg));		
+		builder.setPositiveButton(R.string.mytopics_intlbreddialogposbtn, new DialogInterface.OnClickListener() {
+		    @Override
+	        public void onClick(DialogInterface dialog, int which) {
+			    dialog.dismiss();    	
+		    }
+		});
+
+		builder.create().show();
+	}
+	
+	private void onInValidIntLabelDefinedDialog() {
+		AlertDialog.Builder builder = new Builder(getActivity());
+		builder.setTitle(getString(R.string.mytopics_invalidlabdialogtitle));
+		builder.setMessage(getString(R.string.mytopics_invalidlabdialogmsg));		
+		builder.setPositiveButton(R.string.mytopics_invalidlabdialogposbtn, new DialogInterface.OnClickListener() {
+		    @Override
+	        public void onClick(DialogInterface dialog, int which) {
+			    dialog.dismiss();    	
+		    }
+		});
+
+		builder.create().show();
+	}
+	
     private Bitmap getThumb(String s)
 	{
 		Bitmap bmp = Bitmap.createBitmap(150, 75, Bitmap.Config.RGB_565);
@@ -514,6 +568,35 @@ public class RenHaiMyTopicsFragment extends Fragment {
     	tIntLabelMap.setIntLabelName(_label);
     	tIntLabelMap.setLabelOrder(RenHaiInfo.InterestLabel.getMyIntLabelNum()+1);
     	RenHaiInfo.InterestLabel.putMyIntLabel(tIntLabelMap);
+	}
+	
+	public boolean isLabelAlreayDefined(String _label) {
+		int tLabelNum = mMyInterestsGrid.getChildCount();
+
+		for(int viewIdx=0; viewIdx<tLabelNum; viewIdx++)
+		{
+			String tLabelName = ((RenHaiImageView)mMyInterestsGrid.getChildAt(viewIdx)).getText();
+			if(tLabelName.equals(_label))
+			{
+				Message t_MsgListData = new Message();
+		        t_MsgListData.what = MYTOPIC_MSG_LABELREDEFINED;									
+		        handler.sendMessage(t_MsgListData);	
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isLabelValid(String _label) {
+		if(_label.equals(""))
+		{
+			Message t_MsgListData = new Message();
+	        t_MsgListData.what = MYTOPIC_MSG_INVALIDLABEL;									
+	        handler.sendMessage(t_MsgListData);	
+			return false;
+		}			
+		//TODO: Add conditions here
+		return true;
 	}
     ///////////////////////////////////////////////////////////////////////
     // Timer Callbacks

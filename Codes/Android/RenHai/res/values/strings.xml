@@ -63,6 +63,13 @@
     <string name="mytopics_inteditordelbuildneubtn">Cancel</string>
     <string name="mytopics_inteditordelbuildnegbtn">Delete</string>
     <string name="mytopics_glbintlabelempty">No global hot topics</string>
+    <string name="mytopics_intlbreddialogtitle">Interest Label</string>
+    <string name="mytopics_intlbreddialogmsg">This label has already been defined</string>
+    <string name="mytopics_intlbreddialogposbtn">Confirm</string>
+    <string name="mytopics_invalidlabdialogtitle">Interest Label</string>
+    <string name="mytopics_invalidlabdialogmsg">Label just defined is invalid</string>
+    <string name="mytopics_invalidlabdialogposbtn">Confirm</string>
+    <string name="mytopics_test">basketball</string>
     
     <string name="mytopics_testint1">Basketball</string>
     <string name="mytopics_testint2">Football</string>

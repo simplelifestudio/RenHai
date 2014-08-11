@@ -61,6 +61,13 @@
     <string name="mytopics_inteditordelbuildneubtn">取消</string>
     <string name="mytopics_inteditordelbuildnegbtn">删除</string>
     <string name="mytopics_glbintlabelempty">当前无热点话题</string>
+    <string name="mytopics_intlbreddialogtitle">兴趣标签</string>
+    <string name="mytopics_intlbreddialogmsg">该标签已经存在兴趣列表中</string>
+    <string name="mytopics_intlbreddialogposbtn">确认</string>
+    <string name="mytopics_invalidlabdialogtitle">兴趣标签</string>
+    <string name="mytopics_invalidlabdialogmsg">您定义的兴趣标签不符合标准</string>
+    <string name="mytopics_invalidlabdialogposbtn">确认</string>
+    <string name="mytopics_test">篮球</string>
     
     <string name="mytopics_testint1">篮球</string>
     <string name="mytopics_testint2">足球</string>
