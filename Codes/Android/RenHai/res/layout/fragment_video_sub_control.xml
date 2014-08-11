@@ -82,7 +82,7 @@
             android:text=""
             android:background="@color/maingreen"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="14sp" />
         <Button
             android:id="@+id/video_replymsg"
             android:layout_width="wrap_content"
