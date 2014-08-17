@@ -558,7 +558,7 @@ public final class R {
         public static final int video_publish_bg=0x7f020042;
     }
     public static final class id {
-        public static final int action_settings=0x7f090080;
+        public static final int action_settings=0x7f090082;
         public static final int archiving=0x7f090070;
         public static final int assess_btndisgust=0x7f090004;
         public static final int assess_btnhappy=0x7f090002;
@@ -617,7 +617,9 @@ public final class R {
         public static final int matching_peerstat=0x7f09002b;
         public static final int matching_title1=0x7f090020;
         public static final int matching_title2=0x7f090023;
-        public static final int menu_settings=0x7f09007f;
+        public static final int menu_item_feedback=0x7f09007f;
+        public static final int menu_item_setting=0x7f090080;
+        public static final int menu_settings=0x7f090081;
         public static final int mutePublisher=0x7f09006a;
         public static final int muteSubscriber=0x7f090077;
         public static final int myimpression_divide=0x7f09004e;
@@ -711,8 +713,9 @@ public final class R {
         public static final int framelayout_titlebar=0x7f030013;
     }
     public static final class menu {
-        public static final int menu_videotalk=0x7f080000;
-        public static final int splash=0x7f080001;
+        public static final int menu_mainpage=0x7f080000;
+        public static final int menu_videotalk=0x7f080001;
+        public static final int splash=0x7f080002;
     }
     public static final class string {
         public static final int action_settings=0x7f060001;
@@ -729,7 +732,7 @@ public final class R {
         public static final int assess_title1=0x7f06007b;
         public static final int assess_title2=0x7f06007c;
         public static final int assess_title3=0x7f06007d;
-        public static final int assesss_editimplabeldnegbtn=0x7f060088;
+        public static final int assesss_editimplabeldnegbtn=0x7f06008a;
         public static final int hello_world=0x7f060002;
         public static final int introduce_page0_text=0x7f060010;
         public static final int introduce_page1_button_text=0x7f060013;
@@ -761,6 +764,8 @@ public final class R {
         public static final int matching_peerstattextlost=0x7f060064;
         public static final int matching_peerstattextreject=0x7f060063;
         public static final int matching_refuse=0x7f060066;
+        public static final int menu_feedback=0x7f060087;
+        public static final int menu_setting=0x7f060088;
         public static final int myimpression_chatcount=0x7f060051;
         public static final int myimpression_chatlosscount=0x7f060053;
         public static final int myimpression_chattotalduration=0x7f060052;
@@ -805,7 +810,7 @@ public final class R {
         public static final int mytopics_testint5=0x7f060044;
         public static final int mytopics_testint6=0x7f060045;
         public static final int protocal_no=0x7f06000f;
-        public static final int protocal_text=0x7f060087;
+        public static final int protocal_text=0x7f060089;
         public static final int protocal_title=0x7f06000d;
         public static final int protocal_yes=0x7f06000e;
         public static final int splash_advert=0x7f060004;

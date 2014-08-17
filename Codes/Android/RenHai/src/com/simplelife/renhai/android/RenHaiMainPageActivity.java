@@ -9,12 +9,14 @@
 package com.simplelife.renhai.android;
 
 import org.apache.log4j.Logger;
+
 import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgServerDataSyncReq;
 import com.simplelife.renhai.android.networkprocess.RenHaiWebSocketProcess;
 import com.simplelife.renhai.android.timer.RenHaiTimerHelper;
 import com.simplelife.renhai.android.timer.RenHaiTimerProcessor;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
@@ -27,8 +29,11 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -314,6 +319,37 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
         	}
         }
 	};
+	
+	///////////////////////////////////////////////////////////////////////
+	// Network message processing
+	///////////////////////////////////////////////////////////////////////
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.menu_mainpage, menu);
+		return true;
+	}
+	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {        
+            case android.R.id.home:
+            {
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+            }
+            case R.id.menu_item_feedback:
+            {
+
+    		    return true;
+            }
+            case R.id.menu_item_setting:
+            {
+            	return true;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    } 
     
     ///////////////////////////////////////////////////////////////////////
     // Network message processing
