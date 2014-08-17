@@ -98,6 +98,7 @@ public class RenHaiStartVedioFragment extends Fragment {
     	
     	mCircleButton.resetView();    	
     	mCircleButton.autoShiningRing();
+    	mCircleButton.setClickable(true);
     	mCircleButton.setOnClickListener(mStartBtnListener);
     	
     	onUpdateView();
@@ -178,6 +179,7 @@ public class RenHaiStartVedioFragment extends Fragment {
 		@Override
 		public void onClick(View v) {
 			mCircleButton.setShowPercentText(true);
+			mCircleButton.setClickable(false);
 			new Thread() {  						
 	            @Override
 	            public void run() {
