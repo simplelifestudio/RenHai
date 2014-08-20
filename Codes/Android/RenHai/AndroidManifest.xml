@@ -84,6 +84,16 @@
             android:theme="@style/Theme.Actionbarwithtabstheme"
             android:screenOrientation="portrait" >                       
         </activity>
+        <activity
+            android:name="com.simplelife.renhai.android.RenHaiConfigActivity"
+            android:theme="@style/Theme.Actionbarwithtabstheme"
+            android:screenOrientation="portrait" >                       
+        </activity>
+        <activity
+            android:name="com.simplelife.renhai.android.RenHaiAboutActivity"
+            android:theme="@style/Theme.Actionbarwithtabstheme"
+            android:screenOrientation="portrait" >                       
+        </activity>
     </application>
 
 </manifest>

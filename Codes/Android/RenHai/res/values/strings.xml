@@ -152,6 +152,13 @@
     <string name="menu_feedback">Feedback</string>
     <string name="menu_setting">Settings</string>
     
+    <string name="config_pagetitle">Settings</string>
+    <string name="config_about">About HiYa</string>
+    <string name="config_aboutpage_title">About</string>
+    <string name="config_aboutpage_author">SimpleLife Studio&#160;版权所有</string>
+    <string name="config_aboutpage_copyright">Copyright(©) 2014&#045;2015&#046;</string>
+    <string name="config_aboutpage_allrightreserved">All Rights Reserved&#046;</string>   
+    
     <string name="protocal_text">
 \t\t人海是一款基于话题匹配的视频社交产品，人海所提供的各项服务的所有权和运作权归简单生活工作室（SimpleLife Studio，以下称人海官方）所有。
 \n\t\t本协议（包括隐私保护声明）是由您（终端用户）与人海官方之间就人海提供的各项服务所订立的相关权利义务规范，本协议将对您使用人海产生法律约束力。

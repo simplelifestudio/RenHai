@@ -151,4 +151,5 @@
 	<color name="trans_dark_grey">#80282828</color>
 	<color name="trans_white">#20ffffff</color>
 	<color name="trans">#00000000</color>
+	<color name="text_white_shadow_color">#ff5a9487</color>
 </resources>

@@ -23,6 +23,7 @@ import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -345,6 +346,8 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
             }
             case R.id.menu_item_setting:
             {
+            	Intent tIntent = new Intent(this, RenHaiConfigActivity.class);
+        		startActivity(tIntent); 
             	return true;
             }
         }
