@@ -877,7 +877,9 @@ public final class R {
         public static final int A2_Font=0x7f080005;
         public static final int A3_Font=0x7f080006;
         public static final int A4_Font=0x7f080007;
+        public static final int ActionBar_Solid_ActionbarTitleStyle=0x7f08001e;
         public static final int ActionBar_Solid_Actionbarwithtabstheme=0x7f080012;
+        public static final int ActionBar_Solid_Actionbarwithtabstheme2=0x7f08001d;
         public static final int ActionBar_Transparent_Actionbarwithtabstheme=0x7f080013;
         public static final int ActionBarTabStyle_Actionbarwithtabstheme=0x7f080016;
         /**  ActionBar styles 
@@ -931,6 +933,9 @@ public final class R {
         /**  this style is only referenced in a Light.DarkActionBar based theme 
          */
         public static final int Theme_Actionbarwithtabstheme_Widget=0x7f08001b;
+        /**  ======================================================================= 
+         */
+        public static final int Theme_Actionbarwithtabstheme2=0x7f08001c;
         /**  ActionBar title text 
          */
         public static final int ThemeOneActionBarTitleText=0x7f08000a;

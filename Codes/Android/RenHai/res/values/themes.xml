@@ -119,6 +119,34 @@
         <item name="android:dropDownListViewStyle">@style/DropDownListView.Actionbarwithtabstheme</item>
     </style>
 
+    <!-- ======================================================================= -->  
+    <style name="Theme.Actionbarwithtabstheme2" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_actionbarwithtabstheme</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.Actionbarwithtabstheme</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Actionbarwithtabstheme</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Actionbarwithtabstheme</item>
+        <item name="android:actionBarTabTextStyle">@style/ThemeThreeMyActionBarTabText</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Actionbarwithtabstheme</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Actionbarwithtabstheme2</item>
+        <item name="android:actionModeBackground">@drawable/cab_background_top_actionbarwithtabstheme</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_actionbarwithtabstheme</item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Actionbarwithtabstheme</item>                
+    </style>
+
+    <style name="ActionBar.Solid.Actionbarwithtabstheme2" parent="@android:style/Widget.Holo.ActionBar.Solid">
+        <item name="android:background">@drawable/ab_solid_actionbarwithtabstheme</item>
+        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_actionbarwithtabstheme</item>
+        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_actionbarwithtabstheme</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Actionbarwithtabstheme</item>
+        <item name="android:titleTextStyle">@style/ActionBar.Solid.ActionbarTitleStyle</item>
+    </style>
+    
+    <style name="ActionBar.Solid.ActionbarTitleStyle"
+       parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title"> 
+    <item name="android:textColor">#FFFFFF</item> 
+</style>
+
+
     <!-- ======================================================================= -->
    
 </resources>
