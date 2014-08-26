@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
         
-    <Preference 
+    <com.simplelife.renhai.android.ui.CheckUpdatePreference 
         android:title="@string/config_update" 
         android:key="config_update"
-        android:layout="@layout/config_checkupdate"
-            />
+        android:widgetLayout="@layout/config_widget_version">
+    </com.simplelife.renhai.android.ui.CheckUpdatePreference>
     
     <Preference 
         android:title="@string/config_about" 
