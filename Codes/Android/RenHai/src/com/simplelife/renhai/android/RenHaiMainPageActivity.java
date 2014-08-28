@@ -341,7 +341,8 @@ public class RenHaiMainPageActivity extends RenHaiBaseActivity
             }
             case R.id.menu_item_feedback:
             {
-
+            	Intent tIntent = new Intent(this, RenHaiFeedBackActivity.class);
+        		startActivity(tIntent); 
     		    return true;
             }
             case R.id.menu_item_setting:

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+    
+    <EditText android:text=""
+        android:id="@+id/feedback_content"
+        android:layout_above="@+id/feedback_divide" 
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:gravity="top"
+        android:hint="@string/config_feedback_hint1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@null"
+        android:textSize="16sp">        
+    </EditText>
+
+    <LinearLayout
+        android:id="@+id/feedback_divide"
+        android:layout_height="1dp" 
+        android:layout_width="fill_parent"
+        android:layout_above="@+id/feedback_contact" 
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/maingreen"
+        android:orientation="horizontal">        
+    </LinearLayout>
+    
+    <EditText android:text=""
+		android:id="@+id/feedback_contact"
+		android:layout_alignParentBottom="true"
+		android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+		android:hint="@string/config_feedback_hint2"
+		android:layout_width="fill_parent"
+		android:layout_height="48dip"
+		android:gravity="center|left"
+		android:background="@null"
+		android:textSize="16sp">        
+    </EditText>
+    
+</RelativeLayout>

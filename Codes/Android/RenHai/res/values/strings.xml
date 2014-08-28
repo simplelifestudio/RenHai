@@ -161,7 +161,12 @@
     <string name="config_aboutpage_copyright">Copyright(©) 2014&#045;2015&#046;</string>
     <string name="config_aboutpage_allrightreserved">All Rights Reserved&#046;</string>
     <string name="config_update">Check Update</string>
-    <string name="config_versionlatest">Current version is already the latest</string>   
+    <string name="config_versionlatest">Current version is already the latest</string>
+    <string name="config_feedback_title">Feedback</string>
+    <string name="config_feedback_hint1">We\'d love to hear your thoughts&#8230;</string>
+    <string name="config_feedback_hint2">Your contact way QQ/WeChat/Email (Optional)</string>
+    <string name="config_feedback_send">Send</string>
+    <string name="config_feedback_sendnote">Sending feedback&#8230;</string>     
     
     <string name="protocal_text">
 \t\t人海是一款基于话题匹配的视频社交产品，人海所提供的各项服务的所有权和运作权归简单生活工作室（SimpleLife Studio，以下称人海官方）所有。

@@ -160,6 +160,11 @@
     <string name="config_aboutpage_allrightreserved">All Rights Reserved&#046;</string>
     <string name="config_update">检查更新</string>
     <string name="config_versionlatest">当前已是最新版本</string>
+    <string name="config_feedback_title">意见反馈</string>
+    <string name="config_feedback_hint1">我们用心聆听来自您的声音&#8230;</string>
+    <string name="config_feedback_hint2">您的联系方式 QQ/微信/邮箱(选填)</string>
+    <string name="config_feedback_send">发送</string>
+    <string name="config_feedback_sendnote">正在提交反馈&#8230;</string> 
     
     <string name="protocal_text">
 \t\t人海是一款基于话题匹配的视频社交产品，人海所提供的各项服务的所有权和运作权归简单生活工作室（SimpleLife Studio，以下称人海官方）所有。

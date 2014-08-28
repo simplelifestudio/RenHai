@@ -94,6 +94,11 @@
             android:theme="@style/Theme.Actionbarwithtabstheme2"
             android:screenOrientation="portrait" >                       
         </activity>
+        <activity
+            android:name="com.simplelife.renhai.android.RenHaiFeedBackActivity"
+            android:theme="@style/Theme.Actionbarwithtabstheme2"
+            android:screenOrientation="portrait" >                       
+        </activity>
     </application>
 
 </manifest>
