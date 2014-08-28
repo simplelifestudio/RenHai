@@ -8,16 +8,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 
 public class RenHaiFeedBackActivity extends Activity {	
 	
-	private ProgressDialog mProgressDialog = null; 
+	private ProgressDialog mProgressDialog = null;
+	private EditText mContent;
+	private EditText mContactway;
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
    	    super.onCreate(savedInstanceState);
    	    setContentView(R.layout.activity_feedback);
 
+   	    mContent = (EditText) findViewById(R.id.feedback_content);
+   	    mContactway = (EditText) findViewById(R.id.feedback_contact);
    	    
    	    // Set a title for this page
 		ActionBar tActionBar = getActionBar();
@@ -43,19 +48,26 @@ public class RenHaiFeedBackActivity extends Activity {
 			}
 			case R.id.feedback_send:
 			{
+				String tFeedbackText = mContent.getText().toString();
+				String tContactWay   = mContactway.getText().toString();
+				final String tTextToSend = tFeedbackText
+						                 + "\n\n"
+						                 + tContactWay;
+				/*
 				mProgressDialog = ProgressDialog.show(RenHaiFeedBackActivity.this, 
 						getString(R.string.config_feedback_title), 
 				        getString(R.string.config_feedback_sendnote), true, false);
 		        mProgressDialog.setCanceledOnTouchOutside(true);
-		        
+		        */
 		        new Thread() {				
 					@Override
 					public void run() {
 						Intent data=new Intent(Intent.ACTION_SENDTO);
 						data.setData(Uri.parse("mailto:simplelife.chris@gmail.com"));
-						data.putExtra(Intent.EXTRA_SUBJECT, "这是标题");
-						data.putExtra(Intent.EXTRA_TEXT, "这是内容");
+						data.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.config_feedback_title));
+						data.putExtra(Intent.EXTRA_TEXT, tTextToSend);
 						startActivity(data); 
+
 					}
 				}.start();
 			}
