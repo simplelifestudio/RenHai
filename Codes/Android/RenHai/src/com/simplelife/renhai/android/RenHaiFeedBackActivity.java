@@ -3,12 +3,20 @@ package com.simplelife.renhai.android;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.InflateException;
+import android.view.LayoutInflater;
+import android.view.LayoutInflater.Factory;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class RenHaiFeedBackActivity extends Activity {	
 	
@@ -31,9 +39,45 @@ public class RenHaiFeedBackActivity extends Activity {
     }
 	
 	@Override
+	public void onResume() {
+		super.onResume();
+		//mContent.setText("");
+		//mContactway.setText("");
+	}
+	
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_feedback, menu);
+		MenuInflater inflater = getMenuInflater();
+		
+		getLayoutInflater().setFactory(new Factory()
+        {
+
+			@Override
+			public View onCreateView(String _name, Context _context,
+					AttributeSet _attrs) {
+				// TODO Auto-generated method stub
+				if (  _name.equalsIgnoreCase("com.android.internal.view.menu.IconMenuItemView")
+		           || _name.equalsIgnoreCase("com.android.internal.view.menu.ActionMenuItemView"))
+				{
+					try
+					{
+						LayoutInflater f = getLayoutInflater();
+						final View view = f.createView(_name, null, _attrs);
+						if(view instanceof TextView){
+			                 ((TextView)view).setTextSize(14);
+			            }
+			            return view;
+					}catch (InflateException e){
+		              	e.printStackTrace();
+		            } catch (ClassNotFoundException e){
+		              	e.printStackTrace();
+		            }
+				}
+				return null;
+			}
+		
+        });
+		inflater.inflate(R.menu.menu_feedback, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 	
