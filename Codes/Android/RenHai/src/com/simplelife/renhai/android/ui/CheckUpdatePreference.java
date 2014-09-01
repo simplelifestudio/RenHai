@@ -69,7 +69,7 @@ public class CheckUpdatePreference extends Preference {
         mNewBadge.setTextColor(Color.WHITE);
         mNewBadge.setBadgeBackgroundColor(Color.RED);
         mNewBadge.setTextSize(12);
-        mNewBadge.toggle();
+        //mNewBadge.toggle();
         /*
         mNewBadge.setOnClickListener(new OnClickListener() {
 			@Override

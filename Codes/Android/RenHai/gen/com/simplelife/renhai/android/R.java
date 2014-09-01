@@ -557,6 +557,7 @@ public final class R {
         public static final int unmute_sub=0x7f020040;
         public static final int video_button_bg=0x7f020041;
         public static final int video_publish_bg=0x7f020042;
+        public static final int video_writemsg_normal=0x7f020043;
     }
     public static final class id {
         public static final int about_allrightreserved=0x7f0a0003;
@@ -682,13 +683,13 @@ public final class R {
         public static final int title_tv=0x7f0a001b;
         public static final int video_btnhangup=0x7f0a004c;
         public static final int video_centerline=0x7f0a0078;
-        public static final int video_editmsg=0x7f0a0072;
+        public static final int video_editmsg=0x7f0a0073;
         public static final int video_hangup=0x7f0a004b;
         public static final int video_mainlayout=0x7f0a003d;
         public static final int video_rcvmsgwidget=0x7f0a0085;
         public static final int video_recvmsg=0x7f0a0086;
         public static final int video_replymsg=0x7f0a0088;
-        public static final int video_sendmsg=0x7f0a0073;
+        public static final int video_sendmsg=0x7f0a0072;
         public static final int video_subloadingnote=0x7f0a0040;
         public static final int waitingformatch_btnback=0x7f0a0054;
         public static final int waitingformatch_btncancel=0x7f0a0051;

@@ -12,32 +12,36 @@
        android:layout_width="fill_parent"
        android:layout_height="48dp"
        android:layout_alignParentBottom="true"
-       android:layout_centerHorizontal="true"
-       android:visibility="gone">
+       android:background="@color/maingreen"
+       android:visibility="gone"
+       >
        
-       <EditText
-            android:id="@+id/video_editmsg"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_toLeftOf="@+id/video_sendmsg"
-            android:background="@color/white"
-            android:layout_weight="1"
-            android:hint="@string/video_msghint" >
-        </EditText>
-        
        <Button
             android:id="@+id/video_sendmsg"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_alignParentTop="true"            
-            android:layout_alignParentRight="true"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:layout_width="60dp"
+        	android:layout_height="40dp"
+        	android:layout_alignParentRight="true"
+        	android:layout_marginRight="10dp"
+        	android:layout_centerVertical="true"
             android:background="@drawable/video_button_bg"
             android:text="@string/video_msgsend"
             android:textColor="@color/white" 
             android:onClick="onSendMsg" />
+       
+       <EditText
+            android:id="@+id/video_editmsg"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_toLeftOf="@id/video_sendmsg"
+        	android:layout_marginLeft="10dp"
+        	android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:textSize="18sp"
+            android:background="@drawable/video_writemsg_normal"
+            android:hint="@string/video_msghint" >
+        </EditText>
+        
+       
    </RelativeLayout>   
    
    <RelativeLayout
@@ -46,6 +50,7 @@
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        
         >
 
         <ImageButton
