@@ -10,7 +10,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +38,7 @@ public class PublisherControlFragment extends Fragment implements
 	private PublisherCallbacks mCallbacks = sOpenTokCallbacks;
 	private RenHaiVideoTalkActivity openTokActivity;
 	protected boolean mPublisherWidgetVisible = false;
+	private boolean mTimeoutHideWidget = true;
 
 	protected RelativeLayout mPublisherContainer;
 	protected RelativeLayout mWriteMsgLayout;
@@ -221,6 +221,7 @@ public class PublisherControlFragment extends Fragment implements
 	}
 	
 	public void editAndSendMsg() {
+		mTimeoutHideWidget = false;
 		mButtonLayout.setVisibility(View.GONE);
 		mWriteMsgLayout.setVisibility(View.VISIBLE);
 		mInputMgr.hideSoftInputFromWindow(mEditMsg.getWindowToken(), 1);
@@ -234,7 +235,9 @@ public class PublisherControlFragment extends Fragment implements
     	mWebSocketHandle.sendMessage(tBusinessSessionReq);
     	//mEditMsg.setInputType(InputType.TYPE_NULL);
     	mInputMgr.hideSoftInputFromWindow(mEditMsg.getWindowToken(), 0);
-    	mWriteMsgLayout.setVisibility(View.GONE);
+    	hidePublisherWidget();
+    	mTimeoutHideWidget = true;
+    	//mWriteMsgLayout.setVisibility(View.GONE);
 	}
 
 	public void initPublisherUI() {
@@ -251,10 +254,17 @@ public class PublisherControlFragment extends Fragment implements
 	private Runnable mPublisherWidgetTimerTask = new Runnable() {
 		@Override
 		public void run() {
-			showPublisherWidget(false);
-			openTokActivity.setPubViewMargins();
+			if(mTimeoutHideWidget == true)
+			{
+				hidePublisherWidget();
+			}			
 		}
 	};
+	
+	private void hidePublisherWidget() {
+		showPublisherWidget(false);
+		openTokActivity.setPubViewMargins();
+	}
 
 	public void publisherClick() {
 		if (!mPublisherWidgetVisible) {

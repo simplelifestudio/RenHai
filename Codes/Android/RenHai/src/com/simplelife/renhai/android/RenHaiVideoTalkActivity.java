@@ -384,14 +384,23 @@ public class RenHaiVideoTalkActivity extends RenHaiBaseActivity implements Sessi
 	
 	private void sessionConnect() {
 		if (mSession == null) {
-		    //mSession = new Session(this, API_KEY, SESSION_ID);
-			mSession = new Session(this, WebRtcSession.getApiKey(), WebRtcSession.getSessionId());
+			if(SUBSCRIBE_TO_SELF)
+			{
+				mSession = new Session(this, API_KEY, SESSION_ID);				
+			}else{
+				mSession = new Session(this, WebRtcSession.getApiKey(), WebRtcSession.getSessionId());
+			}
+			
 		    mSession.setSessionListener(this);
 		    mSession.setArchiveListener(this);
 		    mSession.setStreamPropertiesListener(this);
 		    mSession.setPublisherListener(this);
-		    mSession.connect(WebRtcSession.getToken());
-		    //mSession.connect(TOKEN);
+		    if(SUBSCRIBE_TO_SELF)
+			{
+		    	mSession.connect(TOKEN);				
+			}else{
+				mSession.connect(WebRtcSession.getToken());
+			}
 		}
 	}
 	
