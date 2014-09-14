@@ -8,6 +8,7 @@
  */
 package com.simplelife.renhai.android;
 
+import com.crashlytics.android.Crashlytics;
 import com.simplelife.renhai.android.R;
 import com.simplelife.renhai.android.data.RenHaiInfo;
 import com.simplelife.renhai.android.jsonprocess.RenHaiMsgAppDataSyncReq;
@@ -69,6 +70,7 @@ public class RenHaiSplashActivity extends RenHaiBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Crashlytics.start(this);
 		final View tStartView = View.inflate(this,R.layout.activity_splash,null);
 		
 		configureLogger();

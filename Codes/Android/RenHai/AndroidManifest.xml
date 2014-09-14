@@ -99,6 +99,7 @@
             android:theme="@style/Theme.Actionbarwithtabstheme2"
             android:screenOrientation="portrait" >                       
         </activity>
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="949894ca2ceea9a373d1dba3168f80ddb5a6ca20"/>
     </application>
 
 </manifest>
